@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+/* Box Office's own look: a ticket booth's paper, ink and marquee red. */
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk Variable", "Inter Variable", ui-sans-serif, sans-serif;
+  --color-paper: var(--paper);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-marquee: var(--marquee);
+  --color-marquee-ink: var(--marquee-ink);
+  --color-gold: var(--gold);
+  --color-ok: var(--ok);
+  --color-bad: var(--bad);
+}
+
+:root {
+  --paper: #f5efe4;
+  --card: #fffaf1;
+  --ink: #1f1b16;
+  --muted: #6d6458;
+  --line: #e2d8c6;
+  --marquee: #c8352a;
+  --marquee-ink: #fffaf1;
+  --gold: #b7851d;
+  --ok: #2f7d4f;
+  --bad: #b3261e;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #15120f;
+    --card: #1f1b17;
+    --ink: #f2eadc;
+    --muted: #a99d8b;
+    --line: #362f28;
+    --marquee: #e5493b;
+    --marquee-ink: #15120f;
+    --gold: #e2b24c;
+    --ok: #63b884;
+    --bad: #f07167;
+  }
+}
+
+html {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+/* A ticket's torn edge, used under the header and on cards. */
+.perforated {
+  background-image: radial-gradient(circle at 6px 0, transparent 4px, var(--line) 4.5px, transparent 5px);
+  background-size: 12px 6px;
+  background-repeat: repeat-x;
+  height: 6px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--marquee);
+  outline-offset: 2px;
+}

@@ -1,0 +1,124 @@
+image:
+  repository: ghcr.io/yeixio/boxoffice
+  # Defaults to the chart's appVersion.
+  tag: ""
+  pullPolicy: IfNotPresent
+
+# Box Office runs as one pod. With SQLite (the default) its volume can only
+# be mounted by one pod at a time, so an upgrade stops the old pod first.
+strategy:
+  type: Recreate
+
+service:
+  type: ClusterIP
+  port: 7272
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: boxoffice.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+# The key Matinee (and anything else) uses for Box Office's API, including
+# its Radarr- and Sonarr-compatible ones at /radarr and /sonarr. Empty: Box
+# Office makes one on first start, shown under Settings. Set it here or in
+# an existing secret's "api-key" key to manage it with the cluster instead.
+apiKey:
+  value: ""
+  existingSecret: ""
+
+# A themoviedb.org key. It can also be entered under Settings.
+tmdb:
+  apiKey: ""
+  # Or read it from an existing secret's "tmdb-api-key" key.
+  existingSecret: ""
+
+# Box Office's database (with SQLite), its backups, and the backups it keeps
+# of the apps you move in from.
+persistence:
+  size: 5Gi
+  storageClass: ""
+  existingClaim: ""
+
+# Leave both empty to use SQLite on the volume above. To use PostgreSQL,
+# either point at one you run...
+database:
+  url: ""
+  # ...or an existing secret holding it under the "database-url" key.
+  existingSecret: ""
+
+# ...or turn on a bundled PostgreSQL. An install hook makes its password
+# into the <release>-db secret on first install and keeps it from then on.
+postgresql:
+  enabled: false
+  image:
+    repository: postgres
+    tag: "17-alpine"
+  auth:
+    username: boxoffice
+    database: boxoffice
+    password: ""
+  persistence:
+    size: 4Gi
+    storageClass: ""
+  resources: {}
+
+# Your media, mounted where Box Office files movies and shows. Mount the same
+# volumes Matinee reads, ideally at the same paths in both pods, so both see
+# a file in the same place. Box Office writes here: new files, and replaced
+# ones go to a .recycle folder in the root folder rather than being deleted.
+media: []
+#  - name: movies
+#    mountPath: /media/movies
+#    volume:
+#      nfs:
+#        server: nas.local
+#        path: /export/movies
+#  - name: tv
+#    mountPath: /media/tv
+#    volume:
+#      persistentVolumeClaim:
+#        claimName: tv-library
+
+# A second place for backups that's a mounted volume (Backups → Also send
+# to → Another folder). S3-compatible storage needs no mount: set it up
+# under Backups.
+backupVolume: {}
+#  mountPath: /backups-nas
+#  volume:
+#    nfs:
+#      server: nas.local
+#      path: /export/backups
+
+env: []
+#  - name: BOXOFFICE_REFRESH_EVERY
+#    value: 6h
+#  - name: BOXOFFICE_LOG_FORMAT
+#    value: json
+
+resources: {}
+#  requests: {cpu: 50m, memory: 64Mi}
+#  limits: {memory: 512Mi}
+
+# The image's user. fsGroup lets it write to the volumes; your media must
+# be writable by this group (or user) too.
+podSecurityContext:
+  runAsUser: 65532
+  runAsGroup: 65532
+  fsGroup: 65532
+  runAsNonRoot: true
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop: [ALL]
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
