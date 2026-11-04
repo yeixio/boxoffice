@@ -448,5 +448,5 @@ func (m *Migrator) importSettings(ctx context.Context, p *pending, pr *Progress)
 		}
 		nBlock++
 	}
-	return fmt.Sprintf("%d indexers, %d download clients, %d blocked releases, %d other sections", nIdx, nDC, nBlock, len(d.raw)), nil
+	return count(nIdx, "indexer", "indexers") + ", " + count(nDC, "download client", "download clients") + ", " + count(nBlock, "blocked release", "blocked releases") + ", " + count(len(d.raw), "other section", "other sections"), nil
 }

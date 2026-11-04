@@ -343,10 +343,10 @@ func (m *Migrator) Preview(ctx context.Context, req Request) (Plan, error) {
 		sample(Sample{Title: sr.Title, Year: sr.Year, Path: mapPath(req.PathMap, sr.Path)})
 	}
 	if noTMDB > 0 {
-		plan.Warnings = append(plan.Warnings, fmt.Sprintf("%d movies have no TMDB id in Radarr and will be left out.", noTMDB))
+		plan.Warnings = append(plan.Warnings, count(noTMDB, "movie has", "movies have")+" no TMDB id in Radarr and will be left out.")
 	}
 	if needTMDB > 0 && m.Catalog.TMDB(ctx).Key == "" {
-		plan.Warnings = append(plan.Warnings, fmt.Sprintf("%d shows have no TMDB id in Sonarr. Add a TMDB key under Settings so Box Office can look them up by their TVDB id; without one they're left out.", needTMDB))
+		plan.Warnings = append(plan.Warnings, count(needTMDB, "show has", "shows have")+" no TMDB id in Sonarr. Add a TMDB key under Settings so Box Office can look them up by their TVDB id; without one they're left out.")
 	}
 	if req.App == "sonarr" {
 		plan.Files.Total = -1 // counted while importing; Sonarr lists files per show
@@ -359,7 +359,7 @@ func (m *Migrator) Preview(ctx context.Context, req Request) (Plan, error) {
 		Notifications: len(d.providers["notification"]), ImportLists: len(d.providers["importlist"]), Blocklist: len(d.blocklist),
 		Sections: slices.Sorted(maps.Keys(d.raw)), HiddenSecrets: d.hidden()}
 	if plan.Settings.HiddenSecrets > 0 {
-		plan.Warnings = append(plan.Warnings, fmt.Sprintf("%s hides %d passwords and API keys from other apps. Keep \"Back up %s\" on and Box Office reads them from the backup; skip it and they come across blank.", l.name(), plan.Settings.HiddenSecrets, l.name()))
+		plan.Warnings = append(plan.Warnings, fmt.Sprintf("%s hides %s from other apps. Keep \"Back up %s\" on and Box Office reads them from the backup; skip it and they come across blank.", l.name(), count(plan.Settings.HiddenSecrets, "password or API key", "passwords and API keys"), l.name()))
 	}
 	p.plan = plan
 	m.keep(p)
@@ -379,6 +379,14 @@ func (m *Migrator) keep(p *pending) {
 	}
 	m.plans[p.plan.Token] = p
 	m.mu.Unlock()
+}
+
+// count says "1 movie" or "2 movies".
+func count(n int, one, many string) string {
+	if n == 1 {
+		return "1 " + one
+	}
+	return strconv.Itoa(n) + " " + many
 }
 
 func isDir(p string) bool {
@@ -572,7 +580,7 @@ func (m *Migrator) run(ctx context.Context, p *pending, pr *Progress, o Options)
 		fail(2, err)
 		return
 	}
-	step(2, "done", fmt.Sprintf("%d quality profiles, %d root folders", len(p.profiles), len(p.roots)))
+	step(2, "done", count(len(p.profiles), "quality profile", "quality profiles")+", "+count(len(p.roots), "root folder", "root folders"))
 	step(3, "running", "")
 	progress := func(done, total int) {
 		step(3, "running", fmt.Sprintf("%d of %d", done, total))

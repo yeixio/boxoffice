@@ -3,6 +3,7 @@
 package main
 
 import (
+	"cmp"
 	"context"
 	"errors"
 	"flag"
@@ -11,6 +12,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"sync"
 	"syscall"
 	"time"
@@ -29,8 +31,13 @@ import (
 
 func main() {
 	cmd := run
-	if len(os.Args) > 1 && os.Args[1] == "init-db-secret" {
-		cmd = initDBSecret
+	if len(os.Args) > 1 {
+		switch os.Args[1] {
+		case "init-db-secret":
+			cmd = initDBSecret
+		case "healthcheck":
+			cmd = healthcheck
+		}
 	}
 	if err := cmd(); err != nil {
 		fmt.Fprintln(os.Stderr, "boxoffice:", err)
@@ -135,6 +142,25 @@ func initDBSecret() error {
 		fmt.Println("created database credentials in secret", s.Name)
 	} else {
 		fmt.Println("secret", s.Name, "already exists; keeping it")
+	}
+	return nil
+}
+
+// healthcheck asks the running server whether it's up, for Docker's
+// HEALTHCHECK in an image that has no shell or wget.
+func healthcheck() error {
+	addr := cmp.Or(os.Getenv("BOXOFFICE_ADDR"), ":7272")
+	if strings.HasPrefix(addr, ":") {
+		addr = "127.0.0.1" + addr
+	}
+	c := &http.Client{Timeout: 3 * time.Second}
+	res, err := c.Get("http://" + addr + "/healthz")
+	if err != nil {
+		return err
+	}
+	res.Body.Close()
+	if res.StatusCode != http.StatusOK {
+		return fmt.Errorf("healthz answered %d", res.StatusCode)
 	}
 	return nil
 }

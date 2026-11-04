@@ -221,7 +221,7 @@ func (m *Migrator) runNZBGet(ctx context.Context, p *pending, pr *Progress, o Op
 	}
 	m.update(func() {
 		pr.Steps[2].Status = "done"
-		pr.Steps[2].Message = fmt.Sprintf("%d news servers, %d categories, and NZBGet's other settings", len(servers), len(p.nzbConfig.numbered("Category")))
+		pr.Steps[2].Message = count(len(servers), "news server", "news servers") + ", " + count(len(p.nzbConfig.numbered("Category")), "category", "categories") + ", and NZBGet's other settings"
 		pr.Status = "done"
 	})
 	m.finish(ctx, pr)
