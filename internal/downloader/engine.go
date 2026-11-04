@@ -38,7 +38,7 @@ type Engine struct {
 	limit   limiter
 	wake    chan struct{}
 	mu      sync.Mutex
-	current *running          // the download being fetched, if any
+	current *running           // the download being fetched, if any
 	working map[int64]*running // every download in progress, fetching or after
 	srv     *servers
 	post    chan struct{} // one download is checked and unpacked at a time
@@ -83,7 +83,9 @@ func (e *Engine) Wake() {
 	}
 }
 
-func (e *Engine) nzbPath(id int64) string { return filepath.Join(e.Dir, ".nzb", fmt.Sprintf("%d.nzb", id)) }
+func (e *Engine) nzbPath(id int64) string {
+	return filepath.Join(e.Dir, ".nzb", fmt.Sprintf("%d.nzb", id))
+}
 
 // Add queues a release from its NZB.
 func (e *Engine) Add(ctx context.Context, d store.Download, nzbData []byte) (store.Download, error) {

@@ -17,6 +17,7 @@ type Config struct {
 	Addr        string        // where it listens; BOXOFFICE_ADDR
 	DataDir     string        // its database, backups and imports; BOXOFFICE_DATA_DIR
 	DatabaseURL string        // a PostgreSQL URL; empty uses SQLite in DataDir; BOXOFFICE_DATABASE_URL
+	Downloads   string        // where downloads go while they're fetched and unpacked; BOXOFFICE_DOWNLOADS_DIR
 	TMDBKey     string        // used when none is saved in Settings; BOXOFFICE_TMDB_KEY
 	APIKey      string        // fixes the API key, such as from a Kubernetes Secret; BOXOFFICE_API_KEY
 	LogFormat   string        // text or json; BOXOFFICE_LOG_FORMAT
@@ -34,6 +35,7 @@ func load(args []string, env func(string) string) (Config, error) {
 		Addr:        cmp.Or(env("BOXOFFICE_ADDR"), ":7272"),
 		DataDir:     cmp.Or(env("BOXOFFICE_DATA_DIR"), defaultDataDir()),
 		DatabaseURL: env("BOXOFFICE_DATABASE_URL"),
+		Downloads:   env("BOXOFFICE_DOWNLOADS_DIR"),
 		TMDBKey:     env("BOXOFFICE_TMDB_KEY"),
 		APIKey:      env("BOXOFFICE_API_KEY"),
 		LogFormat:   cmp.Or(env("BOXOFFICE_LOG_FORMAT"), "text"),
@@ -51,11 +53,15 @@ func load(args []string, env func(string) string) (Config, error) {
 	fs.StringVar(&c.Addr, "addr", c.Addr, "address to listen on")
 	fs.StringVar(&c.DataDir, "data", c.DataDir, "folder for the database, backups and imports")
 	fs.StringVar(&c.DatabaseURL, "database-url", c.DatabaseURL, "PostgreSQL URL (default: SQLite in the data folder)")
+	fs.StringVar(&c.Downloads, "downloads", c.Downloads, "folder for downloads in progress (default: downloads in the data folder)")
 	fs.StringVar(&c.LogFormat, "log-format", c.LogFormat, "text or json")
 	fs.BoolVar(&c.Debug, "debug", c.Debug, "log more")
 	fs.DurationVar(&c.Refresh, "refresh-every", c.Refresh, "how often titles are refreshed from TMDB")
 	if err := fs.Parse(args); err != nil {
 		return c, err
+	}
+	if c.Downloads == "" {
+		c.Downloads = filepath.Join(c.DataDir, "downloads")
 	}
 	if c.LogFormat != "text" && c.LogFormat != "json" {
 		return c, errors.New("the log format is text or json")

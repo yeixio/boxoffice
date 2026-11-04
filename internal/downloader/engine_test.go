@@ -31,10 +31,10 @@ func gen(n, size int) []byte {
 }
 
 type post struct {
-	name   string // as posted (may be obfuscated)
-	data   []byte
-	ids    []string
-	sizes  []int64
+	name  string // as posted (may be obfuscated)
+	data  []byte
+	ids   []string
+	sizes []int64
 }
 
 // release posts the par2 fixture set to a fake news server, in 4000-byte

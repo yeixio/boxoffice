@@ -400,6 +400,9 @@ func (m *Migrator) importSettings(ctx context.Context, p *pending, pr *Progress)
 		}
 		nDC++
 	}
+	if err := st.MergeDuplicateDownloadClients(ctx); err != nil {
+		return "", err
+	}
 	saved, err := st.ImportedSettings(ctx)
 	if err != nil {
 		return "", err

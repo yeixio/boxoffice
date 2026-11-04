@@ -26,7 +26,9 @@ import (
 	"github.com/yeixio/boxoffice/internal/arrapi"
 	"github.com/yeixio/boxoffice/internal/backup"
 	"github.com/yeixio/boxoffice/internal/catalog"
+	"github.com/yeixio/boxoffice/internal/downloader"
 	"github.com/yeixio/boxoffice/internal/migrate"
+	"github.com/yeixio/boxoffice/internal/search"
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/tmdb"
 )
@@ -45,10 +47,13 @@ type Server struct {
 	Catalog  *catalog.Service
 	Backups  *backup.Manager
 	Migrator *migrate.Migrator
-	Log      *slog.Logger
-	Version  string
-	Database string // sqlite or postgres, for the System page
-	DataDir  string
+	// Downloads is the downloader, and Search finds releases for it.
+	Downloads *downloader.Engine
+	Search    *search.Service
+	Log       *slog.Logger
+	Version   string
+	Database  string // sqlite or postgres, for the System page
+	DataDir   string
 	// EnvAPIKey, when set, is the API key, and can't be changed in the UI:
 	// it comes from the deployment, such as a Kubernetes Secret.
 	EnvAPIKey string
@@ -165,6 +170,8 @@ func (s *Server) Handler() http.Handler {
 		{"GET /api/v1/blocklist", true, s.blocklist},
 		{"GET /api/v1/imported", true, s.importedSettings},
 	}
+	routes = append(routes, s.downloadRoutes()...)
+	routes = append(routes, s.connectionRoutes()...)
 	for _, r := range routes {
 		mux.Handle(r.pattern, s.wrap(r))
 	}
