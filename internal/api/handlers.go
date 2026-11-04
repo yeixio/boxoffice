@@ -776,6 +776,38 @@ func (s *Server) previewMigration(w http.ResponseWriter, r *http.Request) error 
 	return writeJSON(w, http.StatusOK, p)
 }
 
+// startScan previews a migration in the background; the scan's progress
+// and, once it's ready, its plan are read from scan.
+func (s *Server) startScan(w http.ResponseWriter, r *http.Request) error {
+	var in migrate.Request
+	if err := readJSON(r, &in); err != nil {
+		return err
+	}
+	sc, err := s.Migrator.StartScan(in)
+	if err != nil {
+		return errorf(http.StatusBadRequest, err.Error())
+	}
+	return writeJSON(w, http.StatusAccepted, sc)
+}
+
+func (s *Server) scans(w http.ResponseWriter, r *http.Request) error {
+	return writeJSON(w, http.StatusOK, s.Migrator.Scans())
+}
+
+func (s *Server) scan(w http.ResponseWriter, r *http.Request) error {
+	sc, ok := s.Migrator.ScanByID(r.PathValue("id"))
+	if !ok {
+		return errorf(http.StatusNotFound, "that look-over has ended; connect again")
+	}
+	return writeJSON(w, http.StatusOK, sc)
+}
+
+func (s *Server) dismissScan(w http.ResponseWriter, r *http.Request) error {
+	s.Migrator.DismissScan(r.PathValue("id"))
+	w.WriteHeader(http.StatusNoContent)
+	return nil
+}
+
 // findApp looks for an app to move in from at its usual addresses.
 func (s *Server) findApp(w http.ResponseWriter, r *http.Request) error {
 	return writeJSON(w, http.StatusOK, map[string]string{"url": s.Migrator.Find(r.Context(), r.URL.Query().Get("app"))})

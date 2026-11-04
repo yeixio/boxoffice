@@ -3,6 +3,7 @@ import { NavLink, Navigate, Route, Routes } from 'react-router-dom'
 import { CalendarDays, Clapperboard, DatabaseBackup, Film, History, LogOut, Settings as Cog, Truck, Tv } from 'lucide-react'
 import { get, post, type Status } from './api'
 import { Spinner } from './ui'
+import { Tray } from './Tray'
 import { SignIn } from './pages/SignIn'
 import { Movies } from './pages/Movies'
 import { MovieDetail } from './pages/MovieDetail'
@@ -63,9 +64,10 @@ function Shell({ status }: { status: Status }) {
               </NavLink>
             ))}
           </nav>
-          <button onClick={signOut} className="flex items-center gap-1.5 text-sm text-muted hover:text-ink" title={`Signed in as ${status.user?.username}`}>
+          <Tray />
+          <button onClick={signOut} className="flex items-center gap-1.5 text-sm text-muted hover:text-ink" title={`Signed in as ${status.user?.username}`} aria-label="Sign out">
             <LogOut className="size-4" aria-hidden />
-            Sign out
+            <span className="hidden sm:inline">Sign out</span>
           </button>
         </div>
         <div className="perforated" aria-hidden />

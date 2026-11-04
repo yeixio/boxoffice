@@ -146,6 +146,10 @@ func (s *Server) Handler() http.Handler {
 
 		{"POST /api/v1/migrations/preview", true, s.previewMigration},
 		{"GET /api/v1/migrations/find", true, s.findApp},
+		{"POST /api/v1/migrations/scans", true, s.startScan},
+		{"GET /api/v1/migrations/scans", true, s.scans},
+		{"GET /api/v1/migrations/scans/{id}", true, s.scan},
+		{"DELETE /api/v1/migrations/scans/{id}", true, s.dismissScan},
 		{"POST /api/v1/migrations", true, s.runMigration},
 		{"GET /api/v1/migrations", true, s.migrations},
 		{"GET /api/v1/migrations/{id}", true, s.migration},
