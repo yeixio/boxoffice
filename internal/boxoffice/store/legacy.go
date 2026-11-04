@@ -71,4 +71,3 @@ func (s *Store) Migrations(ctx context.Context) ([]Migration, error) {
 	}
 	return out, rows.Err()
 }
-

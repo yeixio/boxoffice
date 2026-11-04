@@ -75,8 +75,9 @@ func (s *Store) migrate(ctx context.Context) error {
 		ddl = strings.ReplaceAll(ddl, "INTEGER PRIMARY KEY AUTOINCREMENT", "BIGSERIAL PRIMARY KEY")
 		ddl = strings.ReplaceAll(ddl, "BLOB", "BYTEA")
 	}
-	for _, stmt := range strings.Split(ddl, ";") {
-		if strings.TrimSpace(stripComments(stmt)) == "" {
+	// Comments go first, so a semicolon in one can't split a statement.
+	for _, stmt := range strings.Split(stripComments(ddl), ";") {
+		if strings.TrimSpace(stmt) == "" {
 			continue
 		}
 		if _, err := s.db.ExecContext(ctx, stmt); err != nil {

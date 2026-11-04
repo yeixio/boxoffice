@@ -147,3 +147,89 @@ CREATE TABLE IF NOT EXISTS migrations (
 	created_at  BIGINT NOT NULL,
 	finished_at BIGINT NOT NULL DEFAULT 0
 );
+
+-- Where releases are searched for. Box Office's own search uses these once
+-- it lands. Until then, imported ones wait here.
+CREATE TABLE IF NOT EXISTS indexers (
+	id             INTEGER PRIMARY KEY AUTOINCREMENT,
+	name           TEXT NOT NULL,
+	protocol       TEXT NOT NULL, -- usenet or torrent
+	kind           TEXT NOT NULL, -- newznab, torznab, or the other app's name for it
+	url            TEXT NOT NULL DEFAULT '',
+	api_path       TEXT NOT NULL DEFAULT '',
+	api_key        TEXT NOT NULL DEFAULT '',
+	categories     TEXT NOT NULL DEFAULT '[]',
+	enable_rss     INTEGER NOT NULL DEFAULT 1,
+	enable_search  INTEGER NOT NULL DEFAULT 1,
+	priority       INTEGER NOT NULL DEFAULT 25,
+	settings       TEXT NOT NULL DEFAULT '{}', -- everything else, as the other app had it
+	source         TEXT NOT NULL DEFAULT '',   -- radarr, sonarr… or '' when made here
+	missing_secret INTEGER NOT NULL DEFAULT 0, -- a key or password couldn't be brought over
+	UNIQUE (protocol, url, api_key)
+);
+
+-- Download clients other apps used (NZBGet, SABnzbd, qBittorrent…).
+CREATE TABLE IF NOT EXISTS download_clients (
+	id             INTEGER PRIMARY KEY AUTOINCREMENT,
+	name           TEXT NOT NULL,
+	kind           TEXT NOT NULL,
+	protocol       TEXT NOT NULL,
+	host           TEXT NOT NULL DEFAULT '',
+	port           INTEGER NOT NULL DEFAULT 0,
+	use_tls        INTEGER NOT NULL DEFAULT 0,
+	url_base       TEXT NOT NULL DEFAULT '',
+	username       TEXT NOT NULL DEFAULT '',
+	password       TEXT NOT NULL DEFAULT '',
+	category       TEXT NOT NULL DEFAULT '',
+	priority       INTEGER NOT NULL DEFAULT 1,
+	enabled        INTEGER NOT NULL DEFAULT 1,
+	settings       TEXT NOT NULL DEFAULT '{}',
+	source         TEXT NOT NULL DEFAULT '',
+	missing_secret INTEGER NOT NULL DEFAULT 0,
+	UNIQUE (kind, host, port, category)
+);
+
+-- Usenet servers for Box Office's own downloader.
+CREATE TABLE IF NOT EXISTS usenet_servers (
+	id          INTEGER PRIMARY KEY AUTOINCREMENT,
+	name        TEXT NOT NULL,
+	host        TEXT NOT NULL,
+	port        INTEGER NOT NULL DEFAULT 563,
+	use_tls     INTEGER NOT NULL DEFAULT 1,
+	username    TEXT NOT NULL DEFAULT '',
+	password    TEXT NOT NULL DEFAULT '',
+	connections INTEGER NOT NULL DEFAULT 8,
+	level       INTEGER NOT NULL DEFAULT 0, -- 0 first; higher levels are backups
+	optional    INTEGER NOT NULL DEFAULT 0,
+	retention   INTEGER NOT NULL DEFAULT 0, -- days; 0 unknown
+	enabled     INTEGER NOT NULL DEFAULT 1,
+	settings    TEXT NOT NULL DEFAULT '{}',
+	source      TEXT NOT NULL DEFAULT '',
+	UNIQUE (host, port, username)
+);
+
+-- Releases not to grab again.
+CREATE TABLE IF NOT EXISTS blocklist (
+	id           INTEGER PRIMARY KEY AUTOINCREMENT,
+	kind         TEXT NOT NULL, -- movie or series
+	title_id     BIGINT NOT NULL,
+	source_title TEXT NOT NULL,
+	quality      INTEGER NOT NULL DEFAULT 0,
+	protocol     TEXT NOT NULL DEFAULT '',
+	indexer      TEXT NOT NULL DEFAULT '',
+	reason       TEXT NOT NULL DEFAULT '',
+	at           BIGINT NOT NULL,
+	source       TEXT NOT NULL DEFAULT '',
+	UNIQUE (kind, title_id, source_title)
+);
+
+-- Settings brought over from other apps that Box Office keeps as they
+-- were: naming, tags, delay profiles, notifications, lists and the rest.
+-- Features read them as they land.
+CREATE TABLE IF NOT EXISTS imported_settings (
+	app         TEXT NOT NULL,
+	section     TEXT NOT NULL,
+	data        TEXT NOT NULL,
+	imported_at BIGINT NOT NULL,
+	PRIMARY KEY (app, section)
+);
