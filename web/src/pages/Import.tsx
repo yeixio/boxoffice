@@ -48,7 +48,7 @@ export function Import() {
             return (
               <li key={s} className={`flex items-center gap-2 rounded-full border px-3 py-1 text-sm ${me === at ? 'border-marquee text-marquee' : me < at ? 'border-ok/40 text-ok' : 'border-line text-muted'}`}>
                 <span className="font-mono text-xs">{me < at ? <Check className="size-3.5" /> : i + 1}</span>
-                {s}
+                {s === 'Matinee' ? 'Matinee (optional)' : s}
               </li>
             )
           })}
@@ -545,8 +545,16 @@ function SwitchMatinee({ app, migrationId, onDone }: { app: MigrationApp; migrat
   }
   return (
     <Card>
-      <h2 className="font-display text-lg font-semibold">Point Matinee at Box Office</h2>
-      <p className="mt-1 text-sm text-muted">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <h2 className="font-display text-lg font-semibold">
+          Point Matinee at Box Office <span className="font-normal text-muted">(optional)</span>
+        </h2>
+        <Button onClick={() => onDone(null)}>Skip this step</Button>
+      </div>
+      <p className="mt-2 text-sm">
+        Only if you watch with Matinee. If you use Plex, Jellyfin, Emby or another player, skip this: the move-in is already done, and nothing else depends on it. You can also do it later.
+      </p>
+      <p className="mt-2 text-sm text-muted">
         Matinee's {appName[app]} connection moves to Box Office, keeping its quality profile and root folder. Matinee checks the new connection before saving it, so a wrong address changes nothing. Your
         Matinee sign-in is used once and not kept.
       </p>
@@ -561,7 +569,7 @@ function SwitchMatinee({ app, migrationId, onDone }: { app: MigrationApp; migrat
       <ErrorNote error={error} />
       <div className="mt-6 flex flex-wrap justify-between gap-3">
         <Button variant="ghost" onClick={() => onDone(null)}>
-          Skip; I'll do it later
+          Skip, I'll do it later or I don't use Matinee
         </Button>
         <Button variant="primary" busy={busy} onClick={go} disabled={!matineeUrl || !username || !password}>
           Switch Matinee over
@@ -589,7 +597,7 @@ function Finished({ app, matinee, onAgain }: { app: MigrationApp; matinee: Switc
         ) : (
           app !== 'nzbget' && (
             <li>
-              Matinee still uses {name}. When you're ready, point it at Box Office from here or in Matinee's admin settings, using the address and API key under{' '}
+              If you watch with Matinee, it still uses {name}. When you're ready, point it at Box Office from here or in Matinee's admin settings, using the address and API key under{' '}
               <Link className="font-medium text-marquee" to="/settings">
                 Settings
               </Link>

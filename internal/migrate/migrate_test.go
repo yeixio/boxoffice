@@ -401,7 +401,17 @@ func TestSwitchMatinee(t *testing.T) {
 	ts := httptest.NewServer(mux)
 	t.Cleanup(ts.Close)
 
-	sr := SwitchRequest{MatineeURL: ts.URL, Username: "mike", Password: "wrong", BoxOfficeURL: "http://boxoffice:7272", App: "radarr"}
+	sr := SwitchRequest{MatineeURL: ts.URL, Username: "mike", Password: "pw", BoxOfficeURL: "http://boxoffice:7272", App: "radarr"}
+	// Box Office needs a movie root folder for Matinee to save.
+	if _, err := w.m.SwitchMatinee(ctx, 0, sr, "bo-key"); err == nil || !strings.Contains(err.Error(), "no movie root folder") {
+		t.Fatalf("no root folder: %v", err)
+	}
+	// Matinee's /movies isn't one of Box Office's, so its only one is used,
+	// exactly as Box Office lists it.
+	if _, err := w.st.AddRootFolder(ctx, "movie", "/library/movies"); err != nil {
+		t.Fatal(err)
+	}
+	sr.Password = "wrong"
 	if _, err := w.m.SwitchMatinee(ctx, 0, sr, "bo-key"); err == nil || !strings.Contains(err.Error(), "username and password") {
 		t.Fatalf("a wrong password: %v", err)
 	}
@@ -413,7 +423,7 @@ func TestSwitchMatinee(t *testing.T) {
 	if res.Before != "http://radarr:7878" || res.After != "http://boxoffice:7272/radarr" || !loggedOut {
 		t.Fatalf("result: %+v, logged out %v", res, loggedOut)
 	}
-	if saved["url"] != "http://boxoffice:7272/radarr" || saved["apiKey"] != "bo-key" || saved["qualityProfileId"] != float64(7) || saved["rootFolder"] != "/movies" {
+	if saved["url"] != "http://boxoffice:7272/radarr" || saved["apiKey"] != "bo-key" || saved["qualityProfileId"] != float64(7) || saved["rootFolder"] != "/library/movies" {
 		t.Fatalf("Matinee was sent %v", saved)
 	}
 }
@@ -428,6 +438,26 @@ func TestMapPath(t *testing.T) {
 	} {
 		if got := mapPath(maps, in); got != want {
 			t.Errorf("mapPath(%q) = %q, want %q", in, got, want)
+		}
+	}
+}
+
+func TestMatineeRoot(t *testing.T) {
+	w := newWorld(t)
+	ctx := context.Background()
+	for _, p := range []string{"/media/4k", "/media/movies"} {
+		if _, err := w.st.AddRootFolder(ctx, "movie", p); err != nil {
+			t.Fatal(err)
+		}
+	}
+	for want, got := range map[string]string{
+		"/media/movies/":     "/media/movies", // Radarr's trailing slash
+		"/media/movies/Kids": "/media/movies",
+		"/elsewhere":         "/media/4k", // the first
+		"":                   "/media/4k",
+	} {
+		if r, err := w.m.matineeRoot(ctx, "radarr", want); err != nil || r != got {
+			t.Errorf("%q: got %q, %v; want %q", want, r, err, got)
 		}
 	}
 }

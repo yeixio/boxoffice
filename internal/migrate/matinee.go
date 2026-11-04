@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"path/filepath"
 	"strings"
 	"time"
 )
@@ -89,8 +90,8 @@ func (m *Migrator) SwitchMatinee(ctx context.Context, migrationID int64, req Swi
 	before := current[req.App]
 	after := strings.TrimRight(bu.String(), "/") + "/" + req.App
 	res := SwitchResult{App: req.App, Before: before.URL, After: after, ProfileID: before.QualityProfileID}
-	if before.RootFolder != "" {
-		res.RootFolder = mapPath(maps, before.RootFolder)
+	if res.RootFolder, err = m.matineeRoot(ctx, req.App, mapPath(maps, before.RootFolder)); err != nil {
+		return SwitchResult{}, err
 	}
 	body := map[string]any{"url": after, "apiKey": apiKey, "qualityProfileId": res.ProfileID, "rootFolder": res.RootFolder}
 	if err := c.do(ctx, "PUT", "/api/v1/integrations/"+req.App, body, nil); err != nil {
@@ -101,6 +102,35 @@ func (m *Migrator) SwitchMatinee(ctx context.Context, migrationID int64, req Swi
 	}
 	m.Log.Info("Matinee switched over", "app", req.App, "from", before.URL, "to", after)
 	return res, nil
+}
+
+// matineeRoot picks the root folder Matinee adds titles to, exactly as
+// Box Office lists it, since Matinee only saves one Box Office has: the
+// one Matinee used (after the path maps), the one holding it, or else Box
+// Office's only or first one.
+func (m *Migrator) matineeRoot(ctx context.Context, app, want string) (string, error) {
+	kind := map[string]string{"radarr": "movie", "sonarr": "series"}[app]
+	roots, err := m.Catalog.Store.RootFolders(ctx, kind)
+	if err != nil {
+		return "", err
+	}
+	if len(roots) == 0 {
+		return "", fmt.Errorf("Box Office has no %s root folder yet. Move in from %s first, or add one under Settings", map[string]string{"movie": "movie", "series": "TV"}[kind], map[string]string{"radarr": "Radarr", "sonarr": "Sonarr"}[app])
+	}
+	if want != "" {
+		want = filepath.Clean(want)
+		for _, r := range roots {
+			if filepath.Clean(r.Path) == want {
+				return r.Path, nil
+			}
+		}
+		for _, r := range roots {
+			if strings.HasPrefix(want, strings.TrimRight(filepath.Clean(r.Path), "/")+"/") {
+				return r.Path, nil
+			}
+		}
+	}
+	return roots[0].Path, nil
 }
 
 func or(a, b string) string {
