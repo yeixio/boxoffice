@@ -72,10 +72,15 @@ func (m *Migrator) Find(ctx context.Context, app string) string {
 		}()
 	}
 	wg.Wait()
-	if i := slices.Index(found, true); i >= 0 {
-		return cands[i]
+	// An app under a URL base can also answer without it, before pointing
+	// a request with a key at the base; so the longest address wins.
+	best := ""
+	for i, ok := range found {
+		if ok && len(cands[i]) > len(best) {
+			best = cands[i]
+		}
 	}
-	return ""
+	return best
 }
 
 // answersAs says whether base looks like app's address. Radarr and Sonarr

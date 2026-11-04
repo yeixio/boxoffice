@@ -65,6 +65,46 @@ func (l *legacy) name() string {
 }
 
 func (l *legacy) do(ctx context.Context, method, path string, q url.Values, body, out any) error {
+	err := l.try(ctx, method, path, q, body, out)
+	var rd *redirectError
+	if errors.As(err, &rd) && rd.base != nil {
+		// The app runs under a URL base, such as /radarr, and points there.
+		l.base = rd.base
+		return l.try(ctx, method, path, q, body, out)
+	}
+	return err
+}
+
+// redirectError is the app sending a request elsewhere. base is set when
+// it's the same app at another URL base on the same host.
+type redirectError struct {
+	msg  string
+	base *url.URL
+}
+
+func (e *redirectError) Error() string { return e.msg }
+
+// redirectBase works out the URL base a redirect points at: the same host,
+// and the same request under another path, as an app with a URL base
+// answers a request without it.
+func redirectBase(from *url.URL, location, path string) (*url.URL, string) {
+	to, err := from.Parse(location)
+	if err != nil {
+		return nil, location
+	}
+	to.RawQuery, to.Fragment = "", ""
+	if to.Scheme != from.Scheme || to.Host != from.Host || !strings.HasSuffix(to.Path, path) {
+		return nil, to.Redacted()
+	}
+	base := *to
+	base.Path = strings.TrimRight(strings.TrimSuffix(to.Path, path), "/")
+	if base.Path == strings.TrimRight(strings.TrimSuffix(from.Path, path), "/") {
+		return nil, base.Redacted()
+	}
+	return &base, base.Redacted()
+}
+
+func (l *legacy) try(ctx context.Context, method, path string, q url.Values, body, out any) error {
 	u := *l.base
 	u.Path += path
 	u.RawQuery = q.Encode()
@@ -95,7 +135,8 @@ func (l *legacy) do(ctx context.Context, method, path string, q url.Values, body
 	case res.StatusCode == 401 || res.StatusCode == 403:
 		return fmt.Errorf("%s didn't accept the API key", l.name())
 	case res.StatusCode >= 300 && res.StatusCode < 400:
-		return fmt.Errorf("%s at %s redirects to %s; enter that address instead", l.name(), l.base.Redacted(), res.Header.Get("Location"))
+		base, to := redirectBase(req.URL, res.Header.Get("Location"), path)
+		return &redirectError{base: base, msg: fmt.Sprintf("%s at %s sends Box Office to %s instead. Enter that address.", l.name(), l.base.Redacted(), to)}
 	case res.StatusCode >= 300:
 		return fmt.Errorf("%s answered HTTP %d for %s", l.name(), res.StatusCode, path)
 	}
