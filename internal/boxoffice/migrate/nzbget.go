@@ -9,6 +9,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"path/filepath"
 	"slices"
 	"strconv"
 	"strings"
@@ -133,19 +134,12 @@ func (c nzbgetConfig) servers() []store.UsenetServer {
 		}
 		settings, _ := json.Marshal(extra)
 		out = append(out, store.UsenetServer{
-			Name: cmpOr(get("Name"), get("Host")), Host: get("Host"), Port: port, UseTLS: yes(get("Encryption")),
+			Name: or(get("Name"), get("Host")), Host: get("Host"), Port: port, UseTLS: yes(get("Encryption")),
 			Username: get("Username"), Password: get("Password"), Connections: conns, Level: level, Optional: yes(get("Optional")),
 			Retention: ret, Enabled: get("Active") == "" || yes(get("Active")), Settings: settings, Source: "nzbget",
 		})
 	}
 	return out
-}
-
-func cmpOr(a, b string) string {
-	if a != "" {
-		return a
-	}
-	return b
 }
 
 // controlKeys are NZBGet's own sign-in, which Box Office has no use for.
@@ -208,7 +202,7 @@ func (m *Migrator) runNZBGet(ctx context.Context, p *pending, pr *Progress, o Op
 			msg += "; " + err.Error()
 		}
 		step(1, "done", msg)
-		m.update(func() { pr.Backups = append(pr.Backups, name) })
+		m.update(func() { pr.Backups = append(pr.Backups, filepath.Base(path)) })
 	}
 	step(2, "running", "")
 	servers := p.nzbConfig.servers()

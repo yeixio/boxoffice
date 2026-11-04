@@ -16,6 +16,7 @@ import (
 	"github.com/yeixio/matinee/internal/boxoffice/catalog"
 	"github.com/yeixio/matinee/internal/boxoffice/jobs"
 	"github.com/yeixio/matinee/internal/boxoffice/store"
+	"github.com/yeixio/matinee/internal/boxoffice/store/storetest"
 	"github.com/yeixio/matinee/internal/boxoffice/tmdb/tmdbtest"
 )
 
@@ -30,11 +31,7 @@ type env struct {
 
 func setup(t *testing.T) env {
 	t.Helper()
-	st, err := store.Open(":memory:")
-	if err != nil {
-		t.Fatal(err)
-	}
-	t.Cleanup(func() { st.Close() })
+	st := storetest.Open(t)
 	log := slog.New(slog.NewTextHandler(io.Discard, nil))
 	fake := tmdbtest.New(t)
 	cat := &catalog.Service{Store: st, Jobs: jobs.New(st, log), Log: log, EnvTMDBKey: tmdbtest.Key, TMDBBase: fake.URL}

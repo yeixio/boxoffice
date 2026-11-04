@@ -547,13 +547,15 @@ func (m *Migrator) run(ctx context.Context, p *pending, pr *Progress, o Options)
 			p.backupZip = data
 			var path string
 			path, err = m.Backups.KeepFile(ctx, name, data)
-			if err != nil && path != "" {
-				step(1, "done", "saved as "+path+"; "+err.Error())
+			if path != "" {
+				msg := "saved as " + path
+				if err != nil {
+					msg += "; " + err.Error()
+				}
 				err = nil
-			} else if err == nil {
-				step(1, "done", "saved as "+path)
+				step(1, "done", msg)
+				m.update(func() { pr.Backups = append(pr.Backups, filepath.Base(path)) })
 			}
-			m.update(func() { pr.Backups = append(pr.Backups, name) })
 		}
 		if err != nil {
 			fail(1, fmt.Errorf("didn't migrate, because the backup of %s failed: %w", p.l.name(), err))

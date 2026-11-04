@@ -494,15 +494,23 @@ func (l localStore) Delete(ctx context.Context, name string) error {
 // a backup downloaded from Radarr before a migration, next to the backups
 // on this disk and in the remote place. It's never pruned.
 func (m *Manager) KeepFile(ctx context.Context, name string, data []byte) (string, error) {
+	s, err := m.Settings(ctx)
+	if err != nil {
+		return "", err
+	}
+	// Another app's backup holds its passwords and keys, so it's kept
+	// encrypted like Box Office's own when there's a passphrase.
+	if s.Passphrase != "" {
+		if data, err = encrypt(data, s.Passphrase); err != nil {
+			return "", err
+		}
+		name += ".enc"
+	}
 	dir := filepath.Join(m.Dir, "imported")
 	if err := (localStore{dir}).Put(ctx, name, bytes.NewReader(data), int64(len(data))); err != nil {
 		return "", err
 	}
 	path := filepath.Join(dir, name)
-	s, err := m.Settings(ctx)
-	if err != nil {
-		return path, err
-	}
 	if r, err := remoteFor(s.Remote); err != nil {
 		return path, err
 	} else if r != nil {

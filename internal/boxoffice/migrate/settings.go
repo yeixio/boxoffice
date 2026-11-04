@@ -336,14 +336,30 @@ func (m *Migrator) importSettings(ctx context.Context, p *pending, pr *Progress)
 		}
 		slices.Sort(cats)
 		cats = slices.Compact(cats)
+		missing := len(ix.maskedFields()) > 0
+		settings := ix.settingsJSON()
+		// Run again without the backup, a hidden key comes over blank:
+		// keep the one an earlier import brought.
+		if key == "" && missing {
+			for _, e := range existing {
+				if e.Protocol == proto && e.URL == baseURL && e.APIKey != "" && !e.MissingSecret {
+					key, missing, settings = e.APIKey, false, e.Settings
+					break
+				}
+			}
+		}
 		row := store.Indexer{Name: ix.Name, Protocol: proto, Kind: strings.ToLower(ix.Implementation), URL: baseURL,
 			APIPath: ix.str("apiPath"), APIKey: key, Categories: cats, EnableRSS: ix.EnableRSS == nil || *ix.EnableRSS,
-			EnableSearch: ix.EnableSearch == nil || *ix.EnableSearch, Priority: ix.Priority, Settings: ix.settingsJSON(), Source: app,
-			MissingSecret: len(ix.maskedFields()) > 0}
+			EnableSearch: ix.EnableSearch == nil || *ix.EnableSearch, Priority: ix.Priority, Settings: settings, Source: app,
+			MissingSecret: missing}
 		if err := st.UpsertIndexer(ctx, row); err != nil {
 			return "", fmt.Errorf("indexer %s: %w", ix.Name, err)
 		}
 		nIdx++
+	}
+	clients, err := st.DownloadClients(ctx)
+	if err != nil {
+		return "", err
 	}
 	nDC := 0
 	for _, dc := range d.providers["downloadclient"] {
@@ -365,15 +381,37 @@ func (m *Migrator) importSettings(ctx context.Context, p *pending, pr *Progress)
 		if category == "" {
 			category = dc.str("tvCategory")
 		}
-		row := store.DownloadClient{Name: dc.Name, Kind: strings.ToLower(dc.Implementation), Protocol: strings.ToLower(dc.Protocol), Host: host, Port: port,
+		kind := strings.ToLower(dc.Implementation)
+		missing := len(dc.maskedFields()) > 0
+		settings := dc.settingsJSON()
+		if missing {
+			for _, e := range clients {
+				if e.Kind == kind && e.Host == host && e.Port == port && e.Category == category && !e.MissingSecret {
+					password, missing, settings = e.Password, false, e.Settings
+					break
+				}
+			}
+		}
+		row := store.DownloadClient{Name: dc.Name, Kind: kind, Protocol: strings.ToLower(dc.Protocol), Host: host, Port: port,
 			UseTLS: tls, URLBase: base, Username: dc.str("username"), Password: password, Category: category, Priority: max(dc.Priority, 1),
-			Enabled: dc.Enable == nil || *dc.Enable, Settings: dc.settingsJSON(), Source: app, MissingSecret: len(dc.maskedFields()) > 0}
+			Enabled: dc.Enable == nil || *dc.Enable, Settings: settings, Source: app, MissingSecret: missing}
 		if err := st.UpsertDownloadClient(ctx, row); err != nil {
 			return "", fmt.Errorf("download client %s: %w", dc.Name, err)
 		}
 		nDC++
 	}
+	saved, err := st.ImportedSettings(ctx)
+	if err != nil {
+		return "", err
+	}
 	for sec, raw := range d.raw {
+		// Hidden secrets in a section saved earlier with them filled in
+		// keep the earlier copy.
+		if bytes.Contains(raw, []byte(`"`+masked+`"`)) && slices.ContainsFunc(saved, func(is store.ImportedSetting) bool {
+			return is.App == app && is.Section == sec && !bytes.Contains(is.Data, []byte(`"`+masked+`"`))
+		}) {
+			continue
+		}
 		if err := st.SaveImportedSetting(ctx, app, sec, raw); err != nil {
 			return "", err
 		}
