@@ -180,7 +180,7 @@ func (c *Checker) files(ctx context.Context) ([]Issue, error) {
 		is.Level, is.Title = "error", "Most files aren't where Box Office expects them"
 		is.Steps = []string{
 			"Check the library is mounted into Box Office: in Kubernetes, the media list in its Helm values; in Docker, the -v volumes.",
-			"If you moved in from Radarr or Sonarr, the old app may see the library at another path. Move in again and set the path under \"Where Box Office sees your library\"; titles already here are kept.",
+			"Easiest: mount the library into Box Office at the same path the old app (Radarr or Sonarr) uses, such as /data/media/tv, read-only if you like. Box Office then finds the files where the old app said they are.",
 		}
 		is.Link = &Link{To: "/import", Label: "Open Move in"}
 	}

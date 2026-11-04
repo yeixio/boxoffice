@@ -40,6 +40,16 @@ type PathMap struct {
 	To   string `json:"to"`
 }
 
+// covered says whether one of maps applies to path.
+func covered(maps []PathMap, path string) bool {
+	for _, m := range maps {
+		if from := strings.TrimRight(m.From, "/"); from != "" && (path == from || strings.HasPrefix(path, from+"/")) {
+			return true
+		}
+	}
+	return false
+}
+
 func mapPath(maps []PathMap, p string) string {
 	if p == "" {
 		return p
@@ -286,13 +296,18 @@ func (m *Migrator) preview(ctx context.Context, req Request, say report) (Plan, 
 	if p.settings, err = l.readSettings(ctx); err != nil {
 		return Plan{}, err
 	}
+	// Maps typed in are used as they are; the old app's other root folders
+	// get the maps Box Office finds. (A typed map for one library, such as
+	// movies, mustn't leave the shows unmapped.)
+	say("Finding where Box Office sees your files", 0, 0)
 	found := false
-	if len(req.PathMap) == 0 {
-		say("Finding where Box Office sees your files", 0, 0)
-		req.PathMap = m.findPathMaps(p)
-		found = len(req.PathMap) > 0
-		p.req = req
+	for _, pm := range m.findPathMaps(p) {
+		if !covered(req.PathMap, pm.From) {
+			req.PathMap = append(req.PathMap, pm)
+			found = true
+		}
 	}
+	p.req = req
 	plan := Plan{PathMap: orEmpty(req.PathMap), PathMapFound: found, Token: newToken(), App: req.App, AppVersion: st.Version, URL: l.base.String(), Warnings: []string{},
 		Profiles: []ProfilePlan{}, RootFolders: []FolderPlan{}, Sample: []Sample{}, ExpiresAt: time.Now().Add(planLife)}
 
