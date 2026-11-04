@@ -17,16 +17,16 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/yeixio/matinee/boxoffice/web"
-	"github.com/yeixio/matinee/internal/boxoffice/api"
-	"github.com/yeixio/matinee/internal/boxoffice/backup"
-	"github.com/yeixio/matinee/internal/boxoffice/catalog"
-	"github.com/yeixio/matinee/internal/boxoffice/config"
-	"github.com/yeixio/matinee/internal/boxoffice/jobs"
-	"github.com/yeixio/matinee/internal/boxoffice/migrate"
-	"github.com/yeixio/matinee/internal/boxoffice/store"
-	"github.com/yeixio/matinee/internal/kube"
-	"github.com/yeixio/matinee/internal/version"
+	"github.com/yeixio/boxoffice/internal/api"
+	"github.com/yeixio/boxoffice/internal/backup"
+	"github.com/yeixio/boxoffice/internal/catalog"
+	"github.com/yeixio/boxoffice/internal/config"
+	"github.com/yeixio/boxoffice/internal/jobs"
+	"github.com/yeixio/boxoffice/internal/kube"
+	"github.com/yeixio/boxoffice/internal/migrate"
+	"github.com/yeixio/boxoffice/internal/store"
+	"github.com/yeixio/boxoffice/internal/version"
+	"github.com/yeixio/boxoffice/web"
 )
 
 func main() {

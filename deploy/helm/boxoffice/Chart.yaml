@@ -4,10 +4,10 @@ description: Box Office finds and keeps the movies and shows Matinee plays, repl
 type: application
 version: 0.1.0
 appVersion: "0.1.0"
-home: https://matinee.yeix.io
+home: https://github.com/yeixio/boxoffice
 sources:
-  - https://github.com/yeixio/matinee
+  - https://github.com/yeixio/boxoffice
 keywords: [self-hosted, movies, tv, automation, matinee]
 maintainers:
   - name: Yeix
-    url: https://matinee.yeix.io
+    url: https://github.com/yeixio/boxoffice

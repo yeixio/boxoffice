@@ -1,0 +1,496 @@
+// Package api is Box Office's own HTTP API, which its web UI uses, plus the
+// health checks and the web UI itself. The Radarr- and Sonarr-compatible
+// APIs are mounted next to it, under /radarr and /sonarr.
+//
+// Everything under /api/v1 needs an admin: a browser signed in with a
+// session cookie, or any client with the API key in X-Api-Key.
+package api
+
+import (
+	"context"
+	"encoding/json"
+	"errors"
+	"io"
+	"io/fs"
+	"log/slog"
+	"net"
+	"net/http"
+	"path"
+	"strconv"
+	"strings"
+	"sync"
+	"time"
+
+	"golang.org/x/crypto/bcrypt"
+
+	"github.com/yeixio/boxoffice/internal/arrapi"
+	"github.com/yeixio/boxoffice/internal/backup"
+	"github.com/yeixio/boxoffice/internal/catalog"
+	"github.com/yeixio/boxoffice/internal/migrate"
+	"github.com/yeixio/boxoffice/internal/store"
+	"github.com/yeixio/boxoffice/internal/tmdb"
+)
+
+// SettingAPIKey is where the API key is kept.
+const SettingAPIKey = "api_key"
+
+const (
+	cookieName = "boxoffice_session"
+	sessionTTL = 30 * 24 * time.Hour
+)
+
+// Server is the whole HTTP side of Box Office.
+type Server struct {
+	Store    *store.Store
+	Catalog  *catalog.Service
+	Backups  *backup.Manager
+	Migrator *migrate.Migrator
+	Log      *slog.Logger
+	Version  string
+	Database string // sqlite or postgres, for the System page
+	DataDir  string
+	// EnvAPIKey, when set, is the API key, and can't be changed in the UI:
+	// it comes from the deployment, such as a Kubernetes Secret.
+	EnvAPIKey string
+	// Web is the built web UI; nil serves a short page saying so.
+	Web fs.FS
+
+	started  time.Time
+	failures sync.Map // username -> *failure
+}
+
+type failure struct {
+	mu    sync.Mutex
+	count int
+	until time.Time
+}
+
+// APIKey is the key the API and the Radarr and Sonarr APIs take. One is
+// made on first start.
+func (s *Server) APIKey(ctx context.Context) string {
+	if s.EnvAPIKey != "" {
+		return s.EnvAPIKey
+	}
+	k, _ := s.Store.Setting(ctx, SettingAPIKey)
+	return k
+}
+
+// EnsureAPIKey makes the API key if there isn't one.
+func (s *Server) EnsureAPIKey(ctx context.Context) error {
+	if s.APIKey(ctx) != "" {
+		return nil
+	}
+	return s.Store.SetSetting(ctx, SettingAPIKey, store.NewToken())
+}
+
+type route struct {
+	pattern string
+	auth    bool
+	fn      func(http.ResponseWriter, *http.Request) error
+}
+
+// Handler is every route.
+func (s *Server) Handler() http.Handler {
+	s.started = time.Now()
+	mux := http.NewServeMux()
+	routes := []route{
+		{"GET /api/v1/status", false, s.status},
+		{"POST /api/v1/setup", false, s.setup},
+		{"POST /api/v1/login", false, s.login},
+		{"POST /api/v1/logout", false, s.logout},
+		{"PUT /api/v1/me/password", true, s.changePassword},
+
+		{"GET /api/v1/system", true, s.system},
+		{"GET /api/v1/settings", true, s.settings},
+		{"PUT /api/v1/settings", true, s.saveSettings},
+		{"POST /api/v1/settings/apikey", true, s.newAPIKey},
+		{"GET /api/v1/qualities", true, s.qualities},
+		{"GET /api/v1/profiles", true, s.profiles},
+		{"POST /api/v1/profiles", true, s.createProfile},
+		{"PUT /api/v1/profiles/{id}", true, s.updateProfile},
+		{"DELETE /api/v1/profiles/{id}", true, s.deleteProfile},
+		{"GET /api/v1/rootfolders", true, s.rootFolders},
+		{"POST /api/v1/rootfolders", true, s.addRootFolder},
+		{"DELETE /api/v1/rootfolders/{id}", true, s.deleteRootFolder},
+		{"GET /api/v1/fs", true, s.browse},
+
+		{"GET /api/v1/lookup/movies", true, s.lookupMovies},
+		{"GET /api/v1/lookup/series", true, s.lookupSeries},
+		{"GET /api/v1/movies", true, s.movies},
+		{"POST /api/v1/movies", true, s.addMovie},
+		{"GET /api/v1/movies/{id}", true, s.movie},
+		{"PATCH /api/v1/movies/{id}", true, s.editMovie},
+		{"DELETE /api/v1/movies/{id}", true, s.deleteMovie},
+		{"POST /api/v1/movies/{id}/search", true, s.searchMovie},
+		{"POST /api/v1/movies/{id}/refresh", true, s.refreshMovie},
+		{"GET /api/v1/series", true, s.seriesList},
+		{"POST /api/v1/series", true, s.addSeries},
+		{"GET /api/v1/series/{id}", true, s.series},
+		{"PATCH /api/v1/series/{id}", true, s.editSeries},
+		{"DELETE /api/v1/series/{id}", true, s.deleteSeries},
+		{"POST /api/v1/series/{id}/search", true, s.searchSeries},
+		{"POST /api/v1/series/{id}/refresh", true, s.refreshSeries},
+		{"PATCH /api/v1/series/{id}/seasons/{number}", true, s.editSeason},
+		{"PATCH /api/v1/episodes/{id}", true, s.editEpisode},
+		{"POST /api/v1/episodes/{id}/search", true, s.searchEpisode},
+		{"GET /api/v1/calendar", true, s.calendar},
+		{"GET /api/v1/activity", true, s.activity},
+
+		{"GET /api/v1/backups", true, s.backups},
+		{"POST /api/v1/backups", true, s.makeBackup},
+		{"PUT /api/v1/backups/settings", true, s.saveBackupSettings},
+		{"POST /api/v1/backups/test", true, s.testBackupRemote},
+		{"POST /api/v1/backups/restore", true, s.restoreUpload},
+		{"GET /api/v1/backups/{name}", true, s.downloadBackup},
+		{"POST /api/v1/backups/{name}/restore", true, s.restoreBackup},
+
+		{"POST /api/v1/migrations/preview", true, s.previewMigration},
+		{"POST /api/v1/migrations", true, s.runMigration},
+		{"GET /api/v1/migrations", true, s.migrations},
+		{"GET /api/v1/migrations/{id}", true, s.migration},
+		{"POST /api/v1/matinee/switch", true, s.switchMatinee},
+
+		{"GET /api/v1/connections", true, s.connections},
+		{"DELETE /api/v1/indexers/{id}", true, s.deleteConnection(func(r *http.Request, id int64) error { return s.Store.DeleteIndexer(r.Context(), id) })},
+		{"DELETE /api/v1/downloadclients/{id}", true, s.deleteConnection(func(r *http.Request, id int64) error { return s.Store.DeleteDownloadClient(r.Context(), id) })},
+		{"DELETE /api/v1/usenetservers/{id}", true, s.deleteConnection(func(r *http.Request, id int64) error { return s.Store.DeleteUsenetServer(r.Context(), id) })},
+		{"GET /api/v1/blocklist", true, s.blocklist},
+		{"GET /api/v1/imported", true, s.importedSettings},
+	}
+	for _, r := range routes {
+		mux.Handle(r.pattern, s.wrap(r))
+	}
+	mux.HandleFunc("/api/", func(w http.ResponseWriter, r *http.Request) {
+		writeError(w, http.StatusNotFound, "there's no such API")
+	})
+	key := s.APIKey
+	mux.Handle("/radarr/", http.StripPrefix("/radarr", arrapi.New(arrapi.Radarr, s.Catalog, key, s.Version, s.Log)))
+	mux.Handle("/sonarr/", http.StripPrefix("/sonarr", arrapi.New(arrapi.Sonarr, s.Catalog, key, s.Version, s.Log)))
+	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte("ok\n")) })
+	mux.HandleFunc("GET /readyz", func(w http.ResponseWriter, r *http.Request) {
+		ctx, cancel := context.WithTimeout(r.Context(), 3*time.Second)
+		defer cancel()
+		if err := s.Store.Ping(ctx); err != nil {
+			http.Error(w, "database unreachable", http.StatusServiceUnavailable)
+			return
+		}
+		w.Write([]byte("ok\n"))
+	})
+	mux.Handle("/", s.web())
+	return securityHeaders(mux)
+}
+
+func securityHeaders(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("X-Content-Type-Options", "nosniff")
+		w.Header().Set("Referrer-Policy", "same-origin")
+		w.Header().Set("X-Frame-Options", "DENY")
+		// Posters come from TMDB; everything else is Box Office's own.
+		w.Header().Set("Content-Security-Policy", "default-src 'self'; img-src 'self' data: https://image.tmdb.org; style-src 'self' 'unsafe-inline'; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'")
+		h.ServeHTTP(w, r)
+	})
+}
+
+// web serves the web UI, with index.html for any path it doesn't have, so
+// the UI's own routes load on refresh.
+func (s *Server) web() http.Handler {
+	if s.Web == nil {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Content-Type", "text/html; charset=utf-8")
+			io.WriteString(w, "<!doctype html><title>Box Office</title><p>Box Office is running, but its web UI wasn't built into this binary. Build it with <code>make build</code>.</p>")
+		})
+	}
+	files := http.FileServerFS(s.Web)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		p := strings.TrimPrefix(path.Clean(r.URL.Path), "/")
+		if p == "" {
+			p = "index.html"
+		}
+		if _, err := fs.Stat(s.Web, p); err != nil {
+			r = r.Clone(r.Context())
+			r.URL.Path = "/"
+		}
+		if strings.HasPrefix(p, "assets/") {
+			w.Header().Set("Cache-Control", "public, max-age=31536000, immutable")
+		} else {
+			w.Header().Set("Cache-Control", "no-cache")
+		}
+		files.ServeHTTP(w, r)
+	})
+}
+
+// ---- answers ----
+
+type httpError struct {
+	status int
+	msg    string
+}
+
+func (e *httpError) Error() string { return e.msg }
+
+func errorf(status int, msg string) error { return &httpError{status, msg} }
+
+func writeJSON(w http.ResponseWriter, status int, v any) error {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Header().Set("Cache-Control", "no-store")
+	w.WriteHeader(status)
+	return json.NewEncoder(w).Encode(v)
+}
+
+func writeError(w http.ResponseWriter, status int, msg string) {
+	writeJSON(w, status, map[string]string{"error": msg})
+}
+
+func readJSON(r *http.Request, v any) error {
+	if ct := r.Header.Get("Content-Type"); !strings.HasPrefix(ct, "application/json") {
+		return errorf(http.StatusUnsupportedMediaType, "send JSON")
+	}
+	dec := json.NewDecoder(io.LimitReader(r.Body, 1<<20))
+	if err := dec.Decode(v); err != nil {
+		return errorf(http.StatusBadRequest, "that isn't valid JSON")
+	}
+	return nil
+}
+
+func pathID(r *http.Request, name string) (int64, error) {
+	id, err := strconv.ParseInt(r.PathValue(name), 10, 64)
+	if err != nil || id <= 0 {
+		return 0, errorf(http.StatusNotFound, "not found")
+	}
+	return id, nil
+}
+
+type ctxKey struct{}
+
+// wrap checks sign-in for routes that need it, and turns errors into answers.
+func (s *Server) wrap(rt route) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if rt.auth {
+			u, ok := s.authenticate(r)
+			if !ok {
+				writeError(w, http.StatusUnauthorized, "sign in first")
+				return
+			}
+			r = r.WithContext(context.WithValue(r.Context(), ctxKey{}, u))
+			// A browser's cookie rides along on requests from other sites;
+			// those can't send JSON or custom headers without asking first,
+			// so changes from a browser must come as JSON or with the key.
+			if r.Method != "GET" && r.Method != "HEAD" && u.ID != 0 && r.Header.Get("X-Requested-With") == "" &&
+				!strings.HasPrefix(r.Header.Get("Content-Type"), "application/json") {
+				writeError(w, http.StatusForbidden, "send changes as JSON")
+				return
+			}
+		}
+		err := rt.fn(w, r)
+		if err == nil {
+			return
+		}
+		var he *httpError
+		var ce *catalog.Error
+		switch {
+		case errors.As(err, &he):
+			writeError(w, he.status, he.msg)
+		case errors.As(err, &ce):
+			writeError(w, http.StatusBadRequest, ce.Message)
+		case errors.Is(err, store.ErrNotFound):
+			writeError(w, http.StatusNotFound, "not found")
+		case errors.Is(err, store.ErrExists):
+			writeError(w, http.StatusConflict, "that's there already")
+		case errors.Is(err, catalog.ErrExists):
+			writeError(w, http.StatusConflict, "that's on the list already")
+		case errors.Is(err, store.ErrInUse):
+			writeError(w, http.StatusConflict, "titles still use it; move them to another first")
+		case errors.Is(err, tmdb.ErrNoKey):
+			writeError(w, http.StatusServiceUnavailable, err.Error())
+		case errors.Is(err, context.Canceled):
+		default:
+			s.Log.Warn("request failed", "method", r.Method, "path", r.URL.Path, "err", err)
+			writeError(w, http.StatusInternalServerError, err.Error())
+		}
+	})
+}
+
+// authenticate finds who's asking: an admin by session, or the API key
+// (as user 0).
+func (s *Server) authenticate(r *http.Request) (store.User, bool) {
+	if k := r.Header.Get("X-Api-Key"); k != "" {
+		want := s.APIKey(r.Context())
+		return store.User{Username: "api key"}, want != "" && constEq(k, want)
+	}
+	tok := ""
+	if h := r.Header.Get("Authorization"); strings.HasPrefix(h, "Bearer ") {
+		tok = strings.TrimPrefix(h, "Bearer ")
+	} else if c, err := r.Cookie(cookieName); err == nil {
+		tok = c.Value
+	}
+	if tok == "" {
+		return store.User{}, false
+	}
+	u, err := s.Store.SessionUser(r.Context(), tok)
+	return u, err == nil
+}
+
+func constEq(a, b string) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	var v byte
+	for i := range len(a) {
+		v |= a[i] ^ b[i]
+	}
+	return v == 0
+}
+
+func user(r *http.Request) store.User {
+	u, _ := r.Context().Value(ctxKey{}).(store.User)
+	return u
+}
+
+// ---- signing in ----
+
+func (s *Server) status(w http.ResponseWriter, r *http.Request) error {
+	n, err := s.Store.CountUsers(r.Context())
+	if err != nil {
+		return err
+	}
+	out := map[string]any{"setup": n > 0, "version": s.Version}
+	if u, ok := s.authenticate(r); ok {
+		out["user"] = u
+	}
+	return writeJSON(w, http.StatusOK, out)
+}
+
+type credentials struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+func (c credentials) check() error {
+	if strings.TrimSpace(c.Username) == "" {
+		return errorf(http.StatusBadRequest, "enter a username")
+	}
+	if len(c.Password) < 8 {
+		return errorf(http.StatusBadRequest, "use a password of at least 8 characters")
+	}
+	return nil
+}
+
+var setupMu sync.Mutex
+
+// setup makes the first admin. It only works once.
+func (s *Server) setup(w http.ResponseWriter, r *http.Request) error {
+	var c credentials
+	if err := readJSON(r, &c); err != nil {
+		return err
+	}
+	if err := c.check(); err != nil {
+		return err
+	}
+	setupMu.Lock()
+	defer setupMu.Unlock()
+	if n, err := s.Store.CountUsers(r.Context()); err != nil {
+		return err
+	} else if n > 0 {
+		return errorf(http.StatusConflict, "Box Office is set up already; sign in")
+	}
+	hash, err := bcrypt.GenerateFromPassword([]byte(c.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+	u, err := s.Store.CreateUser(r.Context(), strings.TrimSpace(c.Username), string(hash))
+	if err != nil {
+		return err
+	}
+	return s.signIn(w, r, u)
+}
+
+func (s *Server) signIn(w http.ResponseWriter, r *http.Request, u store.User) error {
+	tok, err := s.Store.CreateSession(r.Context(), u.ID, sessionTTL)
+	if err != nil {
+		return err
+	}
+	http.SetCookie(w, &http.Cookie{Name: cookieName, Value: tok, Path: "/", HttpOnly: true, SameSite: http.SameSiteStrictMode,
+		Secure: r.TLS != nil || r.Header.Get("X-Forwarded-Proto") == "https", MaxAge: int(sessionTTL.Seconds())})
+	return writeJSON(w, http.StatusOK, map[string]any{"user": u, "token": tok})
+}
+
+var dummyHash, _ = bcrypt.GenerateFromPassword([]byte("box office"), bcrypt.DefaultCost)
+
+func (s *Server) login(w http.ResponseWriter, r *http.Request) error {
+	var c credentials
+	if err := readJSON(r, &c); err != nil {
+		return err
+	}
+	name := strings.TrimSpace(c.Username)
+	fv, _ := s.failures.LoadOrStore(strings.ToLower(name), &failure{})
+	f := fv.(*failure)
+	f.mu.Lock()
+	wait := time.Until(f.until)
+	f.mu.Unlock()
+	if wait > 0 {
+		w.Header().Set("Retry-After", strconv.Itoa(int(wait.Seconds())+1))
+		return errorf(http.StatusTooManyRequests, "too many wrong passwords; try again in a few minutes")
+	}
+	u, err := s.Store.UserByName(r.Context(), name)
+	hash := dummyHash
+	if err == nil {
+		hash = []byte(u.PasswordHash())
+	}
+	if bcrypt.CompareHashAndPassword(hash, []byte(c.Password)) != nil || err != nil {
+		f.mu.Lock()
+		f.count++
+		if f.count >= 5 {
+			f.until = time.Now().Add(time.Duration(min(f.count-4, 15)) * time.Minute)
+		}
+		f.mu.Unlock()
+		s.Log.Warn("wrong sign-in", "username", name, "from", clientIP(r))
+		return errorf(http.StatusUnauthorized, "that username and password don't match")
+	}
+	s.failures.Delete(strings.ToLower(name))
+	return s.signIn(w, r, u)
+}
+
+func clientIP(r *http.Request) string {
+	host, _, err := net.SplitHostPort(r.RemoteAddr)
+	if err != nil {
+		return r.RemoteAddr
+	}
+	return host
+}
+
+func (s *Server) logout(w http.ResponseWriter, r *http.Request) error {
+	if c, err := r.Cookie(cookieName); err == nil {
+		s.Store.DeleteSession(r.Context(), c.Value)
+	}
+	http.SetCookie(w, &http.Cookie{Name: cookieName, Value: "", Path: "/", MaxAge: -1, HttpOnly: true, SameSite: http.SameSiteStrictMode})
+	w.WriteHeader(http.StatusNoContent)
+	return nil
+}
+
+func (s *Server) changePassword(w http.ResponseWriter, r *http.Request) error {
+	u := user(r)
+	if u.ID == 0 {
+		return errorf(http.StatusForbidden, "sign in as an admin to change a password")
+	}
+	var in struct {
+		Current string `json:"current"`
+		New     string `json:"new"`
+	}
+	if err := readJSON(r, &in); err != nil {
+		return err
+	}
+	if bcrypt.CompareHashAndPassword([]byte(u.PasswordHash()), []byte(in.Current)) != nil {
+		return errorf(http.StatusForbidden, "the current password isn't right")
+	}
+	if len(in.New) < 8 {
+		return errorf(http.StatusBadRequest, "use a password of at least 8 characters")
+	}
+	hash, err := bcrypt.GenerateFromPassword([]byte(in.New), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+	if err := s.Store.SetPassword(r.Context(), u.ID, string(hash)); err != nil {
+		return err
+	}
+	return s.signIn(w, r, u)
+}
