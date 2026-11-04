@@ -28,7 +28,7 @@ function scanItem(s: Scan, dismiss: () => void): Item {
 function moveItem(m: Progress): Item {
   const name = appName[m.app] ?? m.app
   const to = `/import?migration=${m.id}`
-  const step = m.steps.find((s) => s.status === 'running')
+  const step = m.steps?.find((s) => s.status === 'running')
   if (m.status === 'running') return { key: `m${m.id}`, state: 'running', title: `Moving in from ${name}`, detail: step?.message || step?.name, to, action: 'See progress' }
   if (m.status === 'failed') return { key: `m${m.id}`, state: 'failed', title: `Moving in from ${name} stopped`, detail: `${name} is as it was.`, to, action: 'See why' }
   return { key: `m${m.id}`, state: 'done', title: `Moved in from ${name}`, to, action: 'See it' }

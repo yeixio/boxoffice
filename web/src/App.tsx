@@ -24,7 +24,9 @@ export function App() {
   return <Shell status={status.data} />
 }
 
-const nav = [
+// Move in is for setting up: it leaves the menu once the admin has finished
+// moving in, for Settings.
+const allNav = [
   { to: '/movies', label: 'Movies', icon: Film },
   { to: '/shows', label: 'Shows', icon: Tv },
   { to: '/calendar', label: 'Coming up', icon: CalendarDays },
@@ -36,6 +38,7 @@ const nav = [
 
 function Shell({ status }: { status: Status }) {
   const qc = useQueryClient()
+  const nav = allNav.filter((n) => n.to !== '/import' || !status.movedIn)
   // On a phone the sections fold into a menu, closed again on moving.
   const [menu, setMenu] = useState(false)
   const location = useLocation()

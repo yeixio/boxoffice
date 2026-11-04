@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AlertTriangle, Copy, Folder, FolderUp, KeyRound, Plus, Trash2 } from 'lucide-react'
 import { del, get, post, put, type Connections, type Profile, type RootFolder, type Settings as SettingsData, type SystemInfo } from '../api'
@@ -14,6 +15,7 @@ export function Settings() {
         <div className="flex flex-col gap-6">
           <General />
           <ConnectMatinee />
+          <MoveIn />
           <Account />
         </div>
         <div className="flex flex-col gap-6">
@@ -61,6 +63,19 @@ function General() {
         </Button>
       </div>
       <ErrorNote error={save.error} />
+    </Card>
+  )
+}
+
+// MoveIn is where Move in lives once it has left the menu.
+function MoveIn() {
+  return (
+    <Card>
+      <h2 className="mb-1 font-display text-lg font-semibold">Move in</h2>
+      <p className="mb-4 text-sm text-muted">Bring everything over from Radarr, Sonarr or NZBGet. The old app is only read from, so it's safe to do again, such as for an app you add later.</p>
+      <Link to="/import">
+        <Button>Open Move in</Button>
+      </Link>
     </Card>
   )
 }
