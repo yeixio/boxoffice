@@ -30,6 +30,9 @@ type Engine struct {
 	// Libraries lists the library folders, so the downloads folder is never
 	// one of them or inside one.
 	Libraries func(ctx context.Context) ([]string, error)
+	// Failed hears of a download that failed, to block the release and
+	// look for another.
+	Failed func(ctx context.Context, d store.Download, why string)
 
 	meter   meter
 	limit   limiter
@@ -476,6 +479,9 @@ func (e *Engine) process(ctx context.Context, r *running, d store.Download, srv 
 	default:
 		e.Log.Warn("download failed", "name", d.Name, "err", err)
 		e.Store.SetDownloadStatus(bg, d.ID, store.DownloadFailed, sentence(err.Error()))
+		if e.Failed != nil {
+			e.Failed(bg, d, sentence(err.Error()))
+		}
 	}
 }
 

@@ -164,3 +164,21 @@ func (s *Store) MergeDuplicateDownloadClients(ctx context.Context) error {
 	}
 	return nil
 }
+
+// BlockedFor is the blocklist for one title.
+func (s *Store) BlockedFor(ctx context.Context, kind string, titleID int64) ([]Blocked, error) {
+	rows, err := s.query(ctx, "SELECT source_title FROM blocklist WHERE kind = ? AND title_id = ?", kind, titleID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var out []Blocked
+	for rows.Next() {
+		var b Blocked
+		if err := rows.Scan(&b.SourceTitle); err != nil {
+			return nil, err
+		}
+		out = append(out, b)
+	}
+	return out, rows.Err()
+}
