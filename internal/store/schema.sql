@@ -233,3 +233,30 @@ CREATE TABLE IF NOT EXISTS imported_settings (
 	imported_at BIGINT NOT NULL,
 	PRIMARY KEY (app, section)
 );
+
+-- Box Office's own downloads: the queue, and once finished, the history.
+-- The NZB itself is kept in the downloads folder, by id.
+CREATE TABLE IF NOT EXISTS downloads (
+	id           INTEGER PRIMARY KEY AUTOINCREMENT,
+	name         TEXT NOT NULL,
+	status       TEXT NOT NULL DEFAULT 'queued', -- queued, downloading, paused, verifying, repairing, unpacking, importing, completed, failed
+	kind         TEXT NOT NULL DEFAULT '',       -- movie or series, when it's for a title
+	title_id     BIGINT NOT NULL DEFAULT 0,
+	episode_ids  TEXT NOT NULL DEFAULT '[]',
+	quality      INTEGER NOT NULL DEFAULT 0,
+	indexer      TEXT NOT NULL DEFAULT '',
+	source       TEXT NOT NULL DEFAULT '',       -- search, upload…
+	password     TEXT NOT NULL DEFAULT '',
+	size         BIGINT NOT NULL DEFAULT 0,
+	done_bytes   BIGINT NOT NULL DEFAULT 0,
+	failed_bytes BIGINT NOT NULL DEFAULT 0,
+	done_files   TEXT NOT NULL DEFAULT '[]',     -- files of the NZB already fetched, by index
+	position     INTEGER NOT NULL DEFAULT 0,
+	folder       TEXT NOT NULL DEFAULT '',
+	message      TEXT NOT NULL DEFAULT '',
+	imported_to  TEXT NOT NULL DEFAULT '',
+	added_at     BIGINT NOT NULL,
+	started_at   BIGINT NOT NULL DEFAULT 0,
+	finished_at  BIGINT NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS downloads_status ON downloads (status, position);
