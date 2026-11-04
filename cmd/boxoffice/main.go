@@ -81,7 +81,7 @@ func run() error {
 	cat.Register()
 	backups := &backup.Manager{Store: db, Dir: cfg.BackupDir(), Log: log}
 	srv := &api.Server{
-		Store: db, Catalog: cat, Backups: backups, Migrator: &migrate.Migrator{Catalog: cat, Backups: backups, Log: log}, Log: log,
+		Store: db, Catalog: cat, Backups: backups, Migrator: &migrate.Migrator{Catalog: cat, Backups: backups, Log: log, DataDir: cfg.DataDir}, Log: log,
 		Version: version.Version, Database: dbKind, DataDir: cfg.DataDir, EnvAPIKey: cfg.APIKey, Web: web.FS(),
 	}
 	if err := srv.EnsureAPIKey(ctx); err != nil {

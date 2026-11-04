@@ -88,6 +88,10 @@ type Plan struct {
 	Servers     []ServerPlan  `json:"servers,omitempty"` // NZBGet's news servers
 	Warnings    []string      `json:"warnings"`
 	ExpiresAt   time.Time     `json:"expiresAt"`
+	// PathMap is the path maps the import uses. PathMapFound says Box
+	// Office worked them out itself, because none were entered.
+	PathMap      []PathMap `json:"pathMap"`
+	PathMapFound bool      `json:"pathMapFound"`
 }
 
 // SettingsPlan counts the settings that would come across besides titles.
@@ -196,6 +200,13 @@ type Migrator struct {
 	Backups *backup.Manager
 	Log     *slog.Logger
 
+	// DataDir is Box Office's own data folder, never taken for media.
+	DataDir string
+	// Candidates and MediaDirs replace where Find looks for an app and
+	// where Preview looks for the old app's folders; for tests.
+	Candidates func(app string) []string
+	MediaDirs  func() []string
+
 	mu      sync.Mutex
 	plans   map[string]*pending
 	running map[int64]*Progress
@@ -261,7 +272,13 @@ func (m *Migrator) Preview(ctx context.Context, req Request) (Plan, error) {
 	if p.settings, err = l.readSettings(ctx); err != nil {
 		return Plan{}, err
 	}
-	plan := Plan{Token: newToken(), App: req.App, AppVersion: st.Version, URL: l.base.String(), Warnings: []string{},
+	found := false
+	if len(req.PathMap) == 0 {
+		req.PathMap = m.findPathMaps(p)
+		found = len(req.PathMap) > 0
+		p.req = req
+	}
+	plan := Plan{PathMap: orEmpty(req.PathMap), PathMapFound: found, Token: newToken(), App: req.App, AppVersion: st.Version, URL: l.base.String(), Warnings: []string{},
 		Profiles: []ProfilePlan{}, RootFolders: []FolderPlan{}, Sample: []Sample{}, ExpiresAt: time.Now().Add(30 * time.Minute)}
 
 	locals, err := m.Catalog.Store.Profiles(ctx)
@@ -364,6 +381,44 @@ func (m *Migrator) Preview(ctx context.Context, req Request) (Plan, error) {
 	p.plan = plan
 	m.keep(p)
 	return plan, nil
+}
+
+// findPathMaps works out the path maps for the old app's root folders from
+// where Box Office finds their titles.
+func (m *Migrator) findPathMaps(p *pending) []PathMap {
+	roots := make([]string, 0, len(p.roots))
+	for _, r := range p.roots {
+		roots = append(roots, filepath.Clean(r.Path))
+	}
+	var paths []string
+	for _, mv := range p.movies {
+		paths = append(paths, mv.Path)
+	}
+	for _, sr := range p.series {
+		paths = append(paths, sr.Path)
+	}
+	titles := map[string][]string{}
+	for _, t := range paths {
+		t = filepath.Clean(t)
+		for _, r := range roots {
+			if strings.HasPrefix(t, strings.TrimRight(r, "/")+"/") {
+				titles[r] = append(titles[r], t)
+				break
+			}
+		}
+	}
+	dirs := m.MediaDirs
+	if dirs == nil {
+		dirs = func() []string { return mediaDirs([]string{m.DataDir}) }
+	}
+	return findPathMaps(roots, titles, dirs())
+}
+
+func orEmpty(maps []PathMap) []PathMap {
+	if maps == nil {
+		return []PathMap{}
+	}
+	return maps
 }
 
 // keep holds a plan until it's run or expires.
