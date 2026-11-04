@@ -216,3 +216,17 @@ func TestRedirectBase(t *testing.T) {
 		t.Errorf("another host: %v %q", b, to)
 	}
 }
+
+func TestPickImage(t *testing.T) {
+	imgs := []lImage{
+		{CoverType: "banner", RemoteURL: "https://artworks.thetvdb.com/banners/b.jpg"},
+		{CoverType: "poster", RemoteURL: "http://artworks.thetvdb.com/banners/p.jpg"},
+		{CoverType: "fanart", RemoteURL: "/MediaCover/1/fanart.jpg"},
+	}
+	if got := pickImage(imgs, "poster"); got != "https://artworks.thetvdb.com/banners/p.jpg" {
+		t.Errorf("poster = %q", got)
+	}
+	if got := pickImage(imgs, "fanart"); got != "" {
+		t.Errorf("fanart = %q, want none (not a web address)", got)
+	}
+}

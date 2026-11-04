@@ -214,9 +214,17 @@ type lImage struct {
 	RemoteURL string `json:"remoteUrl"`
 }
 
+// pickImage picks the image of kind, over https: Box Office is served over
+// https, and a browser won't show an http image on it.
 func pickImage(images []lImage, kind string) string {
 	for _, im := range images {
-		if im.CoverType == kind && strings.HasPrefix(im.RemoteURL, "https://") {
+		if im.CoverType != kind {
+			continue
+		}
+		if u, ok := strings.CutPrefix(im.RemoteURL, "http://"); ok {
+			return "https://" + u
+		}
+		if strings.HasPrefix(im.RemoteURL, "https://") {
 			return im.RemoteURL
 		}
 	}
