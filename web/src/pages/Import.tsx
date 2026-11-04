@@ -2,7 +2,7 @@ import { useEffect, useState, type ReactNode } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, useSearchParams } from 'react-router-dom'
 import { AlertTriangle, ArrowRight, Check, CircleDashed, Film, LoaderCircle, Minus, Plus, Server, Tv, X } from 'lucide-react'
-import { get, post, type MigrationApp, type MigrationRequest, type PathMap, type Plan, type Progress, type Scan, type Step, type SwitchResult } from '../api'
+import { del, get, post, put, type MigrationApp, type MigrationRequest, type PathMap, type Plan, type Progress, type Scan, type Status, type Step, type SwitchResult } from '../api'
 import { ItemRow, useBackground } from '../Tray'
 import { appName, count, when } from '../format'
 import { Badge, Button, Card, ErrorNote, Field, Heading, Input, Toggle } from '../ui'
@@ -45,9 +45,11 @@ export function Import() {
           .map((s, i) => {
             const at = stages.indexOf(stage)
             const me = stages.indexOf(s)
+            // Done is reached, not worked on: it shows as done.
+            const done = me < at || (s === 'Done' && at === me)
             return (
-              <li key={s} className={`flex items-center gap-2 rounded-full border px-3 py-1 text-sm ${me === at ? 'border-marquee text-marquee' : me < at ? 'border-ok/40 text-ok' : 'border-line text-muted'}`}>
-                <span className="font-mono text-xs">{me < at ? <Check className="size-3.5" /> : i + 1}</span>
+              <li key={s} className={`flex items-center gap-2 rounded-full border px-3 py-1 text-sm ${done ? 'border-ok/40 text-ok' : me === at ? 'border-marquee text-marquee' : 'border-line text-muted'}`}>
+                <span className="font-mono text-xs">{done ? <Check className="size-3.5" /> : i + 1}</span>
                 {s === 'Matinee' ? 'Matinee (optional)' : s}
               </li>
             )
@@ -55,6 +57,7 @@ export function Import() {
       </ol>
       {stage === 'Connect' && (
         <>
+          <Overview />
           <Connect
             req={req}
             setReq={setReq}
@@ -487,7 +490,7 @@ function Moving({ id, onDone, onRestart }: { id: number; onDone: (app: Migration
   return (
     <Card>
       <ul className="flex flex-col gap-4">
-        {p?.steps.map((st, i) => (
+        {p?.steps?.map((st, i) => (
           <li key={i} className="flex gap-3">
             <StepIcon status={st.status} />
             <div>
@@ -620,6 +623,83 @@ function Finished({ app, matinee, onAgain }: { app: MigrationApp; matinee: Switc
           <Button variant="primary">See what came over</Button>
         </Link>
       </div>
+    </Card>
+  )
+}
+
+// Overview is the move-in as a whole: which apps have come over, and a way
+// to finish, after which Move in leaves the menu for Settings.
+function Overview() {
+  const qc = useQueryClient()
+  const status = useQuery({ queryKey: ['status'], queryFn: () => get<Status>('/status') })
+  const list = useQuery({ queryKey: ['migrations'], queryFn: () => get<Progress[]>('/migrations') })
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState<unknown>(null)
+  const movedIn = !!status.data?.movedIn
+  const moves = list.data ?? []
+  const moved = (a: MigrationApp) => moves.find((m) => m.app === a && m.status === 'done')
+  const matinee = moves.find((m) => m.status === 'done' && m.matinee)
+  const any = apps.some((a) => moved(a.app))
+  const finish = async (done: boolean) => {
+    setBusy(true)
+    setError(null)
+    try {
+      await (done ? put('/migrations/done', {}) : del('/migrations/done'))
+      await qc.invalidateQueries({ queryKey: ['status'] })
+    } catch (e) {
+      setError(e)
+    } finally {
+      setBusy(false)
+    }
+  }
+  if (!list.data || !status.data) return null
+  // Before anything has come over, the form below says it all.
+  if (!any && !movedIn) {
+    return (
+      <p className="mb-6 text-sm text-muted">
+        Starting fresh, with nothing to move in from?{' '}
+        <button className="font-medium text-marquee" disabled={busy} onClick={() => finish(true)}>
+          Skip moving in
+        </button>{' '}
+        and Move in leaves the menu. It stays under Settings if you need it later.
+      </p>
+    )
+  }
+  const row = (key: string, ok: boolean, title: string, detail: string) => (
+    <li key={key} className="flex items-start gap-3 py-2">
+      {ok ? <Check className="mt-0.5 size-4 shrink-0 text-ok" aria-label="done" /> : <CircleDashed className="mt-0.5 size-4 shrink-0 text-muted" aria-label="not yet" />}
+      <div>
+        <div className="text-sm font-medium">{title}</div>
+        <div className="text-xs text-muted">{detail}</div>
+      </div>
+    </li>
+  )
+  return (
+    <Card className="mb-6">
+      <h2 className="font-display text-lg font-semibold">{movedIn ? "You've moved in" : 'Your move-in so far'}</h2>
+      <ul className="mt-2 divide-y divide-line">
+        {apps.map(({ app }) => {
+          const m = moved(app)
+          return row(app, !!m, appName[app], m ? `Moved in ${when(m.finished ?? m.started)}` : 'Not moved in. Skip it if you never used it.')
+        })}
+        {row('matinee', !!matinee, 'Matinee (optional)', matinee ? matinee.matinee! : 'Not switched over. Only needed if you watch with Matinee.')}
+      </ul>
+      {error ? <ErrorNote error={error} /> : null}
+      {movedIn ? (
+        <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-muted">
+          <span>Move in now lives under Settings. You can still move in from an app you add later.</span>
+          <Button variant="ghost" busy={busy} onClick={() => finish(false)}>
+            Show Move in in the menu again
+          </Button>
+        </div>
+      ) : (
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          <Button variant="primary" busy={busy} onClick={() => finish(true)}>
+            Finish moving in
+          </Button>
+          <span className="text-sm text-muted">Once everything you use has come over. Move in then leaves the menu, and stays under Settings.</span>
+        </div>
+      )}
     </Card>
   )
 }

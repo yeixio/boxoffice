@@ -146,6 +146,8 @@ func (s *Server) Handler() http.Handler {
 
 		{"POST /api/v1/migrations/preview", true, s.previewMigration},
 		{"GET /api/v1/migrations/find", true, s.findApp},
+		{"PUT /api/v1/migrations/done", true, s.setMovedIn(true)},
+		{"DELETE /api/v1/migrations/done", true, s.setMovedIn(false)},
 		{"POST /api/v1/migrations/scans", true, s.startScan},
 		{"GET /api/v1/migrations/scans", true, s.scans},
 		{"GET /api/v1/migrations/scans/{id}", true, s.scan},
@@ -363,6 +365,11 @@ func (s *Server) status(w http.ResponseWriter, r *http.Request) error {
 	out := map[string]any{"setup": n > 0, "version": s.Version}
 	if u, ok := s.authenticate(r); ok {
 		out["user"] = u
+		v, err := s.Store.Setting(r.Context(), settingMovedIn)
+		if err != nil {
+			return err
+		}
+		out["movedIn"] = v != ""
 	}
 	return writeJSON(w, http.StatusOK, out)
 }

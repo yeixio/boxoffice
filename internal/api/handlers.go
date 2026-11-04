@@ -808,6 +808,24 @@ func (s *Server) dismissScan(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
+// settingMovedIn is set once an admin has finished moving in. Move in then
+// leaves the main menu for Settings, where it stays for an app added later.
+const settingMovedIn = "moved_in"
+
+func (s *Server) setMovedIn(done bool) func(w http.ResponseWriter, r *http.Request) error {
+	return func(w http.ResponseWriter, r *http.Request) error {
+		v := ""
+		if done {
+			v = time.Now().UTC().Format(time.RFC3339)
+		}
+		if err := s.Store.SetSetting(r.Context(), settingMovedIn, v); err != nil {
+			return err
+		}
+		w.WriteHeader(http.StatusNoContent)
+		return nil
+	}
+}
+
 // findApp looks for an app to move in from at its usual addresses.
 func (s *Server) findApp(w http.ResponseWriter, r *http.Request) error {
 	return writeJSON(w, http.StatusOK, map[string]string{"url": s.Migrator.Find(r.Context(), r.URL.Query().Get("app"))})
