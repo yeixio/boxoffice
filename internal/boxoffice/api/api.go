@@ -149,6 +149,13 @@ func (s *Server) Handler() http.Handler {
 		{"GET /api/v1/migrations", true, s.migrations},
 		{"GET /api/v1/migrations/{id}", true, s.migration},
 		{"POST /api/v1/matinee/switch", true, s.switchMatinee},
+
+		{"GET /api/v1/connections", true, s.connections},
+		{"DELETE /api/v1/indexers/{id}", true, s.deleteConnection(func(r *http.Request, id int64) error { return s.Store.DeleteIndexer(r.Context(), id) })},
+		{"DELETE /api/v1/downloadclients/{id}", true, s.deleteConnection(func(r *http.Request, id int64) error { return s.Store.DeleteDownloadClient(r.Context(), id) })},
+		{"DELETE /api/v1/usenetservers/{id}", true, s.deleteConnection(func(r *http.Request, id int64) error { return s.Store.DeleteUsenetServer(r.Context(), id) })},
+		{"GET /api/v1/blocklist", true, s.blocklist},
+		{"GET /api/v1/imported", true, s.importedSettings},
 	}
 	for _, r := range routes {
 		mux.Handle(r.pattern, s.wrap(r))

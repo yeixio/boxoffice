@@ -263,3 +263,19 @@ func (s *Store) ImportedSettings(ctx context.Context) ([]ImportedSetting, error)
 	}
 	return out, rows.Err()
 }
+
+func (s *Store) DeleteDownloadClient(ctx context.Context, id int64) error {
+	res, err := s.exec(ctx, "DELETE FROM download_clients WHERE id = ?", id)
+	if err != nil {
+		return err
+	}
+	return affected(res)
+}
+
+func (s *Store) DeleteUsenetServer(ctx context.Context, id int64) error {
+	res, err := s.exec(ctx, "DELETE FROM usenet_servers WHERE id = ?", id)
+	if err != nil {
+		return err
+	}
+	return affected(res)
+}
