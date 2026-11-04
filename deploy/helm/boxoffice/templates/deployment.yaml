@@ -1,0 +1,117 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "boxoffice.fullname" . }}
+  labels:
+    {{- include "boxoffice.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  strategy:
+    {{- toYaml .Values.strategy | nindent 4 }}
+  selector:
+    matchLabels:
+      {{- include "boxoffice.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "boxoffice.selectorLabels" . | nindent 8 }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+    spec:
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: boxoffice
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          env:
+            - name: BOXOFFICE_ADDR
+              value: ":7272"
+            - name: BOXOFFICE_DATA_DIR
+              value: /data
+            {{- if include "boxoffice.usesPostgres" . }}
+            - name: BOXOFFICE_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "boxoffice.databaseSecret" . }}
+                  key: database-url
+            {{- end }}
+            {{- with include "boxoffice.apiKeySecret" . }}
+            - name: BOXOFFICE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ . }}
+                  key: api-key
+            {{- end }}
+            {{- with include "boxoffice.tmdbSecret" . }}
+            - name: BOXOFFICE_TMDB_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ . }}
+                  key: tmdb-api-key
+            {{- end }}
+            {{- with .Values.env }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: 7272
+          startupProbe:
+            httpGet: {path: /healthz, port: http}
+            periodSeconds: 2
+            failureThreshold: 60
+          livenessProbe:
+            httpGet: {path: /healthz, port: http}
+            periodSeconds: 20
+          readinessProbe:
+            httpGet: {path: /readyz, port: http}
+            periodSeconds: 10
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            # Reading another app's database out of its backup needs scratch space.
+            - name: tmp
+              mountPath: /tmp
+            {{- range .Values.media }}
+            - name: media-{{ .name }}
+              mountPath: {{ .mountPath }}
+              {{- with .subPath }}
+              subPath: {{ . }}
+              {{- end }}
+            {{- end }}
+            {{- with .Values.backupVolume.mountPath }}
+            - name: backups
+              mountPath: {{ . }}
+            {{- end }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim | default (printf "%s-data" (include "boxoffice.fullname" .)) }}
+        - name: tmp
+          emptyDir:
+            sizeLimit: 2Gi
+        {{- range .Values.media }}
+        - name: media-{{ .name }}
+          {{- toYaml .volume | nindent 10 }}
+        {{- end }}
+        {{- if .Values.backupVolume.mountPath }}
+        - name: backups
+          {{- toYaml .Values.backupVolume.volume | nindent 10 }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

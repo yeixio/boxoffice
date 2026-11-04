@@ -1,0 +1,13 @@
+apiVersion: v2
+name: boxoffice
+description: Box Office finds and keeps the movies and shows Matinee plays, replacing Radarr, Sonarr and Overseerr, and moves you over from them
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+home: https://github.com/yeixio/boxoffice
+sources:
+  - https://github.com/yeixio/boxoffice
+keywords: [self-hosted, movies, tv, automation, matinee]
+maintainers:
+  - name: Yeix
+    url: https://github.com/yeixio/boxoffice

@@ -1,0 +1,18 @@
+Box Office is starting.
+{{ if .Values.ingress.enabled }}
+Open it at http{{ if .Values.ingress.tls }}s{{ end }}://{{ (first .Values.ingress.hosts).host }}
+{{- else }}
+Open it with:
+  kubectl -n {{ .Release.Namespace }} port-forward svc/{{ include "boxoffice.fullname" . }} {{ .Values.service.port }}
+and go to http://localhost:{{ .Values.service.port }}
+{{- end }}
+
+The first visit makes the admin account.
+
+To move in from Radarr, Sonarr or NZBGet, open "Move in". Inside the
+cluster, reach them by their services, such as http://radarr:7878.
+
+To connect Matinee, use these in Matinee's Radarr and Sonarr connections,
+with the API key from Box Office's Settings:
+  http://{{ include "boxoffice.fullname" . }}.{{ .Release.Namespace }}.svc:{{ .Values.service.port }}/radarr
+  http://{{ include "boxoffice.fullname" . }}.{{ .Release.Namespace }}.svc:{{ .Values.service.port }}/sonarr
