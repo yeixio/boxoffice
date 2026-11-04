@@ -209,6 +209,7 @@ type Migrator struct {
 
 	mu      sync.Mutex
 	plans   map[string]*pending
+	scans   map[string]*Scan
 	running map[int64]*Progress
 }
 
@@ -237,8 +238,17 @@ func newToken() string {
 // Preview connects to the old app, reads everything, and says what a
 // migration would do. Nothing changes anywhere.
 func (m *Migrator) Preview(ctx context.Context, req Request) (Plan, error) {
+	return m.preview(ctx, req, func(string, int, int) {})
+}
+
+// report says what a preview is doing: a step, and how far through it,
+// when that's known.
+type report func(step string, done, total int)
+
+func (m *Migrator) preview(ctx context.Context, req Request, say report) (Plan, error) {
 	req.App = strings.ToLower(strings.TrimSpace(req.App))
 	if req.App == "nzbget" {
+		say("Reading NZBGet's settings", 0, 0)
 		plan, p, err := m.previewNZBGet(ctx, req)
 		if err != nil {
 			return Plan{}, err
@@ -251,17 +261,20 @@ func (m *Migrator) Preview(ctx context.Context, req Request) (Plan, error) {
 	if err != nil {
 		return Plan{}, err
 	}
+	say("Connecting to "+l.name(), 0, 0)
 	st, err := l.status(ctx)
 	if err != nil {
 		return Plan{}, err
 	}
 	p := &pending{req: req, l: l}
+	say("Reading quality profiles and root folders", 0, 0)
 	if err := l.get(ctx, "/qualityprofile", nil, &p.profiles); err != nil {
 		return Plan{}, err
 	}
 	if err := l.get(ctx, "/rootfolder", nil, &p.roots); err != nil {
 		return Plan{}, err
 	}
+	say(map[string]string{"radarr": "Reading the movies", "sonarr": "Reading the shows"}[req.App], 0, 0)
 	if req.App == "radarr" {
 		if err := l.get(ctx, "/movie", nil, &p.movies); err != nil {
 			return Plan{}, err
@@ -269,17 +282,19 @@ func (m *Migrator) Preview(ctx context.Context, req Request) (Plan, error) {
 	} else if err := l.get(ctx, "/series", nil, &p.series); err != nil {
 		return Plan{}, err
 	}
+	say("Reading indexers, download clients and settings", 0, 0)
 	if p.settings, err = l.readSettings(ctx); err != nil {
 		return Plan{}, err
 	}
 	found := false
 	if len(req.PathMap) == 0 {
+		say("Finding where Box Office sees your files", 0, 0)
 		req.PathMap = m.findPathMaps(p)
 		found = len(req.PathMap) > 0
 		p.req = req
 	}
 	plan := Plan{PathMap: orEmpty(req.PathMap), PathMapFound: found, Token: newToken(), App: req.App, AppVersion: st.Version, URL: l.base.String(), Warnings: []string{},
-		Profiles: []ProfilePlan{}, RootFolders: []FolderPlan{}, Sample: []Sample{}, ExpiresAt: time.Now().Add(30 * time.Minute)}
+		Profiles: []ProfilePlan{}, RootFolders: []FolderPlan{}, Sample: []Sample{}, ExpiresAt: time.Now().Add(planLife)}
 
 	locals, err := m.Catalog.Store.Profiles(ctx)
 	if err != nil {
@@ -322,7 +337,13 @@ func (m *Migrator) Preview(ctx context.Context, req Request) (Plan, error) {
 		}
 	}
 	noTMDB := 0
-	for _, mv := range p.movies {
+	for i, mv := range p.movies {
+		if i%25 == 0 {
+			if err := ctx.Err(); err != nil {
+				return Plan{}, err
+			}
+			say("Checking the movies and their files", i, len(p.movies))
+		}
 		plan.Titles.Total++
 		if mv.TMDBID <= 0 {
 			plan.Titles.Skipped++
@@ -343,7 +364,10 @@ func (m *Migrator) Preview(ctx context.Context, req Request) (Plan, error) {
 		sample(Sample{Title: mv.Title, Year: mv.Year, Path: mapPath(req.PathMap, mv.Path), HasFile: mv.HasFile})
 	}
 	needTMDB := 0
-	for _, sr := range p.series {
+	for i, sr := range p.series {
+		if i%25 == 0 {
+			say("Checking the shows", i, len(p.series))
+		}
 		plan.Titles.Total++
 		if sr.TMDBID > 0 {
 			if _, err := m.Catalog.Store.SeriesByTMDB(ctx, sr.TMDBID); err == nil {
@@ -420,6 +444,10 @@ func orEmpty(maps []PathMap) []PathMap {
 	}
 	return maps
 }
+
+// planLife is how long a plan can wait to be confirmed, such as while
+// other apps are being looked over.
+const planLife = 3 * time.Hour
 
 // keep holds a plan until it's run or expires.
 func (m *Migrator) keep(p *pending) {

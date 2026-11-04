@@ -182,6 +182,19 @@ export type Plan = {
   pathMap: PathMap[]
   pathMapFound: boolean
 }
+export type Scan = {
+  id: string
+  app: MigrationApp
+  url: string
+  status: 'running' | 'ready' | 'failed'
+  step: string
+  done: number
+  total: number
+  error?: string
+  plan?: Plan
+  started: string
+  finished?: string
+}
 export type Step = { name: string; status: 'waiting' | 'running' | 'done' | 'skipped' | 'failed'; message?: string }
 export type Progress = {
   id: number

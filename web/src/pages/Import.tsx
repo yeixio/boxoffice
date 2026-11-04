@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { AlertTriangle, ArrowRight, Check, CircleDashed, Film, LoaderCircle, Minus, Plus, Server, Tv, X } from 'lucide-react'
-import { get, post, type MigrationApp, type MigrationRequest, type PathMap, type Plan, type Progress, type Step, type SwitchResult } from '../api'
+import { get, post, type MigrationApp, type MigrationRequest, type PathMap, type Plan, type Progress, type Scan, type Step, type SwitchResult } from '../api'
+import { ItemRow, useBackground } from '../Tray'
 import { appName, count, when } from '../format'
 import { Badge, Button, Card, ErrorNote, Field, Heading, Input, Toggle } from '../ui'
 
@@ -17,23 +18,25 @@ const apps: { app: MigrationApp; icon: ReactNode; blurb: string }[] = [
 ]
 
 export function Import() {
-  const [stage, setStage] = useState<Stage>('Connect')
+  const [params, setParams] = useSearchParams()
+  const scanId = params.get('scan') ?? ''
+  const migrationId = Number(params.get('migration') ?? 0)
   const [req, setReq] = useState<MigrationRequest>({ app: 'radarr', url: '', apiKey: '', pathMap: [] })
-  const [plan, setPlan] = useState<Plan | null>(null)
-  const [migrationId, setMigrationId] = useState(0)
-  const [matinee, setMatinee] = useState<SwitchResult | null>(null)
-  const restart = () => {
-    setStage('Connect')
-    setPlan(null)
-    setMigrationId(0)
-    setMatinee(null)
+  // After the move, the Matinee and Done steps, for the app moved from.
+  const [after, setAfter] = useState<{ stage: 'Matinee' | 'Done'; app: MigrationApp; matinee: SwitchResult | null } | null>(null)
+  const stage: Stage = after ? after.stage : migrationId ? 'Move in' : scanId ? 'Look it over' : 'Connect'
+  const app = after?.app ?? req.app
+  const go = (p: Record<string, string>) => {
+    setAfter(null)
+    setParams(p)
   }
+  const restart = () => go({})
   return (
     <>
       <Heading title="Move in" sub="Bring everything over from Radarr, Sonarr or NZBGet, step by step. The old app is only read from, so nothing in it changes." />
       <ol className="mb-8 flex flex-wrap gap-2" aria-label="Steps">
         {stages
-          .filter((s) => s !== 'Matinee' || req.app !== 'nzbget')
+          .filter((s) => s !== 'Matinee' || app !== 'nzbget')
           .map((s, i) => {
             const at = stages.indexOf(stage)
             const me = stages.indexOf(s)
@@ -46,43 +49,83 @@ export function Import() {
           })}
       </ol>
       {stage === 'Connect' && (
-        <Connect
-          req={req}
-          setReq={setReq}
-          onPlan={(p) => {
-            setPlan(p)
-            setStage('Look it over')
-          }}
-        />
+        <>
+          <Connect req={req} setReq={setReq} onStarted={(sc) => go({ scan: sc.id })} />
+          <Background />
+        </>
       )}
-      {stage === 'Look it over' && plan && (
-        <Review
-          plan={plan}
-          onBack={() => setStage('Connect')}
-          onStarted={(id) => {
-            setMigrationId(id)
-            setStage('Move in')
-          }}
-        />
-      )}
-      {stage === 'Move in' && <Moving id={migrationId} onDone={() => setStage(req.app === 'nzbget' ? 'Done' : 'Matinee')} onRestart={restart} />}
-      {stage === 'Matinee' && plan && (
-        <SwitchMatinee
-          app={plan.app}
-          migrationId={migrationId}
-          onDone={(r) => {
-            setMatinee(r)
-            setStage('Done')
-          }}
-        />
-      )}
-      {stage === 'Done' && plan && <Finished plan={plan} matinee={matinee} onAgain={restart} />}
+      {stage === 'Look it over' && <Looking id={scanId} onBack={restart} onStarted={(id) => go({ migration: String(id) })} />}
+      {stage === 'Move in' && <Moving id={migrationId} onDone={(a) => setAfter({ stage: a === 'nzbget' ? 'Done' : 'Matinee', app: a, matinee: null })} onRestart={restart} />}
+      {stage === 'Matinee' && after && <SwitchMatinee app={after.app} migrationId={migrationId} onDone={(r) => setAfter({ ...after, stage: 'Done', matinee: r })} />}
+      {stage === 'Done' && after && <Finished app={after.app} matinee={after.matinee} onAgain={restart} />}
       <History />
     </>
   )
 }
 
-function Connect({ req, setReq, onPlan }: { req: MigrationRequest; setReq: (r: MigrationRequest) => void; onPlan: (p: Plan) => void }) {
+// Background lists what's being looked over or moved in already, so another
+// app can be connected meanwhile.
+function Background() {
+  const items = useBackground()
+  if (!items.length) return null
+  return (
+    <section className="mt-8">
+      <h2 className="mb-3 font-display text-lg font-semibold">In the background</h2>
+      <ul className="divide-y divide-line rounded-xl border border-line bg-card">
+        {items.map((i) => (
+          <ItemRow key={i.key} item={i} />
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+// Looking follows a scan: its progress while Box Office reads the old app,
+// then the plan to look over.
+function Looking({ id, onBack, onStarted }: { id: string; onBack: () => void; onStarted: (id: number) => void }) {
+  const scan = useQuery({
+    queryKey: ['scan', id],
+    queryFn: () => get<Scan>(`/migrations/scans/${id}`),
+    refetchInterval: (q) => (q.state.data?.status === 'running' ? 1000 : false),
+    retry: false,
+  })
+  const sc = scan.data
+  if (sc?.status === 'ready' && sc.plan) return <Review plan={sc.plan} onBack={onBack} onStarted={onStarted} />
+  const name = sc ? appName[sc.app] : ''
+  return (
+    <Card>
+      {sc?.status === 'failed' ? (
+        <>
+          <h2 className="font-display text-lg font-semibold">Couldn't look over {name}</h2>
+          <p className="mt-2 text-sm text-bad">{sc.error}</p>
+          <p className="mt-2 text-sm text-muted">Nothing changed here or in {name}.</p>
+        </>
+      ) : scan.isError ? (
+        <ErrorNote error={scan.error} />
+      ) : (
+        <>
+          <div className="flex items-center gap-3">
+            <LoaderCircle className="size-5 animate-spin text-marquee" aria-hidden />
+            <h2 className="font-display text-lg font-semibold">Looking over {name}</h2>
+          </div>
+          <ul className="mt-3">{sc && <ItemRow item={{ key: sc.id, state: 'running', title: sc.step, done: sc.done, total: sc.total, to: '/import', action: '' }} />}</ul>
+          <p className="mt-2 text-sm text-muted">
+            A large library can take a few minutes. This carries on in the background: you can connect another app or leave this page, and the bell at the top says when it's ready. Nothing changes here or in {name} until
+            you confirm on the next step.
+          </p>
+        </>
+      )}
+      <div className="mt-5">
+        <Button variant="ghost" onClick={onBack}>
+          {sc?.status === 'running' ? 'Connect another app' : 'Back'}
+        </Button>
+      </div>
+    </Card>
+  )
+}
+
+function Connect({ req, setReq, onStarted }: { req: MigrationRequest; setReq: (r: MigrationRequest) => void; onStarted: (s: Scan) => void }) {
+  const qc = useQueryClient()
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<unknown>(null)
   const nzb = req.app === 'nzbget'
@@ -92,7 +135,9 @@ function Connect({ req, setReq, onPlan }: { req: MigrationRequest; setReq: (r: M
     setBusy(true)
     setError(null)
     try {
-      onPlan(await post<Plan>('/migrations/preview', { ...req, pathMap: req.pathMap.filter((m) => m.from && m.to) }))
+      const sc = await post<Scan>('/migrations/scans', { ...req, pathMap: req.pathMap.filter((m) => m.from && m.to) })
+      qc.invalidateQueries({ queryKey: ['scans'] })
+      onStarted(sc)
     } catch (err) {
       setError(err)
     } finally {
@@ -107,7 +152,7 @@ function Connect({ req, setReq, onPlan }: { req: MigrationRequest; setReq: (r: M
   const filled = useRef('')
   useEffect(() => {
     const url = found.data?.url
-    if (url && (req.url === '' || req.url === filled.current)) {
+    if (url && req.url !== url && (req.url === '' || req.url === filled.current)) {
       filled.current = url
       setReq({ ...req, url })
     }
@@ -416,7 +461,7 @@ function StepIcon({ status }: { status: Step['status'] }) {
   }
 }
 
-function Moving({ id, onDone, onRestart }: { id: number; onDone: () => void; onRestart: () => void }) {
+function Moving({ id, onDone, onRestart }: { id: number; onDone: (app: MigrationApp) => void; onRestart: () => void }) {
   const qc = useQueryClient()
   const pr = useQuery({
     queryKey: ['migration', id],
@@ -457,7 +502,7 @@ function Moving({ id, onDone, onRestart }: { id: number; onDone: () => void; onR
       )}
       {p?.status === 'done' && (
         <div className="mt-6 flex justify-end">
-          <Button variant="primary" onClick={onDone}>
+          <Button variant="primary" onClick={() => onDone(p.app)}>
             Next
           </Button>
         </div>
@@ -518,8 +563,8 @@ function SwitchMatinee({ app, migrationId, onDone }: { app: MigrationApp; migrat
   )
 }
 
-function Finished({ plan, matinee, onAgain }: { plan: Plan; matinee: SwitchResult | null; onAgain: () => void }) {
-  const name = appName[plan.app]
+function Finished({ app, matinee, onAgain }: { app: MigrationApp; matinee: SwitchResult | null; onAgain: () => void }) {
+  const name = appName[app]
   return (
     <Card>
       <div className="flex items-center gap-3">
@@ -534,7 +579,7 @@ function Finished({ plan, matinee, onAgain }: { plan: Plan; matinee: SwitchResul
             Matinee's {name} connection now goes to <code>{matinee.after}</code> (it was <code>{matinee.before || 'not set'}</code>).
           </li>
         ) : (
-          plan.app !== 'nzbget' && (
+          app !== 'nzbget' && (
             <li>
               Matinee still uses {name}. When you're ready, point it at Box Office from here or in Matinee's admin settings, using the address and API key under{' '}
               <Link className="font-medium text-marquee" to="/settings">
@@ -555,7 +600,7 @@ function Finished({ plan, matinee, onAgain }: { plan: Plan; matinee: SwitchResul
       </ul>
       <div className="mt-6 flex flex-wrap gap-2">
         <Button onClick={onAgain}>Move in from another app</Button>
-        <Link to={plan.app === 'sonarr' ? '/shows' : '/movies'}>
+        <Link to={app === 'sonarr' ? '/shows' : '/movies'}>
           <Button variant="primary">See what came over</Button>
         </Link>
       </div>

@@ -170,7 +170,7 @@ func (m *Migrator) previewNZBGet(ctx context.Context, req Request) (Plan, *pendi
 	}
 	p := &pending{req: req, nzb: n, nzbConfig: c}
 	plan := Plan{PathMap: []PathMap{}, Token: newToken(), App: "nzbget", AppVersion: version, URL: n.base.String(), Warnings: []string{},
-		Profiles: []ProfilePlan{}, RootFolders: []FolderPlan{}, Sample: []Sample{}, ExpiresAt: time.Now().Add(30 * time.Minute)}
+		Profiles: []ProfilePlan{}, RootFolders: []FolderPlan{}, Sample: []Sample{}, ExpiresAt: time.Now().Add(planLife)}
 	servers := c.servers()
 	plan.Settings = SettingsPlan{UsenetServers: len(servers), Categories: len(c.numbered("Category")), Sections: []string{"categories", "general"}}
 	for _, s := range servers {
