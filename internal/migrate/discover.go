@@ -3,7 +3,10 @@ package migrate
 import (
 	"bufio"
 	"context"
+	"encoding/json"
+	"io"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"slices"
@@ -73,11 +76,19 @@ func (m *Migrator) Find(ctx context.Context, app string) string {
 	}
 	wg.Wait()
 	// An app under a URL base can also answer without it, before pointing
-	// a request with a key at the base; so the longest address wins.
-	best := ""
+	// a request with a key at the base; so the one with the longest path
+	// wins, and otherwise the first, the shortest host name.
+	best, bestPath := "", -1
 	for i, ok := range found {
-		if ok && len(cands[i]) > len(best) {
-			best = cands[i]
+		if !ok {
+			continue
+		}
+		u, err := url.Parse(cands[i])
+		if err != nil {
+			continue
+		}
+		if len(u.Path) > bestPath {
+			best, bestPath = cands[i], len(u.Path)
 		}
 	}
 	return best
@@ -98,9 +109,22 @@ func answersAs(ctx context.Context, client *http.Client, app, base string) bool 
 	if err != nil {
 		return false
 	}
-	res.Body.Close()
+	defer res.Body.Close()
 	if app == "nzbget" {
-		return res.StatusCode == http.StatusUnauthorized && strings.Contains(strings.ToLower(res.Header.Get("WWW-Authenticate")), "nzbget")
+		// NZBGet names itself in its Server header, and in the sign-in it
+		// asks for unless it uses its own sign-in page. With no password
+		// set, it just answers.
+		named := strings.Contains(strings.ToLower(strings.Join(append(res.Header.Values("Server"), res.Header.Values("WWW-Authenticate")...), " ")), "nzbget")
+		switch res.StatusCode {
+		case http.StatusUnauthorized, http.StatusForbidden:
+			return named
+		case http.StatusOK:
+			var r struct {
+				Result any `json:"result"`
+			}
+			return json.NewDecoder(io.LimitReader(res.Body, 4096)).Decode(&r) == nil && r.Result != nil
+		}
+		return false
 	}
 	return res.StatusCode == http.StatusUnauthorized
 }
