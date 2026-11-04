@@ -179,6 +179,8 @@ export type Plan = {
   servers?: { name: string; host: string; port: number; tls: boolean; connections: number; level: number; hasPassword: boolean }[]
   warnings: string[]
   expiresAt: string
+  pathMap: PathMap[]
+  pathMapFound: boolean
 }
 export type Step = { name: string; status: 'waiting' | 'running' | 'done' | 'skipped' | 'failed'; message?: string }
 export type Progress = {

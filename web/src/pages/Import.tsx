@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import { AlertTriangle, ArrowRight, Check, CircleDashed, Film, LoaderCircle, Minus, Plus, Server, Tv, X } from 'lucide-react'
@@ -100,6 +100,33 @@ function Connect({ req, setReq, onPlan }: { req: MigrationRequest; setReq: (r: M
     }
   }
   const placeholder = { radarr: 'http://radarr:7878', sonarr: 'http://sonarr:8989', nzbget: 'http://nzbget:6789' }[req.app]
+  const folder = req.app === 'sonarr' ? 'tv' : 'movies'
+  // Look for the app at its usual addresses, and fill in the one that
+  // answers unless an address has been typed in.
+  const found = useQuery({ queryKey: ['find', req.app], queryFn: () => get<{ url: string }>(`/migrations/find?app=${req.app}`), staleTime: 60_000 })
+  const filled = useRef('')
+  useEffect(() => {
+    const url = found.data?.url
+    if (url && (req.url === '' || req.url === filled.current)) {
+      filled.current = url
+      setReq({ ...req, url })
+    }
+  }, [found.data?.url, req, setReq])
+  const pick = (app: MigrationApp) => {
+    // An address that was filled in belongs to the app it was found for.
+    set({ app, url: req.url === filled.current ? '' : req.url })
+    filled.current = ''
+  }
+  const addressHint = found.isLoading ? (
+    <>Looking for {appName[req.app]}…</>
+  ) : found.data?.url && req.url === found.data.url ? (
+    <span className="text-ok">Found {appName[req.app]} here.</span>
+  ) : (
+    <>
+      Box Office couldn't find {appName[req.app]} by itself. Enter the address you open it at, such as <code>{placeholder}</code>. If you open it at an address like <code>https://example.com/{req.app}</code>, keep the{' '}
+      <code>/{req.app}</code> at the end. In Kubernetes, use its service name: <code>kubectl get svc -A | grep {req.app}</code> lists it.
+    </>
+  )
   return (
     <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr]">
       <div className="flex flex-col gap-3">
@@ -107,7 +134,7 @@ function Connect({ req, setReq, onPlan }: { req: MigrationRequest; setReq: (r: M
         {apps.map((a) => (
           <button
             key={a.app}
-            onClick={() => set({ app: a.app })}
+            onClick={() => pick(a.app)}
             className={`flex gap-4 rounded-xl border p-4 text-left transition ${req.app === a.app ? 'border-marquee bg-marquee/5' : 'border-line bg-card hover:border-ink/40'}`}
           >
             <span className={req.app === a.app ? 'text-marquee' : 'text-muted'}>{a.icon}</span>
@@ -121,24 +148,49 @@ function Connect({ req, setReq, onPlan }: { req: MigrationRequest; setReq: (r: M
       <Card>
         <h2 className="mb-4 font-display text-lg font-semibold">Connect to {appName[req.app]}</h2>
         <div className="flex flex-col gap-4">
-          <Field label="Address" hint={`The address Box Office can reach ${appName[req.app]} at, such as its Kubernetes service.`}>
+          <Field label="Address" hint={addressHint}>
             {(id) => <Input id={id} placeholder={placeholder} value={req.url} onChange={(e) => set({ url: e.target.value })} />}
           </Field>
           {nzb ? (
             <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Username" hint="Settings → Security → ControlUsername">{(id) => <Input id={id} value={req.username ?? ''} onChange={(e) => set({ username: e.target.value })} />}</Field>
-              <Field label="Password">{(id) => <Input id={id} type="password" value={req.password ?? ''} onChange={(e) => set({ password: e.target.value })} />}</Field>
+              <Field label="Username">{(id) => <Input id={id} value={req.username ?? ''} onChange={(e) => set({ username: e.target.value })} autoComplete="off" />}</Field>
+              <Field label="Password">{(id) => <Input id={id} type="password" value={req.password ?? ''} onChange={(e) => set({ password: e.target.value })} autoComplete="off" />}</Field>
+              <Steps
+                className="sm:col-span-2"
+                steps={[
+                  <>
+                    Open NZBGet and go to <b>Settings</b>, then <b>Security</b>.
+                  </>,
+                  <>
+                    Copy <b>ControlUsername</b> and <b>ControlPassword</b> here. They're what you sign in to NZBGet with.
+                  </>,
+                ]}
+              />
             </div>
           ) : (
-            <Field label="API key" hint={`In ${appName[req.app]} under Settings → General.`}>
-              {(id) => <Input id={id} value={req.apiKey ?? ''} onChange={(e) => set({ apiKey: e.target.value })} autoComplete="off" spellCheck={false} />}
+            <Field label="API key">
+              {(id) => <Input id={id} value={req.apiKey ?? ''} onChange={(e) => set({ apiKey: e.target.value })} autoComplete="off" spellCheck={false} placeholder="32 letters and numbers" />}
             </Field>
           )}
           {!nzb && (
+            <Steps
+              steps={[
+                <>Open {appName[req.app]} in another tab.</>,
+                <>
+                  Go to <b>Settings</b>, then <b>General</b>.
+                </>,
+                <>
+                  Under <b>Security</b>, copy the <b>API Key</b> and paste it above.
+                </>,
+              ]}
+            />
+          )}
+          {!nzb && (
             <div className="flex flex-col gap-2">
-              <div className="text-sm font-medium">Path maps</div>
+              <div className="text-sm font-medium">Path maps (usually not needed)</div>
               <p className="text-xs text-muted">
-                Only if {appName[req.app]} and Box Office mount your media in different places, such as <code>/movies</code> in {appName[req.app]} and <code>/media/movies</code> here.
+                Box Office works out where your files are by itself, even if it sees them somewhere else than {appName[req.app]} does. Add a map only if the next step says it can't see them: {appName[req.app]}'s folder on the
+                left, such as <code>/{folder}</code>, and where Box Office sees it on the right, such as <code>/media/{folder}</code>.
               </p>
               {req.pathMap.map((m, i) => (
                 <div key={i} className="flex items-center gap-2">
@@ -163,6 +215,17 @@ function Connect({ req, setReq, onPlan }: { req: MigrationRequest; setReq: (r: M
         </div>
       </Card>
     </div>
+  )
+}
+
+// Steps are numbered instructions for finding something to enter.
+function Steps({ steps, className }: { steps: ReactNode[]; className?: string }) {
+  return (
+    <ol className={`flex list-decimal flex-col gap-1 rounded-lg border border-line bg-paper py-3 pl-8 pr-4 text-xs text-muted ${className ?? ''}`}>
+      {steps.map((s, i) => (
+        <li key={i}>{s}</li>
+      ))}
+    </ol>
   )
 }
 
@@ -250,6 +313,7 @@ function Review({ plan, onBack, onStarted }: { plan: Plan; onBack: () => void; o
               ))}
             </ul>
             <h3 className="mb-3 mt-5 font-display font-semibold">Root folders</h3>
+            {plan.pathMapFound && <p className="mb-2 text-xs text-muted">Box Office found where these are by looking for {name}'s titles in its own folders. If one is wrong, go back and add a path map.</p>}
             <ul className="flex flex-col gap-2 text-sm">
               {plan.rootFolders.map((f) => (
                 <li key={f.legacyPath} className="flex flex-wrap items-center gap-2">

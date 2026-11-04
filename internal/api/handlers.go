@@ -776,6 +776,11 @@ func (s *Server) previewMigration(w http.ResponseWriter, r *http.Request) error 
 	return writeJSON(w, http.StatusOK, p)
 }
 
+// findApp looks for an app to move in from at its usual addresses.
+func (s *Server) findApp(w http.ResponseWriter, r *http.Request) error {
+	return writeJSON(w, http.StatusOK, map[string]string{"url": s.Migrator.Find(r.Context(), r.URL.Query().Get("app"))})
+}
+
 func (s *Server) runMigration(w http.ResponseWriter, r *http.Request) error {
 	var in struct {
 		Token string `json:"token"`

@@ -145,6 +145,7 @@ func (s *Server) Handler() http.Handler {
 		{"POST /api/v1/backups/{name}/restore", true, s.restoreBackup},
 
 		{"POST /api/v1/migrations/preview", true, s.previewMigration},
+		{"GET /api/v1/migrations/find", true, s.findApp},
 		{"POST /api/v1/migrations", true, s.runMigration},
 		{"GET /api/v1/migrations", true, s.migrations},
 		{"GET /api/v1/migrations/{id}", true, s.migration},
