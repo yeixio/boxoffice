@@ -218,3 +218,7 @@ export type UsenetServer = { id: number; name: string; host: string; port: numbe
 export type Connections = { indexers: Indexer[]; downloadClients: DownloadClient[]; usenetServers: UsenetServer[]; blocklist: number }
 
 export type SystemInfo = { version: string; database: string; dataDir: string; go: string; os: string; startedAt: string; movies: number; series: number }
+
+// A problem Box Office found in itself, and how to fix it.
+export type HealthIssue = { id: string; level: 'error' | 'warning' | 'notice'; title: string; detail: string; steps: string[]; link?: { to: string; label: string } }
+export type Health = { issues: HealthIssue[]; checked: string }

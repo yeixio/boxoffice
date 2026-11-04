@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { NavLink, Navigate, Route, Routes, useLocation } from 'react-router-dom'
-import { CalendarDays, Clapperboard, DatabaseBackup, Film, History, LogOut, Menu, Settings as Cog, Truck, Tv, X } from 'lucide-react'
+import { CalendarDays, Clapperboard, DatabaseBackup, Film, HeartPulse, History, LogOut, Menu, Settings as Cog, Truck, Tv, X } from 'lucide-react'
 import { get, post, type Status } from './api'
 import { Spinner } from './ui'
 import { Tray } from './Tray'
@@ -15,6 +15,7 @@ import { Activity } from './pages/Activity'
 import { Import } from './pages/Import'
 import { Backups } from './pages/Backups'
 import { Settings } from './pages/Settings'
+import { Health, needsAttention, useHealth } from './pages/Health'
 
 export function App() {
   const status = useQuery({ queryKey: ['status'], queryFn: () => get<Status>('/status') })
@@ -31,6 +32,7 @@ const allNav = [
   { to: '/shows', label: 'Shows', icon: Tv },
   { to: '/calendar', label: 'Coming up', icon: CalendarDays },
   { to: '/activity', label: 'Activity', icon: History },
+  { to: '/health', label: 'Health', icon: HeartPulse },
   { to: '/import', label: 'Move in', icon: Truck },
   { to: '/backups', label: 'Backups', icon: DatabaseBackup },
   { to: '/settings', label: 'Settings', icon: Cog },
@@ -39,6 +41,14 @@ const allNav = [
 function Shell({ status }: { status: Status }) {
   const qc = useQueryClient()
   const nav = allNav.filter((n) => n.to !== '/import' || !status.movedIn)
+  // Health shows how many problems need fixing.
+  const problems = needsAttention(useHealth().data)
+  const badge = (to: string) =>
+    to === '/health' && problems > 0 ? (
+      <span className="rounded-full bg-marquee px-1.5 text-xs font-semibold leading-5 text-marquee-ink" aria-label={`${problems} to fix`}>
+        {problems}
+      </span>
+    ) : null
   // On a phone the sections fold into a menu, closed again on moving.
   const [menu, setMenu] = useState(false)
   const location = useLocation()
@@ -69,6 +79,7 @@ function Shell({ status }: { status: Status }) {
               >
                 <Icon className="size-4" aria-hidden />
                 {label}
+                {badge(to)}
               </NavLink>
             ))}
           </nav>
@@ -76,12 +87,13 @@ function Shell({ status }: { status: Status }) {
           <Tray />
           <button
             onClick={() => setMenu(!menu)}
-            className="flex items-center rounded-md p-1.5 text-muted hover:text-ink md:hidden"
+            className="relative flex items-center rounded-md p-1.5 text-muted hover:text-ink md:hidden"
             aria-label={menu ? 'Close menu' : 'Menu'}
             aria-expanded={menu}
             aria-controls="mobile-nav"
           >
             {menu ? <X className="size-5" aria-hidden /> : <Menu className="size-5" aria-hidden />}
+            {problems > 0 && !menu && <span className="absolute right-0.5 top-0.5 size-2 rounded-full bg-marquee" aria-hidden />}
           </button>
           <button onClick={signOut} className="flex items-center gap-1.5 text-sm text-muted hover:text-ink" title={`Signed in as ${status.user?.username}`} aria-label="Sign out">
             <LogOut className="size-4" aria-hidden />
@@ -98,6 +110,7 @@ function Shell({ status }: { status: Status }) {
               >
                 <Icon className="size-5" aria-hidden />
                 {label}
+                {badge(to)}
               </NavLink>
             ))}
           </nav>
@@ -113,6 +126,7 @@ function Shell({ status }: { status: Status }) {
           <Route path="/shows/:id" element={<ShowDetail />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/activity" element={<Activity />} />
+          <Route path="/health" element={<Health />} />
           <Route path="/import" element={<Import />} />
           <Route path="/backups" element={<Backups />} />
           <Route path="/settings" element={<Settings />} />

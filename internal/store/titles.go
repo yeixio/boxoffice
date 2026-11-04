@@ -485,3 +485,22 @@ func (s *Store) DeleteFile(ctx context.Context, id int64) error {
 	}
 	return affected(res)
 }
+
+// SampleFilePaths is up to n media files' paths, picked at random, for
+// checking that files are where Box Office thinks they are.
+func (s *Store) SampleFilePaths(ctx context.Context, n int) ([]string, error) {
+	rows, err := s.query(ctx, "SELECT path FROM media_files ORDER BY RANDOM() LIMIT ?", n)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var out []string
+	for rows.Next() {
+		var p string
+		if err := rows.Scan(&p); err != nil {
+			return nil, err
+		}
+		out = append(out, p)
+	}
+	return out, rows.Err()
+}
