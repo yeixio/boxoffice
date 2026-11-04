@@ -43,6 +43,28 @@ func TestFind(t *testing.T) {
 	}))
 	defer other.Close()
 
+	// NZBGet with its own sign-in page: no Basic prompt, but its Server header.
+	formAuth := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Server", "nzbget-24.3")
+		w.WriteHeader(http.StatusUnauthorized)
+	}))
+	defer formAuth.Close()
+	// NZBGet with no password just answers.
+	open := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/jsonrpc/version" {
+			w.Write([]byte(`{"version":"1.1","result":"21.1"}`))
+			return
+		}
+		w.Write([]byte("<html></html>"))
+	}))
+	defer open.Close()
+	for _, ts := range []*httptest.Server{formAuth, open} {
+		m := &Migrator{Candidates: func(string) []string { return []string{other.URL, ts.URL} }}
+		if got := m.Find(context.Background(), "nzbget"); got != ts.URL {
+			t.Errorf("NZBGet at %s: found %q", ts.URL, got)
+		}
+	}
+
 	m := &Migrator{Candidates: func(app string) []string {
 		switch app {
 		case "radarr":

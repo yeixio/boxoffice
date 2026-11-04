@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, useSearchParams } from 'react-router-dom'
 import { AlertTriangle, ArrowRight, Check, CircleDashed, Film, LoaderCircle, Minus, Plus, Server, Tv, X } from 'lucide-react'
@@ -21,7 +21,12 @@ export function Import() {
   const [params, setParams] = useSearchParams()
   const scanId = params.get('scan') ?? ''
   const migrationId = Number(params.get('migration') ?? 0)
-  const [req, setReq] = useState<MigrationRequest>({ app: 'radarr', url: '', apiKey: '', pathMap: [] })
+  // Each app keeps its own form, so connecting another while one is being
+  // looked over starts from that app's own details.
+  const [forms, setForms] = useState<Record<MigrationApp, MigrationRequest>>(() => ({ radarr: blank('radarr'), sonarr: blank('sonarr'), nzbget: blank('nzbget') }))
+  const [current, setCurrent] = useState<MigrationApp>('radarr')
+  const req = forms[current]
+  const setReq = (r: MigrationRequest) => setForms((f) => ({ ...f, [r.app]: r }))
   // After the move, the Matinee and Done steps, for the app moved from.
   const [after, setAfter] = useState<{ stage: 'Matinee' | 'Done'; app: MigrationApp; matinee: SwitchResult | null } | null>(null)
   const stage: Stage = after ? after.stage : migrationId ? 'Move in' : scanId ? 'Look it over' : 'Connect'
@@ -50,7 +55,17 @@ export function Import() {
       </ol>
       {stage === 'Connect' && (
         <>
-          <Connect req={req} setReq={setReq} onStarted={(sc) => go({ scan: sc.id })} />
+          <Connect
+            req={req}
+            setReq={setReq}
+            onPick={setCurrent}
+            onStarted={(sc) => {
+              // The next app is the likely one to connect meanwhile.
+              const order = apps.map((a) => a.app)
+              setCurrent(order[(order.indexOf(sc.app) + 1) % order.length])
+              go({ scan: sc.id })
+            }}
+          />
           <Background />
         </>
       )}
@@ -124,7 +139,9 @@ function Looking({ id, onBack, onStarted }: { id: string; onBack: () => void; on
   )
 }
 
-function Connect({ req, setReq, onStarted }: { req: MigrationRequest; setReq: (r: MigrationRequest) => void; onStarted: (s: Scan) => void }) {
+const blank = (app: MigrationApp): MigrationRequest => ({ app, url: '', apiKey: '', pathMap: [] })
+
+function Connect({ req, setReq, onPick, onStarted }: { req: MigrationRequest; setReq: (r: MigrationRequest) => void; onPick: (app: MigrationApp) => void; onStarted: (s: Scan) => void }) {
   const qc = useQueryClient()
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<unknown>(null)
@@ -149,19 +166,10 @@ function Connect({ req, setReq, onStarted }: { req: MigrationRequest; setReq: (r
   // Look for the app at its usual addresses, and fill in the one that
   // answers unless an address has been typed in.
   const found = useQuery({ queryKey: ['find', req.app], queryFn: () => get<{ url: string }>(`/migrations/find?app=${req.app}`), staleTime: 60_000 })
-  const filled = useRef('')
+  const foundUrl = found.data?.url
   useEffect(() => {
-    const url = found.data?.url
-    if (url && req.url !== url && (req.url === '' || req.url === filled.current)) {
-      filled.current = url
-      setReq({ ...req, url })
-    }
-  }, [found.data?.url, req, setReq])
-  const pick = (app: MigrationApp) => {
-    // An address that was filled in belongs to the app it was found for.
-    set({ app, url: req.url === filled.current ? '' : req.url })
-    filled.current = ''
-  }
+    if (foundUrl && req.url === '') setReq({ ...req, url: foundUrl })
+  }, [foundUrl, req, setReq])
   const addressHint = found.isLoading ? (
     <>Looking for {appName[req.app]}…</>
   ) : found.data?.url && req.url === found.data.url ? (
@@ -179,7 +187,7 @@ function Connect({ req, setReq, onStarted }: { req: MigrationRequest; setReq: (r
         {apps.map((a) => (
           <button
             key={a.app}
-            onClick={() => pick(a.app)}
+            onClick={() => onPick(a.app)}
             className={`flex gap-4 rounded-xl border p-4 text-left transition ${req.app === a.app ? 'border-marquee bg-marquee/5' : 'border-line bg-card hover:border-ink/40'}`}
           >
             <span className={req.app === a.app ? 'text-marquee' : 'text-muted'}>{a.icon}</span>
