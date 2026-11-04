@@ -158,6 +158,16 @@ func TestPreviewFindsPathMaps(t *testing.T) {
 	if plan.PathMapFound || !slices.Equal(plan.PathMap, typed) {
 		t.Fatalf("typed maps: found=%v %+v", plan.PathMapFound, plan.PathMap)
 	}
+	// A typed map for some other folder (such as one left from another
+	// app) doesn't stop Box Office finding this one's.
+	other := PathMap{From: "/data/media/tv", To: "/media/tv"}
+	plan, err = w.m.Preview(context.Background(), Request{App: "radarr", URL: ts.URL, APIKey: legacyKey, PathMap: []PathMap{other}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !plan.PathMapFound || !slices.Equal(plan.PathMap, append([]PathMap{other}, want...)) {
+		t.Fatalf("with another app's map: found=%v %+v", plan.PathMapFound, plan.PathMap)
+	}
 }
 
 func TestUnescapeMount(t *testing.T) {
