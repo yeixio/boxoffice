@@ -2,6 +2,7 @@ package api
 
 import (
 	"cmp"
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -17,6 +18,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/arrapi"
 	"github.com/yeixio/boxoffice/internal/backup"
 	"github.com/yeixio/boxoffice/internal/catalog"
+	"github.com/yeixio/boxoffice/internal/health"
 	"github.com/yeixio/boxoffice/internal/migrate"
 	"github.com/yeixio/boxoffice/internal/quality"
 	"github.com/yeixio/boxoffice/internal/store"
@@ -806,6 +808,14 @@ func (s *Server) dismissScan(w http.ResponseWriter, r *http.Request) error {
 	s.Migrator.DismissScan(r.PathValue("id"))
 	w.WriteHeader(http.StatusNoContent)
 	return nil
+}
+
+// health looks Box Office over for problems an admin can fix.
+func (s *Server) health(w http.ResponseWriter, r *http.Request) error {
+	ctx, cancel := context.WithTimeout(r.Context(), 20*time.Second)
+	defer cancel()
+	c := &health.Checker{Store: s.Store, Backups: s.Backups, TMDBKey: func(ctx context.Context) string { return s.Catalog.TMDB(ctx).Key }}
+	return writeJSON(w, http.StatusOK, map[string]any{"issues": c.Check(ctx), "checked": time.Now().UTC()})
 }
 
 // settingMovedIn is set once an admin has finished moving in. Move in then
