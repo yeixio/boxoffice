@@ -17,6 +17,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/yeixio/boxoffice/internal/announce"
 	"github.com/yeixio/boxoffice/internal/api"
 	"github.com/yeixio/boxoffice/internal/backup"
 	"github.com/yeixio/boxoffice/internal/catalog"
@@ -138,6 +139,23 @@ func run() error {
 		finder.RSSEvery, finder.PruneEvery} {
 		wg.Add(1)
 		go func() { defer wg.Done(); loop(ctx) }()
+	}
+
+	// Matinee looks for Box Office on the home network to fill in its address.
+	if cfg.Announce {
+		if port, err := announce.Port(cfg.Addr); err != nil {
+			log.Warn("not announcing on the local network", "addr", cfg.Addr, "err", err)
+		} else if id, err := db.InstanceID(ctx); err != nil {
+			log.Warn("not announcing on the local network", "err", err)
+		} else {
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+				if err := announce.Run(ctx, announce.Announcement{Port: port, ID: id, Version: version.Version}, log); err != nil {
+					log.Warn("not announcing on the local network", "err", err)
+				}
+			}()
+		}
 	}
 
 	hs := &http.Server{Addr: cfg.Addr, Handler: srv.Handler(), ReadHeaderTimeout: 10 * time.Second, IdleTimeout: 2 * time.Minute}
