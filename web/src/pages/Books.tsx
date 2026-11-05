@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { BookOpen, Headphones, Plus, RefreshCw, Search, Trash2 } from 'lucide-react'
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
+import { BookOpen, CircleCheck, Headphones, ListFilter, Lock, Plus, RefreshCw, Search, Trash2 } from 'lucide-react'
 import { del, get, patch, post, put, type Author, type AuthorDetail, type Book, type BookFormat, type LookupAuthor } from '../api'
-import { day } from '../format'
+import { bytes, day } from '../format'
+import { Releases } from '../Releases'
 import { useRootFolders } from '../hooks'
 import { SortControl, sortList, useSort, words, type SortOption } from '../sort'
 import { Badge, Button, Card, Empty, ErrorNote, Heading, Input, Modal, Spinner, Toggle } from '../ui'
@@ -18,7 +19,9 @@ const formats = {
     nouns: 'ebooks',
     icon: BookOpen,
     wanted: (a: Author) => a.wantedEbooks,
+    have: (a: Author) => a.haveEbooks,
     wants: (b: Book) => b.wantEbook,
+    file: (b: Book) => b.ebookFile,
     newFlag: 'newEbooks' as const,
   },
   audiobook: {
@@ -28,7 +31,9 @@ const formats = {
     nouns: 'audiobooks',
     icon: Headphones,
     wanted: (a: Author) => a.wantedAudiobooks,
+    have: (a: Author) => a.haveAudiobooks,
     wants: (b: Book) => b.wantAudiobook,
+    file: (b: Book) => b.audiobookFile,
     newFlag: 'newAudiobooks' as const,
   },
 }
@@ -93,7 +98,16 @@ export function Books({ format }: { format: BookFormat }) {
                     <span className="block truncate font-medium">{a.name}</span>
                     <span className="block truncate text-xs text-muted">{sort.option.key === 'added' ? `Added ${day(a.addedAt)}` : `${a.books} ${a.books === 1 ? 'book' : 'books'}`}</span>
                   </span>
-                  {f.wanted(a) > 0 ? <Badge tone="gold">{f.wanted(a)} wanted</Badge> : <Badge>Nothing wanted</Badge>}
+                  {a.locked && <Lock className="size-4 shrink-0 text-muted" aria-label="Do not touch" />}
+                  {f.wanted(a) === 0 ? (
+                    <Badge>Nothing wanted</Badge>
+                  ) : f.have(a) >= f.wanted(a) ? (
+                    <Badge tone="ok">All {f.wanted(a)} on disk</Badge>
+                  ) : (
+                    <Badge tone="gold">
+                      {f.wanted(a) - f.have(a)} of {f.wanted(a)} missing
+                    </Badge>
+                  )}
                 </Link>
               </li>
             ))}
@@ -229,11 +243,13 @@ export function AuthorPage({ format }: { format: BookFormat }) {
   const author = useQuery({ queryKey: ['author', id], queryFn: () => get<AuthorDetail>(`/authors/${id}`) })
   const [removing, setRemoving] = useState(false)
   const [text, setText] = useState('')
+  const [open, setOpen] = useState<number>()
+  const [releasesFor, setReleasesFor] = useState<Book>()
   const set = (a: AuthorDetail) => {
     qc.setQueryData(['author', id], a)
     qc.invalidateQueries({ queryKey: ['authors'] })
   }
-  const edit = useMutation({ mutationFn: (body: Partial<Pick<Author, 'newEbooks' | 'newAudiobooks'>>) => patch<AuthorDetail>(`/authors/${id}`, body), onSuccess: set })
+  const edit = useMutation({ mutationFn: (body: Partial<Pick<Author, 'newEbooks' | 'newAudiobooks' | 'locked'>>) => patch<AuthorDetail>(`/authors/${id}`, body), onSuccess: set })
   const refresh = useMutation({ mutationFn: () => post<AuthorDetail>(`/authors/${id}/refresh`), onSuccess: set })
   const all = useMutation({ mutationFn: (wanted: boolean) => put<AuthorDetail>(`/authors/${id}/wanted`, { format, wanted }), onSuccess: set })
   const book = useMutation({
@@ -260,11 +276,18 @@ export function AuthorPage({ format }: { format: BookFormat }) {
     const t = text.trim().toLowerCase()
     return (author.data?.bookList ?? []).filter((b) => !t || b.title.toLowerCase().includes(t))
   }, [author.data, text])
+  // A link to one book (from Downloads, say) opens it.
+  useEffect(() => {
+    const m = /^#book-(\d+)$/.exec(window.location.hash)
+    if (m && author.data?.bookList.some((b) => b.id === Number(m[1]))) setOpen(Number(m[1]))
+  }, [author.data])
 
   if (author.isPending) return <Spinner />
   if (author.isError) return <ErrorNote error={author.error} />
   const a = author.data
   const wanted = f.wanted(a)
+  const have = f.have(a)
+  const opened = a.bookList.find((b) => b.id === open)
   return (
     <div>
       <h1 className="font-display text-4xl font-bold tracking-tight">{a.name}</h1>
@@ -272,10 +295,11 @@ export function AuthorPage({ format }: { format: BookFormat }) {
         <Badge tone={wanted ? 'gold' : 'plain'}>
           {wanted} {wanted === 1 ? f.noun : f.nouns} wanted
         </Badge>
+        {wanted > 0 && <Badge tone={have >= wanted ? 'ok' : 'plain'}>{have} on disk</Badge>}
+        {a.locked && <Badge>Do not touch</Badge>}
         {lifespan(a) && <Badge>{lifespan(a)}</Badge>}
       </div>
       {a.bio && <p className="mt-4 line-clamp-4 max-w-3xl text-sm leading-relaxed">{a.bio}</p>}
-      <p className="mt-3 text-sm text-muted">Searching for and downloading books comes in the next Box Office update.</p>
       <div className="mt-5 flex flex-wrap gap-2">
         <Button busy={refresh.isPending} onClick={() => refresh.mutate()}>
           <RefreshCw className="size-4" aria-hidden /> Refresh from Open Library
@@ -289,6 +313,17 @@ export function AuthorPage({ format }: { format: BookFormat }) {
       <Card className="mt-6">
         <div className="flex flex-col gap-4">
           <Toggle checked={a[f.newFlag]} disabled={edit.isPending} onChange={(on) => edit.mutate({ [f.newFlag]: on })} label={`Want new books as ${f.nouns} when they come out`} />
+          <Toggle
+            checked={a.locked}
+            disabled={edit.isPending}
+            onChange={(on) => edit.mutate({ locked: on })}
+            label={
+              <span>
+                Do not touch
+                <span className="block text-sm text-muted">Box Office won't search for, download or move any of {a.name}'s books, as ebooks or audiobooks. Use it for books you look after yourself.</span>
+              </span>
+            }
+          />
           <div className="flex flex-wrap gap-2">
             <Button busy={all.isPending && all.variables === true} disabled={wanted === a.books} onClick={() => all.mutate(true)}>
               Want all {a.books}
@@ -307,13 +342,21 @@ export function AuthorPage({ format }: { format: BookFormat }) {
         {a.books > 12 && <Input type="search" className="sm:ml-auto sm:w-60" placeholder="Filter by title" aria-label="Filter by title" value={text} onChange={(e) => setText(e.target.value)} />}
       </div>
       {a.books === 0 && <p className="text-sm text-muted">Open Library lists no books for {a.name} yet.</p>}
-      <p className="mb-4 text-xs text-muted">The books with the most editions come first.</p>
+      <p className="mb-4 text-xs text-muted">The books with the most editions come first. Pick a cover to look for that book.</p>
       <ul className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
         {shown.map((b) => {
           const on = f.wants(b)
+          const file = f.file(b)
           return (
-            <li key={b.id}>
-              <Cover src={b.cover} title={b.title} />
+            <li key={b.id} id={`book-${b.id}`}>
+              <button type="button" className="relative block w-full text-left" onClick={() => setOpen(b.id)} aria-label={`Open ${b.title}`}>
+                <Cover src={b.cover} title={b.title} />
+                {file && (
+                  <span className="absolute top-2 right-2 rounded-full bg-ok p-1 text-white shadow" title="On disk">
+                    <CircleCheck className="size-4" aria-label="On disk" />
+                  </span>
+                )}
+              </button>
               <div className="mt-2 line-clamp-2 font-medium leading-snug" title={b.subtitle ? `${b.title}: ${b.subtitle}` : b.title}>
                 {b.title}
               </div>
@@ -335,6 +378,24 @@ export function AuthorPage({ format }: { format: BookFormat }) {
         })}
       </ul>
 
+      {opened && (
+        <BookDialog
+          format={format}
+          book={opened}
+          locked={a.locked}
+          busy={book.isPending}
+          onWant={(wanted) => book.mutate({ id: opened.id, wanted })}
+          onReleases={() => {
+            setOpen(undefined)
+            setReleasesFor(opened)
+          }}
+          onClose={() => setOpen(undefined)}
+        />
+      )}
+      {releasesFor && (
+        <Releases path={`/books/${releasesFor.id}/releases?format=${format}`} title={`${releasesFor.title} (${f.noun})`} onClose={() => setReleasesFor(undefined)} />
+      )}
+
       {removing && (
         <Modal title={`Remove ${a.name}?`} onClose={() => setRemoving(false)}>
           <p className="text-sm">Box Office stops following {a.name} for ebooks and audiobooks alike, and forgets their books. Files already in your libraries stay where they are.</p>
@@ -351,6 +412,84 @@ export function AuthorPage({ format }: { format: BookFormat }) {
       )}
     </div>
   )
+}
+
+// BookDialog is one book in one format: whether it's on disk, and looking
+// for it.
+function BookDialog({
+  format,
+  book: b,
+  locked,
+  busy,
+  onWant,
+  onReleases,
+  onClose,
+}: {
+  format: BookFormat
+  book: Book
+  locked: boolean
+  busy: boolean
+  onWant: (wanted: boolean) => void
+  onReleases: () => void
+  onClose: () => void
+}) {
+  const f = formats[format]
+  const qc = useQueryClient()
+  const file = f.file(b)
+  const on = f.wants(b)
+  const search = useMutation({
+    mutationFn: () => post(`/books/${b.id}/search`, { format }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['jobs'] }),
+  })
+  return (
+    <Modal title={b.title} onClose={onClose}>
+      <div className="flex gap-4">
+        <div className="w-24 shrink-0 sm:w-28">
+          <Cover src={b.cover} title={b.title} />
+        </div>
+        <div className="min-w-0 flex-1 text-sm">
+          {b.subtitle && <p className="mb-1 text-muted">{b.subtitle}</p>}
+          <p className="text-muted">{[b.year, b.editions ? `${b.editions} editions` : ''].filter(Boolean).join(' · ')}</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {file ? <Badge tone="ok">On disk</Badge> : on ? <Badge tone="gold">Wanted</Badge> : <Badge>Not wanted</Badge>}
+          </div>
+          {file && (
+            <p className="mt-2 break-all text-xs text-muted">
+              {file.path} · {bytes(file.size)}
+            </p>
+          )}
+        </div>
+      </div>
+      <div className="mt-5 flex flex-col gap-4">
+        <Toggle checked={on} disabled={busy} onChange={onWant} label={`Want it as ${format === 'ebook' ? 'an ebook' : 'an audiobook'}`} />
+        {locked ? (
+          <p className="text-sm text-muted">This author is set to Do not touch, so Box Office doesn't look for their books.</p>
+        ) : (
+          <div className="flex flex-wrap gap-2">
+            <Button variant="primary" busy={search.isPending} disabled={search.isSuccess} onClick={() => search.mutate()}>
+              <Search className="size-4" aria-hidden /> {search.isSuccess ? 'Looking for it' : 'Look for it'}
+            </Button>
+            <Button onClick={onReleases}>
+              <ListFilter className="size-4" aria-hidden /> Choose a release
+            </Button>
+          </div>
+        )}
+        {search.isSuccess && <p className="text-sm text-muted">Box Office is searching your indexers and will grab the best {f.noun} it finds. Activity shows how it went.</p>}
+        {!file && on && !locked && !search.isSuccess && <p className="text-sm text-muted">Box Office also looks for wanted books by itself, a few each hour.</p>}
+        <ErrorNote error={search.error} />
+      </div>
+    </Modal>
+  )
+}
+
+// BookLink opens a book's author page at the book, from a link that only
+// knows the book (a download's, say).
+export function BookLink({ format }: { format: BookFormat }) {
+  const id = Number(useParams().id)
+  const book = useQuery({ queryKey: ['book', id], queryFn: () => get<Book>(`/books/${id}`) })
+  if (book.isPending) return <Spinner />
+  if (book.isError) return <ErrorNote error={book.error} />
+  return <Navigate to={`${formats[format].path}/${book.data.authorId}#book-${id}`} replace />
 }
 
 // Cover is a book's cover, or its title when there's none.

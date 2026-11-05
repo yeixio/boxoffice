@@ -57,3 +57,20 @@ export function gb(n: number): string {
   if (n >= 1e9) return `${(n / 1e9).toFixed(n >= 1e11 ? 0 : 1)} GB`
   return `${Math.round(n / 1e6)} MB`
 }
+
+// titleLink is where a download's or a file's title is shown, and what to
+// call it.
+export function titleLink(kind?: string, id?: number): { to: string; label: string } | null {
+  if (!kind || !id) return null
+  switch (kind) {
+    case 'movie':
+      return { to: `/movies/${id}`, label: 'Movie' }
+    case 'series':
+      return { to: `/shows/${id}`, label: 'Show' }
+    case 'ebook':
+      return { to: `/books/book/${id}`, label: 'Ebook' }
+    case 'audiobook':
+      return { to: `/audiobooks/book/${id}`, label: 'Audiobook' }
+  }
+  return null
+}

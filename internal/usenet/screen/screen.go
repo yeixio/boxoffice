@@ -1,6 +1,6 @@
 // Package screen looks a finished download over for what has no place in
-// a movie or TV release: programs and scripts, files dressed up as
-// videos, and releases with no video at all. Box Office never runs or
+// a movie, TV or book release: programs and scripts, files dressed up as
+// videos, books or audio, and releases with none of what they're for. Box Office never runs or
 // opens what it downloads, but people do, so these are quarantined
 // rather than imported.
 package screen
@@ -32,16 +32,49 @@ var risky = []string{
 
 var videoExts = []string{".mkv", ".mp4", ".m4v", ".avi", ".ts", ".m2ts", ".mts", ".wmv", ".mov", ".mpg", ".mpeg", ".webm", ".vob", ".iso", ".divx", ".flv"}
 
+// Ebook and audiobook files.
+var (
+	ebookExts = []string{".epub", ".kepub", ".azw3", ".azw", ".mobi", ".kfx", ".pdf", ".fb2", ".djvu", ".lit", ".pdb"}
+	audioExts = []string{".m4b", ".m4a", ".mp3", ".flac", ".ogg", ".oga", ".opus", ".aac", ".wma", ".wav"}
+)
+
 // IsVideo says whether a name is a video file's.
 func IsVideo(name string) bool {
 	return slices.Contains(videoExts, strings.ToLower(filepath.Ext(name)))
 }
 
+// IsEbook says whether a name is an ebook file's.
+func IsEbook(name string) bool {
+	return slices.Contains(ebookExts, strings.ToLower(filepath.Ext(name)))
+}
+
+// IsAudio says whether a name is an audio file's, as an audiobook is.
+func IsAudio(name string) bool {
+	return slices.Contains(audioExts, strings.ToLower(filepath.Ext(name)))
+}
+
+// What a release must hold to be real.
+const (
+	WantNothing = ""      // added by hand: anything goes
+	WantVideo   = "video" // a movie or an episode
+	WantEbook   = "ebook"
+	WantAudio   = "audio" // an audiobook
+)
+
 // Check looks over files (names in dir). wantVideo is set when the release
 // is for a movie or episode, so one with no video in it is fake.
 func Check(dir string, files []string, wantVideo bool) []Finding {
+	if wantVideo {
+		return CheckFor(dir, files, WantVideo)
+	}
+	return CheckFor(dir, files, WantNothing)
+}
+
+// CheckFor looks over files (names in dir) for a release that should hold
+// want: one with none of it is fake.
+func CheckFor(dir string, files []string, want string) []Finding {
 	var out []Finding
-	videos := 0
+	found := 0
 	for _, f := range files {
 		p := filepath.Join(dir, f)
 		base := strings.ToLower(filepath.Base(f))
@@ -51,8 +84,14 @@ func Check(dir string, files []string, wantVideo bool) []Finding {
 		case slices.Contains(risky, ext) && IsVideo(inner):
 			out = append(out, Finding{f, fmt.Sprintf("it's a %s file pretending to be a video", ext)})
 			continue
+		case slices.Contains(risky, ext) && IsEbook(inner):
+			out = append(out, Finding{f, fmt.Sprintf("it's a %s file pretending to be an ebook", ext)})
+			continue
+		case slices.Contains(risky, ext) && IsAudio(inner):
+			out = append(out, Finding{f, fmt.Sprintf("it's a %s file pretending to be audio", ext)})
+			continue
 		case slices.Contains(risky, ext):
-			out = append(out, Finding{f, fmt.Sprintf("%s files are programs or scripts, not part of a movie or TV release", ext)})
+			out = append(out, Finding{f, fmt.Sprintf("%s files are programs or scripts, not part of a %s", ext, releaseOf(want))})
 			continue
 		}
 		head := readHead(p)
@@ -60,18 +99,59 @@ func Check(dir string, files []string, wantVideo bool) []Finding {
 			out = append(out, Finding{f, "it's " + what + " under another name"})
 			continue
 		}
-		if IsVideo(base) {
+		switch {
+		case IsVideo(base):
 			if what := archive(head); what != "" {
 				out = append(out, Finding{f, "it's named like a video but it's " + what})
 				continue
 			}
-			videos++
+			if want == WantVideo {
+				found++
+			}
+		case IsAudio(base):
+			if what := archive(head); what != "" {
+				out = append(out, Finding{f, "it's named like an audio file but it's " + what})
+				continue
+			}
+			if want == WantAudio {
+				found++
+			}
+		case IsEbook(base):
+			// An EPUB is a ZIP archive, so only other kinds give a fake
+			// away; other ebook formats are never archives.
+			what := archive(head)
+			if ext == ".epub" || ext == ".kepub" {
+				if strings.HasPrefix(what, "a ZIP") {
+					what = ""
+				}
+			}
+			if what != "" {
+				out = append(out, Finding{f, "it's named like an ebook but it's " + what})
+				continue
+			}
+			if want == WantEbook {
+				found++
+			}
 		}
 	}
-	if wantVideo && videos == 0 && len(out) == 0 {
-		out = append(out, Finding{"", "there's no video in it, so it isn't the release it said it was"})
+	if want != WantNothing && found == 0 && len(out) == 0 {
+		out = append(out, Finding{"", map[string]string{
+			WantVideo: "there's no video in it, so it isn't the release it said it was",
+			WantEbook: "there's no ebook in it (such as an EPUB, AZW3, MOBI or PDF), so it isn't the release it said it was",
+			WantAudio: "there's no audio in it (such as M4B or MP3 files), so it isn't the audiobook it said it was",
+		}[want]})
 	}
 	return out
+}
+
+func releaseOf(want string) string {
+	switch want {
+	case WantEbook:
+		return "book release"
+	case WantAudio:
+		return "audiobook release"
+	}
+	return "movie or TV release"
 }
 
 func readHead(p string) []byte {
