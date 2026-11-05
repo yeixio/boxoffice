@@ -1,0 +1,140 @@
+{
+  "problems": {
+    "wont_play": "Tidak dapat diputar",
+    "wrong_title": "Film atau episodenya salah",
+    "picture": "Gambarnya buruk",
+    "sound": "Suaranya salah atau tidak sinkron",
+    "subtitles": "Subtitle hilang atau salah",
+    "other": "Hal lain"
+  },
+  "state": {
+    "pending": "Menunggu persetujuan",
+    "declined": "Ditolak",
+    "searching": "Disetujui, sedang dicari",
+    "downloadingAt": "Mengunduh, {{percent}}",
+    "downloading": "Mengunduh",
+    "partial": "Beberapa episode siap",
+    "available": "Siap ditonton",
+    "paused": "Disetujui, ditahan",
+    "removed": "Dihapus dari perpustakaan"
+  },
+  "site": {
+    "down": "Situs ini tidak menjawab: {{error}}",
+    "closed": "Situs permintaan ini sedang tidak dibuka."
+  },
+  "signIn": {
+    "matinee": "Akun Matinee",
+    "local": "Akun di sini",
+    "with": "Masuk dengan",
+    "matineeHint": "Gunakan nama pengguna dan kata sandi yang Anda pakai untuk menonton di Matinee.",
+    "signUpHint": "Buat akun untuk meminta film dan acara.",
+    "username": "Nama pengguna",
+    "name": "Nama Anda",
+    "nameHint": "Yang dilihat admin. Biarkan kosong untuk memakai nama pengguna Anda.",
+    "password": "Kata sandi",
+    "passwordHint": "Minimal 8 karakter.",
+    "make": "Buat akun saya",
+    "signIn": "Masuk",
+    "haveAccount": "Saya punya akun",
+    "new": "Baru di sini? Buat akun"
+  },
+  "nav": {
+    "discover": "Jelajahi",
+    "requests": "Permintaan saya",
+    "problems": "Masalah",
+    "sections": "Bagian",
+    "account": "Akunmu"
+  },
+  "home": {
+    "hi": "Hai, {{name}}",
+    "welcome": "Temukan film atau acara dan mintalah. Anda dapat mengikutinya di Permintaan saya.",
+    "find": "Temukan film atau acara",
+    "seeAll": "Lihat semua",
+    "nothing": "Belum ada yang bisa ditampilkan",
+    "notSetUp": "Admin belum selesai menyiapkan situs ini. Coba lagi nanti.",
+    "movieGenres": "Genre film",
+    "showGenres": "Genre acara"
+  },
+  "search": {
+    "nothing": "Tidak ada dengan nama itu.",
+    "movies": "Film",
+    "shows": "Acara",
+    "looking": "Mencari…"
+  },
+  "row": {
+    "more": "Tampilkan lebih banyak"
+  },
+  "pill": {
+    "ready": "Siap ditonton",
+    "some": "Beberapa episode",
+    "coming": "Dalam perjalanan",
+    "asked": "Diminta",
+    "declined": "Ditolak"
+  },
+  "kind": {
+    "movie": "Film",
+    "show": "Tampilkan"
+  },
+  "card": {
+    "request": "Minta {{title}}"
+  },
+  "sheet": {
+    "out": "Keluar {{date}}",
+    "starts": "Mulai {{date}}",
+    "released": "Dirilis {{date}}",
+    "firstAired": "Tayang perdana {{date}}",
+    "ready": "Sudah ada di perpustakaan. Selamat menonton!",
+    "some": "Sebagian sudah ada di perpustakaan, dan sisanya sedang dalam perjalanan.",
+    "report": "Laporkan masalah",
+    "coming": "Sedang dalam perjalanan. Tidak perlu diminta: akan ada di perpustakaan setelah ditemukan.",
+    "asked": "Anda memintanya. Menunggu persetujuan admin.",
+    "takeBack": "Batalkan",
+    "declined": "Admin menolak ini. Anda dapat memintanya lagi.",
+    "declinedWhy": "Admin menolak ini: \"{{reply}}\" Anda dapat memintanya lagi.",
+    "note": "Catatan untuk admin",
+    "noteHint": "Opsional, seperti versi yang Anda cari.",
+    "askMovie": "Minta film ini",
+    "askShow": "Minta acara ini"
+  },
+  "report": {
+    "thanks": "Terima kasih. Admin akan melihatnya, dan Anda dapat mengikutinya di Masalah.",
+    "done": "Selesai",
+    "title": "Apa yang salah?",
+    "problem": "Masalah",
+    "season": "Musim",
+    "seasonHint": "Biarkan kosong jika menyangkut seluruh acara.",
+    "episode": "Episode",
+    "more": "Ceritakan lebih lanjut",
+    "say": "Jelaskan apa yang terjadi.",
+    "optional": "Opsional.",
+    "send": "Kirim laporan"
+  },
+  "mine": {
+    "title": "Permintaan saya",
+    "none": "Belum ada yang diminta",
+    "empty": "Temukan film atau acara di <link>Jelajahi</link> dan tekan <strong>+</strong> untuk memintanya.",
+    "admin": "Admin: \"{{reply}}\"",
+    "asked": "Diminta {{date}}",
+    "takeBack": "Tarik kembali"
+  },
+  "issues": {
+    "title": "Masalah",
+    "sub": "Ada yang salah dengan film atau acara? Buka di Jelajahi atau cari menurut nama, lalu pilih Laporkan masalah.",
+    "none": "Tidak ada masalah yang dilaporkan",
+    "season": "Musim {{season}}",
+    "episode": "Musim {{season}}, episode {{episode}}",
+    "waiting": "Menunggu admin",
+    "fixed": "Diperbaiki"
+  },
+  "account": {
+    "title": "Akunmu",
+    "signedIn": "Masuk sebagai <strong>{{name}}</strong>.",
+    "signedInMatinee": "Masuk sebagai <strong>{{name}}</strong> dengan akun Matinee Anda.",
+    "change": "Ubah kata sandi Anda",
+    "current": "Kata sandi saat ini",
+    "new": "Kata sandi baru",
+    "changed": "Diubah. Anda telah dikeluarkan dari semua tempat lain.",
+    "changeButton": "Ubah kata sandi",
+    "signOut": "Keluar"
+  }
+}

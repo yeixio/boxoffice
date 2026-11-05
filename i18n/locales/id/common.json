@@ -1,0 +1,54 @@
+{
+  "size": {
+    "B": "{{value}} B",
+    "KB": "{{value}} KB",
+    "MB": "{{value}} MB",
+    "GB": "{{value}} GB",
+    "TB": "{{value}} TB",
+    "PB": "{{value}} PB"
+  },
+  "duration": {
+    "minutes_other": "{{count}} mnt",
+    "hours": "{{hours}} j",
+    "hoursMinutes": "{{hours}} j {{minutes}} mnt"
+  },
+  "loading": "Memuat…",
+  "close": "Tutup",
+  "language": {
+    "title": "Bahasa",
+    "label": "Bahasa",
+    "automatic": "Otomatis ({{language}})",
+    "hint": "Bahasa yang digunakan Box Office untuk Anda, di setiap perangkat tempat Anda masuk. Otomatis mengikuti bahasa setiap browser.",
+    "machine": "Terjemahan ini dibuat oleh mesin, jadi beberapa kata mungkin kurang tepat.",
+    "help": "Bantu memperbaikinya"
+  },
+  "sort": {
+    "az": "A ke Z",
+    "za": "Z ke A",
+    "oldest": "Terlama dulu",
+    "newest": "Terbaru dulu",
+    "soonest": "Terdekat dulu",
+    "latest": "Terbaru dulu",
+    "smallest": "Terkecil dulu",
+    "largest": "Terbesar dulu",
+    "lowest": "Terendah dulu",
+    "highest": "Tertinggi dulu",
+    "worst": "Terburuk dulu",
+    "best": "Terbaik dulu",
+    "shortest": "Terpendek dulu",
+    "longest": "Terpanjang dulu",
+    "fewest": "Paling sedikit dulu",
+    "most": "Paling banyak dulu",
+    "least": "Paling sedikit dulu",
+    "by": "Urutkan menurut",
+    "show": "Tampilkan {{order}}",
+    "flip": "{{option}}, {{order}}. Tampilkan {{other}} sebagai gantinya"
+  },
+  "pager": {
+    "pages": "Halaman {{label}}",
+    "range": "{{from}}–{{to}} dari {{total}}",
+    "previous": "Halaman sebelumnya",
+    "next": "Halaman berikutnya",
+    "page": "Halaman {{page}} dari {{pages}}"
+  }
+}
