@@ -1,11 +1,12 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { NavLink, Navigate, Route, Routes, useLocation } from 'react-router-dom'
-import { CalendarDays, Clapperboard, DatabaseBackup, Download as DownloadIcon, Film, HeartPulse, History, LogOut, Menu, Music as MusicIcon, Settings as Cog, Truck, Tv, X } from 'lucide-react'
+import { CalendarDays, Clapperboard, Compass, DatabaseBackup, Download as DownloadIcon, Film, HeartPulse, History, LogOut, Menu, Music as MusicIcon, Settings as Cog, Truck, Tv, X } from 'lucide-react'
 import { get, post, type Settings as SettingsData, type Status } from './api'
 import { Spinner } from './ui'
 import { Tray } from './Tray'
 import { SignIn } from './pages/SignIn'
+import { Discover, DiscoverRowPage } from './pages/Discover'
 import { Movies } from './pages/Movies'
 import { MovieDetail } from './pages/MovieDetail'
 import { Shows } from './pages/Shows'
@@ -31,6 +32,7 @@ export function App() {
 // Move in is for setting up: it leaves the menu once the admin has finished
 // moving in, for Settings.
 const allNav = [
+  { to: '/discover', label: 'Discover', icon: Compass },
   { to: '/movies', label: 'Movies', icon: Film },
   { to: '/shows', label: 'Shows', icon: Tv },
   { to: '/music', label: 'Music', icon: MusicIcon },
@@ -75,7 +77,7 @@ function Shell({ status }: { status: Status }) {
     <div className="min-h-screen">
       <header className="sticky top-0 z-20 bg-paper/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3">
-          <NavLink to="/movies" className="flex items-center gap-2">
+          <NavLink to="/discover" className="flex items-center gap-2">
             <span className="flex size-8 items-center justify-center rounded-md bg-marquee text-marquee-ink">
               <Clapperboard className="size-4.5" aria-hidden />
             </span>
@@ -132,7 +134,9 @@ function Shell({ status }: { status: Status }) {
       </header>
       <main className="mx-auto max-w-7xl px-4 py-8">
         <Routes>
-          <Route path="/" element={<Navigate to="/movies" replace />} />
+          <Route path="/" element={<Navigate to="/discover" replace />} />
+          <Route path="/discover" element={<Discover />} />
+          <Route path="/discover/:id" element={<DiscoverRowPage />} />
           <Route path="/movies" element={<Movies />} />
           <Route path="/movies/:id" element={<MovieDetail />} />
           <Route path="/shows" element={<Shows />} />
@@ -146,7 +150,7 @@ function Shell({ status }: { status: Status }) {
           <Route path="/import" element={<Import />} />
           <Route path="/backups" element={<Backups />} />
           <Route path="/settings" element={<Settings />} />
-          <Route path="*" element={<Navigate to="/movies" replace />} />
+          <Route path="*" element={<Navigate to="/discover" replace />} />
         </Routes>
       </main>
       <footer className="mx-auto max-w-7xl px-4 pb-8 text-xs text-muted">Box Office {status.version}</footer>

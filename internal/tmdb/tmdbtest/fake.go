@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	"strconv"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 )
@@ -20,6 +21,27 @@ type Fake struct {
 	Movies   map[int64]map[string]any
 	Shows    map[int64]map[string]any
 	Episodes map[string][]map[string]any // "show/season"
+	// Raw answers any other path (without the leading slash) as it is,
+	// such as "trending/all/week" or "genre/movie/list".
+	Raw map[string]any
+
+	mu   sync.Mutex
+	hits map[string]int
+}
+
+// Hits is how many times a path was asked for.
+func (f *Fake) Hits(path string) int {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	return f.hits[strings.Trim(path, "/")]
+}
+
+// List is a list's answer: these titles, on one of pages pages.
+func List(pages int, results ...map[string]any) map[string]any {
+	if results == nil {
+		results = []map[string]any{}
+	}
+	return map[string]any{"results": results, "total_pages": pages, "page": 1}
 }
 
 // Date is a day relative to today, as TMDB writes dates.
@@ -47,6 +69,7 @@ func New(t *testing.T) *Fake {
 					map[string]any{"season_number": 2, "episode_count": 2}},
 				"external_ids": map[string]any{"tvdb_id": 371980, "imdb_id": "tt11280740"}},
 		},
+		Raw: map[string]any{},
 		Episodes: map[string][]map[string]any{
 			"95396/0": {{"season_number": 0, "episode_number": 1, "name": "Special", "air_date": "2022-01-01"}},
 			"95396/1": {{"season_number": 1, "episode_number": 1, "name": "Good News About Hell", "air_date": "2022-02-18"},
@@ -66,7 +89,20 @@ func (f *Fake) serve(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
-	parts := strings.Split(strings.Trim(r.URL.Path, "/"), "/")
+	path := strings.Trim(r.URL.Path, "/")
+	f.mu.Lock()
+	if f.hits == nil {
+		f.hits = map[string]int{}
+	}
+	f.hits[path]++
+	raw, ok := f.Raw[path]
+	f.mu.Unlock()
+	if ok {
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(raw)
+		return
+	}
+	parts := strings.Split(path, "/")
 	write := func(v any) { w.Header().Set("Content-Type", "application/json"); json.NewEncoder(w).Encode(v) }
 	id := func(i int) int64 {
 		if i >= len(parts) {

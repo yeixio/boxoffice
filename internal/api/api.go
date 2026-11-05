@@ -210,6 +210,7 @@ func (s *Server) Handler() http.Handler {
 		{"POST /api/v1/admin/metrics/token", true, s.newMetricsToken},
 		{"DELETE /api/v1/admin/metrics/token", true, s.deleteMetricsToken},
 	}
+	routes = append(routes, s.discoverRoutes()...)
 	routes = append(routes, s.downloadRoutes()...)
 	routes = append(routes, s.downloadFileRoutes()...)
 	routes = append(routes, s.quarantineRoutes()...)

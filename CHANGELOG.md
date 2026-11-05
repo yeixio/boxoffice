@@ -6,6 +6,7 @@ What changed in Box Office, newest first. The format follows [Keep a Changelog](
 
 ### Added
 
+- **Discover, the new home page:** what's trending, popular and coming soon on TMDB, recommendations based on what's in your library, and genres and networks to browse. Every poster says whether it's on disk, partly on disk, wanted or paused, and ones that aren't here can be added in one click with your usual profile and the recent-seasons default, or with other choices from the title's card. Matinee can show the same rows in its Discover tab in place of Overseerr, through `/{radarr,sonarr}/api/v3/boxoffice/discover`.
 - **Music:** follow artists from MusicBrainz and pick which of their albums, EPs and singles you want, once Music is turned on in Settings ([#41](https://github.com/yeixio/boxoffice/pull/41)). Searching and downloading them comes next.
 - **Music, audiobooks, ebooks and comics can be turned on in Settings,** each off by default, with its own root folders and one-click suggestions for where the library is mounted ([#38](https://github.com/yeixio/boxoffice/pull/38)). Adding and searching for them comes next.
 - **New shows watch only their last 3 aired seasons, and any still to come,** so a long-running show doesn't flood the library patrol and upgrades. The rule and the number of seasons are in Settings → New shows, and can be changed per show when adding it. Matinee requests follow the same default; shows already on the list and ones brought in by Move in keep what they have. Specials stay off.

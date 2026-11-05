@@ -24,3 +24,28 @@ export function monitorOptions(recent: number) {
     { value: 'none', label: 'None for now' },
   ]
 }
+
+const profileKey = (kind: RootKind) => `boxoffice.profile.${kind}`
+
+// pickProfile is the profile a new title gets unless someone picks another:
+// the one last picked for that kind, else the first. Do not touch is only
+// ever used when picked by hand: it's never the default.
+export function pickProfile(profiles: Profile[] | undefined, kind: RootKind): Profile | undefined {
+  const usable = (profiles ?? []).filter((p) => !p.locked && p.name !== 'Do not touch')
+  let last = 0
+  try {
+    last = Number(localStorage.getItem(profileKey(kind))) || 0
+  } catch {
+    // storage blocked
+  }
+  return usable.find((p) => p.id === last) ?? usable[0]
+}
+
+// rememberProfile keeps the profile picked for a new title, for the next one.
+export function rememberProfile(kind: RootKind, id: number) {
+  try {
+    localStorage.setItem(profileKey(kind), String(id))
+  } catch {
+    // storage blocked
+  }
+}

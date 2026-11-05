@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate } from 'react-router-dom'
 import { Search } from 'lucide-react'
 import { get, post, type LookupMovie, type LookupShow, type Movie, type Series } from '../api'
-import { monitorOptions, useProfiles, useRootFolders, useShowDefaults } from '../hooks'
+import { monitorOptions, pickProfile, rememberProfile, useProfiles, useRootFolders, useShowDefaults } from '../hooks'
 import { Button, ErrorNote, Field, Input, Modal, Poster, Select, Spinner, Toggle } from '../ui'
 
 type Kind = 'movie' | 'series'
@@ -65,7 +65,21 @@ export function AddTitle({ kind, onClose }: { kind: Kind; onClose: () => void })
   )
 }
 
-function AddOptions({ kind, title, onBack, onDone }: { kind: Kind; title: LookupMovie | LookupShow; onBack: () => void; onDone: () => void }) {
+// AddOptions are the choices for adding a title. onAdded, when given, is
+// called with the new title instead of opening its page.
+export function AddOptions({
+  kind,
+  title,
+  onBack,
+  onDone,
+  onAdded,
+}: {
+  kind: Kind
+  title: { tmdbId: number }
+  onBack?: () => void
+  onDone: () => void
+  onAdded?: (added: Movie | Series) => void
+}) {
   const profiles = useProfiles()
   const folders = useRootFolders(kind)
   const qc = useQueryClient()
@@ -80,8 +94,8 @@ function AddOptions({ kind, title, onBack, onDone }: { kind: Kind; title: Lookup
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<unknown>(null)
   useEffect(() => {
-    if (!profileId && profiles.data?.length) setProfileId(profiles.data[0].id)
-  }, [profiles.data, profileId])
+    if (!profileId && profiles.data?.length) setProfileId(pickProfile(profiles.data, kind)?.id ?? 0)
+  }, [profiles.data, profileId, kind])
   useEffect(() => {
     if (!root && folders.data?.length) setRoot(folders.data[0].path)
   }, [folders.data, root])
@@ -111,7 +125,13 @@ function AddOptions({ kind, title, onBack, onDone }: { kind: Kind; title: Lookup
     try {
       const body = { tmdbId: title.tmdbId, profileId, rootFolder: root, monitored, search, ...(kind === 'series' ? { monitor, recent: seasons } : {}) }
       const added = await post<Movie | Series>(kind === 'movie' ? '/movies' : '/series', body)
+      rememberProfile(kind, profileId)
       await qc.invalidateQueries({ queryKey: [kind === 'movie' ? 'movies' : 'series'] })
+      qc.invalidateQueries({ queryKey: ['discover'] })
+      if (onAdded) {
+        onAdded(added)
+        return
+      }
       onDone()
       nav(`/${kind === 'movie' ? 'movies' : 'shows'}/${added.id}`)
     } catch (err) {
@@ -140,9 +160,13 @@ function AddOptions({ kind, title, onBack, onDone }: { kind: Kind; title: Lookup
       <Toggle checked={search} onChange={setSearch} label="Start looking now" />
       <ErrorNote error={error} />
       <div className="flex justify-between">
-        <Button variant="ghost" onClick={onBack}>
-          Back
-        </Button>
+        {onBack ? (
+          <Button variant="ghost" onClick={onBack}>
+            Back
+          </Button>
+        ) : (
+          <span />
+        )}
         <Button variant="primary" busy={busy} onClick={add}>
           Add {kind === 'movie' ? 'movie' : 'show'}
         </Button>
