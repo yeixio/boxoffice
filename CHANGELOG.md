@@ -6,6 +6,8 @@ What changed in Box Office, newest first. The format follows [Keep a Changelog](
 
 ### Added
 
+- **More for Matinee when it's paired with Box Office** ([matinee#297](https://github.com/yeixio/matinee/issues/297)): live download progress with an ETA for titles on the way (`GET /{radarr,sonarr}/api/v3/boxoffice/activity`), **another edition of a movie** (Director's Cut, Extended…) to replace its copy or to keep next to it, named `{edition-…}` (`/radarr/api/v3/boxoffice/editions`), and **a better copy** or **a replacement for a bad one**, which blocklists the bad release (`POST /{radarr,sonarr}/api/v3/boxoffice/upgrade`). A movie replaced by an edition stays that edition in later upgrades. Each is advertised in `boxOfficeFeatures` (`progress`, `editions`, `upgrades`), so Matinee only shows what Box Office offers.
+
 - **Official images come with a TMDB key,** so posters and details work with nothing to paste. Settings → TMDB shows **Built in**, and a key saved there or set in `BOXOFFICE_TMDB_KEY` still wins ([#51](https://github.com/yeixio/boxoffice/pull/51)).
 - **Books and Audiobooks:** follow authors from Open Library and pick which of their books you want as ebooks, audiobooks or both, once either is turned on in Settings ([#50](https://github.com/yeixio/boxoffice/pull/50)). Searching and downloading them comes next.
 - **Scan a root folder for what's on disk but not on the list.** Each movie, TV and music root folder in Settings has a Scan button: it runs in the background, matches each folder to TMDB or MusicBrainz, and lets you check the matches and add the ones you pick where they are, with their files. Nothing is moved, renamed or deleted.
@@ -35,6 +37,8 @@ What changed in Box Office, newest first. The format follows [Keep a Changelog](
 - **The first Box Office:** the server, the web UI, the Radarr- and Sonarr-compatible API for Matinee, and a step-by-step move-in from Radarr, Sonarr and NZBGet that never changes the old app ([#1](https://github.com/yeixio/boxoffice/pull/1)).
 
 ### Changed
+
+- **Replaced copies are kept in the recycle folders for 7 days** unless Settings says otherwise; before, they stayed until someone emptied them. Choose **Never (empty them yourself)** in Settings → Recycle folders to keep the old behaviour.
 
 - **The sections moved to a sidebar on the left** on a computer, grouped into Library, Status and Setup, so they no longer crowd the top. It narrows to icons on a smaller screen, or with Icons only, which it remembers. On a phone the menu stays as it was, now with the same groups. Sections for media types that are off stay hidden.
 - **Automatic upgrades are off by default.** RSS sync and the library patrol still look for missing titles by themselves; turn on Settings → Missing titles and upgrades → Automatic upgrades to have them go after better copies too. Looking for an upgrade from a title's page works either way. Each movie and show can turn automatic upgrades on or off for itself from its page, and **Most automatic upgrades a month** caps how many Box Office grabs by itself.
