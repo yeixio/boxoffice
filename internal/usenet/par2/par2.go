@@ -69,6 +69,26 @@ type Set struct {
 	Files     []*File // in the set's order, by ID
 	recovery  []recovery
 	setID     ID
+	// Progress, if set, hears how far Verify and Repair have got.
+	Progress func(done, total int64)
+}
+
+func (s *Set) progress(done, total int64) {
+	if s.Progress != nil {
+		s.Progress(done, total)
+	}
+}
+
+// countWriter tells of bytes hashed as they go.
+type countWriter struct {
+	n    *int64
+	tell func()
+}
+
+func (c countWriter) Write(p []byte) (int, error) {
+	*c.n += int64(len(p))
+	c.tell()
+	return len(p), nil
 }
 
 // RecoveryBlocks is how many recovery slices the par2 files that were read
@@ -365,7 +385,13 @@ func (r *Report) Repairable() bool { return r.HaveBlocks >= r.NeedBlocks }
 func (s *Set) Verify(ctx context.Context, dir string) (*Report, error) {
 	rep := &Report{HaveBlocks: len(s.recovery)}
 	buf := make([]byte, s.SliceSize)
+	var total, done int64
 	for _, f := range s.Files {
+		total += f.Size
+	}
+	tell := func() { s.progress(min(done, total), total) }
+	for _, f := range s.Files {
+		start := done
 		st := FileState{Name: f.Name}
 		n := f.Slices(s.SliceSize)
 		p := filepath.Join(dir, f.Name)
@@ -380,11 +406,12 @@ func (s *Set) Verify(ctx context.Context, dir string) (*Report, error) {
 			whole := false
 			if info != nil && info.Size() == f.Size {
 				h := md5.New()
-				if _, err := io.Copy(h, io.NewSectionReader(fh, 0, f.Size)); err == nil && bytes.Equal(h.Sum(nil), f.MD5[:]) {
+				if _, err := io.Copy(io.MultiWriter(h, countWriter{&done, tell}), io.NewSectionReader(fh, 0, f.Size)); err == nil && bytes.Equal(h.Sum(nil), f.MD5[:]) {
 					whole = true
 				}
 			}
 			if !whole {
+				done = start
 				for i := range n {
 					if err := ctx.Err(); err != nil {
 						fh.Close()
@@ -399,6 +426,8 @@ func (s *Set) Verify(ctx context.Context, dir string) (*Report, error) {
 						st.Damaged++
 						rep.bad = append(rep.bad, f.first+i)
 					}
+					done += int64(want)
+					tell()
 				}
 				// IFSC was missing: the file's wrong but which slices is
 				// unknown, so all of them are rebuilt.
@@ -414,6 +443,8 @@ func (s *Set) Verify(ctx context.Context, dir string) (*Report, error) {
 			}
 			fh.Close()
 		}
+		done = start + f.Size
+		tell()
 		st.OK = st.Damaged == 0 && !st.Missing
 		rep.NeedBlocks += st.Damaged
 		rep.Files = append(rep.Files, st)
@@ -517,6 +548,8 @@ func (s *Set) Repair(ctx context.Context, dir string, rep *Report, memLimit int6
 	}
 	in := make([]byte, chunk)
 	workers := max(runtime.GOMAXPROCS(0), 1)
+	passes := (s.SliceSize + chunk - 1) / chunk
+	steps, step := passes*int64(total), int64(0)
 	for start := int64(0); start < s.SliceSize; start += chunk {
 		width := min(chunk, s.SliceSize-start)
 		for i, r := range used {
@@ -528,6 +561,10 @@ func (s *Set) Repair(ctx context.Context, dir string, rep *Report, memLimit int6
 		for fi, f := range s.Files {
 			for j := range f.Slices(s.SliceSize) {
 				g := f.first + j
+				step++
+				if step%16 == 0 {
+					s.progress(step, steps)
+				}
 				if _, isBad := bad[g]; isBad {
 					continue
 				}

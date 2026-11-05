@@ -46,10 +46,16 @@ type Download struct {
 	Quarantined string `json:"quarantined,omitempty"`
 	// CanReprocess says its files are still there to check and unpack
 	// again, without downloading them again. It's worked out, not stored.
-	CanReprocess bool      `json:"canReprocess,omitempty"`
-	AddedAt      time.Time `json:"addedAt"`
-	StartedAt    time.Time `json:"startedAt,omitzero"`
-	FinishedAt   time.Time `json:"finishedAt,omitzero"`
+	CanReprocess bool `json:"canReprocess,omitempty"`
+	// CanImport says it's waiting to be moved into the library.
+	CanImport bool `json:"canImport,omitempty"`
+	// StepDone and StepTotal say how far checking, repairing or unpacking
+	// has got, while it runs.
+	StepDone   int64     `json:"stepDone,omitempty"`
+	StepTotal  int64     `json:"stepTotal,omitempty"`
+	AddedAt    time.Time `json:"addedAt"`
+	StartedAt  time.Time `json:"startedAt,omitzero"`
+	FinishedAt time.Time `json:"finishedAt,omitzero"`
 }
 
 // Finished says whether the download is history.

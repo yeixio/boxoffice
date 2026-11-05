@@ -29,7 +29,7 @@ func (e *Engine) postProcess(ctx context.Context, r *running, d *store.Download,
 		return err
 	}
 	status(store.DownloadUnpacking, "")
-	if err := e.unpack(ctx, d, job); err != nil {
+	if err := e.unpack(ctx, r, d, job); err != nil {
 		return err
 	}
 	files := listFiles(job.dir)
@@ -37,7 +37,11 @@ func (e *Engine) postProcess(ctx context.Context, r *running, d *store.Download,
 		return errors.New("the download finished with no files in it")
 	}
 	e.Log.Debug("download unpacked", "name", d.Name, "id", d.ID, "files", len(files), "repair notes", strings.Join(notes, "; "))
-	if found := screen.Check(job.dir, files, d.Kind != ""); len(found) > 0 {
+	found := screen.Check(job.dir, files, d.Kind != "")
+	if len(found) == 0 {
+		found = e.checkLength(ctx, d, job.dir, files)
+	}
+	if len(found) > 0 {
 		return e.quarantine(ctx, d, job, found)
 	}
 	lead := ""
@@ -57,16 +61,7 @@ func (e *Engine) postProcess(ctx context.Context, r *running, d *store.Download,
 	case e.Importer == nil:
 	default:
 		status(store.DownloadImporting, "")
-		to, err := e.Importer.Import(ctx, *d, job.dir, files)
-		if err != nil {
-			return fmt.Errorf("downloaded, but couldn't move it into the library: %w", err)
-		}
-		e.Log.Info("download moved into the library", "name", d.Name, "id", d.ID, "to", to)
-		e.Store.SetDownloadImported(context.WithoutCancel(ctx), d.ID, to)
-		d.ImportedTo = to
-		msg = lead + "Moved into the library at " + to
-		// Nothing's left worth keeping.
-		e.removeFolder(*d)
+		msg = e.importInto(context.WithoutCancel(ctx), d, job.dir, lead)
 	}
 	r.setStage("")
 	e.Log.Info("download finished", "name", d.Name, "id", d.ID, "result", msg)
@@ -103,6 +98,7 @@ func (e *Engine) repair(ctx context.Context, r *running, d *store.Download, job 
 	if len(renamed) > 0 {
 		notes = append(notes, fmt.Sprintf("renamed %d obfuscated %s", len(renamed), plural(len(renamed), "file", "files")))
 	}
+	set.Progress = r.step
 	rep, err := set.Verify(ctx, job.dir)
 	if err != nil {
 		return nil, err
@@ -144,6 +140,7 @@ func (e *Engine) repair(ctx context.Context, r *running, d *store.Download, job 
 		if set, err = par2.Load(par2Files()); err != nil {
 			return nil, err
 		}
+		set.Progress = r.step
 		if rep, err = set.Verify(ctx, job.dir); err != nil {
 			return nil, err
 		}
@@ -154,10 +151,11 @@ func (e *Engine) repair(ctx context.Context, r *running, d *store.Download, job 
 	if !rep.Repairable() {
 		return nil, fmt.Errorf("%d blocks are damaged, and there are only %d recovery blocks; try another release", rep.NeedBlocks, rep.HaveBlocks)
 	}
-	status(store.DownloadRepairing, fmt.Sprintf("rebuilding %d blocks", rep.NeedBlocks))
+	status(store.DownloadRepairing, fmt.Sprintf("Rebuilding %d blocks", rep.NeedBlocks))
 	if err := set.Repair(ctx, job.dir, rep, 0); err != nil {
 		return nil, err
 	}
+	r.setStage("Checking the repair")
 	if rep, err = set.Verify(ctx, job.dir); err != nil {
 		return nil, err
 	}
@@ -173,12 +171,15 @@ func isPar2(name string) (bool, int) {
 }
 
 // unpack extracts the archives, then deletes them and the par2 files.
-func (e *Engine) unpack(ctx context.Context, d *store.Download, job *fetchJob) error {
+func (e *Engine) unpack(ctx context.Context, r *running, d *store.Download, job *fetchJob) error {
 	files := listFiles(job.dir)
 	archives := unpack.Find(job.dir, files)
 	var volumes []string
-	for _, a := range archives {
-		res, err := unpack.Extract(ctx, a, job.dir, d.Password)
+	for i, a := range archives {
+		if len(archives) > 1 {
+			r.setStage(fmt.Sprintf("Archive %d of %d", i+1, len(archives)))
+		}
+		res, err := unpack.ExtractWithProgress(ctx, a, job.dir, d.Password, r.step)
 		if errors.Is(err, unpack.ErrPassword) {
 			if d.Password == "" {
 				return errors.New("the archive needs a password, and the release didn't give one. Releases like this are often fake")

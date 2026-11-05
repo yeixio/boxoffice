@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/usenet/nntp/nntptest"
@@ -141,11 +142,7 @@ func (f *flakyImporter) Import(_ context.Context, _ store.Download, _ string, _ 
 	return "/library/Amerikatsi (2022)", nil
 }
 
-// A download that fails after it's fetched can be unpacked again without
-// downloading it again.
-func TestReprocess(t *testing.T) {
-	srv := nntptest.New()
-	defer srv.Close()
+func obfuscatedSet(t *testing.T) [][2]any {
 	var files [][2]any
 	for i, to := range []string{"39f5d2cb5d2e2f132f5f3091c5087f1c.rar", "77aa01bc", "e1e1e1e1e1.rar"} {
 		b, err := os.ReadFile(filepath.Join("..", "usenet", "unpack", "testdata", fmt.Sprintf("multi.part%d.rar", i+1)))
@@ -154,13 +151,31 @@ func TestReprocess(t *testing.T) {
 		}
 		files = append(files, [2]any{to, b})
 	}
+	return files
+}
+
+// smallMedia lets the test files, a few KB, pass for a movie.
+func smallMedia(t *testing.T) {
+	m, ep := minMovieSize, minEpSize
+	minMovieSize, minEpSize = 1, 1
+	t.Cleanup(func() { minMovieSize, minEpSize = m, ep })
+}
+
+// A download whose unpacking fails can be unpacked again without
+// downloading it again.
+func TestReprocess(t *testing.T) {
+	smallMedia(t)
+	srv := nntptest.New()
+	defer srv.Close()
+	locked, err := os.ReadFile(filepath.Join("..", "usenet", "unpack", "testdata", "locked.rar"))
+	if err != nil {
+		t.Fatal(err)
+	}
 	e, st := newEngine(t, srv)
-	imp := &flakyImporter{fail: true}
-	e.Importer = imp
-	enable(t, st, Settings{Import: true})
+	enable(t, st, Settings{})
 	run(t, e)
 	ctx := context.Background()
-	d, err := e.Add(ctx, store.Download{Source: "search", Kind: "movie", TitleID: 1}, postFiles(srv, "Amerikatsi.2022", files))
+	d, err := e.Add(ctx, store.Download{Source: "upload"}, postFiles(srv, "Locked", [][2]any{{"a1b2c3.rar", locked}}))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -169,21 +184,97 @@ func TestReprocess(t *testing.T) {
 		t.Fatalf("%s: %s (can reprocess: %v)", d.Status, d.Message, e.CanReprocess(d))
 	}
 	fetched := srv.Fetches.Load()
-	imp.fail = false
 	if err := e.Reprocess(ctx, d.ID); err != nil {
 		t.Fatal(err)
 	}
-	d = waitFor(t, st, d.ID, store.DownloadCompleted, store.DownloadFailed)
-	if d.Status != store.DownloadCompleted || d.ImportedTo == "" {
-		t.Fatalf("%s: %s", d.Status, d.Message)
+	d = waitFor(t, st, d.ID, store.DownloadFailed)
+	if !strings.Contains(d.Message, "password") {
+		t.Fatalf("message %q", d.Message)
 	}
 	if n := srv.Fetches.Load(); n != fetched {
 		t.Fatalf("fetched %d more articles", n-fetched)
 	}
 	// Gone files can't be unpacked again.
 	os.RemoveAll(filepath.Join(e.Dir, d.Folder))
-	d.Status = store.DownloadFailed
 	if e.CanReprocess(d) {
 		t.Fatal("reprocessable with no files")
+	}
+}
+
+// When moving into the library fails, the download stays unpacked and
+// done, the release isn't blocked, and moving it later does only that.
+func TestImportLater(t *testing.T) {
+	smallMedia(t)
+	srv := nntptest.New()
+	defer srv.Close()
+	e, st := newEngine(t, srv)
+	imp := &flakyImporter{fail: true}
+	e.Importer = imp
+	blocked := false
+	e.Failed = func(context.Context, store.Download, string) { blocked = true }
+	enable(t, st, Settings{Import: true})
+	run(t, e)
+	ctx := context.Background()
+	d, err := e.Add(ctx, store.Download{Source: "search", Kind: "movie", TitleID: 1}, postFiles(srv, "Amerikatsi.2022", obfuscatedSet(t)))
+	if err != nil {
+		t.Fatal(err)
+	}
+	d = waitFor(t, st, d.ID, store.DownloadCompleted, store.DownloadFailed)
+	if d.Status != store.DownloadCompleted || !e.CanImport(d) || !strings.Contains(d.Message, "Move into library") || blocked {
+		t.Fatalf("%s: %s (can import: %v, blocked: %v)", d.Status, d.Message, e.CanImport(d), blocked)
+	}
+	// Unpacked already: only movie.mkv and readme.txt are left.
+	if left := listFiles(filepath.Join(e.Dir, d.Folder)); len(left) != 2 {
+		t.Fatalf("left %v", left)
+	}
+	fetched := srv.Fetches.Load()
+	imp.fail = false
+	if err := e.Import(ctx, d.ID); err != nil {
+		t.Fatal(err)
+	}
+	deadline := time.Now().Add(5 * time.Second)
+	for d.ImportedTo == "" && time.Now().Before(deadline) {
+		time.Sleep(20 * time.Millisecond)
+		d, _ = st.Download(ctx, d.ID)
+	}
+	if d.ImportedTo == "" || d.Status != store.DownloadCompleted || !strings.HasPrefix(d.Message, "Moved into the library") {
+		t.Fatalf("%s: %s", d.Status, d.Message)
+	}
+	if n := srv.Fetches.Load(); n != fetched {
+		t.Fatalf("fetched %d more articles", n-fetched)
+	}
+	// What was left is cleaned up once it's in.
+	if _, err := os.Stat(filepath.Join(e.Dir, d.Folder)); !os.IsNotExist(err) {
+		t.Fatalf("download folder left: %v", err)
+	}
+}
+
+// A release whose video is a short clip, not the movie, is quarantined.
+func TestTooShort(t *testing.T) {
+	srv := nntptest.New()
+	defer srv.Close()
+	e, st := newEngine(t, srv)
+	enable(t, st, Settings{})
+	run(t, e)
+	ctx := context.Background()
+	profiles, err := st.Profiles(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	m, err := st.AddMovie(ctx, store.Movie{TMDBID: 1, Title: "Amerikatsi", Year: 2022, Runtime: 120, ProfileID: profiles[0].ID, RootFolder: "/m", Path: "/m/Amerikatsi (2022)"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	clip, err := os.ReadFile(filepath.Join("..", "usenet", "screen", "testdata", "75s.mkv"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	d, err := e.Add(ctx, store.Download{Source: "search", Kind: "movie", TitleID: m.ID}, postFiles(srv, "Amerikatsi.2022", [][2]any{{"amerikatsi.2022.mkv", clip}}))
+	if err != nil {
+		t.Fatal(err)
+	}
+	d = waitFor(t, st, d.ID, store.DownloadCompleted, store.DownloadFailed)
+	if d.Status != store.DownloadFailed || d.Quarantined == "" || !strings.Contains(d.Message, "runs 1 minute,") {
+		t.Fatalf("%s: %s", d.Status, d.Message)
 	}
 }

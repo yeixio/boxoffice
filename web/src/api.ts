@@ -307,6 +307,11 @@ export type Download = {
   quarantined?: string
   // Its files are still there to check and unpack again.
   canReprocess?: boolean
+  // It's done, and waiting to be moved into the library.
+  canImport?: boolean
+  // How far checking, repairing or unpacking has got.
+  stepDone?: number
+  stepTotal?: number
   addedAt: string
   startedAt?: string
   finishedAt?: string
