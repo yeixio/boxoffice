@@ -88,6 +88,8 @@ func (s *Store) migrate(ctx context.Context) error {
 	// Columns added since a table was first made.
 	for _, c := range []struct{ table, column, def string }{
 		{"downloads", "quarantined", "TEXT NOT NULL DEFAULT ''"},
+		{"movies", "rating", "DOUBLE PRECISION NOT NULL DEFAULT 0"},
+		{"series", "rating", "DOUBLE PRECISION NOT NULL DEFAULT 0"},
 	} {
 		if _, err := s.db.ExecContext(ctx, "SELECT "+c.column+" FROM "+c.table+" WHERE 1 = 0"); err != nil {
 			if _, err := s.db.ExecContext(ctx, "ALTER TABLE "+c.table+" ADD COLUMN "+c.column+" "+c.def); err != nil {

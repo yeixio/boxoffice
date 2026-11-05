@@ -188,6 +188,7 @@ func fromTMDBMovie(m tmdb.Movie) store.Movie {
 	return store.Movie{
 		TMDBID: m.TMDBID, IMDBID: m.IMDBID, Title: m.Title, Year: m.Year, Overview: m.Overview, Poster: m.Poster, Backdrop: m.Backdrop,
 		Runtime: m.Runtime, Status: m.Status, InCinemas: m.InCinemas, DigitalRelease: m.DigitalRelease, PhysicalRelease: m.PhysicalRelease,
+		Rating: m.Rating,
 	}
 }
 
@@ -245,6 +246,8 @@ func (s *Service) RefreshMovie(ctx context.Context, id int64) error {
 	}
 	n := fromTMDBMovie(info)
 	n.ID = m.ID
+	// A rating brought from Radarr stays until TMDB has one.
+	n.Rating = cmp.Or(n.Rating, m.Rating)
 	return s.Store.RefreshMovie(ctx, n)
 }
 
@@ -290,6 +293,7 @@ func fromTMDBShow(t tmdb.Show) store.Series {
 	return store.Series{
 		TMDBID: t.TMDBID, TVDBID: t.TVDBID, IMDBID: t.IMDBID, Title: t.Title, Year: t.Year, Overview: t.Overview,
 		Poster: t.Poster, Backdrop: t.Backdrop, Status: t.Status, Network: t.Network, Runtime: t.Runtime,
+		Rating: t.Rating,
 	}
 }
 
@@ -389,6 +393,7 @@ func (s *Service) RefreshSeries(ctx context.Context, id int64) error {
 	}
 	n := fromTMDBShow(info)
 	n.ID = t.ID
+	n.Rating = cmp.Or(n.Rating, t.Rating)
 	if err := s.Store.RefreshSeries(ctx, n); err != nil {
 		return err
 	}

@@ -1,6 +1,7 @@
 package migrate
 
 import (
+	"cmp"
 	"context"
 	"encoding/json"
 	"errors"
@@ -248,11 +249,29 @@ type lMovie struct {
 	Path             string     `json:"path"`
 	RootFolderPath   string     `json:"rootFolderPath"`
 	HasFile          bool       `json:"hasFile"`
+	Ratings          lRatings   `json:"ratings"`
 	MovieFile        *struct {
 		Path    string   `json:"path"`
 		Size    int64    `json:"size"`
 		Quality lQuality `json:"quality"`
 	} `json:"movieFile"`
+}
+
+// lRatings is a title's ratings, out of 10. Radarr has one per site;
+// Sonarr, and Radarr before v3, have one.
+type lRatings struct {
+	Value float64 `json:"value"`
+	TMDB  struct {
+		Value float64 `json:"value"`
+	} `json:"tmdb"`
+	IMDB struct {
+		Value float64 `json:"value"`
+	} `json:"imdb"`
+}
+
+// best is TMDB's rating, as Box Office keeps, or the next best there is.
+func (r lRatings) best() float64 {
+	return cmp.Or(r.TMDB.Value, r.IMDB.Value, r.Value)
 }
 
 type lSeries struct {
@@ -271,6 +290,7 @@ type lSeries struct {
 	QualityProfileID int      `json:"qualityProfileId"`
 	Path             string   `json:"path"`
 	RootFolderPath   string   `json:"rootFolderPath"`
+	Ratings          lRatings `json:"ratings"`
 	Seasons          []struct {
 		SeasonNumber int  `json:"seasonNumber"`
 		Monitored    bool `json:"monitored"`

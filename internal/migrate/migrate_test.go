@@ -100,6 +100,7 @@ func fakeRadarr(t *testing.T, zipData []byte) (*httptest.Server, *sync.Map) {
 	mux.HandleFunc("GET /api/v3/movie", j([]map[string]any{
 		{"id": 1, "tmdbId": 603, "title": "The Matrix", "year": 1999, "monitored": true, "qualityProfileId": 7,
 			"path": "/movies/The Matrix (1999)", "rootFolderPath": "/movies", "hasFile": true,
+			"ratings": map[string]any{"imdb": map[string]any{"value": 8.7}, "tmdb": map[string]any{"value": 8.2}},
 			"movieFile": map[string]any{"path": "/movies/The Matrix (1999)/The Matrix.mkv", "size": 1234,
 				"quality": map[string]any{"quality": map[string]any{"id": 7, "name": "Bluray-1080p"}}}},
 		{"id": 2, "tmdbId": 0, "title": "Home Video", "year": 2003, "path": "/movies/Home Video"},
@@ -212,7 +213,7 @@ func TestMigrateRadarr(t *testing.T) {
 	}
 
 	movies, _ := w.st.Movies(ctx)
-	if len(movies) != 1 || movies[0].TMDBID != 603 || movies[0].Path != movieDir {
+	if len(movies) != 1 || movies[0].TMDBID != 603 || movies[0].Path != movieDir || movies[0].Rating != 8.2 {
 		t.Fatalf("movies: %+v", movies)
 	}
 	// Matinee saved Radarr's profile id 7; Box Office answers to it.

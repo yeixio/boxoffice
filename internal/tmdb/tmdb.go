@@ -127,6 +127,8 @@ type Movie struct {
 	InCinemas       *time.Time `json:"inCinemas,omitempty"`
 	DigitalRelease  *time.Time `json:"digitalRelease,omitempty"`
 	PhysicalRelease *time.Time `json:"physicalRelease,omitempty"`
+	// Rating is TMDB's average vote, out of 10; 0 when nobody's voted.
+	Rating float64 `json:"rating,omitempty"`
 }
 
 type apiMovie struct {
@@ -140,6 +142,7 @@ type apiMovie struct {
 	Runtime      int     `json:"runtime"`
 	Status       string  `json:"status"`
 	Popularity   float64 `json:"popularity"`
+	VoteAverage  float64 `json:"vote_average"`
 	ReleaseDates struct {
 		Results []struct {
 			Country string `json:"iso_3166_1"`
@@ -155,6 +158,7 @@ func (m apiMovie) movie(country string) Movie {
 	out := Movie{
 		TMDBID: m.ID, IMDBID: m.IMDBID, Title: m.Title, Year: year(m.ReleaseDate), Overview: m.Overview,
 		Poster: Image(m.PosterPath, "w500"), Backdrop: Image(m.BackdropPath, "w1280"), Runtime: m.Runtime, Status: m.Status,
+		Rating: m.VoteAverage,
 	}
 	// Release types: 1 premiere, 2 limited, 3 theatrical, 4 digital, 5 physical, 6 TV.
 	// The home country's dates win; elsewhere, the earliest of each type.
@@ -245,6 +249,7 @@ type Show struct {
 	Status   string       `json:"status,omitempty"`
 	Network  string       `json:"network,omitempty"`
 	Runtime  int          `json:"runtime,omitempty"`
+	Rating   float64      `json:"rating,omitempty"`
 	Seasons  []SeasonInfo `json:"seasons,omitempty"`
 }
 
@@ -255,14 +260,15 @@ type SeasonInfo struct {
 }
 
 type apiShow struct {
-	ID           int64  `json:"id"`
-	Name         string `json:"name"`
-	FirstAirDate string `json:"first_air_date"`
-	Overview     string `json:"overview"`
-	PosterPath   string `json:"poster_path"`
-	BackdropPath string `json:"backdrop_path"`
-	Status       string `json:"status"`
-	RunTimes     []int  `json:"episode_run_time"`
+	ID           int64   `json:"id"`
+	Name         string  `json:"name"`
+	FirstAirDate string  `json:"first_air_date"`
+	Overview     string  `json:"overview"`
+	PosterPath   string  `json:"poster_path"`
+	BackdropPath string  `json:"backdrop_path"`
+	Status       string  `json:"status"`
+	RunTimes     []int   `json:"episode_run_time"`
+	VoteAverage  float64 `json:"vote_average"`
 	Networks     []struct {
 		Name string `json:"name"`
 	} `json:"networks"`
@@ -280,6 +286,7 @@ func (s apiShow) show() Show {
 	out := Show{
 		TMDBID: s.ID, TVDBID: s.ExternalIDs.TVDBID, IMDBID: s.ExternalIDs.IMDBID, Title: s.Name, Year: year(s.FirstAirDate),
 		Overview: s.Overview, Poster: Image(s.PosterPath, "w500"), Backdrop: Image(s.BackdropPath, "w1280"), Status: s.Status,
+		Rating: s.VoteAverage,
 	}
 	if len(s.Networks) > 0 {
 		out.Network = s.Networks[0].Name

@@ -794,7 +794,12 @@ func (m *Migrator) importMovies(ctx context.Context, p *pending, profiles map[in
 			warn(fmt.Sprintf("%s (%d) has no TMDB id in Radarr, so it was left out", mv.Title, mv.Year))
 			continue
 		}
-		if _, err := m.Catalog.Store.MovieByTMDB(ctx, mv.TMDBID); err == nil {
+		if have, err := m.Catalog.Store.MovieByTMDB(ctx, mv.TMDBID); err == nil {
+			// Moving in again brings ratings to titles moved in before
+			// Box Office kept them.
+			if r := mv.Ratings.best(); r > 0 && have.Rating == 0 {
+				m.Catalog.Store.FillRating(ctx, "movie", have.ID, r)
+			}
 			m.update(func() { pr.Imported.Already++ })
 			continue
 		}
@@ -808,7 +813,7 @@ func (m *Migrator) importMovies(ctx context.Context, p *pending, profiles map[in
 		// the rest with the next refresh.
 		info := tmdb.Movie{TMDBID: mv.TMDBID, IMDBID: mv.IMDBID, Title: mv.Title, Year: mv.Year, Overview: mv.Overview, Runtime: mv.Runtime,
 			Poster: pickImage(mv.Images, "poster"), Backdrop: pickImage(mv.Images, "fanart"),
-			InCinemas: mv.InCinemas, DigitalRelease: mv.DigitalRelease, PhysicalRelease: mv.PhysicalRelease}
+			InCinemas: mv.InCinemas, DigitalRelease: mv.DigitalRelease, PhysicalRelease: mv.PhysicalRelease, Rating: mv.Ratings.best()}
 		added, err := m.Catalog.AddMovieInfo(ctx, info, catalog.AddOptions{ProfileID: pid, RootFolder: root, Path: mapPath(p.req.PathMap, mv.Path), Monitored: mv.Monitored})
 		if errors.Is(err, catalog.ErrExists) {
 			m.update(func() { pr.Imported.Already++ })
@@ -870,7 +875,10 @@ func (m *Migrator) importSeries(ctx context.Context, p *pending, profiles map[in
 			warn(fmt.Sprintf("%s (%d): Box Office couldn't find its TMDB id, so it was left out", sr.Title, sr.Year))
 			continue
 		}
-		if _, err := m.Catalog.Store.SeriesByTMDB(ctx, tmdbID); err == nil {
+		if have, err := m.Catalog.Store.SeriesByTMDB(ctx, tmdbID); err == nil {
+			if r := sr.Ratings.best(); r > 0 && have.Rating == 0 {
+				m.Catalog.Store.FillRating(ctx, "series", have.ID, r)
+			}
 			m.update(func() { pr.Imported.Already++ })
 			continue
 		}
@@ -896,7 +904,7 @@ func (m *Migrator) importSeries(ctx context.Context, p *pending, profiles map[in
 			seasons[se.SeasonNumber] = se.Monitored
 		}
 		t := store.Series{TMDBID: info.TMDBID, TVDBID: info.TVDBID, IMDBID: info.IMDBID, Title: info.Title, Year: info.Year, Overview: info.Overview,
-			Poster: info.Poster, Backdrop: info.Backdrop, Status: info.Status, Network: info.Network, Runtime: info.Runtime,
+			Poster: info.Poster, Backdrop: info.Backdrop, Status: info.Status, Network: info.Network, Runtime: info.Runtime, Rating: sr.Ratings.best(),
 			Monitored: sr.Monitored, ProfileID: pid, RootFolder: root, Path: mapPath(p.req.PathMap, sr.Path)}
 		for _, se := range sr.Seasons {
 			t.Seasons = append(t.Seasons, store.Season{Number: se.SeasonNumber, Monitored: se.Monitored})
