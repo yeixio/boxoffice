@@ -417,10 +417,17 @@ func (s *Server) deleteEpisodeFile(w http.ResponseWriter, r *http.Request) error
 
 const settingRecycleDays = "recycle_keep_days"
 
+// DefaultRecycleDays is how long replaced copies are kept when Settings
+// doesn't say: a week, time enough to notice a replacement is worse.
+const DefaultRecycleDays = 7
+
 // RecycleDays is how many days replaced copies stay in the recycle
 // folders before they're deleted; 0 keeps them until someone empties them.
 func RecycleDays(ctx context.Context, st *store.Store) int {
 	v, _ := st.Setting(ctx, settingRecycleDays)
+	if v == "" {
+		return DefaultRecycleDays
+	}
 	n, _ := strconv.Atoi(v)
 	return max(n, 0)
 }

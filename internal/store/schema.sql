@@ -118,6 +118,19 @@ CREATE TABLE IF NOT EXISTS media_files (
 );
 CREATE INDEX IF NOT EXISTS media_files_owner ON media_files (kind, owner_id);
 
+-- What people asked for beyond the profile: the edition a movie should be
+-- (Director's Cut, say), and a better or another copy wanted now, from
+-- Matinee's "Get another edition" and "Ask for a better copy".
+CREATE TABLE IF NOT EXISTS title_wants (
+	kind       TEXT NOT NULL,            -- movie or episode
+	owner_id   BIGINT NOT NULL,
+	edition    TEXT NOT NULL DEFAULT '', -- the edition its copy should be
+	want       TEXT NOT NULL DEFAULT '', -- better, replace (the copy's bad) or ''
+	note       TEXT NOT NULL DEFAULT '',
+	updated_at BIGINT NOT NULL,
+	PRIMARY KEY (kind, owner_id)
+);
+
 -- Background work, and the record of it that Activity shows.
 CREATE TABLE IF NOT EXISTS jobs (
 	id          INTEGER PRIMARY KEY AUTOINCREMENT,
