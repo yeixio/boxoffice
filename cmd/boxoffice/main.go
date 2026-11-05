@@ -27,6 +27,8 @@ import (
 	"github.com/yeixio/boxoffice/internal/kube"
 	"github.com/yeixio/boxoffice/internal/migrate"
 	"github.com/yeixio/boxoffice/internal/monitor"
+	"github.com/yeixio/boxoffice/internal/music"
+	"github.com/yeixio/boxoffice/internal/musicbrainz"
 	"github.com/yeixio/boxoffice/internal/notify"
 	"github.com/yeixio/boxoffice/internal/search"
 	"github.com/yeixio/boxoffice/internal/store"
@@ -89,6 +91,10 @@ func run() error {
 	runner := jobs.New(db, log)
 	cat := &catalog.Service{Store: db, Jobs: runner, Log: log, EnvTMDBKey: cfg.TMDBKey}
 	cat.Register()
+	mb := musicbrainz.New(version.Version)
+	if cfg.MusicBrainz != "" {
+		mb.Base = cfg.MusicBrainz
+	}
 	backups := &backup.Manager{Store: db, Dir: cfg.BackupDir(), Log: log}
 	downloads := &downloader.Engine{Store: db, Dir: cfg.Downloads, Log: log, Importer: &downloader.LibraryImporter{Store: db},
 		Libraries: func(ctx context.Context) ([]string, error) {
@@ -119,7 +125,7 @@ func run() error {
 	notes := &notify.Recorder{Store: db, Log: log}
 	downloads.Notify = notes.Download
 	srv := &api.Server{
-		Store: db, Catalog: cat, Backups: backups, Migrator: &migrate.Migrator{Catalog: cat, Backups: backups, Log: log, DataDir: cfg.DataDir}, Log: log,
+		Store: db, Catalog: cat, Music: &music.Service{Store: db, MusicBrainz: mb}, Backups: backups, Migrator: &migrate.Migrator{Catalog: cat, Backups: backups, Log: log, DataDir: cfg.DataDir}, Log: log,
 		Downloads: downloads, Search: finder,
 		Version: version.Version, Database: dbKind, DataDir: cfg.DataDir, EnvAPIKey: cfg.APIKey, Web: web.FS(),
 		Monitoring: mon,

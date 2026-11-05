@@ -15,6 +15,7 @@ import (
 // Sign-in sessions aren't kept: a restored server signs everyone in again.
 var dumpTables = []string{
 	"settings", "users", "quality_profiles", "root_folders", "movies", "series", "seasons", "episodes",
+	"artists", "albums",
 	"media_files", "legacy_ids", "migrations", "jobs",
 	"indexers", "download_clients", "usenet_servers", "blocklist", "imported_settings", "data_usage",
 }
