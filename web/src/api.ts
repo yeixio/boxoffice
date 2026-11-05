@@ -54,6 +54,7 @@ export type Movie = {
   tmdbId: number
   imdbId?: string
   title: string
+  sortTitle?: string
   year?: number
   overview?: string
   poster?: string
@@ -63,6 +64,8 @@ export type Movie = {
   inCinemas?: string
   digitalRelease?: string
   physicalRelease?: string
+  // Out of 10, from TMDB or brought from Radarr.
+  rating?: number
   monitored: boolean
   profileId: number
   rootFolder: string
@@ -92,6 +95,11 @@ export type Series = {
   seasons: Season[]
   episodeCount: number
   fileCount: number
+  sortTitle?: string
+  rating?: number
+  sizeOnDisk: number
+  lastAired?: string
+  nextAiring?: string
 }
 export type Episode = {
   id: number

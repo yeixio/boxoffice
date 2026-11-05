@@ -23,6 +23,7 @@ type Movie struct {
 	InCinemas       *time.Time `json:"inCinemas,omitempty"`
 	DigitalRelease  *time.Time `json:"digitalRelease,omitempty"`
 	PhysicalRelease *time.Time `json:"physicalRelease,omitempty"`
+	Rating          float64    `json:"rating,omitempty"` // out of 10
 	Monitored       bool       `json:"monitored"`
 	ProfileID       int        `json:"profileId"`
 	RootFolder      string     `json:"rootFolder"`
@@ -44,7 +45,7 @@ type File struct {
 }
 
 const movieCols = `m.id, m.tmdb_id, m.imdb_id, m.title, m.sort_title, m.year, m.overview, m.poster, m.backdrop, m.runtime, m.status,
-	m.in_cinemas, m.digital_release, m.physical_release, m.monitored, m.profile_id, m.root_folder, m.path, m.added_at, m.refreshed_at,
+	m.in_cinemas, m.digital_release, m.physical_release, m.rating, m.monitored, m.profile_id, m.root_folder, m.path, m.added_at, m.refreshed_at,
 	f.id, f.path, f.size, f.quality, f.added_at`
 
 const movieFrom = ` FROM movies m LEFT JOIN media_files f ON f.kind = 'movie' AND f.owner_id = m.id`
@@ -58,7 +59,7 @@ func scanMovie(r interface{ Scan(...any) error }) (Movie, error) {
 	var fpath sql.NullString
 	var fq sql.NullInt64
 	err := r.Scan(&m.ID, &m.TMDBID, &m.IMDBID, &m.Title, &m.SortTitle, &m.Year, &m.Overview, &m.Poster, &m.Backdrop, &m.Runtime, &m.Status,
-		&cin, &dig, &phy, &mon, &m.ProfileID, &m.RootFolder, &m.Path, &added, &refreshed,
+		&cin, &dig, &phy, &m.Rating, &mon, &m.ProfileID, &m.RootFolder, &m.Path, &added, &refreshed,
 		&fid, &fpath, &fsize, &fq, &fadded)
 	if errors.Is(err, sql.ErrNoRows) {
 		return m, ErrNotFound
@@ -115,10 +116,10 @@ func (s *Store) MoviesReleasing(ctx context.Context, from, to time.Time) ([]Movi
 // AddMovie puts a movie on the wanted list.
 func (s *Store) AddMovie(ctx context.Context, m Movie) (Movie, error) {
 	id, err := s.insert(ctx, `INSERT INTO movies (tmdb_id, imdb_id, title, sort_title, year, overview, poster, backdrop, runtime, status,
-		in_cinemas, digital_release, physical_release, monitored, profile_id, root_folder, path, added_at, refreshed_at)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+		in_cinemas, digital_release, physical_release, rating, monitored, profile_id, root_folder, path, added_at, refreshed_at)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 		m.TMDBID, m.IMDBID, m.Title, SortTitle(m.Title), m.Year, m.Overview, m.Poster, m.Backdrop, m.Runtime, m.Status,
-		nullTime(m.InCinemas), nullTime(m.DigitalRelease), nullTime(m.PhysicalRelease), b2i(m.Monitored), m.ProfileID, m.RootFolder, m.Path, now(), now())
+		nullTime(m.InCinemas), nullTime(m.DigitalRelease), nullTime(m.PhysicalRelease), m.Rating, b2i(m.Monitored), m.ProfileID, m.RootFolder, m.Path, now(), now())
 	if err != nil {
 		return m, err
 	}
@@ -138,13 +139,24 @@ func (s *Store) UpdateMovie(ctx context.Context, m Movie) error {
 // RefreshMovie saves new details from TMDB.
 func (s *Store) RefreshMovie(ctx context.Context, m Movie) error {
 	res, err := s.exec(ctx, `UPDATE movies SET imdb_id = ?, title = ?, sort_title = ?, year = ?, overview = ?, poster = ?, backdrop = ?, runtime = ?, status = ?,
-		in_cinemas = ?, digital_release = ?, physical_release = ?, refreshed_at = ? WHERE id = ?`,
+		in_cinemas = ?, digital_release = ?, physical_release = ?, rating = ?, refreshed_at = ? WHERE id = ?`,
 		m.IMDBID, m.Title, SortTitle(m.Title), m.Year, m.Overview, m.Poster, m.Backdrop, m.Runtime, m.Status,
-		nullTime(m.InCinemas), nullTime(m.DigitalRelease), nullTime(m.PhysicalRelease), now(), m.ID)
+		nullTime(m.InCinemas), nullTime(m.DigitalRelease), nullTime(m.PhysicalRelease), m.Rating, now(), m.ID)
 	if err != nil {
 		return err
 	}
 	return affected(res)
+}
+
+// FillRating sets a title's rating when it hasn't one yet, for titles
+// moved in before Box Office kept ratings.
+func (s *Store) FillRating(ctx context.Context, kind string, id int64, rating float64) error {
+	table := "movies"
+	if kind == "series" {
+		table = "series"
+	}
+	_, err := s.exec(ctx, "UPDATE "+table+" SET rating = ? WHERE id = ? AND rating = 0", rating, id)
+	return err
 }
 
 func (s *Store) DeleteMovie(ctx context.Context, id int64) error {
@@ -175,6 +187,7 @@ type Series struct {
 	Status      string    `json:"status,omitempty"` // TMDB's: Returning Series, Ended…
 	Network     string    `json:"network,omitempty"`
 	Runtime     int       `json:"runtime,omitempty"`
+	Rating      float64   `json:"rating,omitempty"` // out of 10
 	Monitored   bool      `json:"monitored"`
 	ProfileID   int       `json:"profileId"`
 	RootFolder  string    `json:"rootFolder"`
@@ -185,6 +198,11 @@ type Series struct {
 	// Counts over monitored, aired episodes.
 	EpisodeCount int `json:"episodeCount"`
 	FileCount    int `json:"fileCount"`
+	// Over every episode file, wanted or not.
+	SizeOnDisk int64 `json:"sizeOnDisk"`
+	// The latest episode to have aired, and the next one to air.
+	LastAired  *time.Time `json:"lastAired,omitempty"`
+	NextAiring *time.Time `json:"nextAiring,omitempty"`
 }
 
 // Season is one season of a show, and whether its episodes are wanted.
@@ -206,14 +224,14 @@ type Episode struct {
 	File      *File      `json:"file,omitempty"`
 }
 
-const seriesCols = `id, tmdb_id, tvdb_id, imdb_id, title, sort_title, year, overview, poster, backdrop, status, network, runtime,
+const seriesCols = `id, tmdb_id, tvdb_id, imdb_id, title, sort_title, year, overview, poster, backdrop, status, network, runtime, rating,
 	monitored, profile_id, root_folder, path, added_at, refreshed_at`
 
 func scanSeries(r interface{ Scan(...any) error }) (Series, error) {
 	var t Series
 	var mon int
 	var added, refreshed int64
-	err := r.Scan(&t.ID, &t.TMDBID, &t.TVDBID, &t.IMDBID, &t.Title, &t.SortTitle, &t.Year, &t.Overview, &t.Poster, &t.Backdrop, &t.Status, &t.Network, &t.Runtime,
+	err := r.Scan(&t.ID, &t.TMDBID, &t.TVDBID, &t.IMDBID, &t.Title, &t.SortTitle, &t.Year, &t.Overview, &t.Poster, &t.Backdrop, &t.Status, &t.Network, &t.Runtime, &t.Rating,
 		&mon, &t.ProfileID, &t.RootFolder, &t.Path, &added, &refreshed)
 	if errors.Is(err, sql.ErrNoRows) {
 		return t, ErrNotFound
@@ -269,11 +287,25 @@ func (s *Store) fillSeries(ctx context.Context, t *Series) error {
 	if err := rows.Err(); err != nil {
 		return err
 	}
-	return s.row(ctx, `SELECT COUNT(*), COUNT(f.id) FROM episodes e
+	at := now()
+	if err := s.row(ctx, `SELECT COUNT(*), COUNT(f.id) FROM episodes e
 		JOIN seasons se ON se.series_id = e.series_id AND se.number = e.season
 		LEFT JOIN media_files f ON f.kind = 'episode' AND f.owner_id = e.id
-		WHERE e.series_id = ? AND e.monitored = 1 AND se.monitored = 1 AND e.air_date IS NOT NULL AND e.air_date <= ?`, t.ID, now()).
-		Scan(&t.EpisodeCount, &t.FileCount)
+		WHERE e.series_id = ? AND e.monitored = 1 AND se.monitored = 1 AND e.air_date IS NOT NULL AND e.air_date <= ?`, t.ID, at).
+		Scan(&t.EpisodeCount, &t.FileCount); err != nil {
+		return err
+	}
+	// Specials (season 0) don't count towards when a show last or next airs.
+	var size, last, next sql.NullInt64
+	if err := s.row(ctx, `SELECT
+		(SELECT CAST(SUM(f.size) AS BIGINT) FROM media_files f JOIN episodes e ON f.kind = 'episode' AND f.owner_id = e.id WHERE e.series_id = ?),
+		(SELECT MAX(air_date) FROM episodes WHERE series_id = ? AND season > 0 AND air_date <= ?),
+		(SELECT MIN(air_date) FROM episodes WHERE series_id = ? AND season > 0 AND air_date > ?)`,
+		t.ID, t.ID, at, t.ID, at).Scan(&size, &last, &next); err != nil {
+		return err
+	}
+	t.SizeOnDisk, t.LastAired, t.NextAiring = size.Int64, unix(last), unix(next)
+	return nil
 }
 
 func (s *Store) SeriesAll(ctx context.Context) ([]Series, error) {
@@ -309,9 +341,9 @@ func (s *Store) SeriesByTVDB(ctx context.Context, tvdbID int64) (Series, error) 
 
 // AddSeries puts a show on the wanted list, with its seasons.
 func (s *Store) AddSeries(ctx context.Context, t Series) (Series, error) {
-	id, err := s.insert(ctx, `INSERT INTO series (tmdb_id, tvdb_id, imdb_id, title, sort_title, year, overview, poster, backdrop, status, network, runtime,
-		monitored, profile_id, root_folder, path, added_at, refreshed_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-		t.TMDBID, t.TVDBID, t.IMDBID, t.Title, SortTitle(t.Title), t.Year, t.Overview, t.Poster, t.Backdrop, t.Status, t.Network, t.Runtime,
+	id, err := s.insert(ctx, `INSERT INTO series (tmdb_id, tvdb_id, imdb_id, title, sort_title, year, overview, poster, backdrop, status, network, runtime, rating,
+		monitored, profile_id, root_folder, path, added_at, refreshed_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+		t.TMDBID, t.TVDBID, t.IMDBID, t.Title, SortTitle(t.Title), t.Year, t.Overview, t.Poster, t.Backdrop, t.Status, t.Network, t.Runtime, t.Rating,
 		b2i(t.Monitored), t.ProfileID, t.RootFolder, t.Path, now(), now())
 	if err != nil {
 		return t, err
@@ -349,8 +381,8 @@ func (s *Store) UpdateSeries(ctx context.Context, t Series) error {
 
 func (s *Store) RefreshSeries(ctx context.Context, t Series) error {
 	res, err := s.exec(ctx, `UPDATE series SET tvdb_id = ?, imdb_id = ?, title = ?, sort_title = ?, year = ?, overview = ?, poster = ?, backdrop = ?,
-		status = ?, network = ?, runtime = ?, refreshed_at = ? WHERE id = ?`,
-		t.TVDBID, t.IMDBID, t.Title, SortTitle(t.Title), t.Year, t.Overview, t.Poster, t.Backdrop, t.Status, t.Network, t.Runtime, now(), t.ID)
+		status = ?, network = ?, runtime = ?, rating = ?, refreshed_at = ? WHERE id = ?`,
+		t.TVDBID, t.IMDBID, t.Title, SortTitle(t.Title), t.Year, t.Overview, t.Poster, t.Backdrop, t.Status, t.Network, t.Runtime, t.Rating, now(), t.ID)
 	if err != nil {
 		return err
 	}

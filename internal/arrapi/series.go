@@ -42,7 +42,7 @@ func (h *Handler) seriesJSON(t store.Series, ids ids) map[string]any {
 		"path": t.Path, "rootFolderPath": t.RootFolder, "titleSlug": slug(t.Title, t.TMDBID), "added": t.AddedAt.Format(time.RFC3339),
 		"tags": []int{}, "genres": []string{},
 		"statistics": map[string]any{"seasonCount": len(t.Seasons), "episodeCount": t.EpisodeCount, "episodeFileCount": t.FileCount,
-			"totalEpisodeCount": t.EpisodeCount, "percentOfEpisodes": pct, "sizeOnDisk": 0},
+			"totalEpisodeCount": t.EpisodeCount, "percentOfEpisodes": pct, "sizeOnDisk": t.SizeOnDisk},
 	}
 }
 

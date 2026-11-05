@@ -40,3 +40,11 @@ export const appName: Record<string, string> = { radarr: 'Radarr', sonarr: 'Sona
 export function count(n: number, one: string, many: string): string {
   return `${n} ${n === 1 ? one : many}`
 }
+
+// runtime says "48 min" or "2 h 16 min".
+export function runtime(minutes?: number): string {
+  if (!minutes) return ''
+  if (minutes < 60) return `${minutes} min`
+  const m = minutes % 60
+  return m ? `${Math.floor(minutes / 60)} h ${m} min` : `${minutes / 60} h`
+}

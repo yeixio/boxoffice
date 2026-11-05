@@ -1,10 +1,11 @@
-import { useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { ArrowUpToLine, CircleCheck, Clock, FolderInput, CircleX, Download as DownloadIcon, Pause, Play, PackageOpen, RotateCcw, ShieldAlert, Trash2, Upload } from 'lucide-react'
 import { api, del, get, post, put, type Download, type Downloads as DownloadsData } from '../api'
 import { bytes, when } from '../format'
 import { useQualities } from '../hooks'
+import { SortControl, sortList, useSort, words, type SortOption } from '../sort'
 import { Badge, Button, Card, Empty, ErrorNote, Heading, Modal, Spinner, Toggle } from '../ui'
 
 export function useDownloads() {
@@ -48,6 +49,26 @@ function eta(left: number, rate: number) {
   return `${h} h ${Math.round((s % 3600) / 60)} min left`
 }
 
+// What needs a look comes first: failed, then held in quarantine, then
+// waiting to go into the library, then done.
+function outcome(d: Download): number {
+  if (d.status !== 'completed') return 0
+  if (d.quarantined) return 1
+  if (d.canImport) return 2
+  return 3
+}
+
+// History sorts; the queue keeps its own order, which is what downloads next.
+const historySorts: SortOption<Download>[] = [
+  { key: 'finished', label: 'Date finished', value: (d) => d.finishedAt ?? d.addedAt, dir: 'desc', says: words.date },
+  { key: 'added', label: 'Date added', value: (d) => d.addedAt, dir: 'desc', says: words.date },
+  { key: 'name', label: 'Name', value: (d) => d.name, dir: 'asc', says: words.text },
+  { key: 'size', label: 'Size', value: (d) => d.size || undefined, dir: 'desc', says: words.size },
+  { key: 'status', label: 'Status', value: outcome, dir: 'asc', says: { asc: 'Problems first', desc: 'Done first' } },
+]
+
+const newestFirst = (d: Download) => -d.id
+
 export function Downloads() {
   const qc = useQueryClient()
   const d = useDownloads()
@@ -62,6 +83,8 @@ export function Downloads() {
     onSuccess: refresh,
   })
   const clear = useMutation({ mutationFn: () => del('/downloads/history'), onSuccess: refresh })
+  const sort = useSort('downloads-history', historySorts)
+  const history = useMemo(() => sortList(d.data?.history ?? [], sort.option, sort.dir, newestFirst), [d.data?.history, sort.option, sort.dir])
   if (d.isPending) return <Spinner />
   if (d.isError) return <ErrorNote error={d.error} />
   const data = d.data
@@ -143,8 +166,9 @@ export function Downloads() {
       </section>
 
       <section>
-        <div className="mb-3 flex items-center justify-between gap-2">
-          <h2 className="font-display text-xl font-semibold">History</h2>
+        <div className="mb-3 flex flex-wrap items-center gap-2">
+          <h2 className="mr-auto font-display text-xl font-semibold">History</h2>
+          {data.history.length > 1 && <SortControl sort={sort} className="order-last w-full sm:order-none sm:w-auto" />}
           {data.history.length > 0 && (
             <Button variant="ghost" busy={clear.isPending} onClick={() => clear.mutate()}>
               Clear history
@@ -155,7 +179,7 @@ export function Downloads() {
           <p className="text-sm text-muted">Finished downloads show up here.</p>
         ) : (
           <ul className="divide-y divide-line rounded-xl border border-line bg-card">
-            {data.history.map((x) => (
+            {history.map((x) => (
               <HistoryItem key={x.id} d={x} />
             ))}
           </ul>
