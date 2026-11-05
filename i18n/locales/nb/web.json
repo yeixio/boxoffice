@@ -1464,6 +1464,9 @@
     "history": "Historie",
     "clear": "Tøm historikken",
     "noHistory": "Ferdige nedlastinger vises her.",
+    "showMissing": "Vis ufullstendige ({{count}})",
+    "hideMissing": "Skjul ufullstendige",
+    "missingHint": "Utgivelser som mangler for mye på nyhetsserverne til å kunne repareres. Box Office blokkerte hver av dem og lette etter en annen, så det er ingenting å gjøre.",
     "folder": "Nedlastinger havner i {{path}}.",
     "folderFree": "Nedlastinger havner i {{path}}, med {{free}} ledig.",
     "stats": {

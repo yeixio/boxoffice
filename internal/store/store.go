@@ -70,6 +70,13 @@ func Open(dsn string) (*Store, error) {
 func (s *Store) Close() error                   { return s.db.Close() }
 func (s *Store) Ping(ctx context.Context) error { return s.db.PingContext(ctx) }
 
+// backfill fills in a column just added, for the rows already there.
+var backfill = map[string]string{
+	// Downloads that failed for articles gone from the news servers, from
+	// before they were marked, by what they said.
+	"downloads.missing": "UPDATE downloads SET missing = 1 WHERE status = 'failed' AND quarantined = '' AND (message LIKE '%gone from your news servers%' OR message LIKE '%missing from your news servers%' OR message LIKE '%blocks are damaged%')",
+}
+
 func (s *Store) migrate(ctx context.Context) error {
 	ddl := schema
 	if s.postgres {
@@ -103,10 +110,16 @@ func (s *Store) migrate(ctx context.Context) error {
 		{"downloads", "edition", "TEXT NOT NULL DEFAULT ''"},
 		{"downloads", "mode", "TEXT NOT NULL DEFAULT ''"},
 		{"authors", "locked", "INTEGER NOT NULL DEFAULT 0"},
+		{"downloads", "missing", "INTEGER NOT NULL DEFAULT 0"},
 	} {
 		if _, err := s.db.ExecContext(ctx, "SELECT "+c.column+" FROM "+c.table+" WHERE 1 = 0"); err != nil {
 			if _, err := s.db.ExecContext(ctx, "ALTER TABLE "+c.table+" ADD COLUMN "+c.column+" "+c.def); err != nil {
 				return fmt.Errorf("add %s.%s: %w", c.table, c.column, err)
+			}
+			if fill := backfill[c.table+"."+c.column]; fill != "" {
+				if _, err := s.db.ExecContext(ctx, fill); err != nil {
+					return fmt.Errorf("fill in %s.%s: %w", c.table, c.column, err)
+				}
 			}
 		}
 	}

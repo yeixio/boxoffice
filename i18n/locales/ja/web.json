@@ -1373,6 +1373,9 @@
     "history": "歴史",
     "clear": "履歴を消去",
     "noHistory": "完了したダウンロードがここに表示されます。",
+    "showMissing": "不完全なものを表示 ({{count}})",
+    "hideMissing": "不完全なものを隠す",
+    "missingHint": "ニュースサーバー上で欠けている部分が多すぎて修復できないリリースです。Box Office はそれぞれをブロックして別のものを探したので、何もする必要はありません。",
     "folder": "ダウンロード先は {{path}} です。",
     "folderFree": "ダウンロード先は {{path}}（空き {{free}}）です。",
     "stats": {

@@ -1373,6 +1373,9 @@
     "history": "Sejarah",
     "clear": "Kosongkan sejarah",
     "noHistory": "Muat turun yang selesai dipaparkan di sini.",
+    "showMissing": "Tunjukkan yang tidak lengkap ({{count}})",
+    "hideMissing": "Sembunyikan yang tidak lengkap",
+    "missingHint": "Keluaran yang terlalu tidak lengkap pada pelayan berita untuk dibaiki. Box Office menyekat setiap satu dan mencari yang lain, jadi tiada apa yang perlu dibuat.",
     "folder": "Muat turun pergi ke {{path}}.",
     "folderFree": "Muat turun pergi ke {{path}}, dengan {{free}} kosong.",
     "stats": {

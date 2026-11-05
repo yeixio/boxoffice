@@ -1464,6 +1464,9 @@
     "history": "Geschiedenis",
     "clear": "Geschiedenis wissen",
     "noHistory": "Voltooide downloads verschijnen hier.",
+    "showMissing": "Onvolledige tonen ({{count}})",
+    "hideMissing": "Onvolledige verbergen",
+    "missingHint": "Releases waar op de nieuwsservers te veel van ontbreekt om te repareren. Box Office heeft ze elk geblokkeerd en een andere gezocht, dus er hoeft niets te gebeuren.",
     "folder": "Downloads gaan naar {{path}}.",
     "folderFree": "Downloads gaan naar {{path}}, met {{free}} vrij.",
     "stats": {

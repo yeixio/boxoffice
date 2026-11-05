@@ -1555,6 +1555,9 @@
     "history": "Istoric",
     "clear": "Golește istoricul",
     "noHistory": "Descărcările terminate apar aici.",
+    "showMissing": "Arată incompletele ({{count}})",
+    "hideMissing": "Ascunde incompletele",
+    "missingHint": "Lansări prea incomplete pe serverele de știri pentru a fi reparate. Box Office le-a blocat pe fiecare și a căutat alta, așa că nu e nimic de făcut.",
     "folder": "Descărcările merg în {{path}}.",
     "folderFree": "Descărcările merg în {{path}}, cu {{free}} liberi.",
     "stats": {

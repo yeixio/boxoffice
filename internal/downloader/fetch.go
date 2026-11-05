@@ -11,6 +11,7 @@ import (
 	"strings"
 	"sync"
 	"sync/atomic"
+	"syscall"
 	"time"
 
 	"github.com/yeixio/boxoffice/internal/store"
@@ -171,7 +172,7 @@ func (e *Engine) download(ctx context.Context, r *running, d *store.Download, sr
 		tmp := filepath.Join(job.dir, fmt.Sprintf(".boxoffice-%d-%s.part", f.index, try))
 		fh, err := os.OpenFile(tmp, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0o640)
 		if err != nil {
-			return fmt.Errorf("Box Office couldn't make a file in its download folder %s: %w", job.dir, err)
+			return shareTrouble(fmt.Errorf("Box Office couldn't make a file in its download folder %s: %w", job.dir, err))
 		}
 		st := &fileState{nf: f, fh: fh, tmp: tmp}
 		st.remaining.Store(int32(len(f.file.Segments)))
@@ -220,13 +221,15 @@ func (e *Engine) download(ctx context.Context, r *running, d *store.Download, sr
 		if name == "" || strings.HasPrefix(name, ".boxoffice-") {
 			name = fmt.Sprintf("file-%d", st.nf.index)
 		}
-		if err := st.fh.Close(); err != nil {
-			return err
-		}
+		err := closePart(st.fh)
 		st.fh = nil
+		if err != nil {
+			os.Remove(st.tmp)
+			return shareTrouble(err)
+		}
 		final := filepath.Join(job.dir, name)
 		if err := os.Rename(st.tmp, final); err != nil {
-			return err
+			return shareTrouble(err)
 		}
 		mu.Lock()
 		st.nf.name = name
@@ -335,9 +338,42 @@ func (e *Engine) segment(ctx context.Context, r *running, srv *servers, s segmen
 		return nil // a part that claims to go past the end of its file
 	}
 	if _, err := s.fs.fh.WriteAt(p.Data, p.Begin); err != nil {
-		return fmt.Errorf("write to the downloads folder: %w", err)
+		return shareTrouble(fmt.Errorf("write to the downloads folder: %w", err))
 	}
 	return nil
+}
+
+// closePart closes a finished part file; tests swap it.
+var closePart = (*os.File).Close
+
+// shareError is a write to the downloads folder that failed because the
+// folder stopped answering for a while: a network share (SMB, NFS)
+// dropping out and coming back says "host is down" or "resource
+// temporarily unavailable". The download is tried again, keeping the
+// files it finished.
+type shareError struct{ error }
+
+func (s shareError) Unwrap() error { return s.error }
+
+func (s shareError) Error() string {
+	why := s.error.Error()
+	var errno syscall.Errno
+	if errors.As(s.error, &errno) {
+		why = errno.Error()
+	}
+	return "the downloads folder stopped answering while Box Office was saving to it (" + why + "); if it's a network share, check it's up, then download it again"
+}
+
+// shareTrouble marks err as a shareError when it's the downloads folder
+// dropping out, not something that stays wrong (no room, no permission).
+func shareTrouble(err error) error {
+	for _, e := range []syscall.Errno{syscall.EHOSTDOWN, syscall.EHOSTUNREACH, syscall.EAGAIN, syscall.ESTALE, syscall.EIO,
+		syscall.ECONNRESET, syscall.ECONNABORTED, syscall.ETIMEDOUT, syscall.ENETDOWN, syscall.ENETUNREACH, syscall.ENETRESET} {
+		if errors.Is(err, e) {
+			return shareError{err}
+		}
+	}
+	return err
 }
 
 func humanBytes(n int64) string {

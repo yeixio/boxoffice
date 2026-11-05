@@ -176,7 +176,10 @@ func (s *Server) downloads(w http.ResponseWriter, r *http.Request) error {
 		limit = 100
 	}
 	offset, _ := strconv.Atoi(q.Get("historyOffset"))
-	history, historyTotal, err := s.Store.DownloadHistoryPage(ctx, q.Get("historySort"), q.Get("historyDir") == "asc", offset, limit)
+	// Failures for missing articles are hidden unless asked for, as NZBGet
+	// does: there's nothing to do about them.
+	history, historyTotal, historyHidden, err := s.Store.DownloadHistoryPage(ctx, q.Get("historySort"), q.Get("historyDir") == "asc",
+		q.Get("historyMissing") == "true", offset, limit)
 	if err != nil {
 		return err
 	}
@@ -218,7 +221,7 @@ func (s *Server) downloads(w http.ResponseWriter, r *http.Request) error {
 	}
 	out := map[string]any{
 		"settings": set, "queue": queue, "history": history, "speed": live.Speed, "servers": live.Servers,
-		"newsServers": enabled, "folder": folder, "cap": dataCap, "historyTotal": historyTotal,
+		"newsServers": enabled, "folder": folder, "cap": dataCap, "historyTotal": historyTotal, "historyHidden": historyHidden,
 	}
 	if why := s.Downloads.Waiting(); why != "" {
 		out["waiting"] = why

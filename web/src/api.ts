@@ -359,6 +359,8 @@ export type Download = {
   importedTo?: string
   // Where its files were moved when they looked unsafe.
   quarantined?: string
+  // It failed because too much is gone from the news servers to repair.
+  missing?: boolean
   // Its files are still there to check and unpack again.
   canReprocess?: boolean
   // It's done, and waiting to be moved into the library.
@@ -395,6 +397,8 @@ export type Downloads = {
   waiting?: string
   // How many finished downloads there are, of which history is a page.
   historyTotal?: number
+  // Failures for articles gone from the news servers left out of the history.
+  historyHidden?: number
 }
 // The downloads folder's file browser.
 export type DownloadFile = {

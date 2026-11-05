@@ -1555,6 +1555,9 @@
     "history": "História",
     "clear": "Limpar histórico",
     "noHistory": "Downloads concluídos aparecem aqui.",
+    "showMissing": "Mostrar incompletos ({{count}})",
+    "hideMissing": "Ocultar incompletos",
+    "missingHint": "Lançamentos incompletos demais nos servidores de notícias para reparar. O Box Office bloqueou cada um e procurou outro, então não há nada a fazer.",
     "folder": "Os downloads vão para {{path}}.",
     "folderFree": "Os downloads vão para {{path}}, com {{free}} livres.",
     "stats": {
