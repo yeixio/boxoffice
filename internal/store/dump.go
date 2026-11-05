@@ -18,6 +18,7 @@ var dumpTables = []string{
 	"artists", "albums", "authors", "books",
 	"media_files", "legacy_ids", "migrations", "jobs",
 	"indexers", "download_clients", "usenet_servers", "blocklist", "imported_settings", "data_usage",
+	"members", "requests", "issues",
 }
 
 // DumpFormat names the backup format, so a restore can tell it's one.
@@ -143,6 +144,9 @@ func (s *Store) Restore(ctx context.Context, r io.Reader, keepSettings ...string
 	}
 	defer tx.Rollback()
 	if _, err := tx.ExecContext(ctx, "DELETE FROM sessions"); err != nil {
+		return err
+	}
+	if _, err := tx.ExecContext(ctx, "DELETE FROM member_sessions"); err != nil {
 		return err
 	}
 	for i := len(dumpTables) - 1; i >= 0; i-- {

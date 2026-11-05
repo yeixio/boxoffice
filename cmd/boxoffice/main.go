@@ -33,6 +33,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/musicbrainz"
 	"github.com/yeixio/boxoffice/internal/notify"
 	"github.com/yeixio/boxoffice/internal/openlibrary"
+	"github.com/yeixio/boxoffice/internal/portal"
 	"github.com/yeixio/boxoffice/internal/search"
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/version"
@@ -136,6 +137,7 @@ func run() error {
 	srv := &api.Server{
 		Store: db, Catalog: cat, Music: tunes, LibScan: &libscan.Service{Store: db, Catalog: cat, Music: tunes, Log: log}, Backups: backups, Migrator: &migrate.Migrator{Catalog: cat, Backups: backups, Log: log, DataDir: cfg.DataDir}, Log: log,
 		Books:     &books.Service{Store: db, OpenLibrary: ol},
+		Portal:    &portal.Service{Store: db, Catalog: cat, Notify: notes, Log: log},
 		Downloads: downloads, Search: finder,
 		Version: version.Version, Database: dbKind, DataDir: cfg.DataDir, EnvAPIKey: cfg.APIKey, Web: web.FS(),
 		Monitoring: mon,

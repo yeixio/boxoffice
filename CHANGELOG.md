@@ -6,6 +6,7 @@ What changed in Box Office, newest first. The format follows [Keep a Changelog](
 
 ### Added
 
+- **A request site for family and friends,** in place of Overseerr: at `/request` or on its own host name, with your name, colour and logo. People sign in with their Matinee account or one made here, ask for movies and shows, follow them to ready to watch, and report problems. Admins approve or decline on the new **Requests** page, which also has problem reports, the people who can sign in, automatic approval and weekly limits.
 - **Official images come with a TMDB key,** so posters and details work with nothing to paste. Settings → TMDB shows **Built in**, and a key saved there or set in `BOXOFFICE_TMDB_KEY` still wins ([#51](https://github.com/yeixio/boxoffice/pull/51)).
 - **Books and Audiobooks:** follow authors from Open Library and pick which of their books you want as ebooks, audiobooks or both, once either is turned on in Settings ([#50](https://github.com/yeixio/boxoffice/pull/50)). Searching and downloading them comes next.
 - **Scan a root folder for what's on disk but not on the list.** Each movie, TV and music root folder in Settings has a Scan button: it runs in the background, matches each folder to TMDB or MusicBrainz, and lets you check the matches and add the ones you pick where they are, with their files. Nothing is moved, renamed or deleted.

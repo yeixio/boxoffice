@@ -43,6 +43,7 @@ Box Office is a library manager. It doesn't come with any content, indexers or n
 - [Responsible use](#responsible-use)
 - [Try it in one line](#try-it-in-one-line)
 - [What it does](#what-it-does)
+- [The request site](#the-request-site)
 - [Works with Matinee](#works-with-matinee)
 - [Run it](#run-it): [Docker](#docker), [Docker Compose](#docker-compose), [Kubernetes](#kubernetes), [from source](#from-source)
 - [Moving in from Radarr, Sonarr and NZBGet](#moving-in-from-radarr-sonarr-and-nzbget)
@@ -75,6 +76,17 @@ Open http://localhost:7272 and make the admin account. To have it file things in
 - **Health.** A check-up of the things that stop Box Office working (disks, folders it can't write to, indexers, news servers), live charts of the processor, memory, requests and download speed, the log with a debug switch, and alerts. Prometheus metrics are at `/metrics` once you make a token.
 - **Backups** of its database on a schedule, to its own disk and optionally to another folder (such as a NAS share) or S3-compatible storage (AWS S3, Backblaze B2, Cloudflare R2, MinIO). A passphrase encrypts them. Restore from the Backups page.
 - **Works on a phone.** Every page is built to work at phone width, in light and dark.
+
+## The request site
+
+Box Office has its own site where family and friends ask for movies and shows, in place of Overseerr. Turn it on in **Requests → Request site**.
+
+- **It's at `/request`** on your Box Office address with nothing else to set up, for example `http://boxoffice.home:7272/request`. If you give it its own host name (such as `requests.example.com`) and point that name at Box Office, the site answers on that whole name, and the admin pages stay off it.
+- **Your name, colour and logo.** Give it a name, a welcome line, an accent colour and a logo.
+- **Signing in.** People sign in with their Matinee account when you give the Matinee address (Box Office checks the password with Matinee and keeps nothing of Matinee's), or with an account you make for them here. You can let people make their own account too. Request site accounts are separate from the admin account and never open the admin pages or API.
+- **Asking.** People browse the same Discover rows and search, ask for a title with an optional note, and follow it on **My requests**: waiting for approval, looking for it, downloading with how far along, ready to watch.
+- **Approving.** New requests wait on the **Requests** page for you to approve (with your usual profile, or other choices) or decline with a reason. Approval can be automatic for everyone or for chosen people, and weekly limits for movies and shows can be set for everyone and changed per person.
+- **Problems.** People can report a problem with something in the library (it won't play, the wrong episode, bad picture, sound or subtitles). Reports land on the **Problems** tab with a link to the title, where **Choose a release** finds another copy; mark it fixed with a note and the person sees it.
 
 ## Works with Matinee
 

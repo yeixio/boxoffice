@@ -394,3 +394,62 @@ CREATE TABLE IF NOT EXISTS books (
 	want_audiobook INTEGER NOT NULL DEFAULT 0
 );
 CREATE INDEX IF NOT EXISTS books_author ON books (author_id);
+
+-- The request site: the people who use it, what they ask for, and the
+-- problems they report. Members are not admins: they sign in to the
+-- request site only, never to the admin UI, and have their own sessions.
+CREATE TABLE IF NOT EXISTS members (
+	id            INTEGER PRIMARY KEY AUTOINCREMENT,
+	username      TEXT NOT NULL UNIQUE, -- lowercased
+	display_name  TEXT NOT NULL DEFAULT '',
+	password_hash TEXT NOT NULL DEFAULT '', -- empty for Matinee accounts
+	source        TEXT NOT NULL DEFAULT 'local', -- local or matinee
+	auto_approve  TEXT NOT NULL DEFAULT '', -- '' follows Settings, or on or off
+	quota_movies  INTEGER NOT NULL DEFAULT -1, -- a week; -1 follows Settings, 0 is no limit
+	quota_shows   INTEGER NOT NULL DEFAULT -1,
+	disabled      INTEGER NOT NULL DEFAULT 0,
+	created_at    BIGINT NOT NULL,
+	seen_at       BIGINT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS member_sessions (
+	token_hash TEXT PRIMARY KEY,
+	member_id  BIGINT NOT NULL REFERENCES members(id) ON DELETE CASCADE,
+	expires_at BIGINT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS requests (
+	id         INTEGER PRIMARY KEY AUTOINCREMENT,
+	member_id  BIGINT NOT NULL REFERENCES members(id) ON DELETE CASCADE,
+	kind       TEXT NOT NULL, -- movie or series
+	tmdb_id    BIGINT NOT NULL,
+	title      TEXT NOT NULL,
+	year       INTEGER NOT NULL DEFAULT 0,
+	poster     TEXT NOT NULL DEFAULT '',
+	status     TEXT NOT NULL DEFAULT 'pending', -- pending, approved, declined
+	note       TEXT NOT NULL DEFAULT '', -- from the person asking
+	reply      TEXT NOT NULL DEFAULT '', -- from the admin, such as why it was declined
+	created_at BIGINT NOT NULL,
+	decided_at BIGINT NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS requests_member ON requests (member_id, created_at);
+CREATE INDEX IF NOT EXISTS requests_title ON requests (kind, tmdb_id);
+
+CREATE TABLE IF NOT EXISTS issues (
+	id          INTEGER PRIMARY KEY AUTOINCREMENT,
+	member_id   BIGINT NOT NULL REFERENCES members(id) ON DELETE CASCADE,
+	kind        TEXT NOT NULL, -- movie or series
+	tmdb_id     BIGINT NOT NULL,
+	title       TEXT NOT NULL,
+	year        INTEGER NOT NULL DEFAULT 0,
+	poster      TEXT NOT NULL DEFAULT '',
+	season      INTEGER NOT NULL DEFAULT 0, -- 0 for a movie or the whole show
+	episode     INTEGER NOT NULL DEFAULT 0,
+	problem     TEXT NOT NULL, -- wont_play, wrong_title, picture, sound, subtitles, other
+	message     TEXT NOT NULL DEFAULT '',
+	status      TEXT NOT NULL DEFAULT 'open', -- open or resolved
+	reply       TEXT NOT NULL DEFAULT '',
+	created_at  BIGINT NOT NULL,
+	resolved_at BIGINT NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS issues_status ON issues (status, created_at);

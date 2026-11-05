@@ -10,6 +10,7 @@ import {
   Film,
   HeartPulse,
   History,
+  Inbox,
   LogOut,
   Music as MusicIcon,
   BookOpen,
@@ -24,6 +25,7 @@ import { get, type MediaTypeKey, type Settings as SettingsData, type Status } fr
 import { Tray } from './Tray'
 import { speed, useDownloads } from './pages/Downloads'
 import { needsAttention, useHealth } from './pages/Health'
+import { useRequestCounts } from './pages/Requests'
 
 type Item = { to: string; label: string; icon: ComponentType<{ className?: string }>; type?: MediaTypeKey }
 type Group = { label: string; items: Item[] }
@@ -47,6 +49,7 @@ const allGroups: Group[] = [
   {
     label: 'Status',
     items: [
+      { to: '/requests', label: 'Requests', icon: Inbox },
       { to: '/downloads', label: 'Downloads', icon: DownloadIcon },
       { to: '/activity', label: 'Activity', icon: History },
       { to: '/health', label: 'Health', icon: HeartPulse },
@@ -74,7 +77,9 @@ export function useNav(status: Status) {
   const problems = needsAttention(useHealth().data)
   const dl = useDownloads().data
   const rate = dl?.settings.enabled && !dl.settings.paused ? dl.speed : 0
-  return { groups, problems, rate }
+  const counts = useRequestCounts().data
+  const waiting = counts ? counts.requests + counts.issues : 0
+  return { groups, problems, rate, waiting }
 }
 
 type Nav = ReturnType<typeof useNav>
@@ -85,6 +90,14 @@ function Badge({ to, nav, dot }: { to: string; nav: Nav; dot?: boolean }) {
     return (
       <span className="ml-auto rounded-full bg-marquee px-1.5 text-xs font-semibold leading-5 text-marquee-ink" aria-label={`${nav.problems} to fix`}>
         {nav.problems}
+      </span>
+    )
+  }
+  if (to === '/requests' && nav.waiting > 0) {
+    if (dot) return <span className="absolute right-1.5 top-1.5 size-2 rounded-full bg-marquee" aria-label={`${nav.waiting} waiting`} />
+    return (
+      <span className="ml-auto rounded-full bg-marquee px-1.5 text-xs font-semibold leading-5 text-marquee-ink" aria-label={`${nav.waiting} waiting`}>
+        {nav.waiting}
       </span>
     )
   }
