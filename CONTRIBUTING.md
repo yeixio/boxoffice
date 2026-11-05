@@ -82,9 +82,27 @@ Run `gofmt -w` on Go files you touch. If you change the Helm chart, run `make he
 
 Using AI tools to help is fine. You're responsible for what you submit, so read and test it before you open the pull request.
 
+## Contributor License Agreement
+
+Contributors retain copyright ownership of their contributions.
+
+By submitting a contribution to Box Office, you agree to the [Box Office Contributor License Agreement](CLA.md), which grants YEIXIO LLC the rights necessary to use, modify, distribute, sublicense, and relicense contributed code, including as part of commercial offerings.
+
+This allows Box Office to remain open source under the AGPL while preserving future commercial licensing options. The pull request template has a checkbox for it.
+
+## Responsible use
+
+Box Office is for managing media people have the right to download and keep (see [Responsible use](README.md#responsible-use)). In code, tests, docs and screenshots:
+
+- Don't name, link to or recommend indexers, news servers, trackers or other sources of content. Use placeholders such as `https://indexer.example`.
+- Use made-up titles and file names in tests (`Test.Movie.2024.1080p.WEB-DL-GRP`), not real releases or group names.
+- Don't add features whose purpose is to get around access controls, DRM or a service's terms.
+
+Issues and pull requests that link to or ask for help finding infringing content are closed.
+
 ## Issues
 
-Use the forms when you open an issue: bug, move-in report, or feature. Remove passwords, API keys and private URLs from logs.
+Use the forms when you open an issue: bug, move-in report, or feature. Remove passwords, API keys and private URLs from logs, and don't paste links to NZB files or content.
 
 Security problems go through [SECURITY.md](SECURITY.md), not a public issue. Code of Conduct reports go to conduct@yeix.io (see [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)).
 

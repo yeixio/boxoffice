@@ -53,7 +53,7 @@ func checkURL(raw string) (string, error) {
 	}
 	u, err := url.Parse(raw)
 	if err != nil || (u.Scheme != "http" && u.Scheme != "https") || u.Host == "" {
-		return "", errorf(http.StatusBadRequest, "enter the indexer's web address, like https://api.nzbgeek.info")
+		return "", errorf(http.StatusBadRequest, "enter the indexer's web address, like https://api.indexer.example")
 	}
 	return raw, nil
 }

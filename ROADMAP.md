@@ -8,7 +8,7 @@ Box Office already replaces Radarr, Sonarr and NZBGet for one household. The wor
 
 - **Tagged releases,** so the Helm chart and images have versions, with release notes from the [changelog](CHANGELOG.md).
 - **Richer status in Matinee:** download progress, editions and upgrades, shown on Matinee's posters and requests ([#17](https://github.com/yeixio/boxoffice/issues/17)).
-- **More search rules:** a minimum age for releases, preferring propers and repacks, and a limit on how often one title is grabbed again in a day.
+- **More search rules:** a minimum age for releases, preferring corrected copies when a provider replaces one, and a limit on how often one title is downloaded again in a day.
 - **A download speed schedule,** such as slower during the evening.
 - **Move-in reports from more setups,** so unusual Radarr and Sonarr configurations come across cleanly. [Send one](https://github.com/yeixio/boxoffice/issues/new?template=move_in_report.yml).
 

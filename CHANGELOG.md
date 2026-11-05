@@ -7,6 +7,7 @@ What changed in Box Office, newest first. The format follows [Keep a Changelog](
 ### Added
 
 - **Music, audiobooks, ebooks and comics can be turned on in Settings,** each off by default, with its own root folders and one-click suggestions for where the library is mounted ([#38](https://github.com/yeixio/boxoffice/pull/38)). Adding and searching for them comes next.
+- **New shows watch only their last 3 aired seasons, and any still to come,** so a long-running show doesn't flood the library patrol and upgrades. The rule and the number of seasons are in Settings → New shows, and can be changed per show when adding it. Matinee requests follow the same default; shows already on the list and ones brought in by Move in keep what they have. Specials stay off.
 - **Removing titles can delete their files from disk,** showing the folder, file count and size first, and deleting only what it showed ([#28](https://github.com/yeixio/boxoffice/pull/28)). Recycle folders can be emptied from Settings, or after a number of days.
 - **Downloads housekeeping:** failed downloads that can't be repaired are deleted, quarantine has its own section with release, delete and auto-delete after a number of days, long lists are paged, and the queue is summed up at the top ([#27](https://github.com/yeixio/boxoffice/pull/27)).
 - Bulk actions on the Downloads queue and history ([#26](https://github.com/yeixio/boxoffice/pull/26)).
@@ -20,7 +21,7 @@ What changed in Box Office, newest first. The format follows [Keep a Changelog](
 - Health: server monitoring, a log viewer, a debug-logging switch, alerts and Prometheus metrics ([#14](https://github.com/yeixio/boxoffice/pull/14)).
 - Unpack progress, **Move into library** later, and a check that a release is really as long as the movie or episode ([#13](https://github.com/yeixio/boxoffice/pull/13)).
 - **Unpack again** without downloading again ([#11](https://github.com/yeixio/boxoffice/pull/11)).
-- Unpacking RAR sets with scrambled names, and **quarantine** for downloads that hold executables, disguised files or no video ([#10](https://github.com/yeixio/boxoffice/pull/10)).
+- Unpacking RAR sets whose file names don't say what's inside, and **quarantine** for downloads that hold executables, disguised files or no video ([#10](https://github.com/yeixio/boxoffice/pull/10)).
 - **Box Office's own Usenet downloader,** Newznab release search, and the Downloads page ([#9](https://github.com/yeixio/boxoffice/pull/9)).
 - The Health page: problems Box Office finds, and how to fix each ([#7](https://github.com/yeixio/boxoffice/pull/7)).
 - **Finish moving in** ([#6](https://github.com/yeixio/boxoffice/pull/6)).
@@ -30,7 +31,7 @@ What changed in Box Office, newest first. The format follows [Keep a Changelog](
 
 ### Fixed
 
-- An episode whose video has a scrambled name is matched by the release's name ([#24](https://github.com/yeixio/boxoffice/pull/24)).
+- An episode whose video file has a meaningless name is matched by the download's name ([#24](https://github.com/yeixio/boxoffice/pull/24)).
 - An import no longer fails when the original can't be removed from a downloads share ([#18](https://github.com/yeixio/boxoffice/pull/18)).
 - A release's length is judged by its main video, so samples and extras don't quarantine it ([#16](https://github.com/yeixio/boxoffice/pull/16)).
 - RAR 3 and 4 volume numbers are read from the right flag ([#12](https://github.com/yeixio/boxoffice/pull/12)), and old-style `.r00` naming is followed ([#11](https://github.com/yeixio/boxoffice/pull/11)).

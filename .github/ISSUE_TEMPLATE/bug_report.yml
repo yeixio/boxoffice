@@ -6,6 +6,7 @@ body:
     attributes:
       value: |
         One problem per report, please. Remove passwords, API keys, news server sign-ins and private URLs from anything you paste.
+        Don't link to NZB files, indexers or copyrighted content: describe the problem instead. Such reports are closed.
   - type: checkboxes
     id: preflight
     attributes:
@@ -14,6 +15,8 @@ body:
         - label: I searched existing issues
           required: true
         - label: I removed secrets and private URLs from logs and screenshots
+          required: true
+        - label: This isn't about finding or getting access to content
           required: true
   - type: textarea
     id: what-happened
@@ -76,8 +79,8 @@ body:
   - type: textarea
     id: release
     attributes:
-      label: The release, if it's about a specific download
-      description: Its name, its indexer, and what the Downloads page said about it.
+      label: The download, if it's about a specific one
+      description: What the Downloads page said about it, and what was inside (file types, sizes, how many parts). No links, please.
       render: text
     validations:
       required: false

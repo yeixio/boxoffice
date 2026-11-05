@@ -110,7 +110,7 @@ export function DownloadSettings() {
 
 // ---- the monthly data cap ----
 
-function NumberField({ label, hint, value, onSave, min = 1, max, busy, suffix }: { label: string; hint: ReactNode; value: number; onSave: (v: number) => void; min?: number; max?: number; busy: boolean; suffix?: string }) {
+export function NumberField({ label, hint, value, onSave, min = 1, max, busy, suffix }: { label: string; hint: ReactNode; value: number; onSave: (v: number) => void; min?: number; max?: number; busy: boolean; suffix?: string }) {
   const [v, setV] = useState<string | null>(null)
   const n = Number(v)
   const ok = v !== null && v.trim() !== '' && Number.isFinite(n) && n >= min && (max === undefined || n <= max) && n !== value
@@ -551,7 +551,7 @@ function IndexerForm({ indexer, state, onClose }: { indexer: Indexer | null; sta
               <Steps>
                 <li>Sign in to the indexer's website.</li>
                 <li>Open its API page (often under your profile, or "API" in the menu).</li>
-                <li>Copy the API address it gives, like https://api.nzbgeek.info. If it only gives a website, use that.</li>
+                <li>Copy the API address it gives, like https://api.indexer.example. If it only gives a website, use that.</li>
               </Steps>
               For an indexer in Prowlarr, use Prowlarr's address for it, like http://prowlarr:9696/1.
             </>

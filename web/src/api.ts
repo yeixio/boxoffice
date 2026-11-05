@@ -154,6 +154,9 @@ export type AutoSearch = {
 }
 export type Job = { id: number; kind: string; subject: string; status: string; message?: string; createdAt: string; startedAt?: string; finishedAt?: string }
 
+// ShowDefaults say which seasons a new show watches when nobody picks.
+export type ShowDefaults = { monitor: string; recent: number }
+
 // A kind of media beyond movies and TV that an admin can turn on.
 export type MediaTypeKey = 'music' | 'audiobook' | 'ebook' | 'comic'
 export type MediaType = { key: MediaTypeKey; name: string; summary: string; replaces?: string; enabled: boolean; suggested: string[] }

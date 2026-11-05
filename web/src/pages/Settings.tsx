@@ -2,10 +2,10 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Copy, Folder, FolderUp, KeyRound, Plus, Trash2 } from 'lucide-react'
-import { del, get, post, put, type MediaType, type MediaTypeKey, type Profile, type Recycle, type RootFolder, type RootKind, type Settings as SettingsData, type SystemInfo } from '../api'
+import { del, get, post, put, type MediaType, type MediaTypeKey, type Profile, type Recycle, type RootFolder, type RootKind, type Settings as SettingsData, type ShowDefaults, type SystemInfo } from '../api'
 import { bytes, count, day } from '../format'
-import { useProfiles, useQualities, useRootFolders } from '../hooks'
-import { AutoSearchSettings, Connections, DataCapSettingsCard, DownloadSettings } from './Connections'
+import { monitorOptions, useProfiles, useQualities, useRootFolders, useShowDefaults } from '../hooks'
+import { AutoSearchSettings, Connections, DataCapSettingsCard, DownloadSettings, NumberField } from './Connections'
 import { Badge, Button, Card, ErrorNote, Field, Heading, Input, Modal, Select, Spinner, Toggle } from '../ui'
 
 export function Settings() {
@@ -24,6 +24,7 @@ export function Settings() {
           <RootFolders kind="movie" />
           <RootFolders kind="series" />
           <MediaTypeFolders />
+          <NewShows />
           <RecycleFolders />
           <Profiles />
         </div>
@@ -254,6 +255,45 @@ function RootFolders({ kind, type }: { kind: RootKind; type?: MediaType }) {
       </ul>
       <ErrorNote error={remove.error} />
       {picking && <FolderPicker kind={kind} title={rootTitle(kind, type)} onClose={() => setPicking(false)} />}
+    </Card>
+  )
+}
+
+// NewShows sets which seasons a new show watches when nobody picks, for
+// shows added here and requests from Matinee. Shows already on the list,
+// and ones brought over by Move in, keep what they have.
+function NewShows() {
+  const qc = useQueryClient()
+  const d = useShowDefaults()
+  const save = useMutation({
+    mutationFn: (s: Partial<ShowDefaults>) => put<ShowDefaults>('/series/defaults', { ...d.data!, ...s }),
+    onSuccess: (v) => qc.setQueryData(['show-defaults'], v),
+  })
+  if (!d.data) return null
+  return (
+    <Card>
+      <h2 className="mb-1 font-display text-lg font-semibold">New shows</h2>
+      <p className="mb-4 text-sm text-muted">
+        Which episodes Box Office watches for when a show is added, here or by a request from Matinee. A long-running show can have hundreds of old episodes; watching only the last few seasons keeps the
+        library patrol and upgrades on what you're likely to watch. You can still pick something else when adding a show, and switch seasons on or off from the show's page. Shows already on the
+        list keep what they have.
+      </p>
+      <div className="flex flex-col gap-4">
+        <Field label="Which episodes to get" hint="Specials are always left out.">
+          {(id) => <Select id={id} value={d.data.monitor} onChange={(v) => save.mutate({ monitor: v })} options={monitorOptions(d.data.recent)} />}
+        </Field>
+        {d.data.monitor === 'recent' && (
+          <NumberField
+            label="How many seasons"
+            value={d.data.recent}
+            max={99}
+            busy={save.isPending}
+            onSave={(v) => save.mutate({ recent: v })}
+            hint="Counts seasons that have started airing; seasons still to come are always watched. A show with this many seasons or fewer gets every season."
+          />
+        )}
+        <ErrorNote error={save.error} />
+      </div>
     </Card>
   )
 }

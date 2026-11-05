@@ -3,8 +3,8 @@
 </p>
 
 <p align="center">
-  <b>Finds, downloads and looks after your movies and shows.</b><br>
-  One self-hosted app in place of Radarr, Sonarr and NZBGet, made to sit next to <a href="https://github.com/yeixio/matinee">Matinee</a>.
+  <b>A self-hosted manager for your own movie and TV library.</b><br>
+  One app in place of Radarr, Sonarr and NZBGet, made to sit next to <a href="https://github.com/yeixio/matinee">Matinee</a>.
 </p>
 
 <p align="center">
@@ -15,7 +15,7 @@
   <a href="https://github.com/yeixio/boxoffice/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22"><img src="https://img.shields.io/github/issues/yeixio/boxoffice/good%20first%20issue?color=7057ff&label=good%20first%20issues" alt="Good first issues"></a>
 </p>
 
-Box Office keeps a list of the movies and shows you want, searches your Usenet indexers for them, downloads and unpacks them itself, checks they're the real thing, and files them into your library. When a better copy turns up, it swaps it in and keeps the old one in a recycle folder.
+Box Office keeps track of the movies and shows in your library and the ones you're waiting for. It fetches files from the Usenet services you connect it to, checks them for malware and damage, and files them into tidy folders that any media server can play. When a better-quality copy turns up, it swaps it in and keeps the old one in a recycle folder.
 
 Already running Radarr, Sonarr or NZBGet? **Move in** brings everything over step by step, and only ever reads from the old apps, so nothing in them changes until you decide to turn them off.
 
@@ -23,19 +23,24 @@ Already running Radarr, Sonarr or NZBGet? **Move in** brings everything over ste
 
 <p>
   <img src="docs/images/movies.webp" width="49%" alt="The movies list, sorted by rating">
-  <img src="docs/images/downloads.webp" width="49%" alt="Downloads, with the queue and what finished">
+  <img src="docs/images/move-in.webp" width="49%" alt="Moving in from Radarr, step by step">
 </p>
 
-<p>
-  <img src="docs/images/move-in.webp" width="56%" alt="Moving in from Radarr, step by step">
-  <img src="docs/images/phone-movies.webp" width="20%" alt="Movies on a phone">
-  <img src="docs/images/phone-releases.webp" width="20%" alt="Choosing a release on a phone">
+<p align="center">
+  <img src="docs/images/phone-movies.webp" width="30%" alt="Movies on a phone">
+  <img src="docs/images/phone-shows.webp" width="30%" alt="Shows on a phone, sorted by the next episode">
+  <img src="docs/images/phone-menu.webp" width="30%" alt="The menu on a phone">
 </p>
 
 **Status:** early, and moving fast. Movies, TV, the built-in Usenet downloader and moving in from Radarr, Sonarr and NZBGet work end to end. There are no tagged releases yet: the `main` image is built from every change that passes CI. See the [roadmap](ROADMAP.md) for what's next.
 
+## Responsible use
+
+Box Office is a library manager. It doesn't come with any content, indexers or news servers, and it doesn't link to, recommend or bypass the protections of any service. You connect it to services you have an account with, and you're responsible for having the right to download and keep what you add, such as recordings you made, discs you own where the law where you live allows a personal copy, public-domain films and Creative Commons works, or content a provider licenses you to download. Please respect copyright and your providers' terms. Issues and pull requests that link to or ask for help finding infringing content will be closed.
+
 ## Contents
 
+- [Responsible use](#responsible-use)
 - [Try it in one line](#try-it-in-one-line)
 - [What it does](#what-it-does)
 - [Works with Matinee](#works-with-matinee)
@@ -56,17 +61,17 @@ Open http://localhost:7272 and make the admin account. To have it file things in
 
 ## What it does
 
-- **Movies and shows you want.** Add a title by name and Box Office looks it up on [TMDB](https://www.themoviedb.org/): poster, description, rating, and for shows every season and episode. Each title has a quality profile, a folder, and a switch to watch for it. **Coming up** lists new episodes and movie releases on their way.
-- **Searches on its own.** RSS sync reads each indexer's new releases every 15 minutes, so new episodes are caught as they're posted. An hourly library patrol searches for a few missing titles and upgrades at a time, newest first, and searches a whole season when three or more of its episodes are wanted.
-- **Kind to your indexers and your data plan.** Searches are spaced out and kept under each indexer's daily limit (read from the indexer when it says, or typed in), an indexer that's having trouble rests for a while, and a monthly **data cap** makes upgrades wait first, then missing titles, before you hit your internet provider's limit. Block accounts on news servers count down too.
-- **A Usenet downloader built in.** No NZBGet or SABnzbd needed: Box Office connects to your news servers, downloads, checks and repairs with par2, and unpacks RAR sets, including ones with scrambled file names and old-style `.r00` volumes. Add an NZB yourself on the Downloads page, pause, reorder, retry, and act on many at once.
-- **Checks what it downloaded.** Before anything reaches your library, Box Office looks inside: executables, files pretending to be videos, releases with no video, and "movies" far shorter than the real thing go to quarantine instead, the release is blocked, and another one is searched for. You can look through quarantine, release something from it, or delete it.
+- **Movies and shows you want.** Add a title by name and Box Office looks it up on [TMDB](https://www.themoviedb.org/): poster, description, rating, and for shows every season and episode. Each title has a quality profile, a folder, and a switch to watch for it. **Coming up** lists new episodes and movies on their way.
+- **Searches on its own.** RSS sync reads each connected indexer's newest listings every 15 minutes, so new episodes are found when they become available. An hourly library patrol looks for a few missing titles and upgrades at a time, newest first, and looks for a whole season when three or more of its episodes are wanted.
+- **Kind to the services you use and your data plan.** Searches are spaced out and kept under each indexer's daily limit (read from the indexer when it says, or typed in), an indexer that's having trouble rests for a while, and a monthly **data cap** makes upgrades wait first, then missing titles, before you hit your internet provider's limit. Block accounts on news servers count down too.
+- **A Usenet downloader built in.** No NZBGet or SABnzbd needed: Box Office connects to your news servers, downloads, checks and repairs with par2, and unpacks RAR archives, including multi-part sets in the older `.r00` style and sets whose file names don't say what's inside. Add an NZB yourself on the Downloads page, pause, reorder, retry, and act on many at once.
+- **Checks what it downloaded.** Before anything reaches your library, Box Office looks inside: executables and other malware risks, files whose contents don't match their names, downloads with no video, and videos much shorter than the movie or episode they're meant to be go to quarantine instead, that result is blocked, and another one is looked for. You can look through quarantine, release something from it, or delete it.
 - **Files things neatly.** Finished downloads are moved into the title's folder, copied and checked by size first when the downloads folder is on another share. A file browser on the Downloads page lets you tidy the downloads folder or move a folder into a title by hand.
 - **Upgrades without losing anything.** When a copy is below its profile's good-enough quality, Box Office keeps looking. A better copy replaces the old one, which goes to the library's `.recycle` folder. Empty those folders from Settings, or have them emptied after a number of days.
-- **Choose a release yourself.** Every movie, episode and season has **Choose a release**: all the results from every indexer, with their quality, size, age and grabs, and why any were turned down.
+- **Choose a copy yourself.** Every movie, episode and season has **Choose a release**: the results from every connected indexer, with their quality, size and age, and why any were turned down.
 - **Removes titles cleanly.** Removing a movie, show, season or episode can also delete its files from disk. You see the folder, the number of files and their size first, and Box Office deletes only what it showed you.
 - **Sorts and filters** movies and shows by title, rating, size on disk, date added, and for shows by the next or last episode, remembered per list.
-- **Health.** A check-up of the things that stop downloads working (disks, folders it can't write to, indexers, news servers), live charts of the processor, memory, requests and download speed, the log with a debug switch, and alerts. Prometheus metrics are at `/metrics` once you make a token.
+- **Health.** A check-up of the things that stop Box Office working (disks, folders it can't write to, indexers, news servers), live charts of the processor, memory, requests and download speed, the log with a debug switch, and alerts. Prometheus metrics are at `/metrics` once you make a token.
 - **Backups** of its database on a schedule, to its own disk and optionally to another folder (such as a NAS share) or S3-compatible storage (AWS S3, Backblaze B2, Cloudflare R2, MinIO). A passphrase encrypts them. Restore from the Backups page.
 - **Works on a phone.** Every page is built to work at phone width, in light and dark.
 
@@ -210,6 +215,12 @@ Kubernetes probes are at `/healthz` (process up) and `/readyz` (database reachab
 ## FAQ
 
 <details>
+<summary><b>Where does the content come from?</b></summary>
+
+From services you choose and connect yourself. Box Office ships with no indexers, news servers or content, and doesn't suggest any. It's up to you to use it only for media you have the right to download and keep; see [Responsible use](#responsible-use).
+</details>
+
+<details>
 <summary><b>Do I need Matinee?</b></summary>
 
 No. Box Office works on its own and files things into ordinary folders, so Plex, Jellyfin, Emby or anything else can play them. Because it answers on Radarr's and Sonarr's APIs, request tools like Overseerr or Jellyseerr can point at `http://boxoffice:7272/radarr` and `/sonarr` with Box Office's API key (only Matinee has been tested this way so far). With Matinee you also get requests, notifications and the one-click connection.
@@ -218,7 +229,7 @@ No. Box Office works on its own and files things into ordinary folders, so Plex,
 <details>
 <summary><b>Will moving in change or break my Radarr, Sonarr or NZBGet?</b></summary>
 
-No. Box Office only reads from them. The one thing it asks for is a backup of the app itself, which it downloads and keeps. Files aren't moved or renamed. Keep the old app running until you're happy, but don't let both grab the same titles: once Box Office's **Download releases** is on, turn off searching in the old app.
+No. Box Office only reads from them. The one thing it asks for is a backup of the app itself, which it downloads and keeps. Files aren't moved or renamed. Keep the old app running until you're happy, but don't let both download the same titles: once Box Office's **Download releases** is on, turn off searching in the old app.
 </details>
 
 <details>
@@ -234,7 +245,7 @@ Sign up at [themoviedb.org](https://www.themoviedb.org/signup), open [Settings â
 </details>
 
 <details>
-<summary><b>Will it eat my data cap or get my indexer account banned?</b></summary>
+<summary><b>Will it use up my data allowance or overload my indexers?</b></summary>
 
 It's built not to. Searches are spaced two seconds apart and kept under each indexer's daily limit with a reserve for searches you start yourself; an indexer that errors or says "too many requests" rests and is tried again later. The monthly data cap is on by default at 3 TB: upgrades wait at 70%, missing titles at 90%, and downloads stop at 100%. Change all of it under **Settings â†’ Downloads**.
 </details>
@@ -294,7 +305,7 @@ Box Office is young, which makes it a good time to get involved: small fixes lan
 - **Start small.** Issues labeled [good first issue](https://github.com/yeixio/boxoffice/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) are well scoped and say where to start. [help wanted](https://github.com/yeixio/boxoffice/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) has bigger ones.
 - **No code needed.** Moving in from an unusual Radarr or Sonarr setup, a news server or indexer that behaves oddly, or a release Box Office got wrong: a [move-in report](https://github.com/yeixio/boxoffice/issues/new?template=move_in_report.yml) or [bug report](https://github.com/yeixio/boxoffice/issues/new?template=bug_report.yml) helps a lot.
 
-[CONTRIBUTING.md](CONTRIBUTING.md) gets you from clone to a running server. Everyone follows the [Code of Conduct](CODE_OF_CONDUCT.md). What changed is in the [changelog](CHANGELOG.md).
+[CONTRIBUTING.md](CONTRIBUTING.md) gets you from clone to a running server. Contributions are covered by a short [CLA](CLA.md), and everyone follows the [Code of Conduct](CODE_OF_CONDUCT.md). What changed is in the [changelog](CHANGELOG.md).
 
 ## License
 
