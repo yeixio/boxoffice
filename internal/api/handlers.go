@@ -53,7 +53,8 @@ func (s *Server) settings(w http.ResponseWriter, r *http.Request) error {
 	return writeJSON(w, http.StatusOK, map[string]any{
 		"apiKey": s.APIKey(ctx), "apiKeyFromEnv": s.EnvAPIKey != "",
 		"hasTmdbKey": key != "" || s.Catalog.EnvTMDBKey != "", "tmdbKeyFromEnv": key == "" && s.Catalog.EnvTMDBKey != "",
-		"mediaTypes": types,
+		"tmdbKeyBuiltIn": key == "" && s.Catalog.EnvTMDBKey != "" && s.Catalog.TMDBKeyBuiltIn,
+		"mediaTypes":     types,
 	})
 }
 

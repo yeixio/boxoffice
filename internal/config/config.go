@@ -13,13 +13,18 @@ import (
 	"time"
 )
 
+// DefaultTMDBKey is the project's own TMDB key, linked into official images with
+// -ldflags "-X github.com/yeixio/boxoffice/internal/config.DefaultTMDBKey=...",
+// so they look titles up with no key to paste. Builds from source leave it empty.
+var DefaultTMDBKey = ""
+
 // Config is how Box Office is set up on this server.
 type Config struct {
 	Addr        string        // where it listens; BOXOFFICE_ADDR
 	DataDir     string        // its database, backups and imports; BOXOFFICE_DATA_DIR
 	DatabaseURL string        // a PostgreSQL URL; empty uses SQLite in DataDir; BOXOFFICE_DATABASE_URL
 	Downloads   string        // where downloads go while they're fetched and unpacked; BOXOFFICE_DOWNLOADS_DIR
-	TMDBKey     string        // used when none is saved in Settings; BOXOFFICE_TMDB_KEY
+	TMDBKey     string        // used when none is saved in Settings; BOXOFFICE_TMDB_KEY, else DefaultTMDBKey
 	APIKey      string        // fixes the API key, such as from a Kubernetes Secret; BOXOFFICE_API_KEY
 	LogFormat   string        // text or json; BOXOFFICE_LOG_FORMAT
 	Debug       bool          // BOXOFFICE_DEBUG
@@ -47,7 +52,7 @@ func load(args []string, env func(string) string) (Config, error) {
 		DataDir:     cmp.Or(env("BOXOFFICE_DATA_DIR"), defaultDataDir()),
 		DatabaseURL: env("BOXOFFICE_DATABASE_URL"),
 		Downloads:   env("BOXOFFICE_DOWNLOADS_DIR"),
-		TMDBKey:     env("BOXOFFICE_TMDB_KEY"),
+		TMDBKey:     cmp.Or(env("BOXOFFICE_TMDB_KEY"), DefaultTMDBKey),
 		APIKey:      env("BOXOFFICE_API_KEY"),
 		LogFormat:   cmp.Or(env("BOXOFFICE_LOG_FORMAT"), "text"),
 		Debug:       env("BOXOFFICE_DEBUG") != "",

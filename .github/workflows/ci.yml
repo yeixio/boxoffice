@@ -99,5 +99,8 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: VERSION=main-${{ github.sha }}
+          # Empty on pull requests and forks, which then build without a TMDB key.
+          secrets: |
+            tmdb_key=${{ secrets.TMDB_API_KEY }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

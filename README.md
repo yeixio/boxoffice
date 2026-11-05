@@ -114,7 +114,7 @@ docker run -d --name boxoffice \
 Open http://localhost:7272, make the admin account, then in **Settings**:
 
 1. Add `/media/movies` and `/media/tv` as root folders.
-2. Paste a free [TMDB key](#faq) for posters and details.
+2. Official images come with a TMDB key for posters and details. If you built Box Office yourself, paste a free [TMDB key](#faq).
 3. Under **Downloads**, add a news server and an indexer, then turn on **Download releases**.
 
 Or skip those and [move in](#moving-in-from-radarr-sonarr-and-nzbget) from Radarr, Sonarr and NZBGet, which brings all of it over.
@@ -203,7 +203,7 @@ Most settings live in the web UI under **Settings**. The server itself takes a f
 | `BOXOFFICE_DATA_DIR` | `-data` | `/data` in the image | Database (with SQLite), backups and the backups of apps you move in from |
 | `BOXOFFICE_DATABASE_URL` | `-database-url` | empty | `postgres://…` to use PostgreSQL instead of SQLite |
 | `BOXOFFICE_DOWNLOADS_DIR` | `-downloads` | `downloads` in the data folder | Where downloads go while they're fetched, checked and unpacked. Give it room for a few releases, and never point it inside a library |
-| `BOXOFFICE_TMDB_KEY` | | empty | A TMDB key, used when none is saved in Settings |
+| `BOXOFFICE_TMDB_KEY` | | built-in key in official images, else empty | A TMDB key, used when none is saved in Settings |
 | `BOXOFFICE_API_KEY` | | made on first start | Fixes the API key Matinee and other apps use, such as from a Kubernetes Secret |
 | `BOXOFFICE_REFRESH_EVERY` | `-refresh-every` | `12h` | How often titles are refreshed from TMDB (at least `1h`) |
 | `BOXOFFICE_MUSICBRAINZ_URL` | | `https://musicbrainz.org/ws/2` | A MusicBrainz mirror to look music up on, if you run one |
@@ -266,7 +266,7 @@ Not yet. Torznab indexers and torrent clients can be moved in and are kept, but 
 <details>
 <summary><b>Where do I get a TMDB key?</b></summary>
 
-Sign up at [themoviedb.org](https://www.themoviedb.org/signup), open [Settings → API](https://www.themoviedb.org/settings/api), click **Create** and answer **Yes** to personal use. Copy the **API Key** (or the Read Access Token) into Box Office's **Settings → TMDB**. Box Office checks it and fills in artwork right away. Moving in from Radarr or Sonarr works without a key; artwork then comes from what those apps knew.
+You only need one if you built Box Office yourself: the official images come with the project's key. Sign up at [themoviedb.org](https://www.themoviedb.org/signup), open [Settings → API](https://www.themoviedb.org/settings/api), click **Create** and answer **Yes** to personal use. Copy the **API Key** (or the Read Access Token) into Box Office's **Settings → TMDB**. Box Office checks it and fills in artwork right away. Moving in from Radarr or Sonarr works without a key; artwork then comes from what those apps knew.
 </details>
 
 <details>

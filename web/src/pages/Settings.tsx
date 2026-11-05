@@ -68,9 +68,12 @@ function General() {
       <p className="mb-4 text-sm text-muted">
         Box Office looks up movies and shows on TMDB. Get a free key at <a className="text-marquee" href="https://www.themoviedb.org/settings/api" target="_blank" rel="noreferrer">themoviedb.org</a>; the API key and the longer read access token both work.
       </p>
+      {s.data?.tmdbKeyBuiltIn && (
+        <p className="mb-3 text-sm text-muted">This copy of Box Office comes with the project's own key, so there's nothing to set up. You can still save your own key here to use it instead.</p>
+      )}
       {s.data && (
         <p className="mb-3 text-sm">
-          {s.data.hasTmdbKey ? <Badge tone="ok">{s.data.tmdbKeyFromEnv ? 'Set on the server' : 'Saved'}</Badge> : <Badge tone="bad">Not set</Badge>}
+          {s.data.hasTmdbKey ? <Badge tone="ok">{s.data.tmdbKeyBuiltIn ? 'Built in' : s.data.tmdbKeyFromEnv ? 'Set on the server' : 'Saved'}</Badge> : <Badge tone="bad">Not set</Badge>}
         </p>
       )}
       <div className="flex gap-2">

@@ -92,7 +92,8 @@ func run() error {
 	defer stop()
 
 	runner := jobs.New(db, log)
-	cat := &catalog.Service{Store: db, Jobs: runner, Log: log, EnvTMDBKey: cfg.TMDBKey}
+	cat := &catalog.Service{Store: db, Jobs: runner, Log: log, EnvTMDBKey: cfg.TMDBKey,
+		TMDBKeyBuiltIn: cfg.TMDBKey != "" && cfg.TMDBKey == config.DefaultTMDBKey}
 	cat.Register()
 	mb := musicbrainz.New(version.Version)
 	if cfg.MusicBrainz != "" {

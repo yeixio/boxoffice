@@ -167,7 +167,7 @@ export type ShowDefaults = { monitor: string; recent: number }
 export type MediaTypeKey = 'music' | 'audiobook' | 'ebook' | 'comic'
 export type MediaType = { key: MediaTypeKey; name: string; summary: string; replaces?: string; enabled: boolean; suggested: string[] }
 export type RootKind = 'movie' | 'series' | MediaTypeKey
-export type Settings = { apiKey: string; apiKeyFromEnv: boolean; hasTmdbKey: boolean; tmdbKeyFromEnv: boolean; mediaTypes: MediaType[] }
+export type Settings = { apiKey: string; apiKeyFromEnv: boolean; hasTmdbKey: boolean; tmdbKeyFromEnv: boolean; tmdbKeyBuiltIn: boolean; mediaTypes: MediaType[] }
 
 export type BackupRemote = {
   kind: '' | 'folder' | 's3'

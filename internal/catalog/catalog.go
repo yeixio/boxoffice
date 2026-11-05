@@ -42,6 +42,9 @@ type Service struct {
 	Log   *slog.Logger
 	// EnvTMDBKey is the key set on the server, used when none is saved.
 	EnvTMDBKey string
+	// TMDBKeyBuiltIn says EnvTMDBKey is the one built into official images,
+	// not one the admin set.
+	TMDBKeyBuiltIn bool
 	// TMDBBase and TMDBHTTP point at a test server.
 	TMDBBase string
 	TMDBHTTP *http.Client
