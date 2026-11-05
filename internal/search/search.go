@@ -45,6 +45,7 @@ func (s *Service) Register(r *jobs.Runner) {
 	r.Handle(catalog.JobSearchSeries, s.jobSeries)
 	r.Handle(catalog.JobSearchEpisode, s.jobEpisode)
 	r.Handle(JobSearchWanted, s.jobWanted)
+	r.Handle(JobSearchBook, s.jobBook)
 }
 
 // Candidate is a release and what Box Office makes of it for a title.
@@ -58,11 +59,14 @@ type Candidate struct {
 	// numbers a release holds, as its name gives them.
 	Pack     bool  `json:"pack,omitempty"`
 	Episodes []int `json:"episodes,omitempty"`
+	// Format is a book release's format as its name gives it: EPUB, M4B.
+	Format string `json:"format,omitempty"`
 
-	kind     string
-	titleID  int64
-	episodes []int64
-	priority int
+	kind       string
+	titleID    int64
+	episodes   []int64
+	priority   int
+	formatRank int
 }
 
 // Results are a search's releases, best first, and the indexers that
@@ -387,6 +391,8 @@ func (s *Service) rank(ctx context.Context, out *Results) {
 			return 1
 		case a.Quality != b.Quality:
 			return quality.Rank(b.Quality) - quality.Rank(a.Quality)
+		case a.formatRank != b.formatRank:
+			return b.formatRank - a.formatRank
 		case a.priority != b.priority:
 			return a.priority - b.priority
 		case a.Grabs != b.Grabs:

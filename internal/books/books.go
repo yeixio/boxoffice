@@ -11,8 +11,11 @@ import (
 	"strings"
 
 	"github.com/yeixio/boxoffice/internal/catalog"
+	"github.com/yeixio/boxoffice/internal/downloader"
+	"github.com/yeixio/boxoffice/internal/jobs"
 	"github.com/yeixio/boxoffice/internal/mediatypes"
 	"github.com/yeixio/boxoffice/internal/openlibrary"
+	"github.com/yeixio/boxoffice/internal/search"
 	"github.com/yeixio/boxoffice/internal/store"
 )
 
@@ -34,6 +37,8 @@ func (e ErrOff) Error() string {
 type Service struct {
 	Store       *store.Store
 	OpenLibrary *openlibrary.Client
+	// Jobs runs a search for a book as soon as it's wanted, when set.
+	Jobs *jobs.Runner
 }
 
 func checkFormat(format string) error {
@@ -141,6 +146,10 @@ func (s *Service) Add(ctx context.Context, o AddOptions) (store.Author, error) {
 	if err := s.refreshBooks(ctx, added, o.All && o.Format == store.Ebook, o.All && o.Format == store.Audiobook); err != nil {
 		return added, err
 	}
+	// Books already in the root folders count as there, not missing.
+	if _, err := s.FindOnDisk(ctx, added.ID); err != nil {
+		return added, err
+	}
 	return s.Store.Author(ctx, added.ID)
 }
 
@@ -167,6 +176,9 @@ func (s *Service) Refresh(ctx context.Context, id int64) (store.Author, error) {
 	if err := s.refreshBooks(ctx, have, have.NewEbooks, have.NewAudiobooks); err != nil {
 		return store.Author{}, err
 	}
+	if _, err := s.FindOnDisk(ctx, id); err != nil {
+		return store.Author{}, err
+	}
 	return s.Store.Author(ctx, id)
 }
 
@@ -190,6 +202,8 @@ func (s *Service) refreshBooks(ctx context.Context, a store.Author, ebook, audio
 type Edit struct {
 	NewEbooks     *bool `json:"newEbooks"`
 	NewAudiobooks *bool `json:"newAudiobooks"`
+	// Locked is Do not touch: no searches, downloads or file changes.
+	Locked *bool `json:"locked"`
 }
 
 // Update changes an author.
@@ -214,6 +228,9 @@ func (s *Service) Update(ctx context.Context, id int64, e Edit) (store.Author, e
 	if e.NewAudiobooks != nil {
 		a.NewAudiobooks = *e.NewAudiobooks
 	}
+	if e.Locked != nil {
+		a.Locked = *e.Locked
+	}
 	if err := s.Store.UpdateAuthor(ctx, a); err != nil {
 		return store.Author{}, err
 	}
@@ -231,7 +248,55 @@ func (s *Service) Want(ctx context.Context, bookID int64, format string, on bool
 	if err := s.Store.SetBookWanted(ctx, bookID, format, on); err != nil {
 		return store.Book{}, err
 	}
-	return s.Store.Book(ctx, bookID)
+	b, err := s.Store.Book(ctx, bookID)
+	if err == nil && on {
+		s.searchSoon(ctx, b, format)
+	}
+	return b, err
+}
+
+// searchSoon queues a search for a book just wanted, when Box Office can
+// download it: downloading is on, the author isn't on Do not touch, and
+// there's no copy yet. Otherwise the hourly search gets to it in turn.
+func (s *Service) searchSoon(ctx context.Context, b store.Book, format string) {
+	if s.Jobs == nil || b.File(format) != nil {
+		return
+	}
+	if set, err := downloader.LoadSettings(ctx, s.Store); err != nil || !set.Enabled {
+		return
+	}
+	a, err := s.Store.Author(ctx, b.AuthorID)
+	if err != nil || a.Locked {
+		return
+	}
+	s.Jobs.Queue(ctx, search.JobSearchBook, search.BookSubject(a, b, format), search.BookJob(b.ID, format))
+}
+
+// Search queues a search for a book in a format now, whether or not it's
+// wanted, and grabs the best release it finds.
+func (s *Service) Search(ctx context.Context, bookID int64, format string) error {
+	if err := checkFormat(format); err != nil {
+		return err
+	}
+	if err := s.on(ctx, format); err != nil {
+		return err
+	}
+	if err := s.Store.CheckUnlocked(ctx, format, bookID); err != nil {
+		return err
+	}
+	b, err := s.Store.Book(ctx, bookID)
+	if err != nil {
+		return err
+	}
+	a, err := s.Store.Author(ctx, b.AuthorID)
+	if err != nil {
+		return err
+	}
+	if s.Jobs == nil {
+		return errors.New("searching isn't set up")
+	}
+	_, err = s.Jobs.Queue(ctx, search.JobSearchBook, search.BookSubject(a, b, format), search.BookJob(b.ID, format))
+	return err
 }
 
 // WantAll says whether every one of an author's books is wanted in a

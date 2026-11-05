@@ -120,9 +120,12 @@ func run() error {
 		}
 		db.Block(ctx, store.Blocked{Kind: d.Kind, TitleID: d.TitleID, SourceTitle: d.Name, Quality: d.Quality, Protocol: "usenet",
 			Indexer: d.Indexer, Reason: why, At: time.Now()})
-		if d.Kind == "movie" {
+		switch {
+		case d.Kind == "movie":
 			cat.SearchMovies(ctx, d.TitleID)
-		} else if len(d.EpisodeIDs) > 0 {
+		case store.IsBookKind(d.Kind):
+			runner.Queue(ctx, search.JobSearchBook, d.Name, search.BookJob(d.TitleID, d.Kind))
+		case len(d.EpisodeIDs) > 0:
 			cat.SearchEpisodes(ctx, d.EpisodeIDs...)
 		}
 	}
@@ -134,7 +137,7 @@ func run() error {
 	if cfg.OpenLibrary != "" {
 		ol.Base = cfg.OpenLibrary
 	}
-	shelf := &books.Service{Store: db, OpenLibrary: ol}
+	shelf := &books.Service{Store: db, OpenLibrary: ol, Jobs: runner}
 	srv := &api.Server{
 		Store: db, Catalog: cat, Music: tunes, LibScan: &libscan.Service{Store: db, Catalog: cat, Music: tunes, Books: shelf, Log: log}, Backups: backups, Migrator: &migrate.Migrator{Catalog: cat, Backups: backups, Log: log, DataDir: cfg.DataDir}, Log: log,
 		Books:     shelf,

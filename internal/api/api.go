@@ -153,6 +153,10 @@ func (s *Server) Handler() http.Handler {
 		{"POST /api/v1/authors/{id}/refresh", true, s.refreshAuthor},
 		{"PUT /api/v1/authors/{id}/wanted", true, s.wantAllBooks},
 		{"PUT /api/v1/books/{id}/wanted", true, s.wantBook},
+		{"GET /api/v1/books", true, s.allBooks},
+		{"GET /api/v1/books/{id}", true, s.book},
+		{"GET /api/v1/books/{id}/releases", true, s.bookReleases},
+		{"POST /api/v1/books/{id}/search", true, s.searchBook},
 
 		{"GET /api/v1/lookup/movies", true, s.lookupMovies},
 		{"GET /api/v1/lookup/series", true, s.lookupSeries},
@@ -395,6 +399,8 @@ func (s *Server) wrap(rt route) http.Handler {
 			writeError(w, http.StatusConflict, "that's there already")
 		case errors.Is(err, catalog.ErrExists):
 			writeError(w, http.StatusConflict, "that's on the list already")
+		case errors.Is(err, store.ErrAuthorLocked):
+			writeError(w, http.StatusConflict, "This author is set to Do not touch, so Box Office leaves their books alone. Turn that off on the author's page first.")
 		case errors.Is(err, store.ErrLocked):
 			writeError(w, http.StatusConflict, "This title is set to Do not touch, so Box Office leaves its files alone. Pick another quality profile for it first.")
 		case errors.Is(err, store.ErrInUse):
