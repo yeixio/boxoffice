@@ -104,16 +104,13 @@ function ConnectMatinee() {
     setTimeout(() => setCopied(''), 1500)
   }
   const origin = window.location.origin
-  const rows = [
-    ['Radarr address', origin + '/radarr'],
-    ['Sonarr address', origin + '/sonarr'],
-  ]
+  const rows = [['Address', origin]]
   return (
     <Card>
       <h2 className="mb-1 font-display text-lg font-semibold">Connect Matinee</h2>
       <p className="mb-4 text-sm text-muted">
-        In Matinee's admin settings, under its Radarr and Sonarr connections, enter these addresses and the API key. Box Office answers Matinee the way Radarr and Sonarr do. If you moved in from them,
-        the Move in page can do this for you.
+        In Matinee, go to Settings → Add-ons → Box Office and choose Connect. Matinee looks for Box Office on its own; if it can't find it, enter this address. Then paste the API key.
+        Requests, posters and notifications all go through that one connection.
       </p>
       <dl className="flex flex-col gap-3 text-sm">
         {rows.map(([label, v]) => (

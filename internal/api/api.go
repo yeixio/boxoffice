@@ -381,12 +381,18 @@ func user(r *http.Request) store.User {
 
 // ---- signing in ----
 
+// status needs no sign-in. Product and id let other apps, such as Matinee
+// looking for Box Office on the network, tell it's Box Office, and which.
 func (s *Server) status(w http.ResponseWriter, r *http.Request) error {
 	n, err := s.Store.CountUsers(r.Context())
 	if err != nil {
 		return err
 	}
-	out := map[string]any{"setup": n > 0, "version": s.Version}
+	id, err := s.Store.InstanceID(r.Context())
+	if err != nil {
+		return err
+	}
+	out := map[string]any{"product": "boxoffice", "id": id, "setup": n > 0, "version": s.Version}
 	if u, ok := s.authenticate(r); ok {
 		out["user"] = u
 		v, err := s.Store.Setting(r.Context(), settingMovedIn)
