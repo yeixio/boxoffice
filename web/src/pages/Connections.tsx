@@ -4,8 +4,8 @@
 import { useState, type ReactNode } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AlertTriangle, CircleCheck, Pencil, Plus, Trash2 } from 'lucide-react'
-import { del, get, post, put, type AutoSearch, type Connections as ConnectionsData, type DownloadClient, type IndexerCaps, type Indexer, type UsenetServer } from '../api'
-import { bytes, count, when } from '../format'
+import { del, get, post, put, type AutoSearch, type Connections as ConnectionsData, type DataCapSettings, type DownloadClient, type IndexerCaps, type Indexer, type IndexerState, type UsenetServer } from '../api'
+import { bytes, count, gb, when } from '../format'
 import { Badge, Button, Card, ErrorNote, Field, Input, Modal, Select, Toggle } from '../ui'
 import { useDownloads } from './Downloads'
 
@@ -57,7 +57,7 @@ export function DownloadSettings() {
             <>
               Move finished downloads into the library
               <span className="block text-xs text-muted">
-                Off, finished downloads wait in {d.data.folder.path}. On, Box Office moves the video into the title's folder, and only if that folder takes writes: a library mounted read-only is never touched.
+                Off, finished downloads wait in <span className="break-all">{d.data.folder.path}</span>. On, Box Office moves the video into the title's folder, and only if that folder takes writes: a library mounted read-only is never touched.
               </span>
             </>
           }
@@ -75,10 +75,133 @@ export function DownloadSettings() {
           )}
         </Field>
         <p className="text-xs text-muted">
-          Downloads go to {d.data.folder.path}
+          Downloads go to <span className="break-all">{d.data.folder.path}</span>
           {d.data.folder.freeSpace > 0 && ` (${bytes(d.data.folder.freeSpace)} free)`}. Set BOXOFFICE_DOWNLOADS_DIR on the server to use another folder.
         </p>
         {d.data.folder.problem && <ErrorNote error={d.data.folder.problem} />}
+        <ErrorNote error={save.error} />
+      </div>
+    </Card>
+  )
+}
+
+// ---- the monthly data cap ----
+
+function NumberField({ label, hint, value, onSave, min = 1, max, busy, suffix }: { label: string; hint: ReactNode; value: number; onSave: (v: number) => void; min?: number; max?: number; busy: boolean; suffix?: string }) {
+  const [v, setV] = useState<string | null>(null)
+  const n = Number(v)
+  const ok = v !== null && v.trim() !== '' && Number.isFinite(n) && n >= min && (max === undefined || n <= max) && n !== value
+  return (
+    <Field label={label} hint={hint}>
+      {(id) => (
+        <div className="flex flex-wrap items-center gap-2">
+          <Input id={id} type="number" min={min} max={max} value={v ?? String(value)} onChange={(e) => setV(e.target.value)} className="max-w-32" />
+          {suffix && <span className="text-sm text-muted">{suffix}</span>}
+          {ok && (
+            <Button
+              busy={busy}
+              onClick={() => {
+                onSave(n)
+                setV(null)
+              }}
+            >
+              Save
+            </Button>
+          )}
+        </div>
+      )}
+    </Field>
+  )
+}
+
+const longDay = (iso: string) => new Date(iso).toLocaleDateString(undefined, { month: 'long', day: 'numeric' })
+
+export function DataCapSettingsCard() {
+  const qc = useQueryClient()
+  const d = useDownloads()
+  const save = useMutation({
+    mutationFn: (s: Partial<DataCapSettings>) => {
+      const c = d.data!.cap
+      return put('/downloads/cap', { enabled: c.enabled, gb: c.gb, upgradesAt: c.upgradesAt, missingAt: c.missingAt, resetDay: c.resetDay, ...s })
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['downloads'] }),
+  })
+  if (!d.data) return null
+  const c = d.data.cap
+  const pct = c.limit > 0 ? Math.min(100, (c.used / c.limit) * 100) : 0
+  const tone = c.level === 'full' ? 'bg-bad' : c.level ? 'bg-gold' : 'bg-marquee'
+  return (
+    <Card>
+      <h2 id="data-cap" className="mb-1 scroll-mt-24 font-display text-lg font-semibold">
+        Monthly data cap
+      </h2>
+      <p className="mb-4 text-sm text-muted">
+        If your internet plan has a monthly allowance, Box Office keeps its downloads under it: as the month fills up, upgrades wait first, then automatic searches for missing titles, then
+        downloading itself. Everything carries on when the month starts again.
+      </p>
+      <div className="flex flex-col gap-4">
+        <div>
+          <div className="mb-1 flex justify-between gap-2 text-sm">
+            <span>
+              {gb(c.used)} downloaded since {longDay(c.since)}
+            </span>
+            {c.enabled && <span className="shrink-0 text-muted">of {gb(c.limit)}</span>}
+          </div>
+          {c.enabled && (
+            <div className="relative h-2 overflow-hidden rounded-full bg-line" role="meter" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(pct)} aria-label="Data cap used">
+              <div className={`h-full ${tone}`} style={{ width: `${pct}%` }} />
+              <div className="absolute inset-y-0 w-0.5 bg-muted/60" style={{ left: `${c.upgradesAt}%` }} />
+              <div className="absolute inset-y-0 w-0.5 bg-muted/60" style={{ left: `${c.missingAt}%` }} />
+            </div>
+          )}
+          {c.level && (
+            <p className="mt-2 text-sm">
+              <Badge tone={c.level === 'full' ? 'bad' : 'gold'}>{c.level === 'full' ? 'Downloads waiting' : c.level === 'missing' ? 'Automatic searches waiting' : 'Upgrades waiting'}</Badge>{' '}
+              <span className="text-xs text-muted">until {longDay(c.resets)}</span>
+            </p>
+          )}
+          <p className="mt-1 text-xs text-muted">This counts what Box Office downloads. It can't see the rest of your home's use, so leave room for it.</p>
+        </div>
+        <Toggle checked={c.enabled} onChange={(v) => save.mutate({ enabled: v })} disabled={save.isPending} label="Keep under a monthly cap" />
+        {c.enabled && (
+          <>
+            <NumberField
+              label="Allowance a month"
+              suffix="GB"
+              value={c.gb}
+              busy={save.isPending}
+              onSave={(v) => save.mutate({ gb: v })}
+              hint={
+                <>
+                  1000 GB is 1 TB. To find yours:
+                  <Steps>
+                    <li>Sign in to your internet provider's website or app.</li>
+                    <li>Open Usage, Data usage or My plan. It shows the monthly allowance (such as 1.2 TB) and the day your month starts.</li>
+                  </Steps>
+                </>
+              }
+            />
+            <NumberField
+              label="Upgrades wait at"
+              suffix={`% of it (${gb((c.gb * 1e9 * c.upgradesAt) / 100)})`}
+              value={c.upgradesAt}
+              max={100}
+              busy={save.isPending}
+              onSave={(v) => save.mutate({ upgradesAt: v })}
+              hint="Better copies of what you have already wait from here."
+            />
+            <NumberField
+              label="Missing titles wait at"
+              suffix={`% of it (${gb((c.gb * 1e9 * c.missingAt) / 100)})`}
+              value={c.missingAt}
+              max={100}
+              busy={save.isPending}
+              onSave={(v) => save.mutate({ missingAt: v })}
+              hint="From here, Box Office stops searching and grabbing by itself. Downloads you start yourself go on until the cap."
+            />
+            <NumberField label="Month starts on day" value={c.resetDay} max={28} busy={save.isPending} onSave={(v) => save.mutate({ resetDay: v })} hint="Your provider's bill or usage page says which day your allowance starts again." />
+          </>
+        )}
         <ErrorNote error={save.error} />
       </div>
     </Card>
@@ -94,37 +217,74 @@ export function AutoSearchSettings() {
   const done = (v: AutoSearch) => qc.setQueryData(['search-auto'], v)
   const save = useMutation({ mutationFn: (s: Partial<AutoSearch['settings']>) => put<AutoSearch>('/search/auto', { ...a.data!.settings, ...s }), onSuccess: done })
   const run = useMutation({ mutationFn: () => post<AutoSearch>('/search/auto/run', {}), onSuccess: done })
+  const sync = useMutation({ mutationFn: () => post<AutoSearch>('/search/rss/run', {}), onSuccess: done })
   if (!a.data) return null
   const s = a.data.settings
   const last = a.data.last
+  const rss = a.data.lastRss
   return (
     <Card>
       <h2 id="automatic-searches" className="mb-1 scroll-mt-24 font-display text-lg font-semibold">
         Missing titles and upgrades
       </h2>
       <p className="mb-4 text-sm text-muted">
-        Every hour, Box Office searches for a few monitored movies and episodes that have no copy yet, and for ones whose copy is below the
-        quality profile's good-enough quality while the profile has upgrades on. A better copy replaces the old one, which goes to the
-        library's .recycle folder; nothing is deleted.
+        Box Office finds what's wanted two ways. RSS sync reads each indexer's list of new releases every few minutes, which catches new episodes and movies as they're posted. The library patrol
+        searches every hour for a few monitored titles that have no copy yet (new ones first, then ones missing longer), then for ones below the quality profile's good-enough quality. A better copy
+        replaces the old one, which goes to the library's .recycle folder; nothing is deleted.
       </p>
       <div className="flex flex-col gap-4">
         <p className="text-sm">
           Wanted now: {count(a.data.missing, 'missing title', 'missing titles')}, {count(a.data.upgrades, 'upgrade', 'upgrades')}.
         </p>
+        {a.data.cap && <p className="text-sm text-gold">{a.data.cap}.</p>}
+        <Toggle
+          checked={s.rss}
+          onChange={(v) => save.mutate({ rss: v })}
+          disabled={save.isPending}
+          label={
+            <>
+              RSS sync
+              <span className="block text-xs text-muted">Only while Download releases is on, and for indexers with RSS on. One call to each indexer each time, or up to 5 after a long gap.</span>
+            </>
+          }
+        />
+        {s.rss && (
+          <NumberField label="Every" suffix="minutes" value={s.rssMinutes} min={10} max={1440} busy={save.isPending} onSave={(v) => save.mutate({ rssMinutes: v })} hint="15 suits most indexers; 10 is the least." />
+        )}
+        {s.rss &&
+          (a.data.rssPaused ? (
+            <p className="text-xs text-muted">Not syncing: {a.data.rssPaused}.</p>
+          ) : (
+            <div className="flex flex-wrap items-center gap-3">
+              <Button variant="plain" busy={sync.isPending} onClick={() => sync.mutate()}>
+                Sync now
+              </Button>
+              {rss && (
+                <span className="text-xs text-muted">
+                  Last sync {when(rss.at)}:{' '}
+                  {rss.skipped ? rss.skipped : `${count(rss.releases, 'new release', 'new releases')}, grabbed ${rss.grabbed?.length ? rss.grabbed.join(', ') : 'nothing'}`}
+                  {rss.problems?.length ? ` (${rss.problems.join('; ')})` : ''}
+                </span>
+              )}
+            </div>
+          ))}
         <Toggle
           checked={s.enabled}
           onChange={(v) => save.mutate({ enabled: v })}
           disabled={save.isPending}
           label={
             <>
-              Search automatically
-              <span className="block text-xs text-muted">Only while Download releases is on. Missing titles go first. Each title waits a day before it's searched again, and longer (up to 30 days) while searches keep finding nothing.</span>
+              Library patrol
+              <span className="block text-xs text-muted">
+                Only while Download releases is on. Each title waits a day before it's searched again, and longer (up to 30 days) while searches keep finding nothing. A season with 3 or more
+                episodes wanted is searched as one, which can bring a season pack.
+              </span>
             </>
           }
         />
         <Field
           label="Searches a day"
-          hint="Each search asks every indexer once. Keep it under your indexer's daily API limit, which its website shows on your account or profile page; leave room for searches you start yourself."
+          hint="Each search asks every indexer once. The patrol never uses more than half of what an indexer has left for the day, so searches you start yourself always have room. Set your indexer's daily limits under Indexers."
         >
           {(id) => (
             <div className="flex gap-2">
@@ -228,6 +388,7 @@ export function Connections({ section }: { section: 'indexers' | 'news-servers' 
               <>
                 {i.missingSecret && !i.hasApiKey ? needsKey : <Badge>{i.protocol}</Badge>}
                 {!i.enableSearch && off}
+                <IndexerBadge state={d.indexerStates?.[i.id]} />
               </>
             }
             onEdit={() => setIndexer(i)}
@@ -241,7 +402,12 @@ export function Connections({ section }: { section: 'indexers' | 'news-servers' 
             key={s.id}
             main={s.name}
             sub={`${s.host}:${s.port}${s.useTls ? ', encrypted' : ''}, ${count(s.connections, 'connection', 'connections')}${s.level > 0 ? ', backup' : ''}`}
-            badges={!s.enabled && off}
+            badges={
+              <>
+                {!s.enabled && off}
+                <QuotaBadge server={s} quota={d.quotas?.[s.id]} />
+              </>
+            }
             onEdit={() => setServer(s)}
             onRemove={() => remove.mutate(`/usenetservers/${s.id}`)}
           />
@@ -271,11 +437,29 @@ export function Connections({ section }: { section: 'indexers' | 'news-servers' 
         ))}
       </Section>}
       <ErrorNote error={remove.error} />
-      {indexer && <IndexerForm indexer={indexer === 'new' ? null : indexer} onClose={() => setIndexer(null)} />}
-      {server && <ServerForm server={server === 'new' ? null : server} onClose={() => setServer(null)} />}
+      {indexer && <IndexerForm indexer={indexer === 'new' ? null : indexer} state={indexer === 'new' ? undefined : d.indexerStates?.[indexer.id]} onClose={() => setIndexer(null)} />}
+      {server && <ServerForm server={server === 'new' ? null : server} left={server === 'new' ? undefined : d.quotas?.[server.id]?.left} onClose={() => setServer(null)} />}
       {client && <ClientForm client={client === 'new' ? null : client} onClose={() => setClient(null)} />}
     </>
   )
+}
+
+function IndexerBadge({ state }: { state?: IndexerState }) {
+  if (!state) return null
+  if (state.resting)
+    return (
+      <Badge tone="bad">
+        <AlertTriangle className="size-3" /> resting
+      </Badge>
+    )
+  if (state.queryLimit) return <Badge>{`${state.today.queries} of ${state.queryLimit} today`}</Badge>
+  return null
+}
+
+function QuotaBadge({ server, quota }: { server: UsenetServer; quota?: { left: number; problem?: string } }) {
+  if (quota?.problem) return <Badge tone="bad">{server.expires && new Date(server.expires) < new Date() ? 'expired' : 'used up'}</Badge>
+  if (quota && quota.left >= 0) return <Badge tone={quota.left * 10 < server.quota ? 'gold' : 'plain'}>{`${gb(quota.left)} left`}</Badge>
+  return null
 }
 
 function useSaved(onClose: () => void) {
@@ -298,8 +482,10 @@ function SecretField({ label, has, value, onChange, hint }: { label: string; has
 
 // ---- indexers ----
 
-function IndexerForm({ indexer, onClose }: { indexer: Indexer | null; onClose: () => void }) {
+function IndexerForm({ indexer, state, onClose }: { indexer: Indexer | null; state?: IndexerState; onClose: () => void }) {
   const saved = useSaved(onClose)
+  const qc = useQueryClient()
+  const reset = useMutation({ mutationFn: () => post(`/indexers/${indexer!.id}/reset`, {}), onSuccess: () => qc.invalidateQueries({ queryKey: ['connections'] }) })
   const [f, setF] = useState({
     name: indexer?.name ?? '',
     protocol: indexer?.protocol ?? 'usenet',
@@ -310,6 +496,8 @@ function IndexerForm({ indexer, onClose }: { indexer: Indexer | null; onClose: (
     enableRss: indexer?.enableRss ?? true,
     enableSearch: indexer?.enableSearch ?? true,
     priority: indexer?.priority ?? 25,
+    dailyQueries: indexer?.dailyQueries ?? 0,
+    dailyGrabs: indexer?.dailyGrabs ?? 0,
   })
   const set = (p: Partial<typeof f>) => setF({ ...f, ...p })
   const body = () => ({ ...f, id: indexer?.id ?? 0 })
@@ -330,6 +518,8 @@ function IndexerForm({ indexer, onClose }: { indexer: Indexer | null; onClose: (
   return (
     <Modal title={indexer ? `Edit ${indexer.name}` : 'Add an indexer'} onClose={onClose}>
       <div className="flex flex-col gap-4">
+        {state && <IndexerStatus state={state} onReset={() => reset.mutate()} resetting={reset.isPending} />}
+        <ErrorNote error={reset.error} />
         <Field
           label="Address"
           hint={
@@ -414,7 +604,35 @@ function IndexerForm({ indexer, onClose }: { indexer: Indexer | null; onClose: (
         <Field label="Priority" hint="1 to 50. When two indexers have the same release, the lower number wins.">
           {(id) => <Input id={id} type="number" min={1} max={50} value={f.priority} onChange={(e) => set({ priority: Number(e.target.value) })} className="max-w-32" />}
         </Field>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label="Searches a day" hint="Your account's daily API limit; 0 if you don't know it.">
+            {(id) => <Input id={id} type="number" min={0} value={f.dailyQueries} onChange={(e) => set({ dailyQueries: Math.max(0, Number(e.target.value) || 0) })} className="max-w-32" />}
+          </Field>
+          <Field label="Downloads a day" hint="Your account's daily NZB download (grab) limit; 0 if you don't know it.">
+            {(id) => <Input id={id} type="number" min={0} value={f.dailyGrabs} onChange={(e) => set({ dailyGrabs: Math.max(0, Number(e.target.value) || 0) })} className="max-w-32" />}
+          </Field>
+        </div>
+        <p className="-mt-2 text-xs text-muted">
+          {state?.limitsReported ? (
+            `The indexer reports its own limits (${state.queryLimit ?? '?'} searches, ${state.grabLimit ?? '?'} downloads a day); numbers here take their place.`
+          ) : (
+            <>
+              To find them, open your profile or account page on the indexer's website: it lists the API calls (or API hits) and downloads (or grabs) a day your membership allows. Box Office stays
+              inside them, and fills them in itself for indexers that report them.
+            </>
+          )}
+        </p>
         <Toggle checked={f.enableSearch} onChange={(v) => set({ enableSearch: v })} label="Use it for searches" />
+        <Toggle
+          checked={f.enableRss}
+          onChange={(v) => set({ enableRss: v })}
+          label={
+            <>
+              Use it for RSS sync
+              <span className="block text-xs text-muted">Reads its newest releases every few minutes for anything wanted.</span>
+            </>
+          }
+        />
         <ErrorNote error={save.error} />
         <div className="flex justify-end gap-2">
           <Button onClick={onClose}>Cancel</Button>
@@ -427,9 +645,44 @@ function IndexerForm({ indexer, onClose }: { indexer: Indexer | null; onClose: (
   )
 }
 
+function IndexerStatus({ state, onReset, resetting }: { state: IndexerState; onReset: () => void; resetting: boolean }) {
+  return (
+    <div className={`rounded-md border p-3 text-sm ${state.resting ? 'border-bad/40 bg-bad/5' : 'border-line'}`}>
+      {state.resting ? (
+        <>
+          <p className="font-medium">Resting until {when(state.restingUntil)}</p>
+          <p className="mt-1 text-xs text-muted">
+            After {count(state.failures, 'error', 'errors')} in a row, Box Office waits before asking it again, longer each time. Its last answer: {state.lastError}
+          </p>
+          <Button className="mt-2" busy={resetting} onClick={onReset}>
+            Try again now
+          </Button>
+        </>
+      ) : (
+        <p>
+          Today: {count(state.today.queries, 'search', 'searches')}
+          {state.queryLimit ? ` of ${state.queryLimit}` : ''}, {count(state.today.grabs, 'download', 'downloads')}
+          {state.grabLimit ? ` of ${state.grabLimit}` : ''}
+          <span className="block text-xs text-muted">
+            Limits reset at midnight UTC.{state.rssSyncedAt ? ` Last RSS sync ${when(state.rssSyncedAt)}.` : ''}
+          </span>
+        </p>
+      )}
+    </div>
+  )
+}
+
 // ---- news servers ----
 
-function ServerForm({ server, onClose }: { server: UsenetServer | null; onClose: () => void }) {
+// dateInput is the last day an account works, for a date field: it's kept
+// as the moment that day ends.
+function dateInput(iso?: string) {
+  if (!iso) return ''
+  const d = new Date(new Date(iso).getTime() - 1000)
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+
+function ServerForm({ server, left, onClose }: { server: UsenetServer | null; left?: number; onClose: () => void }) {
   const saved = useSaved(onClose)
   const [f, setF] = useState({
     name: server?.name ?? '',
@@ -441,7 +694,10 @@ function ServerForm({ server, onClose }: { server: UsenetServer | null; onClose:
     connections: server?.connections ?? 8,
     level: server?.level ?? 0,
     enabled: server?.enabled ?? true,
+    quotaGb: server?.quota && left !== undefined && left >= 0 ? Math.round(left / 1e8) / 10 : 0,
+    expires: dateInput(server?.expires),
   })
+  const [block, setBlock] = useState(!!server?.quota || !!server?.expires)
   const [portTouched, setPortTouched] = useState(!!server)
   const set = (p: Partial<typeof f>) => setF({ ...f, ...p })
   const body = () => ({ ...f, id: server?.id ?? 0 })
@@ -509,6 +765,29 @@ function ServerForm({ server, onClose }: { server: UsenetServer | null; onClose:
             />
           )}
         </Field>
+        <Toggle
+          checked={block}
+          onChange={(v) => {
+            setBlock(v)
+            if (!v) set({ quotaGb: 0, expires: '' })
+          }}
+          label={
+            <>
+              It's a block account, or it expires
+              <span className="block text-xs text-muted">A block is an amount of data bought once. Box Office counts what it downloads from it, and stops using it when it runs out or expires.</span>
+            </>
+          }
+        />
+        {block && (
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field label="Data left" hint="In GB, as the provider's account page shows it now. 0 for no limit.">
+              {(id) => <Input id={id} type="number" min={0} step="0.1" value={f.quotaGb} onChange={(e) => set({ quotaGb: Math.max(0, Number(e.target.value) || 0) })} className="max-w-32" />}
+            </Field>
+            <Field label="Expires on" hint="The last day it works, from the provider's account page. Blank for never.">
+              {(id) => <Input id={id} type="date" value={f.expires} onChange={(e) => set({ expires: e.target.value })} className="max-w-44" />}
+            </Field>
+          </div>
+        )}
         <Field label="Name" hint="Leave it blank to name it after its address.">
           {(id) => <Input id={id} value={f.name} onChange={(e) => set({ name: e.target.value })} />}
         </Field>

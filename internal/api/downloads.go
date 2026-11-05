@@ -32,6 +32,7 @@ func (s *Server) downloadRoutes() []route {
 		{"GET /api/v1/downloads", true, s.downloads},
 		{"POST /api/v1/downloads", true, s.addNZB},
 		{"PUT /api/v1/downloads/settings", true, s.saveDownloadSettings},
+		{"PUT /api/v1/downloads/cap", true, s.saveDataCap},
 		{"DELETE /api/v1/downloads/history", true, func(w http.ResponseWriter, r *http.Request) error {
 			if err := s.Downloads.ClearHistory(r.Context()); err != nil {
 				return err
@@ -56,6 +57,7 @@ func (s *Server) downloadRoutes() []route {
 		{"GET /api/v1/search/auto", true, s.autoSearch},
 		{"PUT /api/v1/search/auto", true, s.saveAutoSearch},
 		{"POST /api/v1/search/auto/run", true, s.runAutoSearch},
+		{"POST /api/v1/search/rss/run", true, s.syncRSS},
 	}
 }
 
@@ -113,10 +115,42 @@ func (s *Server) downloads(w http.ResponseWriter, r *http.Request) error {
 	if err := s.Downloads.CheckFolder(ctx); err != nil {
 		folder["problem"] = err.Error()
 	}
-	return writeJSON(w, http.StatusOK, map[string]any{
+	dataCap, err := downloader.LoadCap(ctx, s.Store)
+	if err != nil {
+		return err
+	}
+	out := map[string]any{
 		"settings": set, "queue": queue, "history": history, "speed": live.Speed, "servers": live.Servers,
-		"newsServers": enabled, "folder": folder,
-	})
+		"newsServers": enabled, "folder": folder, "cap": dataCap,
+	}
+	if why := s.Downloads.Waiting(); why != "" {
+		out["waiting"] = why
+	}
+	return writeJSON(w, http.StatusOK, out)
+}
+
+func (s *Server) saveDataCap(w http.ResponseWriter, r *http.Request) error {
+	var in downloader.CapSettings
+	if err := readJSON(r, &in); err != nil {
+		return err
+	}
+	if in.Enabled && in.GB < 1 {
+		return errorf(http.StatusBadRequest, "enter your plan's monthly allowance in GB, like 3000 for 3 TB, or turn the cap off")
+	}
+	if in.UpgradesAt < 1 || in.UpgradesAt > 100 || in.MissingAt < 1 || in.MissingAt > 100 {
+		return errorf(http.StatusBadRequest, "the pauses are a percent of the cap, from 1 to 100")
+	}
+	if in.UpgradesAt > in.MissingAt {
+		return errorf(http.StatusBadRequest, "upgrades pause first, so their percent can't be above the one for missing titles")
+	}
+	if in.ResetDay < 1 || in.ResetDay > 28 {
+		return errorf(http.StatusBadRequest, "pick the day of the month your plan's month starts, from 1 to 28")
+	}
+	if err := downloader.SaveCapSettings(r.Context(), s.Store, in); err != nil {
+		return err
+	}
+	s.Downloads.Wake()
+	return s.downloads(w, r)
 }
 
 func (s *Server) saveDownloadSettings(w http.ResponseWriter, r *http.Request) error {

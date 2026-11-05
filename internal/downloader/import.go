@@ -118,6 +118,13 @@ func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir str
 			if i < 0 {
 				continue
 			}
+			// A download for some episodes (a season pack grabbed for the
+			// ones wanted, say) leaves the others' copies alone.
+			if len(d.EpisodeIDs) > 0 && !slices.ContainsFunc(eps, func(e store.Episode) bool {
+				return e.Season == season && slices.Contains(numbers, e.Number) && slices.Contains(d.EpisodeIDs, e.ID)
+			}) {
+				continue
+			}
 			ep := eps[i]
 			code := fmt.Sprintf("S%02dE%02d", season, numbers[0])
 			for _, n := range numbers[1:] {

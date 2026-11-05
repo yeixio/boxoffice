@@ -62,7 +62,7 @@ func (c *Checker) clock() time.Time {
 // itself.
 func (c *Checker) Check(ctx context.Context) []Issue {
 	var out []Issue
-	for _, check := range []func(context.Context) ([]Issue, error){c.tmdb, c.rootFolders, c.files, c.connections, c.backups, c.jobs, c.quarantine} {
+	for _, check := range []func(context.Context) ([]Issue, error){c.tmdb, c.rootFolders, c.files, c.connections, c.backups, c.jobs, c.quarantine, c.indexers, c.data} {
 		issues, err := check(ctx)
 		if err != nil {
 			out = append(out, Issue{ID: "check-failed", Level: "warning", Title: "A health check couldn't run", Detail: err.Error()})

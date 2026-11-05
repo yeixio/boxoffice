@@ -5,14 +5,14 @@ import { Copy, Folder, FolderUp, KeyRound, Plus, Trash2 } from 'lucide-react'
 import { del, get, post, put, type Profile, type RootFolder, type Settings as SettingsData, type SystemInfo } from '../api'
 import { bytes, day } from '../format'
 import { useProfiles, useQualities, useRootFolders } from '../hooks'
-import { AutoSearchSettings, Connections, DownloadSettings } from './Connections'
+import { AutoSearchSettings, Connections, DataCapSettingsCard, DownloadSettings } from './Connections'
 import { Badge, Button, Card, ErrorNote, Field, Heading, Input, Modal, Spinner, Toggle } from '../ui'
 
 export function Settings() {
   return (
     <>
       <Heading title="Settings" />
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <div className="flex flex-col gap-6">
           <General />
           <ConnectMatinee />
@@ -25,14 +25,15 @@ export function Settings() {
           <Profiles />
         </div>
       </div>
-      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
         <div className="flex flex-col gap-6">
           <DownloadSettings />
           <AutoSearchSettings />
-          <Connections section="news-servers" />
+          <DataCapSettingsCard />
         </div>
         <div className="flex flex-col gap-6">
           <Connections section="indexers" />
+          <Connections section="news-servers" />
           <Connections section="download-clients" />
         </div>
       </div>

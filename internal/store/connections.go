@@ -23,6 +23,10 @@ type Indexer struct {
 	Settings      json.RawMessage `json:"settings"`
 	Source        string          `json:"source,omitempty"`
 	MissingSecret bool            `json:"missingSecret"`
+	// The account's daily limits, as entered; 0 leaves it to what the
+	// indexer reports, if it does.
+	DailyQueries int `json:"dailyQueries"`
+	DailyGrabs   int `json:"dailyGrabs"`
 }
 
 // UpsertIndexer adds an indexer, or updates the one with the same address
@@ -43,8 +47,8 @@ func (s *Store) UpsertIndexer(ctx context.Context, ix Indexer) error {
 }
 
 func (s *Store) Indexers(ctx context.Context) ([]Indexer, error) {
-	rows, err := s.query(ctx, `SELECT id, name, protocol, kind, url, api_path, api_key, categories, enable_rss, enable_search, priority, settings, source, missing_secret
-		FROM indexers ORDER BY priority, name`)
+	rows, err := s.query(ctx, `SELECT id, name, protocol, kind, url, api_path, api_key, categories, enable_rss, enable_search, priority, settings, source, missing_secret,
+		daily_queries, daily_grabs FROM indexers ORDER BY priority, name`)
 	if err != nil {
 		return nil, err
 	}
@@ -54,7 +58,8 @@ func (s *Store) Indexers(ctx context.Context) ([]Indexer, error) {
 		var ix Indexer
 		var cats, settings string
 		var rss, search, missing int
-		if err := rows.Scan(&ix.ID, &ix.Name, &ix.Protocol, &ix.Kind, &ix.URL, &ix.APIPath, &ix.APIKey, &cats, &rss, &search, &ix.Priority, &settings, &ix.Source, &missing); err != nil {
+		if err := rows.Scan(&ix.ID, &ix.Name, &ix.Protocol, &ix.Kind, &ix.URL, &ix.APIPath, &ix.APIKey, &cats, &rss, &search, &ix.Priority, &settings, &ix.Source, &missing,
+			&ix.DailyQueries, &ix.DailyGrabs); err != nil {
 			return nil, err
 		}
 		json.Unmarshal([]byte(cats), &ix.Categories)
@@ -147,6 +152,11 @@ type UsenetServer struct {
 	Enabled     bool            `json:"enabled"`
 	Settings    json.RawMessage `json:"settings"`
 	Source      string          `json:"source,omitempty"`
+	// A block account: Quota bytes bought (0 for an unlimited plan),
+	// counted from QuotaSince, and the day it runs out (zero for never).
+	Quota      int64     `json:"quota"`
+	QuotaSince time.Time `json:"quotaSince,omitzero"`
+	Expires    time.Time `json:"expires,omitzero"`
 }
 
 func (s *Store) UpsertUsenetServer(ctx context.Context, u UsenetServer) error {
@@ -163,8 +173,8 @@ func (s *Store) UpsertUsenetServer(ctx context.Context, u UsenetServer) error {
 }
 
 func (s *Store) UsenetServers(ctx context.Context) ([]UsenetServer, error) {
-	rows, err := s.query(ctx, `SELECT id, name, host, port, use_tls, username, password, connections, level, optional, retention, enabled, settings, source
-		FROM usenet_servers ORDER BY level, name`)
+	rows, err := s.query(ctx, `SELECT id, name, host, port, use_tls, username, password, connections, level, optional, retention, enabled, settings, source,
+		quota, quota_since, expires FROM usenet_servers ORDER BY level, name`)
 	if err != nil {
 		return nil, err
 	}
@@ -174,8 +184,16 @@ func (s *Store) UsenetServers(ctx context.Context) ([]UsenetServer, error) {
 		var u UsenetServer
 		var tls, optional, enabled int
 		var settings string
-		if err := rows.Scan(&u.ID, &u.Name, &u.Host, &u.Port, &tls, &u.Username, &u.Password, &u.Connections, &u.Level, &optional, &u.Retention, &enabled, &settings, &u.Source); err != nil {
+		var since, expires int64
+		if err := rows.Scan(&u.ID, &u.Name, &u.Host, &u.Port, &tls, &u.Username, &u.Password, &u.Connections, &u.Level, &optional, &u.Retention, &enabled, &settings, &u.Source,
+			&u.Quota, &since, &expires); err != nil {
 			return nil, err
+		}
+		if since > 0 {
+			u.QuotaSince = time.Unix(since, 0).UTC()
+		}
+		if expires > 0 {
+			u.Expires = time.Unix(expires, 0).UTC()
 		}
 		u.Settings = json.RawMessage(settings)
 		u.UseTLS, u.Optional, u.Enabled, u.HasPassword = tls == 1, optional == 1, enabled == 1, u.Password != ""
