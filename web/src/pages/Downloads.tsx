@@ -9,6 +9,7 @@ import { SortControl, sortList, useSort, words, type SortOption } from '../sort'
 import { Badge, Button, Card, Empty, ErrorNote, Heading, Modal, Spinner, Toggle } from '../ui'
 import { BulkBar, PickBox, SelectAll, type BulkList } from './DownloadsBulk'
 import { DownloadFiles } from './DownloadFiles'
+import { Quarantine } from './DownloadsQuarantine'
 
 export function useDownloads() {
   return useQuery({ queryKey: ['downloads'], queryFn: () => get<DownloadsData>('/downloads'), refetchInterval: 2000 })
@@ -230,6 +231,7 @@ export function Downloads() {
           </ul>
         )}
       </section>
+      <Quarantine />
       <DownloadFiles />
       {data.folder.path && (
         <p className="mt-6 text-xs text-muted">
@@ -424,7 +426,7 @@ function RemoveDialog({ d, onClose }: { d: Download; onClose: () => void }) {
       <p className="mb-4 break-words text-sm">{d.name}</p>
       {d.quarantined && (
         <p className="text-sm text-muted">
-          Its files stay in quarantine at <code className="break-all">{d.quarantined}</code>. Box Office never deletes them; delete them yourself once you've looked, and don't open them.
+          Its files stay in quarantine at <code className="break-all">{d.quarantined}</code>; delete or release them under Quarantine below. Don't open them.
         </p>
       )}
       {d.folder && !d.quarantined && (

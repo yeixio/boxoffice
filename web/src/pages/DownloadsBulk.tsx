@@ -174,7 +174,7 @@ function BulkRemove({ items, busy, error, onRemove, onClose }: { items: Download
           }
         />
       )}
-      {held > 0 && <p className="mt-3 text-sm text-muted">Files in quarantine stay there; Box Office never deletes them.</p>}
+      {held > 0 && <p className="mt-3 text-sm text-muted">Files in quarantine stay there; delete them under Quarantine below.</p>}
       <ErrorNote error={error} />
       <div className="mt-5 flex justify-end gap-2">
         <Button onClick={onClose}>Keep them</Button>

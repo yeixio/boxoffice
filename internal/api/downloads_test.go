@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io"
 	"log/slog"
+	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/yeixio/boxoffice/internal/downloader"
@@ -68,5 +70,39 @@ func TestBulkDownloads(t *testing.T) {
 	}
 	if code := call(t, hs, "POST", "/api/v1/downloads/bulk", `{"action":"explode","ids":[1]}`, nil); code != 400 {
 		t.Fatalf("unknown action: %d", code)
+	}
+}
+
+func TestQuarantineBulk(t *testing.T) {
+	s, hs, _ := monitorServer(t)
+	dir := t.TempDir()
+	s.Downloads = &downloader.Engine{Store: s.Store, Dir: dir, Log: slog.New(slog.NewTextHandler(io.Discard, nil))}
+	for _, p := range []string{"_quarantine/bad one/x.exe", "_quarantine/worse/y.exe", "keep/z.mkv"} {
+		os.MkdirAll(filepath.Join(dir, filepath.Dir(p)), 0o755)
+		os.WriteFile(filepath.Join(dir, p), []byte("x"), 0o644)
+	}
+	var list struct {
+		Items []downloader.QuarantineItem `json:"items"`
+		Size  int64                       `json:"size"`
+	}
+	if code := call(t, hs, "GET", "/api/v1/downloads/quarantine", "", &list); code != 200 || len(list.Items) != 2 || list.Size != 2 {
+		t.Fatalf("%d %+v", code, list)
+	}
+	var a struct {
+		Done   int `json:"done"`
+		Failed []struct {
+			Path string `json:"path"`
+		} `json:"failed"`
+	}
+	call(t, hs, "POST", "/api/v1/downloads/quarantine/delete", `{"paths":["_quarantine/bad one","keep","_quarantine/worse/y.exe"]}`, &a)
+	if a.Done != 1 || len(a.Failed) != 2 {
+		t.Fatalf("%+v", a)
+	}
+	if _, err := os.Stat(filepath.Join(dir, "keep/z.mkv")); err != nil {
+		t.Fatal("deleted something outside quarantine")
+	}
+	call(t, hs, "POST", "/api/v1/downloads/quarantine/release", `{"paths":["_quarantine/worse"]}`, &a)
+	if _, err := os.Stat(filepath.Join(dir, "worse/y.exe")); a.Done != 1 || err != nil {
+		t.Fatalf("release: %+v %v", a, err)
 	}
 }

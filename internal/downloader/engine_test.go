@@ -219,12 +219,16 @@ func TestDownloadTooBroken(t *testing.T) {
 	e, st := newEngine(t, srv)
 	events := make(chan string, 10)
 	e.Notify = func(_ context.Context, d store.Download, event, why string) { events <- event }
-	enable(t, st, Settings{})
+	enable(t, st, Settings{DeleteFailed: true})
 	run(t, e)
 	d, _ := e.Add(context.Background(), store.Download{}, data)
 	d = waitFor(t, st, d.ID, store.DownloadCompleted, store.DownloadFailed)
-	if d.Status != store.DownloadFailed {
+	if d.Status != store.DownloadFailed || !strings.Contains(d.Message, "files were deleted") {
 		t.Fatalf("%s: %s", d.Status, d.Message)
+	}
+	// Past repair, so its files are gone.
+	if _, err := os.Stat(filepath.Join(e.Dir, d.Folder)); !os.IsNotExist(err) {
+		t.Fatalf("its folder is still there: %v", err)
 	}
 	nextEvent(t, events, store.EventGrabbed)
 	nextEvent(t, events, store.EventFailed)

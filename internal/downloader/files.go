@@ -326,7 +326,8 @@ func (e *Engine) DeletePath(ctx context.Context, p string) error {
 	if err != nil {
 		return err
 	}
-	if _, err := e.changeable(ctx, rel); err != nil {
+	state, err := e.changeable(ctx, rel)
+	if err != nil {
 		return err
 	}
 	root, err := e.root()
@@ -353,7 +354,12 @@ func (e *Engine) DeletePath(ctx context.Context, p string) error {
 	e.mu.Lock()
 	delete(e.moves, rel)
 	e.mu.Unlock()
-	e.Log.Info("deleted from the downloads folder by hand", "path", rel)
+	// A download whose quarantined files are gone says so; it stays
+	// marked as quarantined, so it isn't offered to download again.
+	if d, ok := state.owner[rel]; ok && inQuarantine(rel) {
+		e.Store.SetDownloadMessage(ctx, d.ID, strings.TrimSuffix(d.Message, ".")+". Its files were deleted from quarantine.")
+	}
+	e.Log.Info("deleted from the downloads folder", "path", rel)
 	return nil
 }
 

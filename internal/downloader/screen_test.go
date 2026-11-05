@@ -108,6 +108,31 @@ func TestDownloadQuarantined(t *testing.T) {
 	if _, err := os.Stat(filepath.Join(e.Dir, d.Folder)); !os.IsNotExist(err) {
 		t.Fatal("still in the downloads folder")
 	}
+	// It's listed, with why.
+	ctx := context.Background()
+	items, err := e.Quarantine(ctx)
+	if err != nil || len(items) != 1 || !strings.Contains(items[0].Reason, "pretending to be a video") || items[0].Download == nil || items[0].Files != 2 {
+		t.Fatalf("%+v %v", items, err)
+	}
+	// Something held a long time goes once days are set; what's newer stays.
+	old := filepath.Join(e.Dir, QuarantineDir, "old release")
+	os.MkdirAll(old, 0o755)
+	os.WriteFile(filepath.Join(old, "x.mkv"), []byte("x"), 0o644)
+	long := time.Now().Add(-40 * 24 * time.Hour)
+	os.Chtimes(old, long, long)
+	if n := e.PurgeQuarantine(ctx); n != 0 {
+		t.Fatalf("purged %d with no days set", n)
+	}
+	enable(t, st, Settings{Import: true, QuarantineDays: 30})
+	if n := e.PurgeQuarantine(ctx); n != 1 {
+		t.Fatalf("purged %d", n)
+	}
+	if _, err := os.Stat(old); !os.IsNotExist(err) {
+		t.Fatal("the old one is still there")
+	}
+	if _, err := os.Stat(d.Quarantined); err != nil {
+		t.Fatal("the new one went too")
+	}
 	// Removing it with its files leaves quarantine alone.
 	if err := e.Remove(context.Background(), d.ID, true); err != nil {
 		t.Fatal(err)

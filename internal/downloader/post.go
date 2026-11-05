@@ -84,7 +84,7 @@ func (e *Engine) repair(ctx context.Context, r *running, d *store.Download, job 
 	set, err := par2.Load(par2Files())
 	if errors.Is(err, par2.ErrNoSet) {
 		if r.failed.Load() > 0 {
-			return nil, fmt.Errorf("%s of the release is missing from your news servers, and it came with no par2 files to repair it", humanBytes(r.failed.Load()))
+			return nil, hopeless(fmt.Errorf("%s of the release is missing from your news servers, and it came with no par2 files to repair it", humanBytes(r.failed.Load())))
 		}
 		return []string{"no par2 files to check it with"}, nil
 	}
@@ -120,7 +120,7 @@ func (e *Engine) repair(ctx context.Context, r *running, d *store.Download, job 
 			got += f.blocks
 		}
 		if got < need {
-			return nil, fmt.Errorf("%d blocks are damaged, and there are only %d recovery blocks; try another release", rep.NeedBlocks, rep.HaveBlocks+got)
+			return nil, hopeless(fmt.Errorf("%d blocks are damaged, and there are only %d recovery blocks; try another release", rep.NeedBlocks, rep.HaveBlocks+got))
 		}
 		var extra int64
 		for _, f := range pick {
@@ -149,7 +149,7 @@ func (e *Engine) repair(ctx context.Context, r *running, d *store.Download, job 
 		}
 	}
 	if !rep.Repairable() {
-		return nil, fmt.Errorf("%d blocks are damaged, and there are only %d recovery blocks; try another release", rep.NeedBlocks, rep.HaveBlocks)
+		return nil, hopeless(fmt.Errorf("%d blocks are damaged, and there are only %d recovery blocks; try another release", rep.NeedBlocks, rep.HaveBlocks))
 	}
 	status(store.DownloadRepairing, fmt.Sprintf("Rebuilding %d blocks", rep.NeedBlocks))
 	if err := set.Repair(ctx, job.dir, rep, 0); err != nil {

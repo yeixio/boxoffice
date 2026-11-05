@@ -177,6 +177,12 @@ func (s *Store) SetDownloadImported(ctx context.Context, id int64, to string) er
 	return err
 }
 
+// SetDownloadMessage changes what a download says, and nothing else.
+func (s *Store) SetDownloadMessage(ctx context.Context, id int64, message string) error {
+	_, err := s.exec(ctx, "UPDATE downloads SET message = ? WHERE id = ?", message, id)
+	return err
+}
+
 // SetDownloadQuarantined records where a download's unsafe files went.
 func (s *Store) SetDownloadQuarantined(ctx context.Context, id int64, to string) error {
 	_, err := s.exec(ctx, "UPDATE downloads SET quarantined = ? WHERE id = ?", to, id)

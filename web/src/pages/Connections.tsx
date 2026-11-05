@@ -34,7 +34,7 @@ export function DownloadSettings() {
       <h2 id="downloads" className="mb-1 scroll-mt-24 font-display text-lg font-semibold">
         Downloads
       </h2>
-      <p className="mb-4 text-sm text-muted">Box Office downloads from your news servers itself. Both switches start off.</p>
+      <p className="mb-4 text-sm text-muted">Box Office downloads from your news servers itself. The first two switches start off.</p>
       <div className="flex flex-col gap-4">
         <Toggle
           checked={s.enabled}
@@ -61,6 +61,29 @@ export function DownloadSettings() {
               </span>
             </>
           }
+        />
+        <Toggle
+          checked={s.deleteFailed}
+          onChange={(v) => save.mutate({ deleteFailed: v })}
+          disabled={save.isPending}
+          label={
+            <>
+              Delete the files of failed downloads
+              <span className="block text-xs text-muted">
+                Only when they can't be used: too much is gone from the news servers, or too damaged to repair. A download that failed to unpack, or is waiting to go into the library, keeps its files so you can try again.
+              </span>
+            </>
+          }
+        />
+        <NumberField
+          label="Delete from quarantine after"
+          hint="Days a release that didn't look safe stays in quarantine. 0 keeps it until you delete it on the Downloads page."
+          value={s.quarantineDays}
+          min={0}
+          max={3650}
+          suffix="days"
+          busy={save.isPending}
+          onSave={(v) => save.mutate({ quarantineDays: v })}
         />
         <Field label="Speed limit" hint="In KB/s. Leave it at 0 for no limit.">
           {(id) => (

@@ -234,6 +234,7 @@ func (s *Server) saveDownloadSettings(w http.ResponseWriter, r *http.Request) er
 	if in.SpeedLimit < 0 {
 		in.SpeedLimit = 0
 	}
+	in.QuarantineDays = min(max(in.QuarantineDays, 0), 3650)
 	cur, err := downloader.LoadSettings(ctx, s.Store)
 	if err != nil {
 		return err

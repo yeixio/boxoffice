@@ -186,6 +186,7 @@ func (s *Server) Handler() http.Handler {
 	}
 	routes = append(routes, s.downloadRoutes()...)
 	routes = append(routes, s.downloadFileRoutes()...)
+	routes = append(routes, s.quarantineRoutes()...)
 	routes = append(routes, s.connectionRoutes()...)
 	for _, r := range routes {
 		mux.Handle(r.pattern, s.wrap(r))
