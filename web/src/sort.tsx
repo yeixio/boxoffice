@@ -1,5 +1,7 @@
 // Sorting for Box Office's lists: the options each list offers, the
 // control that picks one, and remembering the pick in this browser.
+import { formatLocale } from './i18n'
+import { useTranslation } from 'react-i18next'
 import { useId, useState } from 'react'
 import { ArrowDownWideNarrow, ArrowUpDown, ArrowUpNarrowWide, ChevronDown } from 'lucide-react'
 
@@ -7,21 +9,22 @@ export type Dir = 'asc' | 'desc'
 type Value = string | number | undefined | null
 
 // How each kind of value says which way it's going, in words: "Newest
-// first" says more than an arrow does.
+// first" says more than an arrow does. They're catalog keys.
 export const words = {
-  text: { asc: 'A to Z', desc: 'Z to A' },
-  date: { asc: 'Oldest first', desc: 'Newest first' },
-  soon: { asc: 'Soonest first', desc: 'Latest first' },
-  size: { asc: 'Smallest first', desc: 'Largest first' },
-  rating: { asc: 'Lowest first', desc: 'Highest first' },
-  quality: { asc: 'Worst first', desc: 'Best first' },
-  length: { asc: 'Shortest first', desc: 'Longest first' },
-  count: { asc: 'Fewest first', desc: 'Most first' },
-  percent: { asc: 'Least first', desc: 'Most first' },
+  text: { asc: 'common:sort.az', desc: 'common:sort.za' },
+  date: { asc: 'common:sort.oldest', desc: 'common:sort.newest' },
+  soon: { asc: 'common:sort.soonest', desc: 'common:sort.latest' },
+  size: { asc: 'common:sort.smallest', desc: 'common:sort.largest' },
+  rating: { asc: 'common:sort.lowest', desc: 'common:sort.highest' },
+  quality: { asc: 'common:sort.worst', desc: 'common:sort.best' },
+  length: { asc: 'common:sort.shortest', desc: 'common:sort.longest' },
+  count: { asc: 'common:sort.fewest', desc: 'common:sort.most' },
+  percent: { asc: 'common:sort.least', desc: 'common:sort.most' },
 } satisfies Record<string, Record<Dir, string>>
 
 export type SortOption<T> = {
   key: string
+  // A catalog key, as are the words in says.
   label: string
   // What to sort on. Empty values (undefined, null, '') always go last,
   // whichever way the list runs: a movie with no file has no size.
@@ -32,11 +35,18 @@ export type SortOption<T> = {
   says: Record<Dir, string>
 }
 
-const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' })
+// Titles sort the way the page's language does; one collator per language.
+const collators = new Map<string, Intl.Collator>()
+function collator(): Intl.Collator {
+  const locale = formatLocale()
+  let c = collators.get(locale)
+  if (!c) collators.set(locale, (c = new Intl.Collator(locale, { numeric: true, sensitivity: 'base' })))
+  return c
+}
 
 function compare(a: Value, b: Value): number {
   if (typeof a === 'number' && typeof b === 'number') return a - b
-  return collator.compare(String(a), String(b))
+  return collator().compare(String(a), String(b))
 }
 
 const empty = (v: Value) => v === undefined || v === null || v === '' || (typeof v === 'number' && Number.isNaN(v))
@@ -106,6 +116,7 @@ export function useSort<T>(list: string, options: SortOption<T>[]) {
 // SortControl is a native select, so a phone opens its own picker, and a
 // button that says which way the list runs and turns it round.
 export function SortControl<T>({ sort, className = '' }: { sort: ReturnType<typeof useSort<T>>; className?: string }) {
+  const { t } = useTranslation()
   const id = useId()
   const { option, dir } = sort
   const other: Dir = dir === 'asc' ? 'desc' : 'asc'
@@ -113,33 +124,33 @@ export function SortControl<T>({ sort, className = '' }: { sort: ReturnType<type
   return (
     <div className={`flex min-w-0 items-center gap-1.5 ${className}`}>
       <label htmlFor={id} className="sr-only">
-        Sort by
+        {t('common:sort.by')}
       </label>
       <div className="relative min-w-0 flex-1 sm:flex-none">
-        <ArrowUpDown className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted" aria-hidden />
+        <ArrowUpDown className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted" aria-hidden />
         <select
           id={id}
           value={option.key}
           onChange={(e) => sort.pick(e.target.value)}
-          className="h-10 w-full min-w-0 cursor-pointer appearance-none truncate rounded-full border border-line bg-card pl-9 pr-8 text-sm font-medium hover:border-ink/40 sm:h-9"
+          className="h-10 w-full min-w-0 cursor-pointer appearance-none truncate rounded-full border border-line bg-card ps-9 pe-8 text-sm font-medium hover:border-ink/40 sm:h-9"
         >
           {sort.options.map((o) => (
             <option key={o.key} value={o.key}>
-              {o.label}
+              {t(o.label)}
             </option>
           ))}
         </select>
-        <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 size-4 -translate-y-1/2 text-muted" aria-hidden />
+        <ChevronDown className="pointer-events-none absolute end-2.5 top-1/2 size-4 -translate-y-1/2 text-muted" aria-hidden />
       </div>
       <button
         type="button"
         onClick={sort.flip}
-        title={`Show ${option.says[other].toLowerCase()}`}
-        aria-label={`${option.label}, ${option.says[dir].toLowerCase()}. Show ${option.says[other].toLowerCase()} instead`}
+        title={t('common:sort.show', { order: t(option.says[other]) })}
+        aria-label={t('common:sort.flip', { option: t(option.label), order: t(option.says[dir]), other: t(option.says[other]) })}
         className="flex h-10 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-line bg-card px-3 text-sm hover:border-ink/40 sm:h-9"
       >
         <Arrow className="size-4" aria-hidden />
-        {option.says[dir]}
+        {t(option.says[dir])}
       </button>
     </div>
   )

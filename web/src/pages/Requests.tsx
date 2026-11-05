@@ -1,9 +1,11 @@
+import { Trans, useTranslation } from 'react-i18next'
 import { useEffect, useState, type FormEvent } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Check, Copy, ExternalLink, Flag, Inbox, Plus, Trash2, UserRound, X } from 'lucide-react'
 import { api, del, get, patch, post, put } from '../api'
 import { useProfiles, useRootFolders } from '../hooks'
+import { formatLocale } from '../i18n'
 import { problemLabel, stateText, type Issue, type Request } from '../portal/papi'
 import { Badge, Button, Card, Empty, ErrorNote, Field, Heading, Input, Modal, Poster, Select, Spinner, Toggle } from '../ui'
 
@@ -49,32 +51,33 @@ export const useRequestCounts = () => useQuery({ queryKey: ['requests', 'counts'
 const usePortalSettings = () => useQuery({ queryKey: ['portal-settings'], queryFn: () => get<{ settings: PortalSettings; hasLogo: boolean }>('/portal/settings') })
 
 const tabs = [
-  { id: 'requests', label: 'Requests' },
-  { id: 'problems', label: 'Problems' },
-  { id: 'people', label: 'People' },
-  { id: 'site', label: 'Request site' },
+  { id: 'requests', label: 'req.tabs.requests' },
+  { id: 'problems', label: 'req.tabs.problems' },
+  { id: 'people', label: 'req.tabs.people' },
+  { id: 'site', label: 'req.tabs.site' },
 ] as const
 type Tab = (typeof tabs)[number]['id']
 
 export function Requests() {
+  const { t } = useTranslation()
   const [params, setParams] = useSearchParams()
   const counts = useRequestCounts()
-  const tab = (tabs.find((t) => t.id === params.get('tab'))?.id ?? (counts.data && !counts.data.enabled ? 'site' : 'requests')) as Tab
+  const tab = (tabs.find((x) => x.id === params.get('tab'))?.id ?? (counts.data && !counts.data.enabled ? 'site' : 'requests')) as Tab
   return (
     <>
-      <Heading title="Requests" sub="What people asked for on the request site, and the problems they found." />
+      <Heading title={t('req.title')} sub={t('req.sub')} />
       <div className="mb-6 flex gap-1 overflow-x-auto border-b border-line" role="tablist">
-        {tabs.map((t) => {
-          const n = t.id === 'requests' ? counts.data?.requests : t.id === 'problems' ? counts.data?.issues : 0
+        {tabs.map((tb) => {
+          const n = tb.id === 'requests' ? counts.data?.requests : tb.id === 'problems' ? counts.data?.issues : 0
           return (
             <button
-              key={t.id}
+              key={tb.id}
               role="tab"
-              aria-selected={tab === t.id}
-              onClick={() => setParams({ tab: t.id }, { replace: true })}
-              className={`-mb-px flex shrink-0 items-center gap-1.5 border-b-2 px-3 py-2 text-sm font-medium ${tab === t.id ? 'border-marquee text-ink' : 'border-transparent text-muted hover:text-ink'}`}
+              aria-selected={tab === tb.id}
+              onClick={() => setParams({ tab: tb.id }, { replace: true })}
+              className={`-mb-px flex shrink-0 items-center gap-1.5 border-b-2 px-3 py-2 text-sm font-medium ${tab === tb.id ? 'border-marquee text-ink' : 'border-transparent text-muted hover:text-ink'}`}
             >
-              {t.label}
+              {t(tb.label)}
               {!!n && <span className="rounded-full bg-marquee px-1.5 text-xs font-semibold leading-5 text-marquee-ink">{n}</span>}
             </button>
           )
@@ -93,19 +96,16 @@ function OffNote() {
   if (!counts.data || counts.data.enabled) return null
   return (
     <p className="mb-4 rounded-lg border border-gold/50 bg-gold/5 px-4 py-3 text-sm">
-      The request site is turned off. Turn it on under{' '}
-      <Link to="/requests?tab=site" className="font-medium text-marquee">
-        Request site
-      </Link>
-      .
+      <Trans i18nKey="req.off" components={{ link: <Link to="/requests?tab=site" className="font-medium text-marquee" /> }} />
     </p>
   )
 }
 
 const titlePage = (kind: string, id?: number) => (id ? `/${kind === 'movie' ? 'movies' : 'shows'}/${id}` : undefined)
-const date = (s: string) => new Date(s).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })
+const date = (s: string) => new Date(s).toLocaleDateString(formatLocale(), { day: 'numeric', month: 'short', year: 'numeric' })
 
 function RequestList() {
+  const { t } = useTranslation()
   const qc = useQueryClient()
   const [filter, setFilter] = useState<'pending' | ''>('pending')
   const list = useQuery({ queryKey: ['requests', filter], queryFn: () => get<Request[]>(`/requests${filter ? `?status=${filter}` : ''}`) })
@@ -141,14 +141,14 @@ function RequestList() {
     <>
       <OffNote />
       <div className="mb-4 flex items-center gap-3">
-        <Select value={filter} onChange={(v) => setFilter(v as 'pending' | '')} options={[{ value: 'pending', label: 'Waiting for approval' }, { value: '', label: 'All requests' }]} />
+        <Select value={filter} onChange={(v) => setFilter(v as 'pending' | '')} options={[{ value: 'pending', label: t('req.list.pending') }, { value: '', label: t('req.list.all') }]} />
       </div>
       <ErrorNote error={error} />
       {list.isPending && <Spinner />}
       {list.error && <ErrorNote error={list.error} />}
       {list.data?.length === 0 && (
-        <Empty icon={<Inbox className="size-8" />} title={filter ? 'Nothing waiting' : 'No requests yet'}>
-          {filter ? 'New requests from the request site show up here.' : 'Once people ask for titles on the request site, they show up here.'}
+        <Empty icon={<Inbox className="size-8" />} title={filter ? t('req.list.nothingWaiting') : t('req.list.none')}>
+          {filter ? t('req.list.newShowHere') : t('req.list.onceAsked')}
         </Empty>
       )}
       <ul className="mt-2 flex flex-col gap-3">
@@ -168,18 +168,18 @@ function RequestList() {
                   )}
                   <span className="text-sm text-muted">
                     {r.year ? `${r.year} · ` : ''}
-                    {r.kind === 'movie' ? 'Movie' : 'Show'}
+                    {r.kind === 'movie' ? t('discover.movie') : t('discover.show')}
                   </span>
                 </div>
                 <p className="text-sm text-muted">
-                  <UserRound className="mr-1 inline size-3.5" aria-hidden />
-                  {r.member} asked {date(r.createdAt)}
+                  <UserRound className="me-1 inline size-3.5" aria-hidden />
+                  {t('req.list.asked', { member: r.member, date: date(r.createdAt) })}
                 </p>
                 {r.note && <p className="text-sm">“{r.note}”</p>}
                 {r.status !== 'pending' && (
                   <div>
                     <Badge tone={r.state === 'available' ? 'ok' : r.status === 'declined' ? 'plain' : 'gold'}>{stateText(r)}</Badge>
-                    {r.reply && <span className="ml-2 text-sm text-muted">“{r.reply}”</span>}
+                    {r.reply && <span className="ms-2 text-sm text-muted">“{r.reply}”</span>}
                   </div>
                 )}
               </div>
@@ -187,15 +187,15 @@ function RequestList() {
                 {r.status === 'pending' ? (
                   <>
                     <Button variant="ghost" onClick={() => setDeclining(r)}>
-                      <X className="size-4" aria-hidden /> Decline
+                      <X className="size-4" aria-hidden /> {t('req.list.decline')}
                     </Button>
-                    <Button onClick={() => setChoosing(r)}>Choose…</Button>
+                    <Button onClick={() => setChoosing(r)}>{t('req.list.choose')}</Button>
                     <Button variant="primary" busy={busy === r.id} onClick={() => approve(r)}>
-                      <Check className="size-4" aria-hidden /> Approve
+                      <Check className="size-4" aria-hidden /> {t('req.list.approve')}
                     </Button>
                   </>
                 ) : (
-                  <Button variant="ghost" onClick={() => remove(r)} aria-label={`Remove the request for ${r.title}`} title="Remove the request (the title stays)">
+                  <Button variant="ghost" onClick={() => remove(r)} aria-label={t('req.list.removeFor', { title: r.title })} title={t('req.list.removeHint')}>
                     <Trash2 className="size-4" aria-hidden />
                   </Button>
                 )}
@@ -230,6 +230,7 @@ function RequestList() {
 }
 
 function ApproveSheet({ r, onClose, onDone }: { r: Request; onClose: () => void; onDone: () => void }) {
+  const { t } = useTranslation()
   const profiles = useProfiles()
   const folders = useRootFolders(r.kind)
   const site = usePortalSettings()
@@ -245,19 +246,19 @@ function ApproveSheet({ r, onClose, onDone }: { r: Request; onClose: () => void;
   }, [folders.data, folder])
   const go = useMutation({ mutationFn: () => post(`/requests/${r.id}/approve`, { profileId: profile, rootFolder: folder }), onSuccess: onDone })
   return (
-    <Modal title={`Approve ${r.title}`} onClose={onClose}>
+    <Modal title={t('req.approve.title', { title: r.title })} onClose={onClose}>
       <div className="flex flex-col gap-4">
-        <Field label="Quality profile">{(id) => <Select id={id} value={profile} onChange={(v) => setProfile(Number(v))} options={usable.map((p) => ({ value: p.id, label: p.name }))} />}</Field>
-        <Field label="Folder" hint={folders.data?.length ? undefined : `Add a root folder for ${r.kind === 'movie' ? 'movies' : 'shows'} under Settings first.`}>
+        <Field label={t('add.profile')}>{(id) => <Select id={id} value={profile} onChange={(v) => setProfile(Number(v))} options={usable.map((p) => ({ value: p.id, label: p.name }))} />}</Field>
+        <Field label={t('req.approve.folder')} hint={folders.data?.length ? undefined : r.kind === 'movie' ? t('req.approve.noMovieRoot') : t('req.approve.noShowRoot')}>
           {(id) => <Select id={id} value={folder} onChange={setFolder} options={(folders.data ?? []).map((f) => ({ value: f.path, label: f.path }))} />}
         </Field>
         <ErrorNote error={go.error} />
         <div className="flex justify-end gap-2">
           <Button variant="ghost" onClick={onClose}>
-            Cancel
+            {t('common.cancel')}
           </Button>
           <Button variant="primary" busy={go.isPending} disabled={!profile || !folder} onClick={() => go.mutate()}>
-            Approve and look for it
+            {t('req.approve.go')}
           </Button>
         </div>
       </div>
@@ -266,21 +267,22 @@ function ApproveSheet({ r, onClose, onDone }: { r: Request; onClose: () => void;
 }
 
 function DeclineSheet({ r, onClose, onDone }: { r: Request; onClose: () => void; onDone: () => void }) {
+  const { t } = useTranslation()
   const [reply, setReply] = useState('')
   const go = useMutation({ mutationFn: () => post(`/requests/${r.id}/decline`, { reply }), onSuccess: onDone })
   return (
-    <Modal title={`Decline ${r.title}`} onClose={onClose}>
+    <Modal title={t('req.decline.title', { title: r.title })} onClose={onClose}>
       <div className="flex flex-col gap-4">
-        <Field label="Why" hint={`Optional. ${r.member} sees it under My requests.`}>
+        <Field label={t('req.decline.why')} hint={t('req.decline.whyHint', { member: r.member })}>
           {(id) => <textarea id={id} rows={3} maxLength={500} value={reply} onChange={(e) => setReply(e.target.value)} className="w-full rounded-md border border-line bg-paper px-3 py-2 text-sm" />}
         </Field>
         <ErrorNote error={go.error} />
         <div className="flex justify-end gap-2">
           <Button variant="ghost" onClick={onClose}>
-            Cancel
+            {t('common.cancel')}
           </Button>
           <Button variant="danger" busy={go.isPending} onClick={() => go.mutate()}>
-            Decline
+            {t('req.list.decline')}
           </Button>
         </div>
       </div>
@@ -289,6 +291,7 @@ function DeclineSheet({ r, onClose, onDone }: { r: Request; onClose: () => void;
 }
 
 function ProblemList() {
+  const { t } = useTranslation()
   const qc = useQueryClient()
   const [filter, setFilter] = useState<'open' | 'resolved'>('open')
   const list = useQuery({ queryKey: ['issues', filter], queryFn: () => get<Issue[]>(`/issues?status=${filter}`) })
@@ -304,14 +307,14 @@ function ProblemList() {
     <>
       <OffNote />
       <div className="mb-4">
-        <Select value={filter} onChange={(v) => setFilter(v as 'open' | 'resolved')} options={[{ value: 'open', label: 'Open' }, { value: 'resolved', label: 'Fixed' }]} />
+        <Select value={filter} onChange={(v) => setFilter(v as 'open' | 'resolved')} options={[{ value: 'open', label: t('req.problems.open') }, { value: 'resolved', label: t('req.problems.fixed') }]} />
       </div>
       <ErrorNote error={reopen.error} />
       {list.isPending && <Spinner />}
       {list.error && <ErrorNote error={list.error} />}
       {list.data?.length === 0 && (
-        <Empty icon={<Flag className="size-8" />} title={filter === 'open' ? 'No open problems' : 'Nothing fixed yet'}>
-          When someone reports a problem with a title on the request site, it shows up here.
+        <Empty icon={<Flag className="size-8" />} title={filter === 'open' ? t('req.problems.noneOpen') : t('req.problems.noneFixed')}>
+          {t('req.problems.empty')}
         </Empty>
       )}
       <ul className="mt-2 flex flex-col gap-3">
@@ -325,31 +328,30 @@ function ProblemList() {
                   <span className="font-display font-semibold">{i.title}</span>
                   {i.season ? (
                     <span className="text-sm text-muted">
-                      Season {i.season}
-                      {i.episode ? `, episode ${i.episode}` : ''}
+                      {i.episode ? t('req.problems.episode', { season: i.season, episode: i.episode }) : t('req.problems.season', { season: i.season })}
                     </span>
                   ) : null}
                 </div>
                 <p className="text-sm font-medium">{problemLabel(i.problem)}</p>
                 {i.message && <p className="text-sm">“{i.message}”</p>}
                 <p className="text-sm text-muted">
-                  {i.member} reported it {date(i.createdAt)}
+                  {t('req.problems.reported', { member: i.member, date: date(i.createdAt) })}
                 </p>
-                {i.reply && <p className="text-sm text-muted">Your reply: “{i.reply}”</p>}
+                {i.reply && <p className="text-sm text-muted">{t('req.problems.reply', { reply: i.reply })}</p>}
               </div>
               <div className="flex w-full items-center justify-end gap-2 sm:w-auto">
                 {page && (
                   <Link to={page} className="inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium text-marquee hover:bg-line/60">
-                    Open {i.kind === 'movie' ? 'movie' : 'show'}
+                    {i.kind === 'movie' ? t('req.problems.openMovie') : t('req.problems.openShow')}
                   </Link>
                 )}
                 {i.status === 'open' ? (
                   <Button variant="primary" onClick={() => setFixing(i)}>
-                    <Check className="size-4" aria-hidden /> Mark fixed
+                    <Check className="size-4" aria-hidden /> {t('req.problems.markFixed')}
                   </Button>
                 ) : (
                   <Button variant="ghost" busy={reopen.isPending} onClick={() => reopen.mutate(i)}>
-                    Open again
+                    {t('req.problems.again')}
                   </Button>
                 )}
               </div>
@@ -373,24 +375,25 @@ function ProblemList() {
 }
 
 function FixSheet({ i, onClose, onDone }: { i: Issue; onClose: () => void; onDone: () => void }) {
+  const { t } = useTranslation()
   const [reply, setReply] = useState('')
   const go = useMutation({ mutationFn: () => patch(`/issues/${i.id}`, { resolved: true, reply }), onSuccess: onDone })
   return (
-    <Modal title={`Fixed: ${i.title}`} onClose={onClose}>
+    <Modal title={t('req.fix.title', { title: i.title })} onClose={onClose}>
       <div className="flex flex-col gap-4">
         <p className="text-sm text-muted">
-          To swap a bad file, open the title and use <strong>Choose a release</strong> or <strong>Search</strong>; then mark the problem fixed here.
+          <Trans i18nKey="req.fix.how" components={{ strong: <strong /> }} />
         </p>
-        <Field label="Reply" hint={`Optional. ${i.member} sees it under Problems.`}>
+        <Field label={t('req.fix.reply')} hint={t('req.fix.replyHint', { member: i.member })}>
           {(id) => <textarea id={id} rows={3} maxLength={1000} value={reply} onChange={(e) => setReply(e.target.value)} className="w-full rounded-md border border-line bg-paper px-3 py-2 text-sm" />}
         </Field>
         <ErrorNote error={go.error} />
         <div className="flex justify-end gap-2">
           <Button variant="ghost" onClick={onClose}>
-            Cancel
+            {t('common.cancel')}
           </Button>
           <Button variant="primary" busy={go.isPending} onClick={() => go.mutate()}>
-            Mark fixed
+            {t('req.problems.markFixed')}
           </Button>
         </div>
       </div>
@@ -399,12 +402,18 @@ function FixSheet({ i, onClose, onDone }: { i: Issue; onClose: () => void; onDon
 }
 
 const approvalOptions = [
-  { value: '', label: 'Follow the site setting' },
-  { value: 'on', label: 'Approve on their own' },
-  { value: 'off', label: 'Always wait for an admin' },
+  { value: '', label: 'req.approval.site' },
+  { value: 'on', label: 'req.approval.on' },
+  { value: 'off', label: 'req.approval.off' },
 ]
 
+function useApprovalOptions() {
+  const { t } = useTranslation()
+  return approvalOptions.map((o) => ({ ...o, label: t(o.label) }))
+}
+
 function People() {
+  const { t } = useTranslation()
   const qc = useQueryClient()
   const list = useQuery({ queryKey: ['portal-members'], queryFn: () => get<Member[]>('/portal/members') })
   const [adding, setAdding] = useState(false)
@@ -414,28 +423,28 @@ function People() {
     <>
       <OffNote />
       <div className="mb-4 flex items-center justify-between gap-3">
-        <p className="text-sm text-muted">People who can sign in to the request site. They can't open this admin UI.</p>
+        <p className="text-sm text-muted">{t('req.people.sub')}</p>
         <Button variant="primary" onClick={() => setAdding(true)}>
-          <Plus className="size-4" aria-hidden /> Add someone
+          <Plus className="size-4" aria-hidden /> {t('req.people.add')}
         </Button>
       </div>
       {list.isPending && <Spinner />}
       {list.error && <ErrorNote error={list.error} />}
       {list.data?.length === 0 && (
-        <Empty icon={<UserRound className="size-8" />} title="Nobody yet">
-          Add people here, let them make their own accounts, or let them sign in with Matinee, under Request site.
+        <Empty icon={<UserRound className="size-8" />} title={t('req.people.nobody')}>
+          {t('req.people.empty')}
         </Empty>
       )}
       {!!list.data?.length && (
         <div className="overflow-x-auto rounded-xl border border-line bg-card">
-          <table className="w-full text-left text-sm">
+          <table className="w-full text-start text-sm">
             <thead className="border-b border-line text-xs uppercase tracking-wide text-muted">
               <tr>
-                <th className="px-4 py-2 font-medium">Name</th>
-                <th className="px-4 py-2 font-medium">Signs in with</th>
-                <th className="px-4 py-2 font-medium">Requests</th>
-                <th className="px-4 py-2 font-medium">Approval</th>
-                <th className="px-4 py-2 font-medium">Last seen</th>
+                <th className="px-4 py-2 font-medium">{t('req.people.name')}</th>
+                <th className="px-4 py-2 font-medium">{t('req.people.signsIn')}</th>
+                <th className="px-4 py-2 font-medium">{t('req.people.requests')}</th>
+                <th className="px-4 py-2 font-medium">{t('req.people.approval')}</th>
+                <th className="px-4 py-2 font-medium">{t('req.people.seen')}</th>
                 <th className="px-4 py-2" />
               </tr>
             </thead>
@@ -446,16 +455,16 @@ function People() {
                     <div className="font-medium">{m.displayName || m.username}</div>
                     <div className="text-xs text-muted">{m.username}</div>
                   </td>
-                  <td className="px-4 py-2">{m.source === 'matinee' ? 'Matinee' : 'An account here'}</td>
+                  <td className="px-4 py-2">{m.source === 'matinee' ? 'Matinee' : t('req.people.local')}</td>
                   <td className="px-4 py-2 tabular-nums">
                     {m.requests}
-                    {m.pending ? <span className="text-muted"> ({m.pending} waiting)</span> : null}
+                    {m.pending ? <span className="text-muted"> {t('req.people.waiting', { count: m.pending })}</span> : null}
                   </td>
-                  <td className="px-4 py-2">{approvalOptions.find((o) => o.value === m.autoApprove)?.label}</td>
-                  <td className="px-4 py-2 text-muted">{m.disabled ? <Badge tone="bad">Turned off</Badge> : m.seenAt ? date(m.seenAt) : 'Never'}</td>
-                  <td className="px-4 py-2 text-right">
+                  <td className="px-4 py-2">{t(approvalOptions.find((o) => o.value === m.autoApprove)?.label ?? 'req.approval.site')}</td>
+                  <td className="px-4 py-2 text-muted">{m.disabled ? <Badge tone="bad">{t('req.people.turnedOff')}</Badge> : m.seenAt ? date(m.seenAt) : t('req.people.never')}</td>
+                  <td className="px-4 py-2 text-end">
                     <Button variant="ghost" onClick={() => setEditing(m)}>
-                      Edit
+                      {t('req.people.edit')}
                     </Button>
                   </td>
                 </tr>
@@ -489,6 +498,8 @@ function People() {
 }
 
 function AddPerson({ onClose, onDone }: { onClose: () => void; onDone: () => void }) {
+  const { t } = useTranslation()
+  const options = useApprovalOptions()
   const [username, setUsername] = useState('')
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
@@ -499,25 +510,25 @@ function AddPerson({ onClose, onDone }: { onClose: () => void; onDone: () => voi
     go.mutate()
   }
   return (
-    <Modal title="Add someone" onClose={onClose}>
+    <Modal title={t('req.people.add')} onClose={onClose}>
       <form onSubmit={submit} className="flex flex-col gap-4">
-        <Field label="Username" hint="What they sign in with. No spaces.">
+        <Field label={t('conn.username')} hint={t('req.person.usernameHint')}>
           {(id) => <Input id={id} autoComplete="off" value={username} onChange={(e) => setUsername(e.target.value)} required autoFocus />}
         </Field>
-        <Field label="Name" hint="Optional. What the request site calls them.">
+        <Field label={t('req.people.name')} hint={t('req.person.nameHint')}>
           {(id) => <Input id={id} value={name} onChange={(e) => setName(e.target.value)} />}
         </Field>
-        <Field label="Password" hint="At least 8 characters. Pass it on to them; they can change it on the request site.">
+        <Field label={t('conn.password')} hint={t('req.person.passwordHint')}>
           {(id) => <Input id={id} type="password" autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)} required />}
         </Field>
-        <Field label="Approval">{(id) => <Select id={id} value={approval} onChange={setApproval} options={approvalOptions} />}</Field>
+        <Field label={t('req.people.approval')}>{(id) => <Select id={id} value={approval} onChange={setApproval} options={options} />}</Field>
         <ErrorNote error={go.error} />
         <div className="flex justify-end gap-2">
           <Button variant="ghost" type="button" onClick={onClose}>
-            Cancel
+            {t('common.cancel')}
           </Button>
           <Button variant="primary" type="submit" busy={go.isPending}>
-            Add
+            {t('conn.add')}
           </Button>
         </div>
       </form>
@@ -528,6 +539,8 @@ function AddPerson({ onClose, onDone }: { onClose: () => void; onDone: () => voi
 const limit = (v: string) => (v.trim() === '' ? -1 : Math.max(0, Math.floor(Number(v) || 0)))
 
 function EditPerson({ m, onClose, onDone }: { m: Member; onClose: () => void; onDone: () => void }) {
+  const { t } = useTranslation()
+  const options = useApprovalOptions()
   const [name, setName] = useState(m.displayName)
   const [approval, setApproval] = useState<string>(m.autoApprove)
   const [movies, setMovies] = useState(m.quotaMovies < 0 ? '' : String(m.quotaMovies))
@@ -544,39 +557,39 @@ function EditPerson({ m, onClose, onDone }: { m: Member; onClose: () => void; on
   return (
     <Modal title={m.displayName || m.username} onClose={onClose}>
       <div className="flex flex-col gap-4">
-        <Field label="Name">{(id) => <Input id={id} value={name} onChange={(e) => setName(e.target.value)} placeholder={m.username} />}</Field>
-        <Field label="Approval">{(id) => <Select id={id} value={approval} onChange={setApproval} options={approvalOptions} />}</Field>
+        <Field label={t('req.people.name')}>{(id) => <Input id={id} value={name} onChange={(e) => setName(e.target.value)} placeholder={m.username} />}</Field>
+        <Field label={t('req.people.approval')}>{(id) => <Select id={id} value={approval} onChange={setApproval} options={options} />}</Field>
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Movies a week" hint="Empty follows the site; 0 is no limit.">
+          <Field label={t('req.person.moviesWeek')} hint={t('req.person.moviesWeekHint')}>
             {(id) => <Input id={id} type="number" min={0} inputMode="numeric" value={movies} onChange={(e) => setMovies(e.target.value)} />}
           </Field>
-          <Field label="Shows a week">{(id) => <Input id={id} type="number" min={0} inputMode="numeric" value={shows} onChange={(e) => setShows(e.target.value)} />}</Field>
+          <Field label={t('req.person.showsWeek')}>{(id) => <Input id={id} type="number" min={0} inputMode="numeric" value={shows} onChange={(e) => setShows(e.target.value)} />}</Field>
         </div>
         {m.source === 'local' ? (
-          <Field label="New password" hint="Leave empty to keep theirs. Setting one signs them out.">
+          <Field label={t('req.person.newPassword')} hint={t('req.person.newPasswordHint')}>
             {(id) => <Input id={id} type="password" autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)} />}
           </Field>
         ) : (
-          <p className="text-sm text-muted">They sign in with their Matinee account, so their password is set in Matinee.</p>
+          <p className="text-sm text-muted">{t('req.person.matinee')}</p>
         )}
-        <Toggle checked={!disabled} onChange={(v) => setDisabled(!v)} label="Can sign in" />
+        <Toggle checked={!disabled} onChange={(v) => setDisabled(!v)} label={t('req.person.canSignIn')} />
         <ErrorNote error={save.error ?? remove.error} />
         <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line pt-4">
           {confirmRemove ? (
             <Button variant="danger" busy={remove.isPending} onClick={() => remove.mutate()}>
-              Remove them and their {m.requests} request{m.requests === 1 ? '' : 's'}
+              {t('req.person.removeAll', { count: m.requests })}
             </Button>
           ) : (
             <Button variant="ghost" onClick={() => setConfirmRemove(true)}>
-              <Trash2 className="size-4" aria-hidden /> Remove
+              <Trash2 className="size-4" aria-hidden /> {t('dl.remove')}
             </Button>
           )}
           <div className="flex gap-2">
             <Button variant="ghost" onClick={onClose}>
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button variant="primary" busy={save.isPending} onClick={() => save.mutate()}>
-              Save
+              {t('common.save')}
             </Button>
           </div>
         </div>
@@ -586,6 +599,7 @@ function EditPerson({ m, onClose, onDone }: { m: Member; onClose: () => void; on
 }
 
 function SiteSettings() {
+  const { t } = useTranslation()
   const qc = useQueryClient()
   const data = usePortalSettings()
   const profiles = useProfiles()
@@ -618,60 +632,60 @@ function SiteSettings() {
     setSt({ ...st, ...p })
   }
   const address = `${location.origin}/request`
-  const profileOptions = [{ value: 0, label: 'The first profile' }, ...(profiles.data ?? []).filter((p) => !p.locked).map((p) => ({ value: p.id, label: p.name }))]
+  const profileOptions = [{ value: 0, label: t('req.site.firstProfile') }, ...(profiles.data ?? []).filter((p) => !p.locked).map((p) => ({ value: p.id, label: p.name }))]
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
       <div className="flex flex-col gap-6">
         <Card>
-          <h2 className="mb-1 font-display text-lg font-semibold">The request site</h2>
-          <p className="mb-4 text-sm text-muted">A site of its own for the people who watch: they find movies and shows, ask for them, follow how it's going, and report problems.</p>
+          <h2 className="mb-1 font-display text-lg font-semibold">{t('req.site.title')}</h2>
+          <p className="mb-4 text-sm text-muted">{t('req.site.sub')}</p>
           <div className="flex flex-col gap-4">
-            <Toggle checked={st.enabled} onChange={(v) => set({ enabled: v })} label="Open the request site" />
-            <Field label="Address" hint="Share this with the people who use it.">
+            <Toggle checked={st.enabled} onChange={(v) => set({ enabled: v })} label={t('req.site.open')} />
+            <Field label={t('conn.address')} hint={t('req.site.addressHint')}>
               {() => (
                 <div className="flex flex-wrap items-center gap-2">
                   <code className="rounded bg-paper px-2 py-1 text-sm">{address}</code>
-                  <Button variant="ghost" onClick={() => navigator.clipboard?.writeText(address)} aria-label="Copy the address">
+                  <Button variant="ghost" onClick={() => navigator.clipboard?.writeText(address)} aria-label={t('req.site.copy')}>
                     <Copy className="size-4" aria-hidden />
                   </Button>
                   <a href="/request" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-sm font-medium text-marquee">
-                    Open <ExternalLink className="size-3.5" aria-hidden />
+                    {t('req.site.openLink')} <ExternalLink className="size-3.5" aria-hidden />
                   </a>
                 </div>
               )}
             </Field>
             <Field
-              label="Its own host name"
-              hint="Optional, such as requests.example.com. Point that name at Box Office (in DNS and your ingress or reverse proxy), and there the request site is the whole site. This admin UI stays at its usual address."
+              label={t('req.site.host')}
+              hint={t('req.site.hostHint')}
             >
               {(id) => <Input id={id} value={st.host} onChange={(e) => set({ host: e.target.value })} placeholder="requests.example.com" />}
             </Field>
           </div>
         </Card>
         <Card>
-          <h2 className="mb-4 font-display text-lg font-semibold">Look</h2>
+          <h2 className="mb-4 font-display text-lg font-semibold">{t('req.site.look')}</h2>
           <div className="flex flex-col gap-4">
-            <Field label="Name">{(id) => <Input id={id} maxLength={60} value={st.name} onChange={(e) => set({ name: e.target.value })} />}</Field>
-            <Field label="Welcome text" hint="Shown on the sign-in page and at the top of Discover.">
+            <Field label={t('req.people.name')}>{(id) => <Input id={id} maxLength={60} value={st.name} onChange={(e) => set({ name: e.target.value })} />}</Field>
+            <Field label={t('req.site.welcome')} hint={t('req.site.welcomeHint')}>
               {(id) => <textarea id={id} rows={3} maxLength={1000} value={st.welcome} onChange={(e) => set({ welcome: e.target.value })} className="w-full rounded-md border border-line bg-paper px-3 py-2 text-sm" />}
             </Field>
-            <Field label="Colour" hint="Buttons, links and highlights. Empty uses Box Office's red.">
+            <Field label={t('req.site.colour')} hint={t('req.site.colourHint')}>
               {(id) => (
                 <div className="flex items-center gap-2">
-                  <input type="color" aria-label="Pick a colour" value={st.accent || '#c8352a'} onChange={(e) => set({ accent: e.target.value })} className="h-9 w-12 rounded border border-line bg-paper" />
+                  <input type="color" aria-label={t('req.site.pickColour')} value={st.accent || '#c8352a'} onChange={(e) => set({ accent: e.target.value })} className="h-9 w-12 rounded border border-line bg-paper" />
                   <Input id={id} className="max-w-32" value={st.accent} onChange={(e) => set({ accent: e.target.value })} placeholder="#c8352a" />
                   {st.accent && (
                     <Button variant="ghost" onClick={() => set({ accent: '' })}>
-                      Reset
+                      {t('req.site.reset')}
                     </Button>
                   )}
                 </div>
               )}
             </Field>
-            <Field label="Logo" hint="PNG, JPEG or WebP, up to 512 KB. Shown in place of the ticket.">
+            <Field label={t('req.site.logo')} hint={t('req.site.logoHint')}>
               {(id) => (
                 <div className="flex flex-wrap items-center gap-3">
-                  {data.data?.hasLogo && <img src={`/api/portal/logo?at=${logoAt}`} alt="The logo" className="h-10 w-auto max-w-40 rounded bg-paper object-contain p-1" />}
+                  {data.data?.hasLogo && <img src={`/api/portal/logo?at=${logoAt}`} alt={t('req.site.logoAlt')} className="h-10 w-auto max-w-40 rounded bg-paper object-contain p-1" />}
                   <input
                     id={id}
                     type="file"
@@ -685,7 +699,7 @@ function SiteSettings() {
                   />
                   {data.data?.hasLogo && (
                     <Button variant="ghost" busy={logo.isPending} onClick={() => logo.mutate(null)}>
-                      Remove
+                      {t('dl.remove')}
                     </Button>
                   )}
                 </div>
@@ -697,54 +711,54 @@ function SiteSettings() {
       </div>
       <div className="flex flex-col gap-6">
         <Card>
-          <h2 className="mb-4 font-display text-lg font-semibold">Signing in</h2>
+          <h2 className="mb-4 font-display text-lg font-semibold">{t('req.site.signingIn')}</h2>
           <div className="flex flex-col gap-4">
             <Field
-              label="Matinee's address"
-              hint="To let people sign in with their Matinee account: the address you open Matinee at, such as http://matinee.local:7171. Box Office checks their password with Matinee. Leave it empty to turn this off."
+              label={t('move.matinee.address')}
+              hint={t('req.site.matineeHint')}
             >
               {(id) => <Input id={id} value={st.matineeUrl} onChange={(e) => set({ matineeUrl: e.target.value })} placeholder="http://matinee.local:7171" />}
             </Field>
-            <Toggle checked={st.localSignIn} onChange={(v) => set({ localSignIn: v, signUp: v && st.signUp })} label="Accounts made here, under People" />
-            <Toggle checked={st.signUp} disabled={!st.localSignIn} onChange={(v) => set({ signUp: v })} label="Let people make their own account" />
+            <Toggle checked={st.localSignIn} onChange={(v) => set({ localSignIn: v, signUp: v && st.signUp })} label={t('req.site.local')} />
+            <Toggle checked={st.signUp} disabled={!st.localSignIn} onChange={(v) => set({ signUp: v })} label={t('req.site.signUp')} />
           </div>
         </Card>
         <Card>
-          <h2 className="mb-4 font-display text-lg font-semibold">Requests</h2>
+          <h2 className="mb-4 font-display text-lg font-semibold">{t('req.title')}</h2>
           <div className="flex flex-col gap-4">
-            <Field label="Approval" hint="Each person can have their own setting, under People.">
+            <Field label={t('req.people.approval')} hint={t('req.site.approvalHint')}>
               {(id) => (
                 <Select
                   id={id}
                   value={st.approval}
                   onChange={(v) => set({ approval: v as PortalSettings['approval'] })}
                   options={[
-                    { value: 'manual', label: 'An admin approves each request' },
-                    { value: 'auto', label: 'Approve requests on their own' },
+                    { value: 'manual', label: t('req.site.manual') },
+                    { value: 'auto', label: t('req.site.auto') },
                   ]}
                 />
               )}
             </Field>
             <div className="grid grid-cols-2 gap-3">
-              <Field label="Movies a week" hint="Per person. 0 is no limit.">
+              <Field label={t('req.person.moviesWeek')} hint={t('req.site.moviesHint')}>
                 {(id) => <Input id={id} type="number" min={0} inputMode="numeric" value={st.quotaMovies} onChange={(e) => set({ quotaMovies: Math.max(0, Number(e.target.value) || 0) })} />}
               </Field>
-              <Field label="Shows a week">
+              <Field label={t('req.person.showsWeek')}>
                 {(id) => <Input id={id} type="number" min={0} inputMode="numeric" value={st.quotaShows} onChange={(e) => set({ quotaShows: Math.max(0, Number(e.target.value) || 0) })} />}
               </Field>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <Field label="Movie profile">{(id) => <Select id={id} value={st.movieProfileId} onChange={(v) => set({ movieProfileId: Number(v) })} options={profileOptions} />}</Field>
-              <Field label="Show profile">{(id) => <Select id={id} value={st.showProfileId} onChange={(v) => set({ showProfileId: Number(v) })} options={profileOptions} />}</Field>
+              <Field label={t('req.site.movieProfile')}>{(id) => <Select id={id} value={st.movieProfileId} onChange={(v) => set({ movieProfileId: Number(v) })} options={profileOptions} />}</Field>
+              <Field label={t('req.site.showProfile')}>{(id) => <Select id={id} value={st.showProfileId} onChange={(v) => set({ showProfileId: Number(v) })} options={profileOptions} />}</Field>
             </div>
-            <p className="text-xs text-muted">Approved shows watch the seasons set under Settings → New shows.</p>
+            <p className="text-xs text-muted">{t('req.site.seasons')}</p>
           </div>
         </Card>
         <div className="flex items-center justify-end gap-3">
-          {saved && <span className="text-sm text-ok">Saved</span>}
+          {saved && <span className="text-sm text-ok">{t('common.savedButton')}</span>}
           <ErrorNote error={save.error} />
           <Button variant="primary" busy={save.isPending} onClick={() => save.mutate(st)}>
-            Save
+            {t('common.save')}
           </Button>
         </div>
       </div>

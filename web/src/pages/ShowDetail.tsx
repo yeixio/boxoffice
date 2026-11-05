@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -14,6 +15,7 @@ import { Badge, Button, Card, ErrorNote, Field, Poster, Select, Spinner, Toggle 
 type Detail = { series: Series; episodes: Episode[] }
 
 export function ShowDetail() {
+  const { t } = useTranslation()
   const id = Number(useParams().id)
   const qc = useQueryClient()
   const nav = useNavigate()
@@ -31,7 +33,7 @@ export function ShowDetail() {
   const action = useMutation({
     mutationFn: (what: 'search' | 'refresh') => post(`/series/${id}/${what}`),
     onSuccess: (_, what) => {
-      setNote(what === 'search' ? 'Looking for its wanted episodes; see Activity.' : 'Refreshing its details and episodes from TMDB.')
+      setNote(what === 'search' ? t('show.lookingNow') : t('show.refreshing'))
       setTimeout(() => qc.invalidateQueries({ queryKey: key }), 3000)
     },
   })
@@ -63,7 +65,7 @@ export function ShowDetail() {
             {s.network && <Badge>{s.network}</Badge>}
             {s.status && <Badge>{s.status}</Badge>}
             <Badge tone={s.fileCount === s.episodeCount && s.episodeCount > 0 ? 'ok' : 'gold'}>
-              {s.fileCount} of {s.episodeCount} episodes on disk
+              {t('shows.progress', { have: s.fileCount, count: s.episodeCount })}
             </Badge>
           </div>
           {s.overview && <p className="mt-4 max-w-3xl leading-relaxed">{s.overview}</p>}
@@ -71,14 +73,14 @@ export function ShowDetail() {
           <div className="mt-6 flex flex-wrap gap-2">
             {!locked && (
               <Button variant="primary" busy={action.isPending && action.variables === 'search'} onClick={() => action.mutate('search')}>
-                <Search className="size-4" aria-hidden /> Look for wanted episodes
+                <Search className="size-4" aria-hidden /> {t('show.lookWanted')}
               </Button>
             )}
             <Button busy={action.isPending && action.variables === 'refresh'} onClick={() => action.mutate('refresh')}>
-              <RefreshCw className="size-4" aria-hidden /> Refresh details
+              <RefreshCw className="size-4" aria-hidden /> {t('title.refresh')}
             </Button>
             <Button variant="danger" onClick={() => setConfirmDelete(true)}>
-              <Trash2 className="size-4" aria-hidden /> Remove
+              <Trash2 className="size-4" aria-hidden /> {t('title.remove')}
             </Button>
           </div>
           {note && <p className="mt-3 text-sm text-muted">{note}</p>}
@@ -88,14 +90,14 @@ export function ShowDetail() {
 
       <Card className="mt-8">
         <div className="grid gap-4 sm:grid-cols-2">
-          <Toggle checked={s.monitored} onChange={(v) => edit.mutate({ monitored: v })} label="Watch for new episodes" />
-          <Field label="Quality profile">
+          <Toggle checked={s.monitored} onChange={(v) => edit.mutate({ monitored: v })} label={t('show.watchNew')} />
+          <Field label={t('add.profile')}>
             {(fid) => <Select id={fid} value={s.profileId} onChange={(v) => edit.mutate({ profileId: Number(v) })} options={(profiles.data ?? []).map((p) => ({ value: p.id, label: p.name }))} />}
           </Field>
           {!locked && <AutoUpgradeField value={s.autoUpgrade} onChange={(v) => edit.mutate({ autoUpgrade: v as Series['autoUpgrade'] })} upgradeOK={!!profiles.data?.find((p) => p.id === s.profileId)?.upgrade} />}
         </div>
         <div className="mt-3 text-sm">
-          <span className="text-muted">Folder </span>
+          <span className="text-muted">{t('title.folder')} </span>
           <code className="break-all">{s.path}</code>
         </div>
       </Card>
@@ -146,6 +148,7 @@ function SeasonBlock({
   showTitle: string
   defaultOpen: boolean
 }) {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(defaultOpen)
   const qualities = useQualities()
   const have = episodes.filter((e) => e.file).length
@@ -153,7 +156,7 @@ function SeasonBlock({
   const search = useMutation({ mutationFn: (e: Episode) => post(`/episodes/${e.id}/search`) })
   const [releases, setReleases] = useState<Episode | 'season' | null>(null)
   const [deleting, setDeleting] = useState<Episode | 'season' | null>(null)
-  const seasonName = number === 0 ? 'Specials' : `Season ${number}`
+  const seasonName = number === 0 ? t('show.specials') : t('show.season', { number })
   const now = Date.now()
   const rank = (q: number) => qualities.data?.findIndex((x) => x.id === q) ?? -1
   // Below the profile's good-enough quality, with upgrades on.
@@ -164,25 +167,25 @@ function SeasonBlock({
   return (
     <Card className="p-0">
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 px-5 py-3">
-        <button className="flex min-w-0 flex-1 basis-full flex-wrap items-center gap-x-3 text-left sm:basis-0" onClick={() => setOpen(!open)} aria-expanded={open}>
+        <button className="flex min-w-0 flex-1 basis-full flex-wrap items-center gap-x-3 text-start sm:basis-0" onClick={() => setOpen(!open)} aria-expanded={open}>
           <ChevronDown className={`size-4 shrink-0 transition ${open ? '' : '-rotate-90'}`} aria-hidden />
           <span className="whitespace-nowrap font-display text-lg font-semibold">{seasonName}</span>
           <span className="text-sm text-muted">
-            {have} of {episodes.length} on disk
-            {upgrades > 0 && `, ${upgrades} to upgrade`}
+            {t('show.seasonHave', { have, count: episodes.length })}
+            {upgrades > 0 && t('show.toUpgrade', { count: upgrades })}
           </span>
         </button>
         {anyAired && !locked && (
           <Button variant="ghost" onClick={() => setReleases('season')}>
-            <ListChecks className="size-4" aria-hidden /> Choose a release
+            <ListChecks className="size-4" aria-hidden /> {t('title.choose')}
           </Button>
         )}
         {have > 0 && !locked && (
-          <Button variant="ghost" onClick={() => setDeleting('season')} aria-label={`Delete ${seasonName}'s files from disk`} title="Delete its files from disk">
-            <Trash2 className="size-4" aria-hidden /> <span className="sm:hidden">Delete files</span>
+          <Button variant="ghost" onClick={() => setDeleting('season')} aria-label={t('show.deleteSeason', { season: seasonName })} title={t('show.deleteItsFiles')}>
+            <Trash2 className="size-4" aria-hidden /> <span className="sm:hidden">{t('show.deleteFiles')}</span>
           </Button>
         )}
-        <Toggle checked={monitored} onChange={onMonitor} label={<span className="text-muted">Watch</span>} />
+        <Toggle checked={monitored} onChange={onMonitor} label={<span className="text-muted">{t('show.watch')}</span>} />
       </div>
       {open && (
         <ul className="divide-y divide-line border-t border-line">
@@ -194,45 +197,45 @@ function SeasonBlock({
               const looking = search.isSuccess && search.variables?.id === e.id
               return (
                 <li key={e.id} className="flex flex-wrap items-center gap-x-4 gap-y-2 px-5 py-2.5 text-sm">
-                  <input type="checkbox" checked={e.monitored} onChange={() => toggle.mutate(e)} aria-label={`Watch for ${episodeCode(e.season, e.number)}`} className="accent-[var(--marquee)]" />
+                  <input type="checkbox" checked={e.monitored} onChange={() => toggle.mutate(e)} aria-label={t('show.watchEpisode', { episode: episodeCode(e.season, e.number) })} className="accent-[var(--marquee)]" />
                   <span className="w-16 font-mono text-xs text-muted">{episodeCode(e.season, e.number)}</span>
-                  <span className="min-w-0 flex-1 basis-40 truncate">{e.title || 'To be announced'}</span>
+                  <span className="min-w-0 flex-1 basis-40 truncate">{e.title || t('show.tba')}</span>
                   <span className="w-28 text-muted">{day(e.airDate)}</span>
-                  <span className="ml-auto flex flex-wrap items-center justify-end gap-2">
+                  <span className="ms-auto flex flex-wrap items-center justify-end gap-2">
                     {e.file ? (
                       <Badge tone={upgrade ? 'gold' : 'ok'}>
-                        {upgrade && <ArrowUpCircle className="size-3" aria-label="Upgrade wanted" />}
+                        {upgrade && <ArrowUpCircle className="size-3" aria-label={t('show.upgradeWanted')} />}
                         {qualityName(qualities.data, e.file.quality)} · {bytes(e.file.size)}
                       </Badge>
                     ) : aired ? (
-                      !e.monitored && <Badge>Skipped</Badge>
+                      !e.monitored && <Badge>{t('show.skipped')}</Badge>
                     ) : (
-                      <Badge tone="gold">Coming</Badge>
+                      <Badge tone="gold">{t('show.coming')}</Badge>
                     )}
                     {!locked && aired && e.monitored && (!e.file || upgrade) && (
                       <button
                         className="rounded px-1.5 py-0.5 text-xs text-marquee hover:bg-line"
                         onClick={() => search.mutate(e)}
-                        title={e.file ? 'Look for a better copy and grab the best one' : 'Look for it and grab the best release'}
+                        title={e.file ? t('show.betterCopy') : t('show.grabBest')}
                       >
-                        {looking ? 'Looking…' : e.file ? 'Look for an upgrade' : 'Look for it'}
+                        {looking ? t('common.looking') : e.file ? t('show.lookUpgrade') : t('title.lookFor')}
                       </button>
                     )}
                     {aired && !locked && (
                       <button
                         className="flex items-center gap-1 rounded px-1.5 py-0.5 text-xs text-muted hover:bg-line hover:text-ink"
                         onClick={() => setReleases(e)}
-                        aria-label={`Choose a release for ${episodeCode(e.season, e.number)}`}
+                        aria-label={t('show.chooseFor', { episode: episodeCode(e.season, e.number) })}
                       >
-                        <ListChecks className="size-3.5" aria-hidden /> Choose
+                        <ListChecks className="size-3.5" aria-hidden /> {t('show.choose')}
                       </button>
                     )}
                     {e.file && !locked && (
                       <button
                         className="rounded p-1 text-muted hover:bg-line hover:text-bad"
                         onClick={() => setDeleting(e)}
-                        aria-label={`Delete ${episodeCode(e.season, e.number)}'s file from disk`}
-                        title="Delete its file from disk"
+                        aria-label={t('show.deleteEpisode', { episode: episodeCode(e.season, e.number) })}
+                        title={t('show.deleteItsFile')}
                       >
                         <Trash2 className="size-3.5" aria-hidden />
                       </button>
@@ -244,12 +247,12 @@ function SeasonBlock({
         </ul>
       )}
       {releases === 'season' && (
-        <Releases path={`/series/${seriesId}/seasons/${number}/releases`} title={number === 0 ? 'Specials' : `Season ${number}`} onClose={() => setReleases(null)} />
+        <Releases path={`/series/${seriesId}/seasons/${number}/releases`} title={seasonName} onClose={() => setReleases(null)} />
       )}
       {deleting === 'season' && (
         <DeleteFiles<Detail>
           path={`/series/${seriesId}/seasons/${number}/files`}
-          title={`${showTitle} ${seasonName}`}
+          title={t('show.seasonOf', { show: showTitle, season: seasonName })}
           what="season"
           onClose={() => setDeleting(null)}
           onDone={(d) => {
@@ -261,7 +264,7 @@ function SeasonBlock({
       {deleting && deleting !== 'season' && (
         <DeleteFiles<Episode>
           path={`/episodes/${deleting.id}/file`}
-          title={`${showTitle} ${episodeCode(deleting.season, deleting.number)}`}
+          title={t('show.seasonOf', { show: showTitle, season: episodeCode(deleting.season, deleting.number) })}
           what="episode"
           onClose={() => setDeleting(null)}
           onDone={(e) => {

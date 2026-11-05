@@ -49,6 +49,7 @@ func (s *Server) portalRoutes() []route {
 		{"POST /api/portal/signup", false, s.memberSignUp},
 		{"POST /api/portal/logout", false, s.memberLogout},
 		{"PUT /api/portal/me/password", false, s.asMember(s.memberPassword)},
+		{"PUT /api/portal/me/language", false, s.asMember(s.memberLanguage)},
 		{"GET /api/portal/discover", false, s.asMember(func(w http.ResponseWriter, r *http.Request, _ store.Member) error { return s.discoverHome(w, r) })},
 		{"GET /api/portal/discover/rows/{id}", false, s.asMember(func(w http.ResponseWriter, r *http.Request, _ store.Member) error { return s.discoverRow(w, r) })},
 		{"GET /api/portal/search", false, s.asMember(s.memberSearch)},
@@ -114,10 +115,11 @@ type memberView struct {
 	DisplayName string `json:"displayName"`
 	Name        string `json:"name"`
 	Source      string `json:"source"`
+	Language    string `json:"language"`
 }
 
 func viewMember(m store.Member) memberView {
-	return memberView{ID: m.ID, Username: m.Username, DisplayName: m.DisplayName, Name: m.Name(), Source: m.Source}
+	return memberView{ID: m.ID, Username: m.Username, DisplayName: m.DisplayName, Name: m.Name(), Source: m.Source, Language: m.Language}
 }
 
 // portalSite is what the request site needs before anyone signs in: its
@@ -245,6 +247,18 @@ func (s *Server) memberPassword(w http.ResponseWriter, r *http.Request, m store.
 	}
 	// Changing it signs out everywhere; this browser stays in.
 	return s.memberSignedIn(w, r, m)
+}
+
+// memberLanguage keeps the language someone picked on the request site.
+func (s *Server) memberLanguage(w http.ResponseWriter, r *http.Request, m store.Member) error {
+	language, err := readLanguage(r)
+	if err != nil {
+		return err
+	}
+	if err := s.Store.SetMemberLanguage(r.Context(), m.ID, language); err != nil {
+		return err
+	}
+	return writeJSON(w, http.StatusOK, map[string]string{"language": language})
 }
 
 func (s *Server) memberSearch(w http.ResponseWriter, r *http.Request, _ store.Member) error {

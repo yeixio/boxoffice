@@ -1,3 +1,5 @@
+import { formatLocale } from '../i18n'
+import { Trans, useTranslation } from 'react-i18next'
 import { useEffect, useMemo, useState } from 'react'
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Bug, Download, Search } from 'lucide-react'
@@ -14,10 +16,10 @@ const REFRESH_MS = 5000
 export type LogSearch = { q: string; level?: LogLevel; n: number }
 
 const levels: { value: LogLevel | 'all'; label: string }[] = [
-  { value: 'all', label: 'Everything' },
-  { value: 'info', label: 'Info and up' },
-  { value: 'warn', label: 'Warnings and errors' },
-  { value: 'error', label: 'Errors' },
+  { value: 'all', label: 'log.everything' },
+  { value: 'info', label: 'log.info' },
+  { value: 'warn', label: 'log.warn' },
+  { value: 'error', label: 'log.error' },
 ]
 
 type Page = { lines: LogLine[]; more: boolean }
@@ -33,6 +35,7 @@ function logPath(base: string, q: { q?: string; level?: string; before?: number;
 }
 
 export function LogViewer({ search }: { search: LogSearch }) {
+  const { t } = useTranslation()
   const [text, setText] = useState(search.q)
   const [q, setQ] = useState(search.q)
   const [level, setLevel] = useState<LogLevel | 'all'>(search.level ?? 'all')
@@ -62,21 +65,21 @@ export function LogViewer({ search }: { search: LogSearch }) {
       <DebugSwitch />
       <div className="flex flex-wrap items-end justify-between gap-3">
         <p className="max-w-2xl text-sm text-muted">
-          Box Office keeps its latest log lines in memory, newest first. They're also wherever its output goes, such as <code className="text-xs">kubectl logs</code>. Download them to attach to a bug report.
+          <Trans i18nKey="log.intro" components={{ code: <code className="text-xs" /> }} />
         </p>
         <a href={'/api/v1' + logPath('/admin/logs/download', query)} download>
           <Button tabIndex={-1}>
-            <Download className="size-4" aria-hidden /> Download
+            <Download className="size-4" aria-hidden /> {t('log.download')}
           </Button>
         </a>
       </div>
       <div className="flex flex-wrap items-center gap-2">
         <label className="relative min-w-0 flex-1 basis-64">
-          <span className="sr-only">Search the log</span>
-          <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted" aria-hidden />
-          <Input type="search" value={text} onChange={(e) => setText(e.target.value)} placeholder="Search, such as a title, an indexer or an error" className="pl-9" />
+          <span className="sr-only">{t('log.search')}</span>
+          <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted" aria-hidden />
+          <Input type="search" value={text} onChange={(e) => setText(e.target.value)} placeholder={t('log.searchPlaceholder')} className="ps-9" />
         </label>
-        <div className="flex flex-wrap gap-1.5" role="radiogroup" aria-label="Show">
+        <div className="flex flex-wrap gap-1.5" role="radiogroup" aria-label={t('list.show')}>
           {levels.map((l) => (
             <button
               key={l.value}
@@ -85,26 +88,26 @@ export function LogViewer({ search }: { search: LogSearch }) {
               onClick={() => setLevel(l.value)}
               className={`rounded-full border px-3 py-1.5 text-sm transition ${level === l.value ? 'border-ink bg-ink text-paper' : 'border-line text-muted hover:border-ink/40'}`}
             >
-              {l.label}
+              {t(l.label)}
             </button>
           ))}
         </div>
         <label className="flex cursor-pointer items-center gap-2 text-sm text-muted">
           <input type="checkbox" checked={live} onChange={(e) => setLive(e.target.checked)} className="accent-[var(--marquee)]" />
-          Keep updating
+          {t('log.keepUpdating')}
         </label>
       </div>
       <ErrorNote error={logs.error} />
       <Card className="overflow-hidden p-0!">
         <div className="max-h-[36rem] overflow-auto font-mono text-xs leading-relaxed" role="log" aria-live="off">
-          {lines.length === 0 && !logs.isPending && <p className="p-4 font-sans text-sm text-muted">Nothing matches.</p>}
+          {lines.length === 0 && !logs.isPending && <p className="p-4 font-sans text-sm text-muted">{t('log.nothing')}</p>}
           {lines.map((l) => (
             <LogRow key={l.seq} line={l} />
           ))}
           {logs.hasNextPage && (
             <div className="p-3 font-sans">
               <Button onClick={() => logs.fetchNextPage()} busy={logs.isFetchingNextPage}>
-                Show older lines
+                {t('log.older')}
               </Button>
             </div>
           )}
@@ -114,7 +117,7 @@ export function LogViewer({ search }: { search: LogSearch }) {
   )
 }
 
-const timeOfDay = (ms: number) => new Date(ms).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+const timeOfDay = (ms: number) => new Date(ms).toLocaleTimeString(formatLocale(), { hour: '2-digit', minute: '2-digit', second: '2-digit' })
 
 function LogRow({ line }: { line: LogLine }) {
   const color = line.level === 'error' ? 'text-bad' : line.level === 'warn' ? 'text-gold' : 'text-muted'
@@ -139,6 +142,7 @@ function LogRow({ line }: { line: LogLine }) {
 }
 
 function DebugSwitch() {
+  const { t } = useTranslation()
   const qc = useQueryClient()
   const m = useMonitor(false)
   const on = m.data?.debug ?? false
@@ -158,13 +162,12 @@ function DebugSwitch() {
             checked={on}
             disabled={!m.data || set.isPending || (m.data.debugForced && on)}
             onChange={(v) => set.mutate(v)}
-            label={<span className="font-medium">Debug logging</span>}
+            label={<span className="font-medium">{t('log.debug')}</span>}
           />
           <p className="mt-2 text-sm text-muted">
-            Logs every request, indexer search (with why each release was or wasn't taken), news server connection, download stage and task. Turn it on to find out why something didn't happen, then off
-            again: it's a lot of lines. It stays on across restarts until you turn it off.
+            {t('log.debugBody')}
           </p>
-          {m.data?.debugForced && <p className="mt-2 text-sm text-muted">BOXOFFICE_DEBUG is set in the deployment, so it stays on. Remove it and restart Box Office to turn it off.</p>}
+          {m.data?.debugForced && <p className="mt-2 text-sm text-muted">{t('log.debugForced')}</p>}
           <ErrorNote error={set.error} />
         </div>
       </div>

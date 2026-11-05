@@ -1,3 +1,5 @@
+import i18n from './i18n'
+import { useTranslation } from 'react-i18next'
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -17,11 +19,11 @@ function scanItem(s: Scan, dismiss: () => void): Item {
   const to = `/import?scan=${s.id}`
   switch (s.status) {
     case 'ready':
-      return { key: s.id, state: 'ready', title: `${name} is ready to look over`, detail: 'Nothing has changed yet.', to, action: 'Look it over', dismiss }
+      return { key: s.id, state: 'ready', title: i18n.t('tray.ready', { name }), detail: i18n.t('tray.nothingChanged'), to, action: i18n.t('tray.lookOver'), dismiss }
     case 'failed':
-      return { key: s.id, state: 'failed', title: `Couldn't look over ${name}`, detail: s.error, to: '/import', action: 'Try again', dismiss }
+      return { key: s.id, state: 'failed', title: i18n.t('tray.couldNotLookOver', { name }), detail: s.error, to: '/import', action: i18n.t('tray.tryAgain'), dismiss }
     default:
-      return { key: s.id, state: 'running', title: `Looking over ${name}`, detail: s.step, done: s.done, total: s.total, to, action: 'Open' }
+      return { key: s.id, state: 'running', title: i18n.t('tray.lookingOver', { name }), detail: s.step, done: s.done, total: s.total, to, action: i18n.t('tray.open') }
   }
 }
 
@@ -29,9 +31,9 @@ function moveItem(m: Progress): Item {
   const name = appName[m.app] ?? m.app
   const to = `/import?migration=${m.id}`
   const step = m.steps?.find((s) => s.status === 'running')
-  if (m.status === 'running') return { key: `m${m.id}`, state: 'running', title: `Moving in from ${name}`, detail: step?.message || step?.name, to, action: 'See progress' }
-  if (m.status === 'failed') return { key: `m${m.id}`, state: 'failed', title: `Moving in from ${name} stopped`, detail: `${name} is as it was.`, to, action: 'See why' }
-  return { key: `m${m.id}`, state: 'done', title: `Moved in from ${name}`, to, action: 'See it' }
+  if (m.status === 'running') return { key: `m${m.id}`, state: 'running', title: i18n.t('tray.movingIn', { name }), detail: step?.message || step?.name, to, action: i18n.t('tray.seeProgress') }
+  if (m.status === 'failed') return { key: `m${m.id}`, state: 'failed', title: i18n.t('tray.moveStopped', { name }), detail: i18n.t('tray.asItWas', { name }), to, action: i18n.t('tray.seeWhy') }
+  return { key: `m${m.id}`, state: 'done', title: i18n.t('tray.movedIn', { name }), to, action: i18n.t('tray.seeIt') }
 }
 
 // useBackground lists what's running in the background: move-in scans and
@@ -61,12 +63,14 @@ export function useBackground() {
 }
 
 function ItemIcon({ state }: { state: Item['state'] }) {
-  if (state === 'running') return <LoaderCircle className="mt-0.5 size-4 shrink-0 animate-spin text-marquee" aria-label="running" />
-  if (state === 'failed') return <X className="mt-0.5 size-4 shrink-0 text-bad" aria-label="failed" />
-  return <Check className="mt-0.5 size-4 shrink-0 text-ok" aria-label="ready" />
+  const { t } = useTranslation()
+  if (state === 'running') return <LoaderCircle className="mt-0.5 size-4 shrink-0 animate-spin text-marquee" aria-label={t('tray.running')} />
+  if (state === 'failed') return <X className="mt-0.5 size-4 shrink-0 text-bad" aria-label={t('tray.failed')} />
+  return <Check className="mt-0.5 size-4 shrink-0 text-ok" aria-label={t('tray.readyIcon')} />
 }
 
 export function ItemRow({ item, onGo }: { item: Item; onGo?: () => void }) {
+  const { t } = useTranslation()
   return (
     <li className="flex gap-3 px-4 py-3">
       <ItemIcon state={item.state} />
@@ -79,7 +83,7 @@ export function ItemRow({ item, onGo }: { item: Item; onGo?: () => void }) {
               <div className="h-full bg-marquee transition-all" style={{ width: `${Math.round(((item.done ?? 0) / item.total) * 100)}%` }} />
             </div>
             <div className="mt-0.5 text-xs text-muted">
-              {(item.done ?? 0).toLocaleString()} of {item.total.toLocaleString()}
+              {t('tray.progress', { done: item.done ?? 0, total: item.total })}
             </div>
           </div>
         ) : null}
@@ -90,7 +94,7 @@ export function ItemRow({ item, onGo }: { item: Item; onGo?: () => void }) {
         )}
       </div>
       {item.dismiss && (
-        <button onClick={item.dismiss} aria-label="Dismiss" className="self-start text-muted hover:text-ink">
+        <button onClick={item.dismiss} aria-label={t('tray.dismiss')} className="self-start text-muted hover:text-ink">
           <X className="size-4" />
         </button>
       )}
@@ -102,6 +106,7 @@ export function ItemRow({ item, onGo }: { item: Item; onGo?: () => void }) {
 // running in the background, and a note when something finishes, wherever
 // you are in Box Office.
 export function Tray({ side }: { side?: boolean }) {
+  const { t } = useTranslation()
   const items = useBackground()
   const [open, setOpen] = useState(false)
   const [toasts, setToasts] = useState<Item[]>([])
@@ -141,20 +146,20 @@ export function Tray({ side }: { side?: boolean }) {
         <button
           onClick={() => setOpen(!open)}
           className="relative flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm text-muted hover:text-ink"
-          aria-label={running ? `${running} running in the background` : 'Background activity'}
+          aria-label={running ? t('tray.runningCount', { count: running }) : t('tray.activity')}
           aria-expanded={open}
         >
           {running ? <LoaderCircle className="size-4 animate-spin text-marquee" aria-hidden /> : <Bell className="size-4" aria-hidden />}
           {running > 0 && <span className="text-xs font-medium text-marquee">{running}</span>}
-          {waiting && <span className="absolute right-1 top-1 size-2 rounded-full bg-marquee" aria-hidden />}
+          {waiting && <span className="absolute end-1 top-1 size-2 rounded-full bg-marquee" aria-hidden />}
         </button>
         {open && (
           <div
             className={`fixed inset-x-4 top-14 z-30 overflow-hidden rounded-xl border border-line bg-card shadow-lg sm:absolute sm:inset-x-auto sm:w-80 ${
-              side ? 'sm:left-full sm:top-0 sm:ml-2' : 'sm:right-0 sm:top-full sm:mt-2 md:left-0 md:right-auto'
+              side ? 'sm:start-full sm:top-0 sm:ms-2' : 'sm:end-0 sm:top-full sm:mt-2 md:start-0 md:end-auto'
             }`}
           >
-            <div className="border-b border-line px-4 py-2.5 text-sm font-semibold">In the background</div>
+            <div className="border-b border-line px-4 py-2.5 text-sm font-semibold">{t('tray.title')}</div>
             {items.length ? (
               <ul className="max-h-96 divide-y divide-line overflow-y-auto">
                 {items.map((i) => (
@@ -162,14 +167,14 @@ export function Tray({ side }: { side?: boolean }) {
                 ))}
               </ul>
             ) : (
-              <p className="px-4 py-4 text-sm text-muted">Nothing running. Looking over or moving in from an app shows here, so you can carry on elsewhere meanwhile.</p>
+              <p className="px-4 py-4 text-sm text-muted">{t('tray.empty')}</p>
             )}
           </div>
         )}
       </div>
       {toasts.length > 0 &&
         createPortal(
-        <div className="fixed bottom-4 right-4 z-40 flex w-80 max-w-[calc(100vw-2rem)] flex-col gap-2" aria-live="polite">
+        <div className="fixed bottom-4 end-4 z-40 flex w-80 max-w-[calc(100vw-2rem)] flex-col gap-2" aria-live="polite">
           {toasts.map((t) => (
             <ul key={t.key} className="overflow-hidden rounded-xl border border-line bg-card shadow-lg">
               <ItemRow item={{ ...t, dismiss: () => setToasts((ts) => ts.filter((x) => x.key !== t.key)) }} onGo={() => setToasts((ts) => ts.filter((x) => x.key !== t.key))} />

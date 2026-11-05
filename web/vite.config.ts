@@ -5,7 +5,11 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   // `pnpm dev` talks to a Box Office started with `make run`.
-  server: { proxy: { '/api': 'http://localhost:7272' } },
+  server: {
+    proxy: { '/api': 'http://localhost:7272' },
+    // The text in every language is in i18n/ at the repository root.
+    fs: { allow: ['..'] },
+  },
   build: { outDir: 'dist', emptyOutDir: false },
   test: { environment: 'jsdom' },
 })

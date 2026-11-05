@@ -1,3 +1,6 @@
+import { formatLocale } from '../i18n'
+import { decimal } from '../format'
+import { Trans, useTranslation } from 'react-i18next'
 import { useEffect, useState } from 'react'
 import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, useParams } from 'react-router-dom'
@@ -28,22 +31,23 @@ import { AddOptions } from './AddTitle'
 const pageOf = (kind: DiscoverKind, id: number) => `/${kind === 'movie' ? 'movies' : 'shows'}/${id}`
 
 export function Discover() {
+  const { t } = useTranslation()
   const home = useQuery({ queryKey: ['discover', 'home'], queryFn: () => get<DiscoverHome>('/discover'), staleTime: 5 * 60_000 })
   const [term, setTerm] = useState('')
   const [q, setQ] = useState('')
   useEffect(() => {
-    const t = setTimeout(() => setQ(term.trim()), 350)
-    return () => clearTimeout(t)
+    const timer = setTimeout(() => setQ(term.trim()), 350)
+    return () => clearTimeout(timer)
   }, [term])
   return (
     <>
       <Heading
-        title="Discover"
-        sub="What's popular and coming soon, and more like what you have."
+        title={t('nav.discover')}
+        sub={t('discover.sub')}
         actions={
           <div className="relative w-full sm:w-72">
-            <Search className="pointer-events-none absolute left-3 top-2.5 size-4 text-muted" aria-hidden />
-            <Input type="search" className="pl-9" placeholder="Find a movie or show" aria-label="Find a movie or show" value={term} onChange={(e) => setTerm(e.target.value)} />
+            <Search className="pointer-events-none absolute start-3 top-2.5 size-4 text-muted" aria-hidden />
+            <Input type="search" className="ps-9" placeholder={t('discover.find')} aria-label={t('discover.find')} value={term} onChange={(e) => setTerm(e.target.value)} />
           </div>
         }
       />
@@ -69,14 +73,11 @@ export function Discover() {
 
 // NoTMDB explains a failure, with the way to a key when that's the trouble.
 function NoTMDB({ error }: { error: unknown }) {
+  const { t } = useTranslation()
   if (error instanceof ApiError && error.status === 503) {
     return (
-      <Empty icon={<Compass className="size-8" />} title="Discover needs TMDB">
-        Box Office gets what's popular and coming soon from The Movie Database. Add a TMDB API key under{' '}
-        <Link to="/settings" className="font-medium text-marquee">
-          Settings
-        </Link>{' '}
-        and this page fills in.
+      <Empty icon={<Compass className="size-8" />} title={t('discover.needsTmdb')}>
+        <Trans i18nKey="discover.needsTmdbBody" components={{ link: <Link to="/settings" className="font-medium text-marquee" /> }} />
       </Empty>
     )
   }
@@ -84,6 +85,7 @@ function NoTMDB({ error }: { error: unknown }) {
 }
 
 function Row({ row }: { row: DiscoverRow }) {
+  const { t } = useTranslation()
   return (
     <section aria-labelledby={`row-${row.id}`}>
       <div className="mb-3 flex items-baseline justify-between gap-4">
@@ -91,13 +93,13 @@ function Row({ row }: { row: DiscoverRow }) {
           {row.title}
         </h2>
         <Link to={`/discover/${row.id}`} className="flex shrink-0 items-center gap-0.5 text-sm font-medium text-marquee">
-          See all <ChevronRight className="size-4" aria-hidden />
+          {t('discover.seeAll')} <ChevronRight className="size-4 rtl:rotate-180" aria-hidden />
         </Link>
       </div>
       <ul className="-mx-4 flex snap-x scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 md:-mx-8 md:scroll-px-8 md:px-8 [scrollbar-width:thin]">
-        {row.items.map((t) => (
-          <li key={`${t.kind}-${t.tmdbId}`} className="w-32 shrink-0 snap-start sm:w-36">
-            <TitleCard t={t} />
+        {row.items.map((title) => (
+          <li key={`${title.kind}-${title.tmdbId}`} className="w-32 shrink-0 snap-start sm:w-36">
+            <TitleCard t={title} />
           </li>
         ))}
       </ul>
@@ -106,18 +108,19 @@ function Row({ row }: { row: DiscoverRow }) {
 }
 
 const statusLook: Record<DiscoverStatus, { label: string; look: string }> = {
-  available: { label: 'On disk', look: 'bg-ok text-white' },
-  partial: { label: 'Some on disk', look: 'bg-gold text-black' },
-  wanted: { label: 'Wanted', look: 'bg-marquee text-marquee-ink' },
-  paused: { label: 'Paused', look: 'bg-ink/85 text-paper' },
+  available: { label: 'common.onDisk', look: 'bg-ok text-white' },
+  partial: { label: 'discover.someOnDisk', look: 'bg-gold text-black' },
+  wanted: { label: 'common.wanted', look: 'bg-marquee text-marquee-ink' },
+  paused: { label: 'common.paused', look: 'bg-ink/85 text-paper' },
 }
 
 function StatusPill({ status }: { status?: DiscoverStatus }) {
-  const s = status ? statusLook[status] : { label: 'On the list', look: 'bg-ink/85 text-paper' }
+  const { t } = useTranslation()
+  const s = status ? statusLook[status] : { label: 'add.onList', look: 'bg-ink/85 text-paper' }
   return (
-    <span className={`absolute left-1.5 top-1.5 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold shadow ${s.look}`}>
+    <span className={`absolute start-1.5 top-1.5 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold shadow ${s.look}`}>
       {status === 'available' && <Check className="size-3" aria-hidden />}
-      {s.label}
+      {t(s.label)}
     </span>
   )
 }
@@ -128,12 +131,13 @@ function TitleCard({ t }: { t: DiscoverTitle }) {
   const [open, setOpen] = useState(false)
   const [added, setAdded] = useState<{ id: number } | null>(null)
   const [busy, setBusy] = useState(false)
+  const { t: say } = useTranslation()
   const [error, setError] = useState<unknown>(null)
   const profiles = useProfiles()
   const qc = useQueryClient()
   const id = t.id ?? added?.id
   const status = t.status ?? (added ? 'wanted' : undefined)
-  const what = t.kind === 'movie' ? 'Movie' : 'Show'
+  const what = t.kind === 'movie' ? say('discover.movie') : say('discover.show')
   const quickAdd = async () => {
     setBusy(true)
     setError(null)
@@ -153,7 +157,7 @@ function TitleCard({ t }: { t: DiscoverTitle }) {
   }
   return (
     <div className="group relative">
-      <button onClick={() => setOpen(true)} className="block w-full text-left" aria-label={`${t.title}${t.year ? ` (${t.year})` : ''}`}>
+      <button onClick={() => setOpen(true)} className="block w-full text-start" aria-label={`${t.title}${t.year ? ` (${t.year})` : ''}`}>
         <div className="relative">
           <Poster src={t.poster} title={t.title} className="transition group-hover:ring-2 group-hover:ring-marquee" />
           {id ? <StatusPill status={status} /> : null}
@@ -164,9 +168,9 @@ function TitleCard({ t }: { t: DiscoverTitle }) {
           {t.year ? <span aria-hidden>·</span> : null}
           <span>{what}</span>
           {t.rating ? (
-            <span className="ml-auto flex items-center gap-0.5 tabular-nums">
+            <span className="ms-auto flex items-center gap-0.5 tabular-nums">
               <Star className="size-3" aria-hidden />
-              {t.rating.toFixed(1)}
+              {decimal(t.rating)}
             </span>
           ) : null}
         </div>
@@ -175,9 +179,9 @@ function TitleCard({ t }: { t: DiscoverTitle }) {
         <button
           onClick={quickAdd}
           disabled={busy || profiles.isPending}
-          className="absolute right-1.5 top-1.5 flex size-8 items-center justify-center rounded-full bg-marquee text-marquee-ink shadow-md transition hover:scale-110 disabled:opacity-70"
-          aria-label={`Add ${t.title}`}
-          title={`Add ${t.title} and start looking for it`}
+          className="absolute end-1.5 top-1.5 flex size-8 items-center justify-center rounded-full bg-marquee text-marquee-ink shadow-md transition hover:scale-110 disabled:opacity-70"
+          aria-label={say('discover.add', { title: t.title })}
+          title={say('discover.addAndLook', { title: t.title })}
         >
           {busy ? <LoaderCircle className="size-4 animate-spin" aria-hidden /> : <Plus className="size-4.5" aria-hidden />}
         </button>
@@ -204,6 +208,7 @@ function TitleSheet({
   onAdded: (a: { id: number }) => void
   onClose: () => void
 }) {
+  const { t: say } = useTranslation()
   const when = t.date ? new Date(t.date + 'T00:00:00') : undefined
   const soon = when && when.getTime() > Date.now()
   return (
@@ -214,13 +219,14 @@ function TitleSheet({
           <Poster src={t.poster} title={t.title} className="hidden w-28 shrink-0 sm:block" />
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-x-2 text-sm text-muted">
-              <span>{t.kind === 'movie' ? 'Movie' : 'Show'}</span>
+              <span>{t.kind === 'movie' ? say('discover.movie') : say('discover.show')}</span>
               {when && (
                 <>
                   <span aria-hidden>·</span>
                   <span>
-                    {soon ? (t.kind === 'movie' ? 'Out ' : 'Starts ') : t.kind === 'movie' ? 'Released ' : 'First aired '}
-                    {when.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}
+                    {say(soon ? (t.kind === 'movie' ? 'discover.out' : 'discover.starts') : t.kind === 'movie' ? 'discover.released' : 'discover.firstAired', {
+                      date: when.toLocaleDateString(formatLocale(), { day: 'numeric', month: 'short', year: 'numeric' }),
+                    })}
                   </span>
                 </>
               )}
@@ -228,7 +234,7 @@ function TitleSheet({
                 <>
                   <span aria-hidden>·</span>
                   <span className="flex items-center gap-0.5">
-                    <Star className="size-3.5" aria-hidden /> {t.rating.toFixed(1)}
+                    <Star className="size-3.5" aria-hidden /> {decimal(t.rating)}
                   </span>
                 </>
               ) : null}
@@ -240,15 +246,15 @@ function TitleSheet({
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-line px-4 py-3">
             <span className="text-sm">
               {status === 'available'
-                ? "It's in the library."
+                ? say('discover.inLibrary')
                 : status === 'partial'
-                  ? 'Some of it is in the library.'
+                  ? say('discover.someInLibrary')
                   : status === 'paused'
-                    ? "It's on the list, but not watched for."
-                    : "It's on the list, and Box Office is looking for it."}
+                    ? say('discover.notWatched')
+                    : say('discover.looking')}
             </span>
             <Link to={pageOf(t.kind, id)} className="text-sm font-medium text-marquee" onClick={onClose}>
-              Open {t.kind === 'movie' ? 'movie' : 'show'}
+              {t.kind === 'movie' ? say('discover.openMovie') : say('discover.openShow')}
             </Link>
           </div>
         ) : (
@@ -271,16 +277,17 @@ function TitleSheet({
 }
 
 function Browse({ browse }: { browse: DiscoverHome['browse'] }) {
+  const { t } = useTranslation()
   const groups = [
-    { title: 'Movie genres', kind: 'movie', genres: browse.movieGenres },
-    { title: 'Show genres', kind: 'series', genres: browse.seriesGenres },
+    { title: t('discover.movieGenres'), kind: 'movie', genres: browse.movieGenres },
+    { title: t('discover.showGenres'), kind: 'series', genres: browse.seriesGenres },
   ] as const
   return (
     <>
       {browse.networks.length > 0 && (
         <section aria-labelledby="networks">
           <h2 id="networks" className="mb-3 font-display text-xl font-semibold">
-            Networks and services
+            {t('discover.networks')}
           </h2>
           <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
             {browse.networks.map((n) => (
@@ -326,9 +333,9 @@ function Browse({ browse }: { browse: DiscoverHome['browse'] }) {
 function Grid({ items }: { items: DiscoverTitle[] }) {
   return (
     <ul className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-      {items.map((t) => (
-        <li key={`${t.kind}-${t.tmdbId}`}>
-          <TitleCard t={t} />
+      {items.map((title) => (
+        <li key={`${title.kind}-${title.tmdbId}`}>
+          <TitleCard t={title} />
         </li>
       ))}
     </ul>
@@ -341,24 +348,25 @@ function SearchResults({ q }: { q: string }) {
     get<(LookupMovie | LookupShow)[]>(`/lookup/${kind === 'movie' ? 'movies' : 'series'}?q=${encodeURIComponent(q)}`).then((rs) =>
       rs.map((r): DiscoverTitle => ({ kind, tmdbId: r.tmdbId, title: r.title, year: r.year, overview: r.overview, poster: r.poster, backdrop: r.backdrop, rating: r.rating, id: r.id })),
     )
+  const { t } = useTranslation()
   const movies = useQuery({ queryKey: ['lookup', 'movie', q], queryFn: () => lookup('movie') })
   const shows = useQuery({ queryKey: ['lookup', 'series', q], queryFn: () => lookup('series') })
-  if (movies.isPending || shows.isPending) return <Spinner label="Looking" />
+  if (movies.isPending || shows.isPending) return <Spinner label={t('common.looking')} />
   const err = movies.error ?? shows.error
   if (err) return <NoTMDB error={err} />
   const all = [...(movies.data ?? []), ...(shows.data ?? [])]
-  if (all.length === 0) return <p className="py-10 text-center text-sm text-muted">TMDB has nothing by that name.</p>
+  if (all.length === 0) return <p className="py-10 text-center text-sm text-muted">{t('add.nothing')}</p>
   return (
     <div className="flex flex-col gap-10">
       {!!movies.data?.length && (
         <section>
-          <h2 className="mb-3 font-display text-xl font-semibold">Movies</h2>
+          <h2 className="mb-3 font-display text-xl font-semibold">{t('nav.movies')}</h2>
           <Grid items={movies.data} />
         </section>
       )}
       {!!shows.data?.length && (
         <section>
-          <h2 className="mb-3 font-display text-xl font-semibold">Shows</h2>
+          <h2 className="mb-3 font-display text-xl font-semibold">{t('nav.shows')}</h2>
           <Grid items={shows.data} />
         </section>
       )}
@@ -368,6 +376,7 @@ function SearchResults({ q }: { q: string }) {
 
 // DiscoverRowPage is every title of one row, a page at a time.
 export function DiscoverRowPage() {
+  const { t } = useTranslation()
   const { id = '' } = useParams()
   const row = useInfiniteQuery({
     queryKey: ['discover', 'row', id],
@@ -380,8 +389,8 @@ export function DiscoverRowPage() {
   const seen = new Set<string>()
   const items = (row.data?.pages ?? [])
     .flatMap((p) => p.items)
-    .filter((t) => {
-      const k = `${t.kind}-${t.tmdbId}`
+    .filter((title) => {
+      const k = `${title.kind}-${title.tmdbId}`
       if (seen.has(k)) return false
       seen.add(k)
       return true
@@ -389,17 +398,17 @@ export function DiscoverRowPage() {
   return (
     <>
       <Link to="/discover" className="mb-2 inline-block text-sm text-muted hover:text-ink">
-        ← Discover
+        {t('discover.back')}
       </Link>
-      <Heading title={first?.title ?? 'Discover'} />
+      <Heading title={first?.title ?? t('nav.discover')} />
       {row.isPending && <Spinner />}
       {row.error && <NoTMDB error={row.error} />}
-      {first && items.length === 0 && <p className="py-10 text-center text-sm text-muted">Nothing here right now.</p>}
+      {first && items.length === 0 && <p className="py-10 text-center text-sm text-muted">{t('discover.nothingHere')}</p>}
       <Grid items={items} />
       {row.hasNextPage && (
         <div className="mt-8 flex justify-center">
           <Button onClick={() => row.fetchNextPage()} busy={row.isFetchingNextPage}>
-            Show more
+            {t('discover.showMore')}
           </Button>
         </div>
       )}

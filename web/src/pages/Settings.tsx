@@ -1,20 +1,25 @@
+import { LanguagePicker } from '../LanguagePicker'
+import i18n from '../i18n'
+import { Trans, useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Copy, Lock, Folder, FolderUp, KeyRound, Plus, Trash2 } from 'lucide-react'
-import { del, get, post, put, type MediaType, type MediaTypeKey, type Profile, type Recycle, type RootFolder, type RootKind, type Settings as SettingsData, type ShowDefaults, type SystemInfo } from '../api'
-import { bytes, count, day } from '../format'
+import { del, get, post, put, type Status, type MediaType, type MediaTypeKey, type Profile, type Recycle, type RootFolder, type RootKind, type Settings as SettingsData, type ShowDefaults, type SystemInfo } from '../api'
+import { bytes, day } from '../format'
 import { monitorOptions, useProfiles, useQualities, useRootFolders, useShowDefaults } from '../hooks'
 import { AutoSearchSettings, Connections, DataCapSettingsCard, DownloadSettings, NumberField } from './Connections'
 import { ScanButton, scannable } from './LibraryScan'
 import { Badge, Button, Card, ErrorNote, Field, Heading, Input, Modal, Select, Spinner, Toggle } from '../ui'
 
 export function Settings() {
+  const { t } = useTranslation()
   return (
     <>
-      <Heading title="Settings" />
+      <Heading title={t('nav.settings')} />
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <div className="flex flex-col gap-6">
+          <Language />
           <General />
           <MediaTypes />
           <ConnectMatinee />
@@ -51,7 +56,29 @@ function useSettings() {
   return useQuery({ queryKey: ['settings'], queryFn: () => get<SettingsData>('/settings') })
 }
 
+// Language is the admin's own: it follows them to every browser they sign
+// in on.
+function Language() {
+  const { t } = useTranslation()
+  const qc = useQueryClient()
+  const status = useQuery({ queryKey: ['status'], queryFn: () => get<Status>('/status') })
+  const pick = useMutation({
+    mutationFn: (language: string) => put('/me/language', { language }),
+    onMutate: (language) => qc.setQueryData<Status>(['status'], (s) => s && s.user && { ...s, user: { ...s.user, language } }),
+    onSettled: () => qc.invalidateQueries({ queryKey: ['status'] }),
+  })
+  return (
+    <Card>
+      <h2 className="mb-1 font-display text-lg font-semibold">{t('common:language.title')}</h2>
+      <p className="mb-4 text-sm text-muted">{t('settings.languageHint')}</p>
+      <LanguagePicker saved={status.data?.user?.language ?? (status.data ? '' : undefined)} busy={pick.isPending} onPick={(code) => pick.mutate(code)} />
+      <ErrorNote error={pick.error} />
+    </Card>
+  )
+}
+
 function General() {
+  const { t } = useTranslation()
   const qc = useQueryClient()
   const s = useSettings()
   const [key, setKey] = useState('')
@@ -66,20 +93,20 @@ function General() {
     <Card>
       <h2 className="mb-1 font-display text-lg font-semibold">TMDB</h2>
       <p className="mb-4 text-sm text-muted">
-        Box Office looks up movies and shows on TMDB. Get a free key at <a className="text-marquee" href="https://www.themoviedb.org/settings/api" target="_blank" rel="noreferrer">themoviedb.org</a>; the API key and the longer read access token both work.
+        <Trans i18nKey="settings.tmdbIntro" components={{ link: <a className="text-marquee" href="https://www.themoviedb.org/settings/api" target="_blank" rel="noreferrer" /> }} />
       </p>
       {s.data?.tmdbKeyBuiltIn && (
-        <p className="mb-3 text-sm text-muted">This copy of Box Office comes with the project's own key, so there's nothing to set up. You can still save your own key here to use it instead.</p>
+        <p className="mb-3 text-sm text-muted">{t('settings.tmdbBuiltIn')}</p>
       )}
       {s.data && (
         <p className="mb-3 text-sm">
-          {s.data.hasTmdbKey ? <Badge tone="ok">{s.data.tmdbKeyBuiltIn ? 'Built in' : s.data.tmdbKeyFromEnv ? 'Set on the server' : 'Saved'}</Badge> : <Badge tone="bad">Not set</Badge>}
+          {s.data.hasTmdbKey ? <Badge tone="ok">{s.data.tmdbKeyBuiltIn ? t('settings.builtIn') : s.data.tmdbKeyFromEnv ? t('settings.onServer') : t('settings.savedBadge')}</Badge> : <Badge tone="bad">{t('settings.notSet')}</Badge>}
         </p>
       )}
       <div className="flex gap-2">
-        <Input aria-label="TMDB key" placeholder={s.data?.hasTmdbKey ? 'Enter a new key to replace it' : 'TMDB key'} value={key} onChange={(e) => setKey(e.target.value)} autoComplete="off" />
+        <Input aria-label={t('settings.tmdbKey')} placeholder={s.data?.hasTmdbKey ? t('settings.replaceKey') : t('settings.tmdbKey')} value={key} onChange={(e) => setKey(e.target.value)} autoComplete="off" />
         <Button variant="primary" busy={save.isPending} disabled={!key} onClick={() => save.mutate()}>
-          Check and save
+          {t('settings.checkSave')}
         </Button>
       </div>
       <ErrorNote error={save.error} />
@@ -89,18 +116,20 @@ function General() {
 
 // MoveIn is where Move in lives once it has left the menu.
 function MoveIn() {
+  const { t } = useTranslation()
   return (
     <Card>
-      <h2 className="mb-1 font-display text-lg font-semibold">Move in</h2>
-      <p className="mb-4 text-sm text-muted">Bring everything over from Radarr, Sonarr or NZBGet. The old app is only read from, so it's safe to do again, such as for an app you add later.</p>
+      <h2 className="mb-1 font-display text-lg font-semibold">{t('nav.import')}</h2>
+      <p className="mb-4 text-sm text-muted">{t('settings.moveInSub')}</p>
       <Link to="/import">
-        <Button>Open Move in</Button>
+        <Button>{t('settings.openMoveIn')}</Button>
       </Link>
     </Card>
   )
 }
 
 function ConnectMatinee() {
+  const { t } = useTranslation()
   const qc = useQueryClient()
   const s = useSettings()
   const [shown, setShown] = useState(false)
@@ -112,13 +141,12 @@ function ConnectMatinee() {
     setTimeout(() => setCopied(''), 1500)
   }
   const origin = window.location.origin
-  const rows = [['Address', origin]]
+  const rows = [[t('settings.address'), origin]]
   return (
     <Card>
-      <h2 className="mb-1 font-display text-lg font-semibold">Connect Matinee</h2>
+      <h2 className="mb-1 font-display text-lg font-semibold">{t('settings.matinee')}</h2>
       <p className="mb-4 text-sm text-muted">
-        In Matinee, go to Settings → Add-ons → Box Office and choose Connect. Matinee looks for Box Office on its own; if it can't find it, enter this address. Then paste the API key.
-        Requests, posters and notifications all go through that one connection.
+        {t('settings.matineeSub')}
       </p>
       <dl className="flex flex-col gap-3 text-sm">
         {rows.map(([label, v]) => (
@@ -126,34 +154,34 @@ function ConnectMatinee() {
             <dt className="text-muted">{label}</dt>
             <dd className="flex items-center gap-2">
               <code className="break-all">{v}</code>
-              <button onClick={() => copy(label, v)} aria-label={`Copy ${label}`} className="rounded p-1 text-muted hover:bg-line">
+              <button onClick={() => copy(label, v)} aria-label={t('settings.copyThe', { what: label })} className="rounded p-1 text-muted hover:bg-line">
                 <Copy className="size-3.5" />
               </button>
-              {copied === label && <span className="text-xs text-ok">Copied</span>}
+              {copied === label && <span className="text-xs text-ok">{t('common.copied')}</span>}
             </dd>
           </div>
         ))}
         <div className="flex items-center justify-between gap-3">
-          <dt className="text-muted">API key</dt>
+          <dt className="text-muted">{t('settings.apiKey')}</dt>
           <dd className="flex items-center gap-2">
             <code className="break-all">{s.data ? (shown ? s.data.apiKey : '•'.repeat(16)) : '…'}</code>
             <button onClick={() => setShown(!shown)} className="text-xs text-marquee">
-              {shown ? 'Hide' : 'Show'}
+              {shown ? t('settings.hide') : t('settings.show')}
             </button>
             {s.data && (
-              <button onClick={() => copy('key', s.data.apiKey)} aria-label="Copy the API key" className="rounded p-1 text-muted hover:bg-line">
+              <button onClick={() => copy('key', s.data.apiKey)} aria-label={t('settings.copyKey')} className="rounded p-1 text-muted hover:bg-line">
                 <Copy className="size-3.5" />
               </button>
             )}
-            {copied === 'key' && <span className="text-xs text-ok">Copied</span>}
+            {copied === 'key' && <span className="text-xs text-ok">{t('common.copied')}</span>}
           </dd>
         </div>
       </dl>
       {s.data?.apiKeyFromEnv ? (
-        <p className="mt-4 text-xs text-muted">The key is set on the server (BOXOFFICE_API_KEY), so it's changed there.</p>
+        <p className="mt-4 text-xs text-muted">{t('settings.keyEnv')}</p>
       ) : (
         <Button className="mt-4" busy={regen.isPending} onClick={() => regen.mutate()}>
-          <KeyRound className="size-4" aria-hidden /> Make a new key
+          <KeyRound className="size-4" aria-hidden /> {t('settings.newKey')}
         </Button>
       )}
       <ErrorNote error={regen.error} />
@@ -164,6 +192,7 @@ function ConnectMatinee() {
 // MediaTypes turns on the kinds of media beyond movies and TV. Each is off
 // until it's turned on here.
 function MediaTypes() {
+  const { t } = useTranslation()
   const qc = useQueryClient()
   const s = useSettings()
   const save = useMutation({
@@ -175,32 +204,31 @@ function MediaTypes() {
   })
   return (
     <Card>
-      <h2 className="mb-1 font-display text-lg font-semibold">More than movies and TV</h2>
+      <h2 className="mb-1 font-display text-lg font-semibold">{t('settings.more')}</h2>
       <p className="mb-4 text-sm text-muted">
-        Turn on the other kinds of media you want Box Office to look after. Each is off until you turn it on, and turning one off later keeps its folders and settings. Box Office
-        never changes files already in these libraries.
+        {t('settings.moreSub')}
       </p>
       {s.isPending && <Spinner />}
       <ErrorNote error={s.error} />
       <div className="flex flex-col gap-4">
-        {s.data?.mediaTypes.map((t) => (
+        {s.data?.mediaTypes.map((m) => (
           <Toggle
-            key={t.key}
-            checked={t.enabled}
+            key={m.key}
+            checked={m.enabled}
             disabled={save.isPending}
-            onChange={(on) => save.mutate({ key: t.key, on })}
+            onChange={(on) => save.mutate({ key: m.key, on })}
             label={
               <span>
-                <span className="font-medium">{t.name}</span>
-                {t.replaces && <span className="text-muted"> (in place of {t.replaces})</span>}
-                <span className="block text-sm text-muted">{t.summary}</span>
+                <span className="font-medium">{typeName(m)}</span>
+                {m.replaces && <span className="text-muted"> {t('settings.inPlaceOf', { app: m.replaces })}</span>}
+                <span className="block text-sm text-muted">{t(`mediaTypes.${m.key}.summary`, { defaultValue: m.summary })}</span>
               </span>
             }
           />
         ))}
       </div>
-      {s.data?.mediaTypes.some((t) => t.enabled) && (
-        <p className="mt-4 text-sm text-muted">Pick a root folder for each one you turned on, below. Adding and searching for these arrives in the next Box Office updates.</p>
+      {s.data?.mediaTypes.some((m) => m.enabled) && (
+        <p className="mt-4 text-sm text-muted">{t('settings.pickRoot')}</p>
       )}
       <ErrorNote error={save.error} />
     </Card>
@@ -213,17 +241,25 @@ function MediaTypeFolders() {
   return (
     <>
       {s.data?.mediaTypes
-        .filter((t) => t.enabled)
-        .map((t) => (
-          <RootFolders key={t.key} kind={t.key} type={t} />
+        .filter((m) => m.enabled)
+        .map((m) => (
+          <RootFolders key={m.key} kind={m.key} type={m} />
         ))}
     </>
   )
 }
 
-const rootTitle = (kind: RootKind, type?: MediaType) => (kind === 'movie' ? 'Movie' : kind === 'series' ? 'TV' : (type?.name ?? kind))
+// typeName is a media type's name in the page's language.
+const typeName = (m: MediaType) => i18n.t(`mediaTypes.${m.key}.name`, { defaultValue: m.name })
+
+// rootTitle heads a kind's root folders, and addTitle its folder picker.
+const rootTitle = (kind: RootKind, type?: MediaType) =>
+  kind === 'movie' || kind === 'series' ? i18n.t(`settings.roots.${kind}`) : i18n.t('settings.roots.other', { name: type ? typeName(type) : kind })
+const addTitle = (kind: RootKind, type?: MediaType) =>
+  kind === 'movie' || kind === 'series' ? i18n.t(`settings.addRoot.${kind}`) : i18n.t('settings.addRoot.other', { name: type ? typeName(type) : kind })
 
 function RootFolders({ kind, type }: { kind: RootKind; type?: MediaType }) {
+  const { t } = useTranslation()
   const qc = useQueryClient()
   const folders = useRootFolders(kind)
   const [picking, setPicking] = useState(false)
@@ -237,32 +273,32 @@ function RootFolders({ kind, type }: { kind: RootKind; type?: MediaType }) {
   return (
     <Card>
       <div className="mb-3 flex items-center justify-between">
-        <h2 className="font-display text-lg font-semibold">{rootTitle(kind, type)} root folders</h2>
+        <h2 className="font-display text-lg font-semibold">{rootTitle(kind, type)}</h2>
         <Button variant="ghost" onClick={() => setPicking(true)}>
-          <Plus className="size-4" aria-hidden /> Add
+          <Plus className="size-4" aria-hidden /> {t('settings.add')}
         </Button>
       </div>
       {folders.isPending && <Spinner />}
-      {folders.data?.length === 0 && <p className="text-sm text-muted">None yet. Each title gets its own folder inside one of these.</p>}
+      {folders.data?.length === 0 && <p className="text-sm text-muted">{t('settings.noRoots')}</p>}
       {folders.data?.length === 0 && type && type.suggested.length > 0 && <SuggestedFolders kind={kind} type={type} />}
       <ul className="flex flex-col divide-y divide-line">
         {folders.data?.map((f) => (
           <li key={f.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2 text-sm">
             <Folder className="size-4 text-muted" aria-hidden />
             <code className="min-w-48 flex-1 break-all">{f.path}</code>
-            {f.accessible ? <span className="text-xs text-muted">{bytes(f.freeSpace)} free</span> : <Badge tone="bad">can't see it</Badge>}
+            {f.accessible ? <span className="text-xs text-muted">{t('settings.free', { size: bytes(f.freeSpace) })}</span> : <Badge tone="bad">{t('settings.cantSee')}</Badge>}
             {f.accessible && scannable(kind) && <ScanButton folder={f} />}
-            <button onClick={() => remove.mutate(f)} aria-label={`Remove ${f.path}`} className="rounded p-1 text-muted hover:bg-line hover:text-bad">
+            <button onClick={() => remove.mutate(f)} aria-label={t('settings.removePath', { path: f.path })} className="rounded p-1 text-muted hover:bg-line hover:text-bad">
               <Trash2 className="size-4" />
             </button>
           </li>
         ))}
       </ul>
       {scannable(kind) && !!folders.data?.length && (
-        <p className="mt-2 text-xs text-muted">Scan looks for {kind === 'movie' ? 'movies' : kind === 'series' ? 'shows' : kind === 'music' ? 'artists' : 'authors'} already in a folder that aren't on the list, so you can add them where they are.</p>
+        <p className="mt-2 text-xs text-muted">{t(`settings.scanFor.${kind === 'movie' || kind === 'series' || kind === 'music' ? kind : 'books'}`)}</p>
       )}
       <ErrorNote error={remove.error} />
-      {picking && <FolderPicker kind={kind} title={rootTitle(kind, type)} onClose={() => setPicking(false)} />}
+      {picking && <FolderPicker kind={kind} title={addTitle(kind, type)} onClose={() => setPicking(false)} />}
     </Card>
   )
 }
@@ -271,6 +307,7 @@ function RootFolders({ kind, type }: { kind: RootKind; type?: MediaType }) {
 // shows added here and requests from Matinee. Shows already on the list,
 // and ones brought over by Move in, keep what they have.
 function NewShows() {
+  const { t } = useTranslation()
   const qc = useQueryClient()
   const d = useShowDefaults()
   const save = useMutation({
@@ -280,24 +317,22 @@ function NewShows() {
   if (!d.data) return null
   return (
     <Card>
-      <h2 className="mb-1 font-display text-lg font-semibold">New shows</h2>
+      <h2 className="mb-1 font-display text-lg font-semibold">{t('settings.newShows')}</h2>
       <p className="mb-4 text-sm text-muted">
-        Which episodes Box Office watches for when a show is added, here or by a request from Matinee. A long-running show can have hundreds of old episodes; watching only the last few seasons keeps the
-        library patrol and upgrades on what you're likely to watch. You can still pick something else when adding a show, and switch seasons on or off from the show's page. Shows already on the
-        list keep what they have.
+        {t('settings.newShowsSub')}
       </p>
       <div className="flex flex-col gap-4">
-        <Field label="Which episodes to get" hint="Specials are always left out.">
+        <Field label={t('add.which')} hint={t('settings.specialsOut')}>
           {(id) => <Select id={id} value={d.data.monitor} onChange={(v) => save.mutate({ monitor: v })} options={monitorOptions(d.data.recent)} />}
         </Field>
         {d.data.monitor === 'recent' && (
           <NumberField
-            label="How many seasons"
+            label={t('add.howMany')}
             value={d.data.recent}
             max={99}
             busy={save.isPending}
             onSave={(v) => save.mutate({ recent: v })}
-            hint="Counts seasons that have started airing; seasons still to come are always watched. A show with this many seasons or fewer gets every season."
+            hint={t('settings.howManyHint')}
           />
         )}
         <ErrorNote error={save.error} />
@@ -309,6 +344,7 @@ function NewShows() {
 // RecycleFolders shows the copies upgrades replaced, set aside in each
 // library's .recycle folder, and frees their space.
 function RecycleFolders() {
+  const { t } = useTranslation()
   const qc = useQueryClient()
   const recycle = useQuery({ queryKey: ['recycle'], queryFn: () => get<Recycle>('/recycle') })
   const [confirm, setConfirm] = useState(false)
@@ -326,10 +362,9 @@ function RecycleFolders() {
   const files = folders.reduce((n, f) => n + f.count, 0)
   return (
     <Card>
-      <h2 className="mb-1 font-display text-lg font-semibold">Recycle folders</h2>
+      <h2 className="mb-1 font-display text-lg font-semibold">{t('settings.recycle')}</h2>
       <p className="mb-4 text-sm text-muted">
-        When a better copy replaces one, the old copy is set aside in a <code>.recycle</code> folder in its library folder, by the day it was replaced, rather than deleted. To keep one,
-        move it out of there yourself before it's deleted. These copies still take space until they're deleted.
+        <Trans i18nKey="settings.recycleSub" components={{ code: <code /> }} />
       </p>
       {recycle.isPending ? (
         <Spinner />
@@ -338,57 +373,54 @@ function RecycleFolders() {
       ) : (
         <div className="flex flex-col gap-4">
           {folders.length === 0 ? (
-            <p className="text-sm">Nothing has been set aside yet.</p>
+            <p className="text-sm">{t('settings.nothingAside')}</p>
           ) : (
             <ul className="flex flex-col divide-y divide-line text-sm">
               {folders.map((f) => (
                 <li key={f.folder} className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2">
                   <code className="min-w-0 flex-1 basis-48 break-all">{f.folder}</code>
                   <span className="text-muted">
-                    {count(f.count, 'file', 'files')}, {bytes(f.size)}
-                    {f.oldest && `, oldest ${day(f.oldest)}`}
+                    {t('scan.files', { count: f.count, size: bytes(f.size) })}
+                    {f.oldest && t('settings.oldest', { date: day(f.oldest) })}
                   </span>
                 </li>
               ))}
             </ul>
           )}
-          <Field label="Delete replaced copies" hint="Box Office checks every few hours and deletes, for good, copies set aside longer than this.">
+          <Field label={t('settings.deleteReplaced')} hint={t('settings.deleteReplacedHint')}>
             {(id) => (
               <Select
                 id={id}
                 value={recycle.data.keepDays}
                 onChange={(v) => keep.mutate(Number(v))}
                 options={[
-                  { value: 0, label: 'Never (empty them yourself)' },
-                  { value: 7, label: 'After 7 days' },
-                  { value: 14, label: 'After 14 days' },
-                  { value: 30, label: 'After 30 days' },
-                  { value: 90, label: 'After 90 days' },
-                  ...([0, 7, 14, 30, 90].includes(recycle.data.keepDays) ? [] : [{ value: recycle.data.keepDays, label: `After ${recycle.data.keepDays} days` }]),
+                  { value: 0, label: t('settings.never') },
+                  ...[7, 14, 30, 90].map((n) => ({ value: n, label: t('settings.after', { count: n }) })),
+                  ...([0, 7, 14, 30, 90].includes(recycle.data.keepDays) ? [] : [{ value: recycle.data.keepDays, label: t('settings.after', { count: recycle.data.keepDays }) }]),
                 ]}
               />
             )}
           </Field>
           <div>
             <Button variant="danger" disabled={total === 0} onClick={() => setConfirm(true)}>
-              <Trash2 className="size-4" aria-hidden /> Empty recycle folders{total > 0 && ` (${bytes(total)})`}
+              <Trash2 className="size-4" aria-hidden /> {t('settings.empty')}{total > 0 && ` (${bytes(total)})`}
             </Button>
           </div>
           <ErrorNote error={keep.error} />
         </div>
       )}
       {confirm && (
-        <Modal title="Empty the recycle folders?" onClose={() => setConfirm(false)}>
+        <Modal title={t('settings.emptyTitle')} onClose={() => setConfirm(false)}>
           <p className="text-sm">
-            This deletes {count(files, 'replaced copy', 'replaced copies')} ({bytes(total)}) for good, freeing the space. They can't be got back. The copies in your library aren't touched.
+            {t('settings.emptyBody', { count: files, size: bytes(total) })}
           </p>
           <ErrorNote error={empty.error} />
           <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
             <Button variant="ghost" onClick={() => setConfirm(false)}>
-              Keep them
+              {t('dlBulk.keep')}
             </Button>
             <Button variant="danger" busy={empty.isPending} onClick={() => empty.mutate()}>
-              <Trash2 className="size-4" aria-hidden /> Delete {bytes(total)}
+              <Trash2 className="size-4" aria-hidden /> {t('remove.delete', { size: bytes(total) })}
             </Button>
           </div>
         </Modal>
@@ -400,6 +432,7 @@ function RecycleFolders() {
 // SuggestedFolders offers, with one click, the folders Box Office found
 // where a media type's library is usually mounted.
 function SuggestedFolders({ kind, type }: { kind: RootKind; type: MediaType }) {
+  const { t } = useTranslation()
   const qc = useQueryClient()
   const add = useMutation({
     mutationFn: (path: string) => post('/rootfolders', { kind, path }),
@@ -410,7 +443,7 @@ function SuggestedFolders({ kind, type }: { kind: RootKind; type: MediaType }) {
   })
   return (
     <div className="mt-2 text-sm">
-      <p className="mb-2">Box Office found {type.suggested.length === 1 ? 'a folder that looks like' : 'folders that look like'} your {type.name.toLowerCase()} library:</p>
+      <p className="mb-2">{t(type.suggested.length === 1 ? 'settings.foundOne' : 'settings.foundMany', { name: typeName(type) })}</p>
       <div className="flex flex-wrap gap-2">
         {type.suggested.map((p) => (
           <Button key={p} busy={add.isPending && add.variables === p} onClick={() => add.mutate(p)}>
@@ -424,6 +457,7 @@ function SuggestedFolders({ kind, type }: { kind: RootKind; type: MediaType }) {
 }
 
 function FolderPicker({ kind, title, onClose }: { kind: RootKind; title: string; onClose: () => void }) {
+  const { t } = useTranslation()
   const qc = useQueryClient()
   const [path, setPath] = useState('/')
   const [typed, setTyped] = useState('/')
@@ -441,9 +475,9 @@ function FolderPicker({ kind, title, onClose }: { kind: RootKind; title: string;
     setTyped(p)
   }
   return (
-    <Modal title={`Add a ${title === 'TV' ? title : title.toLowerCase()} root folder`} onClose={onClose}>
+    <Modal title={title} onClose={onClose}>
       <div className="flex flex-col gap-3">
-        <Input aria-label="Folder" value={typed} onChange={(e) => setTyped(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && go(typed)} />
+        <Input aria-label={t('files.folder')} value={typed} onChange={(e) => setTyped(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && go(typed)} />
         <ul className="max-h-72 overflow-y-auto rounded-md border border-line text-sm">
           {list.data?.parent && (
             <li>
@@ -463,10 +497,10 @@ function FolderPicker({ kind, title, onClose }: { kind: RootKind; title: string;
         <ErrorNote error={list.error || add.error} />
         <div className="flex justify-end gap-2">
           <Button variant="ghost" onClick={onClose}>
-            Cancel
+            {t('common.cancel')}
           </Button>
           <Button variant="primary" busy={add.isPending} onClick={() => add.mutate()}>
-            Add this folder
+            {t('settings.addFolder')}
           </Button>
         </div>
       </div>
@@ -475,6 +509,7 @@ function FolderPicker({ kind, title, onClose }: { kind: RootKind; title: string;
 }
 
 function Profiles() {
+  const { t } = useTranslation()
   const profiles = useProfiles()
   const qualities = useQualities()
   const [editing, setEditing] = useState<Profile | 'new' | null>(null)
@@ -482,9 +517,9 @@ function Profiles() {
   return (
     <Card>
       <div className="mb-3 flex items-center justify-between">
-        <h2 className="font-display text-lg font-semibold">Quality profiles</h2>
+        <h2 className="font-display text-lg font-semibold">{t('settings.profiles')}</h2>
         <Button variant="ghost" onClick={() => setEditing('new')}>
-          <Plus className="size-4" aria-hidden /> New
+          <Plus className="size-4" aria-hidden /> {t('settings.newProfile')}
         </Button>
       </div>
       <ul className="flex flex-col divide-y divide-line">
@@ -496,17 +531,16 @@ function Profiles() {
                 <span>
                   <span className="font-medium">{p.name}</span>
                   <span className="block text-xs text-muted">
-                    Built in. Box Office never searches for, downloads, upgrades, replaces or deletes the files of titles on it. Put a title on it from its page, or many at once with
-                    Select on Movies or Shows.
+                    {t('settings.lockedProfile')}
                   </span>
                 </span>
               </div>
             ) : (
-            <button className="w-full py-2 text-left text-sm hover:text-marquee" onClick={() => setEditing(p)}>
+            <button className="w-full py-2 text-start text-sm hover:text-marquee" onClick={() => setEditing(p)}>
               <span className="font-medium">{p.name}</span>
               <span className="block text-xs text-muted">
-                {p.allowed.length} qualities, good enough at {name(p.cutoff)}
-                {p.upgrade ? ', upgrades on' : ''}
+                {t('settings.profileSummary', { count: p.allowed.length, cutoff: name(p.cutoff) })}
+                {p.upgrade ? t('settings.upgradesOn') : ''}
               </span>
             </button>
             )}
@@ -519,6 +553,7 @@ function Profiles() {
 }
 
 function ProfileEditor({ profile, onClose }: { profile: Profile | null; onClose: () => void }) {
+  const { t } = useTranslation()
   const qc = useQueryClient()
   const qualities = useQualities()
   const [name, setName] = useState(profile?.name ?? '')
@@ -539,11 +574,11 @@ function ProfileEditor({ profile, onClose }: { profile: Profile | null; onClose:
   const remove = useMutation({ mutationFn: () => del(`/profiles/${profile!.id}`), onSuccess: done })
   const toggle = (id: number) => setAllowed(allowed.includes(id) ? allowed.filter((x) => x !== id) : [...allowed, id])
   return (
-    <Modal title={profile ? `Edit ${profile.name}` : 'New quality profile'} onClose={onClose}>
+    <Modal title={profile ? t('settings.edit', { name: profile.name }) : t('settings.newProfileTitle')} onClose={onClose}>
       <div className="flex flex-col gap-4">
-        <Field label="Name">{(id) => <Input id={id} value={name} onChange={(e) => setName(e.target.value)} />}</Field>
+        <Field label={t('alerts.name')}>{(id) => <Input id={id} value={name} onChange={(e) => setName(e.target.value)} />}</Field>
         <div>
-          <div className="mb-2 text-sm font-medium">Qualities, worst to best</div>
+          <div className="mb-2 text-sm font-medium">{t('settings.qualities')}</div>
           <ul className="grid grid-cols-2 gap-1.5 text-sm">
             {qualities.data?.map((q) => (
               <li key={q.id} className="flex items-center gap-2">
@@ -553,25 +588,25 @@ function ProfileEditor({ profile, onClose }: { profile: Profile | null; onClose:
                 </label>
                 {allowed.includes(q.id) && (
                   <button onClick={() => setCutoff(q.id)} className={`text-xs ${cutoff === q.id ? 'font-semibold text-marquee' : 'text-muted hover:text-ink'}`}>
-                    {cutoff === q.id ? 'good enough' : 'set as good enough'}
+                    {cutoff === q.id ? t('settings.goodEnough') : t('settings.setGoodEnough')}
                   </button>
                 )}
               </li>
             ))}
           </ul>
         </div>
-        <Toggle checked={upgrade} onChange={setUpgrade} label="Upgrade until the good-enough quality" />
+        <Toggle checked={upgrade} onChange={setUpgrade} label={t('settings.upgradeUntil')} />
         <ErrorNote error={save.error || remove.error} />
         <div className="flex justify-between gap-2">
           {profile ? (
             <Button variant="danger" busy={remove.isPending} onClick={() => remove.mutate()}>
-              Delete
+              {t('settings.delete')}
             </Button>
           ) : (
             <span />
           )}
           <Button variant="primary" busy={save.isPending} disabled={!name || allowed.length === 0} onClick={() => save.mutate()}>
-            Save
+            {t('common.save')}
           </Button>
         </div>
       </div>
@@ -580,6 +615,7 @@ function ProfileEditor({ profile, onClose }: { profile: Profile | null; onClose:
 }
 
 function Account() {
+  const { t } = useTranslation()
   const [current, setCurrent] = useState('')
   const [next, setNext] = useState('')
   const change = useMutation({
@@ -588,15 +624,15 @@ function Account() {
   })
   return (
     <Card>
-      <h2 className="mb-4 font-display text-lg font-semibold">Your password</h2>
+      <h2 className="mb-4 font-display text-lg font-semibold">{t('settings.password')}</h2>
       <div className="flex flex-col gap-3">
-        <Field label="Current password">{(id) => <Input id={id} type="password" autoComplete="current-password" value={current} onChange={(e) => setCurrent(e.target.value)} />}</Field>
-        <Field label="New password" hint="At least 8 characters. Every device signs in again.">
+        <Field label={t('settings.current')}>{(id) => <Input id={id} type="password" autoComplete="current-password" value={current} onChange={(e) => setCurrent(e.target.value)} />}</Field>
+        <Field label={t('settings.new')} hint={t('settings.newHint')}>
           {(id) => <Input id={id} type="password" autoComplete="new-password" value={next} onChange={(e) => setNext(e.target.value)} />}
         </Field>
         <ErrorNote error={change.error} />
         <Button className="self-end" busy={change.isPending} disabled={!current || next.length < 8} onClick={() => change.mutate()}>
-          Change password
+          {t('settings.change')}
         </Button>
       </div>
     </Card>
@@ -608,7 +644,11 @@ function System() {
   if (!s.data) return null
   return (
     <p className="mt-8 text-xs text-muted">
-      Box Office {s.data.version} on {s.data.os}, {s.data.go}, {s.data.database === 'postgres' ? 'PostgreSQL' : 'SQLite'} · data in <code>{s.data.dataDir}</code> · running since {day(s.data.startedAt)}
+      <Trans
+        i18nKey="settings.system"
+        values={{ version: s.data.version, os: s.data.os, go: s.data.go, db: s.data.database === 'postgres' ? 'PostgreSQL' : 'SQLite', dir: s.data.dataDir, since: day(s.data.startedAt) }}
+        components={{ code: <code /> }}
+      />
     </p>
   )
 }

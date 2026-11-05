@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import { CalendarDays } from 'lucide-react'
@@ -5,9 +6,10 @@ import { get, type Upcoming } from '../api'
 import { episodeCode, relativeDay } from '../format'
 import { Badge, Empty, ErrorNote, Heading, Poster, Spinner } from '../ui'
 
-const releaseLabel = { cinemas: 'In cinemas', digital: 'Digital release', physical: 'On disc', airs: 'Airs' }
+const releaseLabel = { cinemas: 'calendar.cinemas', digital: 'calendar.digital', physical: 'calendar.physical', airs: 'calendar.airs' }
 
 export function Calendar() {
+  const { t } = useTranslation()
   const from = new Date()
   from.setDate(from.getDate() - 3)
   const to = new Date(from)
@@ -22,10 +24,10 @@ export function Calendar() {
   }
   return (
     <>
-      <Heading title="Coming up" sub="Releases and episodes for the next six weeks, for what's on the list." />
+      <Heading title={t('nav.calendar')} sub={t('calendar.sub')} />
       <ErrorNote error={cal.error} />
       {cal.isPending && <Spinner />}
-      {cal.data?.length === 0 && <Empty icon={<CalendarDays className="size-8" />} title="Nothing coming up">Add movies and shows, and their release dates show up here.</Empty>}
+      {cal.data?.length === 0 && <Empty icon={<CalendarDays className="size-8" />} title={t('calendar.nothing')}>{t('calendar.nothingBody')}</Empty>}
       <div className="flex flex-col gap-8">
         {[...days.entries()].map(([k, items]) => (
           <section key={k}>
@@ -38,9 +40,9 @@ export function Calendar() {
                     <div className="min-w-0">
                       <div className="truncate font-medium">{u.kind === 'episode' ? u.show : u.title}</div>
                       <div className="truncate text-sm text-muted">
-                        {u.kind === 'episode' ? `${episodeCode(u.season ?? 0, u.episode ?? 0)} · ${u.title}` : releaseLabel[u.release]}
+                        {u.kind === 'episode' ? `${episodeCode(u.season ?? 0, u.episode ?? 0)} · ${u.title}` : t(releaseLabel[u.release])}
                       </div>
-                      <div className="mt-1">{u.hasFile ? <Badge tone="ok">On disk</Badge> : <Badge tone="gold">Wanted</Badge>}</div>
+                      <div className="mt-1">{u.hasFile ? <Badge tone="ok">{t('common.onDisk')}</Badge> : <Badge tone="gold">{t('common.wanted')}</Badge>}</div>
                     </div>
                   </Link>
                 </li>

@@ -1,3 +1,5 @@
+import i18n from "../i18n";
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -40,35 +42,35 @@ const applies: Record<
   queue: [
     [
       "pause",
-      "Pause",
+      "dlBulk.pause",
       (d) => d.status === "queued" || d.status === "downloading",
     ],
-    ["resume", "Resume", (d) => d.status === "paused"],
+    ["resume", "dlBulk.resume", (d) => d.status === "paused"],
     [
       "top",
-      "To the top",
+      "dlBulk.top",
       (d) => d.status === "queued" || d.status === "paused",
     ],
     [
       "bottom",
-      "To the bottom",
+      "dlBulk.bottom",
       (d) => d.status === "queued" || d.status === "paused",
     ],
-    ["remove", "Remove", (d) => !working(d)],
+    ["remove", "dlBulk.remove", (d) => !working(d)],
   ],
   history: [
     [
       "import",
-      "Move into library",
+      "dlBulk.import",
       (d) => d.status === "completed" && !!d.canImport,
     ],
-    ["reprocess", "Unpack again", (d) => !!d.canReprocess],
+    ["reprocess", "dlBulk.reprocess", (d) => !!d.canReprocess],
     [
       "retry",
-      "Download again",
+      "dlBulk.retry",
       (d) => d.status !== "completed" && !d.quarantined,
     ],
-    ["remove", "Remove", () => true],
+    ["remove", "dlBulk.remove", () => true],
   ],
 };
 
@@ -95,6 +97,7 @@ export function SelectAll({
   onChange: (ids: Set<number>) => void;
   paged?: boolean;
 }) {
+  const { t } = useTranslation();
   const n = items.filter((d) => picked.has(d.id)).length;
   return (
     <label className="flex min-h-9 cursor-pointer items-center gap-2 text-sm">
@@ -109,7 +112,7 @@ export function SelectAll({
           onChange(new Set(e.target.checked ? items.map((d) => d.id) : []))
         }
       />
-      {n > 0 ? `${n} selected` : paged ? "Select this page" : "Select all"}
+      {n > 0 ? t("quarantine.selected", { count: n }) : paged ? t("dlBulk.selectPage") : t("quarantine.selectAll")}
     </label>
   );
 }
@@ -124,6 +127,7 @@ export function PickBox({
   picked: boolean;
   onToggle: () => void;
 }) {
+  const { t } = useTranslation();
   return (
     <label className="-m-2 flex shrink-0 cursor-pointer items-center p-2">
       <input
@@ -131,7 +135,7 @@ export function PickBox({
         className="size-5 accent-[var(--marquee)]"
         checked={picked}
         onChange={onToggle}
-        aria-label={`Select ${d.name}`}
+        aria-label={t("quarantine.selectName", { name: d.name })}
       />
     </label>
   );
@@ -150,6 +154,7 @@ export function BulkBar({
   picked: Set<number>;
   onDone: () => void;
 }) {
+  const { t } = useTranslation();
   const qc = useQueryClient();
   const [removing, setRemoving] = useState(false);
   const [note, setNote] = useState("");
@@ -183,12 +188,16 @@ export function BulkBar({
       const name = (id: number) =>
         items.find((d) => d.id === id)?.name ?? `#${id}`;
       setNote(
-        `${r.done > 0 ? `${r.done} done. ` : ""}${r.failed.length} couldn't: ` +
-          r.failed
-            .slice(0, 3)
-            .map((f) => `${name(f.id)} (${f.error})`)
-            .join("; ") +
-          (r.failed.length > 3 ? `, and ${r.failed.length - 3} more` : ""),
+        `${r.done > 0 ? `${i18n.t("dlBulk.done", { count: r.done })} ` : ""}` +
+          i18n.t("quarantine.couldnt", {
+            count: r.failed.length,
+            which:
+              r.failed
+                .slice(0, 3)
+                .map((f) => `${name(f.id)} (${f.error})`)
+                .join("; ") +
+              (r.failed.length > 3 ? i18n.t("dlBulk.andMore", { count: r.failed.length - 3 }) : ""),
+          }),
       );
     },
   });
@@ -204,13 +213,13 @@ export function BulkBar({
     >
       <div className="mx-auto max-w-7xl px-4 py-3">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="mr-auto text-sm font-medium sm:mr-2">
-            {chosen.length} selected
+          <span className="me-auto text-sm font-medium sm:me-2">
+            {t("quarantine.selected", { count: chosen.length })}
           </span>
           <button
             onClick={onDone}
-            title="Stop selecting"
-            aria-label="Stop selecting"
+            title={t("quarantine.stop")}
+            aria-label={t("quarantine.stop")}
             className="rounded-md p-2 text-muted hover:bg-line hover:text-ink sm:order-last"
           >
             <X className="size-5" />
@@ -234,7 +243,7 @@ export function BulkBar({
                   }
                 >
                   {!busy && icons[action]}
-                  {label}
+                  {t(label)}
                   {n < chosen.length && (
                     <span className="text-muted">({n})</span>
                   )}
@@ -287,10 +296,11 @@ function BulkRemove({
   );
   // Off the queue they're blocked unless you say otherwise, as for one.
   const [block, setBlock] = useState(queue);
+  const { t } = useTranslation();
   const forTitles = items.some((d) => !!d.kind);
   return (
     <Modal
-      title={`Remove ${items.length} download${items.length === 1 ? "" : "s"}`}
+      title={t("dlBulk.removeTitle", { count: items.length })}
       onClose={onClose}
     >
       <ul className="mb-4 max-h-48 overflow-y-auto text-sm">
@@ -307,9 +317,9 @@ function BulkRemove({
             onChange={setFiles}
             label={
               <>
-                Also delete their files in the downloads folder
+                {t("dlBulk.alsoDelete")}
                 <span className="block text-xs text-muted">
-                  Files already moved into your library are never touched.
+                  {t("dlBulk.neverTouched")}
                 </span>
               </>
             }
@@ -325,12 +335,12 @@ function BulkRemove({
       </div>
       {held > 0 && (
         <p className="mt-3 text-sm text-muted">
-          Files in quarantine stay there; delete them under Quarantine below.
+          {t("dlBulk.heldStay")}
         </p>
       )}
       <ErrorNote error={error} />
       <div className="mt-5 flex justify-end gap-2">
-        <Button onClick={onClose}>Keep them</Button>
+        <Button onClick={onClose}>{t("dlBulk.keep")}</Button>
         <Button
           variant="danger"
           busy={busy}
@@ -342,7 +352,7 @@ function BulkRemove({
             )
           }
         >
-          Remove
+          {t("dlBulk.remove")}
         </Button>
       </div>
     </Modal>
@@ -360,16 +370,16 @@ export function BlockToggle({
   onChange: (v: boolean) => void;
   many?: boolean;
 }) {
+  const { t } = useTranslation();
   return (
     <Toggle
       checked={checked}
       onChange={onChange}
       label={
         <>
-          Add {many ? "these releases" : "this release"} to the blocklist
+          {many ? t("dlBulk.blockMany") : t("dlBulk.blockOne")}
           <span className="block text-xs text-muted">
-            Searches skip a blocked release, so it isn't grabbed again. Turn
-            this off to allow it later.
+            {t("dlBulk.blockHint")}
           </span>
         </>
       }

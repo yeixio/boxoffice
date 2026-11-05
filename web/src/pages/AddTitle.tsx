@@ -1,3 +1,4 @@
+import { Trans, useTranslation } from 'react-i18next'
 import { useEffect, useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate } from 'react-router-dom'
@@ -10,12 +11,13 @@ type Kind = 'movie' | 'series'
 
 // AddTitle finds a movie or show on TMDB and adds it to the list.
 export function AddTitle({ kind, onClose }: { kind: Kind; onClose: () => void }) {
+  const { t } = useTranslation()
   const [term, setTerm] = useState('')
   const [q, setQ] = useState('')
   const [picked, setPicked] = useState<LookupMovie | LookupShow | null>(null)
   useEffect(() => {
-    const t = setTimeout(() => setQ(term.trim()), 350)
-    return () => clearTimeout(t)
+    const timer = setTimeout(() => setQ(term.trim()), 350)
+    return () => clearTimeout(timer)
   }, [term])
   const path = kind === 'movie' ? '/lookup/movies' : '/lookup/series'
   const results = useQuery({
@@ -23,20 +25,19 @@ export function AddTitle({ kind, onClose }: { kind: Kind; onClose: () => void })
     queryFn: () => get<(LookupMovie | LookupShow)[]>(`${path}?q=${encodeURIComponent(q)}`),
     enabled: q.length > 1,
   })
-  const what = kind === 'movie' ? 'movie' : 'show'
   return (
-    <Modal title={picked ? `Add ${picked.title}` : `Add a ${what}`} onClose={onClose} wide>
+    <Modal title={picked ? t('add.title', { title: picked.title }) : kind === 'movie' ? t('add.movie') : t('add.show')} onClose={onClose} wide>
       {picked ? (
         <AddOptions kind={kind} title={picked} onBack={() => setPicked(null)} onDone={onClose} />
       ) : (
         <div className="flex flex-col gap-4">
           <div className="relative">
-            <Search className="pointer-events-none absolute left-3 top-2.5 size-4 text-muted" aria-hidden />
-            <Input autoFocus className="pl-9" placeholder={kind === 'movie' ? 'Title, "Title 1999", tmdb:603 or an IMDb id' : 'Title, tmdb:95396 or tvdb:371980'} value={term} onChange={(e) => setTerm(e.target.value)} />
+            <Search className="pointer-events-none absolute start-3 top-2.5 size-4 text-muted" aria-hidden />
+            <Input autoFocus className="ps-9" placeholder={kind === 'movie' ? t('add.moviePlaceholder') : t('add.showPlaceholder')} value={term} onChange={(e) => setTerm(e.target.value)} />
           </div>
-          {results.isFetching && <Spinner label="Looking" />}
+          {results.isFetching && <Spinner label={t('common.looking')} />}
           <ErrorNote error={results.error} />
-          {results.data?.length === 0 && <p className="text-sm text-muted">TMDB has nothing by that name.</p>}
+          {results.data?.length === 0 && <p className="text-sm text-muted">{t('add.nothing')}</p>}
           <ul className="flex flex-col divide-y divide-line">
             {results.data?.map((r) => (
               <li key={r.tmdbId} className="flex gap-4 py-3">
@@ -50,10 +51,10 @@ export function AddTitle({ kind, onClose }: { kind: Kind; onClose: () => void })
                 <div className="shrink-0 self-center">
                   {r.id ? (
                     <Link className="text-sm font-medium text-marquee" to={`/${kind === 'movie' ? 'movies' : 'shows'}/${r.id}`} onClick={onClose}>
-                      On the list
+                      {t('add.onList')}
                     </Link>
                   ) : (
-                    <Button onClick={() => setPicked(r)}>Pick</Button>
+                    <Button onClick={() => setPicked(r)}>{t('add.pick')}</Button>
                   )}
                 </div>
               </li>
@@ -80,6 +81,7 @@ export function AddOptions({
   onDone: () => void
   onAdded?: (added: Movie | Series) => void
 }) {
+  const { t } = useTranslation()
   const profiles = useProfiles()
   const folders = useRootFolders(kind)
   const qc = useQueryClient()
@@ -110,11 +112,7 @@ export function AddOptions({
   if (!folders.data?.length) {
     return (
       <p className="text-sm">
-        Add a {kind === 'movie' ? 'movie' : 'TV'} root folder under{' '}
-        <Link to="/settings" className="font-medium text-marquee" onClick={onDone}>
-          Settings
-        </Link>{' '}
-        first, so Box Office knows where the files go.
+        <Trans i18nKey={kind === 'movie' ? 'add.noMovieRoot' : 'add.noShowRoot'} components={{ link: <Link to="/settings" className="font-medium text-marquee" onClick={onDone} /> }} />
       </p>
     )
   }
@@ -143,32 +141,32 @@ export function AddOptions({
   return (
     <div className="flex flex-col gap-4">
       <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Quality profile">{(id) => <Select id={id} value={profileId} onChange={(v) => setProfileId(Number(v))} options={(profiles.data ?? []).map((p) => ({ value: p.id, label: p.name }))} />}</Field>
-        <Field label="Root folder">{(id) => <Select id={id} value={root} onChange={setRoot} options={folders.data.map((f) => ({ value: f.path, label: f.path }))} />}</Field>
+        <Field label={t('add.profile')}>{(id) => <Select id={id} value={profileId} onChange={(v) => setProfileId(Number(v))} options={(profiles.data ?? []).map((p) => ({ value: p.id, label: p.name }))} />}</Field>
+        <Field label={t('add.root')}>{(id) => <Select id={id} value={root} onChange={setRoot} options={folders.data.map((f) => ({ value: f.path, label: f.path }))} />}</Field>
         {kind === 'series' && (
-          <Field label="Which episodes to get" hint="Specials are left out. You can switch any season on or off later from the show's page.">
+          <Field label={t('add.which')} hint={t('add.whichHint')}>
             {(id) => <Select id={id} value={monitor} onChange={setMonitor} options={monitorOptions(seasons)} />}
           </Field>
         )}
         {kind === 'series' && monitor === 'recent' && (
-          <Field label="How many seasons" hint="Counts seasons that have started airing. A show with this many or fewer gets every season.">
+          <Field label={t('add.howMany')} hint={t('add.howManyHint')}>
             {(id) => <Input id={id} type="number" min={1} max={99} value={recent} onChange={(e) => setRecent(e.target.value)} className="max-w-32" />}
           </Field>
         )}
       </div>
-      <Toggle checked={monitored} onChange={setMonitored} label="Watch for it, and get upgrades as the profile allows" />
-      <Toggle checked={search} onChange={setSearch} label="Start looking now" />
+      <Toggle checked={monitored} onChange={setMonitored} label={t('add.watch')} />
+      <Toggle checked={search} onChange={setSearch} label={t('add.searchNow')} />
       <ErrorNote error={error} />
       <div className="flex justify-between">
         {onBack ? (
           <Button variant="ghost" onClick={onBack}>
-            Back
+            {t('common.back')}
           </Button>
         ) : (
           <span />
         )}
         <Button variant="primary" busy={busy} onClick={add}>
-          Add {kind === 'movie' ? 'movie' : 'show'}
+          {kind === 'movie' ? t('movies.add') : t('shows.add')}
         </Button>
       </div>
     </div>

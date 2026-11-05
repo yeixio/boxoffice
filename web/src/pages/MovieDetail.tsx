@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -7,11 +8,12 @@ import { DeleteFiles, RemoveTitle } from '../RemoveFiles'
 import { AutoUpgradeField } from '../AutoUpgrade'
 import { LockedNote } from '../Bulk'
 import { get, patch, post, type Movie } from '../api'
-import { bytes, day } from '../format'
+import { bytes, day, runtime } from '../format'
 import { qualityName, useProfiles, useQualities } from '../hooks'
 import { Badge, Button, Card, ErrorNote, Field, Poster, Select, Spinner, Toggle } from '../ui'
 
 export function MovieDetail() {
+  const { t } = useTranslation()
   const id = Number(useParams().id)
   const qc = useQueryClient()
   const nav = useNavigate()
@@ -33,7 +35,7 @@ export function MovieDetail() {
   const action = useMutation({
     mutationFn: (what: 'search' | 'refresh') => post(`/movies/${id}/${what}`),
     onSuccess: (_, what) => {
-      setNote(what === 'search' ? 'Looking for it now; see Activity.' : 'Refreshing its details from TMDB.')
+      setNote(what === 'search' ? t('title.lookingNow') : t('title.refreshing'))
       setTimeout(() => qc.invalidateQueries({ queryKey: ['movie', id] }), 2500)
     },
   })
@@ -47,9 +49,9 @@ export function MovieDetail() {
   const m = movie.data
   const locked = !!profiles.data?.find((p) => p.id === m.profileId)?.locked
   const dates = [
-    ['In cinemas', m.inCinemas],
-    ['Digital', m.digitalRelease],
-    ['On disc', m.physicalRelease],
+    [t('title.inCinemas'), m.inCinemas],
+    [t('title.digital'), m.digitalRelease],
+    [t('title.onDisc'), m.physicalRelease],
   ].filter(([, d]) => d) as [string, string][]
 
   return (
@@ -66,8 +68,8 @@ export function MovieDetail() {
             {m.title} {m.year ? <span className="font-normal text-muted">{m.year}</span> : null}
           </h1>
           <div className="mt-2 flex flex-wrap gap-2">
-            {m.file ? <Badge tone="ok">On disk</Badge> : m.monitored ? <Badge tone="gold">Wanted</Badge> : <Badge>Not watched for</Badge>}
-            {m.runtime ? <Badge>{m.runtime} min</Badge> : null}
+            {m.file ? <Badge tone="ok">{t('common.onDisk')}</Badge> : m.monitored ? <Badge tone="gold">{t('common.wanted')}</Badge> : <Badge>{t('filter.notWatched')}</Badge>}
+            {m.runtime ? <Badge>{runtime(m.runtime)}</Badge> : null}
             {m.status && <Badge>{m.status}</Badge>}
           </div>
           {m.overview && <p className="mt-4 max-w-3xl leading-relaxed">{m.overview}</p>}
@@ -86,18 +88,18 @@ export function MovieDetail() {
             {!locked && (
               <>
                 <Button variant="primary" busy={action.isPending && action.variables === 'search'} onClick={() => action.mutate('search')}>
-                  <Search className="size-4" aria-hidden /> Look for it
+                  <Search className="size-4" aria-hidden /> {t('title.lookFor')}
                 </Button>
                 <Button onClick={() => setReleases(true)}>
-                  <ListFilter className="size-4" aria-hidden /> Choose a release
+                  <ListFilter className="size-4" aria-hidden /> {t('title.choose')}
                 </Button>
               </>
             )}
             <Button busy={action.isPending && action.variables === 'refresh'} onClick={() => action.mutate('refresh')}>
-              <RefreshCw className="size-4" aria-hidden /> Refresh details
+              <RefreshCw className="size-4" aria-hidden /> {t('title.refresh')}
             </Button>
             <Button variant="danger" onClick={() => setConfirmDelete(true)}>
-              <Trash2 className="size-4" aria-hidden /> Remove
+              <Trash2 className="size-4" aria-hidden /> {t('title.remove')}
             </Button>
           </div>
           {note && <p className="mt-3 text-sm text-muted">{note}</p>}
@@ -108,41 +110,41 @@ export function MovieDetail() {
 
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
         <Card>
-          <h2 className="mb-4 font-display text-lg font-semibold">How Box Office handles it</h2>
+          <h2 className="mb-4 font-display text-lg font-semibold">{t('title.handles')}</h2>
           <div className="flex flex-col gap-4">
-            <Toggle checked={m.monitored} onChange={(v) => edit.mutate({ monitored: v })} label="Watch for it" />
-            <Field label="Quality profile">
+            <Toggle checked={m.monitored} onChange={(v) => edit.mutate({ monitored: v })} label={t('title.watch')} />
+            <Field label={t('add.profile')}>
               {(fid) => <Select id={fid} value={m.profileId} onChange={(v) => edit.mutate({ profileId: Number(v) })} options={(profiles.data ?? []).map((p) => ({ value: p.id, label: p.name }))} />}
             </Field>
             {!locked && <AutoUpgradeField value={m.autoUpgrade} onChange={(v) => edit.mutate({ autoUpgrade: v as Movie['autoUpgrade'] })} upgradeOK={!!profiles.data?.find((p) => p.id === m.profileId)?.upgrade} />}
             <div className="text-sm">
-              <div className="text-muted">Folder</div>
+              <div className="text-muted">{t('title.folder')}</div>
               <code className="break-all">{m.path}</code>
             </div>
           </div>
         </Card>
         <Card>
-          <h2 className="mb-4 font-display text-lg font-semibold">File</h2>
+          <h2 className="mb-4 font-display text-lg font-semibold">{t('title.file')}</h2>
           {m.file ? (
             <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">
-              <dt className="text-muted">Path</dt>
+              <dt className="text-muted">{t('title.path')}</dt>
               <dd className="break-all font-mono text-xs">{m.file.path}</dd>
-              <dt className="text-muted">Quality</dt>
+              <dt className="text-muted">{t('title.quality')}</dt>
               <dd>{qualityName(qualities.data, m.file.quality)}</dd>
-              <dt className="text-muted">Size</dt>
+              <dt className="text-muted">{t('title.size')}</dt>
               <dd>{bytes(m.file.size)}</dd>
-              <dt className="text-muted">Added</dt>
+              <dt className="text-muted">{t('title.added')}</dt>
               <dd>{day(m.file.addedAt)}</dd>
               {!locked && (
                 <dd className="col-span-2 mt-2">
                   <Button variant="danger" onClick={() => setDeleteFile(true)}>
-                    <Trash2 className="size-4" aria-hidden /> Delete file from disk
+                    <Trash2 className="size-4" aria-hidden /> {t('title.deleteFile')}
                   </Button>
                 </dd>
               )}
             </dl>
           ) : (
-            <p className="text-sm text-muted">Not on disk yet.</p>
+            <p className="text-sm text-muted">{t('title.notOnDisk')}</p>
           )}
         </Card>
       </div>
@@ -151,7 +153,7 @@ export function MovieDetail() {
       {deleteFile && (
         <DeleteFiles<Movie>
           path={`/movies/${m.id}/file`}
-          title={`${m.title}'s file`}
+          title={t('title.filesOf', { title: m.title })}
           what="movie"
           onClose={() => setDeleteFile(false)}
           onDone={(next) => {

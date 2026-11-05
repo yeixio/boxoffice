@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Link, useSearchParams } from 'react-router-dom'
@@ -18,51 +19,52 @@ export function useHealth() {
 export const needsAttention = (h?: HealthData) => h?.issues.filter((i) => i.level !== 'notice').length ?? 0
 
 const look = {
-  error: { icon: XCircle, tone: 'text-bad', label: 'Not working' },
-  warning: { icon: AlertTriangle, tone: 'text-gold', label: 'Needs a look' },
-  notice: { icon: Info, tone: 'text-muted', label: 'Good to know' },
+  error: { icon: XCircle, tone: 'text-bad', label: 'health.error' },
+  warning: { icon: AlertTriangle, tone: 'text-gold', label: 'health.warning' },
+  notice: { icon: Info, tone: 'text-muted', label: 'health.notice' },
 }
 
 // Health has four tabs: the check-up (problems an admin can fix, and how),
 // the server (how busy it is, its disks and what it logged), the log, and
 // alerts.
 const tabs = [
-  { id: 'checkup', label: 'Check-up' },
-  { id: 'server', label: 'Server' },
-  { id: 'log', label: 'Log' },
-  { id: 'alerts', label: 'Alerts' },
+  { id: 'checkup', label: 'health.tabs.checkup' },
+  { id: 'server', label: 'health.tabs.server' },
+  { id: 'log', label: 'health.tabs.log' },
+  { id: 'alerts', label: 'health.tabs.alerts' },
 ] as const
 type Tab = (typeof tabs)[number]['id']
 
 const subs: Record<Tab, string> = {
-  checkup: 'Box Office checks itself for problems you can fix: keys, folders, files, connections, backups and tasks.',
-  server: 'How busy Box Office and its machine are over the last hour, its disks, and the problems it has logged.',
-  log: "What Box Office has been doing, to find out why something happened or didn't.",
-  alerts: 'Hear about problems by email, Discord, ntfy or Home Assistant, and connect Prometheus.',
+  checkup: 'health.subs.checkup',
+  server: 'health.subs.server',
+  log: 'health.subs.log',
+  alerts: 'health.subs.alerts',
 }
 
 export function Health() {
+  const { t } = useTranslation()
   const [params, setParams] = useSearchParams()
-  const tab: Tab = tabs.some((t) => t.id === params.get('tab')) ? (params.get('tab') as Tab) : 'checkup'
+  const tab: Tab = tabs.some((x) => x.id === params.get('tab')) ? (params.get('tab') as Tab) : 'checkup'
   const [search, setSearch] = useState<LogSearch>({ q: '', n: 0 })
-  const go = (t: Tab) => setParams(t === 'checkup' ? {} : { tab: t }, { replace: true })
+  const go = (to: Tab) => setParams(to === 'checkup' ? {} : { tab: to }, { replace: true })
   const showLog = (q: string, level?: LogLevel) => {
     setSearch((s) => ({ q, level, n: s.n + 1 }))
     go('log')
   }
   return (
     <>
-      <Heading title="Health" sub={subs[tab]} actions={tab === 'checkup' ? <CheckAgain /> : undefined} />
-      <div className="mb-6 flex gap-1 overflow-x-auto border-b border-line" role="tablist" aria-label="Health">
-        {tabs.map((t) => (
+      <Heading title={t('nav.health')} sub={t(subs[tab])} actions={tab === 'checkup' ? <CheckAgain /> : undefined} />
+      <div className="mb-6 flex gap-1 overflow-x-auto border-b border-line" role="tablist" aria-label={t('nav.health')}>
+        {tabs.map((x) => (
           <button
-            key={t.id}
+            key={x.id}
             role="tab"
-            aria-selected={tab === t.id}
-            onClick={() => go(t.id)}
-            className={`-mb-px shrink-0 border-b-2 px-3 py-2 text-sm font-medium transition ${tab === t.id ? 'border-marquee text-ink' : 'border-transparent text-muted hover:text-ink'}`}
+            aria-selected={tab === x.id}
+            onClick={() => go(x.id)}
+            className={`-mb-px shrink-0 border-b-2 px-3 py-2 text-sm font-medium transition ${tab === x.id ? 'border-marquee text-ink' : 'border-transparent text-muted hover:text-ink'}`}
           >
-            {t.label}
+            {t(x.label)}
           </button>
         ))}
       </div>
@@ -77,28 +79,30 @@ export function Health() {
 }
 
 function CheckAgain() {
+  const { t } = useTranslation()
   const h = useHealth()
   return (
     <Button busy={h.isFetching} onClick={() => h.refetch()}>
-      <RefreshCw className="size-4" /> Check again
+      <RefreshCw className="size-4" /> {t('health.checkAgain')}
     </Button>
   )
 }
 
 function Checkup() {
+  const { t } = useTranslation()
   const h = useHealth()
   return (
     <>
       <ErrorNote error={h.error} />
-      {h.isPending && <Spinner label="Checking" />}
+      {h.isPending && <Spinner label={t('health.checking')} />}
       {h.data && (
         <>
           {h.data.issues.length === 0 ? (
             <Card className="flex items-center gap-3">
               <CircleCheck className="size-6 text-ok" aria-hidden />
               <div>
-                <div className="font-medium">All good</div>
-                <div className="text-sm text-muted">Nothing needs fixing.</div>
+                <div className="font-medium">{t('health.allGood')}</div>
+                <div className="text-sm text-muted">{t('health.nothing')}</div>
               </div>
             </Card>
           ) : (
@@ -108,7 +112,7 @@ function Checkup() {
               ))}
             </div>
           )}
-          <p className="mt-6 text-xs text-muted">Checked {when(h.data.checked)}.</p>
+          <p className="mt-6 text-xs text-muted">{t('health.checked', { when: when(h.data.checked) })}</p>
         </>
       )}
     </>
@@ -116,19 +120,20 @@ function Checkup() {
 }
 
 function Issue({ issue }: { issue: HealthIssue }) {
+  const { t } = useTranslation()
   const l = look[issue.level]
   const Icon = l.icon
   return (
     <Card>
       <div className="flex gap-3">
-        <Icon className={`mt-0.5 size-5 shrink-0 ${l.tone}`} aria-label={l.label} />
+        <Icon className={`mt-0.5 size-5 shrink-0 ${l.tone}`} aria-label={t(l.label)} />
         <div className="min-w-0 flex-1">
           <h2 className="font-display text-lg font-semibold">{issue.title}</h2>
           <p className="mt-1 text-sm text-muted">{issue.detail}</p>
           {issue.steps.length > 0 && (
             <>
-              <div className="mt-4 text-sm font-medium">How to fix it</div>
-              <ol className="mt-2 flex list-decimal flex-col gap-1 rounded-lg border border-line bg-paper py-3 pl-8 pr-4 text-sm text-muted">
+              <div className="mt-4 text-sm font-medium">{t('health.howToFix')}</div>
+              <ol className="mt-2 flex list-decimal flex-col gap-1 rounded-lg border border-line bg-paper py-3 ps-8 pe-4 text-sm text-muted">
                 {issue.steps.map((s, n) => (
                   <li key={n}>{s}</li>
                 ))}

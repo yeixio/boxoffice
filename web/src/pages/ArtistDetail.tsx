@@ -1,3 +1,4 @@
+import { Trans, useTranslation } from 'react-i18next'
 import { useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -15,6 +16,7 @@ function kindOf(a: Album): string {
 const order = ['Album', 'EP', 'Single', 'Live', 'Compilation', 'Soundtrack', 'Remix']
 
 export function ArtistDetail() {
+  const { t } = useTranslation()
   const id = Number(useParams().id)
   const qc = useQueryClient()
   const nav = useNavigate()
@@ -56,40 +58,40 @@ export function ArtistDetail() {
     <div>
       <h1 className="font-display text-4xl font-bold tracking-tight">{a.name}</h1>
       <div className="mt-2 flex flex-wrap gap-2">
-        {a.monitored ? <Badge tone="gold">{a.wantedAlbums} wanted</Badge> : <Badge>Paused</Badge>}
+        {a.monitored ? <Badge tone="gold">{t('music.wanted', { count: a.wantedAlbums })}</Badge> : <Badge>{t('common.paused')}</Badge>}
         {a.type && <Badge>{a.type}</Badge>}
         {a.country && <Badge>{a.country}</Badge>}
         {a.disambiguation && <Badge>{a.disambiguation}</Badge>}
       </div>
       <p className="mt-3 text-sm text-muted">
-        Files go in <code className="break-all">{a.path}</code>. Searching and downloading music comes in the next Box Office update.
+        <Trans i18nKey="artist.filesGo" values={{ path: a.path }} components={{ code: <code className="break-all" /> }} />
       </p>
       <div className="mt-5 flex flex-wrap gap-2">
         <Button busy={refresh.isPending} onClick={() => refresh.mutate()}>
-          <RefreshCw className="size-4" aria-hidden /> Refresh from MusicBrainz
+          <RefreshCw className="size-4" aria-hidden /> {t('artist.refresh')}
         </Button>
         <Button variant="ghost" onClick={() => setRemoving(true)}>
-          <Trash2 className="size-4" aria-hidden /> Remove
+          <Trash2 className="size-4" aria-hidden /> {t('title.remove')}
         </Button>
       </div>
       <ErrorNote error={refresh.error ?? edit.error ?? album.error} />
 
       <Card className="mt-6">
         <div className="flex flex-col gap-4">
-          <Toggle checked={a.monitored} disabled={edit.isPending} onChange={(monitored) => edit.mutate({ monitored })} label="Watch for new albums from this artist" />
+          <Toggle checked={a.monitored} disabled={edit.isPending} onChange={(monitored) => edit.mutate({ monitored })} label={t('artist.watch')} />
           <div>
-            <p className="mb-2 text-sm font-medium">Kinds of album to get</p>
+            <p className="mb-2 text-sm font-medium">{t('artist.kinds')}</p>
             <AlbumTypePicker value={a.albumTypes} disabled={edit.isPending} onChange={(albumTypes) => edit.mutate({ albumTypes })} />
-            <p className="mt-2 text-xs text-muted">Changing these switches every album of that kind on or off below.</p>
+            <p className="mt-2 text-xs text-muted">{t('artist.kindsHint')}</p>
           </div>
         </div>
       </Card>
 
-      {groups.length === 0 && <p className="mt-6 text-sm text-muted">MusicBrainz lists no albums for {a.name} yet.</p>}
+      {groups.length === 0 && <p className="mt-6 text-sm text-muted">{t('artist.noAlbums', { name: a.name })}</p>}
       {groups.map(([kind, albums]) => (
         <section key={kind} className="mt-8">
           <h2 className="mb-3 font-display text-lg font-semibold">
-            {albumTypeLabels[kind] ?? kind} <span className="font-normal text-muted">{albums.length}</span>
+            {albumTypeLabels[kind] ? t(albumTypeLabels[kind]) : kind} <span className="font-normal text-muted">{albums.length}</span>
           </h2>
           <ul className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
             {albums.map((b) => (
@@ -99,16 +101,16 @@ export function ArtistDetail() {
                   {b.title}
                 </div>
                 <div className="flex items-center justify-between gap-2 text-xs text-muted">
-                  <span>{b.released?.slice(0, 4) || 'No date'}</span>
+                  <span>{b.released?.slice(0, 4) || t('artist.noDate')}</span>
                   <button
                     type="button"
                     disabled={album.isPending}
                     aria-pressed={b.monitored}
-                    aria-label={`${b.monitored ? 'Stop wanting' : 'Want'} ${b.title}`}
+                    aria-label={b.monitored ? t('artist.stopWanting', { title: b.title }) : t('artist.want', { title: b.title })}
                     onClick={() => album.mutate({ id: b.id, monitored: !b.monitored })}
                     className={`rounded-full border px-2 py-1 sm:py-0.5 ${b.monitored ? 'border-gold text-ink' : 'border-line hover:text-ink'}`}
                   >
-                    {b.monitored ? 'Wanted' : 'Not wanted'}
+                    {b.monitored ? t('common.wanted') : t('artist.notWanted')}
                   </button>
                 </div>
               </li>
@@ -118,15 +120,15 @@ export function ArtistDetail() {
       ))}
 
       {removing && (
-        <Modal title={`Remove ${a.name}?`} onClose={() => setRemoving(false)}>
-          <p className="text-sm">Box Office stops following {a.name} and forgets their albums. Files already in the music folder stay where they are.</p>
+        <Modal title={t('artist.removeTitle', { name: a.name })} onClose={() => setRemoving(false)}>
+          <p className="text-sm">{t('artist.removeBody', { name: a.name })}</p>
           <ErrorNote error={remove.error} />
           <div className="mt-4 flex justify-end gap-2">
             <Button variant="ghost" onClick={() => setRemoving(false)}>
-              Keep
+              {t('artist.keep')}
             </Button>
             <Button variant="danger" busy={remove.isPending} onClick={() => remove.mutate()}>
-              Remove
+              {t('title.remove')}
             </Button>
           </div>
         </Modal>

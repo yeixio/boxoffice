@@ -1,0 +1,140 @@
+{
+  "problems": {
+    "wont_play": "It won't play",
+    "wrong_title": "It's the wrong movie or episode",
+    "picture": "The picture is bad",
+    "sound": "The sound is wrong or out of sync",
+    "subtitles": "Subtitles are missing or wrong",
+    "other": "Something else"
+  },
+  "state": {
+    "pending": "Waiting for approval",
+    "declined": "Declined",
+    "searching": "Approved, looking for it",
+    "downloadingAt": "Downloading, {{percent}}",
+    "downloading": "Downloading",
+    "partial": "Some episodes are ready",
+    "available": "Ready to watch",
+    "paused": "Approved, on hold",
+    "removed": "Removed from the library"
+  },
+  "site": {
+    "down": "This site isn't answering: {{error}}",
+    "closed": "This request site isn't open right now."
+  },
+  "signIn": {
+    "matinee": "Matinee account",
+    "local": "Account here",
+    "with": "Sign in with",
+    "matineeHint": "Use the username and password you watch with in Matinee.",
+    "signUpHint": "Make an account to ask for movies and shows.",
+    "username": "Username",
+    "name": "Your name",
+    "nameHint": "What the admins see. Leave it empty to use your username.",
+    "password": "Password",
+    "passwordHint": "At least 8 characters.",
+    "make": "Make my account",
+    "signIn": "Sign in",
+    "haveAccount": "I have an account",
+    "new": "New here? Make an account"
+  },
+  "nav": {
+    "discover": "Discover",
+    "requests": "My requests",
+    "problems": "Problems",
+    "sections": "Sections",
+    "account": "Your account"
+  },
+  "home": {
+    "hi": "Hi, {{name}}",
+    "welcome": "Find a movie or show and ask for it. You can follow it under My requests.",
+    "find": "Find a movie or show",
+    "seeAll": "See all",
+    "nothing": "Nothing to show yet",
+    "notSetUp": "The admin hasn't finished setting this site up. Try again later.",
+    "movieGenres": "Movie genres",
+    "showGenres": "Show genres"
+  },
+  "search": {
+    "nothing": "Nothing by that name.",
+    "movies": "Movies",
+    "shows": "Shows",
+    "looking": "Looking…"
+  },
+  "row": {
+    "more": "Show more"
+  },
+  "pill": {
+    "ready": "Ready to watch",
+    "some": "Some episodes",
+    "coming": "On its way",
+    "asked": "Requested",
+    "declined": "Declined"
+  },
+  "kind": {
+    "movie": "Movie",
+    "show": "Show"
+  },
+  "card": {
+    "request": "Request {{title}}"
+  },
+  "sheet": {
+    "out": "Out {{date}}",
+    "starts": "Starts {{date}}",
+    "released": "Released {{date}}",
+    "firstAired": "First aired {{date}}",
+    "ready": "It's in the library. Enjoy!",
+    "some": "Some of it is in the library, and the rest is on its way.",
+    "report": "Report a problem",
+    "coming": "It's on its way. Nothing to ask for: it'll be in the library once it's found.",
+    "asked": "You asked for this. It's waiting for an admin to approve it.",
+    "takeBack": "Take it back",
+    "declined": "An admin declined this. You can ask again.",
+    "declinedWhy": "An admin declined this: “{{reply}}” You can ask again.",
+    "note": "Note for the admins",
+    "noteHint": "Optional, such as which version you're after.",
+    "askMovie": "Request this movie",
+    "askShow": "Request this show"
+  },
+  "report": {
+    "thanks": "Thanks. The admins will take a look, and you can follow it under Problems.",
+    "done": "Done",
+    "title": "What's wrong?",
+    "problem": "Problem",
+    "season": "Season",
+    "seasonHint": "Leave empty if it's the whole show.",
+    "episode": "Episode",
+    "more": "Tell us more",
+    "say": "Say what happened.",
+    "optional": "Optional.",
+    "send": "Send the report"
+  },
+  "mine": {
+    "title": "My requests",
+    "none": "Nothing asked for yet",
+    "empty": "Find a movie or show on <link>Discover</link> and press <strong>+</strong> to ask for it.",
+    "admin": "Admin: “{{reply}}”",
+    "asked": "Asked {{date}}",
+    "takeBack": "Take back"
+  },
+  "issues": {
+    "title": "Problems",
+    "sub": "Something wrong with a movie or show? Open it on Discover or find it by name, and choose Report a problem.",
+    "none": "No problems reported",
+    "season": "Season {{season}}",
+    "episode": "Season {{season}}, episode {{episode}}",
+    "waiting": "Waiting for an admin",
+    "fixed": "Fixed"
+  },
+  "account": {
+    "title": "Your account",
+    "signedIn": "Signed in as <strong>{{name}}</strong>.",
+    "signedInMatinee": "Signed in as <strong>{{name}}</strong> with your Matinee account.",
+    "change": "Change your password",
+    "current": "Current password",
+    "new": "New password",
+    "changed": "Changed. You're signed out everywhere else.",
+    "changeButton": "Change password",
+    "signOut": "Sign out"
+  }
+}

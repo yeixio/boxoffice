@@ -1,6 +1,7 @@
 // The request site's API, under /api/portal. It signs in with its own
 // cookie, which never opens the admin API.
 
+import i18n, { formatLocale } from '../i18n'
 import { ApiError, type DiscoverHome, type DiscoverKind, type DiscoverPage, type DiscoverTitle } from '../api'
 
 export async function papi<T>(method: string, path: string, body?: unknown): Promise<T> {
@@ -25,7 +26,7 @@ export async function papi<T>(method: string, path: string, body?: unknown): Pro
 export const pget = <T>(path: string) => papi<T>('GET', path)
 export const ppost = <T>(path: string, body?: unknown) => papi<T>('POST', path, body ?? {})
 
-export type Member = { id: number; username: string; displayName: string; name: string; source: 'local' | 'matinee' }
+export type Member = { id: number; username: string; displayName: string; name: string; source: 'local' | 'matinee'; language?: string }
 
 export type Site = {
   enabled: boolean
@@ -62,16 +63,12 @@ export type Request = {
 
 export type Problem = 'wont_play' | 'wrong_title' | 'picture' | 'sound' | 'subtitles' | 'other'
 
-export const problems: { value: Problem; label: string }[] = [
-  { value: 'wont_play', label: "It won't play" },
-  { value: 'wrong_title', label: "It's the wrong movie or episode" },
-  { value: 'picture', label: 'The picture is bad' },
-  { value: 'sound', label: 'The sound is wrong or out of sync' },
-  { value: 'subtitles', label: 'Subtitles are missing or wrong' },
-  { value: 'other', label: 'Something else' },
-]
+const problemKinds: Problem[] = ['wont_play', 'wrong_title', 'picture', 'sound', 'subtitles', 'other']
 
-export const problemLabel = (p: string) => problems.find((x) => x.value === p)?.label ?? 'Something else'
+// problems are the kinds of problem someone can report, in the page's language.
+export const problems = (): { value: Problem; label: string }[] => problemKinds.map((value) => ({ value, label: problemLabel(value) }))
+
+export const problemLabel = (p: string) => i18n.t(`request:problems.${problemKinds.includes(p as Problem) ? p : 'other'}`)
 
 export type Issue = {
   id: number
@@ -97,22 +94,7 @@ export type { DiscoverHome, DiscoverPage, DiscoverTitle }
 
 // stateText is what's happening with a request, in a few words.
 export function stateText(r: Pick<Request, 'state' | 'progress' | 'kind'>): string {
-  switch (r.state) {
-    case 'pending':
-      return 'Waiting for approval'
-    case 'declined':
-      return 'Declined'
-    case 'searching':
-      return 'Approved, looking for it'
-    case 'downloading':
-      return r.progress ? `Downloading, ${Math.floor(r.progress * 100)}%` : 'Downloading'
-    case 'partial':
-      return 'Some episodes are ready'
-    case 'available':
-      return 'Ready to watch'
-    case 'paused':
-      return 'Approved, on hold'
-    case 'removed':
-      return 'Removed from the library'
-  }
+  if (r.state === 'downloading' && r.progress)
+    return i18n.t('request:state.downloadingAt', { percent: new Intl.NumberFormat(formatLocale(), { style: 'percent' }).format(Math.floor(r.progress * 100) / 100) })
+  return i18n.t(`request:state.${r.state}`)
 }

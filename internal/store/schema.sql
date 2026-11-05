@@ -11,7 +11,8 @@ CREATE TABLE IF NOT EXISTS users (
 	id            INTEGER PRIMARY KEY AUTOINCREMENT,
 	username      TEXT NOT NULL UNIQUE,
 	password_hash TEXT NOT NULL,
-	created_at    BIGINT NOT NULL
+	created_at    BIGINT NOT NULL,
+	language      TEXT NOT NULL DEFAULT '' -- '' follows the browser
 );
 
 CREATE TABLE IF NOT EXISTS sessions (
@@ -409,7 +410,8 @@ CREATE TABLE IF NOT EXISTS members (
 	quota_shows   INTEGER NOT NULL DEFAULT -1,
 	disabled      INTEGER NOT NULL DEFAULT 0,
 	created_at    BIGINT NOT NULL,
-	seen_at       BIGINT NOT NULL DEFAULT 0
+	seen_at       BIGINT NOT NULL DEFAULT 0,
+	language      TEXT NOT NULL DEFAULT '' -- '' follows the browser
 );
 
 CREATE TABLE IF NOT EXISTS member_sessions (

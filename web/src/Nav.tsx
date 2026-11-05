@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState, type ComponentType } from 'react'
 import { NavLink } from 'react-router-dom'
@@ -27,6 +28,7 @@ import { speed, useDownloads } from './pages/Downloads'
 import { needsAttention, useHealth } from './pages/Health'
 import { useRequestCounts } from './pages/Requests'
 
+// label and a group's label are catalog keys.
 type Item = { to: string; label: string; icon: ComponentType<{ className?: string }>; type?: MediaTypeKey }
 type Group = { label: string; items: Item[] }
 
@@ -35,32 +37,32 @@ type Group = { label: string; items: Item[] }
 // audiobooks, ebooks and comics slot in here the same way as music.
 const allGroups: Group[] = [
   {
-    label: 'Library',
+    label: 'nav.library',
     items: [
-      { to: '/discover', label: 'Discover', icon: Compass },
-      { to: '/movies', label: 'Movies', icon: Film },
-      { to: '/shows', label: 'Shows', icon: Tv },
-      { to: '/music', label: 'Music', icon: MusicIcon, type: 'music' },
-      { to: '/books', label: 'Books', icon: BookOpen, type: 'ebook' },
-      { to: '/audiobooks', label: 'Audiobooks', icon: Headphones, type: 'audiobook' },
-      { to: '/calendar', label: 'Coming up', icon: CalendarDays },
+      { to: '/discover', label: 'nav.discover', icon: Compass },
+      { to: '/movies', label: 'nav.movies', icon: Film },
+      { to: '/shows', label: 'nav.shows', icon: Tv },
+      { to: '/music', label: 'nav.music', icon: MusicIcon, type: 'music' },
+      { to: '/books', label: 'nav.books', icon: BookOpen, type: 'ebook' },
+      { to: '/audiobooks', label: 'nav.audiobooks', icon: Headphones, type: 'audiobook' },
+      { to: '/calendar', label: 'nav.calendar', icon: CalendarDays },
     ],
   },
   {
-    label: 'Status',
+    label: 'nav.status',
     items: [
-      { to: '/requests', label: 'Requests', icon: Inbox },
-      { to: '/downloads', label: 'Downloads', icon: DownloadIcon },
-      { to: '/activity', label: 'Activity', icon: History },
-      { to: '/health', label: 'Health', icon: HeartPulse },
+      { to: '/requests', label: 'nav.requests', icon: Inbox },
+      { to: '/downloads', label: 'nav.downloads', icon: DownloadIcon },
+      { to: '/activity', label: 'nav.activity', icon: History },
+      { to: '/health', label: 'nav.health', icon: HeartPulse },
     ],
   },
   {
-    label: 'Setup',
+    label: 'nav.setup',
     items: [
-      { to: '/import', label: 'Move in', icon: Truck },
-      { to: '/backups', label: 'Backups', icon: DatabaseBackup },
-      { to: '/settings', label: 'Settings', icon: Cog },
+      { to: '/import', label: 'nav.import', icon: Truck },
+      { to: '/backups', label: 'nav.backups', icon: DatabaseBackup },
+      { to: '/settings', label: 'nav.settings', icon: Cog },
     ],
   },
 ]
@@ -85,24 +87,25 @@ export function useNav(status: Status) {
 type Nav = ReturnType<typeof useNav>
 
 function Badge({ to, nav, dot }: { to: string; nav: Nav; dot?: boolean }) {
+  const { t } = useTranslation()
   if (to === '/health' && nav.problems > 0) {
-    if (dot) return <span className="absolute right-1.5 top-1.5 size-2 rounded-full bg-marquee" aria-label={`${nav.problems} to fix`} />
+    if (dot) return <span className="absolute end-1.5 top-1.5 size-2 rounded-full bg-marquee" aria-label={t('nav.toFix', { count: nav.problems })} />
     return (
-      <span className="ml-auto rounded-full bg-marquee px-1.5 text-xs font-semibold leading-5 text-marquee-ink" aria-label={`${nav.problems} to fix`}>
+      <span className="ms-auto rounded-full bg-marquee px-1.5 text-xs font-semibold leading-5 text-marquee-ink" aria-label={t('nav.toFix', { count: nav.problems })}>
         {nav.problems}
       </span>
     )
   }
   if (to === '/requests' && nav.waiting > 0) {
-    if (dot) return <span className="absolute right-1.5 top-1.5 size-2 rounded-full bg-marquee" aria-label={`${nav.waiting} waiting`} />
+    if (dot) return <span className="absolute end-1.5 top-1.5 size-2 rounded-full bg-marquee" aria-label={t('nav.waiting', { count: nav.waiting })} />
     return (
-      <span className="ml-auto rounded-full bg-marquee px-1.5 text-xs font-semibold leading-5 text-marquee-ink" aria-label={`${nav.waiting} waiting`}>
+      <span className="ms-auto rounded-full bg-marquee px-1.5 text-xs font-semibold leading-5 text-marquee-ink" aria-label={t('nav.waiting', { count: nav.waiting })}>
         {nav.waiting}
       </span>
     )
   }
   if (to === '/downloads' && nav.rate > 0 && !dot) {
-    return <span className="ml-auto rounded-full border border-line px-1.5 text-xs leading-5 tabular-nums">{speed(nav.rate)}</span>
+    return <span className="ms-auto rounded-full border border-line px-1.5 text-xs leading-5 tabular-nums">{speed(nav.rate)}</span>
   }
   return null
 }
@@ -145,6 +148,7 @@ function useWide() {
 // Sidebar holds the sections down the left on a computer. It narrows to
 // icons on a small screen, or when asked to, and remembers that choice.
 export function Sidebar({ status, nav, signOut }: { status: Status; nav: Nav; signOut: () => void }) {
+  const { t } = useTranslation()
   const wide = useWide()
   const [narrowed, setNarrowed] = useState(load)
   const narrow = narrowed || !wide
@@ -166,21 +170,21 @@ export function Sidebar({ status, nav, signOut }: { status: Status; nav: Nav; si
             <Tray side={narrow} />
           </div>
         </div>
-        <nav className="flex-1 overflow-y-auto px-3 pb-3" aria-label="Main">
+        <nav className="flex-1 overflow-y-auto px-3 pb-3" aria-label={t('nav.main')}>
           {nav.groups.map((g) => (
             <div key={g.label} className="mt-4">
               {narrow ? (
                 <div className="mx-2 mb-2 border-t border-line" aria-hidden />
               ) : (
-                <div className="mb-1 px-3 text-xs font-semibold uppercase tracking-wider text-muted">{g.label}</div>
+                <div className="mb-1 px-3 text-xs font-semibold uppercase tracking-wider text-muted">{t(g.label)}</div>
               )}
               <ul className="flex flex-col gap-0.5">
                 {g.items.map(({ to, label, icon: Icon }) => (
                   <li key={to}>
                     <NavLink
                       to={to}
-                      title={narrow ? label : undefined}
-                      aria-label={narrow ? label : undefined}
+                      title={narrow ? t(label) : undefined}
+                      aria-label={narrow ? t(label) : undefined}
                       className={({ isActive }) =>
                         `relative flex items-center gap-3 rounded-md py-2 text-sm font-medium transition ${narrow ? 'justify-center px-2' : 'px-3'} ${
                           isActive ? 'bg-ink text-paper' : 'text-muted hover:bg-line/50 hover:text-ink'
@@ -188,7 +192,7 @@ export function Sidebar({ status, nav, signOut }: { status: Status; nav: Nav; si
                       }
                     >
                       <Icon className="size-4.5 shrink-0" aria-hidden />
-                      {!narrow && <span className="truncate">{label}</span>}
+                      {!narrow && <span className="truncate">{t(label)}</span>}
                       <Badge to={to} nav={nav} dot={narrow} />
                     </NavLink>
                   </li>
@@ -201,25 +205,25 @@ export function Sidebar({ status, nav, signOut }: { status: Status; nav: Nav; si
           <button
             onClick={signOut}
             className={`flex items-center gap-3 rounded-md py-2 text-sm text-muted hover:bg-line/50 hover:text-ink ${narrow ? 'px-2' : 'px-3'}`}
-            title={`Signed in as ${status.user?.username}`}
-            aria-label="Sign out"
+            title={t('nav.signedInAs', { name: status.user?.username })}
+            aria-label={t('nav.signOut')}
           >
             <LogOut className="size-4.5 shrink-0" aria-hidden />
-            {!narrow && <span className="truncate">Sign out {status.user?.username}</span>}
+            {!narrow && <span className="truncate">{t('nav.signOutName', { name: status.user?.username })}</span>}
           </button>
           {wide && (
             <button
               onClick={toggle}
               className={`flex items-center gap-3 rounded-md py-2 text-sm text-muted hover:bg-line/50 hover:text-ink ${narrow ? 'px-2' : 'px-3'}`}
-              title={narrow ? 'Show names' : 'Icons only'}
-              aria-label={narrow ? 'Show names' : 'Icons only'}
+              title={narrow ? t('nav.showNames') : t('nav.iconsOnly')}
+              aria-label={narrow ? t('nav.showNames') : t('nav.iconsOnly')}
               aria-pressed={narrow}
             >
               {narrow ? <PanelLeftOpen className="size-4.5 shrink-0" aria-hidden /> : <PanelLeftClose className="size-4.5 shrink-0" aria-hidden />}
-              {!narrow && 'Icons only'}
+              {!narrow && t('nav.iconsOnly')}
             </button>
           )}
-          {!narrow && <div className="px-3 pt-1 text-xs text-muted">Box Office {status.version}</div>}
+          {!narrow && <div className="px-3 pt-1 text-xs text-muted">{t('nav.version', { version: status.version })}</div>}
         </div>
       </div>
       <div className="perforated-y" aria-hidden />
@@ -229,11 +233,12 @@ export function Sidebar({ status, nav, signOut }: { status: Status; nav: Nav; si
 
 // PhoneNav is the menu that folds down from the header on a phone.
 export function PhoneNav({ nav }: { nav: Nav }) {
+  const { t } = useTranslation()
   return (
-    <nav id="mobile-nav" className="flex max-h-[calc(100dvh-4rem)] flex-col overflow-y-auto border-t border-line px-4 py-2 md:hidden" aria-label="Main">
+    <nav id="mobile-nav" className="flex max-h-[calc(100dvh-4rem)] flex-col overflow-y-auto border-t border-line px-4 py-2 md:hidden" aria-label={t('nav.main')}>
       {nav.groups.map((g) => (
         <div key={g.label} className="py-1">
-          <div className="px-3 pb-1 pt-2 text-xs font-semibold uppercase tracking-wider text-muted">{g.label}</div>
+          <div className="px-3 pb-1 pt-2 text-xs font-semibold uppercase tracking-wider text-muted">{t(g.label)}</div>
           <ul className="flex flex-col gap-1">
             {g.items.map(({ to, label, icon: Icon }) => (
               <li key={to}>
@@ -242,7 +247,7 @@ export function PhoneNav({ nav }: { nav: Nav }) {
                   className={({ isActive }) => `flex items-center gap-3 rounded-md px-3 py-2.5 text-base font-medium ${isActive ? 'bg-ink text-paper' : 'text-ink hover:bg-line/50'}`}
                 >
                   <Icon className="size-5" aria-hidden />
-                  {label}
+                  {t(label)}
                   <Badge to={to} nav={nav} />
                 </NavLink>
               </li>

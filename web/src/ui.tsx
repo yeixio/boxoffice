@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useEffect, useId, useRef, useState, type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode } from 'react'
 import { Film, LoaderCircle, X } from 'lucide-react'
 
@@ -78,7 +79,7 @@ export function Toggle({ checked, onChange, label, disabled }: { checked: boolea
         onClick={() => onChange(!checked)}
         className={`relative mt-0.5 h-5 w-9 shrink-0 rounded-full transition ${checked ? 'bg-marquee' : 'bg-line'}`}
       >
-        <span className={`absolute top-0.5 size-4 rounded-full bg-card shadow transition ${checked ? 'left-4.5' : 'left-0.5'}`} />
+        <span className={`absolute top-0.5 size-4 rounded-full bg-card shadow transition ${checked ? 'start-4.5' : 'start-0.5'}`} />
       </button>
       <span className="text-sm">{label}</span>
     </label>
@@ -96,11 +97,12 @@ export function Badge({ children, tone = 'plain' }: { children: ReactNode; tone?
   return <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium ${look}`}>{children}</span>
 }
 
-export function Spinner({ label = 'Loading' }: { label?: string }) {
+export function Spinner({ label }: { label?: string }) {
+  const { t } = useTranslation('common')
   return (
     <div className="flex items-center gap-2 py-10 text-muted" role="status">
       <LoaderCircle className="size-5 animate-spin" aria-hidden />
-      {label}…
+      {label ?? t('loading')}
     </div>
   )
 }
@@ -138,6 +140,7 @@ export function Poster({ src, title, className = '' }: { src?: string; title: st
 }
 
 export function Modal({ title, onClose, children, wide }: { title: string; onClose: () => void; children: ReactNode; wide?: boolean }) {
+  const { t } = useTranslation('common')
   const ref = useRef<HTMLDialogElement>(null)
   useEffect(() => {
     const d = ref.current
@@ -152,7 +155,7 @@ export function Modal({ title, onClose, children, wide }: { title: string; onClo
     >
       <div className="flex items-center justify-between border-b border-line px-5 py-3">
         <h2 className="font-display text-lg font-semibold">{title}</h2>
-        <button onClick={onClose} className="rounded p-1 hover:bg-line" aria-label="Close">
+        <button onClick={onClose} className="rounded p-1 hover:bg-line" aria-label={t('close')}>
           <X className="size-5" />
         </button>
       </div>

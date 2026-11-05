@@ -1,8 +1,13 @@
-import { useEffect, useState, type FormEvent, type ReactNode } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
+import { useCallback, useEffect, useState, type FormEvent, type ReactNode } from 'react'
 import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, NavLink, Navigate, Route, Routes, useParams } from 'react-router-dom'
 import { Check, ChevronRight, Clock, Film, Flag, LoaderCircle, LogOut, Plus, Search, Star, Ticket, UserRound } from 'lucide-react'
 import { ApiError } from '../api'
+import { decimal } from '../format'
+import { formatLocale } from '../i18n'
+import { LanguageMenu, LanguagePicker } from '../LanguagePicker'
+import { LanguageSync } from '../i18n/sync'
 import { Button, Empty, ErrorNote, Field, Input, Modal, Poster, Select, Spinner } from '../ui'
 import { papi, pget, ppost, problemLabel, problems, stateText, type DiscoverHome, type DiscoverPage, type DiscoverTitle, type Issue, type Member, type Problem, type Request, type Site } from './papi'
 
@@ -13,14 +18,15 @@ import { papi, pget, ppost, problemLabel, problems, stateText, type DiscoverHome
 const useSite = () => useQuery({ queryKey: ['portal', 'site'], queryFn: () => pget<Site>('/site') })
 
 export function Portal() {
+  const { t } = useTranslation('request')
   const site = useSite()
   useBrand(site.data)
   if (site.isPending) return <Spinner />
-  if (site.isError) return <p className="p-8 text-bad">This site isn't answering: {site.error.message}</p>
+  if (site.isError) return <p className="p-8 text-bad">{t('site.down', { error: site.error.message })}</p>
   if (!site.data.enabled) {
     return (
       <Centered site={site.data}>
-        <p className="text-center text-muted">This request site isn't open right now.</p>
+        <p className="text-center text-muted">{t('site.closed')}</p>
       </Centered>
     )
   }
@@ -75,6 +81,9 @@ function Centered({ site, children }: { site: Site; children: ReactNode }) {
   return (
     <div className="flex min-h-screen items-center justify-center px-4 py-10">
       <div className="w-full max-w-sm">
+        <div className="mb-4 flex justify-end">
+          <LanguageMenu />
+        </div>
         <div className="mb-8 flex flex-col items-center gap-3 text-center">
           <Brand site={site} large />
           <h1 className="font-display text-3xl font-bold">{site.name}</h1>
@@ -89,6 +98,7 @@ function Centered({ site, children }: { site: Site; children: ReactNode }) {
 // PortalSignIn signs someone in with an account here or their Matinee
 // account, or lets them make an account when the admin allows it.
 function PortalSignIn({ site }: { site: Site }) {
+  const { t } = useTranslation('request')
   const qc = useQueryClient()
   const [mode, setMode] = useState<'matinee' | 'local' | 'signup'>(site.matinee ? 'matinee' : 'local')
   const [username, setUsername] = useState('')
@@ -111,14 +121,14 @@ function PortalSignIn({ site }: { site: Site }) {
     }
   }
   const choices = [
-    site.matinee && { value: 'matinee' as const, label: 'Matinee account' },
-    site.localSignIn && { value: 'local' as const, label: 'Account here' },
+    site.matinee && { value: 'matinee' as const, label: t('signIn.matinee') },
+    site.localSignIn && { value: 'local' as const, label: t('signIn.local') },
   ].filter((x) => !!x)
   return (
     <Centered site={site}>
       <form onSubmit={submit} className="flex flex-col gap-4 rounded-xl border border-line bg-card p-6">
         {mode !== 'signup' && choices.length > 1 && (
-          <div className="grid grid-cols-2 gap-1 rounded-lg bg-paper p-1" role="tablist" aria-label="Sign in with">
+          <div className="grid grid-cols-2 gap-1 rounded-lg bg-paper p-1" role="tablist" aria-label={t('signIn.with')}>
             {choices.map((c) => (
               <button
                 key={c.value}
@@ -133,24 +143,24 @@ function PortalSignIn({ site }: { site: Site }) {
             ))}
           </div>
         )}
-        {mode === 'matinee' && <p className="text-sm text-muted">Use the username and password you watch with in Matinee.</p>}
-        {mode === 'signup' && <p className="text-sm text-muted">Make an account to ask for movies and shows.</p>}
-        <Field label="Username">{(id) => <Input id={id} autoComplete="username" value={username} onChange={(e) => setUsername(e.target.value)} required autoFocus />}</Field>
+        {mode === 'matinee' && <p className="text-sm text-muted">{t('signIn.matineeHint')}</p>}
+        {mode === 'signup' && <p className="text-sm text-muted">{t('signIn.signUpHint')}</p>}
+        <Field label={t('signIn.username')}>{(id) => <Input id={id} autoComplete="username" value={username} onChange={(e) => setUsername(e.target.value)} required autoFocus />}</Field>
         {mode === 'signup' && (
-          <Field label="Your name" hint="What the admins see. Leave it empty to use your username.">
+          <Field label={t('signIn.name')} hint={t('signIn.nameHint')}>
             {(id) => <Input id={id} autoComplete="name" value={name} onChange={(e) => setName(e.target.value)} />}
           </Field>
         )}
-        <Field label="Password" hint={mode === 'signup' ? 'At least 8 characters.' : undefined}>
+        <Field label={t('signIn.password')} hint={mode === 'signup' ? t('signIn.passwordHint') : undefined}>
           {(id) => <Input id={id} type="password" autoComplete={mode === 'signup' ? 'new-password' : 'current-password'} value={password} onChange={(e) => setPassword(e.target.value)} required />}
         </Field>
         <ErrorNote error={error} />
         <Button variant="primary" type="submit" busy={busy}>
-          {mode === 'signup' ? 'Make my account' : 'Sign in'}
+          {mode === 'signup' ? t('signIn.make') : t('signIn.signIn')}
         </Button>
         {site.signUp && (
           <button type="button" className="text-sm font-medium text-marquee" onClick={() => setMode(mode === 'signup' ? (site.matinee ? 'matinee' : 'local') : 'signup')}>
-            {mode === 'signup' ? 'I have an account' : 'New here? Make an account'}
+            {mode === 'signup' ? t('signIn.haveAccount') : t('signIn.new')}
           </button>
         )}
       </form>
@@ -159,34 +169,44 @@ function PortalSignIn({ site }: { site: Site }) {
 }
 
 function Shell({ site, member }: { site: Site; member: Member }) {
+  const { t } = useTranslation('request')
+  const qc = useQueryClient()
   const [account, setAccount] = useState(false)
+  const adopt = useCallback(
+    async (language: string) => {
+      await papi('PUT', '/me/language', { language })
+      await qc.invalidateQueries({ queryKey: ['portal', 'site'] })
+    },
+    [qc],
+  )
   const tabs = [
-    { to: '/', label: 'Discover', end: true },
-    { to: '/requests', label: 'My requests' },
-    { to: '/problems', label: 'Problems' },
+    { to: '/', label: t('nav.discover'), end: true },
+    { to: '/requests', label: t('nav.requests') },
+    { to: '/problems', label: t('nav.problems') },
   ]
   return (
     <div className="min-h-screen">
+      <LanguageSync saved={member.language ?? ''} adopt={adopt} />
       <header className="sticky top-0 z-20 border-b border-line bg-paper/95 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3 md:px-8">
           <Brand site={site} />
-          <nav className="ml-4 hidden gap-1 sm:flex" aria-label="Sections">
-            {tabs.map((t) => (
-              <NavLink key={t.to} to={t.to} end={t.end} className={({ isActive }) => `rounded-md px-3 py-1.5 text-sm font-medium ${isActive ? 'bg-marquee/10 text-marquee' : 'text-muted hover:text-ink'}`}>
-                {t.label}
+          <nav className="ms-4 hidden gap-1 sm:flex" aria-label={t('nav.sections')}>
+            {tabs.map((tab) => (
+              <NavLink key={tab.to} to={tab.to} end={tab.end} className={({ isActive }) => `rounded-md px-3 py-1.5 text-sm font-medium ${isActive ? 'bg-marquee/10 text-marquee' : 'text-muted hover:text-ink'}`}>
+                {tab.label}
               </NavLink>
             ))}
           </nav>
           <div className="flex-1" />
-          <button onClick={() => setAccount(true)} className="flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm text-muted hover:text-ink" aria-label="Your account">
+          <button onClick={() => setAccount(true)} className="flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm text-muted hover:text-ink" aria-label={t('nav.account')}>
             <UserRound className="size-4" aria-hidden />
             <span className="hidden max-w-32 truncate sm:inline">{member.name}</span>
           </button>
         </div>
-        <nav className="flex gap-1 overflow-x-auto px-4 pb-2 sm:hidden" aria-label="Sections">
-          {tabs.map((t) => (
-            <NavLink key={t.to} to={t.to} end={t.end} className={({ isActive }) => `shrink-0 rounded-md px-3 py-1.5 text-sm font-medium ${isActive ? 'bg-marquee/10 text-marquee' : 'text-muted'}`}>
-              {t.label}
+        <nav className="flex gap-1 overflow-x-auto px-4 pb-2 sm:hidden" aria-label={t('nav.sections')}>
+          {tabs.map((tab) => (
+            <NavLink key={tab.to} to={tab.to} end={tab.end} className={({ isActive }) => `shrink-0 rounded-md px-3 py-1.5 text-sm font-medium ${isActive ? 'bg-marquee/10 text-marquee' : 'text-muted'}`}>
+              {tab.label}
             </NavLink>
           ))}
         </nav>
@@ -208,23 +228,24 @@ function Shell({ site, member }: { site: Site; member: Member }) {
 const useMine = () => useQuery({ queryKey: ['portal', 'requests'], queryFn: () => pget<Request[]>('/requests') })
 
 function Home({ site, member }: { site: Site; member: Member }) {
+  const { t } = useTranslation('request')
   const home = useQuery({ queryKey: ['portal', 'discover'], queryFn: () => pget<DiscoverHome>('/discover'), staleTime: 5 * 60_000 })
   const [term, setTerm] = useState('')
   const [q, setQ] = useState('')
   useEffect(() => {
-    const t = setTimeout(() => setQ(term.trim()), 350)
-    return () => clearTimeout(t)
+    const timer = setTimeout(() => setQ(term.trim()), 350)
+    return () => clearTimeout(timer)
   }, [term])
   return (
     <>
       <section className="mb-8 flex flex-col gap-4">
         <div>
-          <h1 className="font-display text-3xl font-bold tracking-tight">Hi, {member.name}</h1>
-          <p className="mt-1 whitespace-pre-line text-muted">{site.welcome || 'Find a movie or show and ask for it. You can follow it under My requests.'}</p>
+          <h1 className="font-display text-3xl font-bold tracking-tight">{t('home.hi', { name: member.name })}</h1>
+          <p className="mt-1 whitespace-pre-line text-muted">{site.welcome || t('home.welcome')}</p>
         </div>
         <div className="relative max-w-xl">
-          <Search className="pointer-events-none absolute left-3 top-3 size-4 text-muted" aria-hidden />
-          <Input type="search" className="py-2.5 pl-9 text-base" placeholder="Find a movie or show" aria-label="Find a movie or show" value={term} onChange={(e) => setTerm(e.target.value)} />
+          <Search className="pointer-events-none absolute start-3 top-3 size-4 text-muted" aria-hidden />
+          <Input type="search" className="py-2.5 ps-9 text-base" placeholder={t('home.find')} aria-label={t('home.find')} value={term} onChange={(e) => setTerm(e.target.value)} />
         </div>
       </section>
       {q.length > 1 ? (
@@ -242,13 +263,13 @@ function Home({ site, member }: { site: Site; member: Member }) {
                       {r.title}
                     </h2>
                     <Link to={`/discover/${r.id}`} className="flex shrink-0 items-center gap-0.5 text-sm font-medium text-marquee">
-                      See all <ChevronRight className="size-4" aria-hidden />
+                      {t('home.seeAll')} <ChevronRight className="size-4 rtl:rotate-180" aria-hidden />
                     </Link>
                   </div>
                   <ul className="-mx-4 flex snap-x scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 md:-mx-8 md:scroll-px-8 md:px-8 [scrollbar-width:thin]">
-                    {r.items.map((t) => (
-                      <li key={`${t.kind}-${t.tmdbId}`} className="w-32 shrink-0 snap-start sm:w-36">
-                        <Card t={t} />
+                    {r.items.map((x) => (
+                      <li key={`${x.kind}-${x.tmdbId}`} className="w-32 shrink-0 snap-start sm:w-36">
+                        <Card t={x} />
                       </li>
                     ))}
                   </ul>
@@ -264,10 +285,11 @@ function Home({ site, member }: { site: Site; member: Member }) {
 }
 
 function NotNow({ error }: { error: unknown }) {
+  const { t } = useTranslation('request')
   if (error instanceof ApiError && error.status === 503) {
     return (
-      <Empty title="Nothing to show yet">
-        The admin hasn't finished setting this site up. Try again later.
+      <Empty title={t('home.nothing')}>
+        {t('home.notSetUp')}
       </Empty>
     )
   }
@@ -275,9 +297,10 @@ function NotNow({ error }: { error: unknown }) {
 }
 
 function Genres({ home }: { home: DiscoverHome }) {
+  const { t } = useTranslation('request')
   const groups = [
-    { title: 'Movie genres', kind: 'movie', genres: home.browse.movieGenres },
-    { title: 'Show genres', kind: 'series', genres: home.browse.seriesGenres },
+    { title: t('home.movieGenres'), kind: 'movie', genres: home.browse.movieGenres },
+    { title: t('home.showGenres'), kind: 'series', genres: home.browse.seriesGenres },
   ] as const
   return (
     <>
@@ -305,9 +328,9 @@ function Genres({ home }: { home: DiscoverHome }) {
 function Grid({ items }: { items: DiscoverTitle[] }) {
   return (
     <ul className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-      {items.map((t) => (
-        <li key={`${t.kind}-${t.tmdbId}`}>
-          <Card t={t} />
+      {items.map((x) => (
+        <li key={`${x.kind}-${x.tmdbId}`}>
+          <Card t={x} />
         </li>
       ))}
     </ul>
@@ -315,23 +338,24 @@ function Grid({ items }: { items: DiscoverTitle[] }) {
 }
 
 function SearchResults({ q }: { q: string }) {
+  const { t } = useTranslation('request')
   const found = useQuery({ queryKey: ['portal', 'search', q], queryFn: () => pget<DiscoverTitle[]>(`/search?q=${encodeURIComponent(q)}`) })
-  if (found.isPending) return <Spinner label="Looking" />
+  if (found.isPending) return <Spinner label={t('search.looking')} />
   if (found.error) return <NotNow error={found.error} />
-  if (found.data.length === 0) return <p className="py-10 text-center text-sm text-muted">Nothing by that name.</p>
-  const movies = found.data.filter((t) => t.kind === 'movie')
-  const shows = found.data.filter((t) => t.kind === 'series')
+  if (found.data.length === 0) return <p className="py-10 text-center text-sm text-muted">{t('search.nothing')}</p>
+  const movies = found.data.filter((x) => x.kind === 'movie')
+  const shows = found.data.filter((x) => x.kind === 'series')
   return (
     <div className="flex flex-col gap-10">
       {movies.length > 0 && (
         <section>
-          <h2 className="mb-3 font-display text-xl font-semibold">Movies</h2>
+          <h2 className="mb-3 font-display text-xl font-semibold">{t('search.movies')}</h2>
           <Grid items={movies} />
         </section>
       )}
       {shows.length > 0 && (
         <section>
-          <h2 className="mb-3 font-display text-xl font-semibold">Shows</h2>
+          <h2 className="mb-3 font-display text-xl font-semibold">{t('search.shows')}</h2>
           <Grid items={shows} />
         </section>
       )}
@@ -340,6 +364,7 @@ function SearchResults({ q }: { q: string }) {
 }
 
 function RowPage() {
+  const { t } = useTranslation('request')
   const { id = '' } = useParams()
   const row = useInfiniteQuery({
     queryKey: ['portal', 'row', id],
@@ -350,8 +375,8 @@ function RowPage() {
   })
   const first = row.data?.pages[0]
   const seen = new Set<string>()
-  const items = (row.data?.pages ?? []).flatMap((p) => p.items).filter((t) => {
-    const k = `${t.kind}-${t.tmdbId}`
+  const items = (row.data?.pages ?? []).flatMap((p) => p.items).filter((x) => {
+    const k = `${x.kind}-${x.tmdbId}`
     if (seen.has(k)) return false
     seen.add(k)
     return true
@@ -359,16 +384,16 @@ function RowPage() {
   return (
     <>
       <Link to="/" className="mb-2 inline-block text-sm text-muted hover:text-ink">
-        ← Discover
+        <span className="inline-block rtl:rotate-180">←</span> {t('nav.discover')}
       </Link>
-      <h1 className="mb-6 font-display text-3xl font-bold tracking-tight">{first?.title ?? 'Discover'}</h1>
+      <h1 className="mb-6 font-display text-3xl font-bold tracking-tight">{first?.title ?? t('nav.discover')}</h1>
       {row.isPending && <Spinner />}
       {row.error && <NotNow error={row.error} />}
       <Grid items={items} />
       {row.hasNextPage && (
         <div className="mt-8 flex justify-center">
           <Button onClick={() => row.fetchNextPage()} busy={row.isFetchingNextPage}>
-            Show more
+            {t('row.more')}
           </Button>
         </div>
       )}
@@ -389,12 +414,12 @@ function whereOf(t: DiscoverTitle, mine?: Request): Where {
   return 'none'
 }
 
-const pill: Record<Exclude<Where, 'none'>, { label: string; look: string }> = {
-  ready: { label: 'Ready to watch', look: 'bg-ok text-white' },
-  some: { label: 'Some episodes', look: 'bg-gold text-black' },
-  coming: { label: 'On its way', look: 'bg-ink/85 text-paper' },
-  asked: { label: 'Requested', look: 'bg-marquee text-marquee-ink' },
-  declined: { label: 'Declined', look: 'bg-ink/60 text-paper' },
+const pill: Record<Exclude<Where, 'none'>, { look: string }> = {
+  ready: { look: 'bg-ok text-white' },
+  some: { look: 'bg-gold text-black' },
+  coming: { look: 'bg-ink/85 text-paper' },
+  asked: { look: 'bg-marquee text-marquee-ink' },
+  declined: { look: 'bg-ink/60 text-paper' },
 }
 
 function useMyRequest(t: DiscoverTitle) {
@@ -405,6 +430,7 @@ function useMyRequest(t: DiscoverTitle) {
 // Card is a poster: clicking it opens the title, and the button on a title
 // that isn't here asks for it straight away.
 function Card({ t }: { t: DiscoverTitle }) {
+  const { t: say } = useTranslation('request')
   const mine = useMyRequest(t)
   const [open, setOpen] = useState(false)
   const [busy, setBusy] = useState(false)
@@ -423,14 +449,14 @@ function Card({ t }: { t: DiscoverTitle }) {
   }
   return (
     <div className="group relative">
-      <button onClick={() => setOpen(true)} className="block w-full text-left" aria-label={`${t.title}${t.year ? ` (${t.year})` : ''}`}>
+      <button onClick={() => setOpen(true)} className="block w-full text-start" aria-label={`${t.title}${t.year ? ` (${t.year})` : ''}`}>
         <div className="relative">
           <Poster src={t.poster} title={t.title} className="transition group-hover:ring-2 group-hover:ring-marquee" />
           {where !== 'none' && (
-            <span className={`absolute left-1.5 top-1.5 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold shadow ${pill[where].look}`}>
+            <span className={`absolute start-1.5 top-1.5 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold shadow ${pill[where].look}`}>
               {where === 'ready' && <Check className="size-3" aria-hidden />}
               {where === 'asked' && <Clock className="size-3" aria-hidden />}
-              {pill[where].label}
+              {say(`pill.${where}`)}
             </span>
           )}
         </div>
@@ -438,11 +464,11 @@ function Card({ t }: { t: DiscoverTitle }) {
         <div className="flex items-center gap-1.5 text-xs text-muted">
           {t.year ? <span>{t.year}</span> : null}
           {t.year ? <span aria-hidden>·</span> : null}
-          <span>{t.kind === 'movie' ? 'Movie' : 'Show'}</span>
+          <span>{t.kind === 'movie' ? say('kind.movie') : say('kind.show')}</span>
           {t.rating ? (
-            <span className="ml-auto flex items-center gap-0.5 tabular-nums">
+            <span className="ms-auto flex items-center gap-0.5 tabular-nums">
               <Star className="size-3" aria-hidden />
-              {t.rating.toFixed(1)}
+              {decimal(t.rating)}
             </span>
           ) : null}
         </div>
@@ -451,9 +477,9 @@ function Card({ t }: { t: DiscoverTitle }) {
         <button
           onClick={ask}
           disabled={busy}
-          className="absolute right-1.5 top-1.5 flex size-8 items-center justify-center rounded-full bg-marquee text-marquee-ink shadow-md transition hover:scale-110 disabled:opacity-70"
-          aria-label={`Request ${t.title}`}
-          title={`Request ${t.title}`}
+          className="absolute end-1.5 top-1.5 flex size-8 items-center justify-center rounded-full bg-marquee text-marquee-ink shadow-md transition hover:scale-110 disabled:opacity-70"
+          aria-label={say('card.request', { title: t.title })}
+          title={say('card.request', { title: t.title })}
         >
           {busy ? <LoaderCircle className="size-4 animate-spin" aria-hidden /> : <Plus className="size-4.5" aria-hidden />}
         </button>
@@ -466,6 +492,7 @@ function Card({ t }: { t: DiscoverTitle }) {
 // Sheet is a title's card: what it's about, and asking for it, or how it's
 // going, or reporting a problem with it.
 function Sheet({ t, mine, where, onClose }: { t: DiscoverTitle; mine?: Request; where: Where; onClose: () => void }) {
+  const { t: say } = useTranslation('request')
   const qc = useQueryClient()
   const [note, setNote] = useState('')
   const [busy, setBusy] = useState(false)
@@ -506,13 +533,14 @@ function Sheet({ t, mine, where, onClose }: { t: DiscoverTitle; mine?: Request; 
           <Poster src={t.poster} title={t.title} className="hidden w-28 shrink-0 sm:block" />
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-x-2 text-sm text-muted">
-              <span>{t.kind === 'movie' ? 'Movie' : 'Show'}</span>
+              <span>{t.kind === 'movie' ? say('kind.movie') : say('kind.show')}</span>
               {when && (
                 <>
                   <span aria-hidden>·</span>
                   <span>
-                    {soon ? (t.kind === 'movie' ? 'Out ' : 'Starts ') : t.kind === 'movie' ? 'Released ' : 'First aired '}
-                    {when.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}
+                    {say(soon ? (t.kind === 'movie' ? 'sheet.out' : 'sheet.starts') : t.kind === 'movie' ? 'sheet.released' : 'sheet.firstAired', {
+                      date: when.toLocaleDateString(formatLocale(), { day: 'numeric', month: 'short', year: 'numeric' }),
+                    })}
                   </span>
                 </>
               )}
@@ -520,7 +548,7 @@ function Sheet({ t, mine, where, onClose }: { t: DiscoverTitle; mine?: Request; 
                 <>
                   <span aria-hidden>·</span>
                   <span className="flex items-center gap-0.5">
-                    <Star className="size-3.5" aria-hidden /> {t.rating.toFixed(1)}
+                    <Star className="size-3.5" aria-hidden /> {decimal(t.rating)}
                   </span>
                 </>
               ) : null}
@@ -534,22 +562,22 @@ function Sheet({ t, mine, where, onClose }: { t: DiscoverTitle; mine?: Request; 
             <ReportForm t={t} onDone={onClose} />
           ) : (
             <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-line px-4 py-3">
-              <span className="text-sm">{where === 'ready' ? "It's in the library. Enjoy!" : 'Some of it is in the library, and the rest is on its way.'}</span>
+              <span className="text-sm">{where === 'ready' ? say('sheet.ready') : say('sheet.some')}</span>
               <Button variant="ghost" onClick={() => setReport(true)}>
-                <Flag className="size-4" aria-hidden /> Report a problem
+                <Flag className="size-4" aria-hidden /> {say('sheet.report')}
               </Button>
             </div>
           ))}
         {where === 'coming' && (
           <p className="rounded-lg border border-line px-4 py-3 text-sm">
-            {mine && mine.status === 'approved' ? `${stateText(mine)}.` : "It's on its way. Nothing to ask for: it'll be in the library once it's found."}
+            {mine && mine.status === 'approved' ? `${stateText(mine)}.` : say('sheet.coming')}
           </p>
         )}
         {where === 'asked' && (
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-line px-4 py-3">
-            <span className="text-sm">You asked for this. It's waiting for an admin to approve it.</span>
+            <span className="text-sm">{say('sheet.asked')}</span>
             <Button variant="ghost" busy={busy} onClick={cancel}>
-              Take it back
+              {say('sheet.takeBack')}
             </Button>
           </div>
         )}
@@ -557,15 +585,15 @@ function Sheet({ t, mine, where, onClose }: { t: DiscoverTitle; mine?: Request; 
           <div className="flex flex-col gap-3">
             {where === 'declined' && mine && (
               <p className="rounded-lg border border-line px-4 py-3 text-sm">
-                An admin declined this{mine.reply ? `: “${mine.reply}”` : '.'} You can ask again.
+                {mine.reply ? say('sheet.declinedWhy', { reply: mine.reply }) : say('sheet.declined')}
               </p>
             )}
-            <Field label="Note for the admins" hint="Optional, such as which version you're after.">
+            <Field label={say('sheet.note')} hint={say('sheet.noteHint')}>
               {(id) => <textarea id={id} rows={2} maxLength={500} value={note} onChange={(e) => setNote(e.target.value)} className="w-full rounded-md border border-line bg-paper px-3 py-2 text-sm" />}
             </Field>
             <div className="flex justify-end">
               <Button variant="primary" busy={busy} onClick={ask}>
-                <Plus className="size-4" aria-hidden /> Request {t.kind === 'movie' ? 'this movie' : 'this show'}
+                <Plus className="size-4" aria-hidden /> {t.kind === 'movie' ? say('sheet.askMovie') : say('sheet.askShow')}
               </Button>
             </div>
           </div>
@@ -576,6 +604,7 @@ function Sheet({ t, mine, where, onClose }: { t: DiscoverTitle; mine?: Request; 
 }
 
 function ReportForm({ t, onDone }: { t: DiscoverTitle; onDone: () => void }) {
+  const { t: say } = useTranslation('request')
   const qc = useQueryClient()
   const [problem, setProblem] = useState<Problem>('wont_play')
   const [season, setSeason] = useState('')
@@ -601,30 +630,30 @@ function ReportForm({ t, onDone }: { t: DiscoverTitle; onDone: () => void }) {
   if (sent) {
     return (
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-ok/40 px-4 py-3">
-        <span className="text-sm">Thanks. The admins will take a look, and you can follow it under Problems.</span>
-        <Button onClick={onDone}>Done</Button>
+        <span className="text-sm">{say('report.thanks')}</span>
+        <Button onClick={onDone}>{say('report.done')}</Button>
       </div>
     )
   }
   return (
     <form onSubmit={send} className="flex flex-col gap-3 rounded-lg border border-line p-4">
-      <h3 className="font-display font-semibold">What's wrong?</h3>
-      <Field label="Problem">{(id) => <Select id={id} value={problem} onChange={(v) => setProblem(v as Problem)} options={problems} />}</Field>
+      <h3 className="font-display font-semibold">{say('report.title')}</h3>
+      <Field label={say('report.problem')}>{(id) => <Select id={id} value={problem} onChange={(v) => setProblem(v as Problem)} options={problems()} />}</Field>
       {t.kind === 'series' && (
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Season" hint="Leave empty if it's the whole show.">
+          <Field label={say('report.season')} hint={say('report.seasonHint')}>
             {(id) => <Input id={id} type="number" min={0} inputMode="numeric" value={season} onChange={(e) => setSeason(e.target.value)} />}
           </Field>
-          <Field label="Episode">{(id) => <Input id={id} type="number" min={0} inputMode="numeric" value={episode} onChange={(e) => setEpisode(e.target.value)} />}</Field>
+          <Field label={say('report.episode')}>{(id) => <Input id={id} type="number" min={0} inputMode="numeric" value={episode} onChange={(e) => setEpisode(e.target.value)} />}</Field>
         </div>
       )}
-      <Field label="Tell us more" hint={problem === 'other' ? 'Say what happened.' : 'Optional.'}>
+      <Field label={say('report.more')} hint={problem === 'other' ? say('report.say') : say('report.optional')}>
         {(id) => <textarea id={id} rows={3} maxLength={1000} value={message} onChange={(e) => setMessage(e.target.value)} required={problem === 'other'} className="w-full rounded-md border border-line bg-paper px-3 py-2 text-sm" />}
       </Field>
       <ErrorNote error={error} />
       <div className="flex justify-end">
         <Button variant="primary" type="submit" busy={busy}>
-          Send the report
+          {say('report.send')}
         </Button>
       </div>
     </form>
@@ -643,6 +672,7 @@ const stateLook: Record<Request['state'], string> = {
 }
 
 function MyRequests() {
+  const { t } = useTranslation('request')
   const mine = useMine()
   const qc = useQueryClient()
   const [error, setError] = useState<unknown>(null)
@@ -650,8 +680,8 @@ function MyRequests() {
   const busy = mine.data?.some((r) => r.state === 'downloading' || r.state === 'searching')
   useEffect(() => {
     if (!busy) return
-    const t = setInterval(() => qc.invalidateQueries({ queryKey: ['portal', 'requests'] }), 15_000)
-    return () => clearInterval(t)
+    const timer = setInterval(() => qc.invalidateQueries({ queryKey: ['portal', 'requests'] }), 15_000)
+    return () => clearInterval(timer)
   }, [busy, qc])
   const cancel = async (id: number) => {
     setError(null)
@@ -664,17 +694,13 @@ function MyRequests() {
   }
   return (
     <>
-      <h1 className="mb-6 font-display text-3xl font-bold tracking-tight">My requests</h1>
+      <h1 className="mb-6 font-display text-3xl font-bold tracking-tight">{t('mine.title')}</h1>
       <ErrorNote error={error} />
       {mine.isPending && <Spinner />}
       {mine.error && <ErrorNote error={mine.error} />}
       {mine.data?.length === 0 && (
-        <Empty icon={<Film className="size-8" />} title="Nothing asked for yet">
-          Find a movie or show on{' '}
-          <Link to="/" className="font-medium text-marquee">
-            Discover
-          </Link>{' '}
-          and press <strong>+</strong> to ask for it.
+        <Empty icon={<Film className="size-8" />} title={t('mine.none')}>
+          <Trans t={t} i18nKey="mine.empty" components={{ link: <Link to="/" className="font-medium text-marquee" />, strong: <strong /> }} />
         </Empty>
       )}
       <ul className="flex flex-col gap-3">
@@ -686,7 +712,7 @@ function MyRequests() {
                 <span className="font-display font-semibold">{r.title}</span>
                 <span className="text-sm text-muted">
                   {r.year ? `${r.year} · ` : ''}
-                  {r.kind === 'movie' ? 'Movie' : 'Show'}
+                  {r.kind === 'movie' ? t('kind.movie') : t('kind.show')}
                 </span>
               </div>
               <div>
@@ -697,13 +723,13 @@ function MyRequests() {
                   <div className="h-full bg-gold" style={{ width: `${Math.max(2, r.progress * 100)}%` }} />
                 </div>
               )}
-              {r.reply && <p className="text-sm text-muted">Admin: “{r.reply}”</p>}
-              <p className="text-xs text-muted">Asked {new Date(r.createdAt).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}</p>
+              {r.reply && <p className="text-sm text-muted">{t('mine.admin', { reply: r.reply })}</p>}
+              <p className="text-xs text-muted">{t('mine.asked', { date: new Date(r.createdAt).toLocaleDateString(formatLocale(), { day: 'numeric', month: 'short', year: 'numeric' }) })}</p>
             </div>
             {r.state === 'pending' && (
               <div className="self-center">
                 <Button variant="ghost" onClick={() => cancel(r.id)}>
-                  Take back
+                  {t('mine.takeBack')}
                 </Button>
               </div>
             )}
@@ -715,14 +741,15 @@ function MyRequests() {
 }
 
 function MyProblems() {
+  const { t } = useTranslation('request')
   const issues = useQuery({ queryKey: ['portal', 'issues'], queryFn: () => pget<Issue[]>('/issues') })
   return (
     <>
-      <h1 className="mb-1 font-display text-3xl font-bold tracking-tight">Problems</h1>
-      <p className="mb-6 text-muted">Something wrong with a movie or show? Open it on Discover or find it by name, and choose Report a problem.</p>
+      <h1 className="mb-1 font-display text-3xl font-bold tracking-tight">{t('issues.title')}</h1>
+      <p className="mb-6 text-muted">{t('issues.sub')}</p>
       {issues.isPending && <Spinner />}
       {issues.error && <ErrorNote error={issues.error} />}
-      {issues.data?.length === 0 && <Empty icon={<Flag className="size-8" />} title="No problems reported" />}
+      {issues.data?.length === 0 && <Empty icon={<Flag className="size-8" />} title={t('issues.none')} />}
       <ul className="flex flex-col gap-3">
         {issues.data?.map((i) => (
           <li key={i.id} className="flex gap-4 rounded-xl border border-line bg-card p-3">
@@ -732,21 +759,20 @@ function MyProblems() {
                 <span className="font-display font-semibold">{i.title}</span>
                 {i.season ? (
                   <span className="text-sm text-muted">
-                    Season {i.season}
-                    {i.episode ? `, episode ${i.episode}` : ''}
+                    {i.episode ? t('issues.episode', { season: i.season, episode: i.episode }) : t('issues.season', { season: i.season })}
                   </span>
                 ) : null}
               </div>
               <div>
                 <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium ${i.status === 'open' ? 'border-marquee/50 text-marquee' : 'border-ok/40 text-ok'}`}>
-                  {i.status === 'open' ? 'Waiting for an admin' : 'Fixed'}
+                  {i.status === 'open' ? t('issues.waiting') : t('issues.fixed')}
                 </span>
               </div>
               <p className="text-sm">
                 {problemLabel(i.problem)}
                 {i.message ? `: ${i.message}` : ''}
               </p>
-              {i.reply && <p className="text-sm text-muted">Admin: “{i.reply}”</p>}
+              {i.reply && <p className="text-sm text-muted">{t('mine.admin', { reply: i.reply })}</p>}
             </div>
           </li>
         ))}
@@ -756,7 +782,25 @@ function MyProblems() {
 }
 
 function Account({ member, onClose }: { member: Member; onClose: () => void }) {
+  const { t } = useTranslation('request')
   const qc = useQueryClient()
+  const [language, setLanguage] = useState(member.language ?? '')
+  const [saving, setSaving] = useState(false)
+  const [languageError, setLanguageError] = useState<unknown>(null)
+  const pick = async (code: string) => {
+    setLanguage(code)
+    setSaving(true)
+    setLanguageError(null)
+    try {
+      await papi('PUT', '/me/language', { language: code })
+      await qc.invalidateQueries({ queryKey: ['portal', 'site'] })
+    } catch (err) {
+      setLanguage(member.language ?? '')
+      setLanguageError(err)
+    } finally {
+      setSaving(false)
+    }
+  }
   const [current, setCurrent] = useState('')
   const [next, setNext] = useState('')
   const [busy, setBusy] = useState(false)
@@ -783,31 +827,34 @@ function Account({ member, onClose }: { member: Member; onClose: () => void }) {
     }
   }
   return (
-    <Modal title="Your account" onClose={onClose}>
+    <Modal title={t('account.title')} onClose={onClose}>
       <div className="flex flex-col gap-5">
         <p className="text-sm">
-          Signed in as <strong>{member.name}</strong>
-          {member.source === 'matinee' ? ' with your Matinee account.' : '.'}
+          <Trans t={t} i18nKey={member.source === 'matinee' ? 'account.signedInMatinee' : 'account.signedIn'} values={{ name: member.name }} components={{ strong: <strong /> }} />
         </p>
+        <Field label={t('common:language.label')} hint={t('common:language.hint')}>
+          {(id) => <LanguagePicker id={id} saved={language} onPick={pick} busy={saving} />}
+        </Field>
+        <ErrorNote error={languageError} />
         {member.source === 'local' && (
           <form onSubmit={change} className="flex flex-col gap-3">
-            <h3 className="font-display font-semibold">Change your password</h3>
-            <Field label="Current password">{(id) => <Input id={id} type="password" autoComplete="current-password" value={current} onChange={(e) => setCurrent(e.target.value)} required />}</Field>
-            <Field label="New password" hint="At least 8 characters.">
+            <h3 className="font-display font-semibold">{t('account.change')}</h3>
+            <Field label={t('account.current')}>{(id) => <Input id={id} type="password" autoComplete="current-password" value={current} onChange={(e) => setCurrent(e.target.value)} required />}</Field>
+            <Field label={t('account.new')} hint={t('signIn.passwordHint')}>
               {(id) => <Input id={id} type="password" autoComplete="new-password" value={next} onChange={(e) => setNext(e.target.value)} required />}
             </Field>
             <ErrorNote error={error} />
-            {done && <p className="text-sm text-ok">Changed. You're signed out everywhere else.</p>}
+            {done && <p className="text-sm text-ok">{t('account.changed')}</p>}
             <div className="flex justify-end">
               <Button type="submit" busy={busy}>
-                Change password
+                {t('account.changeButton')}
               </Button>
             </div>
           </form>
         )}
         <div className="flex justify-end border-t border-line pt-4">
           <Button variant="ghost" onClick={signOut}>
-            <LogOut className="size-4" aria-hidden /> Sign out
+            <LogOut className="size-4" aria-hidden /> {t('account.signOut')}
           </Button>
         </div>
       </div>
