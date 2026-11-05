@@ -1,0 +1,55 @@
+{
+  "size": {
+    "B": "{{value}} B",
+    "KB": "{{value}} KB",
+    "MB": "{{value}} MB",
+    "GB": "{{value}} GB",
+    "TB": "{{value}} TB",
+    "PB": "{{value}} PB"
+  },
+  "duration": {
+    "minutes_one": "{{count}} Min.",
+    "minutes_other": "{{count}} Min.",
+    "hours": "{{hours}} Std.",
+    "hoursMinutes": "{{hours}} Std. {{minutes}} Min."
+  },
+  "loading": "Wird geladen…",
+  "close": "Schließen",
+  "language": {
+    "title": "Sprache",
+    "label": "Sprache",
+    "automatic": "Automatisch ({{language}})",
+    "hint": "Die Sprache, in der Box Office dir alles zeigt, auf jedem Gerät, auf dem du dich anmeldest. Automatisch folgt der Sprache des jeweiligen Browsers.",
+    "machine": "Diese Übersetzung wurde maschinell erstellt, daher kann manche Formulierung danebenliegen.",
+    "help": "Hilf mit, sie zu verbessern"
+  },
+  "sort": {
+    "az": "A bis Z",
+    "za": "Z bis A",
+    "oldest": "Älteste zuerst",
+    "newest": "Neueste zuerst",
+    "soonest": "Früheste zuerst",
+    "latest": "Späteste zuerst",
+    "smallest": "Kleinste zuerst",
+    "largest": "Größte zuerst",
+    "lowest": "Niedrigste zuerst",
+    "highest": "Höchste zuerst",
+    "worst": "Schlechteste zuerst",
+    "best": "Beste zuerst",
+    "shortest": "Kürzeste zuerst",
+    "longest": "Längste zuerst",
+    "fewest": "Wenigste zuerst",
+    "most": "Meiste zuerst",
+    "least": "Wenigste zuerst",
+    "by": "Sortieren nach",
+    "show": "{{order}} anzeigen",
+    "flip": "{{option}}, {{order}}. Stattdessen {{other}} anzeigen"
+  },
+  "pager": {
+    "pages": "Seiten: {{label}}",
+    "range": "{{from}}–{{to}} von {{total}}",
+    "previous": "Vorherige Seite",
+    "next": "Nächste Seite",
+    "page": "Seite {{page}} von {{pages}}"
+  }
+}

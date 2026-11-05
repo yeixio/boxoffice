@@ -1,0 +1,140 @@
+{
+  "problems": {
+    "wont_play": "Non si riproduce",
+    "wrong_title": "È il film o l’episodio sbagliato",
+    "picture": "L’immagine è di cattiva qualità",
+    "sound": "L’audio è sbagliato o fuori sincrono",
+    "subtitles": "I sottotitoli mancano o sono sbagliati",
+    "other": "Altro"
+  },
+  "state": {
+    "pending": "In attesa di approvazione",
+    "declined": "Rifiutato",
+    "searching": "Approvato, in ricerca",
+    "downloadingAt": "Download in corso, {{percent}}",
+    "downloading": "Download in corso",
+    "partial": "Alcuni episodi sono pronti",
+    "available": "Pronto da guardare",
+    "paused": "Approvato, in sospeso",
+    "removed": "Rimosso dalla libreria"
+  },
+  "site": {
+    "down": "Questo sito non risponde: {{error}}",
+    "closed": "Questo sito delle richieste non è aperto al momento."
+  },
+  "signIn": {
+    "matinee": "Account Matinee",
+    "local": "Account qui",
+    "with": "Accedi con",
+    "matineeHint": "Usa il nome utente e la password con cui guardi in Matinee.",
+    "signUpHint": "Crea un account per chiedere film e serie.",
+    "username": "Nome utente",
+    "name": "Il tuo nome",
+    "nameHint": "Ciò che vedono gli amministratori. Lascia vuoto per usare il tuo nome utente.",
+    "password": "Password",
+    "passwordHint": "Almeno 8 caratteri.",
+    "make": "Crea il mio account",
+    "signIn": "Accedi",
+    "haveAccount": "Ho un account",
+    "new": "Nuovo qui? Crea un account"
+  },
+  "nav": {
+    "discover": "Scopri",
+    "requests": "Le mie richieste",
+    "problems": "Problemi",
+    "sections": "Sezioni",
+    "account": "Il tuo account"
+  },
+  "home": {
+    "hi": "Ciao, {{name}}",
+    "welcome": "Trova un film o una serie e chiedilo. Puoi seguirlo sotto Le mie richieste.",
+    "find": "Trova un film o una serie",
+    "seeAll": "Vedi tutto",
+    "nothing": "Ancora niente da mostrare",
+    "notSetUp": "L’amministratore non ha finito di configurare questo sito. Riprova più tardi.",
+    "movieGenres": "Generi di film",
+    "showGenres": "Generi di serie"
+  },
+  "search": {
+    "nothing": "Niente con quel nome.",
+    "movies": "Film",
+    "shows": "Serie",
+    "looking": "Ricerca…"
+  },
+  "row": {
+    "more": "Mostra altro"
+  },
+  "pill": {
+    "ready": "Pronto da guardare",
+    "some": "Alcuni episodi",
+    "coming": "In arrivo",
+    "asked": "Richiesto",
+    "declined": "Rifiutato"
+  },
+  "kind": {
+    "movie": "Film",
+    "show": "Mostra"
+  },
+  "card": {
+    "request": "Richiedi {{title}}"
+  },
+  "sheet": {
+    "out": "Esce il {{date}}",
+    "starts": "Inizia il {{date}}",
+    "released": "Uscito il {{date}}",
+    "firstAired": "Prima messa in onda il {{date}}",
+    "ready": "È nella libreria. Buona visione!",
+    "some": "Una parte è nella libreria, e il resto sta arrivando.",
+    "report": "Segnala un problema",
+    "coming": "Sta arrivando. Niente da chiedere: sarà nella libreria appena trovato.",
+    "asked": "L’hai chiesto tu. Aspetta l’approvazione di un amministratore.",
+    "takeBack": "Ritira la richiesta",
+    "declined": "Un amministratore ha rifiutato la richiesta. Puoi chiederlo di nuovo.",
+    "declinedWhy": "Un amministratore ha rifiutato la richiesta: “{{reply}}” Puoi chiederlo di nuovo.",
+    "note": "Nota per gli amministratori",
+    "noteHint": "Facoltativo, per esempio quale versione cerchi.",
+    "askMovie": "Richiedi questo film",
+    "askShow": "Richiedi questa serie"
+  },
+  "report": {
+    "thanks": "Grazie. Gli amministratori daranno un’occhiata, e puoi seguirlo sotto Problemi.",
+    "done": "Fine",
+    "title": "Cosa non va?",
+    "problem": "Problema",
+    "season": "Stagione",
+    "seasonHint": "Lascia vuoto se riguarda tutta la serie.",
+    "episode": "Episodio",
+    "more": "Raccontaci di più",
+    "say": "Di’ cosa è successo.",
+    "optional": "Facoltativo.",
+    "send": "Invia la segnalazione"
+  },
+  "mine": {
+    "title": "Le mie richieste",
+    "none": "Ancora niente di chiesto",
+    "empty": "Trova un film o una serie in <link>Scopri</link> e premi <strong>+</strong> per chiederlo.",
+    "admin": "Amministratore: “{{reply}}”",
+    "asked": "Chiesto {{date}}",
+    "takeBack": "Ritira"
+  },
+  "issues": {
+    "title": "Problemi",
+    "sub": "Qualcosa non va con un film o una serie? Aprilo in Scopri o cercalo per nome, e scegli Segnala un problema.",
+    "none": "Nessun problema segnalato",
+    "season": "Stagione {{season}}",
+    "episode": "Stagione {{season}}, episodio {{episode}}",
+    "waiting": "In attesa di un amministratore",
+    "fixed": "Risolto"
+  },
+  "account": {
+    "title": "Il tuo account",
+    "signedIn": "Accesso eseguito come <strong>{{name}}</strong>.",
+    "signedInMatinee": "Accesso eseguito come <strong>{{name}}</strong> con il tuo account Matinee.",
+    "change": "Cambia la password",
+    "current": "Password attuale",
+    "new": "Nuova password",
+    "changed": "Cambiata. Sei stato disconnesso ovunque altrove.",
+    "changeButton": "Cambia password",
+    "signOut": "Esci"
+  }
+}

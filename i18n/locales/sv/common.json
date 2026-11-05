@@ -1,0 +1,55 @@
+{
+  "size": {
+    "B": "{{value}} B",
+    "KB": "{{value}} kB",
+    "MB": "{{value}} MB",
+    "GB": "{{value}} GB",
+    "TB": "{{value}} TB",
+    "PB": "{{value}} PB"
+  },
+  "duration": {
+    "minutes_one": "{{count}} min",
+    "minutes_other": "{{count}} min",
+    "hours": "{{hours}} h",
+    "hoursMinutes": "{{hours}} tim {{minutes}} min"
+  },
+  "loading": "Läser in…",
+  "close": "Stäng",
+  "language": {
+    "title": "Språk",
+    "label": "Språk",
+    "automatic": "Automatiskt ({{language}})",
+    "hint": "Språket som Box Office visas på för dig, på alla enheter du loggar in på. Automatiskt följer varje webbläsares språk.",
+    "machine": "Den här översättningen är maskingjord, så vissa formuleringar kan vara fel.",
+    "help": "Hjälp till att förbättra det"
+  },
+  "sort": {
+    "az": "A till Ö",
+    "za": "Ö till A",
+    "oldest": "Äldsta först",
+    "newest": "Nyaste först",
+    "soonest": "Närmast först",
+    "latest": "Senast först",
+    "smallest": "Minst först",
+    "largest": "Störst först",
+    "lowest": "Lägst först",
+    "highest": "Högst först",
+    "worst": "Sämst först",
+    "best": "Bäst först",
+    "shortest": "Kortast först",
+    "longest": "Längst först",
+    "fewest": "Färst först",
+    "most": "Flest först",
+    "least": "Lägst först",
+    "by": "Sortera efter",
+    "show": "Visa {{order}}",
+    "flip": "{{option}}, {{order}}. Visa {{other}} i stället"
+  },
+  "pager": {
+    "pages": "{{label}}-sidor",
+    "range": "{{from}}–{{to}} av {{total}}",
+    "previous": "Föregående sida",
+    "next": "Nästa sida",
+    "page": "Sida {{page}} av {{pages}}"
+  }
+}

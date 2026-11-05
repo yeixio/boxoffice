@@ -1,0 +1,140 @@
+{
+  "problems": {
+    "wont_play": "Não reproduz",
+    "wrong_title": "É o filme ou episódio errado",
+    "picture": "A imagem está ruim",
+    "sound": "O som está errado ou fora de sincronia",
+    "subtitles": "As legendas estão faltando ou erradas",
+    "other": "Outra coisa"
+  },
+  "state": {
+    "pending": "Aguardando aprovação",
+    "declined": "Recusado",
+    "searching": "Aprovado, procurando",
+    "downloadingAt": "Baixando, {{percent}}",
+    "downloading": "Baixando",
+    "partial": "Alguns episódios estão prontos",
+    "available": "Pronto para assistir",
+    "paused": "Aprovado, em espera",
+    "removed": "Removido da biblioteca"
+  },
+  "site": {
+    "down": "Este site não está respondendo: {{error}}",
+    "closed": "Este site de pedidos não está aberto agora."
+  },
+  "signIn": {
+    "matinee": "Conta do Matinee",
+    "local": "Conta aqui",
+    "with": "Entrar com",
+    "matineeHint": "Use o nome de usuário e a senha com que você assiste no Matinee.",
+    "signUpHint": "Crie uma conta para pedir filmes e séries.",
+    "username": "Nome de usuário",
+    "name": "Seu nome",
+    "nameHint": "O que os administradores veem. Deixe vazio para usar seu nome de usuário.",
+    "password": "Senha",
+    "passwordHint": "Pelo menos 8 caracteres.",
+    "make": "Criar minha conta",
+    "signIn": "Entrar",
+    "haveAccount": "Já tenho uma conta",
+    "new": "Novo por aqui? Crie uma conta"
+  },
+  "nav": {
+    "discover": "Descobrir",
+    "requests": "Meus pedidos",
+    "problems": "Problemas",
+    "sections": "Seções",
+    "account": "Sua conta"
+  },
+  "home": {
+    "hi": "Olá, {{name}}",
+    "welcome": "Encontre um filme ou série e peça. Você pode acompanhar em Meus pedidos.",
+    "find": "Encontrar um filme ou série",
+    "seeAll": "Ver tudo",
+    "nothing": "Nada para mostrar ainda",
+    "notSetUp": "O administrador ainda não terminou de configurar este site. Tente de novo mais tarde.",
+    "movieGenres": "Gêneros de filmes",
+    "showGenres": "Gêneros de séries"
+  },
+  "search": {
+    "nothing": "Nada com esse nome.",
+    "movies": "Filmes",
+    "shows": "Séries",
+    "looking": "Procurando…"
+  },
+  "row": {
+    "more": "Mostrar mais"
+  },
+  "pill": {
+    "ready": "Pronto para assistir",
+    "some": "Alguns episódios",
+    "coming": "A caminho",
+    "asked": "Pedido",
+    "declined": "Recusado"
+  },
+  "kind": {
+    "movie": "Filme",
+    "show": "Mostrar"
+  },
+  "card": {
+    "request": "Pedir {{title}}"
+  },
+  "sheet": {
+    "out": "Sai em {{date}}",
+    "starts": "Começa em {{date}}",
+    "released": "Lançado em {{date}}",
+    "firstAired": "Estreou em {{date}}",
+    "ready": "Está na biblioteca. Aproveite!",
+    "some": "Parte está na biblioteca, e o resto está a caminho.",
+    "report": "Informar um problema",
+    "coming": "Está a caminho. Nada para pedir: vai estar na biblioteca assim que for encontrado.",
+    "asked": "Você pediu isto. Está aguardando a aprovação de um administrador.",
+    "takeBack": "Retirar o pedido",
+    "declined": "Um administrador recusou isto. Você pode pedir de novo.",
+    "declinedWhy": "Um administrador recusou isto: “{{reply}}” Você pode pedir de novo.",
+    "note": "Nota para os administradores",
+    "noteHint": "Opcional, como a versão que você quer.",
+    "askMovie": "Pedir este filme",
+    "askShow": "Pedir esta série"
+  },
+  "report": {
+    "thanks": "Obrigado. Os administradores vão dar uma olhada, e você pode acompanhar em Problemas.",
+    "done": "Concluído",
+    "title": "O que está errado?",
+    "problem": "Problema",
+    "season": "Temporada",
+    "seasonHint": "Deixe vazio se for a série inteira.",
+    "episode": "Episódio",
+    "more": "Conte mais",
+    "say": "Diga o que aconteceu.",
+    "optional": "Opcional.",
+    "send": "Enviar o relato"
+  },
+  "mine": {
+    "title": "Meus pedidos",
+    "none": "Nada pedido ainda",
+    "empty": "Encontre um filme ou série no <link>Descobrir</link> e toque em <strong>+</strong> para pedir.",
+    "admin": "Administrador: “{{reply}}”",
+    "asked": "Pedido {{date}}",
+    "takeBack": "Cancelar"
+  },
+  "issues": {
+    "title": "Problemas",
+    "sub": "Algo errado com um filme ou série? Abra no Descobrir ou encontre pelo nome, e escolha Relatar um problema.",
+    "none": "Nenhum problema relatado",
+    "season": "Temporada {{season}}",
+    "episode": "Temporada {{season}}, episódio {{episode}}",
+    "waiting": "Aguardando um administrador",
+    "fixed": "Corrigido"
+  },
+  "account": {
+    "title": "Sua conta",
+    "signedIn": "Conectado como <strong>{{name}}</strong>.",
+    "signedInMatinee": "Conectado como <strong>{{name}}</strong> com sua conta do Matinee.",
+    "change": "Mudar sua senha",
+    "current": "Senha atual",
+    "new": "Nova senha",
+    "changed": "Alterada. Você saiu em todos os outros lugares.",
+    "changeButton": "Alterar senha",
+    "signOut": "Sair"
+  }
+}

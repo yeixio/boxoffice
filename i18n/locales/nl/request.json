@@ -1,0 +1,140 @@
+{
+  "problems": {
+    "wont_play": "Het speelt niet af",
+    "wrong_title": "Het is de verkeerde film of aflevering",
+    "picture": "Het beeld is slecht",
+    "sound": "Het geluid klopt niet of loopt niet synchroon",
+    "subtitles": "Ondertitels ontbreken of kloppen niet",
+    "other": "Iets anders"
+  },
+  "state": {
+    "pending": "Wacht op goedkeuring",
+    "declined": "Geweigerd",
+    "searching": "Goedgekeurd, wordt gezocht",
+    "downloadingAt": "Downloaden, {{percent}}",
+    "downloading": "Downloaden",
+    "partial": "Sommige afleveringen zijn klaar",
+    "available": "Klaar om te kijken",
+    "paused": "Goedgekeurd, in de wacht",
+    "removed": "Uit de bibliotheek verwijderd"
+  },
+  "site": {
+    "down": "Deze site reageert niet: {{error}}",
+    "closed": "Deze verzoekensite is nu niet open."
+  },
+  "signIn": {
+    "matinee": "Matinee-account",
+    "local": "Account hier",
+    "with": "Inloggen met",
+    "matineeHint": "Gebruik de gebruikersnaam en het wachtwoord waarmee je kijkt in Matinee.",
+    "signUpHint": "Maak een account om films en series aan te vragen.",
+    "username": "Gebruikersnaam",
+    "name": "Je naam",
+    "nameHint": "Wat de beheerders zien. Laat leeg om je gebruikersnaam te gebruiken.",
+    "password": "Wachtwoord",
+    "passwordHint": "Minstens 8 tekens.",
+    "make": "Mijn account maken",
+    "signIn": "Inloggen",
+    "haveAccount": "Ik heb een account",
+    "new": "Nieuw hier? Maak een account"
+  },
+  "nav": {
+    "discover": "Ontdekken",
+    "requests": "Mijn verzoeken",
+    "problems": "Problemen",
+    "sections": "Secties",
+    "account": "Je account"
+  },
+  "home": {
+    "hi": "Hoi {{name}}",
+    "welcome": "Zoek een film of serie en vraag hem aan. Je kunt het volgen onder Mijn verzoeken.",
+    "find": "Een film of serie zoeken",
+    "seeAll": "Alles bekijken",
+    "nothing": "Nog niets te zien",
+    "notSetUp": "De beheerder is nog niet klaar met het instellen van deze site. Probeer het later opnieuw.",
+    "movieGenres": "Filmgenres",
+    "showGenres": "Seriegenres"
+  },
+  "search": {
+    "nothing": "Niets met die naam.",
+    "movies": "Films",
+    "shows": "Series",
+    "looking": "Zoeken…"
+  },
+  "row": {
+    "more": "Meer tonen"
+  },
+  "pill": {
+    "ready": "Klaar om te kijken",
+    "some": "Sommige afleveringen",
+    "coming": "Onderweg",
+    "asked": "Aangevraagd",
+    "declined": "Geweigerd"
+  },
+  "kind": {
+    "movie": "Film",
+    "show": "Tonen"
+  },
+  "card": {
+    "request": "{{title}} aanvragen"
+  },
+  "sheet": {
+    "out": "Uit op {{date}}",
+    "starts": "Begint op {{date}}",
+    "released": "Uitgebracht op {{date}}",
+    "firstAired": "Voor het eerst uitgezonden op {{date}}",
+    "ready": "Het staat in de bibliotheek. Veel kijkplezier!",
+    "some": "Een deel staat in de bibliotheek, en de rest is onderweg.",
+    "report": "Een probleem melden",
+    "coming": "Het is onderweg. Niets om aan te vragen: het staat in de bibliotheek zodra het is gevonden.",
+    "asked": "Je hebt dit aangevraagd. Het wacht op goedkeuring van een beheerder.",
+    "takeBack": "Intrekken",
+    "declined": "Een beheerder heeft dit geweigerd. Je kunt het opnieuw vragen.",
+    "declinedWhy": "Een beheerder heeft dit geweigerd: “{{reply}}” Je kunt het opnieuw vragen.",
+    "note": "Notitie voor de beheerders",
+    "noteHint": "Optioneel, zoals welke versie je zoekt.",
+    "askMovie": "Deze film aanvragen",
+    "askShow": "Deze serie aanvragen"
+  },
+  "report": {
+    "thanks": "Bedankt. De beheerders kijken ernaar, en je kunt het volgen onder Problemen.",
+    "done": "Klaar",
+    "title": "Wat is er mis?",
+    "problem": "Probleem",
+    "season": "Seizoen",
+    "seasonHint": "Laat leeg als het om de hele serie gaat.",
+    "episode": "Aflevering",
+    "more": "Vertel meer",
+    "say": "Zeg wat er gebeurde.",
+    "optional": "Optioneel.",
+    "send": "De melding versturen"
+  },
+  "mine": {
+    "title": "Mijn verzoeken",
+    "none": "Nog niets aangevraagd",
+    "empty": "Zoek een film of serie op <link>Ontdekken</link> en druk op <strong>+</strong> om hem aan te vragen.",
+    "admin": "Beheerder: “{{reply}}”",
+    "asked": "Gevraagd {{date}}",
+    "takeBack": "Intrekken"
+  },
+  "issues": {
+    "title": "Problemen",
+    "sub": "Is er iets mis met een film of serie? Open hem op Ontdekken of zoek hem op naam, en kies Een probleem melden.",
+    "none": "Geen problemen gemeld",
+    "season": "Seizoen {{season}}",
+    "episode": "Seizoen {{season}}, aflevering {{episode}}",
+    "waiting": "Wacht op een beheerder",
+    "fixed": "Opgelost"
+  },
+  "account": {
+    "title": "Je account",
+    "signedIn": "Ingelogd als <strong>{{name}}</strong>.",
+    "signedInMatinee": "Ingelogd als <strong>{{name}}</strong> met je Matinee-account.",
+    "change": "Je wachtwoord wijzigen",
+    "current": "Huidig wachtwoord",
+    "new": "Nieuw wachtwoord",
+    "changed": "Gewijzigd. Je bent overal anders uitgelogd.",
+    "changeButton": "Wachtwoord wijzigen",
+    "signOut": "Uitloggen"
+  }
+}

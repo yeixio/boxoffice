@@ -1,0 +1,140 @@
+{
+  "problems": {
+    "wont_play": "Den spelas inte upp",
+    "wrong_title": "Det är fel film eller avsnitt",
+    "picture": "Bilden är dålig",
+    "sound": "Ljudet är fel eller osynkat",
+    "subtitles": "Undertexter saknas eller är fel",
+    "other": "Något annat"
+  },
+  "state": {
+    "pending": "Väntar på godkännande",
+    "declined": "Nekad",
+    "searching": "Godkänd, letar efter den",
+    "downloadingAt": "Laddar ner, {{percent}}",
+    "downloading": "Laddar ned",
+    "partial": "Några avsnitt är klara",
+    "available": "Redo att ses",
+    "paused": "Godkänd, pausad",
+    "removed": "Borttagen från biblioteket"
+  },
+  "site": {
+    "down": "Den här sidan svarar inte: {{error}}",
+    "closed": "Den här önskemålssidan är inte öppen just nu."
+  },
+  "signIn": {
+    "matinee": "Matinee-konto",
+    "local": "Konto här",
+    "with": "Logga in med",
+    "matineeHint": "Använd användarnamnet och lösenordet du tittar med i Matinee.",
+    "signUpHint": "Skapa ett konto för att önska filmer och serier.",
+    "username": "Användarnamn",
+    "name": "Ditt namn",
+    "nameHint": "Det administratörerna ser. Lämna tomt för att använda ditt användarnamn.",
+    "password": "Lösenord",
+    "passwordHint": "Minst 8 tecken.",
+    "make": "Skapa mitt konto",
+    "signIn": "Logga in",
+    "haveAccount": "Jag har ett konto",
+    "new": "Ny här? Skapa ett konto"
+  },
+  "nav": {
+    "discover": "Upptäck",
+    "requests": "Mina önskemål",
+    "problems": "Problem",
+    "sections": "Avsnitt",
+    "account": "Ditt konto"
+  },
+  "home": {
+    "hi": "Hej {{name}}",
+    "welcome": "Hitta en film eller serie och önska den. Du kan följa den under Mina önskemål.",
+    "find": "Hitta en film eller serie",
+    "seeAll": "Visa alla",
+    "nothing": "Inget att visa än",
+    "notSetUp": "Administratören har inte ställt in den här sidan färdigt. Försök igen senare.",
+    "movieGenres": "Filmgenrer",
+    "showGenres": "Seriegenrer"
+  },
+  "search": {
+    "nothing": "Inget med det namnet.",
+    "movies": "Filmer",
+    "shows": "Serier",
+    "looking": "Letar…"
+  },
+  "row": {
+    "more": "Visa mer"
+  },
+  "pill": {
+    "ready": "Redo att ses",
+    "some": "Några avsnitt",
+    "coming": "På väg",
+    "asked": "Begärd",
+    "declined": "Nekad"
+  },
+  "kind": {
+    "movie": "Film",
+    "show": "Visa"
+  },
+  "card": {
+    "request": "Önska {{title}}"
+  },
+  "sheet": {
+    "out": "Ute {{date}}",
+    "starts": "Börjar {{date}}",
+    "released": "Släppt {{date}}",
+    "firstAired": "Hade premiär {{date}}",
+    "ready": "Den finns i biblioteket. Mycket nöje!",
+    "some": "En del finns i biblioteket, och resten är på väg.",
+    "report": "Rapportera ett problem",
+    "coming": "Den är på väg. Inget att önska: den finns i biblioteket när den har hittats.",
+    "asked": "Du önskade detta. Det väntar på att en administratör godkänner det.",
+    "takeBack": "Ta tillbaka",
+    "declined": "En administratör nekade detta. Du kan önska igen.",
+    "declinedWhy": "En administratör nekade detta: ”{{reply}}” Du kan önska igen.",
+    "note": "Anteckning till administratörerna",
+    "noteHint": "Valfritt, till exempel vilken version du vill ha.",
+    "askMovie": "Önska den här filmen",
+    "askShow": "Önska den här serien"
+  },
+  "report": {
+    "thanks": "Tack. Administratörerna tar en titt, och du kan följa det under Problem.",
+    "done": "Klar",
+    "title": "Vad är fel?",
+    "problem": "Problem",
+    "season": "Säsong",
+    "seasonHint": "Lämna tomt om det gäller hela serien.",
+    "episode": "Avsnitt",
+    "more": "Berätta mer",
+    "say": "Säg vad som hände.",
+    "optional": "Valfritt.",
+    "send": "Skicka rapporten"
+  },
+  "mine": {
+    "title": "Mina önskemål",
+    "none": "Inget önskat än",
+    "empty": "Hitta en film eller serie på <link>Upptäck</link> och tryck på <strong>+</strong> för att önska den.",
+    "admin": "Administratör: ”{{reply}}”",
+    "asked": "Önskad {{date}}",
+    "takeBack": "Dra tillbaka"
+  },
+  "issues": {
+    "title": "Problem",
+    "sub": "Något fel med en film eller serie? Öppna den på Upptäck eller hitta den via namnet, och välj Rapportera ett problem.",
+    "none": "Inga problem rapporterade",
+    "season": "Säsong {{season}}",
+    "episode": "Säsong {{season}}, avsnitt {{episode}}",
+    "waiting": "Väntar på en administratör",
+    "fixed": "Åtgärdat"
+  },
+  "account": {
+    "title": "Ditt konto",
+    "signedIn": "Inloggad som <strong>{{name}}</strong>.",
+    "signedInMatinee": "Inloggad som <strong>{{name}}</strong> med ditt Matinee-konto.",
+    "change": "Byt ditt lösenord",
+    "current": "Nuvarande lösenord",
+    "new": "Nytt lösenord",
+    "changed": "Ändrat. Du är utloggad överallt annars.",
+    "changeButton": "Byt lösenord",
+    "signOut": "Logga ut"
+  }
+}

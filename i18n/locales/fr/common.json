@@ -1,0 +1,56 @@
+{
+  "size": {
+    "B": "{{value}} o",
+    "KB": "{{value}} Ko",
+    "MB": "{{value}} Mo",
+    "GB": "{{value}} Go",
+    "TB": "{{value}} To",
+    "PB": "{{value}} Po"
+  },
+  "duration": {
+    "minutes_one": "{{count}} min",
+    "minutes_many": "{{count}} min",
+    "minutes_other": "{{count}} min",
+    "hours": "{{hours}} h",
+    "hoursMinutes": "{{hours}} h {{minutes}} min"
+  },
+  "loading": "Chargement…",
+  "close": "Fermer",
+  "language": {
+    "title": "Langue",
+    "label": "Langue",
+    "automatic": "Automatique ({{language}})",
+    "hint": "La langue dans laquelle Box Office vous affiche tout, sur chaque appareil où vous vous connectez. Automatique suit la langue de chaque navigateur.",
+    "machine": "Cette traduction a été faite automatiquement, certaines formulations peuvent donc être imprécises.",
+    "help": "Aidez à l’améliorer"
+  },
+  "sort": {
+    "az": "De A à Z",
+    "za": "De Z à A",
+    "oldest": "Plus anciens d'abord",
+    "newest": "Plus récents d'abord",
+    "soonest": "Les plus proches d’abord",
+    "latest": "Les plus tardifs d’abord",
+    "smallest": "Les plus petits d’abord",
+    "largest": "Les plus grands d’abord",
+    "lowest": "Le plus bas d’abord",
+    "highest": "Le plus élevé d’abord",
+    "worst": "Les pires d’abord",
+    "best": "Les meilleurs d’abord",
+    "shortest": "Les plus courts d’abord",
+    "longest": "Les plus longs d’abord",
+    "fewest": "Les moins nombreux d’abord",
+    "most": "Les plus nombreux d’abord",
+    "least": "Les moins d’abord",
+    "by": "Trier par",
+    "show": "Afficher {{order}}",
+    "flip": "{{option}}, {{order}}. Afficher {{other}} à la place"
+  },
+  "pager": {
+    "pages": "Pages de {{label}}",
+    "range": "{{from}}–{{to}} sur {{total}}",
+    "previous": "Page précédente",
+    "next": "Page suivante",
+    "page": "Page {{page}} sur {{pages}}"
+  }
+}
