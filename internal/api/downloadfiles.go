@@ -51,7 +51,7 @@ func (s *Server) browseDownloads(w http.ResponseWriter, r *http.Request) error {
 // getDownloadFile hands a file over to save. It's always an attachment of
 // no particular type, sandboxed, so a browser never opens or runs it.
 func (s *Server) getDownloadFile(w http.ResponseWriter, r *http.Request) error {
-	f, info, err := s.Downloads.OpenFile(r.URL.Query().Get("path"))
+	f, info, err := s.Downloads.OpenFile(r.Context(), r.URL.Query().Get("path"))
 	if err != nil {
 		return fileError(err)
 	}
