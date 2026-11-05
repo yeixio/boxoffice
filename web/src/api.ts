@@ -532,3 +532,25 @@ export type DiscoverPage = DiscoverRow & { page: number; pages: number }
 export type Genre = { id: number; name: string }
 export type Network = { id: number; name: string; logo?: string }
 export type DiscoverHome = { rows: DiscoverRow[]; browse: { movieGenres: Genre[]; seriesGenres: Genre[]; networks: Network[] } }
+
+// ---- books ----
+
+export type BookFormat = 'ebook' | 'audiobook'
+export type Author = {
+  id: number
+  olKey: string
+  name: string
+  sortName: string
+  born?: string
+  died?: string
+  bio?: string
+  newEbooks: boolean
+  newAudiobooks: boolean
+  addedAt: string
+  books: number
+  wantedEbooks: number
+  wantedAudiobooks: number
+}
+export type Book = { id: number; authorId: number; olKey: string; title: string; subtitle?: string; year?: number; editions: number; wantEbook: boolean; wantAudiobook: boolean; cover?: string }
+export type AuthorDetail = Author & { bookList: Book[] }
+export type LookupAuthor = { key: string; name: string; born?: string; died?: string; topWork?: string; works?: number; photo?: string; id?: number }

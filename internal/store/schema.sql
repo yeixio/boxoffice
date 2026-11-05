@@ -362,3 +362,35 @@ CREATE TABLE IF NOT EXISTS albums (
 	monitored       INTEGER NOT NULL DEFAULT 0
 );
 CREATE INDEX IF NOT EXISTS albums_artist ON albums (artist_id);
+
+-- Books, for ebooks and audiobooks alike, once either is turned on in
+-- Settings: authors from Open Library and their books (Open Library
+-- works). Each book can be wanted as an ebook, an audiobook, or both.
+CREATE TABLE IF NOT EXISTS authors (
+	id             INTEGER PRIMARY KEY AUTOINCREMENT,
+	ol_key         TEXT NOT NULL UNIQUE,
+	name           TEXT NOT NULL,
+	sort_name      TEXT NOT NULL,
+	born           TEXT NOT NULL DEFAULT '',
+	died           TEXT NOT NULL DEFAULT '',
+	bio            TEXT NOT NULL DEFAULT '',
+	-- Whether books that come out from now on are wanted in each format.
+	new_ebooks     INTEGER NOT NULL DEFAULT 0,
+	new_audiobooks INTEGER NOT NULL DEFAULT 0,
+	added_at       BIGINT NOT NULL,
+	refreshed_at   BIGINT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS books (
+	id             INTEGER PRIMARY KEY AUTOINCREMENT,
+	author_id      BIGINT NOT NULL REFERENCES authors(id) ON DELETE CASCADE,
+	ol_key         TEXT NOT NULL UNIQUE,
+	title          TEXT NOT NULL,
+	subtitle       TEXT NOT NULL DEFAULT '',
+	year           INTEGER NOT NULL DEFAULT 0,
+	cover_id       BIGINT NOT NULL DEFAULT 0,
+	editions       INTEGER NOT NULL DEFAULT 0,
+	want_ebook     INTEGER NOT NULL DEFAULT 0,
+	want_audiobook INTEGER NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS books_author ON books (author_id);
