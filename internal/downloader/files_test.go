@@ -148,7 +148,7 @@ func TestReleaseAndOpen(t *testing.T) {
 	d, _ := st.AddDownload(ctx, store.Download{Name: "Rel"})
 	st.SetDownloadStatus(ctx, d.ID, store.DownloadFailed, "quarantined")
 	st.SetDownloadQuarantined(ctx, d.ID, filepath.Join(e.Dir, QuarantineDir, "Rel"))
-	if _, _, err := e.OpenFile(context.Background(), QuarantineDir + "/Rel/movie.mkv"); err == nil {
+	if _, _, err := e.OpenFile(context.Background(), QuarantineDir+"/Rel/movie.mkv"); err == nil {
 		t.Fatal("opened a quarantined file")
 	}
 	if err := e.ImportPath(ctx, QuarantineDir+"/Rel", "movie", 1); err == nil {
