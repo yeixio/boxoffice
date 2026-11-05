@@ -354,6 +354,8 @@ export type Candidate = {
   accepted: boolean
   rejections?: string[]
   infoUrl?: string
+  pack?: boolean
+  episodes?: number[]
 }
 export type ReleaseResults = { releases: Candidate[]; errors?: string[]; searched: number }
 export type IndexerCaps = { categories: { id: number; name: string; subs?: { id: number; name: string }[] }[]; movieSearch: boolean; tvSearch: boolean }

@@ -53,6 +53,10 @@ type Candidate struct {
 	Quality    int      `json:"quality"`
 	Accepted   bool     `json:"accepted"`
 	Rejections []string `json:"rejections,omitempty"`
+	// Pack is a whole season in one release; Episodes are the episode
+	// numbers a release holds, as its name gives them.
+	Pack     bool  `json:"pack,omitempty"`
+	Episodes []int `json:"episodes,omitempty"`
 
 	kind     string
 	titleID  int64
@@ -67,6 +71,9 @@ type Results struct {
 	Errors   []string    `json:"errors,omitempty"`
 	Searched int         `json:"searched"` // indexers asked
 }
+
+// ErrNothingAired means a season has no episodes out yet to search for.
+var ErrNothingAired = errors.New("none of its episodes have aired yet")
 
 // ErrNoIndexers means there's nowhere to search.
 var ErrNoIndexers = errors.New("there are no Usenet indexers to search; add one in Settings")
@@ -275,10 +282,14 @@ func (s *Service) Episode(ctx context.Context, id int64) (Results, error) {
 		case season != e.Season:
 			c.reject(fmt.Sprintf("it's season %d", season))
 		case len(eps) == 0:
-			c.reject("it's a whole season; Box Office grabs single episodes for now")
+			// A season pack holds the episode too; only it is moved in
+			// over its copy, the rest only where they're missing or
+			// worse (see the downloader's import).
+			c.Pack = true
 		case !slices.Contains(eps, e.Number):
 			c.reject(fmt.Sprintf("it's episode %d", eps[0]))
 		}
+		c.Episodes = eps
 		if t.TVDBID == 0 && !titleMatches(r.Title, t.Title) {
 			c.reject("its name doesn't match the show's")
 		}
@@ -287,6 +298,113 @@ func (s *Service) Episode(ctx context.Context, id int64) (Results, error) {
 	s.rank(ctx, &out)
 	s.markSearched(ctx, "episode", e.ID, out)
 	s.logResults(fmt.Sprintf("%s S%02dE%02d", t.Title, e.Season, e.Number), out)
+	return out, nil
+}
+
+// Season searches for a whole season of a show: season packs and single
+// episodes alike. A pack is judged against the season's episodes that have
+// aired: it's taken when its quality is one at least one of them still
+// wants. A single episode is judged against that episode.
+func (s *Service) Season(ctx context.Context, seriesID int64, season int) (Results, error) {
+	t, err := s.Store.Series(ctx, seriesID)
+	if err != nil {
+		return Results{}, err
+	}
+	all, err := s.Store.Episodes(ctx, seriesID)
+	if err != nil {
+		return Results{}, err
+	}
+	now := time.Now()
+	var eps []store.Episode
+	for _, e := range all {
+		if e.Season == season && e.AirDate != nil && e.AirDate.Before(now) {
+			eps = append(eps, e)
+		}
+	}
+	if len(eps) == 0 {
+		return Results{}, fmt.Errorf("season %d: %w", season, ErrNothingAired)
+	}
+	rs, notes, n, err := s.ask(ctx, func(ix store.Indexer) Query {
+		q := Query{Type: "tvsearch", Season: season, Cats: cats(ix, 5000, 5999, 5000)}
+		if t.TVDBID > 0 {
+			q.TVDBID = t.TVDBID
+		} else {
+			q.Text = t.Title
+		}
+		return q
+	})
+	if err != nil {
+		return Results{}, err
+	}
+	p, err := s.profile(ctx, t.ProfileID)
+	if err != nil {
+		return Results{}, err
+	}
+	blocked, err := s.blocked(ctx, "series", t.ID)
+	if err != nil {
+		return Results{}, err
+	}
+	byNumber := map[int]store.Episode{}
+	var ids []int64
+	for _, e := range eps {
+		byNumber[e.Number] = e
+		ids = append(ids, e.ID)
+	}
+	out := Results{Errors: notes, Searched: n}
+	for _, r := range rs {
+		q := quality.Parse(r.Title).ID
+		rseason, numbers, ok := releaseEpisode(r.Title)
+		var c Candidate
+		switch {
+		case !ok:
+			c = s.judge(ctx, r, p, false, 0, blocked)
+			c.reject("its name doesn't say which season it is")
+		case rseason != season:
+			c = s.judge(ctx, r, p, false, 0, blocked)
+			c.reject(fmt.Sprintf("it's season %d", rseason))
+		case len(numbers) == 0:
+			// A pack: as good as the episode that wants it most.
+			has, have := true, -1
+			for _, e := range eps {
+				if !e.Monitored {
+					continue
+				}
+				if e.File == nil {
+					has = false
+				} else if p.Wants(true, e.File.Quality, q) && (have < 0 || quality.Rank(e.File.Quality) < quality.Rank(have)) {
+					have = e.File.Quality
+				}
+			}
+			if have < 0 {
+				have = q // nothing it would upgrade
+			}
+			c = s.judge(ctx, r, p, has, have, blocked)
+			c.Pack, c.episodes = true, ids
+		default:
+			e, found := byNumber[numbers[0]]
+			if !found {
+				c = s.judge(ctx, r, p, false, 0, blocked)
+				c.reject(fmt.Sprintf("Box Office doesn't know an episode %d of season %d that has aired", numbers[0], season))
+				break
+			}
+			has, have := e.File != nil, 0
+			if has {
+				have = e.File.Quality
+			}
+			c = s.judge(ctx, r, p, has, have, blocked)
+			c.episodes = []int64{e.ID}
+			if !e.Monitored {
+				c.reject("the episode isn't watched for")
+			}
+		}
+		c.kind, c.titleID, c.Episodes = "series", t.ID, numbers
+		if t.TVDBID == 0 && !titleMatches(r.Title, t.Title) {
+			c.reject("its name doesn't match the show's")
+		}
+		out.Releases = append(out.Releases, c)
+	}
+	s.rank(ctx, &out)
+	s.logResults(fmt.Sprintf("%s season %d", t.Title, season), out)
 	return out, nil
 }
 
@@ -389,6 +507,11 @@ func (s *Service) rank(ctx context.Context, out *Results) {
 			return 1
 		case a.Quality != b.Quality:
 			return quality.Rank(b.Quality) - quality.Rank(a.Quality)
+		case a.Pack != b.Pack:
+			if b.Pack {
+				return -1
+			}
+			return 1
 		case a.priority != b.priority:
 			return a.priority - b.priority
 		case a.Grabs != b.Grabs:
@@ -597,12 +720,122 @@ func (s *Service) jobEpisode(ctx context.Context, payload string) (jobs.Result, 
 	return s.pick(ctx, res, "series", e.SeriesID, e.ID)
 }
 
-// maxEpisodes caps how many episodes one show search looks for, to be kind
-// to the indexers' daily limits.
+// maxEpisodes caps how many searches one show search makes, to be kind to
+// the indexers' daily limits. A season search counts as one.
 const maxEpisodes = 25
+
+// seasonAt is how many wanted episodes of one season make a show search
+// ask for the whole season once, rather than for each episode.
+const seasonAt = 3
+
+// interleave takes from a and b in turn, so neither starves the other.
+func interleave[T any](a, b []T) []T {
+	out := make([]T, 0, len(a)+len(b))
+	for i := 0; i < len(a) || i < len(b); i++ {
+		if i < len(a) {
+			out = append(out, a[i])
+		}
+		if i < len(b) {
+			out = append(out, b[i])
+		}
+	}
+	return out
+}
+
+// grabTally is what a show search or an automatic search did.
+type grabTally struct {
+	grabbed, found, busy int
+	off                  bool
+	problems             []string
+}
+
+func (g *grabTally) take(ctx context.Context, s *Service, c Candidate) {
+	g.found++
+	if _, err := s.grab(ctx, c); errors.Is(err, ErrOff) {
+		g.off = true
+	} else if err != nil {
+		g.problems = append(g.problems, err.Error())
+	} else {
+		g.grabbed++
+	}
+}
+
+// seasonGrab searches a season once for some of its wanted episodes and
+// grabs the best season pack it takes, or else the best single release for
+// each of those episodes. It notes each episode as searched.
+func (s *Service) seasonGrab(ctx context.Context, t store.Series, season int, want []store.Episode, g *grabTally) error {
+	res, err := s.Season(ctx, t.ID, season)
+	if err != nil {
+		return err
+	}
+	wanted := map[int64]bool{}
+	for _, e := range want {
+		wanted[e.ID] = true
+	}
+	covers := func(c Candidate) bool {
+		return slices.ContainsFunc(c.episodes, func(id int64) bool { return wanted[id] })
+	}
+	for _, e := range want {
+		found := slices.ContainsFunc(res.Releases, func(c Candidate) bool { return c.Accepted && slices.Contains(c.episodes, e.ID) })
+		if res.Searched > 0 {
+			if err := s.Store.MarkSearched(ctx, "episode", e.ID, found); err != nil {
+				return err
+			}
+		}
+	}
+	// The best release taken is first. A pack goes ahead of singles only
+	// when it's at least as good as the best single.
+	i := slices.IndexFunc(res.Releases, func(c Candidate) bool { return c.Accepted && covers(c) })
+	if i < 0 {
+		return nil
+	}
+	if best := res.Releases[i]; best.Pack {
+		if b, err := s.busy(ctx, "series", t.ID, 0, best.Title); err != nil {
+			return err
+		} else if !b {
+			g.take(ctx, s, best)
+		}
+		return nil
+	}
+	for _, e := range want {
+		j := slices.IndexFunc(res.Releases, func(c Candidate) bool { return c.Accepted && !c.Pack && slices.Contains(c.episodes, e.ID) })
+		if j < 0 {
+			continue
+		}
+		if b, err := s.busy(ctx, "series", t.ID, e.ID, res.Releases[j].Title); err != nil {
+			return err
+		} else if b {
+			continue
+		}
+		g.take(ctx, s, res.Releases[j])
+	}
+	return nil
+}
+
+// wantedEpisodes are a show's aired, monitored episodes that have no file,
+// and those whose file its profile still wants upgraded.
+func wantedEpisodes(t store.Series, p quality.Profile, eps []store.Episode, now time.Time) (missing, upgrades []store.Episode) {
+	seasons := map[int]bool{}
+	for _, se := range t.Seasons {
+		seasons[se.Number] = se.Monitored
+	}
+	for _, e := range eps {
+		if !e.Monitored || !seasons[e.Season] || e.Season == 0 || e.AirDate == nil || !e.AirDate.Before(now) {
+			continue
+		}
+		switch {
+		case e.File == nil:
+			missing = append(missing, e)
+		case p.CutoffUnmet(e.File.Quality):
+			upgrades = append(upgrades, e)
+		}
+	}
+	return missing, upgrades
+}
 
 // jobSeries searches for a show's missing episodes (monitored, aired, and
 // with no file) and the ones whose copy the profile still wants upgraded.
+// A season with several of them is searched once, for packs and singles.
 func (s *Service) jobSeries(ctx context.Context, payload string) (jobs.Result, error) {
 	id, err := payloadID(payload)
 	if err != nil {
@@ -620,40 +853,46 @@ func (s *Service) jobSeries(ctx context.Context, payload string) (jobs.Result, e
 	if err != nil {
 		return jobs.Result{}, err
 	}
-	seasons := map[int]bool{}
-	for _, se := range t.Seasons {
-		seasons[se.Number] = se.Monitored
-	}
-	now := time.Now()
-	var missing, upgrades []store.Episode
-	for _, e := range eps {
-		if !e.Monitored || !seasons[e.Season] || e.Season == 0 || e.AirDate == nil || !e.AirDate.Before(now) {
-			continue
-		}
-		switch {
-		case e.File == nil:
-			missing = append(missing, e)
-		case p.CutoffUnmet(e.File.Quality):
-			upgrades = append(upgrades, e)
-		}
-	}
-	want := append(missing, upgrades...)
-	if len(want) == 0 {
+	missing, upgrades := wantedEpisodes(t, p, eps, time.Now())
+	if len(missing)+len(upgrades) == 0 {
 		return jobs.Done("no episodes are missing, and none need upgrading"), nil
 	}
-	more := len(want) > maxEpisodes
-	want = want[:min(len(want), maxEpisodes)]
-	grabbed, found, busy := 0, 0, 0
-	var problems []string
-	off := false
+	var g grabTally
+	var want []store.Episode
+	for _, e := range interleave(missing, upgrades) {
+		if b, err := s.busy(ctx, "series", t.ID, e.ID, ""); err != nil {
+			return jobs.Result{}, err
+		} else if b {
+			g.busy++
+			continue
+		}
+		want = append(want, e)
+	}
+	bySeason := map[int][]store.Episode{}
+	for _, e := range want {
+		bySeason[e.Season] = append(bySeason[e.Season], e)
+	}
+	searches, more := 0, false
+	done := map[int]bool{}
 	for _, e := range want {
 		if ctx.Err() != nil {
 			return jobs.Result{}, ctx.Err()
 		}
-		if b, err := s.busy(ctx, "series", t.ID, e.ID, ""); err != nil {
-			return jobs.Result{}, err
-		} else if b {
-			busy++
+		if done[e.Season] {
+			continue
+		}
+		if searches >= maxEpisodes {
+			more = true
+			break
+		}
+		searches++
+		if season := bySeason[e.Season]; len(season) >= seasonAt {
+			done[e.Season] = true
+			if err := s.seasonGrab(ctx, t, e.Season, season, &g); errors.Is(err, ErrNoIndexers) {
+				return jobs.Skipped("%s", err.Error()), nil
+			} else if err != nil {
+				g.problems = append(g.problems, err.Error())
+			}
 			continue
 		}
 		res, err := s.Episode(ctx, e.ID)
@@ -661,43 +900,36 @@ func (s *Service) jobSeries(ctx context.Context, payload string) (jobs.Result, e
 			return jobs.Skipped("%s", err.Error()), nil
 		}
 		if err != nil {
-			problems = append(problems, err.Error())
+			g.problems = append(g.problems, err.Error())
 			continue
 		}
 		i := slices.IndexFunc(res.Releases, func(c Candidate) bool { return c.Accepted })
 		if i < 0 {
 			continue
 		}
-		found++
 		if b, err := s.busy(ctx, "series", t.ID, e.ID, res.Releases[i].Title); err != nil {
 			return jobs.Result{}, err
 		} else if b {
 			continue
 		}
-		if _, err := s.grab(ctx, res.Releases[i]); errors.Is(err, ErrOff) {
-			off = true
-		} else if err != nil {
-			problems = append(problems, err.Error())
-		} else {
-			grabbed++
-		}
+		g.take(ctx, s, res.Releases[i])
 	}
 	msg := fmt.Sprintf("looked for %s", describeWant(len(missing), len(upgrades), "episode", "episodes"))
-	msg += fmt.Sprintf("; found %d", found)
-	if off && found > 0 {
+	msg += fmt.Sprintf("; found %d", g.found)
+	if g.off && g.found > 0 {
 		msg += ", but downloading is off, so none were grabbed"
 	} else {
-		msg += fmt.Sprintf(", grabbed %d", grabbed)
+		msg += fmt.Sprintf(", grabbed %d", g.grabbed)
 	}
-	if busy > 0 {
-		msg += fmt.Sprintf("; %d already downloading", busy)
+	if g.busy > 0 {
+		msg += fmt.Sprintf("; %d already downloading", g.busy)
 	}
 	if more {
-		msg += fmt.Sprintf(" (the first %d; search again for the rest)", maxEpisodes)
+		msg += fmt.Sprintf(" (the first %d searches; search again for the rest)", maxEpisodes)
 	}
-	if len(problems) > 0 {
-		slices.Sort(problems)
-		msg += " (" + strings.Join(slices.Compact(problems), "; ") + ")"
+	if len(g.problems) > 0 {
+		slices.Sort(g.problems)
+		msg += " (" + strings.Join(slices.Compact(g.problems), "; ") + ")"
 	}
 	return jobs.Done("%s", msg), nil
 }

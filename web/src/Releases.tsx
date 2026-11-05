@@ -61,6 +61,8 @@ export function Releases({ path, title, onClose }: { path: string; title: string
                         <div className={`break-all text-sm font-medium ${r.accepted ? '' : 'text-muted'}`}>{r.title}</div>
                         <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted">
                           {q && <Badge tone={r.accepted ? 'ok' : 'plain'}>{q.name}</Badge>}
+                          {r.pack && <Badge tone="marquee">Whole season</Badge>}
+                          {!r.pack && r.episodes && r.episodes.length > 1 && <Badge>{r.episodes.length} episodes</Badge>}
                           <span>{bytes(r.size)}</span>
                           <span>{r.indexer}</span>
                           {r.publishedAt && <span>{day(r.publishedAt)}</span>}

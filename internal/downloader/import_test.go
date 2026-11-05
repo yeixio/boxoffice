@@ -3,6 +3,7 @@ package downloader
 import (
 	"context"
 	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -165,5 +166,47 @@ func TestImportUpgradeFailsKeepsOld(t *testing.T) {
 	}
 	if b, err := os.ReadFile(oldPath); err != nil || string(b) != "old copy" {
 		t.Fatalf("old copy not put back: %q %v", b, err)
+	}
+}
+
+// A season pack fills in missing episodes and upgrades worse ones, but
+// leaves an episode whose copy is as good alone.
+func TestImportPackKeepsBetter(t *testing.T) {
+	st := storetest.Open(t)
+	ctx := context.Background()
+	lib := t.TempDir()
+	profiles, _ := st.Profiles(ctx)
+	show, _ := st.AddSeries(ctx, store.Series{TMDBID: 1, Title: "Show", ProfileID: profiles[0].ID, RootFolder: lib, Path: filepath.Join(lib, "Show"), Monitored: true,
+		Seasons: []store.Season{{Number: 1, Monitored: true}}})
+	for n := 1; n <= 3; n++ {
+		st.UpsertEpisode(ctx, store.Episode{SeriesID: show.ID, Season: 1, Number: n, Monitored: true})
+	}
+	eps, _ := st.Episodes(ctx, show.ID)
+	os.MkdirAll(filepath.Join(show.Path, "Season 01"), 0o755)
+	good := filepath.Join(show.Path, "Season 01", "good.mkv")
+	worse := filepath.Join(show.Path, "Season 01", "worse.mkv")
+	os.WriteFile(good, []byte("remux"), 0o644)
+	os.WriteFile(worse, []byte("hdtv"), 0o644)
+	st.AddFile(ctx, store.File{Kind: "episode", OwnerID: eps[0].ID, Path: good, Quality: 12})
+	st.AddFile(ctx, store.File{Kind: "episode", OwnerID: eps[1].ID, Path: worse, Quality: 4})
+
+	dl := t.TempDir()
+	for n := 1; n <= 3; n++ {
+		os.WriteFile(filepath.Join(dl, fmt.Sprintf("Show.S01E%02d.1080p.BluRay.mkv", n)), make([]byte, 5000), 0o644)
+	}
+	li := &LibraryImporter{Store: st}
+	d := store.Download{Kind: "series", TitleID: show.ID, Name: "Show.S01.1080p.BluRay", EpisodeIDs: []int64{eps[0].ID, eps[1].ID, eps[2].ID}}
+	if _, err := li.Import(ctx, d, dl, listFiles(dl)); err != nil {
+		t.Fatal(err)
+	}
+	if b, _ := os.ReadFile(good); string(b) != "remux" {
+		t.Fatal("the better copy of episode 1 was replaced")
+	}
+	if _, err := os.Stat(worse); err == nil {
+		t.Fatal("the worse copy of episode 2 is still in the library")
+	}
+	eps, _ = st.Episodes(ctx, show.ID)
+	if eps[0].File.Quality != 12 || eps[1].File.Quality != 11 || eps[2].File == nil || eps[2].File.Quality != 11 {
+		t.Fatalf("files %+v %+v %+v", eps[0].File, eps[1].File, eps[2].File)
 	}
 }

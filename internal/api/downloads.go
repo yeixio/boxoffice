@@ -4,6 +4,7 @@ import (
 	"errors"
 	"io"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/yeixio/boxoffice/internal/arrapi"
@@ -51,6 +52,13 @@ func (s *Server) downloadRoutes() []route {
 
 		{"GET /api/v1/movies/{id}/releases", true, s.releases(func(r *http.Request, id int64) (search.Results, error) { return s.Search.Movie(r.Context(), id) })},
 		{"GET /api/v1/episodes/{id}/releases", true, s.releases(func(r *http.Request, id int64) (search.Results, error) { return s.Search.Episode(r.Context(), id) })},
+		{"GET /api/v1/series/{id}/seasons/{season}/releases", true, s.releases(func(r *http.Request, id int64) (search.Results, error) {
+			n, err := strconv.Atoi(r.PathValue("season"))
+			if err != nil || n < 0 {
+				return search.Results{}, errorf(http.StatusBadRequest, "which season?")
+			}
+			return s.Search.Season(r.Context(), id, n)
+		})},
 		{"POST /api/v1/releases/{key}/grab", true, s.grabRelease},
 
 		{"GET /api/v1/search/auto", true, s.autoSearch},
@@ -181,7 +189,7 @@ func (s *Server) releases(fn func(*http.Request, int64) (search.Results, error))
 			return err
 		}
 		res, err := fn(r, id)
-		if errors.Is(err, search.ErrNoIndexers) {
+		if errors.Is(err, search.ErrNoIndexers) || errors.Is(err, search.ErrNothingAired) {
 			return errorf(http.StatusBadRequest, err.Error())
 		}
 		if err != nil {

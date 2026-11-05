@@ -173,3 +173,71 @@ func TestAgainAfter(t *testing.T) {
 		t.Fatal("due judged wrong")
 	}
 }
+
+// Three or more wanted episodes of a season: one season search, and a pack
+// at least as good as any single is grabbed for all of them.
+func TestSeriesSearchSeasonPack(t *testing.T) {
+	srv, asked := indexer(t,
+		item("Show.S01.1080p.BluRay.x264-GRP", "pack", 20e9),
+		item("Show.S01E01.720p.HDTV-GRP", "e1", 1e9),
+		item("Show.S02.1080p.BluRay.x264-GRP", "other", 20e9),
+	)
+	s, st, m := setup(t, srv.URL)
+	ctx := context.Background()
+	downloader.SaveSettings(ctx, st, downloader.Settings{Enabled: true})
+	show, _ := st.AddSeries(ctx, store.Series{TMDBID: 1, TVDBID: 11, Title: "Show", ProfileID: m.ProfileID, RootFolder: "/tv", Path: "/tv/Show",
+		Monitored: true, Seasons: []store.Season{{Number: 1, Monitored: true}}})
+	aired := time.Now().AddDate(-1, 0, 0)
+	for n := 1; n <= 4; n++ {
+		st.UpsertEpisode(ctx, store.Episode{SeriesID: show.ID, Season: 1, Number: n, AirDate: &aired, Monitored: true})
+	}
+	eps, _ := st.Episodes(ctx, show.ID)
+	for i, e := range eps[:3] {
+		st.AddFile(ctx, store.File{Kind: "episode", OwnerID: e.ID, Path: fmt.Sprintf("/tv/Show/e%d.mkv", i), Quality: 4}) // HDTV 720p
+	}
+
+	res, err := s.Season(ctx, show.ID, 1)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains((*asked)[0], "season=1") || strings.Contains((*asked)[0], "ep=") {
+		t.Fatalf("asked %v", *asked)
+	}
+	if best := res.Releases[0]; !best.Pack || !best.Accepted || len(best.episodes) != 4 {
+		t.Fatalf("best %+v", best)
+	}
+
+	searches := func() int {
+		n := 0
+		for _, a := range *asked {
+			if strings.Contains(a, "t=tvsearch") {
+				n++
+			}
+		}
+		return n
+	}
+	n := searches()
+	r, err := s.jobSeries(ctx, fmt.Sprintf(`{"id":%d}`, show.ID))
+	if err != nil || !strings.Contains(r.Message, "grabbed 1") {
+		t.Fatalf("job %+v %v", r, err)
+	}
+	if searches()-n != 1 {
+		t.Fatalf("searched %d times, want once for the season", searches()-n)
+	}
+	q, _ := st.DownloadQueue(ctx)
+	if len(q) != 1 || q[0].Name != "Show.S01.1080p.BluRay.x264-GRP" || len(q[0].EpisodeIDs) != 4 {
+		t.Fatalf("queue %+v", q)
+	}
+	searched, _ := st.Searched(ctx, "episode")
+	if len(searched) != 4 {
+		t.Fatalf("searched %+v", searched)
+	}
+}
+
+// Missing titles don't starve upgrades: the automatic search takes them in
+// turn.
+func TestWantedTakesTurns(t *testing.T) {
+	if got := interleave([]int{1, 3, 5, 7}, []int{2, 4}); fmt.Sprint(got) != "[1 2 3 4 5 7]" {
+		t.Fatal(got)
+	}
+}

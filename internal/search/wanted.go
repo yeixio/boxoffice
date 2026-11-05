@@ -87,6 +87,7 @@ type Wanted struct {
 	Kind     string    `json:"kind"` // movie or episode
 	ID       int64     `json:"id"`   // the movie's or the episode's
 	SeriesID int64     `json:"seriesId,omitempty"`
+	Season   int       `json:"season,omitempty"`
 	Subject  string    `json:"subject"`
 	Upgrade  bool      `json:"upgrade"`
 	Have     int       `json:"have,omitempty"` // the file's quality, for an upgrade
@@ -101,8 +102,8 @@ func (w Wanted) due(now time.Time) bool {
 }
 
 // WantedList is every movie and episode that's missing or due an upgrade,
-// in the order automatic searches take them: missing before upgrades, then
-// never searched, then the longest ago.
+// never searched first, then the longest ago; missing before upgrades
+// when that's even.
 func (s *Service) WantedList(ctx context.Context) ([]Wanted, error) {
 	ps, err := s.Store.Profiles(ctx)
 	if err != nil {
@@ -166,7 +167,7 @@ func (s *Service) WantedList(ctx context.Context) ([]Wanted, error) {
 			if !e.Monitored || !seasons[e.Season] || e.Season == 0 || e.AirDate == nil || !e.AirDate.Before(now) {
 				continue
 			}
-			w := Wanted{Kind: "episode", ID: e.ID, SeriesID: t.ID, Subject: fmt.Sprintf("%s S%02dE%02d", t.Title, e.Season, e.Number),
+			w := Wanted{Kind: "episode", ID: e.ID, SeriesID: t.ID, Season: e.Season, Subject: fmt.Sprintf("%s S%02dE%02d", t.Title, e.Season, e.Number),
 				Cutoff: p.Cutoff, Searched: searched[e.ID].At, Misses: searched[e.ID].Misses}
 			switch {
 			case e.File == nil:
@@ -179,14 +180,14 @@ func (s *Service) WantedList(ctx context.Context) ([]Wanted, error) {
 		}
 	}
 	slices.SortStableFunc(out, func(a, b Wanted) int {
+		if c := a.Searched.Compare(b.Searched); c != 0 {
+			return c
+		}
 		if a.Upgrade != b.Upgrade {
 			if !a.Upgrade {
 				return -1
 			}
 			return 1
-		}
-		if c := a.Searched.Compare(b.Searched); c != 0 {
-			return c
 		}
 		return cmp.Compare(a.Subject, b.Subject)
 	})
@@ -251,7 +252,9 @@ func (s *Service) AutoDue(ctx context.Context) (bool, string) {
 }
 
 // jobWanted searches for the next few missing titles and upgrades: a
-// twenty-fourth of the day's searches each hour.
+// twenty-fourth of the day's searches each hour, taking missing titles and
+// upgrades in turn so neither waits on the other. Three or more wanted
+// episodes of one season are searched for together, as one search.
 func (s *Service) jobWanted(ctx context.Context, _ string) (jobs.Result, error) {
 	if ok, why := s.AutoDue(ctx); !ok {
 		return jobs.Skipped("%s", why), nil
@@ -266,13 +269,14 @@ func (s *Service) jobWanted(ctx context.Context, _ string) (jobs.Result, error) 
 		return jobs.Result{}, err
 	}
 	now := time.Now()
-	var missing, upgrades, grabbed, busy int
-	var got, problems []string
-	searched := 0
+	var g grabTally
+	var missingDue, upgradeDue []Wanted
+	type seasonKey struct {
+		series int64
+		season int
+	}
+	seasons := map[seasonKey][]Wanted{}
 	for _, w := range list {
-		if searched >= budget || ctx.Err() != nil {
-			break
-		}
 		if !w.due(now) {
 			continue
 		}
@@ -283,35 +287,91 @@ func (s *Service) jobWanted(ctx context.Context, _ string) (jobs.Result, error) 
 		if b, err := s.busy(ctx, kind, titleID, episodeID, ""); err != nil {
 			return jobs.Result{}, err
 		} else if b {
-			busy++
+			g.busy++
+			continue
+		}
+		if w.Upgrade {
+			upgradeDue = append(upgradeDue, w)
+		} else {
+			missingDue = append(missingDue, w)
+		}
+		if w.Kind == "episode" {
+			k := seasonKey{w.SeriesID, w.Season}
+			seasons[k] = append(seasons[k], w)
+		}
+	}
+	var missing, upgrades int
+	var got []string
+	searched := 0
+	done := map[int64]bool{} // episodes a season search covered
+	for _, w := range interleave(missingDue, upgradeDue) {
+		if searched >= budget || ctx.Err() != nil {
+			break
+		}
+		if w.Kind == "episode" && done[w.ID] {
 			continue
 		}
 		searched++
+		before := g.grabbed
+		if w.Kind == "episode" {
+			if group := seasons[seasonKey{w.SeriesID, w.Season}]; len(group) >= seasonAt {
+				t, err := s.Store.Series(ctx, w.SeriesID)
+				if err != nil {
+					g.problems = append(g.problems, fmt.Sprintf("%s: %v", w.Subject, err))
+					continue
+				}
+				var eps []store.Episode
+				for _, x := range group {
+					done[x.ID] = true
+					if x.Upgrade {
+						upgrades++
+					} else {
+						missing++
+					}
+					if e, err := s.Store.Episode(ctx, x.ID); err == nil {
+						eps = append(eps, e)
+					}
+				}
+				err = s.seasonGrab(ctx, t, w.Season, eps, &g)
+				if errors.Is(err, ErrNoIndexers) {
+					return jobs.Skipped("%s", err.Error()), nil
+				}
+				if err != nil {
+					g.problems = append(g.problems, fmt.Sprintf("%s season %d: %v", t.Title, w.Season, err))
+				}
+				if g.grabbed > before {
+					got = append(got, fmt.Sprintf("%s season %d", t.Title, w.Season))
+				}
+				continue
+			}
+		}
 		if w.Upgrade {
 			upgrades++
 		} else {
 			missing++
 		}
+		kind, titleID, episodeID := "movie", w.ID, int64(0)
 		var res Results
 		if w.Kind == "movie" {
 			res, err = s.Movie(ctx, w.ID)
 		} else {
+			kind, titleID, episodeID = "series", w.SeriesID, w.ID
 			res, err = s.Episode(ctx, w.ID)
 		}
 		if errors.Is(err, ErrNoIndexers) {
 			return jobs.Skipped("%s", err.Error()), nil
 		}
 		if err != nil {
-			problems = append(problems, fmt.Sprintf("%s: %v", w.Subject, err))
+			g.problems = append(g.problems, fmt.Sprintf("%s: %v", w.Subject, err))
 			continue
 		}
 		r, err := s.pick(ctx, res, kind, titleID, episodeID)
 		if err != nil {
-			problems = append(problems, fmt.Sprintf("%s: %v", w.Subject, err))
+			g.problems = append(g.problems, fmt.Sprintf("%s: %v", w.Subject, err))
 			continue
 		}
 		if r.Status == "done" && strings.HasPrefix(r.Message, "grabbed ") {
-			grabbed++
+			g.grabbed++
 			got = append(got, w.Subject)
 		}
 	}
@@ -319,15 +379,19 @@ func (s *Service) jobWanted(ctx context.Context, _ string) (jobs.Result, error) 
 		if len(list) == 0 {
 			return jobs.Done("nothing is missing, and nothing needs upgrading"), nil
 		}
-		return jobs.Done("everything wanted was searched for recently%s", busyNote(busy)), nil
+		return jobs.Done("everything wanted was searched for recently%s", busyNote(g.busy)), nil
 	}
-	msg := fmt.Sprintf("looked for %s; grabbed %d", describeWant(missing, upgrades, "title", "titles"), grabbed)
+	msg := fmt.Sprintf("looked for %s in %d %s; grabbed %d", describeWant(missing, upgrades, "title", "titles"), searched,
+		plural(searched, "search", "searches"), g.grabbed)
 	if len(got) > 0 {
 		msg += " (" + strings.Join(got, ", ") + ")"
 	}
-	msg += busyNote(busy)
-	if len(problems) > 0 {
-		msg += "; " + strings.Join(problems, "; ")
+	if g.off && g.found > 0 {
+		msg += "; downloading is off, so packs found weren't grabbed"
+	}
+	msg += busyNote(g.busy)
+	if len(g.problems) > 0 {
+		msg += "; " + strings.Join(g.problems, "; ")
 	}
 	return jobs.Done("%s", msg), nil
 }
