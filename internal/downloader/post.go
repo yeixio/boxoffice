@@ -19,6 +19,7 @@ import (
 // result.
 func (e *Engine) postProcess(ctx context.Context, r *running, d *store.Download, job *fetchJob) error {
 	status := func(s, stage string) {
+		e.Log.Debug("download stage", "name", d.Name, "id", d.ID, "status", s, "stage", stage)
 		r.setStage(stage)
 		e.Store.SetDownloadStatus(context.WithoutCancel(ctx), d.ID, s, "")
 	}
@@ -35,6 +36,7 @@ func (e *Engine) postProcess(ctx context.Context, r *running, d *store.Download,
 	if len(files) == 0 {
 		return errors.New("the download finished with no files in it")
 	}
+	e.Log.Debug("download unpacked", "name", d.Name, "id", d.ID, "files", len(files), "repair notes", strings.Join(notes, "; "))
 	if found := screen.Check(job.dir, files, d.Kind != ""); len(found) > 0 {
 		return e.quarantine(ctx, d, job, found)
 	}
@@ -59,6 +61,7 @@ func (e *Engine) postProcess(ctx context.Context, r *running, d *store.Download,
 		if err != nil {
 			return fmt.Errorf("downloaded, but couldn't move it into the library: %w", err)
 		}
+		e.Log.Info("download moved into the library", "name", d.Name, "id", d.ID, "to", to)
 		e.Store.SetDownloadImported(context.WithoutCancel(ctx), d.ID, to)
 		d.ImportedTo = to
 		msg = lead + "Moved into the library at " + to
@@ -66,6 +69,7 @@ func (e *Engine) postProcess(ctx context.Context, r *running, d *store.Download,
 		e.removeFolder(*d)
 	}
 	r.setStage("")
+	e.Log.Info("download finished", "name", d.Name, "id", d.ID, "result", msg)
 	return e.Store.SetDownloadStatus(context.WithoutCancel(ctx), d.ID, store.DownloadCompleted, msg)
 }
 

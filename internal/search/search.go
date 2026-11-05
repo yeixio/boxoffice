@@ -106,6 +106,40 @@ func cats(ix store.Indexer, lo, hi, def int) []int {
 	return out
 }
 
+func (s *Service) logger() *slog.Logger {
+	if s.Log != nil {
+		return s.Log
+	}
+	return slog.New(slog.DiscardHandler)
+}
+
+// logResults says, at debug level, what a search found and why each
+// release was or wasn't taken, so "why didn't it grab X" can be answered
+// from the log.
+func (s *Service) logResults(what string, res Results) {
+	log := s.logger()
+	if !log.Enabled(context.Background(), slog.LevelDebug) {
+		return
+	}
+	accepted := 0
+	for _, c := range res.Releases {
+		if c.Accepted {
+			accepted++
+		}
+	}
+	log.Debug("search finished", "for", what, "indexers", res.Searched, "releases", len(res.Releases), "accepted", accepted,
+		"errors", strings.Join(res.Errors, "; "))
+	for i, c := range res.Releases {
+		if i == 25 {
+			log.Debug("search: more releases not listed", "for", what, "count", len(res.Releases)-i)
+			break
+		}
+		q, _ := quality.ByID(c.Quality)
+		log.Debug("search: release", "for", what, "rank", i+1, "release", c.Title, "indexer", c.Indexer, "quality", q.Name,
+			"size", c.Size, "accepted", c.Accepted, "why not", strings.Join(c.Rejections, "; "))
+	}
+}
+
 // ask asks every indexer at once.
 func (s *Service) ask(ctx context.Context, query func(store.Indexer) Query) ([]Release, []string, int, error) {
 	list, notes, err := s.indexers(ctx)
@@ -119,13 +153,20 @@ func (s *Service) ask(ctx context.Context, query func(store.Indexer) Query) ([]R
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			rs, err := s.Client.Search(ctx, ix, query(ix))
+			q := query(ix)
+			start := time.Now()
+			rs, err := s.Client.Search(ctx, ix, q)
+			took := time.Since(start).Round(time.Millisecond).String()
 			mu.Lock()
 			defer mu.Unlock()
 			if err != nil {
+				s.logger().Warn("indexer search failed", "indexer", ix.Name, "type", q.Type, "took", took, "err", err)
 				notes = append(notes, err.Error())
 				return
 			}
+			s.logger().Debug("indexer searched", "indexer", ix.Name, "type", q.Type, "text", q.Text, "imdb", q.IMDBID,
+				"tmdb", q.TMDBID, "tvdb", q.TVDBID, "season", q.Season, "episode", q.Episode, "cats", fmt.Sprint(q.Cats),
+				"releases", len(rs), "took", took)
 			for i := range rs {
 				rs[i].Protocol = ix.Protocol
 			}
@@ -181,6 +222,7 @@ func (s *Service) Movie(ctx context.Context, id int64) (Results, error) {
 		out.Releases = append(out.Releases, c)
 	}
 	s.rank(ctx, &out)
+	s.logResults(fmt.Sprintf("%s (%d)", m.Title, m.Year), out)
 	return out, nil
 }
 
@@ -241,6 +283,7 @@ func (s *Service) Episode(ctx context.Context, id int64) (Results, error) {
 		out.Releases = append(out.Releases, c)
 	}
 	s.rank(ctx, &out)
+	s.logResults(fmt.Sprintf("%s S%02dE%02d", t.Title, e.Season, e.Number), out)
 	return out, nil
 }
 
@@ -434,8 +477,11 @@ func (s *Service) grab(ctx context.Context, c Candidate) (store.Download, error)
 	}
 	data, err := s.Client.FetchNZB(ctx, ix, c.Release)
 	if err != nil {
+		s.logger().Warn("couldn't fetch the NZB", "release", c.Title, "indexer", ix.Name, "err", err)
 		return store.Download{}, err
 	}
+	q, _ := quality.ByID(c.Quality)
+	s.logger().Info("grabbing a release", "release", c.Title, "indexer", ix.Name, "quality", q.Name, "size", c.Size, "kind", c.kind, "title", c.titleID)
 	return s.Engine.Add(ctx, store.Download{Name: c.Title, Kind: c.kind, TitleID: c.titleID, EpisodeIDs: c.episodes, Quality: c.Quality,
 		Indexer: c.Indexer, Source: "search", Password: c.Password}, data)
 }

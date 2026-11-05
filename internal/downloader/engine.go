@@ -457,7 +457,7 @@ func (e *Engine) startNext(ctx context.Context, wg *sync.WaitGroup) {
 	if err != nil {
 		return
 	}
-	srv := newServers(list)
+	srv := newServers(list, e.Log)
 	if len(srv.pools) == 0 {
 		e.Store.SetDownloadStatus(ctx, d.ID, store.DownloadPaused, "add a news server in Settings first, then resume")
 		return

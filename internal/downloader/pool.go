@@ -3,6 +3,7 @@ package downloader
 import (
 	"context"
 	"errors"
+	"log/slog"
 	"slices"
 	"sync"
 	"sync/atomic"
@@ -25,6 +26,7 @@ type pool struct {
 	// a while instead of being asked again for every article.
 	downUntil atomic.Int64
 	lastErr   atomic.Value // string
+	log       *slog.Logger
 }
 
 func newPool(s store.UsenetServer) *pool {
@@ -35,8 +37,12 @@ func newPool(s store.UsenetServer) *pool {
 func (p *pool) down() bool { return time.Now().Unix() < p.downUntil.Load() }
 
 func (p *pool) rest(err error, d time.Duration) {
+	wasDown := p.down()
 	p.downUntil.Store(time.Now().Add(d).Unix())
 	p.lastErr.Store(err.Error())
+	if p.log != nil && !wasDown {
+		p.log.Warn("news server isn't working; resting it", "server", p.srv.Host, "port", p.srv.Port, "for", d.String(), "err", err)
+	}
 }
 
 func (p *pool) get(ctx context.Context) (*nntp.Conn, error) {
@@ -54,10 +60,18 @@ func (p *pool) get(ctx context.Context) (*nntp.Conn, error) {
 		return c, nil
 	}
 	p.mu.Unlock()
+	start := time.Now()
 	c, err := nntp.Dial(ctx, p.cfg)
 	if err != nil {
 		<-p.slots
+		if p.log != nil && ctx.Err() == nil {
+			p.log.Debug("news server connection failed", "server", p.srv.Host, "port", p.srv.Port, "tls", p.srv.UseTLS, "err", err)
+		}
 		return nil, err
+	}
+	if p.log != nil {
+		p.log.Debug("news server connected", "server", p.srv.Host, "port", p.srv.Port, "tls", p.srv.UseTLS,
+			"took", time.Since(start).Round(time.Millisecond).String(), "open", p.active.Load()+1)
 	}
 	p.active.Add(1)
 	return c, nil
@@ -91,11 +105,13 @@ type servers struct {
 	pools []*pool
 }
 
-func newServers(list []store.UsenetServer) *servers {
+func newServers(list []store.UsenetServer, log *slog.Logger) *servers {
 	s := &servers{}
 	for _, u := range list {
 		if u.Enabled && u.Host != "" {
-			s.pools = append(s.pools, newPool(u))
+			p := newPool(u)
+			p.log = log
+			s.pools = append(s.pools, p)
 		}
 	}
 	slices.SortStableFunc(s.pools, func(a, b *pool) int { return a.srv.Level - b.srv.Level })
