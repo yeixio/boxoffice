@@ -142,6 +142,14 @@ func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir str
 	return "", errors.New("it isn't for a movie or a show")
 }
 
+// ReadOnlyError means the library folder doesn't take writes, as when
+// it's mounted read-only while Box Office runs next to other apps.
+type ReadOnlyError struct{ Root string }
+
+func (e *ReadOnlyError) Error() string {
+	return fmt.Sprintf("the library folder %s is read-only for Box Office", e.Root)
+}
+
 // checkLibrary makes sure the title's folder is inside its root folder,
 // and that the root folder takes writes: a library mounted read-only
 // stops the import here, before anything is touched.
@@ -154,7 +162,7 @@ func checkLibrary(root, path string) error {
 		return fmt.Errorf("Box Office can't see the library folder %s", root)
 	}
 	if !writable(root) {
-		return fmt.Errorf("the library folder %s is read-only for Box Office, so nothing was moved; the download is still in the downloads folder", root)
+		return &ReadOnlyError{Root: root}
 	}
 	return nil
 }
@@ -215,16 +223,28 @@ func move(src, dest string) error {
 	if err != nil {
 		return err
 	}
-	if _, err := io.Copy(out, in); err != nil {
-		out.Close()
-		os.Remove(tmp)
-		return err
+	n, err := io.Copy(out, in)
+	if err == nil {
+		err = out.Sync()
 	}
-	if err := out.Close(); err != nil {
+	if cerr := out.Close(); err == nil {
+		err = cerr
+	}
+	// The copy must be whole before the original goes.
+	if info, serr := in.Stat(); err == nil && (serr != nil || info.Size() != n) {
+		err = fmt.Errorf("the copy of %s came out %d bytes, not %d", filepath.Base(src), n, info.Size())
+	}
+	if err == nil {
+		if info, serr := os.Stat(tmp); serr != nil || info.Size() != n {
+			err = fmt.Errorf("the copy of %s didn't write out whole", filepath.Base(src))
+		}
+	}
+	if err != nil {
 		os.Remove(tmp)
 		return err
 	}
 	if err := os.Rename(tmp, dest); err != nil {
+		os.Remove(tmp)
 		return err
 	}
 	return os.Remove(src)
