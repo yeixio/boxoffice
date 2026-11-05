@@ -16,6 +16,9 @@ import (
 // writeRAR4 writes a stored (uncompressed) RAR 3 multi-volume set holding
 // one file, the old format no current RAR can make, with volumes named
 // by names.
+// noVolNumber leaves the volume number out of end blocks, as RAR 2 did.
+var noVolNumber bool
+
 func writeRAR4(t *testing.T, dir, file string, data []byte, names []string) {
 	writeRAR4Named(t, dir, file, data, names, true)
 }
@@ -72,13 +75,18 @@ func writeRAR4Named(t *testing.T, dir, file string, data []byte, names []string,
 		}
 		b.Write(block(0x74, flags, fh.Bytes()))
 		b.Write(part)
-		end := uint16(0x0040)
+		end := uint16(0)
+		if !noVolNumber {
+			end |= 0x0008 // EARC_VOLNUMBER, as unrar writes it
+		}
 		if i < n-1 {
 			end |= 0x0001
 		}
-		var num [2]byte
-		binary.LittleEndian.PutUint16(num[:], uint16(i))
-		b.Write(block(0x7b, end, num[:]))
+		var num []byte
+		if !noVolNumber {
+			num = binary.LittleEndian.AppendUint16(nil, uint16(i))
+		}
+		b.Write(block(0x7b, end, num))
 		if err := os.WriteFile(filepath.Join(dir, name), b.Bytes(), 0o644); err != nil {
 			t.Fatal(err)
 		}
@@ -213,5 +221,58 @@ func TestNextOldName(t *testing.T) {
 		if got := nextOldName(in); got != want {
 			t.Errorf("%s: %s, want %s", in, got, want)
 		}
+	}
+}
+
+// Volumes go in the order their headers say, not their names'.
+func TestObfuscatedOrder(t *testing.T) {
+	dir := t.TempDir()
+	data := bytes.Repeat([]byte("0123456789"), 6000)
+	names := []string{"m.rar", "z9", "y8", "x7", "w6", "v5"}
+	writeRAR4Named(t, dir, "movie.mkv", data, names, false)
+	arcs := Find(dir, names)
+	if len(arcs) != 1 || !slices.Equal(arcs[0].Volumes, func() (out []string) {
+		for _, n := range names {
+			out = append(out, filepath.Join(dir, n))
+		}
+		return
+	}()) {
+		t.Fatalf("found %+v", arcs)
+	}
+	if _, err := Extract(context.Background(), arcs[0], dir, ""); err != nil {
+		t.Fatal(err)
+	}
+	if b, _ := os.ReadFile(filepath.Join(dir, "movie.mkv")); !bytes.Equal(b, data) {
+		t.Fatal("movie differs")
+	}
+}
+
+func TestMissingLastVolumes(t *testing.T) {
+	dir := t.TempDir()
+	writeRAR4Named(t, dir, "movie.mkv", bytes.Repeat([]byte("x"), 9000), []string{"a.rar", "b", "c"}, false)
+	os.Remove(filepath.Join(dir, "c"))
+	arcs := Find(dir, []string{"a.rar", "b"})
+	_, err := Extract(context.Background(), arcs[0], dir, "")
+	if err == nil || !strings.Contains(err.Error(), "missing volumes at its end") {
+		t.Fatalf("err %v", err)
+	}
+}
+
+func TestScrambledWithoutNumbers(t *testing.T) {
+	noVolNumber = true
+	defer func() { noVolNumber = false }()
+	dir := t.TempDir()
+	writeRAR4Named(t, dir, "movie.mkv", bytes.Repeat([]byte("x"), 9000), []string{"a.rar", "q", "b"}, false)
+	arcs := Find(dir, []string{"a.rar", "b", "q"})
+	_, err := Extract(context.Background(), arcs[0], dir, "")
+	if err == nil || !strings.Contains(err.Error(), "can't be put in order") {
+		t.Fatalf("err %v", err)
+	}
+	// With regular names, the names give the order.
+	dir = t.TempDir()
+	writeRAR4Named(t, dir, "movie.mkv", bytes.Repeat([]byte("y"), 9000), []string{"s.rar", "s.r00", "s.r01"}, false)
+	arcs = Find(dir, []string{"s.r00", "s.r01", "s.rar"})
+	if _, err := Extract(context.Background(), arcs[0], dir, ""); err != nil {
+		t.Fatal(err)
 	}
 }

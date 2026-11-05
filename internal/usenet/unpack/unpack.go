@@ -172,10 +172,8 @@ func extractRAR(ctx context.Context, a Archive, dir, password string) (Result, e
 	path := a.Path
 	var vfs *volumeFS
 	if len(a.Volumes) > 0 {
-		for i, p := range a.Volumes {
-			if v, ok := probeRAR(p); ok && v.num >= 0 && v.num != i {
-				return Result{}, fmt.Errorf("volume %d of the archive is missing", i+1)
-			}
+		if err := checkSet(a.Volumes); err != nil {
+			return Result{}, err
 		}
 		vfs = &volumeFS{paths: a.Volumes, width: max(4, len(fmt.Sprint(len(a.Volumes))))}
 		opts = append(opts, rardecode.FileSystem(vfs))

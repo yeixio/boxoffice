@@ -27,6 +27,9 @@ type rarVolume struct {
 	multi bool // part of a set of volumes
 	first bool
 	num   int // from 0; -1 when the headers don't say
+	// ended is set when a RAR 3/4 volume's end block was read, and last
+	// when that says no volume follows.
+	ended, last bool
 }
 
 var (
@@ -128,7 +131,8 @@ func probeRAR5(r *bufio.Reader, v *rarVolume) bool {
 }
 
 // probeRAR4 reads the main header for the flags, then walks the blocks to
-// the end block, which has the volume number.
+// the end block, which has the volume number (RAR 3 and later) and says
+// whether another volume follows.
 func probeRAR4(f *os.File, v *rarVolume) bool {
 	var h [7]byte
 	if _, err := io.ReadFull(f, h[:]); err != nil || h[2] != 0x73 {
@@ -159,7 +163,9 @@ func probeRAR4(f *os.File, v *rarVolume) bool {
 			return true
 		}
 		if typ == 0x7b { // end of archive
-			if bf&0x0040 != 0 {
+			v.ended = true
+			v.last = bf&0x0001 == 0 // EARC_NEXT_VOLUME
+			if bf&0x0008 != 0 {     // EARC_VOLNUMBER
 				skip := int64(0)
 				if bf&0x0002 != 0 {
 					skip = 4 // data CRC
@@ -339,3 +345,32 @@ func (v *volumeFS) Open(name string) (fs.File, error) {
 }
 
 var _ fs.FS = (*volumeFS)(nil)
+
+// checkSet says what's wrong with a set's volumes before extracting, as
+// rardecode reads volumes in the order it's given and, for RAR 3 and 4,
+// can't tell when that's wrong.
+func checkSet(paths []string) error {
+	var vols []rarVolume
+	for _, p := range paths {
+		v, ok := probeRAR(p)
+		if !ok {
+			return nil // extracting says what's wrong
+		}
+		vols = append(vols, v)
+	}
+	if len(vols) < 2 || !vols[0].multi {
+		return nil
+	}
+	for i, v := range vols {
+		if v.num >= 0 && v.num != i {
+			return fmt.Errorf("volume %d of the archive is missing", i+1)
+		}
+		if v.num < 0 && i > 0 && stem(v.path) != stem(vols[0].path) {
+			return fmt.Errorf("the archive's volumes have scrambled names and don't say which comes first, so they can't be put in order")
+		}
+	}
+	if last := vols[len(vols)-1]; last.ended && !last.last {
+		return fmt.Errorf("the archive is missing volumes at its end: Box Office has %d, and the last of them says more follow", len(vols))
+	}
+	return nil
+}
