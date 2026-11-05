@@ -30,24 +30,39 @@ func TestDownloadHistoryPage(t *testing.T) {
 		}
 		return fmt.Sprint(out)
 	}
-	list, total, err := st.DownloadHistoryPage(ctx, "name", true, 0, 2)
+	list, total, _, err := st.DownloadHistoryPage(ctx, "name", true, false, 0, 2)
 	if err != nil || total != 5 || names(list) != "[Alpha bravo]" {
 		t.Fatalf("%s %d %v", names(list), total, err)
 	}
-	list, _, _ = st.DownloadHistoryPage(ctx, "name", true, 4, 2)
+	list, _, _, _ = st.DownloadHistoryPage(ctx, "name", true, false, 4, 2)
 	if names(list) != "[echo]" {
 		t.Fatal(names(list))
 	}
-	list, _, _ = st.DownloadHistoryPage(ctx, "size", false, 0, 2)
+	list, _, _, _ = st.DownloadHistoryPage(ctx, "size", false, false, 0, 2)
 	if names(list) != "[echo delta]" {
 		t.Fatal(names(list))
 	}
-	list, _, _ = st.DownloadHistoryPage(ctx, "status", true, 0, 1)
+	list, _, _, _ = st.DownloadHistoryPage(ctx, "status", true, false, 0, 1)
 	if names(list) != "[delta]" {
 		t.Fatal(names(list))
 	}
 	// An unknown sort is newest first, never SQL.
-	if _, _, err := st.DownloadHistoryPage(ctx, "id; DROP TABLE downloads", true, 0, 2); err != nil {
+	if _, _, _, err := st.DownloadHistoryPage(ctx, "id; DROP TABLE downloads", true, false, 0, 2); err != nil {
 		t.Fatal(err)
+	}
+	// Failures for missing articles are hidden unless asked for.
+	all, _ := st.DownloadHistory(ctx, 10)
+	for _, d := range all {
+		if d.Name == "delta" {
+			st.SetDownloadMissing(ctx, d.ID)
+		}
+	}
+	list, total, hidden, err := st.DownloadHistoryPage(ctx, "name", true, false, 0, 10)
+	if err != nil || total != 4 || hidden != 1 || names(list) != "[Alpha bravo charlie echo]" {
+		t.Fatalf("%s %d %d %v", names(list), total, hidden, err)
+	}
+	list, total, hidden, _ = st.DownloadHistoryPage(ctx, "name", true, true, 0, 10)
+	if total != 5 || hidden != 0 || !list[3].Missing {
+		t.Fatalf("%s %d %d", names(list), total, hidden)
 	}
 }

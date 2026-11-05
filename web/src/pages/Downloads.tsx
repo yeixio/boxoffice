@@ -15,6 +15,7 @@ import {
   FolderInput,
   CircleX,
   Download as DownloadIcon,
+  EyeOff,
   Pause,
   Play,
   PackageOpen,
@@ -65,11 +66,14 @@ type HistoryPage = {
   limit: number;
   sort: string;
   dir: "asc" | "desc";
+  // Show failures for articles gone from the news servers, hidden as
+  // there's nothing to do about them.
+  missing?: boolean;
 };
 
 export function useDownloads(page?: HistoryPage) {
   const q = page
-    ? `?historyOffset=${page.offset}&historyLimit=${page.limit}&historySort=${page.sort}&historyDir=${page.dir}`
+    ? `?historyOffset=${page.offset}&historyLimit=${page.limit}&historySort=${page.sort}&historyDir=${page.dir}${page.missing ? "&historyMissing=true" : ""}`
     : "";
   return useQuery({
     queryKey: ["downloads", page ?? null],
@@ -113,7 +117,10 @@ function duration(left: number, rate: number) {
     return i18n.t("web:dl.eta.minutes", { minutes: Math.round(s / 60) });
   const h = Math.floor(s / 3600);
   if (h >= 48)
-    return i18n.t("web:dl.eta.days", { days: Math.floor(h / 24), hours: h % 24 });
+    return i18n.t("web:dl.eta.days", {
+      days: Math.floor(h / 24),
+      hours: h % 24,
+    });
   return i18n.t("web:dl.eta.hours", {
     hours: h,
     minutes: Math.round((s % 3600) / 60),
@@ -177,12 +184,17 @@ export function Downloads() {
   const historySize = usePageSize([6, 10, 15]);
   const [queuePage, setQueuePage] = useState(0);
   const [historyPage, setHistoryPage] = useState(0);
-  useEffect(() => setHistoryPage(0), [sort.option.key, sort.dir, historySize]);
+  const [showMissing, setShowMissing] = useState(false);
+  useEffect(
+    () => setHistoryPage(0),
+    [sort.option.key, sort.dir, historySize, showMissing],
+  );
   const d = useDownloads({
     offset: historyPage * historySize,
     limit: historySize,
     sort: sort.option.key,
     dir: sort.dir,
+    missing: showMissing,
   });
   // A page past the end (the history got shorter) goes back to the last.
   const total = d.data?.historyTotal ?? 0;
@@ -231,6 +243,7 @@ export function Downloads() {
   const active = data.queue.find((x) => x.status === "downloading");
   const history = data.history;
   const historyTotal = data.historyTotal ?? history.length;
+  const historyHidden = data.historyHidden ?? 0;
   // The queue's own pages; a page past the end (the queue got shorter)
   // shows the last one.
   const queuePages = Math.max(1, Math.ceil(data.queue.length / queueSize));
@@ -342,7 +355,9 @@ export function Downloads() {
                   i18nKey="dl.serverError"
                   values={{ name: x.name, error: x.error }}
                   components={{
-                    link: <Link to="/settings#news-servers" className="underline" />,
+                    link: (
+                      <Link to="/settings#news-servers" className="underline" />
+                    ),
                   }}
                 />
               </p>
@@ -352,7 +367,9 @@ export function Downloads() {
 
       <section className="mb-8">
         <div className="mb-3 flex flex-wrap items-center gap-2">
-          <h2 className="me-auto font-display text-xl font-semibold">{t("dl.queue")}</h2>
+          <h2 className="me-auto font-display text-xl font-semibold">
+            {t("dl.queue")}
+          </h2>
           {pickHead("queue", queue, queuePages > 1)}
         </div>
         {data.queue.length === 0 ? (
@@ -398,6 +415,19 @@ export function Downloads() {
               sort={sort}
               className="order-last w-full sm:order-none sm:w-auto"
             />
+          )}
+          {(historyHidden > 0 || showMissing) && (
+            <Button
+              variant="ghost"
+              title={t("dl.missingHint")}
+              aria-pressed={showMissing}
+              onClick={() => setShowMissing((v) => !v)}
+            >
+              <EyeOff className="size-4" aria-hidden />
+              {showMissing
+                ? t("dl.hideMissing")
+                : t("dl.showMissing", { count: historyHidden })}
+            </Button>
           )}
           {pickHead("history", history, historyTotal > historySize)}
           {data.history.length > 0 && picking !== "history" && (
@@ -503,9 +533,9 @@ function Stats({ data }: { data: DownloadsData }) {
       c.enabled && c.limit > 0
         ? t("dl.stats.ofCap", {
             gb: c.gb.toLocaleString(formatLocale()),
-            pct: new Intl.NumberFormat(formatLocale(), { style: "percent" }).format(
-              Math.min(1, c.used / c.limit),
-            ),
+            pct: new Intl.NumberFormat(formatLocale(), {
+              style: "percent",
+            }).format(Math.min(1, c.used / c.limit)),
           })
         : t("dl.stats.noCap"),
     ],
@@ -610,9 +640,7 @@ function QueueItem({
         <div className="min-w-0 flex-1 basis-60" onClick={pick?.toggle}>
           <div className="break-words font-medium">{d.name}</div>
           <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted">
-            <Badge tone={statusTone[d.status]}>
-              {statusName(d.status)}
-            </Badge>
+            <Badge tone={statusTone[d.status]}>{statusName(d.status)}</Badge>
             {q && q.id > 0 && <span>{q.name}</span>}
             {d.indexer && <span>{t("dl.from", { indexer: d.indexer })}</span>}
             {title(d)}
@@ -647,7 +675,10 @@ function QueueItem({
             </IconButton>
           )}
           {!working && (
-            <IconButton label={t("dl.remove")} onClick={() => setRemoving(true)}>
+            <IconButton
+              label={t("dl.remove")}
+              onClick={() => setRemoving(true)}
+            >
               <Trash2 className="size-4" />
             </IconButton>
           )}
@@ -675,10 +706,15 @@ function QueueItem({
                 ` · ${t("dl.of", { done: bytes(d.stepDone ?? 0), total: bytes(d.stepTotal ?? 0) })}`}
             </>
           ) : (
-            <>{t("dl.of", { done: bytes(d.doneBytes), total: bytes(d.size) })}</>
+            <>
+              {t("dl.of", { done: bytes(d.doneBytes), total: bytes(d.size) })}
+            </>
           )}
           {d.failedBytes > 0 && (
-            <span className="text-bad"> · {t("dl.missing", { size: bytes(d.failedBytes) })}</span>
+            <span className="text-bad">
+              {" "}
+              · {t("dl.missing", { size: bytes(d.failedBytes) })}
+            </span>
           )}
         </span>
         <span>
@@ -757,7 +793,8 @@ function HistoryItem({ d, pick }: { d: Download; pick?: Pick }) {
             busy={act.isPending && act.variables?.what === "reprocess"}
             onClick={() => act.mutate({ id: d.id, what: "reprocess" })}
           >
-            <PackageOpen className="size-3.5" aria-hidden /> {t("dl.unpackAgain")}
+            <PackageOpen className="size-3.5" aria-hidden />{" "}
+            {t("dl.unpackAgain")}
           </Button>
         )}
       </div>

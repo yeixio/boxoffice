@@ -114,7 +114,11 @@ func run() error {
 	finder.Register(runner)
 	// A download that fails is blocked, and something else looked for.
 	downloads.Failed = func(ctx context.Context, d store.Download, why string) {
-		mon.DownloadFailures.Add(1)
+		// Releases gone from the news servers are common and need nothing
+		// done, so they don't count towards the failed downloads alert.
+		if !d.Missing {
+			mon.DownloadFailures.Add(1)
+		}
 		if d.Source != "search" || d.Kind == "" {
 			return
 		}

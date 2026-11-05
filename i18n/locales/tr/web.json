@@ -1464,6 +1464,9 @@
     "history": "Tarih",
     "clear": "Geçmişi temizle",
     "noHistory": "Biten indirmeler burada görünür.",
+    "showMissing": "Eksik olanları göster ({{count}})",
+    "hideMissing": "Eksik olanları gizle",
+    "missingHint": "Haber sunucularında onarılamayacak kadar eksik olan sürümler. Box Office her birini engelledi ve başkasını aradı, yapılacak bir şey yok.",
     "folder": "İndirmeler {{path}} içine gider.",
     "folderFree": "İndirmeler {{path}} içine gider, {{free}} boş.",
     "stats": {

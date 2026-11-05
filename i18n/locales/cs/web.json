@@ -1646,6 +1646,9 @@
     "history": "Historický",
     "clear": "Vymazat historii",
     "noHistory": "Dokončená stahování se zobrazí zde.",
+    "showMissing": "Zobrazit neúplné ({{count}})",
+    "hideMissing": "Skrýt neúplné",
+    "missingHint": "Vydání, kterým na news serverech chybí příliš mnoho na opravu. Box Office každé zablokoval a hledal jiné, takže není co dělat.",
     "folder": "Stažené soubory jdou do {{path}}.",
     "folderFree": "Stažené soubory jdou do {{path}}, volné {{free}}.",
     "stats": {

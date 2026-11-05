@@ -1464,6 +1464,9 @@
     "history": "Historia",
     "clear": "Tyhjennä historia",
     "noHistory": "Valmiit lataukset näkyvät täällä.",
+    "showMissing": "Näytä vajaat ({{count}})",
+    "hideMissing": "Piilota vajaat",
+    "missingHint": "Julkaisuja, joista puuttuu uutispalvelimilta liikaa korjattavaksi. Box Office esti jokaisen ja etsi toisen, joten mitään ei tarvitse tehdä.",
     "folder": "Lataukset menevät kansioon {{path}}.",
     "folderFree": "Lataukset menevät kansioon {{path}}, {{free}} vapaana.",
     "stats": {

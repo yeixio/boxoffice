@@ -1464,6 +1464,9 @@
     "history": "Történelmi",
     "clear": "Előzmények törlése",
     "noHistory": "A befejezett letöltések itt jelennek meg.",
+    "showMissing": "Hiányosak mutatása ({{count}})",
+    "hideMissing": "Hiányosak elrejtése",
+    "missingHint": "Kiadások, amelyekből a hírszervereken túl sok hiányzik a javításhoz. A Box Office mindegyiket letiltotta és másikat keresett, így nincs teendő.",
     "folder": "A letöltések ide kerülnek: {{path}}.",
     "folderFree": "A letöltések ide kerülnek: {{path}}, {{free}} szabad.",
     "stats": {

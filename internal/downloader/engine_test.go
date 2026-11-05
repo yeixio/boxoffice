@@ -9,6 +9,8 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync/atomic"
+	"syscall"
 	"testing"
 	"time"
 
@@ -223,22 +225,22 @@ func TestDownloadTooBroken(t *testing.T) {
 	run(t, e)
 	d, _ := e.Add(context.Background(), store.Download{}, data)
 	d = waitFor(t, st, d.ID, store.DownloadCompleted, store.DownloadFailed)
-	if d.Status != store.DownloadFailed || !strings.Contains(d.Message, "files were deleted") {
-		t.Fatalf("%s: %s", d.Status, d.Message)
+	if d.Status != store.DownloadFailed || !strings.Contains(d.Message, "files were deleted") || !d.Missing {
+		t.Fatalf("%s (missing %v): %s", d.Status, d.Missing, d.Message)
 	}
 	// Past repair, so its files are gone.
 	if _, err := os.Stat(filepath.Join(e.Dir, d.Folder)); !os.IsNotExist(err) {
 		t.Fatalf("its folder is still there: %v", err)
 	}
+	// Gone from the news servers: nobody is told.
 	nextEvent(t, events, store.EventGrabbed)
-	nextEvent(t, events, store.EventFailed)
 	// Try again, with the articles back.
 	_, _, _ = release(t, srv, false)
 	if err := e.Retry(context.Background(), d.ID); err != nil {
 		t.Fatal(err)
 	}
 	d = waitFor(t, st, d.ID, store.DownloadCompleted, store.DownloadFailed)
-	if d.Status != store.DownloadCompleted {
+	if d.Status != store.DownloadCompleted || d.Missing {
 		t.Fatalf("retry: %s", d.Message)
 	}
 	// Added by hand, so it stays in the downloads folder.
@@ -376,5 +378,51 @@ func TestRemoveLockedWhileUnpacking(t *testing.T) {
 	st.SetDownloadStatus(ctx, d.ID, store.DownloadQueued, "")
 	if err := e.Remove(ctx, d.ID, true); err != nil {
 		t.Fatal(err)
+	}
+}
+
+// When the downloads folder (a network share) stops answering as a file is
+// saved, the download waits and tries again, keeping what it finished;
+// if it keeps happening, it fails saying so.
+func TestShareDropsOut(t *testing.T) {
+	for _, c := range []struct {
+		name  string
+		fails int
+		want  string
+	}{{"comes back", 2, store.DownloadCompleted}, {"stays down", 100, store.DownloadFailed}} {
+		t.Run(c.name, func(t *testing.T) {
+			srv := nntptest.New()
+			defer srv.Close()
+			data, want, _ := release(t, srv, false)
+			e, st := newEngine(t, srv)
+			enable(t, st, Settings{})
+			var n atomic.Int32
+			closePart, shareWait = func(f *os.File) error {
+				err := f.Close()
+				if n.Add(1) <= int32(c.fails) {
+					return &os.PathError{Op: "close", Path: f.Name(), Err: syscall.EHOSTDOWN}
+				}
+				return err
+			}, time.Millisecond
+			t.Cleanup(func() { closePart, shareWait = (*os.File).Close, 15*time.Second })
+			run(t, e)
+			d, _ := e.Add(context.Background(), store.Download{}, data)
+			d = waitFor(t, st, d.ID, store.DownloadCompleted, store.DownloadFailed)
+			if d.Status != c.want {
+				t.Fatalf("%s: %s", d.Status, d.Message)
+			}
+			if c.want == store.DownloadCompleted {
+				checkFiles(t, filepath.Join(e.Dir, d.Folder), want)
+				return
+			}
+			if !strings.Contains(d.Message, "stopped answering") || !strings.Contains(d.Message, "host is down") || d.Missing {
+				t.Fatalf("missing %v: %s", d.Missing, d.Message)
+			}
+			// Tried again each time, then gave up (several files can be
+			// closing at once, so each try can count more than one).
+			if got := n.Load(); got < shareTries+1 {
+				t.Fatalf("tried %d times", got)
+			}
+		})
 	}
 }

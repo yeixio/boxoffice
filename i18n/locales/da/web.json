@@ -1464,6 +1464,9 @@
     "history": "Historie",
     "clear": "Ryd historikken",
     "noHistory": "Færdige downloads vises her.",
+    "showMissing": "Vis ufuldstændige ({{count}})",
+    "hideMissing": "Skjul ufuldstændige",
+    "missingHint": "Udgivelser, der mangler for meget på nyhedsserverne til at kunne repareres. Box Office blokerede hver enkelt og ledte efter en anden, så der er intet at gøre.",
     "folder": "Downloads havner i {{path}}.",
     "folderFree": "Downloads havner i {{path}}, med {{free}} ledig.",
     "stats": {

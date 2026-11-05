@@ -52,6 +52,9 @@ type Engine struct {
 	post    chan struct{} // one download is checked and unpacked at a time
 	// again holds downloads to check and unpack again without fetching.
 	again map[int64]bool
+	// shareTries counts, by download, the tries since the downloads
+	// folder last stopped answering mid-download.
+	shareTries map[int64]int
 	// importing holds downloads being moved into the library by hand.
 	importing map[int64]bool
 	// moves holds folders picked in the file browser to move into the
@@ -94,6 +97,7 @@ func (e *Engine) init() {
 		e.wake = make(chan struct{}, 1)
 		e.working = map[int64]*running{}
 		e.again = map[int64]bool{}
+		e.shareTries = map[int64]int{}
 		e.post = make(chan struct{}, 1)
 	})
 }
@@ -700,6 +704,9 @@ func (e *Engine) process(ctx context.Context, r *running, d store.Download, srv 
 		}
 	}
 	bg := context.WithoutCancel(ctx)
+	if e.shareRetry(ctx, r, &d, err) {
+		return
+	}
 	e.Store.SaveDownloadProgress(bg, d)
 	switch cause := context.Cause(ctx); {
 	case err == nil:
@@ -720,19 +727,74 @@ func (e *Engine) process(ctx context.Context, r *running, d store.Download, srv 
 	default:
 		e.Log.Warn("download failed", "name", d.Name, "err", err)
 		msg := sentence(err.Error())
+		// Gone from the news servers: nothing to fix or tell anyone, so
+		// it's blocked, another looked for, and it's out of sight.
+		var h hopelessError
+		if errors.As(err, &h) {
+			d.Missing = true
+			e.Store.SetDownloadMissing(bg, d.ID)
+		}
 		if e.dropHopeless(bg, d, err) {
 			msg += ". Its files were deleted, as they can't be used"
 		}
 		e.Store.SetDownloadStatus(bg, d.ID, store.DownloadFailed, msg)
-		if d.Quarantined != "" {
+		switch {
+		case d.Quarantined != "":
 			e.notify(bg, d, store.EventQuarantined, err.Error())
-		} else {
+		case !d.Missing:
 			e.notify(bg, d, store.EventFailed, err.Error())
 		}
 		if e.Failed != nil {
 			e.Failed(bg, d, sentence(err.Error()))
 		}
 	}
+}
+
+// shareWait is how long a download waits after the downloads folder
+// stopped answering before it's tried again, doubling each time; after
+// shareTries tries it fails.
+var shareWait = 15 * time.Second
+
+const shareTries = 3
+
+// shareRetry puts a download that failed because the downloads folder
+// stopped answering back in the queue after a wait, keeping the files it
+// finished, and says whether it did. The queue waits with it, as nothing
+// else could be saved meanwhile either.
+func (e *Engine) shareRetry(ctx context.Context, r *running, d *store.Download, err error) bool {
+	e.mu.Lock()
+	tries := e.shareTries[d.ID]
+	if err == nil {
+		delete(e.shareTries, d.ID)
+	}
+	e.mu.Unlock()
+	var se shareError
+	if err == nil || ctx.Err() != nil || !errors.As(err, &se) {
+		return false
+	}
+	if tries >= shareTries {
+		e.mu.Lock()
+		delete(e.shareTries, d.ID)
+		e.mu.Unlock()
+		return false
+	}
+	e.mu.Lock()
+	e.shareTries[d.ID] = tries + 1
+	e.mu.Unlock()
+	wait := shareWait << tries
+	e.Log.Warn("the downloads folder stopped answering; trying the download again", "name", d.Name, "id", d.ID, "in", wait.String(), "try", tries+1, "err", err)
+	r.setStage(fmt.Sprintf("The downloads folder stopped answering; trying again in %s", wait.Round(time.Second)))
+	select {
+	case <-time.After(wait):
+	case <-ctx.Done():
+		return false
+	}
+	// What a part file had is gone, so progress counts finished files.
+	d.DoneBytes = 0
+	bg := context.WithoutCancel(ctx)
+	e.Store.SaveDownloadProgress(bg, *d)
+	e.Store.SetDownloadStatus(bg, d.ID, store.DownloadQueued, "")
+	return true
 }
 
 // hopelessError marks a failure no retry of the same files can fix: too

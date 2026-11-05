@@ -1464,6 +1464,9 @@
     "history": "History",
     "clear": "Clear history",
     "noHistory": "Finished downloads show up here.",
+    "showMissing": "Show incomplete ({{count}})",
+    "hideMissing": "Hide incomplete",
+    "missingHint": "Releases too incomplete on the news servers to repair. Box Office blocked each one and looked for another, so there's nothing to do.",
     "folder": "Downloads go to {{path}}.",
     "folderFree": "Downloads go to {{path}}, with {{free}} free.",
     "stats": {

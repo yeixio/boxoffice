@@ -47,6 +47,9 @@ type Download struct {
 	ImportedTo  string  `json:"importedTo,omitempty"`
 	// Quarantined is where the files were moved when they looked unsafe.
 	Quarantined string `json:"quarantined,omitempty"`
+	// Missing says it failed because too much of it is gone from the news
+	// servers to repair: nothing to fix, so it's kept out of sight.
+	Missing bool `json:"missing,omitempty"`
 	// CanReprocess says its files are still there to check and unpack
 	// again, without downloading them again. It's worked out, not stored.
 	CanReprocess bool `json:"canReprocess,omitempty"`
@@ -70,14 +73,14 @@ type Download struct {
 func (d Download) Finished() bool { return d.Status == DownloadCompleted || d.Status == DownloadFailed }
 
 const downloadCols = `id, name, status, kind, title_id, episode_ids, quality, indexer, source, password, size, done_bytes, failed_bytes,
-	done_files, position, folder, message, imported_to, quarantined, added_at, started_at, finished_at, edition, mode`
+	done_files, position, folder, message, imported_to, quarantined, added_at, started_at, finished_at, edition, mode, missing`
 
 func scanDownload(r interface{ Scan(...any) error }) (Download, error) {
 	var d Download
 	var eps, files string
 	var added, started, finished int64
 	err := r.Scan(&d.ID, &d.Name, &d.Status, &d.Kind, &d.TitleID, &eps, &d.Quality, &d.Indexer, &d.Source, &d.Password, &d.Size,
-		&d.DoneBytes, &d.FailedBytes, &files, &d.Position, &d.Folder, &d.Message, &d.ImportedTo, &d.Quarantined, &added, &started, &finished, &d.Edition, &d.Mode)
+		&d.DoneBytes, &d.FailedBytes, &files, &d.Position, &d.Folder, &d.Message, &d.ImportedTo, &d.Quarantined, &added, &started, &finished, &d.Edition, &d.Mode, &d.Missing)
 	if errors.Is(err, sql.ErrNoRows) {
 		return d, ErrNotFound
 	}
@@ -167,10 +170,21 @@ var historyOrder = map[string]string{
 // DownloadHistoryPage is one page of finished downloads, sorted by one of
 // historyOrder's keys (newest finished first when it isn't one), and how
 // many there are in all.
-func (s *Store) DownloadHistoryPage(ctx context.Context, sort string, asc bool, offset, limit int) ([]Download, int, error) {
-	var total int
-	if err := s.row(ctx, "SELECT COUNT(*) FROM downloads WHERE status IN ('completed', 'failed')").Scan(&total); err != nil {
-		return nil, 0, err
+//
+// Failures for missing articles are left out unless withMissing; hidden
+// says how many were.
+func (s *Store) DownloadHistoryPage(ctx context.Context, sort string, asc bool, withMissing bool, offset, limit int) (list []Download, total, hidden int, err error) {
+	where := "status IN ('completed', 'failed')"
+	if err := s.row(ctx, "SELECT COUNT(*) FROM downloads WHERE "+where+" AND missing <> 0").Scan(&hidden); err != nil {
+		return nil, 0, 0, err
+	}
+	if !withMissing {
+		where += " AND missing = 0"
+	} else {
+		hidden = 0
+	}
+	if err := s.row(ctx, "SELECT COUNT(*) FROM downloads WHERE "+where).Scan(&total); err != nil {
+		return nil, 0, 0, err
 	}
 	col, ok := historyOrder[sort]
 	if !ok {
@@ -180,8 +194,15 @@ func (s *Store) DownloadHistoryPage(ctx context.Context, sort string, asc bool, 
 	if asc {
 		dir = " ASC"
 	}
-	list, err := s.downloads(ctx, "status IN ('completed', 'failed') ORDER BY "+col+dir+", id DESC LIMIT ? OFFSET ?", limit, max(offset, 0))
-	return list, total, err
+	list, err = s.downloads(ctx, where+" ORDER BY "+col+dir+", id DESC LIMIT ? OFFSET ?", limit, max(offset, 0))
+	return list, total, hidden, err
+}
+
+// SetDownloadMissing marks a download as failed for articles gone from the
+// news servers.
+func (s *Store) SetDownloadMissing(ctx context.Context, id int64) error {
+	_, err := s.exec(ctx, "UPDATE downloads SET missing = 1 WHERE id = ?", id)
+	return err
 }
 
 // SetDownloadStatus moves a download to a status, with a note. Finishing
@@ -235,7 +256,7 @@ func (s *Store) ResetDownload(ctx context.Context, id int64) error {
 	if err := s.row(ctx, "SELECT COALESCE(MAX(position), 0) FROM downloads").Scan(&pos); err != nil {
 		return err
 	}
-	res, err := s.exec(ctx, `UPDATE downloads SET status = 'queued', message = '', done_bytes = 0, failed_bytes = 0, done_files = '[]', quarantined = '',
+	res, err := s.exec(ctx, `UPDATE downloads SET status = 'queued', message = '', done_bytes = 0, failed_bytes = 0, done_files = '[]', quarantined = '', missing = 0,
 		started_at = 0, finished_at = 0, position = ? WHERE id = ?`, pos+1, id)
 	if err != nil {
 		return err
@@ -251,7 +272,7 @@ func (s *Store) RequeueDownload(ctx context.Context, id int64) error {
 	if err := s.row(ctx, "SELECT COALESCE(MAX(position), 0) FROM downloads").Scan(&pos); err != nil {
 		return err
 	}
-	res, err := s.exec(ctx, "UPDATE downloads SET status = 'queued', message = '', finished_at = 0, position = ? WHERE id = ?", pos+1, id)
+	res, err := s.exec(ctx, "UPDATE downloads SET status = 'queued', message = '', missing = 0, finished_at = 0, position = ? WHERE id = ?", pos+1, id)
 	if err != nil {
 		return err
 	}
