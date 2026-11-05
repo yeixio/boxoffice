@@ -3,6 +3,7 @@ package downloader
 import (
 	"context"
 	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -165,5 +166,47 @@ func TestImportUpgradeFailsKeepsOld(t *testing.T) {
 	}
 	if b, err := os.ReadFile(oldPath); err != nil || string(b) != "old copy" {
 		t.Fatalf("old copy not put back: %q %v", b, err)
+	}
+}
+
+// An episode whose video has a scrambled name goes in by the release's
+// name, or else by the episode it was grabbed for.
+func TestImportObfuscatedEpisode(t *testing.T) {
+	st := storetest.Open(t)
+	ctx := context.Background()
+	lib := t.TempDir()
+	profiles, _ := st.Profiles(ctx)
+	show, err := st.AddSeries(ctx, store.Series{TMDBID: 2, Title: "The Lowdown", Year: 2025, ProfileID: profiles[0].ID, RootFolder: lib, Path: filepath.Join(lib, "The Lowdown (2025)"), Monitored: true, Seasons: []store.Season{{Number: 2, Monitored: true}}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	for n := 4; n <= 6; n++ {
+		if err := st.UpsertEpisode(ctx, store.Episode{SeriesID: show.ID, Season: 2, Number: n, Title: fmt.Sprintf("Ep %d", n), Monitored: true}); err != nil {
+			t.Fatal(err)
+		}
+	}
+	eps, _ := st.Episodes(ctx, show.ID)
+	li := &LibraryImporter{Store: st}
+	for _, c := range []struct {
+		d    store.Download
+		want string
+	}{
+		{store.Download{Name: "The.Lowdown.2025.S02E05.A.Dog.with.Two.Tails.1080p.AMZN.WEB-DL-RAWR"}, "S02E05 - Ep 5"},
+		{store.Download{Name: "a3f9c0d1e2", EpisodeIDs: []int64{eps[2].ID}}, "S02E06 - Ep 6"},
+	} {
+		dl := t.TempDir()
+		os.WriteFile(filepath.Join(dl, "8f2c1e9a7b.mkv"), make([]byte, 5000), 0o644)
+		os.WriteFile(filepath.Join(dl, "d41d8cd98f.mkv"), make([]byte, 300), 0o644)
+		c.d.Kind, c.d.TitleID = "series", show.ID
+		to, err := li.Import(ctx, c.d, dl, listFiles(dl))
+		if err != nil {
+			t.Fatalf("%s: %v", c.d.Name, err)
+		}
+		if want := filepath.Join(show.Path, "Season 02", "The Lowdown (2025) - "+c.want+".mkv"); to != want {
+			t.Fatalf("%s: to %s", c.d.Name, to)
+		}
+		if info, _ := os.Stat(to); info == nil || info.Size() != 5000 {
+			t.Fatalf("%s: the wrong video went in", c.d.Name)
+		}
 	}
 }

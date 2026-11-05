@@ -108,9 +108,19 @@ func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir str
 		if err != nil {
 			return "", err
 		}
+		// Obfuscated posts can name the video anything, so when no video
+		// says which episode it is, the biggest one is taken as the episode
+		// the release is named for, or the one it was grabbed for.
+		named := slices.ContainsFunc(vids, func(v string) bool {
+			_, n := episodeNumbers(filepath.Base(v))
+			return len(n) > 0
+		})
 		var placed []string
-		for _, v := range vids {
+		for k, v := range vids {
 			season, numbers := episodeNumbers(filepath.Base(v))
+			if !named && k == 0 {
+				season, numbers = releaseEpisode(d, eps)
+			}
 			if len(numbers) == 0 {
 				continue
 			}
@@ -141,7 +151,7 @@ func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir str
 			placed = append(placed, dest)
 		}
 		if len(placed) == 0 {
-			return "", errors.New("none of its video files are named for an episode of the show (like S01E02)")
+			return "", errors.New("none of its video files, nor the release itself, are named for an episode of the show (like S01E02)")
 		}
 		if len(placed) == 1 {
 			return placed[0], nil
@@ -324,6 +334,20 @@ func copyFile(src, dest string) error {
 		return err
 	}
 	return nil
+}
+
+// releaseEpisode is the episode a download is for, from its release name,
+// or else from the one episode it was grabbed for.
+func releaseEpisode(d store.Download, eps []store.Episode) (int, []int) {
+	if s, n := episodeNumbers(d.Name); len(n) > 0 {
+		return s, n
+	}
+	if len(d.EpisodeIDs) == 1 {
+		if i := slices.IndexFunc(eps, func(e store.Episode) bool { return e.ID == d.EpisodeIDs[0] }); i >= 0 {
+			return eps[i].Season, []int{eps[i].Number}
+		}
+	}
+	return 0, nil
 }
 
 func episodeNumbers(name string) (int, []int) {
