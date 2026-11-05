@@ -1,10 +1,11 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
-import { NavLink, Navigate, Route, Routes, useLocation } from 'react-router-dom'
-import { CalendarDays, Clapperboard, Compass, DatabaseBackup, Download as DownloadIcon, Film, HeartPulse, History, LogOut, Menu, Music as MusicIcon, Settings as Cog, Truck, Tv, X } from 'lucide-react'
-import { get, post, type Settings as SettingsData, type Status } from './api'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import { LogOut, Menu, X } from 'lucide-react'
+import { get, post, type Status } from './api'
 import { Spinner } from './ui'
 import { Tray } from './Tray'
+import { Logo, PhoneNav, Sidebar, useNav } from './Nav'
 import { SignIn } from './pages/SignIn'
 import { Discover, DiscoverRowPage } from './pages/Discover'
 import { Movies } from './pages/Movies'
@@ -15,11 +16,11 @@ import { Music } from './pages/Music'
 import { ArtistDetail } from './pages/ArtistDetail'
 import { Calendar } from './pages/Calendar'
 import { Activity } from './pages/Activity'
-import { Downloads, speed, useDownloads } from './pages/Downloads'
+import { Downloads } from './pages/Downloads'
 import { Import } from './pages/Import'
 import { Backups } from './pages/Backups'
 import { Settings } from './pages/Settings'
-import { Health, needsAttention, useHealth } from './pages/Health'
+import { Health } from './pages/Health'
 
 export function App() {
   const status = useQuery({ queryKey: ['status'], queryFn: () => get<Status>('/status') })
@@ -29,41 +30,9 @@ export function App() {
   return <Shell status={status.data} />
 }
 
-// Move in is for setting up: it leaves the menu once the admin has finished
-// moving in, for Settings.
-const allNav = [
-  { to: '/discover', label: 'Discover', icon: Compass },
-  { to: '/movies', label: 'Movies', icon: Film },
-  { to: '/shows', label: 'Shows', icon: Tv },
-  { to: '/music', label: 'Music', icon: MusicIcon },
-  { to: '/calendar', label: 'Coming up', icon: CalendarDays },
-  { to: '/downloads', label: 'Downloads', icon: DownloadIcon },
-  { to: '/activity', label: 'Activity', icon: History },
-  { to: '/health', label: 'Health', icon: HeartPulse },
-  { to: '/import', label: 'Move in', icon: Truck },
-  { to: '/backups', label: 'Backups', icon: DatabaseBackup },
-  { to: '/settings', label: 'Settings', icon: Cog },
-]
-
 function Shell({ status }: { status: Status }) {
   const qc = useQueryClient()
-  // Music shows only once it's turned on in Settings.
-  const settings = useQuery({ queryKey: ['settings'], queryFn: () => get<SettingsData>('/settings') })
-  const on = (key: string) => !!settings.data?.mediaTypes.find((t) => t.key === key)?.enabled
-  const nav = allNav.filter((n) => (n.to !== '/import' || !status.movedIn) && (n.to !== '/music' || on('music')))
-  // Health shows how many problems need fixing.
-  const problems = needsAttention(useHealth().data)
-  // Downloads shows the speed while something's downloading.
-  const dl = useDownloads().data
-  const rate = dl?.settings.enabled && !dl.settings.paused ? dl.speed : 0
-  const badge = (to: string, menu = false) =>
-    to === '/health' && problems > 0 ? (
-      <span className="rounded-full bg-marquee px-1.5 text-xs font-semibold leading-5 text-marquee-ink" aria-label={`${problems} to fix`}>
-        {problems}
-      </span>
-    ) : to === '/downloads' && rate > 0 ? (
-      <span className={`rounded-full border border-line px-1.5 text-xs leading-5 tabular-nums ${menu ? '' : 'hidden 2xl:inline'}`}>{speed(rate)}</span>
-    ) : null
+  const nav = useNav(status)
   // On a phone the sections fold into a menu, closed again on moving.
   const [menu, setMenu] = useState(false)
   const location = useLocation()
@@ -74,65 +43,33 @@ function Shell({ status }: { status: Status }) {
     qc.invalidateQueries({ queryKey: ['status'] })
   }
   return (
-    <div className="min-h-screen">
-      <header className="sticky top-0 z-20 bg-paper/95 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3">
-          <NavLink to="/discover" className="flex items-center gap-2">
-            <span className="flex size-8 items-center justify-center rounded-md bg-marquee text-marquee-ink">
-              <Clapperboard className="size-4.5" aria-hidden />
-            </span>
-            <span className="font-display text-lg font-bold uppercase tracking-[0.18em]">Box Office</span>
-          </NavLink>
-          <nav className="-mx-1 hidden flex-1 gap-1 overflow-x-auto md:flex" aria-label="Main">
-            {nav.map(({ to, label, icon: Icon }) => (
-              <NavLink
-                key={to}
-                to={to}
-                className={({ isActive }) =>
-                  `flex shrink-0 items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm font-medium transition ${isActive ? 'bg-ink text-paper' : 'text-muted hover:text-ink'}`
-                }
-              >
-                <Icon className="hidden size-4 2xl:block" aria-hidden />
-                {label}
-                {badge(to)}
-              </NavLink>
-            ))}
-          </nav>
-          <div className="flex-1 md:hidden" />
+    <div className="min-h-screen md:flex">
+      <Sidebar status={status} nav={nav} signOut={signOut} />
+      <div className="min-w-0 flex-1">
+      <header className="sticky top-0 z-20 bg-paper/95 backdrop-blur md:hidden">
+        <div className="flex items-center gap-x-3 px-4 py-3">
+          <Logo />
+          <div className="flex-1" />
           <Tray />
           <button
             onClick={() => setMenu(!menu)}
-            className="relative flex items-center rounded-md p-1.5 text-muted hover:text-ink md:hidden"
+            className="relative flex items-center rounded-md p-1.5 text-muted hover:text-ink"
             aria-label={menu ? 'Close menu' : 'Menu'}
             aria-expanded={menu}
             aria-controls="mobile-nav"
           >
             {menu ? <X className="size-5" aria-hidden /> : <Menu className="size-5" aria-hidden />}
-            {problems > 0 && !menu && <span className="absolute right-0.5 top-0.5 size-2 rounded-full bg-marquee" aria-hidden />}
+            {nav.problems > 0 && !menu && <span className="absolute right-0.5 top-0.5 size-2 rounded-full bg-marquee" aria-hidden />}
           </button>
           <button onClick={signOut} className="flex items-center gap-1.5 text-sm text-muted hover:text-ink" title={`Signed in as ${status.user?.username}`} aria-label="Sign out">
             <LogOut className="size-4" aria-hidden />
-            <span className="hidden sm:inline md:hidden 2xl:inline">Sign out</span>
+            <span className="hidden sm:inline">Sign out</span>
           </button>
         </div>
-        {menu && (
-          <nav id="mobile-nav" className="mx-auto flex max-w-7xl flex-col gap-1 border-t border-line px-4 py-3 md:hidden" aria-label="Main">
-            {nav.map(({ to, label, icon: Icon }) => (
-              <NavLink
-                key={to}
-                to={to}
-                className={({ isActive }) => `flex items-center gap-3 rounded-md px-3 py-2.5 text-base font-medium ${isActive ? 'bg-ink text-paper' : 'text-ink hover:bg-line/50'}`}
-              >
-                <Icon className="size-5" aria-hidden />
-                {label}
-                {badge(to, true)}
-              </NavLink>
-            ))}
-          </nav>
-        )}
+        {menu && <PhoneNav nav={nav} />}
         <div className="perforated" aria-hidden />
       </header>
-      <main className="mx-auto max-w-7xl px-4 py-8">
+      <main className="mx-auto max-w-7xl px-4 py-8 md:px-8">
         <Routes>
           <Route path="/" element={<Navigate to="/discover" replace />} />
           <Route path="/discover" element={<Discover />} />
@@ -153,7 +90,8 @@ function Shell({ status }: { status: Status }) {
           <Route path="*" element={<Navigate to="/discover" replace />} />
         </Routes>
       </main>
-      <footer className="mx-auto max-w-7xl px-4 pb-8 text-xs text-muted">Box Office {status.version}</footer>
+      <footer className="mx-auto max-w-7xl px-4 pb-8 text-xs text-muted md:hidden">Box Office {status.version}</footer>
+      </div>
     </div>
   )
 }

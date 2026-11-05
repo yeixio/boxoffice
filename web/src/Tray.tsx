@@ -98,9 +98,10 @@ export function ItemRow({ item, onGo }: { item: Item; onGo?: () => void }) {
   )
 }
 
-// Tray is the bell in the header: what's running in the background, and a
-// note when something finishes, wherever you are in Box Office.
-export function Tray() {
+// Tray is the bell in the sidebar, or in the header on a phone: what's
+// running in the background, and a note when something finishes, wherever
+// you are in Box Office.
+export function Tray({ side }: { side?: boolean }) {
   const items = useBackground()
   const [open, setOpen] = useState(false)
   const [toasts, setToasts] = useState<Item[]>([])
@@ -148,7 +149,11 @@ export function Tray() {
           {waiting && <span className="absolute right-1 top-1 size-2 rounded-full bg-marquee" aria-hidden />}
         </button>
         {open && (
-          <div className="fixed inset-x-4 top-14 z-30 overflow-hidden sm:absolute sm:inset-x-auto sm:right-0 sm:top-full sm:mt-2 sm:w-80 rounded-xl border border-line bg-card shadow-lg">
+          <div
+            className={`fixed inset-x-4 top-14 z-30 overflow-hidden rounded-xl border border-line bg-card shadow-lg sm:absolute sm:inset-x-auto sm:w-80 ${
+              side ? 'sm:left-full sm:top-0 sm:ml-2' : 'sm:right-0 sm:top-full sm:mt-2 md:left-0 md:right-auto'
+            }`}
+          >
             <div className="border-b border-line px-4 py-2.5 text-sm font-semibold">In the background</div>
             {items.length ? (
               <ul className="max-h-96 divide-y divide-line overflow-y-auto">
