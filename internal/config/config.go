@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -23,6 +24,9 @@ type Config struct {
 	LogFormat   string        // text or json; BOXOFFICE_LOG_FORMAT
 	Debug       bool          // BOXOFFICE_DEBUG
 	Refresh     time.Duration // how often titles are refreshed from TMDB; BOXOFFICE_REFRESH_EVERY
+	// Announce tells the home network Box Office is here, so Matinee can
+	// find it; BOXOFFICE_ANNOUNCE=false turns it off.
+	Announce bool
 }
 
 // Load reads the config.
@@ -40,6 +44,7 @@ func load(args []string, env func(string) string) (Config, error) {
 		APIKey:      env("BOXOFFICE_API_KEY"),
 		LogFormat:   cmp.Or(env("BOXOFFICE_LOG_FORMAT"), "text"),
 		Debug:       env("BOXOFFICE_DEBUG") != "",
+		Announce:    !off(env("BOXOFFICE_ANNOUNCE")),
 		Refresh:     12 * time.Hour,
 	}
 	if v := env("BOXOFFICE_REFRESH_EVERY"); v != "" {
@@ -56,6 +61,7 @@ func load(args []string, env func(string) string) (Config, error) {
 	fs.StringVar(&c.Downloads, "downloads", c.Downloads, "folder for downloads in progress (default: downloads in the data folder)")
 	fs.StringVar(&c.LogFormat, "log-format", c.LogFormat, "text or json")
 	fs.BoolVar(&c.Debug, "debug", c.Debug, "log more")
+	fs.BoolVar(&c.Announce, "announce", c.Announce, "tell the home network Box Office is here, so Matinee can find it")
 	fs.DurationVar(&c.Refresh, "refresh-every", c.Refresh, "how often titles are refreshed from TMDB")
 	if err := fs.Parse(args); err != nil {
 		return c, err
@@ -70,6 +76,15 @@ func load(args []string, env func(string) string) (Config, error) {
 		return c, errors.New("refresh titles at most once an hour")
 	}
 	return c, nil
+}
+
+// off reads a setting that's on unless it says otherwise.
+func off(v string) bool {
+	switch strings.ToLower(strings.TrimSpace(v)) {
+	case "0", "false", "no", "off":
+		return true
+	}
+	return false
 }
 
 func defaultDataDir() string {

@@ -19,6 +19,13 @@ func TestLoad(t *testing.T) {
 	if c.Database() != "postgres://x" {
 		t.Fatalf("database %q", c.Database())
 	}
+	if !c.Announce {
+		t.Fatal("announcing is off by default")
+	}
+	env["BOXOFFICE_ANNOUNCE"] = "false"
+	if c, _ = load(nil, func(k string) string { return env[k] }); c.Announce {
+		t.Fatal("BOXOFFICE_ANNOUNCE=false still announces")
+	}
 	if _, err := load([]string{"-refresh-every", "1m"}, func(string) string { return "" }); err == nil {
 		t.Fatal("a one-minute refresh was accepted")
 	}
