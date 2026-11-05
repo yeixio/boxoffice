@@ -1,0 +1,59 @@
+{
+  "size": {
+    "B": "{{value}} بايت",
+    "KB": "{{value}} ك.ب",
+    "MB": "{{value}} م.ب",
+    "GB": "{{value}} ج.ب",
+    "TB": "{{value}} ت.ب",
+    "PB": "{{value}} ب.ب"
+  },
+  "duration": {
+    "minutes_zero": "{{count}} دقيقة",
+    "minutes_one": "دقيقة واحدة",
+    "minutes_two": "دقيقتان",
+    "minutes_few": "{{count}} دقائق",
+    "minutes_many": "{{count}} دقيقة",
+    "minutes_other": "{{count}} دقيقة",
+    "hours": "{{hours}} س",
+    "hoursMinutes": "{{hours}} س {{minutes}} د"
+  },
+  "loading": "جارٍ التحميل…",
+  "close": "إغلاق",
+  "language": {
+    "title": "اللغة",
+    "label": "اللغة",
+    "automatic": "تلقائي ({{language}})",
+    "hint": "اللغة التي يعرض بها Box Office واجهته، على كل جهاز تسجّل الدخول منه. «تلقائي» يتبع لغة كل متصفح.",
+    "machine": "هذه الترجمة آلية، لذا قد تكون بعض العبارات غير دقيقة.",
+    "help": "ساعد في تحسينها"
+  },
+  "sort": {
+    "az": "من أ إلى ي",
+    "za": "من ي إلى أ",
+    "oldest": "الأقدم أولاً",
+    "newest": "الأحدث أولاً",
+    "soonest": "الأقرب أولًا",
+    "latest": "الأحدث أولًا",
+    "smallest": "الأصغر أولًا",
+    "largest": "الأكبر أولًا",
+    "lowest": "الأدنى أولًا",
+    "highest": "الأعلى أولًا",
+    "worst": "الأسوأ أولًا",
+    "best": "الأفضل أولًا",
+    "shortest": "الأقصر أولًا",
+    "longest": "الأطول أولًا",
+    "fewest": "الأقل عددًا أولًا",
+    "most": "الأكثر أولًا",
+    "least": "الأقل أولًا",
+    "by": "الترتيب حسب",
+    "show": "عرض {{order}}",
+    "flip": "{{option}}، {{order}}. اعرض {{other}} بدلًا من ذلك"
+  },
+  "pager": {
+    "pages": "صفحات {{label}}",
+    "range": "{{from}}–{{to}} من {{total}}",
+    "previous": "الصفحة السابقة",
+    "next": "الصفحة التالية",
+    "page": "الصفحة {{page}} من {{pages}}"
+  }
+}
