@@ -163,9 +163,9 @@ function SeasonBlock({
   return (
     <Card className="p-0">
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 px-5 py-3">
-        <button className="flex min-w-0 flex-1 items-center gap-3 text-left" onClick={() => setOpen(!open)} aria-expanded={open}>
+        <button className="flex min-w-0 flex-1 basis-full flex-wrap items-center gap-x-3 text-left sm:basis-0" onClick={() => setOpen(!open)} aria-expanded={open}>
           <ChevronDown className={`size-4 shrink-0 transition ${open ? '' : '-rotate-90'}`} aria-hidden />
-          <span className="font-display text-lg font-semibold">{number === 0 ? 'Specials' : `Season ${number}`}</span>
+          <span className="whitespace-nowrap font-display text-lg font-semibold">{number === 0 ? 'Specials' : `Season ${number}`}</span>
           <span className="text-sm text-muted">
             {have} of {episodes.length} on disk
             {upgrades > 0 && `, ${upgrades} to upgrade`}
@@ -192,7 +192,7 @@ function SeasonBlock({
                   <span className="w-16 font-mono text-xs text-muted">{episodeCode(e.season, e.number)}</span>
                   <span className="min-w-0 flex-1 basis-40 truncate">{e.title || 'To be announced'}</span>
                   <span className="w-28 text-muted">{day(e.airDate)}</span>
-                  <span className="flex flex-wrap items-center justify-end gap-2">
+                  <span className="ml-auto flex flex-wrap items-center justify-end gap-2">
                     {e.file ? (
                       <Badge tone={upgrade ? 'gold' : 'ok'}>
                         {upgrade && <ArrowUpCircle className="size-3" aria-label="Upgrade wanted" />}
