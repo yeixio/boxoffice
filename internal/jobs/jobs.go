@@ -98,6 +98,8 @@ func (r *Runner) runOne(ctx context.Context) bool {
 	h := r.handlers[j.Kind]
 	r.mu.Unlock()
 	res := Result{"failed", "nothing knows how to do this job"}
+	start := time.Now()
+	r.Log.Debug("job started", "kind", j.Kind, "subject", j.Subject, "id", j.ID)
 	if h != nil {
 		res, err = safely(ctx, h, j.Payload)
 		if err != nil {
@@ -105,9 +107,10 @@ func (r *Runner) runOne(ctx context.Context) bool {
 		}
 	}
 	if res.Status == "failed" {
-		r.Log.Warn("job failed", "kind", j.Kind, "subject", j.Subject, "err", res.Message)
+		r.Log.Warn("job failed", "kind", j.Kind, "subject", j.Subject, "err", res.Message, "took", time.Since(start).Round(time.Millisecond).String())
 	} else {
-		r.Log.Info("job finished", "kind", j.Kind, "subject", j.Subject, "status", res.Status)
+		r.Log.Info("job finished", "kind", j.Kind, "subject", j.Subject, "status", res.Status, "result", res.Message,
+			"took", time.Since(start).Round(time.Millisecond).String())
 	}
 	// Record the outcome even when ctx just ended.
 	if err := r.Store.FinishJob(context.WithoutCancel(ctx), j.ID, res.Status, res.Message); err != nil {

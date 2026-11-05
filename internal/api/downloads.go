@@ -42,6 +42,7 @@ func (s *Server) downloadRoutes() []route {
 		{"POST /api/v1/downloads/{id}/pause", true, act(func(r *http.Request, id int64) error { return badRequest(s.Downloads.Pause(r.Context(), id)) })},
 		{"POST /api/v1/downloads/{id}/resume", true, act(func(r *http.Request, id int64) error { return s.Downloads.Resume(r.Context(), id) })},
 		{"POST /api/v1/downloads/{id}/retry", true, act(func(r *http.Request, id int64) error { return badRequest(s.Downloads.Retry(r.Context(), id)) })},
+		{"POST /api/v1/downloads/{id}/import", true, act(func(r *http.Request, id int64) error { return badRequest(s.Downloads.Import(r.Context(), id)) })},
 		{"POST /api/v1/downloads/{id}/reprocess", true, act(func(r *http.Request, id int64) error { return badRequest(s.Downloads.Reprocess(r.Context(), id)) })},
 		{"POST /api/v1/downloads/{id}/top", true, act(func(r *http.Request, id int64) error { return s.Downloads.MoveToTop(r.Context(), id) })},
 		{"DELETE /api/v1/downloads/{id}", true, act(func(r *http.Request, id int64) error {
@@ -79,6 +80,7 @@ func (s *Server) downloads(w http.ResponseWriter, r *http.Request) error {
 	}
 	for i, d := range history {
 		history[i].CanReprocess = s.Downloads.CanReprocess(d)
+		history[i].CanImport = s.Downloads.CanImport(d)
 	}
 	live := s.Downloads.Live()
 	for i, d := range queue {
@@ -90,6 +92,7 @@ func (s *Server) downloads(w http.ResponseWriter, r *http.Request) error {
 			if p.Stage != "" {
 				queue[i].Message = p.Stage
 			}
+			queue[i].StepDone, queue[i].StepTotal = p.StepDone, p.StepTotal
 		}
 	}
 	servers, err := s.Store.UsenetServers(ctx)

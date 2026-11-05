@@ -1,9 +1,13 @@
+import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { AlertTriangle, CircleCheck, Info, RefreshCw, XCircle } from 'lucide-react'
-import { get, type Health as HealthData, type HealthIssue } from '../api'
+import { get, type Health as HealthData, type HealthIssue, type LogLevel } from '../api'
 import { when } from '../format'
 import { Button, Card, ErrorNote, Heading, Spinner } from '../ui'
+import { ServerMonitor } from './ServerMonitor'
+import { LogViewer, type LogSearch } from './LogViewer'
+import { AlertSettings } from './AlertSettings'
 
 // useHealth is Box Office's own check-up, looked at again now and then.
 export function useHealth() {
@@ -19,19 +23,72 @@ const look = {
   notice: { icon: Info, tone: 'text-muted', label: 'Good to know' },
 }
 
+// Health has four tabs: the check-up (problems an admin can fix, and how),
+// the server (how busy it is, its disks and what it logged), the log, and
+// alerts.
+const tabs = [
+  { id: 'checkup', label: 'Check-up' },
+  { id: 'server', label: 'Server' },
+  { id: 'log', label: 'Log' },
+  { id: 'alerts', label: 'Alerts' },
+] as const
+type Tab = (typeof tabs)[number]['id']
+
+const subs: Record<Tab, string> = {
+  checkup: 'Box Office checks itself for problems you can fix: keys, folders, files, connections, backups and tasks.',
+  server: 'How busy Box Office and its machine are over the last hour, its disks, and the problems it has logged.',
+  log: "What Box Office has been doing, to find out why something happened or didn't.",
+  alerts: 'Hear about problems by email, Discord, ntfy or Home Assistant, and connect Prometheus.',
+}
+
 export function Health() {
+  const [params, setParams] = useSearchParams()
+  const tab: Tab = tabs.some((t) => t.id === params.get('tab')) ? (params.get('tab') as Tab) : 'checkup'
+  const [search, setSearch] = useState<LogSearch>({ q: '', n: 0 })
+  const go = (t: Tab) => setParams(t === 'checkup' ? {} : { tab: t }, { replace: true })
+  const showLog = (q: string, level?: LogLevel) => {
+    setSearch((s) => ({ q, level, n: s.n + 1 }))
+    go('log')
+  }
+  return (
+    <>
+      <Heading title="Health" sub={subs[tab]} actions={tab === 'checkup' ? <CheckAgain /> : undefined} />
+      <div className="mb-6 flex gap-1 overflow-x-auto border-b border-line" role="tablist" aria-label="Health">
+        {tabs.map((t) => (
+          <button
+            key={t.id}
+            role="tab"
+            aria-selected={tab === t.id}
+            onClick={() => go(t.id)}
+            className={`-mb-px shrink-0 border-b-2 px-3 py-2 text-sm font-medium transition ${tab === t.id ? 'border-marquee text-ink' : 'border-transparent text-muted hover:text-ink'}`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+      <div role="tabpanel">
+        {tab === 'checkup' && <Checkup />}
+        {tab === 'server' && <ServerMonitor onShowLog={showLog} />}
+        {tab === 'log' && <LogViewer search={search} />}
+        {tab === 'alerts' && <AlertSettings />}
+      </div>
+    </>
+  )
+}
+
+function CheckAgain() {
+  const h = useHealth()
+  return (
+    <Button busy={h.isFetching} onClick={() => h.refetch()}>
+      <RefreshCw className="size-4" /> Check again
+    </Button>
+  )
+}
+
+function Checkup() {
   const h = useHealth()
   return (
     <>
-      <Heading
-        title="Health"
-        sub="Box Office checks itself for problems you can fix: keys, folders, files, connections, backups and tasks."
-        actions={
-          <Button busy={h.isFetching} onClick={() => h.refetch()}>
-            <RefreshCw className="size-4" /> Check again
-          </Button>
-        }
-      />
       <ErrorNote error={h.error} />
       {h.isPending && <Spinner label="Checking" />}
       {h.data && (

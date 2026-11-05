@@ -25,6 +25,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/jobs"
 	"github.com/yeixio/boxoffice/internal/kube"
 	"github.com/yeixio/boxoffice/internal/migrate"
+	"github.com/yeixio/boxoffice/internal/monitor"
 	"github.com/yeixio/boxoffice/internal/notify"
 	"github.com/yeixio/boxoffice/internal/search"
 	"github.com/yeixio/boxoffice/internal/store"
@@ -53,15 +54,20 @@ func run() error {
 	if err != nil {
 		return err
 	}
-	level := slog.LevelInfo
+	// The level can change while Box Office runs: the Health page switches
+	// debug logging on and off. BOXOFFICE_DEBUG keeps it on.
+	level := new(slog.LevelVar)
 	if cfg.Debug {
-		level = slog.LevelDebug
+		level.Set(slog.LevelDebug)
 	}
 	var handler slog.Handler = slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: level})
 	if cfg.LogFormat == "json" {
 		handler = slog.NewJSONHandler(os.Stderr, &slog.HandlerOptions{Level: level})
 	}
-	log := slog.New(handler)
+	// The Health page shows the latest lines and the problems among them.
+	logs := monitor.NewLogs(0)
+	log := slog.New(logs.Handler(handler))
+	mon := &api.Monitoring{Monitor: monitor.NewMonitor(logs), Level: level, ForcedDebug: cfg.Debug}
 
 	if err := os.MkdirAll(cfg.DataDir, 0o750); err != nil {
 		return fmt.Errorf("make the data folder: %w", err)
@@ -96,6 +102,7 @@ func run() error {
 	finder.Register(runner)
 	// A download that fails is blocked, and something else looked for.
 	downloads.Failed = func(ctx context.Context, d store.Download, why string) {
+		mon.DownloadFailures.Add(1)
 		if d.Source != "search" || d.Kind == "" {
 			return
 		}
@@ -114,13 +121,19 @@ func run() error {
 		Store: db, Catalog: cat, Backups: backups, Migrator: &migrate.Migrator{Catalog: cat, Backups: backups, Log: log, DataDir: cfg.DataDir}, Log: log,
 		Downloads: downloads, Search: finder,
 		Version: version.Version, Database: dbKind, DataDir: cfg.DataDir, EnvAPIKey: cfg.APIKey, Web: web.FS(),
+		Monitoring: mon,
 	}
+	alerter := srv.Alerts()
+	// Admin alerts reach Matinee's admins too, with download news.
+	alerter.Forward = notes.Alert
+	backups.Failed = alerter.BackupFailed
 	if err := srv.EnsureAPIKey(ctx); err != nil {
 		return err
 	}
+	srv.RestoreDebugLogging(ctx)
 
 	var wg sync.WaitGroup
-	for _, loop := range []func(context.Context){runner.Run, backups.Run, downloads.Run, func(ctx context.Context) { cat.RefreshEvery(ctx, cfg.Refresh) }} {
+	for _, loop := range []func(context.Context){runner.Run, backups.Run, downloads.Run, mon.Monitor.Run, alerter.Run, func(ctx context.Context) { cat.RefreshEvery(ctx, cfg.Refresh) }} {
 		wg.Add(1)
 		go func() { defer wg.Done(); loop(ctx) }()
 	}
@@ -128,7 +141,8 @@ func run() error {
 	hs := &http.Server{Addr: cfg.Addr, Handler: srv.Handler(), ReadHeaderTimeout: 10 * time.Second, IdleTimeout: 2 * time.Minute}
 	errc := make(chan error, 1)
 	go func() { errc <- hs.ListenAndServe() }()
-	log.Info("Box Office is running", "addr", cfg.Addr, "database", dbKind, "version", version.Version)
+	log.Info("Box Office is running", "addr", cfg.Addr, "database", dbKind, "version", version.Version,
+		"data", cfg.DataDir, "downloads", cfg.Downloads, "debug", level.Level() == slog.LevelDebug)
 	select {
 	case err := <-errc:
 		stop()
@@ -143,6 +157,8 @@ func run() error {
 		log.Warn("stopping the web server", "err", err)
 	}
 	wg.Wait()
+	// A clean stop, so the next start isn't taken for a crash.
+	alerter.Stopped(context.Background())
 	return nil
 }
 

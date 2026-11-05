@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { ArrowUpToLine, CircleCheck, CircleX, Download as DownloadIcon, Pause, Play, PackageOpen, RotateCcw, ShieldAlert, Trash2, Upload } from 'lucide-react'
+import { ArrowUpToLine, CircleCheck, Clock, FolderInput, CircleX, Download as DownloadIcon, Pause, Play, PackageOpen, RotateCcw, ShieldAlert, Trash2, Upload } from 'lucide-react'
 import { api, del, get, post, put, type Download, type Downloads as DownloadsData } from '../api'
 import { bytes, when } from '../format'
 import { useQualities } from '../hooks'
@@ -204,7 +204,7 @@ function title(d: Download) {
 function useAction() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: ({ id, what }: { id: number; what: 'pause' | 'resume' | 'retry' | 'reprocess' | 'top' }) => post(`/downloads/${id}/${what}`),
+    mutationFn: ({ id, what }: { id: number; what: 'pause' | 'resume' | 'retry' | 'reprocess' | 'import' | 'top' }) => post(`/downloads/${id}/${what}`),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['downloads'] }),
   })
 }
@@ -217,6 +217,8 @@ function QueueItem({ d, rate, first }: { d: Download; rate: number; first: boole
   const q = qualities.data?.find((x) => x.id === d.quality)
   const busy = act.isPending && act.variables?.id === d.id
   const working = ['verifying', 'repairing', 'unpacking', 'importing'].includes(d.status)
+  // Checking, repairing and unpacking say how far they've got.
+  const step = working && d.stepTotal ? Math.min(100, ((d.stepDone ?? 0) / d.stepTotal) * 100) : undefined
   return (
     <li className="rounded-xl border border-line bg-card p-4">
       <div className="flex flex-wrap items-start gap-x-3 gap-y-2">
@@ -252,12 +254,24 @@ function QueueItem({ d, rate, first }: { d: Download; rate: number; first: boole
           )}
         </div>
       </div>
-      <div className="mt-3 h-2 overflow-hidden rounded-full bg-line" role="progressbar" aria-valuenow={Math.round(pct)} aria-valuemin={0} aria-valuemax={100} aria-label="Progress">
-        <div className={`h-full rounded-full transition-all ${working ? 'bg-gold' : 'bg-marquee'}`} style={{ width: `${working ? 100 : pct}%` }} />
+      <div className="mt-3 h-2 overflow-hidden rounded-full bg-line" role="progressbar" aria-valuenow={Math.round(step ?? pct)} aria-valuemin={0} aria-valuemax={100} aria-label="Progress">
+        <div
+          className={`h-full rounded-full transition-all ${working ? 'bg-gold' : 'bg-marquee'} ${working && step === undefined ? 'animate-pulse' : ''}`}
+          style={{ width: `${working ? (step ?? 100) : pct}%` }}
+        />
       </div>
       <div className="mt-1.5 flex flex-wrap justify-between gap-x-4 text-xs text-muted">
         <span>
-          {bytes(d.doneBytes)} of {bytes(d.size)}
+          {step !== undefined ? (
+            <>
+              {statusName[d.status]} {Math.floor(step)}%
+              {d.status !== 'repairing' && ` · ${bytes(d.stepDone ?? 0)} of ${bytes(d.stepTotal ?? 0)}`}
+            </>
+          ) : (
+            <>
+              {bytes(d.doneBytes)} of {bytes(d.size)}
+            </>
+          )}
           {d.failedBytes > 0 && <span className="text-bad"> · {bytes(d.failedBytes)} missing</span>}
         </span>
         <span>{d.status === 'downloading' && rate > 0 ? `${speed(rate)} · ${eta(d.size - d.doneBytes, rate)}` : d.message}</span>
@@ -273,10 +287,13 @@ function HistoryItem({ d }: { d: Download }) {
   const [removing, setRemoving] = useState(false)
   const ok = d.status === 'completed'
   const held = !!d.quarantined
+  const waiting = ok && !!d.canImport
   return (
     <li className="flex flex-wrap items-start gap-3 px-4 py-3">
       {held ? (
         <ShieldAlert className="mt-0.5 size-5 shrink-0 text-gold" aria-label="Quarantined" />
+      ) : waiting ? (
+        <Clock className="mt-0.5 size-5 shrink-0 text-gold" aria-label="Waiting to go into the library" />
       ) : ok ? (
         <CircleCheck className="mt-0.5 size-5 shrink-0 text-ok" aria-label="Done" />
       ) : (
@@ -290,6 +307,11 @@ function HistoryItem({ d }: { d: Download }) {
           {bytes(d.size)} · {when(d.finishedAt)} {title(d)}
         </div>
         {d.message && <p className={`mt-1 break-words text-xs ${ok ? 'text-muted' : 'text-bad'}`}>{d.message}</p>}
+        {waiting && (
+          <Button className="mt-2 px-2.5 py-1 text-xs" busy={act.isPending && act.variables?.what === 'import'} onClick={() => act.mutate({ id: d.id, what: 'import' })}>
+            <FolderInput className="size-3.5" aria-hidden /> Move into library
+          </Button>
+        )}
         {d.canReprocess && (
           <Button className="mt-2 px-2.5 py-1 text-xs" busy={act.isPending && act.variables?.what === 'reprocess'} onClick={() => act.mutate({ id: d.id, what: 'reprocess' })}>
             <PackageOpen className="size-3.5" aria-hidden /> Unpack again, without downloading

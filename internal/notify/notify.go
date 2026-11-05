@@ -14,7 +14,9 @@ import (
 	"log/slog"
 	"slices"
 	"strings"
+	"time"
 
+	"github.com/yeixio/boxoffice/internal/alerts"
 	"github.com/yeixio/boxoffice/internal/store"
 )
 
@@ -38,6 +40,19 @@ func (r *Recorder) Add(ctx context.Context, n store.Notification) error {
 		r.Log.Warn("couldn't save a notification", "event", n.Event, "err", err)
 	}
 	return err
+}
+
+// Alert passes an admin alert (internal/alerts) on to Matinee's admins.
+// One that cleared up comes as information.
+func (r *Recorder) Alert(ctx context.Context, a alerts.Alert) {
+	n := store.Notification{Event: "alert." + a.Rule, Level: a.Level, Audience: store.AudienceAdmins, Title: a.Title, Body: a.Message}
+	if a.Resolved {
+		n.Level = store.LevelInfo
+	}
+	if a.Time > 0 {
+		n.At = time.UnixMilli(a.Time)
+	}
+	r.Add(ctx, n)
 }
 
 // Download records what happened to a download. why is what went wrong,

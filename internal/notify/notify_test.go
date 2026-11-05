@@ -1,9 +1,12 @@
 package notify
 
 import (
+	"context"
 	"testing"
 
+	"github.com/yeixio/boxoffice/internal/alerts"
 	"github.com/yeixio/boxoffice/internal/store"
+	"github.com/yeixio/boxoffice/internal/store/storetest"
 )
 
 func TestMediaName(t *testing.T) {
@@ -20,5 +23,23 @@ func TestMediaName(t *testing.T) {
 		if got := mediaName(c.m); got != c.want {
 			t.Errorf("%+v: %q, want %q", c.m, got, c.want)
 		}
+	}
+}
+
+func TestAlert(t *testing.T) {
+	st := storetest.Open(t)
+	r := &Recorder{Store: st}
+	ctx := context.Background()
+	r.Alert(ctx, alerts.Alert{Rule: "disk", Level: "critical", Title: "Disk nearly full", Message: "2 GB left on /data."})
+	r.Alert(ctx, alerts.Alert{Rule: "disk", Level: "critical", Title: "Disk has room again", Resolved: true})
+	list, err := st.Notifications(ctx, 0, 10)
+	if err != nil || len(list) != 2 {
+		t.Fatalf("%+v %v", list, err)
+	}
+	if n := list[0]; n.Event != "alert.disk" || n.Level != "critical" || n.Audience != store.AudienceAdmins || n.Body != "2 GB left on /data." {
+		t.Fatalf("alert: %+v", n)
+	}
+	if list[1].Level != store.LevelInfo {
+		t.Fatalf("resolved: %+v", list[1])
 	}
 }

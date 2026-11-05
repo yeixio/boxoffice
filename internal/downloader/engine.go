@@ -48,7 +48,9 @@ type Engine struct {
 	post    chan struct{} // one download is checked and unpacked at a time
 	// again holds downloads to check and unpack again without fetching.
 	again map[int64]bool
-	once  sync.Once
+	// importing holds downloads being moved into the library by hand.
+	importing map[int64]bool
+	once      sync.Once
 }
 
 // Importer moves the files of a finished download into the library and
@@ -65,6 +67,14 @@ type running struct {
 	failed atomic.Int64
 	size   atomic.Int64
 	stage  atomic.Value // string: what it's doing, for people
+	// How far the current step (checking, repairing, unpacking) has got.
+	stepDone, stepTotal atomic.Int64
+}
+
+// step records how far the current step has got.
+func (r *running) step(done, total int64) {
+	r.stepDone.Store(done)
+	r.stepTotal.Store(total)
 }
 
 var (
@@ -266,6 +276,75 @@ func (e *Engine) Reprocess(ctx context.Context, id int64) error {
 	return nil
 }
 
+// CanImport says whether a finished download is waiting to go into the
+// library: it's for a title, wasn't moved there, and its files are still
+// in its folder.
+func (e *Engine) CanImport(d store.Download) bool {
+	if e.Importer == nil || d.Status != store.DownloadCompleted || d.Kind == "" || d.ImportedTo != "" || d.Folder == "" {
+		return false
+	}
+	dir, ok := e.inside(d.Folder)
+	return ok && len(listFiles(dir)) > 0
+}
+
+// Import moves a finished download into the library now, doing nothing
+// else: no downloading, checking or unpacking. It works whether or not
+// moving downloads in by itself is turned on.
+func (e *Engine) Import(ctx context.Context, id int64) error {
+	d, err := e.Store.Download(ctx, id)
+	if err != nil {
+		return err
+	}
+	if !e.CanImport(d) {
+		return errors.New("there's nothing of it in the downloads folder to move into the library")
+	}
+	e.init()
+	e.mu.Lock()
+	if e.importing == nil {
+		e.importing = map[int64]bool{}
+	}
+	if e.importing[id] {
+		e.mu.Unlock()
+		return errors.New("it's already being moved into the library")
+	}
+	e.importing[id] = true
+	e.mu.Unlock()
+	if err := e.Store.SetDownloadStatus(ctx, id, store.DownloadImporting, ""); err != nil {
+		return err
+	}
+	go func() {
+		bg := context.WithoutCancel(ctx)
+		defer func() {
+			e.mu.Lock()
+			delete(e.importing, id)
+			e.mu.Unlock()
+		}()
+		dir, _ := e.inside(d.Folder)
+		e.Store.SetDownloadStatus(bg, id, store.DownloadCompleted, e.importInto(bg, &d, dir, ""))
+	}()
+	return nil
+}
+
+// importInto moves a download into the library and says what happened.
+// Failing to doesn't fail the download, which is fine where it is.
+func (e *Engine) importInto(ctx context.Context, d *store.Download, dir, lead string) string {
+	to, err := e.Importer.Import(ctx, *d, dir, listFiles(dir))
+	var ro *ReadOnlyError
+	switch {
+	case errors.As(err, &ro):
+		e.Log.Info("download waits to go into the library: its root folder is read-only", "name", d.Name, "id", d.ID, "root", ro.Root)
+		return lead + fmt.Sprintf("Downloaded, and waiting to go into the library: %s is read-only for Box Office for now. Nothing was moved; it's in the downloads folder until you choose Move into library.", ro.Root)
+	case err != nil:
+		e.Log.Warn("couldn't move a download into the library", "name", d.Name, "id", d.ID, "err", err)
+		return lead + "Downloaded, but it couldn't go into the library yet: " + err.Error() + ". It's in the downloads folder until you choose Move into library."
+	}
+	e.Log.Info("download moved into the library", "name", d.Name, "id", d.ID, "to", to)
+	e.Store.SetDownloadImported(ctx, d.ID, to)
+	d.ImportedTo = to
+	e.removeFolder(*d)
+	return lead + "Moved into the library at " + to
+}
+
 // Remove takes a download off the queue or out of the history; with
 // deleteFiles, its folder in the downloads folder goes too.
 func (e *Engine) Remove(ctx context.Context, id int64, deleteFiles bool) error {
@@ -346,6 +425,8 @@ type Progress struct {
 	FailedBytes int64  `json:"failedBytes"`
 	Size        int64  `json:"size"`
 	Stage       string `json:"stage,omitempty"`
+	StepDone    int64  `json:"stepDone,omitempty"`
+	StepTotal   int64  `json:"stepTotal,omitempty"`
 }
 
 // Live is what the engine is doing right now.
@@ -361,7 +442,8 @@ func (e *Engine) Live() Live {
 	e.mu.Lock()
 	for id, r := range e.working {
 		stage, _ := r.stage.Load().(string)
-		l.Progress[id] = Progress{DoneBytes: r.bytes.Load(), FailedBytes: r.failed.Load(), Size: r.size.Load(), Stage: stage}
+		l.Progress[id] = Progress{DoneBytes: r.bytes.Load(), FailedBytes: r.failed.Load(), Size: r.size.Load(), Stage: stage,
+			StepDone: r.stepDone.Load(), StepTotal: r.stepTotal.Load()}
 	}
 	srv := e.srv
 	e.mu.Unlock()
@@ -461,7 +543,7 @@ func (e *Engine) startNext(ctx context.Context, wg *sync.WaitGroup) {
 	if err != nil {
 		return
 	}
-	srv := newServers(list)
+	srv := newServers(list, e.Log)
 	if len(srv.pools) == 0 {
 		e.Store.SetDownloadStatus(ctx, d.ID, store.DownloadPaused, "add a news server in Settings first, then resume")
 		return
@@ -565,4 +647,7 @@ func sentence(s string) string {
 	return strings.ToUpper(s[:1]) + s[1:]
 }
 
-func (r *running) setStage(s string) { r.stage.Store(s) }
+func (r *running) setStage(s string) {
+	r.stage.Store(s)
+	r.step(0, 0)
+}
