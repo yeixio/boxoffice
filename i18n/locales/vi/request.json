@@ -1,0 +1,140 @@
+{
+  "problems": {
+    "wont_play": "Không phát được",
+    "wrong_title": "Sai phim hoặc sai tập",
+    "picture": "Hình ảnh kém",
+    "sound": "Âm thanh sai hoặc lệch tiếng",
+    "subtitles": "Phụ đề thiếu hoặc sai",
+    "other": "Vấn đề khác"
+  },
+  "state": {
+    "pending": "Chờ phê duyệt",
+    "declined": "Đã từ chối",
+    "searching": "Đã duyệt, đang tìm",
+    "downloadingAt": "Đang tải, {{percent}}",
+    "downloading": "Đang tải xuống",
+    "partial": "Một số tập đã sẵn sàng",
+    "available": "Sẵn sàng để xem",
+    "paused": "Đã duyệt, đang tạm giữ",
+    "removed": "Đã xóa khỏi thư viện"
+  },
+  "site": {
+    "down": "Trang này không phản hồi: {{error}}",
+    "closed": "Trang yêu cầu này hiện không mở."
+  },
+  "signIn": {
+    "matinee": "Tài khoản Matinee",
+    "local": "Tài khoản ở đây",
+    "with": "Đăng nhập bằng",
+    "matineeHint": "Dùng tên người dùng và mật khẩu bạn dùng để xem trong Matinee.",
+    "signUpHint": "Tạo tài khoản để yêu cầu phim và chương trình.",
+    "username": "Tên người dùng",
+    "name": "Tên của bạn",
+    "nameHint": "Tên quản trị viên nhìn thấy. Để trống để dùng tên người dùng.",
+    "password": "Mật khẩu",
+    "passwordHint": "Ít nhất 8 ký tự.",
+    "make": "Tạo tài khoản của tôi",
+    "signIn": "Đăng nhập",
+    "haveAccount": "Tôi đã có tài khoản",
+    "new": "Lần đầu đến đây? Tạo tài khoản"
+  },
+  "nav": {
+    "discover": "Khám phá",
+    "requests": "Yêu cầu của tôi",
+    "problems": "Sự cố",
+    "sections": "Mục",
+    "account": "Tài khoản của bạn"
+  },
+  "home": {
+    "hi": "Chào {{name}}",
+    "welcome": "Tìm một phim hoặc chương trình và yêu cầu nó. Bạn có thể theo dõi trong Yêu cầu của tôi.",
+    "find": "Tìm phim hoặc chương trình",
+    "seeAll": "Xem tất cả",
+    "nothing": "Chưa có gì để hiển thị",
+    "notSetUp": "Quản trị viên chưa thiết lập xong trang này. Hãy thử lại sau.",
+    "movieGenres": "Thể loại phim",
+    "showGenres": "Thể loại chương trình"
+  },
+  "search": {
+    "nothing": "Không có gì với tên đó.",
+    "movies": "Phim",
+    "shows": "Chương trình",
+    "looking": "Đang tìm…"
+  },
+  "row": {
+    "more": "Hiện thêm"
+  },
+  "pill": {
+    "ready": "Sẵn sàng để xem",
+    "some": "Một số tập",
+    "coming": "Đang đến",
+    "asked": "Đã yêu cầu",
+    "declined": "Đã từ chối"
+  },
+  "kind": {
+    "movie": "Phim",
+    "show": "Hiện"
+  },
+  "card": {
+    "request": "Yêu cầu {{title}}"
+  },
+  "sheet": {
+    "out": "Ra mắt {{date}}",
+    "starts": "Bắt đầu {{date}}",
+    "released": "Đã phát hành {{date}}",
+    "firstAired": "Phát sóng lần đầu {{date}}",
+    "ready": "Nó đã có trong thư viện. Chúc bạn xem vui!",
+    "some": "Một phần đã có trong thư viện, phần còn lại đang đến.",
+    "report": "Báo lỗi",
+    "coming": "Nó đang đến. Không cần yêu cầu: nó sẽ có trong thư viện ngay khi được tìm thấy.",
+    "asked": "Bạn đã yêu cầu. Đang chờ quản trị viên phê duyệt.",
+    "takeBack": "Rút lại",
+    "declined": "Quản trị viên đã từ chối. Bạn có thể yêu cầu lại.",
+    "declinedWhy": "Quản trị viên đã từ chối: \"{{reply}}\" Bạn có thể yêu cầu lại.",
+    "note": "Ghi chú cho quản trị viên",
+    "noteHint": "Tùy chọn, như phiên bản bạn muốn.",
+    "askMovie": "Yêu cầu phim này",
+    "askShow": "Yêu cầu chương trình này"
+  },
+  "report": {
+    "thanks": "Cảm ơn. Quản trị viên sẽ xem, và bạn có thể theo dõi trong Sự cố.",
+    "done": "Xong",
+    "title": "Có vấn đề gì?",
+    "problem": "Sự cố",
+    "season": "Mùa",
+    "seasonHint": "Để trống nếu liên quan đến cả chương trình.",
+    "episode": "Tập",
+    "more": "Cho chúng tôi biết thêm",
+    "say": "Kể lại chuyện gì đã xảy ra.",
+    "optional": "Tùy chọn.",
+    "send": "Gửi báo cáo"
+  },
+  "mine": {
+    "title": "Yêu cầu của tôi",
+    "none": "Chưa yêu cầu gì",
+    "empty": "Tìm một phim hoặc chương trình trong <link>Khám phá</link> và nhấn <strong>+</strong> để yêu cầu.",
+    "admin": "Quản trị viên: \"{{reply}}\"",
+    "asked": "Đã yêu cầu {{date}}",
+    "takeBack": "Thu hồi"
+  },
+  "issues": {
+    "title": "Sự cố",
+    "sub": "Có vấn đề với một phim hoặc chương trình? Mở nó trong Khám phá hoặc tìm theo tên, và chọn Báo cáo sự cố.",
+    "none": "Chưa có sự cố nào được báo cáo",
+    "season": "Phần {{season}}",
+    "episode": "Mùa {{season}}, tập {{episode}}",
+    "waiting": "Đang chờ quản trị viên",
+    "fixed": "Đã sửa"
+  },
+  "account": {
+    "title": "Tài khoản của bạn",
+    "signedIn": "Đã đăng nhập là <strong>{{name}}</strong>.",
+    "signedInMatinee": "Đã đăng nhập là <strong>{{name}}</strong> bằng tài khoản Matinee.",
+    "change": "Đổi mật khẩu",
+    "current": "Mật khẩu hiện tại",
+    "new": "Mật khẩu mới",
+    "changed": "Đã đổi. Bạn đã được đăng xuất ở mọi nơi khác.",
+    "changeButton": "Đổi mật khẩu",
+    "signOut": "Đăng xuất"
+  }
+}
