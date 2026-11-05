@@ -6,6 +6,7 @@ What changed in Box Office, newest first. The format follows [Keep a Changelog](
 
 ### Added
 
+- **Scan a root folder for what's on disk but not on the list.** Each movie, TV and music root folder in Settings has a Scan button: it runs in the background, matches each folder to TMDB or MusicBrainz, and lets you check the matches and add the ones you pick where they are, with their files. Nothing is moved, renamed or deleted.
 - **Discover, the new home page:** what's trending, popular and coming soon on TMDB, recommendations based on what's in your library, and genres and networks to browse. Every poster says whether it's on disk, partly on disk, wanted or paused, and ones that aren't here can be added in one click with your usual profile and the recent-seasons default, or with other choices from the title's card. Matinee can show the same rows in its Discover tab in place of Overseerr, through `/{radarr,sonarr}/api/v3/boxoffice/discover`.
 - **Music:** follow artists from MusicBrainz and pick which of their albums, EPs and singles you want, once Music is turned on in Settings ([#41](https://github.com/yeixio/boxoffice/pull/41)). Searching and downloading them comes next.
 - **Music, audiobooks, ebooks and comics can be turned on in Settings,** each off by default, with its own root folders and one-click suggestions for where the library is mounted ([#38](https://github.com/yeixio/boxoffice/pull/38)). Adding and searching for them comes next.
