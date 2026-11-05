@@ -24,24 +24,26 @@ const (
 
 // Download is one release being downloaded, or downloaded.
 type Download struct {
-	ID          int64     `json:"id"`
-	Name        string    `json:"name"`
-	Status      string    `json:"status"`
-	Kind        string    `json:"kind,omitempty"`
-	TitleID     int64     `json:"titleId,omitempty"`
-	EpisodeIDs  []int64   `json:"episodeIds,omitempty"`
-	Quality     int       `json:"quality"`
-	Indexer     string    `json:"indexer,omitempty"`
-	Source      string    `json:"source,omitempty"`
-	Password    string    `json:"-"`
-	Size        int64     `json:"size"`
-	DoneBytes   int64     `json:"doneBytes"`
-	FailedBytes int64     `json:"failedBytes"`
-	DoneFiles   []int     `json:"-"`
-	Position    int       `json:"position"`
-	Folder      string    `json:"folder,omitempty"`
-	Message     string    `json:"message,omitempty"`
-	ImportedTo  string    `json:"importedTo,omitempty"`
+	ID          int64   `json:"id"`
+	Name        string  `json:"name"`
+	Status      string  `json:"status"`
+	Kind        string  `json:"kind,omitempty"`
+	TitleID     int64   `json:"titleId,omitempty"`
+	EpisodeIDs  []int64 `json:"episodeIds,omitempty"`
+	Quality     int     `json:"quality"`
+	Indexer     string  `json:"indexer,omitempty"`
+	Source      string  `json:"source,omitempty"`
+	Password    string  `json:"-"`
+	Size        int64   `json:"size"`
+	DoneBytes   int64   `json:"doneBytes"`
+	FailedBytes int64   `json:"failedBytes"`
+	DoneFiles   []int   `json:"-"`
+	Position    int     `json:"position"`
+	Folder      string  `json:"folder,omitempty"`
+	Message     string  `json:"message,omitempty"`
+	ImportedTo  string  `json:"importedTo,omitempty"`
+	// Quarantined is where the files were moved when they looked unsafe.
+	Quarantined string    `json:"quarantined,omitempty"`
 	AddedAt     time.Time `json:"addedAt"`
 	StartedAt   time.Time `json:"startedAt,omitzero"`
 	FinishedAt  time.Time `json:"finishedAt,omitzero"`
@@ -51,14 +53,14 @@ type Download struct {
 func (d Download) Finished() bool { return d.Status == DownloadCompleted || d.Status == DownloadFailed }
 
 const downloadCols = `id, name, status, kind, title_id, episode_ids, quality, indexer, source, password, size, done_bytes, failed_bytes,
-	done_files, position, folder, message, imported_to, added_at, started_at, finished_at`
+	done_files, position, folder, message, imported_to, quarantined, added_at, started_at, finished_at`
 
 func scanDownload(r interface{ Scan(...any) error }) (Download, error) {
 	var d Download
 	var eps, files string
 	var added, started, finished int64
 	err := r.Scan(&d.ID, &d.Name, &d.Status, &d.Kind, &d.TitleID, &eps, &d.Quality, &d.Indexer, &d.Source, &d.Password, &d.Size,
-		&d.DoneBytes, &d.FailedBytes, &files, &d.Position, &d.Folder, &d.Message, &d.ImportedTo, &added, &started, &finished)
+		&d.DoneBytes, &d.FailedBytes, &files, &d.Position, &d.Folder, &d.Message, &d.ImportedTo, &d.Quarantined, &added, &started, &finished)
 	if errors.Is(err, sql.ErrNoRows) {
 		return d, ErrNotFound
 	}
@@ -166,6 +168,12 @@ func (s *Store) SetDownloadImported(ctx context.Context, id int64, to string) er
 	return err
 }
 
+// SetDownloadQuarantined records where a download's unsafe files went.
+func (s *Store) SetDownloadQuarantined(ctx context.Context, id int64, to string) error {
+	_, err := s.exec(ctx, "UPDATE downloads SET quarantined = ? WHERE id = ?", to, id)
+	return err
+}
+
 // ResetDownload puts a finished download back in the queue, to try again
 // from the start.
 func (s *Store) ResetDownload(ctx context.Context, id int64) error {
@@ -173,7 +181,7 @@ func (s *Store) ResetDownload(ctx context.Context, id int64) error {
 	if err := s.row(ctx, "SELECT COALESCE(MAX(position), 0) FROM downloads").Scan(&pos); err != nil {
 		return err
 	}
-	res, err := s.exec(ctx, `UPDATE downloads SET status = 'queued', message = '', done_bytes = 0, failed_bytes = 0, done_files = '[]',
+	res, err := s.exec(ctx, `UPDATE downloads SET status = 'queued', message = '', done_bytes = 0, failed_bytes = 0, done_files = '[]', quarantined = '',
 		started_at = 0, finished_at = 0, position = ? WHERE id = ?`, pos+1, id)
 	if err != nil {
 		return err

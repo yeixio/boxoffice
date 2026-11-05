@@ -11,6 +11,7 @@ import (
 
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/usenet/par2"
+	"github.com/yeixio/boxoffice/internal/usenet/screen"
 	"github.com/yeixio/boxoffice/internal/usenet/unpack"
 )
 
@@ -33,6 +34,9 @@ func (e *Engine) postProcess(ctx context.Context, r *running, d *store.Download,
 	files := listFiles(job.dir)
 	if len(files) == 0 {
 		return errors.New("the download finished with no files in it")
+	}
+	if found := screen.Check(job.dir, files, d.Kind != ""); len(found) > 0 {
+		return e.quarantine(ctx, d, job, found)
 	}
 	lead := ""
 	if len(notes) > 0 {
@@ -173,7 +177,7 @@ func (e *Engine) unpack(ctx context.Context, d *store.Download, job *fetchJob) e
 		res, err := unpack.Extract(ctx, a, job.dir, d.Password)
 		if errors.Is(err, unpack.ErrPassword) {
 			if d.Password == "" {
-				return errors.New("the archive needs a password, and the release didn't give one")
+				return errors.New("the archive needs a password, and the release didn't give one. Releases like this are often fake")
 			}
 			return errors.New("the archive's password isn't right")
 		}
@@ -184,8 +188,11 @@ func (e *Engine) unpack(ctx context.Context, d *store.Download, job *fetchJob) e
 	}
 	if len(archives) > 0 {
 		for _, v := range volumes {
-			if _, ok := e.inside(filepath.Join(d.Folder, filepath.Base(v))); ok {
-				os.Remove(filepath.Join(job.dir, filepath.Base(v)))
+			if !filepath.IsAbs(v) {
+				v = filepath.Join(job.dir, v)
+			}
+			if rel, err := filepath.Rel(job.dir, v); err == nil && rel != "." && !strings.HasPrefix(rel, "..") {
+				os.Remove(v)
 			}
 		}
 		// Any other volume of the same sets, such as .r00 files rardecode
@@ -203,6 +210,46 @@ func (e *Engine) unpack(ctx context.Context, d *store.Download, job *fetchJob) e
 		}
 	}
 	return nil
+}
+
+// QuarantineDir is the folder, inside the downloads folder, that unsafe
+// downloads are moved to. Box Office never deletes what's in it.
+const QuarantineDir = "_quarantine"
+
+// quarantine moves a download that looks unsafe out of the way, without
+// opening, importing or deleting any of it, and takes away any permission
+// to run its files. The error it returns fails the download, so the
+// release is blocked and another looked for.
+func (e *Engine) quarantine(ctx context.Context, d *store.Download, job *fetchJob, found []screen.Finding) error {
+	why := screen.Summary(found)
+	for _, f := range found {
+		e.Log.Warn("download looks unsafe", "name", d.Name, "file", f.File, "why", f.Why)
+	}
+	base := filepath.Join(e.Dir, QuarantineDir)
+	if err := os.MkdirAll(base, 0o750); err != nil {
+		return fmt.Errorf("it looks unsafe (%s), and Box Office couldn't make a quarantine folder for it, so it's left in %s: %v", why, job.dir, err)
+	}
+	to := filepath.Join(base, filepath.Base(job.dir))
+	for i := 2; ; i++ {
+		if _, err := os.Lstat(to); os.IsNotExist(err) {
+			break
+		}
+		to = filepath.Join(base, fmt.Sprintf("%s (%d)", filepath.Base(job.dir), i))
+	}
+	if err := os.Rename(job.dir, to); err != nil {
+		return fmt.Errorf("it looks unsafe (%s), and Box Office couldn't move it to quarantine, so it's left in %s: %v", why, job.dir, err)
+	}
+	filepath.WalkDir(to, func(p string, de os.DirEntry, err error) error {
+		if err == nil && de.Type().IsRegular() {
+			if info, err := de.Info(); err == nil {
+				os.Chmod(p, info.Mode().Perm()&^0o111)
+			}
+		}
+		return nil
+	})
+	e.Store.SetDownloadQuarantined(context.WithoutCancel(ctx), d.ID, to)
+	d.Quarantined = to
+	return fmt.Errorf("quarantined, as it doesn't look safe: %s. Box Office didn't open or import it; its files are in %s", why, to)
 }
 
 // listFiles lists the files in dir and its subfolders, relative to it,

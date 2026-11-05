@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"path/filepath"
 	"slices"
 	"sort"
 	"strings"
@@ -61,7 +62,7 @@ func (c *Checker) clock() time.Time {
 // itself.
 func (c *Checker) Check(ctx context.Context) []Issue {
 	var out []Issue
-	for _, check := range []func(context.Context) ([]Issue, error){c.tmdb, c.rootFolders, c.files, c.connections, c.backups, c.jobs} {
+	for _, check := range []func(context.Context) ([]Issue, error){c.tmdb, c.rootFolders, c.files, c.connections, c.backups, c.jobs, c.quarantine} {
 		issues, err := check(ctx)
 		if err != nil {
 			out = append(out, Issue{ID: "check-failed", Level: "warning", Title: "A health check couldn't run", Detail: err.Error()})
@@ -310,6 +311,35 @@ func (c *Checker) jobs(ctx context.Context) ([]Issue, error) {
 	}}, nil
 }
 
+// quarantine tells of downloads that looked unsafe and were set aside.
+func (c *Checker) quarantine(ctx context.Context) ([]Issue, error) {
+	history, err := c.Store.DownloadHistory(ctx, 500)
+	if err != nil {
+		return nil, err
+	}
+	var found []store.Download
+	for _, d := range history {
+		if d.Quarantined != "" {
+			found = append(found, d)
+		}
+	}
+	if len(found) == 0 {
+		return nil, nil
+	}
+	last := found[0]
+	return []Issue{{
+		ID: "downloads-quarantined", Level: "notice", Title: quarantinedTitle(len(found)),
+		Detail: fmt.Sprintf("Box Office set aside downloads holding programs, disguised files or no video at all, and didn't open or import them. The latest, %s, is in %s.", last.Name, filepath.Dir(last.Quarantined)),
+		Steps: []string{
+			"Nothing needs doing: Box Office blocked each release and looked for another.",
+			"Don't open the quarantined files. Programs and scripts in a movie or TV release are almost always malware.",
+			"To free the space, delete the files in " + filepath.Dir(last.Quarantined) + " yourself. Box Office never deletes them.",
+			"Then remove those downloads from the history on Downloads, and this goes away.",
+		},
+		Link: &Link{To: "/downloads", Label: "Open Downloads"},
+	}}, nil
+}
+
 func plural(n int, one, many string) string {
 	if n == 1 {
 		return "1 " + one
@@ -331,4 +361,11 @@ func cmpOr(a, b string) string {
 		return a
 	}
 	return b
+}
+
+func quarantinedTitle(n int) string {
+	if n == 1 {
+		return "A download was quarantined"
+	}
+	return fmt.Sprintf("%d downloads were quarantined", n)
 }

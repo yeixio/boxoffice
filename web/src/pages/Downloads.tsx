@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { ArrowUpToLine, CircleCheck, CircleX, Download as DownloadIcon, Pause, Play, RotateCcw, Trash2, Upload } from 'lucide-react'
+import { ArrowUpToLine, CircleCheck, CircleX, Download as DownloadIcon, Pause, Play, RotateCcw, ShieldAlert, Trash2, Upload } from 'lucide-react'
 import { api, del, get, post, put, type Download, type Downloads as DownloadsData } from '../api'
 import { bytes, when } from '../format'
 import { useQualities } from '../hooks'
@@ -272,18 +272,27 @@ function HistoryItem({ d }: { d: Download }) {
   const act = useAction()
   const [removing, setRemoving] = useState(false)
   const ok = d.status === 'completed'
+  const held = !!d.quarantined
   return (
     <li className="flex flex-wrap items-start gap-3 px-4 py-3">
-      {ok ? <CircleCheck className="mt-0.5 size-5 shrink-0 text-ok" aria-label="Done" /> : <CircleX className="mt-0.5 size-5 shrink-0 text-bad" aria-label="Failed" />}
+      {held ? (
+        <ShieldAlert className="mt-0.5 size-5 shrink-0 text-gold" aria-label="Quarantined" />
+      ) : ok ? (
+        <CircleCheck className="mt-0.5 size-5 shrink-0 text-ok" aria-label="Done" />
+      ) : (
+        <CircleX className="mt-0.5 size-5 shrink-0 text-bad" aria-label="Failed" />
+      )}
       <div className="min-w-0 flex-1 basis-56">
-        <div className="break-words text-sm font-medium">{d.name}</div>
+        <div className="break-words text-sm font-medium">
+          {d.name} {held && <Badge tone="gold">Quarantined</Badge>}
+        </div>
         <div className="mt-0.5 text-xs text-muted">
           {bytes(d.size)} · {when(d.finishedAt)} {title(d)}
         </div>
         {d.message && <p className={`mt-1 break-words text-xs ${ok ? 'text-muted' : 'text-bad'}`}>{d.message}</p>}
       </div>
       <div className="flex shrink-0 gap-1">
-        {!ok && (
+        {!ok && !held && (
           <IconButton label="Try again" busy={act.isPending} onClick={() => act.mutate({ id: d.id, what: 'retry' })}>
             <RotateCcw className="size-4" />
           </IconButton>
@@ -300,7 +309,7 @@ function HistoryItem({ d }: { d: Download }) {
 
 function RemoveDialog({ d, onClose }: { d: Download; onClose: () => void }) {
   const qc = useQueryClient()
-  const [files, setFiles] = useState(d.status !== 'completed' || !!d.importedTo)
+  const [files, setFiles] = useState(!d.quarantined && (d.status !== 'completed' || !!d.importedTo))
   const remove = useMutation({
     mutationFn: () => del(`/downloads/${d.id}${files ? '?deleteFiles=true' : ''}`),
     onSuccess: () => {
@@ -311,7 +320,12 @@ function RemoveDialog({ d, onClose }: { d: Download; onClose: () => void }) {
   return (
     <Modal title="Remove download" onClose={onClose}>
       <p className="mb-4 break-words text-sm">{d.name}</p>
-      {d.folder && (
+      {d.quarantined && (
+        <p className="text-sm text-muted">
+          Its files stay in quarantine at <code className="break-all">{d.quarantined}</code>. Box Office never deletes them; delete them yourself once you've looked, and don't open them.
+        </p>
+      )}
+      {d.folder && !d.quarantined && (
         <Toggle
           checked={files}
           onChange={setFiles}

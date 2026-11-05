@@ -241,6 +241,8 @@ export type Download = {
   folder?: string
   message?: string
   importedTo?: string
+  // Where its files were moved when they looked unsafe.
+  quarantined?: string
   addedAt: string
   startedAt?: string
   finishedAt?: string
