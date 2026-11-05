@@ -262,6 +262,11 @@ export function AutoSearchSettings() {
             upgrades: t('conn.auto.upgrades', { count: a.data.upgrades }),
           })}
         </p>
+        <p className={`text-sm ${s.upgradesPerMonth > 0 && a.data.upgradesThisMonth >= s.upgradesPerMonth ? 'text-gold' : ''}`}>
+          {s.upgradesPerMonth > 0
+            ? t(a.data.upgradesThisMonth >= s.upgradesPerMonth ? 'conn.auto.usedFull' : 'conn.auto.usedOf', { used: a.data.upgradesThisMonth, limit: s.upgradesPerMonth })
+            : t('conn.auto.usedNoLimit', { count: a.data.upgradesThisMonth })}
+        </p>
         {a.data.cap && <p className="text-sm text-gold">{a.data.cap}.</p>}
         <Toggle
           checked={s.rss}

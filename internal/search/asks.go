@@ -86,6 +86,9 @@ func (s *Service) jobAsked(ctx context.Context, payload string) (jobs.Result, er
 	if err := json.Unmarshal([]byte(payload), &j); err != nil || j.ID == 0 {
 		return jobs.Result{}, errors.New("the job doesn't say which title")
 	}
+	// Someone asked for this copy in Matinee: it's theirs, like a grab by
+	// hand.
+	ctx = byHand(ctx)
 	var res Results
 	var err error
 	switch j.Kind {

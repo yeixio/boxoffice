@@ -514,7 +514,7 @@ func (s *Service) Grab(ctx context.Context, key string) (store.Download, error) 
 	if !ok || time.Now().After(c.expires) {
 		return store.Download{}, errors.New("that search is out of date; search again")
 	}
-	return s.grab(ctx, c.c)
+	return s.grab(byHand(ctx), c.c)
 }
 
 func (s *Service) grab(ctx context.Context, c Candidate) (store.Download, error) {
@@ -541,7 +541,7 @@ func (s *Service) grab(ctx context.Context, c Candidate) (store.Download, error)
 		return store.Download{}, err
 	}
 	upgrade := false
-	if isAuto(ctx) {
+	if !isByHand(ctx) {
 		if upgrade, err = s.autoUpgradeAllowed(ctx, c); err != nil {
 			return store.Download{}, err
 		}
@@ -623,6 +623,33 @@ func (s *Service) autoUpgradeAllowed(ctx context.Context, c Candidate) (bool, er
 
 // ---- the jobs ----
 
+// payloadByHand says whether a search job was started by a person in
+// Box Office (see byHand).
+func payloadByHand(p string) bool {
+	var v struct {
+		ByHand bool `json:"byHand"`
+	}
+	return json.Unmarshal([]byte(p), &v) == nil && v.ByHand
+}
+
+// upgradeRules says whether a search not started by hand may grab an
+// upgrade for a title with this automatic upgrade choice, and how many
+// (-1 for any number).
+func (s *Service) upgradeRules(ctx context.Context, pref string) (int, error) {
+	if isByHand(ctx) {
+		return -1, nil
+	}
+	a, err := LoadAutoSettings(ctx, s.Store)
+	if err != nil {
+		return 0, err
+	}
+	if !a.upgradeOn(pref) {
+		return 0, nil
+	}
+	left, _, err := s.UpgradesLeft(ctx, a)
+	return left, err
+}
+
 func payloadID(p string) (int64, error) {
 	var v struct {
 		ID int64 `json:"id"`
@@ -688,6 +715,13 @@ func (s *Service) jobMovie(ctx context.Context, payload string) (jobs.Result, er
 	if err != nil {
 		return jobs.Result{}, err
 	}
+	if payloadByHand(payload) {
+		ctx = byHand(ctx)
+	} else if m, err := s.Store.Movie(ctx, id); err == nil && m.File != nil {
+		if skip, err := s.upgradeSkipped(ctx, m.AutoUpgrade); err != nil || skip != "" {
+			return jobs.Skipped("%s", skip), err
+		}
+	}
 	res, err := s.Movie(ctx, id)
 	if errors.Is(err, ErrNoIndexers) || errors.Is(err, store.ErrLocked) {
 		return jobs.Skipped("%s", err.Error()), nil
@@ -706,6 +740,17 @@ func (s *Service) jobEpisode(ctx context.Context, payload string) (jobs.Result, 
 	e, err := s.Store.Episode(ctx, id)
 	if err != nil {
 		return jobs.Result{}, err
+	}
+	if payloadByHand(payload) {
+		ctx = byHand(ctx)
+	} else if e.File != nil {
+		t, err := s.Store.Series(ctx, e.SeriesID)
+		if err != nil {
+			return jobs.Result{}, err
+		}
+		if skip, err := s.upgradeSkipped(ctx, t.AutoUpgrade); err != nil || skip != "" {
+			return jobs.Skipped("%s", skip), err
+		}
 	}
 	res, err := s.Episode(ctx, id)
 	if errors.Is(err, ErrNoIndexers) || errors.Is(err, store.ErrLocked) {
@@ -760,8 +805,23 @@ func (s *Service) jobSeries(ctx context.Context, payload string) (jobs.Result, e
 			upgrades = append(upgrades, e)
 		}
 	}
+	if payloadByHand(payload) {
+		ctx = byHand(ctx)
+	}
+	// Not started by hand (a show just added, or Matinee asking): upgrades
+	// follow the automatic upgrade rules.
+	held := 0
+	if left, err := s.upgradeRules(ctx, t.AutoUpgrade); err != nil {
+		return jobs.Result{}, err
+	} else if left >= 0 && left < len(upgrades) {
+		held = len(upgrades) - left
+		upgrades = upgrades[:left]
+	}
 	want := append(missing, upgrades...)
 	if len(want) == 0 {
+		if held > 0 {
+			return jobs.Skipped("no episodes are missing; %d to upgrade %s", held, s.whyNoUpgrades(ctx, t.AutoUpgrade)), nil
+		}
 		return jobs.Done("no episodes are missing, and none need upgrading"), nil
 	}
 	// Season by season: a season with a few episodes wanted is one search,
@@ -827,4 +887,23 @@ func plural(n int, one, many string) string {
 		return one
 	}
 	return many
+}
+
+// upgradeSkipped says why a search not started by hand won't look for an
+// upgrade of a title, or "" when it may.
+func (s *Service) upgradeSkipped(ctx context.Context, pref string) (string, error) {
+	left, err := s.upgradeRules(ctx, pref)
+	if err != nil || left != 0 {
+		return "", err
+	}
+	return "it has a copy, and " + s.whyNoUpgrades(ctx, pref), nil
+}
+
+// whyNoUpgrades says why automatic upgrades can't run for a title.
+func (s *Service) whyNoUpgrades(ctx context.Context, pref string) string {
+	a, err := LoadAutoSettings(ctx, s.Store)
+	if err == nil && a.upgradeOn(pref) {
+		return fmt.Sprintf("this month's %d automatic %s used up", a.UpgradesPerMonth, plural(a.UpgradesPerMonth, "upgrade is", "upgrades are"))
+	}
+	return "automatic upgrades are off for it"
 }

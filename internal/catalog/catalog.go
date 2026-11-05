@@ -260,14 +260,25 @@ func (s *Service) RefreshMovie(ctx context.Context, id int64) error {
 	return s.Store.RefreshMovie(ctx, n)
 }
 
-// SearchMovies queues a search for each movie.
+// SearchMovies queues a search for each movie. An upgrade it finds follows
+// the automatic upgrade rules; see SearchMoviesByHand.
 func (s *Service) SearchMovies(ctx context.Context, ids ...int64) error {
+	return s.searchMovies(ctx, false, ids)
+}
+
+// SearchMoviesByHand is SearchMovies for a person in Box Office: an
+// upgrade it finds is theirs, whatever the automatic upgrade rules say.
+func (s *Service) SearchMoviesByHand(ctx context.Context, ids ...int64) error {
+	return s.searchMovies(ctx, true, ids)
+}
+
+func (s *Service) searchMovies(ctx context.Context, hand bool, ids []int64) error {
 	for _, id := range ids {
 		m, err := s.Store.Movie(ctx, id)
 		if err != nil {
 			return err
 		}
-		if _, err := s.Jobs.Queue(ctx, JobSearchMovie, FolderName(m.Title, m.Year), idPayload(id)); err != nil {
+		if _, err := s.Jobs.Queue(ctx, JobSearchMovie, FolderName(m.Title, m.Year), searchPayload(id, hand)); err != nil {
 			return err
 		}
 	}
@@ -407,14 +418,24 @@ func (s *Service) RefreshSeries(ctx context.Context, id int64) error {
 	return s.syncEpisodes(ctx, t, info, "")
 }
 
-// SearchSeries queues a search for each show's missing episodes.
+// SearchSeries queues a search for each show's missing episodes, and the
+// ones to upgrade as the automatic upgrade rules allow.
 func (s *Service) SearchSeries(ctx context.Context, ids ...int64) error {
+	return s.searchSeries(ctx, false, ids)
+}
+
+// SearchSeriesByHand is SearchSeries for a person in Box Office.
+func (s *Service) SearchSeriesByHand(ctx context.Context, ids ...int64) error {
+	return s.searchSeries(ctx, true, ids)
+}
+
+func (s *Service) searchSeries(ctx context.Context, hand bool, ids []int64) error {
 	for _, id := range ids {
 		t, err := s.Store.Series(ctx, id)
 		if err != nil {
 			return err
 		}
-		if _, err := s.Jobs.Queue(ctx, JobSearchSeries, t.Title, idPayload(id)); err != nil {
+		if _, err := s.Jobs.Queue(ctx, JobSearchSeries, t.Title, searchPayload(id, hand)); err != nil {
 			return err
 		}
 	}
@@ -423,6 +444,15 @@ func (s *Service) SearchSeries(ctx context.Context, ids ...int64) error {
 
 // SearchEpisodes queues a search for some episodes.
 func (s *Service) SearchEpisodes(ctx context.Context, ids ...int64) error {
+	return s.searchEpisodes(ctx, false, ids)
+}
+
+// SearchEpisodesByHand is SearchEpisodes for a person in Box Office.
+func (s *Service) SearchEpisodesByHand(ctx context.Context, ids ...int64) error {
+	return s.searchEpisodes(ctx, true, ids)
+}
+
+func (s *Service) searchEpisodes(ctx context.Context, hand bool, ids []int64) error {
 	for _, id := range ids {
 		e, err := s.Store.Episode(ctx, id)
 		if err != nil {
@@ -433,7 +463,7 @@ func (s *Service) SearchEpisodes(ctx context.Context, ids ...int64) error {
 			return err
 		}
 		subject := fmt.Sprintf("%s S%02dE%02d", t.Title, e.Season, e.Number)
-		if _, err := s.Jobs.Queue(ctx, JobSearchEpisode, subject, idPayload(id)); err != nil {
+		if _, err := s.Jobs.Queue(ctx, JobSearchEpisode, subject, searchPayload(id, hand)); err != nil {
 			return err
 		}
 	}
@@ -497,6 +527,15 @@ func (s *Service) Calendar(ctx context.Context, from, to time.Time) ([]Upcoming,
 }
 
 // ---- jobs ----
+
+// searchPayload is a search job's payload; byHand marks one a person
+// started in Box Office.
+func searchPayload(id int64, hand bool) string {
+	if !hand {
+		return idPayload(id)
+	}
+	return fmt.Sprintf(`{"id":%d,"byHand":true}`, id)
+}
 
 func idPayload(id int64) string {
 	b, _ := json.Marshal(map[string]int64{"id": id})

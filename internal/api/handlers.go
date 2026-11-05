@@ -471,7 +471,7 @@ func (s *Server) searchMovie(w http.ResponseWriter, r *http.Request) error {
 	if err := s.Store.CheckUnlocked(r.Context(), "movie", id); err != nil {
 		return err
 	}
-	if err := s.Catalog.SearchMovies(r.Context(), id); err != nil {
+	if err := s.Catalog.SearchMoviesByHand(r.Context(), id); err != nil {
 		return err
 	}
 	w.WriteHeader(http.StatusAccepted)
@@ -612,7 +612,7 @@ func (s *Server) searchSeries(w http.ResponseWriter, r *http.Request) error {
 	if err := s.Store.CheckUnlocked(r.Context(), "series", id); err != nil {
 		return err
 	}
-	if err := s.Catalog.SearchSeries(r.Context(), id); err != nil {
+	if err := s.Catalog.SearchSeriesByHand(r.Context(), id); err != nil {
 		return err
 	}
 	w.WriteHeader(http.StatusAccepted)
@@ -687,7 +687,7 @@ func (s *Server) searchEpisode(w http.ResponseWriter, r *http.Request) error {
 	if err := s.Store.CheckUnlocked(r.Context(), "episode", id); err != nil {
 		return err
 	}
-	if err := s.Catalog.SearchEpisodes(r.Context(), id); err != nil {
+	if err := s.Catalog.SearchEpisodesByHand(r.Context(), id); err != nil {
 		return err
 	}
 	w.WriteHeader(http.StatusAccepted)
