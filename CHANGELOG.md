@@ -34,6 +34,7 @@ What changed in Box Office, newest first. The format follows [Keep a Changelog](
 
 ### Changed
 
+- **The sections moved to a sidebar on the left** on a computer, grouped into Library, Status and Setup, so they no longer crowd the top. It narrows to icons on a smaller screen, or with Icons only, which it remembers. On a phone the menu stays as it was, now with the same groups. Sections for media types that are off stay hidden.
 - **Automatic upgrades are off by default.** RSS sync and the library patrol still look for missing titles by themselves; turn on Settings → Missing titles and upgrades → Automatic upgrades to have them go after better copies too. Looking for an upgrade from a title's page works either way. Each movie and show can turn automatic upgrades on or off for itself from its page, and **Most automatic upgrades a month** caps how many Box Office grabs by itself.
 
 ### Fixed

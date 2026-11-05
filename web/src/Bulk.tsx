@@ -51,7 +51,7 @@ export function BulkBar({ kind, sel, shown }: { kind: 'movies' | 'series'; sel: 
   const n = sel.ids.size
   const allShown = shown.length > 0 && shown.every((id) => sel.ids.has(id))
   return (
-    <div className="sticky bottom-0 z-20 -mx-4 mt-6 border-t border-line bg-paper/95 px-4 py-3 backdrop-blur">
+    <div className="sticky bottom-0 z-20 -mx-4 mt-6 border-t border-line bg-paper/95 px-4 py-3 md:-mx-8 md:px-8 backdrop-blur">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm">
         <span className="font-medium">{n ? `${count(n, 'title', 'titles')} picked` : 'Tap titles to pick them'}</span>
         <Button variant="ghost" onClick={() => sel.set(allShown ? [] : shown)}>

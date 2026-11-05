@@ -94,7 +94,7 @@ function Row({ row }: { row: DiscoverRow }) {
           See all <ChevronRight className="size-4" aria-hidden />
         </Link>
       </div>
-      <ul className="-mx-4 flex snap-x scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:thin]">
+      <ul className="-mx-4 flex snap-x scroll-px-4 gap-3 overflow-x-auto px-4 pb-2 md:-mx-8 md:scroll-px-8 md:px-8 [scrollbar-width:thin]">
         {row.items.map((t) => (
           <li key={`${t.kind}-${t.tmdbId}`} className="w-32 shrink-0 snap-start sm:w-36">
             <TitleCard t={t} />

@@ -55,7 +55,7 @@ export function MovieDetail() {
   return (
     <div>
       {m.backdrop && (
-        <div className="-mx-4 -mt-8 mb-6 h-56 overflow-hidden sm:h-72">
+        <div className="-mx-4 -mt-8 mb-6 h-56 md:-mx-8 overflow-hidden sm:h-72">
           <img src={m.backdrop} alt="" className="size-full object-cover opacity-80 [mask-image:linear-gradient(to_bottom,black_40%,transparent)]" />
         </div>
       )}
