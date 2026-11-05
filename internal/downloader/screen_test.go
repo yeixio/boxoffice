@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 	"testing"
 	"time"
@@ -276,5 +277,67 @@ func TestTooShort(t *testing.T) {
 	d = waitFor(t, st, d.ID, store.DownloadCompleted, store.DownloadFailed)
 	if d.Status != store.DownloadFailed || d.Quarantined == "" || !strings.Contains(d.Message, "runs 1 minute,") {
 		t.Fatalf("%s: %s", d.Status, d.Message)
+	}
+}
+
+// Mike's case: a bundle with the movie and a short clip under hashed
+// names. Only the main video, the biggest, has to be full length.
+func TestBundleWithClip(t *testing.T) {
+	srv := nntptest.New()
+	defer srv.Close()
+	e, st := newEngine(t, srv)
+	enable(t, st, Settings{})
+	run(t, e)
+	ctx := context.Background()
+	profiles, _ := st.Profiles(ctx)
+	m, err := st.AddMovie(ctx, store.Movie{TMDBID: 2, Title: "Amerikatsi", Year: 2022, Runtime: 115, ProfileID: profiles[0].ID, RootFolder: "/m", Path: "/m/Amerikatsi (2022)"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	read := func(n string) []byte {
+		b, err := os.ReadFile(filepath.Join("..", "usenet", "screen", "testdata", n))
+		if err != nil {
+			t.Fatal(err)
+		}
+		return b
+	}
+	nzb := postFiles(srv, "Amerikatsi.2022.bundle", [][2]any{
+		{"27e5be22f26c98f6e42419a29501947a.mkv", read("75s.mkv")},
+		{"9b1d0c4f8e2a7b3c6d5e4f3a2b1c0d9e.mkv", read("115m.mkv")},
+	})
+	d, err := e.Add(ctx, store.Download{Source: "search", Kind: "movie", TitleID: m.ID}, nzb)
+	if err != nil {
+		t.Fatal(err)
+	}
+	d = waitFor(t, st, d.ID, store.DownloadCompleted, store.DownloadFailed)
+	if d.Status != store.DownloadCompleted {
+		t.Fatalf("%s: %s", d.Status, d.Message)
+	}
+}
+
+func TestMainVideos(t *testing.T) {
+	dir := t.TempDir()
+	for name, size := range map[string]int{
+		"Show.S01E01.mkv": 900, "Show.S01E02.mkv": 850, "Show.S01E03.mkv": 880,
+		"Show.S01E01.sample.mkv": 50, "Extras/Making.Of.mkv": 600, "a1b2c3.mkv": 40,
+	} {
+		os.MkdirAll(filepath.Dir(filepath.Join(dir, name)), 0o755)
+		os.WriteFile(filepath.Join(dir, name), make([]byte, size), 0o644)
+	}
+	files := listFiles(dir)
+	var got []string
+	for _, v := range mainVideos(dir, files, true) {
+		got = append(got, v.name)
+	}
+	slices.Sort(got)
+	if !slices.Equal(got, []string{"Show.S01E01.mkv", "Show.S01E02.mkv", "Show.S01E03.mkv"}) {
+		t.Fatalf("series: %v", got)
+	}
+	if v := mainVideos(dir, files, false); len(v) != 1 || v[0].name != "Show.S01E01.mkv" {
+		t.Fatalf("movie: %v", v)
+	}
+	// Only extras: the biggest of them is it.
+	if v := mainVideos(dir, []string{"Show.S01E01.sample.mkv", "Extras/Making.Of.mkv"}, false); len(v) != 1 || v[0].name != "Extras/Making.Of.mkv" {
+		t.Fatalf("extras only: %v", v)
 	}
 }
