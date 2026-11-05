@@ -440,3 +440,27 @@ export type DeletePlan = { folder?: string; files: { path: string; size: number 
 export type FileRemoval = DeletePlan & { releases: { name: string; indexer?: string }[]; watched: boolean }
 export type RecycleFolder = { root: string; folder: string; count: number; size: number; oldest?: string }
 export type Recycle = { folders: RecycleFolder[]; keepDays: number }
+
+// ---- music ----
+
+export type Artist = {
+  id: number
+  mbid: string
+  name: string
+  sortName: string
+  type?: string
+  country?: string
+  disambiguation?: string
+  monitored: boolean
+  albumTypes: string[]
+  rootFolder: string
+  path: string
+  addedAt: string
+  refreshedAt?: string
+  albums: number
+  wantedAlbums: number
+}
+export type Album = { id: number; artistId: number; mbid: string; title: string; type: string; secondaryTypes: string[]; released?: string; monitored: boolean; cover: string }
+export type ArtistDetail = Artist & { albumList: Album[] }
+export type LookupArtist = { mbid: string; name: string; sortName: string; type?: string; country?: string; disambiguation?: string; began?: string; ended?: string; id?: number }
+export type AlbumTypes = { types: string[]; defaults: string[] }
