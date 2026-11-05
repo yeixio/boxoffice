@@ -1,3 +1,4 @@
+import i18n from './i18n'
 import { useQuery } from '@tanstack/react-query'
 import { get, type Profile, type Quality, type RootFolder, type RootKind, type ShowDefaults } from './api'
 
@@ -7,7 +8,7 @@ export const useRootFolders = (kind: RootKind) =>
   useQuery({ queryKey: ['rootfolders', kind], queryFn: () => get<RootFolder[]>('/rootfolders?kind=' + kind) })
 
 export function qualityName(qualities: Quality[] | undefined, id: number): string {
-  return qualities?.find((q) => q.id === id)?.name ?? 'Unknown'
+  return qualities?.find((q) => q.id === id)?.name ?? i18n.t('hooks.unknown')
 }
 
 export function useShowDefaults() {
@@ -17,11 +18,11 @@ export function useShowDefaults() {
 // monitorOptions are the choices for which of a new show's episodes to get.
 export function monitorOptions(recent: number) {
   return [
-    { value: 'all', label: 'Every season' },
-    { value: 'recent', label: recent === 1 ? 'The latest aired season, and new ones' : `The last ${recent} seasons, and new ones` },
-    { value: 'future', label: 'Only episodes not out yet' },
-    { value: 'latest', label: 'Only the newest season' },
-    { value: 'none', label: 'None for now' },
+    { value: 'all', label: i18n.t('getEpisodes.all') },
+    { value: 'recent', label: recent === 1 ? i18n.t('getEpisodes.recentOne') : i18n.t('getEpisodes.recent', { count: recent }) },
+    { value: 'future', label: i18n.t('getEpisodes.future') },
+    { value: 'latest', label: i18n.t('getEpisodes.latest') },
+    { value: 'none', label: i18n.t('getEpisodes.none') },
   ]
 }
 

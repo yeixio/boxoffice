@@ -1,0 +1,140 @@
+{
+  "problems": {
+    "wont_play": "无法播放",
+    "wrong_title": "电影或单集不对",
+    "picture": "画面质量差",
+    "sound": "声音不对或不同步",
+    "subtitles": "字幕缺失或错误",
+    "other": "其他问题"
+  },
+  "state": {
+    "pending": "等待批准",
+    "declined": "已拒绝",
+    "searching": "已批准，正在寻找",
+    "downloadingAt": "正在下载，{{percent}}",
+    "downloading": "正在下载",
+    "partial": "部分单集已就绪",
+    "available": "可以观看",
+    "paused": "已批准，暂缓",
+    "removed": "已从媒体库移除"
+  },
+  "site": {
+    "down": "此站点没有响应：{{error}}",
+    "closed": "此请求站点目前未开放。"
+  },
+  "signIn": {
+    "matinee": "Matinee 账号",
+    "local": "此处账号",
+    "with": "登录方式",
+    "matineeHint": "使用你在 Matinee 中观看时所用的用户名和密码。",
+    "signUpHint": "创建账号即可请求电影和剧集。",
+    "username": "用户名",
+    "name": "你的名字",
+    "nameHint": "管理员看到的名字。留空则使用你的用户名。",
+    "password": "密码",
+    "passwordHint": "至少 8 个字符。",
+    "make": "创建我的账户",
+    "signIn": "登录",
+    "haveAccount": "我已有账号",
+    "new": "第一次来？创建账号"
+  },
+  "nav": {
+    "discover": "发现",
+    "requests": "我的请求",
+    "problems": "问题",
+    "sections": "分区",
+    "account": "我的帐户"
+  },
+  "home": {
+    "hi": "你好，{{name}}",
+    "welcome": "查找电影或剧集并提出请求。你可以在我的请求中跟进。",
+    "find": "查找电影或剧集",
+    "seeAll": "查看全部",
+    "nothing": "还没有可显示的内容",
+    "notSetUp": "管理员还没有完成此站点的设置。请稍后再试。",
+    "movieGenres": "电影类型",
+    "showGenres": "剧集类型"
+  },
+  "search": {
+    "nothing": "没有这个名字的内容。",
+    "movies": "电影",
+    "shows": "剧集",
+    "looking": "正在查找…"
+  },
+  "row": {
+    "more": "显示更多"
+  },
+  "pill": {
+    "ready": "可以观看",
+    "some": "部分单集",
+    "coming": "即将到来",
+    "asked": "已请求",
+    "declined": "已拒绝"
+  },
+  "kind": {
+    "movie": "电影",
+    "show": "显示"
+  },
+  "card": {
+    "request": "请求 {{title}}"
+  },
+  "sheet": {
+    "out": "{{date}} 上映",
+    "starts": "{{date}} 开播",
+    "released": "{{date}} 发行",
+    "firstAired": "{{date}} 首播",
+    "ready": "它已在媒体库中。祝观看愉快！",
+    "some": "它的一部分已在媒体库中，其余的正在路上。",
+    "report": "报告问题",
+    "coming": "它正在路上。无需请求：找到后就会进入媒体库。",
+    "asked": "你已请求此作品。正在等待管理员批准。",
+    "takeBack": "撤回",
+    "declined": "管理员拒绝了此请求。你可以再次请求。",
+    "declinedWhy": "管理员拒绝了此请求：“{{reply}}” 你可以再次请求。",
+    "note": "给管理员的备注",
+    "noteHint": "可选，例如你想要哪个版本。",
+    "askMovie": "请求这部电影",
+    "askShow": "请求这部剧集"
+  },
+  "report": {
+    "thanks": "谢谢。管理员会查看，你可以在问题中跟进。",
+    "done": "完成",
+    "title": "出了什么问题？",
+    "problem": "问题",
+    "season": "季",
+    "seasonHint": "如果是整部剧集，请留空。",
+    "episode": "单集",
+    "more": "详细说明",
+    "say": "说说发生了什么。",
+    "optional": "可选。",
+    "send": "发送报告"
+  },
+  "mine": {
+    "title": "我的请求",
+    "none": "还没有请求任何内容",
+    "empty": "在<link>发现</link>中查找电影或剧集，然后按 <strong>+</strong> 提出请求。",
+    "admin": "管理员：“{{reply}}”",
+    "asked": "请求于 {{date}}",
+    "takeBack": "收回"
+  },
+  "issues": {
+    "title": "问题",
+    "sub": "电影或剧集有问题？在发现中打开它或按名称查找，然后选择报告问题。",
+    "none": "没有报告的问题",
+    "season": "第 {{season}} 季",
+    "episode": "第 {{season}} 季第 {{episode}} 集",
+    "waiting": "等待管理员",
+    "fixed": "已修复"
+  },
+  "account": {
+    "title": "我的帐户",
+    "signedIn": "已以 <strong>{{name}}</strong> 身份登录。",
+    "signedInMatinee": "已用你的 Matinee 账号以 <strong>{{name}}</strong> 身份登录。",
+    "change": "修改密码",
+    "current": "当前密码",
+    "new": "新密码",
+    "changed": "已修改。你已在其他所有地方退出登录。",
+    "changeButton": "更改密码",
+    "signOut": "退出登录"
+  }
+}

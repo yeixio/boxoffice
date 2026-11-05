@@ -1,0 +1,54 @@
+{
+  "size": {
+    "B": "{{value}} B",
+    "KB": "{{value}} KB",
+    "MB": "{{value}} MB",
+    "GB": "{{value}} GB",
+    "TB": "{{value}} TB",
+    "PB": "{{value}} PB"
+  },
+  "duration": {
+    "minutes_other": "{{count}} นาที",
+    "hours": "{{hours}} ชม.",
+    "hoursMinutes": "{{hours}} ชม. {{minutes}} นาที"
+  },
+  "loading": "กำลังโหลด…",
+  "close": "ปิด",
+  "language": {
+    "title": "ภาษา",
+    "label": "ภาษา",
+    "automatic": "อัตโนมัติ ({{language}})",
+    "hint": "ภาษาที่ Box Office แสดงให้คุณเห็น ในทุกอุปกรณ์ที่คุณลงชื่อเข้าใช้ อัตโนมัติจะใช้ตามภาษาของแต่ละเบราว์เซอร์",
+    "machine": "คำแปลนี้ทำโดยเครื่อง ถ้อยคำบางส่วนจึงอาจไม่ถูกต้อง",
+    "help": "ช่วยปรับปรุง"
+  },
+  "sort": {
+    "az": "A ถึง Z",
+    "za": "Z ถึง A",
+    "oldest": "เก่าสุดก่อน",
+    "newest": "ใหม่สุดก่อน",
+    "soonest": "ใกล้ที่สุดก่อน",
+    "latest": "ล่าสุดก่อน",
+    "smallest": "เล็กที่สุดก่อน",
+    "largest": "ใหญ่ที่สุดก่อน",
+    "lowest": "ต่ำสุดก่อน",
+    "highest": "สูงสุดก่อน",
+    "worst": "แย่ที่สุดก่อน",
+    "best": "ดีที่สุดก่อน",
+    "shortest": "สั้นที่สุดก่อน",
+    "longest": "ยาวที่สุดก่อน",
+    "fewest": "น้อยที่สุดก่อน",
+    "most": "มากที่สุดก่อน",
+    "least": "น้อยที่สุดก่อน",
+    "by": "เรียงตาม",
+    "show": "แสดง{{order}}",
+    "flip": "{{option}}, {{order}} แสดง{{other}}แทน"
+  },
+  "pager": {
+    "pages": "หน้า{{label}}",
+    "range": "{{from}}–{{to}} จาก {{total}}",
+    "previous": "หน้าก่อนหน้า",
+    "next": "หน้าถัดไป",
+    "page": "หน้า {{page}} จาก {{pages}}"
+  }
+}

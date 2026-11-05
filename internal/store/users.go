@@ -15,6 +15,8 @@ import (
 type User struct {
 	ID       int64  `json:"id"`
 	Username string `json:"username"`
+	// Language is the one they picked, or '' to follow the browser.
+	Language string `json:"language"`
 	hash     string
 }
 
@@ -32,7 +34,7 @@ func (s *Store) CreateUser(ctx context.Context, username, passwordHash string) (
 
 func (s *Store) UserByName(ctx context.Context, username string) (User, error) {
 	var u User
-	err := s.row(ctx, "SELECT id, username, password_hash FROM users WHERE username = ?", username).Scan(&u.ID, &u.Username, &u.hash)
+	err := s.row(ctx, "SELECT id, username, password_hash, language FROM users WHERE username = ?", username).Scan(&u.ID, &u.Username, &u.hash, &u.Language)
 	if errors.Is(err, sql.ErrNoRows) {
 		return u, ErrNotFound
 	}
@@ -50,6 +52,15 @@ func (s *Store) SetPassword(ctx context.Context, id int64, passwordHash string) 
 	// Signed in elsewhere with the old password: not any more.
 	_, err = s.exec(ctx, "DELETE FROM sessions WHERE user_id = ?", id)
 	return err
+}
+
+// SetUserLanguage keeps the language an admin picked, or ” for the browser's.
+func (s *Store) SetUserLanguage(ctx context.Context, id int64, language string) error {
+	res, err := s.exec(ctx, "UPDATE users SET language = ? WHERE id = ?", language, id)
+	if err != nil {
+		return err
+	}
+	return affected(res)
 }
 
 func hashToken(t string) string {
@@ -75,8 +86,8 @@ func (s *Store) CreateSession(ctx context.Context, userID int64, ttl time.Durati
 // SessionUser is who a session token belongs to, while it lasts.
 func (s *Store) SessionUser(ctx context.Context, token string) (User, error) {
 	var u User
-	err := s.row(ctx, `SELECT u.id, u.username, u.password_hash FROM sessions s JOIN users u ON u.id = s.user_id
-		WHERE s.token_hash = ? AND s.expires_at > ?`, hashToken(token), now()).Scan(&u.ID, &u.Username, &u.hash)
+	err := s.row(ctx, `SELECT u.id, u.username, u.password_hash, u.language FROM sessions s JOIN users u ON u.id = s.user_id
+		WHERE s.token_hash = ? AND s.expires_at > ?`, hashToken(token), now()).Scan(&u.ID, &u.Username, &u.hash, &u.Language)
 	if errors.Is(err, sql.ErrNoRows) {
 		return u, ErrNotFound
 	}

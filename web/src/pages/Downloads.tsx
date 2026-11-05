@@ -1,3 +1,4 @@
+import { Trans, useTranslation } from "react-i18next";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -32,6 +33,7 @@ import {
   type Downloads as DownloadsData,
 } from "../api";
 import { bytes, titleLink, when } from "../format";
+import i18n, { formatLocale } from "../i18n";
 import { useQualities } from "../hooks";
 import { SortControl, useSort, words, type SortOption } from "../sort";
 import {
@@ -91,31 +93,31 @@ const statusTone: Record<string, "ok" | "bad" | "gold" | "plain" | "marquee"> =
     failed: "bad",
   };
 
-const statusName: Record<string, string> = {
-  queued: "Waiting",
-  downloading: "Downloading",
-  paused: "Paused",
-  downloaded: "Waiting to unpack",
-  verifying: "Checking",
-  repairing: "Repairing",
-  unpacking: "Unpacking",
-  importing: "Moving to library",
-  completed: "Done",
-  failed: "Failed",
-};
+const statusName = (status: string) =>
+  i18n.t(`web:dl.status.${status}`, { defaultValue: status });
 
 export function speed(n: number) {
-  return `${bytes(n)}/s`;
+  return i18n.t("web:dl.speed", { size: bytes(n) });
 }
 
 function eta(left: number, rate: number) {
+  const time = duration(left, rate);
+  return time ? i18n.t("web:dl.eta.left", { time }) : "";
+}
+
+function duration(left: number, rate: number) {
   if (rate <= 0 || left <= 0) return "";
   const s = left / rate;
-  if (s < 60) return "under a minute left";
-  if (s < 3600) return `${Math.round(s / 60)} min left`;
+  if (s < 60) return i18n.t("web:dl.eta.underMinute");
+  if (s < 3600)
+    return i18n.t("web:dl.eta.minutes", { minutes: Math.round(s / 60) });
   const h = Math.floor(s / 3600);
-  if (h >= 48) return `${Math.floor(h / 24)} d ${h % 24} h left`;
-  return `${h} h ${Math.round((s % 3600) / 60)} min left`;
+  if (h >= 48)
+    return i18n.t("web:dl.eta.days", { days: Math.floor(h / 24), hours: h % 24 });
+  return i18n.t("web:dl.eta.hours", {
+    hours: h,
+    minutes: Math.round((s % 3600) / 60),
+  });
 }
 
 // What needs a look comes first: failed, then held in quarantine, then
@@ -131,42 +133,43 @@ function outcome(d: Download): number {
 const historySorts: SortOption<Download>[] = [
   {
     key: "finished",
-    label: "Date finished",
+    label: "dl.sort.finished",
     value: (d) => d.finishedAt ?? d.addedAt,
     dir: "desc",
     says: words.date,
   },
   {
     key: "added",
-    label: "Date added",
+    label: "sorts.added",
     value: (d) => d.addedAt,
     dir: "desc",
     says: words.date,
   },
   {
     key: "name",
-    label: "Name",
+    label: "sorts.name",
     value: (d) => d.name,
     dir: "asc",
     says: words.text,
   },
   {
     key: "size",
-    label: "Size",
+    label: "dl.sort.size",
     value: (d) => d.size || undefined,
     dir: "desc",
     says: words.size,
   },
   {
     key: "status",
-    label: "Status",
+    label: "sorts.status",
     value: outcome,
     dir: "asc",
-    says: { asc: "Problems first", desc: "Done first" },
+    says: { asc: "dl.sort.problems", desc: "dl.sort.done" },
   },
 ];
 
 export function Downloads() {
+  const { t } = useTranslation();
   const qc = useQueryClient();
   const sort = useSort("downloads-history", historySorts);
   // A few rows at a time on a phone, more on a bigger screen.
@@ -251,35 +254,35 @@ export function Downloads() {
           paged={paged}
         />
         <Button variant="ghost" onClick={stopPicking}>
-          Done
+          {t("bulk.done")}
         </Button>
       </>
     ) : (
       <Button variant="ghost" onClick={() => startPicking(list)}>
-        <ListChecks className="size-4" aria-hidden /> Select
+        <ListChecks className="size-4" aria-hidden /> {t("list.select")}
       </Button>
     ));
   return (
     <div className={picking && picked.size > 0 ? "pb-44 sm:pb-28" : ""}>
       <Heading
-        title="Downloads"
+        title={t("dl.title")}
         sub={
           s.enabled ? (
             s.paused ? (
-              "Everything is paused."
+              t("dl.allPaused")
             ) : (
               <>
                 {data.speed > 0
                   ? speed(data.speed)
                   : data.waiting && data.queue.length > 0
-                    ? `Waiting: ${data.waiting}`
-                    : "Idle"}
+                    ? t("dl.waiting", { reason: data.waiting })
+                    : t("dl.idle")}
                 {data.queue.length > 0 &&
-                  ` · ${data.queue.length} in the queue`}
+                  ` · ${t("dl.inQueue", { count: data.queue.length })}`}
               </>
             )
           ) : (
-            "Downloading is off."
+            t("dl.off")
           )
         }
         actions={
@@ -299,7 +302,7 @@ export function Downloads() {
               busy={upload.isPending}
               onClick={() => file.current?.click()}
             >
-              <Upload className="size-4" aria-hidden /> Add NZB
+              <Upload className="size-4" aria-hidden /> {t("dl.addNzb")}
             </Button>
             {s.enabled && (
               <Button
@@ -312,7 +315,7 @@ export function Downloads() {
                 ) : (
                   <Pause className="size-4" aria-hidden />
                 )}
-                {s.paused ? "Resume all" : "Pause all"}
+                {s.paused ? t("dl.resumeAll") : t("dl.pauseAll")}
               </Button>
             )}
           </>
@@ -335,11 +338,13 @@ export function Downloads() {
             .servers!.filter((x) => x.error)
             .map((x) => (
               <p key={x.id}>
-                {x.name}: {x.error}. Check it in{" "}
-                <Link to="/settings#news-servers" className="underline">
-                  Settings
-                </Link>
-                .
+                <Trans
+                  i18nKey="dl.serverError"
+                  values={{ name: x.name, error: x.error }}
+                  components={{
+                    link: <Link to="/settings#news-servers" className="underline" />,
+                  }}
+                />
               </p>
             ))}
         </div>
@@ -347,16 +352,15 @@ export function Downloads() {
 
       <section className="mb-8">
         <div className="mb-3 flex flex-wrap items-center gap-2">
-          <h2 className="mr-auto font-display text-xl font-semibold">Queue</h2>
+          <h2 className="me-auto font-display text-xl font-semibold">{t("dl.queue")}</h2>
           {pickHead("queue", queue, queuePages > 1)}
         </div>
         {data.queue.length === 0 ? (
           <Empty
             icon={<DownloadIcon className="size-8" />}
-            title="Nothing to download"
+            title={t("dl.nothing")}
           >
-            Releases Box Office grabs show up here. You can also add an NZB file
-            yourself.
+            {t("dl.nothingHint")}
           </Empty>
         ) : (
           <ul className="flex flex-col gap-3">
@@ -380,14 +384,14 @@ export function Downloads() {
           size={queueSize}
           total={data.queue.length}
           onPage={turn(setQueuePage)}
-          label="Queue"
+          label={t("dl.queue")}
         />
       </section>
 
       <section>
         <div className="mb-3 flex flex-wrap items-center gap-2">
-          <h2 className="mr-auto font-display text-xl font-semibold">
-            History
+          <h2 className="me-auto font-display text-xl font-semibold">
+            {t("dl.history")}
           </h2>
           {historyTotal > 1 && (
             <SortControl
@@ -402,12 +406,12 @@ export function Downloads() {
               busy={clear.isPending}
               onClick={() => clear.mutate()}
             >
-              Clear history
+              {t("dl.clear")}
             </Button>
           )}
         </div>
         {data.history.length === 0 ? (
-          <p className="text-sm text-muted">Finished downloads show up here.</p>
+          <p className="text-sm text-muted">{t("dl.noHistory")}</p>
         ) : (
           <ul className="divide-y divide-line rounded-xl border border-line bg-card">
             {history.map((x) => (
@@ -428,17 +432,17 @@ export function Downloads() {
           size={historySize}
           total={historyTotal}
           onPage={turn(setHistoryPage)}
-          label="History"
+          label={t("dl.history")}
         />
       </section>
       <Quarantine />
       <DownloadFiles />
       {data.folder.path && (
         <p className="mt-6 text-xs text-muted">
-          Downloads go to {data.folder.path}
-          {data.folder.freeSpace > 0 &&
-            `, with ${bytes(data.folder.freeSpace)} free`}
-          .
+          {t(data.folder.freeSpace > 0 ? "dl.folderFree" : "dl.folder", {
+            path: data.folder.path,
+            free: bytes(data.folder.freeSpace),
+          })}
         </p>
       )}
       {picking && (
@@ -458,6 +462,7 @@ type Pick = { picked: boolean; toggle: () => void };
 // Stats sums up the queue: how fast, how much is left and how long that
 // takes at this speed, and how much has come this month.
 function Stats({ data }: { data: DownloadsData }) {
+  const { t } = useTranslation();
   const left = data.queue.reduce(
     (n, x) => n + Math.max(0, x.size - x.doneBytes),
     0,
@@ -466,34 +471,43 @@ function Stats({ data }: { data: DownloadsData }) {
   const c = data.cap;
   const tiles: [string, string, string?][] = [
     [
-      "Speed",
-      data.settings.paused ? "Paused" : rate > 0 ? speed(rate) : "Idle",
+      t("dl.stats.speed"),
+      data.settings.paused
+        ? t("dl.status.paused")
+        : rate > 0
+          ? speed(rate)
+          : t("dl.idle"),
       data.settings.speedLimit > 0
-        ? `Limit ${speed(data.settings.speedLimit * 1024)}`
+        ? t("dl.stats.limit", { speed: speed(data.settings.speedLimit * 1024) })
         : undefined,
     ],
     [
-      "In the queue",
-      left > 0 ? bytes(left) : "Nothing",
+      t("dl.stats.queue"),
+      left > 0 ? bytes(left) : t("dl.stats.nothing"),
       data.queue.length > 0
-        ? `${data.queue.length} download${data.queue.length === 1 ? "" : "s"} left`
+        ? t("dl.stats.left", { count: data.queue.length })
         : undefined,
     ],
     [
-      "Time to finish",
-      left > 0 && rate > 0 ? eta(left, rate).replace(" left", "") : "—",
+      t("dl.stats.time"),
+      left > 0 && rate > 0 ? duration(left, rate) : "—",
       left > 0 && rate > 0
-        ? "at the current speed"
+        ? t("dl.stats.atSpeed")
         : left > 0
-          ? "once it downloads"
+          ? t("dl.stats.once")
           : undefined,
     ],
     [
-      "This month",
+      t("dl.stats.month"),
       bytes(c.used),
       c.enabled && c.limit > 0
-        ? `of ${c.gb.toLocaleString()} GB (${Math.min(100, Math.round((c.used / c.limit) * 100))}%)`
-        : "no data cap set",
+        ? t("dl.stats.ofCap", {
+            gb: c.gb.toLocaleString(formatLocale()),
+            pct: new Intl.NumberFormat(formatLocale(), { style: "percent" }).format(
+              Math.min(1, c.used / c.limit),
+            ),
+          })
+        : t("dl.stats.noCap"),
     ],
   ];
   return (
@@ -516,25 +530,22 @@ function Stats({ data }: { data: DownloadsData }) {
 
 // TurnOn says why downloading is off and what's needed to turn it on.
 function TurnOn({ data }: { data: DownloadsData }) {
+  const { t } = useTranslation();
   return (
     <Card className="mb-6">
       <h2 className="mb-1 font-display text-lg font-semibold">
-        Downloading is off
+        {t("dl.turnOn.title")}
       </h2>
-      <p className="mb-3 text-sm text-muted">
-        Box Office downloads from Usenet itself, in place of NZBGet. It's off
-        until you turn it on, so it never competes with the apps you're moving
-        from. Searches still run, and Activity says what they found.
-      </p>
-      <ol className="mb-4 list-decimal space-y-1 pl-5 text-sm">
+      <p className="mb-3 text-sm text-muted">{t("dl.turnOn.sub")}</p>
+      <ol className="mb-4 list-decimal space-y-1 ps-5 text-sm">
         <li className={data.newsServers > 0 ? "text-muted line-through" : ""}>
-          Add your Usenet provider under News servers in Settings.
+          {t("dl.turnOn.step1")}
         </li>
-        <li>Check your indexers in Settings; each needs its API key.</li>
-        <li>Turn on downloading in Settings, under Downloads.</li>
+        <li>{t("dl.turnOn.step2")}</li>
+        <li>{t("dl.turnOn.step3")}</li>
       </ol>
       <Link to="/settings#downloads">
-        <Button variant="primary">Open Settings</Button>
+        <Button variant="primary">{t("dl.turnOn.open")}</Button>
       </Link>
     </Card>
   );
@@ -575,6 +586,7 @@ function QueueItem({
   first: boolean;
   pick?: Pick;
 }) {
+  const { t } = useTranslation();
   const qualities = useQualities();
   const act = useAction();
   const [removing, setRemoving] = useState(false);
@@ -599,17 +611,17 @@ function QueueItem({
           <div className="break-words font-medium">{d.name}</div>
           <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted">
             <Badge tone={statusTone[d.status]}>
-              {statusName[d.status] ?? d.status}
+              {statusName(d.status)}
             </Badge>
             {q && q.id > 0 && <span>{q.name}</span>}
-            {d.indexer && <span>from {d.indexer}</span>}
+            {d.indexer && <span>{t("dl.from", { indexer: d.indexer })}</span>}
             {title(d)}
           </div>
         </div>
         <div className={`flex shrink-0 gap-1 ${pick ? "hidden" : ""}`}>
           {(d.status === "queued" || d.status === "downloading") && (
             <IconButton
-              label="Pause"
+              label={t("dl.pause")}
               busy={busy}
               onClick={() => act.mutate({ id: d.id, what: "pause" })}
             >
@@ -618,7 +630,7 @@ function QueueItem({
           )}
           {d.status === "paused" && (
             <IconButton
-              label="Resume"
+              label={t("dl.resume")}
               busy={busy}
               onClick={() => act.mutate({ id: d.id, what: "resume" })}
             >
@@ -627,7 +639,7 @@ function QueueItem({
           )}
           {!first && (d.status === "queued" || d.status === "paused") && (
             <IconButton
-              label="Move to the top"
+              label={t("dl.top")}
               busy={busy}
               onClick={() => act.mutate({ id: d.id, what: "top" })}
             >
@@ -635,7 +647,7 @@ function QueueItem({
             </IconButton>
           )}
           {!working && (
-            <IconButton label="Remove" onClick={() => setRemoving(true)}>
+            <IconButton label={t("dl.remove")} onClick={() => setRemoving(true)}>
               <Trash2 className="size-4" />
             </IconButton>
           )}
@@ -647,7 +659,7 @@ function QueueItem({
         aria-valuenow={Math.round(step ?? pct)}
         aria-valuemin={0}
         aria-valuemax={100}
-        aria-label="Progress"
+        aria-label={t("dl.progress")}
       >
         <div
           className={`h-full rounded-full transition-all ${working ? "bg-gold" : "bg-marquee"} ${working && step === undefined ? "animate-pulse" : ""}`}
@@ -658,17 +670,15 @@ function QueueItem({
         <span>
           {step !== undefined ? (
             <>
-              {statusName[d.status]} {Math.floor(step)}%
+              {statusName(d.status)} {Math.floor(step)}%
               {d.status !== "repairing" &&
-                ` · ${bytes(d.stepDone ?? 0)} of ${bytes(d.stepTotal ?? 0)}`}
+                ` · ${t("dl.of", { done: bytes(d.stepDone ?? 0), total: bytes(d.stepTotal ?? 0) })}`}
             </>
           ) : (
-            <>
-              {bytes(d.doneBytes)} of {bytes(d.size)}
-            </>
+            <>{t("dl.of", { done: bytes(d.doneBytes), total: bytes(d.size) })}</>
           )}
           {d.failedBytes > 0 && (
-            <span className="text-bad"> · {bytes(d.failedBytes)} missing</span>
+            <span className="text-bad"> · {t("dl.missing", { size: bytes(d.failedBytes) })}</span>
           )}
         </span>
         <span>
@@ -686,6 +696,7 @@ function QueueItem({
 }
 
 function HistoryItem({ d, pick }: { d: Download; pick?: Pick }) {
+  const { t } = useTranslation();
   const act = useAction();
   const [removing, setRemoving] = useState(false);
   const ok = d.status === "completed";
@@ -699,27 +710,27 @@ function HistoryItem({ d, pick }: { d: Download; pick?: Pick }) {
       {held ? (
         <ShieldAlert
           className="mt-0.5 size-5 shrink-0 text-gold"
-          aria-label="Quarantined"
+          aria-label={t("dl.quarantined")}
         />
       ) : waiting ? (
         <Clock
           className="mt-0.5 size-5 shrink-0 text-gold"
-          aria-label="Waiting to go into the library"
+          aria-label={t("dl.waitingLibrary")}
         />
       ) : ok ? (
         <CircleCheck
           className="mt-0.5 size-5 shrink-0 text-ok"
-          aria-label="Done"
+          aria-label={t("dl.status.completed")}
         />
       ) : (
         <CircleX
           className="mt-0.5 size-5 shrink-0 text-bad"
-          aria-label="Failed"
+          aria-label={t("dl.status.failed")}
         />
       )}
       <div className="min-w-0 flex-1 basis-56" onClick={pick?.toggle}>
         <div className="break-words text-sm font-medium">
-          {d.name} {held && <Badge tone="gold">Quarantined</Badge>}
+          {d.name} {held && <Badge tone="gold">{t("dl.quarantined")}</Badge>}
         </div>
         <div className="mt-0.5 text-xs text-muted">
           {bytes(d.size)} · {when(d.finishedAt)} {title(d)}
@@ -737,7 +748,7 @@ function HistoryItem({ d, pick }: { d: Download; pick?: Pick }) {
             busy={act.isPending && act.variables?.what === "import"}
             onClick={() => act.mutate({ id: d.id, what: "import" })}
           >
-            <FolderInput className="size-3.5" aria-hidden /> Move into library
+            <FolderInput className="size-3.5" aria-hidden /> {t("dl.moveIn")}
           </Button>
         )}
         {d.canReprocess && !pick && (
@@ -746,22 +757,21 @@ function HistoryItem({ d, pick }: { d: Download; pick?: Pick }) {
             busy={act.isPending && act.variables?.what === "reprocess"}
             onClick={() => act.mutate({ id: d.id, what: "reprocess" })}
           >
-            <PackageOpen className="size-3.5" aria-hidden /> Unpack again,
-            without downloading
+            <PackageOpen className="size-3.5" aria-hidden /> {t("dl.unpackAgain")}
           </Button>
         )}
       </div>
       <div className={`flex shrink-0 gap-1 ${pick ? "hidden" : ""}`}>
         {!ok && !held && (
           <IconButton
-            label="Download again"
+            label={t("dl.again")}
             busy={act.isPending}
             onClick={() => act.mutate({ id: d.id, what: "retry" })}
           >
             <RotateCcw className="size-4" />
           </IconButton>
         )}
-        <IconButton label="Remove" onClick={() => setRemoving(true)}>
+        <IconButton label={t("dl.remove")} onClick={() => setRemoving(true)}>
           <Trash2 className="size-4" />
         </IconButton>
       </div>
@@ -784,6 +794,7 @@ function RemoveDialog({
   queue?: boolean;
   onClose: () => void;
 }) {
+  const { t } = useTranslation();
   const qc = useQueryClient();
   const [files, setFiles] = useState(
     !d.quarantined && (d.status !== "completed" || !!d.importedTo),
@@ -804,13 +815,15 @@ function RemoveDialog({
     },
   });
   return (
-    <Modal title="Remove download" onClose={onClose}>
+    <Modal title={t("dl.removeTitle")} onClose={onClose}>
       <p className="mb-4 break-words text-sm">{d.name}</p>
       {d.quarantined && (
         <p className="text-sm text-muted">
-          Its files stay in quarantine at{" "}
-          <code className="break-all">{d.quarantined}</code>; delete or release
-          them under Quarantine below. Don't open them.
+          <Trans
+            i18nKey="dl.staysQuarantined"
+            values={{ path: d.quarantined }}
+            components={{ code: <code className="break-all" /> }}
+          />
         </p>
       )}
       <div className="space-y-3">
@@ -820,9 +833,9 @@ function RemoveDialog({
             onChange={setFiles}
             label={
               <>
-                Also delete its files in the downloads folder
+                {t("dl.alsoDelete")}
                 <span className="block text-xs text-muted">
-                  Files already moved into your library are never touched.
+                  {t("dl.neverTouched")}
                 </span>
               </>
             }
@@ -832,13 +845,13 @@ function RemoveDialog({
       </div>
       <ErrorNote error={remove.error} />
       <div className="mt-5 flex justify-end gap-2">
-        <Button onClick={onClose}>Keep it</Button>
+        <Button onClick={onClose}>{t("remove.keepIt")}</Button>
         <Button
           variant="danger"
           busy={remove.isPending}
           onClick={() => remove.mutate()}
         >
-          Remove
+          {t("dl.remove")}
         </Button>
       </div>
     </Modal>

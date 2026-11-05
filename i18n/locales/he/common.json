@@ -1,0 +1,56 @@
+{
+  "size": {
+    "B": "{{value}} B",
+    "KB": "{{value}} KB",
+    "MB": "{{value}} MB",
+    "GB": "{{value}} GB",
+    "TB": "{{value}} TB",
+    "PB": "{{value}} PB"
+  },
+  "duration": {
+    "minutes_one": "דקה אחת",
+    "minutes_two": "{{count}} דקות",
+    "minutes_other": "{{count}} דקות",
+    "hours": "{{hours}} שע׳",
+    "hoursMinutes": "{{hours}} שע׳ {{minutes}} דק׳"
+  },
+  "loading": "בטעינה…",
+  "close": "סגירה",
+  "language": {
+    "title": "שפה",
+    "label": "שפה",
+    "automatic": "אוטומטי ({{language}})",
+    "hint": "השפה שבה Box Office מוצג, בכל מכשיר שבו נכנסים לחשבון. „אוטומטי” עוקב אחר שפת כל דפדפן.",
+    "machine": "התרגום הזה נעשה במכונה, ולכן חלק מהניסוחים עשויים להיות לא מדויקים.",
+    "help": "עזרו לשפר אותה"
+  },
+  "sort": {
+    "az": "מ-א׳ ל-ת׳",
+    "za": "מ-ת׳ ל-א׳",
+    "oldest": "הישנים קודם",
+    "newest": "החדשים קודם",
+    "soonest": "הקרוב ביותר קודם",
+    "latest": "החדש ביותר קודם",
+    "smallest": "הקטן ביותר קודם",
+    "largest": "הגדול ביותר קודם",
+    "lowest": "הנמוך ביותר קודם",
+    "highest": "הגבוה ביותר קודם",
+    "worst": "הגרוע ביותר קודם",
+    "best": "הטוב ביותר קודם",
+    "shortest": "הקצר ביותר קודם",
+    "longest": "הארוך ביותר קודם",
+    "fewest": "המעטים ביותר קודם",
+    "most": "הרבים ביותר קודם",
+    "least": "הפחות ביותר קודם",
+    "by": "מיון לפי",
+    "show": "הצגה: {{order}}",
+    "flip": "{{option}}, {{order}}. להציג {{other}} במקום"
+  },
+  "pager": {
+    "pages": "דפי {{label}}",
+    "range": "{{from}}–{{to}} מתוך {{total}}",
+    "previous": "הדף הקודם",
+    "next": "הדף הבא",
+    "page": "דף {{page}} מתוך {{pages}}"
+  }
+}

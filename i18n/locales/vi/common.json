@@ -1,0 +1,54 @@
+{
+  "size": {
+    "B": "{{value}} B",
+    "KB": "{{value}} KB",
+    "MB": "{{value}} MB",
+    "GB": "{{value}} GB",
+    "TB": "{{value}} TB",
+    "PB": "{{value}} PB"
+  },
+  "duration": {
+    "minutes_other": "{{count}} phút",
+    "hours": "{{hours}} giờ",
+    "hoursMinutes": "{{hours}} giờ {{minutes}} phút"
+  },
+  "loading": "Đang tải…",
+  "close": "Đóng",
+  "language": {
+    "title": "Ngôn ngữ",
+    "label": "Ngôn ngữ",
+    "automatic": "Tự động ({{language}})",
+    "hint": "Ngôn ngữ Box Office hiển thị cho bạn, trên mọi thiết bị bạn đăng nhập. Tự động sẽ theo ngôn ngữ của từng trình duyệt.",
+    "machine": "Bản dịch này do máy thực hiện, nên một số câu chữ có thể chưa chính xác.",
+    "help": "Giúp cải thiện"
+  },
+  "sort": {
+    "az": "A đến Z",
+    "za": "Z đến A",
+    "oldest": "Cũ nhất trước",
+    "newest": "Mới nhất trước",
+    "soonest": "Gần nhất trước",
+    "latest": "Mới nhất trước",
+    "smallest": "Nhỏ nhất trước",
+    "largest": "Lớn nhất trước",
+    "lowest": "Thấp nhất trước",
+    "highest": "Cao nhất trước",
+    "worst": "Kém nhất trước",
+    "best": "Tốt nhất trước",
+    "shortest": "Ngắn nhất trước",
+    "longest": "Dài nhất trước",
+    "fewest": "Ít nhất trước",
+    "most": "Nhiều nhất trước",
+    "least": "Ít nhất trước",
+    "by": "Sắp xếp theo",
+    "show": "Hiển thị {{order}}",
+    "flip": "{{option}}, {{order}}. Hiển thị {{other}} thay vào đó"
+  },
+  "pager": {
+    "pages": "Các trang {{label}}",
+    "range": "{{from}}–{{to}} trên {{total}}",
+    "previous": "Trang trước",
+    "next": "Trang sau",
+    "page": "Trang {{page}} trên {{pages}}"
+  }
+}

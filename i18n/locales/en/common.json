@@ -1,0 +1,55 @@
+{
+  "size": {
+    "B": "{{value}} B",
+    "KB": "{{value}} KB",
+    "MB": "{{value}} MB",
+    "GB": "{{value}} GB",
+    "TB": "{{value}} TB",
+    "PB": "{{value}} PB"
+  },
+  "duration": {
+    "minutes_one": "{{count}} min",
+    "minutes_other": "{{count}} min",
+    "hours": "{{hours}} h",
+    "hoursMinutes": "{{hours}} h {{minutes}} min"
+  },
+  "loading": "Loading…",
+  "close": "Close",
+  "language": {
+    "title": "Language",
+    "label": "Language",
+    "automatic": "Automatic ({{language}})",
+    "hint": "The language Box Office shows you, on every device you sign in on. Automatic follows each browser's language.",
+    "machine": "This translation was made by machine, so some wording may be off.",
+    "help": "Help improve it"
+  },
+  "sort": {
+    "az": "A to Z",
+    "za": "Z to A",
+    "oldest": "Oldest first",
+    "newest": "Newest first",
+    "soonest": "Soonest first",
+    "latest": "Latest first",
+    "smallest": "Smallest first",
+    "largest": "Largest first",
+    "lowest": "Lowest first",
+    "highest": "Highest first",
+    "worst": "Worst first",
+    "best": "Best first",
+    "shortest": "Shortest first",
+    "longest": "Longest first",
+    "fewest": "Fewest first",
+    "most": "Most first",
+    "least": "Least first",
+    "by": "Sort by",
+    "show": "Show {{order}}",
+    "flip": "{{option}}, {{order}}. Show {{other}} instead"
+  },
+  "pager": {
+    "pages": "{{label}} pages",
+    "range": "{{from}}–{{to}} of {{total}}",
+    "previous": "Previous page",
+    "next": "Next page",
+    "page": "Page {{page}} of {{pages}}"
+  }
+}

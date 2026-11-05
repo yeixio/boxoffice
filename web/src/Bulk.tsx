@@ -1,11 +1,11 @@
 // Changing many titles at once: pick them on Movies or Shows, then set
 // their quality profile (Do not touch, say) or whether they're watched for.
 
+import { useTranslation } from 'react-i18next'
 import { useState, type ReactNode } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Lock } from 'lucide-react'
 import { post } from './api'
-import { count } from './format'
 import { useProfiles } from './hooks'
 import { Button, ErrorNote, Select } from './ui'
 
@@ -35,6 +35,7 @@ export type Selection = ReturnType<typeof useSelection>
 
 // BulkBar sits at the bottom of the page while titles are being picked.
 export function BulkBar({ kind, sel, shown }: { kind: 'movies' | 'series'; sel: Selection; shown: number[] }) {
+  const { t } = useTranslation()
   const qc = useQueryClient()
   const profiles = useProfiles()
   const locked = profiles.data?.find((p) => p.locked)
@@ -43,7 +44,7 @@ export function BulkBar({ kind, sel, shown }: { kind: 'movies' | 'series'; sel: 
   const apply = useMutation({
     mutationFn: (body: { profileId?: number; monitored?: boolean }) => post<{ changed: number }>(`/${kind}/bulk`, { ids: [...sel.ids], ...body }),
     onSuccess: (r) => {
-      setDone(`Changed ${count(r.changed, 'title', 'titles')}.`)
+      setDone(t('bulk.changed', { count: r.changed }))
       qc.invalidateQueries({ queryKey: [kind === 'movies' ? 'movies' : 'series'] })
       sel.set([])
     },
@@ -53,34 +54,34 @@ export function BulkBar({ kind, sel, shown }: { kind: 'movies' | 'series'; sel: 
   return (
     <div className="sticky bottom-0 z-20 -mx-4 mt-6 border-t border-line bg-paper/95 px-4 py-3 md:-mx-8 md:px-8 backdrop-blur">
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm">
-        <span className="font-medium">{n ? `${count(n, 'title', 'titles')} picked` : 'Tap titles to pick them'}</span>
+        <span className="font-medium">{n ? t('bulk.picked', { count: n }) : t('bulk.tapToPick')}</span>
         <Button variant="ghost" onClick={() => sel.set(allShown ? [] : shown)}>
-          {allShown ? 'Pick none' : `Pick all ${shown.length} shown`}
+          {allShown ? t('bulk.pickNone') : t('bulk.pickAll', { count: shown.length })}
         </Button>
-        <div className="flex w-full flex-wrap items-center gap-2 sm:ml-auto sm:w-auto">
+        <div className="flex w-full flex-wrap items-center gap-2 sm:ms-auto sm:w-auto">
           {locked && (
             <Button disabled={!n} busy={apply.isPending && apply.variables?.profileId === locked.id} onClick={() => apply.mutate({ profileId: locked.id })}>
-              <Lock className="size-4" aria-hidden /> Do not touch
+              <Lock className="size-4" aria-hidden /> {t('bulk.doNotTouch')}
             </Button>
           )}
           <div className="w-44">
             <Select
               value={profile}
               onChange={setProfile}
-              options={[{ value: '', label: 'Quality profile…' }, ...(profiles.data ?? []).filter((p) => !p.locked).map((p) => ({ value: p.id, label: p.name }))]}
+              options={[{ value: '', label: t('bulk.profile') }, ...(profiles.data ?? []).filter((p) => !p.locked).map((p) => ({ value: p.id, label: p.name }))]}
             />
           </div>
           <Button disabled={!n || !profile} busy={apply.isPending && apply.variables?.profileId === Number(profile)} onClick={() => apply.mutate({ profileId: Number(profile) })}>
-            Set profile
+            {t('bulk.setProfile')}
           </Button>
           <Button disabled={!n} onClick={() => apply.mutate({ monitored: true })}>
-            Watch
+            {t('bulk.watch')}
           </Button>
           <Button disabled={!n} onClick={() => apply.mutate({ monitored: false })}>
-            Pause
+            {t('bulk.pause')}
           </Button>
           <Button variant="ghost" onClick={sel.stop}>
-            Done
+            {t('bulk.done')}
           </Button>
         </div>
       </div>
@@ -93,11 +94,12 @@ export function BulkBar({ kind, sel, shown }: { kind: 'movies' | 'series'; sel: 
 // Pickable wraps a poster tile: while picking, a tap picks it rather than
 // opening the title.
 export function Pickable({ sel, id, title, children }: { sel: Selection; id: number; title: string; children: ReactNode }) {
+  const { t } = useTranslation()
   const picked = sel.ids.has(id)
   return (
-    <button type="button" onClick={() => sel.toggle(id)} aria-pressed={picked} aria-label={`Pick ${title}`} className="group relative block w-full text-left">
+    <button type="button" onClick={() => sel.toggle(id)} aria-pressed={picked} aria-label={t('bulk.pick', { title })} className="group relative block w-full text-start">
       <span
-        className={`absolute left-2 top-2 z-10 flex size-6 items-center justify-center rounded-full border-2 text-xs font-bold ${picked ? 'border-marquee bg-marquee text-paper' : 'border-paper bg-ink/40 text-transparent'}`}
+        className={`absolute start-2 top-2 z-10 flex size-6 items-center justify-center rounded-full border-2 text-xs font-bold ${picked ? 'border-marquee bg-marquee text-paper' : 'border-paper bg-ink/40 text-transparent'}`}
         aria-hidden
       >
         ✓
@@ -109,12 +111,12 @@ export function Pickable({ sel, id, title, children }: { sel: Selection; id: num
 
 // LockedNote says what Do not touch means, on a title's page.
 export function LockedNote() {
+  const { t } = useTranslation()
   return (
     <p className="mt-4 flex max-w-3xl items-start gap-2 rounded-md border border-line px-3 py-2 text-sm">
       <Lock className="mt-0.5 size-4 shrink-0 text-muted" aria-hidden />
       <span>
-        <span className="font-medium">Do not touch.</span> Box Office leaves this title's files exactly as they are: no searches, downloads, upgrades, replacing or deleting. Pick another
-        quality profile below to change that.
+        <span className="font-medium">{t('bulk.lockedTitle')}</span> {t('bulk.lockedBody')}
       </span>
     </p>
   )

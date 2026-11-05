@@ -26,7 +26,9 @@ type Member struct {
 	Disabled    bool      `json:"disabled"`
 	CreatedAt   time.Time `json:"createdAt"`
 	SeenAt      time.Time `json:"seenAt,omitzero"`
-	hash        string
+	// Language is the one they picked, or '' to follow the browser.
+	Language string `json:"language"`
+	hash     string
 }
 
 func (m Member) PasswordHash() string { return m.hash }
@@ -39,13 +41,13 @@ func (m Member) Name() string {
 	return m.Username
 }
 
-const memberCols = "id, username, display_name, password_hash, source, auto_approve, quota_movies, quota_shows, disabled, created_at, seen_at"
+const memberCols = "id, username, display_name, password_hash, source, auto_approve, quota_movies, quota_shows, disabled, created_at, seen_at, language"
 
 func scanMember(sc interface{ Scan(...any) error }) (Member, error) {
 	var m Member
 	var disabled int
 	var created, seen int64
-	err := sc.Scan(&m.ID, &m.Username, &m.DisplayName, &m.hash, &m.Source, &m.AutoApprove, &m.QuotaMovies, &m.QuotaShows, &disabled, &created, &seen)
+	err := sc.Scan(&m.ID, &m.Username, &m.DisplayName, &m.hash, &m.Source, &m.AutoApprove, &m.QuotaMovies, &m.QuotaShows, &disabled, &created, &seen, &m.Language)
 	if errors.Is(err, sql.ErrNoRows) {
 		return m, ErrNotFound
 	}
@@ -155,6 +157,16 @@ func (s *Store) DeleteMember(ctx context.Context, id int64) error {
 		return err
 	}
 	return tx.Commit()
+}
+
+// SetMemberLanguage keeps the language someone picked on the request site,
+// or ” for their browser's.
+func (s *Store) SetMemberLanguage(ctx context.Context, id int64, language string) error {
+	res, err := s.exec(ctx, "UPDATE members SET language = ? WHERE id = ?", language, id)
+	if err != nil {
+		return err
+	}
+	return affected(res)
 }
 
 // CreateMemberSession signs someone in to the request site.

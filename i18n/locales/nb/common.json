@@ -1,0 +1,55 @@
+{
+  "size": {
+    "B": "{{value}} B",
+    "KB": "{{value}} kB",
+    "MB": "{{value}} MB",
+    "GB": "{{value}} GB",
+    "TB": "{{value}} TB",
+    "PB": "{{value}} PB"
+  },
+  "duration": {
+    "minutes_one": "{{count}} min",
+    "minutes_other": "{{count}} min",
+    "hours": "{{hours}} t",
+    "hoursMinutes": "{{hours}} t {{minutes}} min"
+  },
+  "loading": "Laster inn …",
+  "close": "Lukk",
+  "language": {
+    "title": "Språk",
+    "label": "Språk",
+    "automatic": "Automatisk ({{language}})",
+    "hint": "Språket Box Office vises på for deg, på alle enheter du logger inn på. Automatisk følger språket i hver nettleser.",
+    "machine": "Denne oversettelsen er maskinlaget, så noen formuleringer kan være feil.",
+    "help": "Hjelp til å forbedre det"
+  },
+  "sort": {
+    "az": "A til Å",
+    "za": "Å til A",
+    "oldest": "Eldste først",
+    "newest": "Nyeste først",
+    "soonest": "Nærmest først",
+    "latest": "Nyeste først",
+    "smallest": "Minst først",
+    "largest": "Størst først",
+    "lowest": "Lavest først",
+    "highest": "Høyest først",
+    "worst": "Dårligst først",
+    "best": "Best først",
+    "shortest": "Kortest først",
+    "longest": "Lengst først",
+    "fewest": "Færrest først",
+    "most": "Flest først",
+    "least": "Lavest først",
+    "by": "Sorter etter",
+    "show": "Vis {{order}}",
+    "flip": "{{option}}, {{order}}. Vis {{other}} i stedet"
+  },
+  "pager": {
+    "pages": "{{label}}-sider",
+    "range": "{{from}}–{{to}} av {{total}}",
+    "previous": "Forrige side",
+    "next": "Neste side",
+    "page": "Side {{page}} av {{pages}}"
+  }
+}

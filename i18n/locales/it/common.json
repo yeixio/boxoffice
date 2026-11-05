@@ -1,0 +1,56 @@
+{
+  "size": {
+    "B": "{{value}} B",
+    "KB": "{{value}} KB",
+    "MB": "{{value}} MB",
+    "GB": "{{value}} GB",
+    "TB": "{{value}} TB",
+    "PB": "{{value}} PB"
+  },
+  "duration": {
+    "minutes_one": "{{count}} min",
+    "minutes_many": "{{count}} min",
+    "minutes_other": "{{count}} min",
+    "hours": "{{hours}} h",
+    "hoursMinutes": "{{hours}} h {{minutes}} min"
+  },
+  "loading": "Caricamento…",
+  "close": "Chiudi",
+  "language": {
+    "title": "Lingua",
+    "label": "Lingua",
+    "automatic": "Automatica ({{language}})",
+    "hint": "La lingua in cui Box Office ti viene mostrato, su ogni dispositivo con cui accedi. Automatica segue la lingua di ogni browser.",
+    "machine": "Questa traduzione è stata fatta automaticamente, quindi alcune frasi potrebbero non essere precise.",
+    "help": "Aiuta a migliorarla"
+  },
+  "sort": {
+    "az": "Dalla A alla Z",
+    "za": "Dalla Z alla A",
+    "oldest": "Prima i più vecchi",
+    "newest": "Prima i più recenti",
+    "soonest": "Prima i più vicini",
+    "latest": "Prima i più recenti",
+    "smallest": "Prima i più piccoli",
+    "largest": "Prima i più grandi",
+    "lowest": "Prima i più bassi",
+    "highest": "Prima i più alti",
+    "worst": "Prima i peggiori",
+    "best": "Prima i migliori",
+    "shortest": "Prima i più brevi",
+    "longest": "Prima i più lunghi",
+    "fewest": "Prima i meno numerosi",
+    "most": "Prima i più numerosi",
+    "least": "Prima i minori",
+    "by": "Ordina per",
+    "show": "Mostra {{order}}",
+    "flip": "{{option}}, {{order}}. Mostra invece {{other}}"
+  },
+  "pager": {
+    "pages": "Pagine di {{label}}",
+    "range": "{{from}}–{{to}} di {{total}}",
+    "previous": "Pagina precedente",
+    "next": "Pagina successiva",
+    "page": "Pagina {{page}} di {{pages}}"
+  }
+}

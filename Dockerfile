@@ -7,6 +7,7 @@ WORKDIR /src/web
 RUN corepack enable
 COPY web/package.json web/pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
+COPY i18n/ /src/i18n/
 COPY web/ ./
 RUN pnpm build
 

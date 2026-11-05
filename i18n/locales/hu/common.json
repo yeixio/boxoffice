@@ -1,0 +1,55 @@
+{
+  "size": {
+    "B": "{{value}} B",
+    "KB": "{{value}} KB",
+    "MB": "{{value}} MB",
+    "GB": "{{value}} GB",
+    "TB": "{{value}} TB",
+    "PB": "{{value}} PB"
+  },
+  "duration": {
+    "minutes_one": "{{count}} perc",
+    "minutes_other": "{{count}} perc",
+    "hours": "{{hours}} ó",
+    "hoursMinutes": "{{hours}} óra {{minutes}} perc"
+  },
+  "loading": "Betöltés…",
+  "close": "Bezárás",
+  "language": {
+    "title": "Nyelv",
+    "label": "Nyelv",
+    "automatic": "Automatikus ({{language}})",
+    "hint": "Az a nyelv, amelyen a Box Office megjelenik neked minden eszközön, ahol bejelentkezel. Az Automatikus mindig a böngésző nyelvét követi.",
+    "machine": "Ezt a fordítást gép készítette, ezért egyes megfogalmazások pontatlanok lehetnek.",
+    "help": "Segíts javítani"
+  },
+  "sort": {
+    "az": "A–Z",
+    "za": "Z–A",
+    "oldest": "Legrégebbi elöl",
+    "newest": "Legújabb elöl",
+    "soonest": "A legközelebbi elöl",
+    "latest": "A legújabb elöl",
+    "smallest": "A legkisebb elöl",
+    "largest": "A legnagyobb elöl",
+    "lowest": "Legalacsonyabb elöl",
+    "highest": "Legmagasabb elöl",
+    "worst": "A legrosszabb elöl",
+    "best": "A legjobb elöl",
+    "shortest": "A legrövidebb elöl",
+    "longest": "A leghosszabb elöl",
+    "fewest": "A legkevesebb elöl",
+    "most": "A legtöbb elöl",
+    "least": "A legkevésbé elöl",
+    "by": "Rendezés",
+    "show": "Megjelenítés: {{order}}",
+    "flip": "{{option}}, {{order}}. Inkább: {{other}}"
+  },
+  "pager": {
+    "pages": "{{label}} oldalai",
+    "range": "{{from}}–{{to}} / {{total}}",
+    "previous": "Előző oldal",
+    "next": "Következő oldal",
+    "page": "{{page}}. oldal / {{pages}}"
+  }
+}

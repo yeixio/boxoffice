@@ -1,0 +1,55 @@
+{
+  "size": {
+    "B": "{{value}} B",
+    "KB": "{{value}} KB",
+    "MB": "{{value}} MB",
+    "GB": "{{value}} GB",
+    "TB": "{{value}} TB",
+    "PB": "{{value}} PB"
+  },
+  "duration": {
+    "minutes_one": "{{count}} min",
+    "minutes_other": "{{count}} min",
+    "hours": "{{hours}} u",
+    "hoursMinutes": "{{hours}} u {{minutes}} min"
+  },
+  "loading": "Laden…",
+  "close": "Sluiten",
+  "language": {
+    "title": "Taal",
+    "label": "Taal",
+    "automatic": "Automatisch ({{language}})",
+    "hint": "De taal waarin Box Office zich aan je toont, op elk apparaat waarop je inlogt. Automatisch volgt de taal van elke browser.",
+    "machine": "Deze vertaling is automatisch gemaakt, dus sommige formuleringen kloppen misschien niet.",
+    "help": "Help mee om het te verbeteren"
+  },
+  "sort": {
+    "az": "A tot Z",
+    "za": "Z tot A",
+    "oldest": "Oudste eerst",
+    "newest": "Nieuwste eerst",
+    "soonest": "Eerstvolgende eerst",
+    "latest": "Nieuwste eerst",
+    "smallest": "Kleinste eerst",
+    "largest": "Grootste eerst",
+    "lowest": "Laagste eerst",
+    "highest": "Hoogste eerst",
+    "worst": "Slechtste eerst",
+    "best": "Beste eerst",
+    "shortest": "Kortste eerst",
+    "longest": "Langste eerst",
+    "fewest": "Minste eerst",
+    "most": "Meeste eerst",
+    "least": "Laagste eerst",
+    "by": "Sorteren op",
+    "show": "{{order}} tonen",
+    "flip": "{{option}}, {{order}}. In plaats daarvan {{other}} tonen"
+  },
+  "pager": {
+    "pages": "{{label}}-pagina’s",
+    "range": "{{from}}–{{to}} van {{total}}",
+    "previous": "Vorige pagina",
+    "next": "Volgende pagina",
+    "page": "Pagina {{page}} van {{pages}}"
+  }
+}

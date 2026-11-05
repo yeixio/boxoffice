@@ -1,3 +1,5 @@
+import { Trans, useTranslation } from 'react-i18next'
+import i18n from '../i18n'
 import { useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
@@ -13,10 +15,8 @@ import { Badge, Button, Card, Empty, ErrorNote, Heading, Input, Modal, Spinner, 
 // shows what's wanted in its own format.
 const formats = {
   ebook: {
-    title: 'Books',
+    title: 'nav.books',
     path: '/books',
-    noun: 'ebook',
-    nouns: 'ebooks',
     icon: BookOpen,
     wanted: (a: Author) => a.wantedEbooks,
     have: (a: Author) => a.haveEbooks,
@@ -25,10 +25,8 @@ const formats = {
     newFlag: 'newEbooks' as const,
   },
   audiobook: {
-    title: 'Audiobooks',
+    title: 'nav.audiobooks',
     path: '/audiobooks',
-    noun: 'audiobook',
-    nouns: 'audiobooks',
     icon: Headphones,
     wanted: (a: Author) => a.wantedAudiobooks,
     have: (a: Author) => a.haveAudiobooks,
@@ -42,33 +40,34 @@ const byName = (a: Author) => a.sortName || a.name
 
 // Books lists the authors Box Office follows, for one format.
 export function Books({ format }: { format: BookFormat }) {
+  const { t } = useTranslation()
   const f = formats[format]
   const authors = useQuery({ queryKey: ['authors'], queryFn: () => get<Author[]>('/authors') })
   const [adding, setAdding] = useState(false)
   const [text, setText] = useState('')
   const sorts = useMemo<SortOption<Author>[]>(
     () => [
-      { key: 'name', label: 'Name', value: byName, dir: 'asc', says: words.text },
-      { key: 'added', label: 'Date added', value: (a) => a.addedAt, dir: 'desc', says: words.date },
-      { key: 'wanted', label: `${f.title} wanted`, value: f.wanted, dir: 'desc', says: { asc: 'Fewest first', desc: 'Most first' } },
+      { key: 'name', label: 'sorts.name', value: byName, dir: 'asc', says: words.text },
+      { key: 'added', label: 'sorts.added', value: (a) => a.addedAt, dir: 'desc', says: words.date },
+      { key: 'wanted', label: `books.${format}.wantedSort`, value: f.wanted, dir: 'desc', says: words.count },
     ],
-    [f],
+    [f, format],
   )
   const sort = useSort(`authors-${format}`, sorts)
   const shown = useMemo(() => {
-    const t = text.trim().toLowerCase()
-    return sortList(authors.data ?? [], sort.option, sort.dir, byName).filter((a) => !t || a.name.toLowerCase().includes(t))
+    const q = text.trim().toLowerCase()
+    return sortList(authors.data ?? [], sort.option, sort.dir, byName).filter((a) => !q || a.name.toLowerCase().includes(q))
   }, [authors.data, sort.option, sort.dir, text])
   const wanted = authors.data?.reduce((n, a) => n + f.wanted(a), 0) ?? 0
   const Icon = f.icon
   return (
     <>
       <Heading
-        title={f.title}
-        sub={authors.data ? `${authors.data.length} ${authors.data.length === 1 ? 'author' : 'authors'}, ${wanted} ${wanted === 1 ? f.noun : f.nouns} wanted` : undefined}
+        title={t(f.title)}
+        sub={authors.data ? t('books.sub', { authors: t('books.authors', { count: authors.data.length }), wanted: t(`books.${format}.wanted`, { count: wanted }) }) : undefined}
         actions={
           <Button variant="primary" onClick={() => setAdding(true)}>
-            <Plus className="size-4" aria-hidden /> Add author
+            <Plus className="size-4" aria-hidden /> {t('books.add')}
           </Button>
         }
       />
@@ -76,17 +75,17 @@ export function Books({ format }: { format: BookFormat }) {
       <ErrorNote error={authors.error} />
       {authors.isPending && <Spinner />}
       {authors.data?.length === 0 && (
-        <Empty icon={<Icon className="size-8" />} title="No authors yet">
-          Add an author and Box Office lists their books from Open Library. Ebooks and audiobooks share the one list of authors, so an author added here shows on both pages.
+        <Empty icon={<Icon className="size-8" />} title={t('books.none')}>
+          {t('books.noneBody')}
         </Empty>
       )}
       {!!authors.data?.length && (
         <>
           <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center">
-            <Input type="search" className="sm:w-60 sm:flex-none" placeholder="Filter by name" aria-label="Filter by name" value={text} onChange={(e) => setText(e.target.value)} />
-            <SortControl sort={sort} className="sm:ml-auto" />
+            <Input type="search" className="sm:w-60 sm:flex-none" placeholder={t('list.filterName')} aria-label={t('list.filterName')} value={text} onChange={(e) => setText(e.target.value)} />
+            <SortControl sort={sort} className="sm:ms-auto" />
           </div>
-          {shown.length === 0 && <p className="py-10 text-center text-sm text-muted">No authors match.</p>}
+          {shown.length === 0 && <p className="py-10 text-center text-sm text-muted">{t('books.noMatch')}</p>}
           <ul className="flex flex-col divide-y divide-line">
             {shown.map((a) => (
               <li key={a.id}>
@@ -96,17 +95,15 @@ export function Books({ format }: { format: BookFormat }) {
                   </span>
                   <span className="min-w-0 flex-1">
                     <span className="block truncate font-medium">{a.name}</span>
-                    <span className="block truncate text-xs text-muted">{sort.option.key === 'added' ? `Added ${day(a.addedAt)}` : `${a.books} ${a.books === 1 ? 'book' : 'books'}`}</span>
+                    <span className="block truncate text-xs text-muted">{sort.option.key === 'added' ? t('fact.added', { date: day(a.addedAt) }) : t('books.count', { count: a.books })}</span>
                   </span>
-                  {a.locked && <Lock className="size-4 shrink-0 text-muted" aria-label="Do not touch" />}
+                  {a.locked && <Lock className="size-4 shrink-0 text-muted" aria-label={t('books.locked')} />}
                   {f.wanted(a) === 0 ? (
-                    <Badge>Nothing wanted</Badge>
+                    <Badge>{t('music.nothingWanted')}</Badge>
                   ) : f.have(a) >= f.wanted(a) ? (
-                    <Badge tone="ok">All {f.wanted(a)} on disk</Badge>
+                    <Badge tone="ok">{t('books.allOnDisk', { count: f.wanted(a) })}</Badge>
                   ) : (
-                    <Badge tone="gold">
-                      {f.wanted(a) - f.have(a)} of {f.wanted(a)} missing
-                    </Badge>
+                    <Badge tone="gold">{t('books.missing', { missing: f.wanted(a) - f.have(a), count: f.wanted(a) })}</Badge>
                   )}
                 </Link>
               </li>
@@ -120,48 +117,49 @@ export function Books({ format }: { format: BookFormat }) {
 
 function lifespan(a: { born?: string; died?: string }): string {
   if (!a.born) return ''
-  return a.died ? `${a.born} – ${a.died}` : `Born ${a.born}`
+  return a.died ? i18n.t('books.lived', { born: a.born, died: a.died }) : i18n.t('books.born', { born: a.born })
 }
 
 // AddAuthor finds an author on Open Library and adds them.
 function AddAuthor({ format, onClose }: { format: BookFormat; onClose: () => void }) {
+  const { t } = useTranslation()
   const f = formats[format]
   const [term, setTerm] = useState('')
   const [q, setQ] = useState('')
   const [picked, setPicked] = useState<LookupAuthor | null>(null)
   useEffect(() => {
-    const t = setTimeout(() => setQ(term.trim()), 400)
-    return () => clearTimeout(t)
+    const timer = setTimeout(() => setQ(term.trim()), 400)
+    return () => clearTimeout(timer)
   }, [term])
   const results = useQuery({ queryKey: ['lookup', 'authors', q], queryFn: () => get<LookupAuthor[]>(`/lookup/authors?q=${encodeURIComponent(q)}`), enabled: q.length > 1 })
   return (
-    <Modal title={picked ? `Add ${picked.name}` : 'Add an author'} onClose={onClose} wide>
+    <Modal title={picked ? t('add.title', { title: picked.name }) : t('books.addAn')} onClose={onClose} wide>
       {picked ? (
         <AddOptions format={format} author={picked} onBack={() => setPicked(null)} onDone={onClose} />
       ) : (
         <div className="flex flex-col gap-4">
           <div className="relative">
-            <Search className="pointer-events-none absolute left-3 top-2.5 size-4 text-muted" aria-hidden />
-            <Input autoFocus className="pl-9" placeholder="Author name, or an Open Library id like OL1394865A" value={term} onChange={(e) => setTerm(e.target.value)} />
+            <Search className="pointer-events-none absolute start-3 top-2.5 size-4 text-muted" aria-hidden />
+            <Input autoFocus className="ps-9" placeholder={t('books.placeholder')} value={term} onChange={(e) => setTerm(e.target.value)} />
           </div>
-          {results.isFetching && <Spinner label="Looking on Open Library" />}
+          {results.isFetching && <Spinner label={t('books.looking')} />}
           <ErrorNote error={results.error} />
-          {results.data?.length === 0 && <p className="text-sm text-muted">Open Library has nobody by that name.</p>}
+          {results.data?.length === 0 && <p className="text-sm text-muted">{t('books.nobody')}</p>}
           <ul className="flex flex-col divide-y divide-line">
             {results.data?.map((a) => (
               <li key={a.key} className="flex items-center gap-4 py-3">
                 <div className="min-w-0 flex-1">
                   <div className="font-display font-semibold">{a.name}</div>
                   <p className="truncate text-sm text-muted">
-                    {[lifespan(a), a.topWork && `Known for ${a.topWork}`, a.works ? `${a.works} works` : ''].filter(Boolean).join(' · ')}
+                    {[lifespan(a), a.topWork && t('books.knownFor', { work: a.topWork }), a.works ? t('books.works', { count: a.works }) : ''].filter(Boolean).join(' · ')}
                   </p>
                 </div>
                 {a.id ? (
                   <Link className="shrink-0 text-sm font-medium text-marquee" to={`${f.path}/${a.id}`} onClick={onClose}>
-                    On the list
+                    {t('add.onList')}
                   </Link>
                 ) : (
-                  <Button onClick={() => setPicked(a)}>Pick</Button>
+                  <Button onClick={() => setPicked(a)}>{t('add.pick')}</Button>
                 )}
               </li>
             ))}
@@ -173,6 +171,7 @@ function AddAuthor({ format, onClose }: { format: BookFormat; onClose: () => voi
 }
 
 function AddOptions({ format, author, onBack, onDone }: { format: BookFormat; author: LookupAuthor; onBack: () => void; onDone: () => void }) {
+  const { t } = useTranslation()
   const f = formats[format]
   const folders = useRootFolders(format)
   const qc = useQueryClient()
@@ -185,11 +184,7 @@ function AddOptions({ format, author, onBack, onDone }: { format: BookFormat; au
   if (!folders.data?.length) {
     return (
       <p className="text-sm">
-        Add {format === 'ebook' ? 'an ebook' : 'an audiobook'} root folder under{' '}
-        <Link to="/settings" className="font-medium text-marquee" onClick={onDone}>
-          Settings
-        </Link>{' '}
-        first, so Box Office knows where the {f.nouns} go.
+        <Trans i18nKey={`books.${format}.noRoot`} components={{ link: <Link to="/settings" className="font-medium text-marquee" onClick={onDone} /> }} />
       </p>
     )
   }
@@ -214,20 +209,20 @@ function AddOptions({ format, author, onBack, onDone }: { format: BookFormat; au
         onChange={setAll}
         label={
           <span>
-            Want every book of theirs as {format === 'ebook' ? 'an ebook' : 'an audiobook'}
-            <span className="block text-sm text-muted">Off, you pick the ones you want from the author's page. Open Library lists collections and translations too, so picking is often better.</span>
+            {t(`books.${format}.wantAll`)}
+            <span className="block text-sm text-muted">{t('books.wantAllHint')}</span>
           </span>
         }
       />
-      <Toggle checked={fresh} onChange={setFresh} label={`Want new books as ${f.nouns} when they come out`} />
-      <p className="text-sm text-muted">Box Office looks the books up on Open Library, which takes a few seconds for authors with a lot of them.</p>
+      <Toggle checked={fresh} onChange={setFresh} label={t(`books.${format}.wantNew`)} />
+      <p className="text-sm text-muted">{t('books.lookup')}</p>
       <ErrorNote error={error} />
       <div className="flex justify-between">
         <Button variant="ghost" onClick={onBack}>
-          Back
+          {t('common.back')}
         </Button>
         <Button variant="primary" busy={busy} onClick={add}>
-          Add author
+          {t('books.add')}
         </Button>
       </div>
     </div>
@@ -236,6 +231,7 @@ function AddOptions({ format, author, onBack, onDone }: { format: BookFormat; au
 
 // AuthorPage shows an author's books and which are wanted in one format.
 export function AuthorPage({ format }: { format: BookFormat }) {
+  const { t } = useTranslation()
   const f = formats[format]
   const id = Number(useParams().id)
   const qc = useQueryClient()
@@ -273,8 +269,8 @@ export function AuthorPage({ format }: { format: BookFormat }) {
     },
   })
   const shown = useMemo(() => {
-    const t = text.trim().toLowerCase()
-    return (author.data?.bookList ?? []).filter((b) => !t || b.title.toLowerCase().includes(t))
+    const q = text.trim().toLowerCase()
+    return (author.data?.bookList ?? []).filter((b) => !q || b.title.toLowerCase().includes(q))
   }, [author.data, text])
   // A link to one book (from Downloads, say) opens it.
   useEffect(() => {
@@ -293,43 +289,43 @@ export function AuthorPage({ format }: { format: BookFormat }) {
       <h1 className="font-display text-4xl font-bold tracking-tight">{a.name}</h1>
       <div className="mt-2 flex flex-wrap gap-2">
         <Badge tone={wanted ? 'gold' : 'plain'}>
-          {wanted} {wanted === 1 ? f.noun : f.nouns} wanted
+          {t(`books.${format}.wanted`, { count: wanted })}
         </Badge>
-        {wanted > 0 && <Badge tone={have >= wanted ? 'ok' : 'plain'}>{have} on disk</Badge>}
-        {a.locked && <Badge>Do not touch</Badge>}
+        {wanted > 0 && <Badge tone={have >= wanted ? 'ok' : 'plain'}>{t('books.onDiskCount', { count: have })}</Badge>}
+        {a.locked && <Badge>{t('books.locked')}</Badge>}
         {lifespan(a) && <Badge>{lifespan(a)}</Badge>}
       </div>
       {a.bio && <p className="mt-4 line-clamp-4 max-w-3xl text-sm leading-relaxed">{a.bio}</p>}
       <div className="mt-5 flex flex-wrap gap-2">
         <Button busy={refresh.isPending} onClick={() => refresh.mutate()}>
-          <RefreshCw className="size-4" aria-hidden /> Refresh from Open Library
+          <RefreshCw className="size-4" aria-hidden /> {t('books.refresh')}
         </Button>
         <Button variant="ghost" onClick={() => setRemoving(true)}>
-          <Trash2 className="size-4" aria-hidden /> Remove
+          <Trash2 className="size-4" aria-hidden /> {t('title.remove')}
         </Button>
       </div>
       <ErrorNote error={refresh.error ?? edit.error ?? all.error ?? book.error} />
 
       <Card className="mt-6">
         <div className="flex flex-col gap-4">
-          <Toggle checked={a[f.newFlag]} disabled={edit.isPending} onChange={(on) => edit.mutate({ [f.newFlag]: on })} label={`Want new books as ${f.nouns} when they come out`} />
+          <Toggle checked={a[f.newFlag]} disabled={edit.isPending} onChange={(on) => edit.mutate({ [f.newFlag]: on })} label={t(`books.${format}.wantNew`)} />
           <Toggle
             checked={a.locked}
             disabled={edit.isPending}
             onChange={(on) => edit.mutate({ locked: on })}
             label={
               <span>
-                Do not touch
-                <span className="block text-sm text-muted">Box Office won't search for, download or move any of {a.name}'s books, as ebooks or audiobooks. Use it for books you look after yourself.</span>
+                {t('books.locked')}
+                <span className="block text-sm text-muted">{t('books.lockedHint', { name: a.name })}</span>
               </span>
             }
           />
           <div className="flex flex-wrap gap-2">
             <Button busy={all.isPending && all.variables === true} disabled={wanted === a.books} onClick={() => all.mutate(true)}>
-              Want all {a.books}
+              {t('books.wantAllCount', { count: a.books })}
             </Button>
             <Button variant="ghost" busy={all.isPending && all.variables === false} disabled={wanted === 0} onClick={() => all.mutate(false)}>
-              Want none
+              {t('books.wantNone')}
             </Button>
           </div>
         </div>
@@ -337,23 +333,23 @@ export function AuthorPage({ format }: { format: BookFormat }) {
 
       <div className="mt-8 mb-3 flex flex-col gap-2 sm:flex-row sm:items-center">
         <h2 className="font-display text-lg font-semibold">
-          Books <span className="font-normal text-muted">{a.books}</span>
+          {t('books.heading')} <span className="font-normal text-muted">{a.books}</span>
         </h2>
-        {a.books > 12 && <Input type="search" className="sm:ml-auto sm:w-60" placeholder="Filter by title" aria-label="Filter by title" value={text} onChange={(e) => setText(e.target.value)} />}
+        {a.books > 12 && <Input type="search" className="sm:ms-auto sm:w-60" placeholder={t('list.filterTitle')} aria-label={t('list.filterTitle')} value={text} onChange={(e) => setText(e.target.value)} />}
       </div>
-      {a.books === 0 && <p className="text-sm text-muted">Open Library lists no books for {a.name} yet.</p>}
-      <p className="mb-4 text-xs text-muted">The books with the most editions come first. Pick a cover to look for that book.</p>
+      {a.books === 0 && <p className="text-sm text-muted">{t('books.noBooks', { name: a.name })}</p>}
+      <p className="mb-4 text-xs text-muted">{t('books.orderPick')}</p>
       <ul className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
         {shown.map((b) => {
           const on = f.wants(b)
           const file = f.file(b)
           return (
             <li key={b.id} id={`book-${b.id}`}>
-              <button type="button" className="relative block w-full text-left" onClick={() => setOpen(b.id)} aria-label={`Open ${b.title}`}>
+              <button type="button" className="relative block w-full text-start" onClick={() => setOpen(b.id)} aria-label={t('books.open', { title: b.title })}>
                 <Cover src={b.cover} title={b.title} />
                 {file && (
-                  <span className="absolute top-2 right-2 rounded-full bg-ok p-1 text-white shadow" title="On disk">
-                    <CircleCheck className="size-4" aria-label="On disk" />
+                  <span className="absolute top-2 end-2 rounded-full bg-ok p-1 text-white shadow" title={t('common.onDisk')}>
+                    <CircleCheck className="size-4" aria-label={t('common.onDisk')} />
                   </span>
                 )}
               </button>
@@ -361,16 +357,16 @@ export function AuthorPage({ format }: { format: BookFormat }) {
                 {b.title}
               </div>
               <div className="mt-1 flex items-center justify-between gap-2 text-xs text-muted">
-                <span>{b.year || 'No date'}</span>
+                <span>{b.year || t('artist.noDate')}</span>
                 <button
                   type="button"
                   disabled={book.isPending}
                   aria-pressed={on}
-                  aria-label={`${on ? 'Stop wanting' : 'Want'} ${b.title} as ${format === 'ebook' ? 'an ebook' : 'an audiobook'}`}
+                  aria-label={on ? t(`books.${format}.stop`, { title: b.title }) : t(`books.${format}.want`, { title: b.title })}
                   onClick={() => book.mutate({ id: b.id, wanted: !on })}
                   className={`rounded-full border px-2 py-1 sm:py-0.5 ${on ? 'border-gold text-ink' : 'border-line hover:text-ink'}`}
                 >
-                  {on ? 'Wanted' : 'Not wanted'}
+                  {on ? t('common.wanted') : t('artist.notWanted')}
                 </button>
               </div>
             </li>
@@ -393,19 +389,19 @@ export function AuthorPage({ format }: { format: BookFormat }) {
         />
       )}
       {releasesFor && (
-        <Releases path={`/books/${releasesFor.id}/releases?format=${format}`} title={`${releasesFor.title} (${f.noun})`} onClose={() => setReleasesFor(undefined)} />
+        <Releases path={`/books/${releasesFor.id}/releases?format=${format}`} title={t(`books.${format}.releasesTitle`, { title: releasesFor.title })} onClose={() => setReleasesFor(undefined)} />
       )}
 
       {removing && (
-        <Modal title={`Remove ${a.name}?`} onClose={() => setRemoving(false)}>
-          <p className="text-sm">Box Office stops following {a.name} for ebooks and audiobooks alike, and forgets their books. Files already in your libraries stay where they are.</p>
+        <Modal title={t('artist.removeTitle', { name: a.name })} onClose={() => setRemoving(false)}>
+          <p className="text-sm">{t('books.removeBody', { name: a.name })}</p>
           <ErrorNote error={remove.error} />
           <div className="mt-4 flex justify-end gap-2">
             <Button variant="ghost" onClick={() => setRemoving(false)}>
-              Keep
+              {t('artist.keep')}
             </Button>
             <Button variant="danger" busy={remove.isPending} onClick={() => remove.mutate()}>
-              Remove
+              {t('title.remove')}
             </Button>
           </div>
         </Modal>
@@ -433,6 +429,7 @@ function BookDialog({
   onReleases: () => void
   onClose: () => void
 }) {
+  const { t } = useTranslation()
   const f = formats[format]
   const qc = useQueryClient()
   const file = f.file(b)
@@ -449,9 +446,9 @@ function BookDialog({
         </div>
         <div className="min-w-0 flex-1 text-sm">
           {b.subtitle && <p className="mb-1 text-muted">{b.subtitle}</p>}
-          <p className="text-muted">{[b.year, b.editions ? `${b.editions} editions` : ''].filter(Boolean).join(' · ')}</p>
+          <p className="text-muted">{[b.year, b.editions ? t('books.editions', { count: b.editions }) : ''].filter(Boolean).join(' · ')}</p>
           <div className="mt-3 flex flex-wrap gap-2">
-            {file ? <Badge tone="ok">On disk</Badge> : on ? <Badge tone="gold">Wanted</Badge> : <Badge>Not wanted</Badge>}
+            {file ? <Badge tone="ok">{t('common.onDisk')}</Badge> : on ? <Badge tone="gold">{t('common.wanted')}</Badge> : <Badge>{t('artist.notWanted')}</Badge>}
           </div>
           {file && (
             <p className="mt-2 break-all text-xs text-muted">
@@ -461,21 +458,21 @@ function BookDialog({
         </div>
       </div>
       <div className="mt-5 flex flex-col gap-4">
-        <Toggle checked={on} disabled={busy} onChange={onWant} label={`Want it as ${format === 'ebook' ? 'an ebook' : 'an audiobook'}`} />
+        <Toggle checked={on} disabled={busy} onChange={onWant} label={t(`books.${format}.wantIt`)} />
         {locked ? (
-          <p className="text-sm text-muted">This author is set to Do not touch, so Box Office doesn't look for their books.</p>
+          <p className="text-sm text-muted">{t('books.lockedNote')}</p>
         ) : (
           <div className="flex flex-wrap gap-2">
             <Button variant="primary" busy={search.isPending} disabled={search.isSuccess} onClick={() => search.mutate()}>
-              <Search className="size-4" aria-hidden /> {search.isSuccess ? 'Looking for it' : 'Look for it'}
+              <Search className="size-4" aria-hidden /> {search.isSuccess ? t('books.lookingFor') : t('books.lookFor')}
             </Button>
             <Button onClick={onReleases}>
-              <ListFilter className="size-4" aria-hidden /> Choose a release
+              <ListFilter className="size-4" aria-hidden /> {t('title.choose')}
             </Button>
           </div>
         )}
-        {search.isSuccess && <p className="text-sm text-muted">Box Office is searching your indexers and will grab the best {f.noun} it finds. Activity shows how it went.</p>}
-        {!file && on && !locked && !search.isSuccess && <p className="text-sm text-muted">Box Office also looks for wanted books by itself, a few each hour.</p>}
+        {search.isSuccess && <p className="text-sm text-muted">{t(`books.${format}.searching`)}</p>}
+        {!file && on && !locked && !search.isSuccess && <p className="text-sm text-muted">{t('books.alsoLooks')}</p>}
         <ErrorNote error={search.error} />
       </div>
     </Modal>

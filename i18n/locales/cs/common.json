@@ -1,0 +1,57 @@
+{
+  "size": {
+    "B": "{{value}} B",
+    "KB": "{{value}} kB",
+    "MB": "{{value}} MB",
+    "GB": "{{value}} GB",
+    "TB": "{{value}} TB",
+    "PB": "{{value}} PB"
+  },
+  "duration": {
+    "minutes_one": "{{count}} min",
+    "minutes_few": "{{count}} min",
+    "minutes_many": "{{count}} min",
+    "minutes_other": "{{count}} min",
+    "hours": "{{hours}} h",
+    "hoursMinutes": "{{hours}} h {{minutes}} min"
+  },
+  "loading": "Načítání…",
+  "close": "Zavřít",
+  "language": {
+    "title": "Jazyk",
+    "label": "Jazyk",
+    "automatic": "Automaticky ({{language}})",
+    "hint": "Jazyk, ve kterém se vám Box Office zobrazuje, na každém zařízení, kde se přihlásíte. Automaticky se řídí jazykem každého prohlížeče.",
+    "machine": "Tento překlad byl vytvořen strojově, takže některé formulace nemusí sedět.",
+    "help": "Pomoz ho vylepšit"
+  },
+  "sort": {
+    "az": "Od A do Z",
+    "za": "Od Z do A",
+    "oldest": "Nejstarší první",
+    "newest": "Nejnovější první",
+    "soonest": "Nejbližší první",
+    "latest": "Nejnovější první",
+    "smallest": "Nejmenší první",
+    "largest": "Největší první",
+    "lowest": "Nejnižší první",
+    "highest": "Nejvyšší první",
+    "worst": "Nejhorší první",
+    "best": "Nejlepší první",
+    "shortest": "Nejkratší první",
+    "longest": "Nejdelší první",
+    "fewest": "Nejméně první",
+    "most": "Nejvíce první",
+    "least": "Nejnižší první",
+    "by": "Řadit podle",
+    "show": "Zobrazit {{order}}",
+    "flip": "{{option}}, {{order}}. Zobrazit raději {{other}}"
+  },
+  "pager": {
+    "pages": "Stránky: {{label}}",
+    "range": "{{from}}–{{to}} z {{total}}",
+    "previous": "Předchozí stránka",
+    "next": "Další stránka",
+    "page": "Stránka {{page}} z {{pages}}"
+  }
+}

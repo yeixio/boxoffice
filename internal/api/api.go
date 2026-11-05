@@ -23,6 +23,7 @@ import (
 
 	"golang.org/x/crypto/bcrypt"
 
+	"github.com/yeixio/boxoffice/i18n"
 	"github.com/yeixio/boxoffice/internal/arrapi"
 	"github.com/yeixio/boxoffice/internal/backup"
 	"github.com/yeixio/boxoffice/internal/books"
@@ -120,6 +121,7 @@ func (s *Server) Handler() http.Handler {
 		{"POST /api/v1/login", false, s.login},
 		{"POST /api/v1/logout", false, s.logout},
 		{"PUT /api/v1/me/password", true, s.changePassword},
+		{"PUT /api/v1/me/language", true, s.setLanguage},
 
 		{"GET /api/v1/system", true, s.system},
 		{"GET /api/v1/settings", true, s.settings},
@@ -582,6 +584,37 @@ func (s *Server) logout(w http.ResponseWriter, r *http.Request) error {
 	http.SetCookie(w, &http.Cookie{Name: cookieName, Value: "", Path: "/", MaxAge: -1, HttpOnly: true, SameSite: http.SameSiteStrictMode})
 	w.WriteHeader(http.StatusNoContent)
 	return nil
+}
+
+// readLanguage reads the language someone picked: one of i18n's, or ” for
+// their browser's.
+func readLanguage(r *http.Request) (string, error) {
+	var in struct {
+		Language string `json:"language"`
+	}
+	if err := readJSON(r, &in); err != nil {
+		return "", err
+	}
+	if in.Language != "" && !i18n.Has(in.Language) {
+		return "", errorf(http.StatusBadRequest, "Box Office has no "+in.Language+" translation")
+	}
+	return in.Language, nil
+}
+
+// setLanguage keeps the admin's language, which follows them to every browser.
+func (s *Server) setLanguage(w http.ResponseWriter, r *http.Request) error {
+	u := user(r)
+	if u.ID == 0 {
+		return errorf(http.StatusForbidden, "sign in as an admin to pick a language")
+	}
+	language, err := readLanguage(r)
+	if err != nil {
+		return err
+	}
+	if err := s.Store.SetUserLanguage(r.Context(), u.ID, language); err != nil {
+		return err
+	}
+	return writeJSON(w, http.StatusOK, map[string]string{"language": language})
 }
 
 func (s *Server) changePassword(w http.ResponseWriter, r *http.Request) error {

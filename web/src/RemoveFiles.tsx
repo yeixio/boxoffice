@@ -7,11 +7,12 @@
 // itself, and the server only deletes what it was shown (expectFiles and
 // expectSize); if the disk changed since, nothing is deleted.
 
+import { Trans, useTranslation } from 'react-i18next'
 import { useState, type ReactNode } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { AlertTriangle, ChevronDown, Trash2 } from 'lucide-react'
 import { api, get, type DeletePlan, type FileRemoval } from './api'
-import { bytes, count } from './format'
+import { bytes } from './format'
 import { Button, ErrorNote, Modal, Spinner } from './ui'
 
 function expect(p: DeletePlan) {
@@ -32,6 +33,7 @@ export function Check({ checked, onChange, disabled, children, hint }: { checked
 
 // FileList says what a plan deletes, with the files a tap away.
 export function FileList({ plan }: { plan: DeletePlan }) {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   if (plan.count === 0) return null
   return (
@@ -40,19 +42,15 @@ export function FileList({ plan }: { plan: DeletePlan }) {
         <AlertTriangle className="mt-0.5 size-4 shrink-0 text-bad" aria-hidden />
         <span>
           {plan.folder ? (
-            <>
-              Deletes the folder <code className="break-all">{plan.folder}</code> and everything in it: <strong>{count(plan.count, 'file', 'files')}</strong>, <strong>{bytes(plan.size)}</strong>.
-            </>
+            <Trans i18nKey="remove.deletesFolder" values={{ folder: plan.folder, count: plan.count, size: bytes(plan.size) }} components={{ code: <code className="break-all" />, strong: <strong /> }} />
           ) : (
-            <>
-              Deletes <strong>{count(plan.count, 'file', 'files')}</strong>, <strong>{bytes(plan.size)}</strong>.
-            </>
+            <Trans i18nKey="remove.deletes" values={{ count: plan.count, size: bytes(plan.size) }} components={{ strong: <strong /> }} />
           )}{' '}
-          This frees {bytes(plan.size)} and can't be undone: deleted files don't go to the recycle folder.
+          {t('remove.forGood', { size: bytes(plan.size) })}
         </span>
       </p>
       <button type="button" className="mt-2 flex items-center gap-1 text-xs text-muted hover:text-ink" onClick={() => setOpen(!open)} aria-expanded={open}>
-        <ChevronDown className={`size-3.5 transition ${open ? '' : '-rotate-90'}`} aria-hidden /> {open ? 'Hide' : 'Show'} the files
+        <ChevronDown className={`size-3.5 transition ${open ? '' : '-rotate-90'}`} aria-hidden /> {open ? t('remove.hideFiles') : t('remove.showFiles')}
       </button>
       {open && (
         <ul className="mt-2 max-h-48 overflow-y-auto rounded border border-line bg-card text-xs">
@@ -62,7 +60,7 @@ export function FileList({ plan }: { plan: DeletePlan }) {
               <span className="shrink-0 text-muted">{bytes(f.size)}</span>
             </li>
           ))}
-          {plan.count > plan.files.length && <li className="px-2 py-1.5 text-muted">and {count(plan.count - plan.files.length, 'more file', 'more files')}</li>}
+          {plan.count > plan.files.length && <li className="px-2 py-1.5 text-muted">{t('remove.more', { count: plan.count - plan.files.length })}</li>}
         </ul>
       )}
     </div>
@@ -76,6 +74,7 @@ function Actions({ children }: { children: ReactNode }) {
 // RemoveTitle removes a movie or a show from the list, and deletes its
 // folder only when that's ticked.
 export function RemoveTitle({ kind, id, title, onClose, onRemoved }: { kind: 'movie' | 'series'; id: number; title: string; onClose: () => void; onRemoved: () => void }) {
+  const { t } = useTranslation()
   const base = kind === 'movie' ? `/movies/${id}` : `/series/${id}`
   const plan = useQuery({ queryKey: ['removal', base], queryFn: () => get<DeletePlan>(`${base}/removal`), gcTime: 0, staleTime: 0 })
   const [deleteFiles, setDeleteFiles] = useState(false)
@@ -87,14 +86,14 @@ export function RemoveTitle({ kind, id, title, onClose, onRemoved }: { kind: 'mo
   const p = plan.data
   const canDelete = !!p && p.count > 0 && !p.problem
   return (
-    <Modal title={`Remove ${title}?`} onClose={onClose}>
+    <Modal title={t('remove.title', { title })} onClose={onClose}>
       <p className="text-sm">
-        It comes off Box Office's list{kind === 'movie' ? " and Matinee's requests" : ''}, and Box Office stops looking for it.
-        {deleteFiles ? '' : ' Its files stay where they are on disk.'}
+        {kind === 'movie' ? t('remove.offListMovie') : t('remove.offList')}
+        {deleteFiles ? '' : ` ${t('remove.filesStay')}`}
       </p>
       <div className="mt-4 flex flex-col gap-3">
         {plan.isPending ? (
-          <Spinner label="Checking its folder" />
+          <Spinner label={t('remove.checkingFolder')} />
         ) : plan.isError ? (
           <ErrorNote error={plan.error} />
         ) : (
@@ -104,13 +103,13 @@ export function RemoveTitle({ kind, id, title, onClose, onRemoved }: { kind: 'mo
             disabled={!canDelete}
             hint={
               p!.problem
-                ? `Box Office can't delete them: ${p!.problem}.`
+                ? t('remove.cantDelete', { problem: p!.problem })
                 : p!.count === 0
-                  ? 'There are no files on disk for it.'
-                  : `${count(p!.count, 'file', 'files')}, ${bytes(p!.size)}, in ${p!.folder}`
+                  ? t('remove.noFiles')
+                  : t('remove.filesIn', { count: p!.count, size: bytes(p!.size), folder: p!.folder })
             }
           >
-            Also delete its files from disk
+            {t('remove.alsoDelete')}
           </Check>
         )}
         {deleteFiles && p && <FileList plan={p} />}
@@ -118,10 +117,10 @@ export function RemoveTitle({ kind, id, title, onClose, onRemoved }: { kind: 'mo
       <ErrorNote error={remove.error} />
       <Actions>
         <Button variant="ghost" onClick={onClose}>
-          Keep it
+          {t('remove.keepIt')}
         </Button>
         <Button variant="danger" busy={remove.isPending} disabled={plan.isPending} onClick={() => remove.mutate()}>
-          <Trash2 className="size-4" aria-hidden /> {deleteFiles && p ? `Remove and delete ${bytes(p.size)}` : 'Remove from list'}
+          <Trash2 className="size-4" aria-hidden /> {deleteFiles && p ? t('remove.removeAndDelete', { size: bytes(p.size) }) : t('remove.removeFromList')}
         </Button>
       </Actions>
     </Modal>
@@ -132,6 +131,7 @@ export function RemoveTitle({ kind, id, title, onClose, onRemoved }: { kind: 'mo
 // title stays on the list. path is the files' API path, such as
 // /episodes/7/file or /series/3/seasons/2/files.
 export function DeleteFiles<T>({ path, title, what, onClose, onDone }: { path: string; title: string; what: 'movie' | 'season' | 'episode'; onClose: () => void; onDone: (r: T) => void }) {
+  const { t } = useTranslation()
   const plan = useQuery({ queryKey: ['removal', path], queryFn: () => get<FileRemoval>(`${path}/removal`), gcTime: 0, staleTime: 0 })
   const [unmonitor, setUnmonitor] = useState(true)
   const [block, setBlock] = useState(false)
@@ -141,26 +141,24 @@ export function DeleteFiles<T>({ path, title, what, onClose, onDone }: { path: s
     onSuccess: onDone,
     onError: () => plan.refetch(),
   })
-  const them = what === 'season' ? 'them' : 'it'
-  const they = what === 'season' ? 'they' : 'it'
+  const many = what === 'season'
   return (
-    <Modal title={`Delete ${title} from disk?`} onClose={onClose}>
+    <Modal title={t('remove.deleteTitle', { title })} onClose={onClose}>
       {plan.isPending ? (
-        <Spinner label="Checking the files" />
+        <Spinner label={t('remove.checkingFiles')} />
       ) : plan.isError ? (
         <ErrorNote error={plan.error} />
       ) : p!.count === 0 ? (
-        <p className="text-sm">There are no files on disk for it.</p>
+        <p className="text-sm">{t('remove.noFiles')}</p>
       ) : (
         <div className="flex flex-col gap-3">
           <p className="text-sm">
-            {what === 'season' ? 'The episodes stay on the list, without files.' : what === 'episode' ? 'The episode stays on the list, without a file.' : 'The movie stays on the list, without a file.'}{' '}
-            Subtitles, artwork and other files named after {what === 'season' ? 'each episode' : 'it'} go too.
+            {what === 'season' ? t('remove.episodesStay') : what === 'episode' ? t('remove.episodeStays') : t('remove.movieStays')} {many ? t('remove.extrasEach') : t('remove.extras')}
           </p>
-          {p!.problem ? <p className="text-sm text-bad">Box Office can't delete {them}: {p!.problem}.</p> : <FileList plan={p!} />}
+          {p!.problem ? <p className="text-sm text-bad">{many ? t('remove.cantDeleteThem', { problem: p!.problem }) : t('remove.cantDeleteIt', { problem: p!.problem })}</p> : <FileList plan={p!} />}
           {p!.watched && (
-            <Check checked={unmonitor} onChange={setUnmonitor} hint={`Otherwise Box Office will look for ${them} and download ${them} again.`}>
-              Stop watching for {them}
+            <Check checked={unmonitor} onChange={setUnmonitor} hint={many ? t('remove.againThem') : t('remove.againIt')}>
+              {many ? t('remove.stopThem') : t('remove.stopIt')}
             </Check>
           )}
           {p!.releases.length > 0 && (
@@ -173,7 +171,7 @@ export function DeleteFiles<T>({ path, title, what, onClose, onDone }: { path: s
                 </code>
               ))}
             >
-              Block the {p!.releases.length === 1 ? 'release' : 'releases'} {they} came from, so {p!.releases.length === 1 ? 'it isn’t' : 'they aren’t'} grabbed again
+              {p!.releases.length > 1 ? t('remove.blockMany') : many ? t('remove.blockOneThem') : t('remove.blockOne')}
             </Check>
           )}
         </div>
@@ -181,11 +179,11 @@ export function DeleteFiles<T>({ path, title, what, onClose, onDone }: { path: s
       <ErrorNote error={del.error} />
       <Actions>
         <Button variant="ghost" onClick={onClose}>
-          Keep {them}
+          {many ? t('remove.keepThem') : t('remove.keepIt')}
         </Button>
         {p && p.count > 0 && (
           <Button variant="danger" busy={del.isPending} disabled={!!p.problem} onClick={() => del.mutate()}>
-            <Trash2 className="size-4" aria-hidden /> Delete {bytes(p.size)}
+            <Trash2 className="size-4" aria-hidden /> {t('remove.delete', { size: bytes(p.size) })}
           </Button>
         )}
       </Actions>

@@ -1,8 +1,10 @@
+import { LanguageSync } from './i18n/sync'
+import { useTranslation } from 'react-i18next'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { LogOut, Menu, X } from 'lucide-react'
-import { get, post, type Status } from './api'
+import { get, post, put, type Status } from './api'
 import { Spinner } from './ui'
 import { Tray } from './Tray'
 import { Logo, PhoneNav, Sidebar, useNav } from './Nav'
@@ -25,20 +27,27 @@ import { Health } from './pages/Health'
 import { Requests } from './pages/Requests'
 
 export function App() {
+  const { t } = useTranslation()
   const status = useQuery({ queryKey: ['status'], queryFn: () => get<Status>('/status') })
   if (status.isPending) return <Spinner />
-  if (status.isError) return <p className="p-8 text-bad">Box Office isn't answering: {status.error.message}</p>
+  if (status.isError) return <p className="p-8 text-bad">{t('app.notAnswering', { error: status.error.message })}</p>
   if (!status.data.setup || !status.data.user) return <SignIn firstRun={!status.data.setup} />
   return <Shell status={status.data} />
 }
 
 function Shell({ status }: { status: Status }) {
+  const { t } = useTranslation()
   const qc = useQueryClient()
   const nav = useNav(status)
   // On a phone the sections fold into a menu, closed again on moving.
   const [menu, setMenu] = useState(false)
   const location = useLocation()
   useEffect(() => setMenu(false), [location.pathname, location.search])
+  // A language picked on the sign-in page becomes the account's.
+  const adopt = useCallback(
+    (language: string) => void put('/me/language', { language }).then(() => qc.invalidateQueries({ queryKey: ['status'] })),
+    [qc],
+  )
   const signOut = async () => {
     await post('/logout')
     qc.clear()
@@ -46,6 +55,7 @@ function Shell({ status }: { status: Status }) {
   }
   return (
     <div className="min-h-screen md:flex">
+      <LanguageSync saved={status.user?.language ?? ''} adopt={adopt} />
       <Sidebar status={status} nav={nav} signOut={signOut} />
       <div className="min-w-0 flex-1">
       <header className="sticky top-0 z-20 bg-paper/95 backdrop-blur md:hidden">
@@ -56,16 +66,16 @@ function Shell({ status }: { status: Status }) {
           <button
             onClick={() => setMenu(!menu)}
             className="relative flex items-center rounded-md p-1.5 text-muted hover:text-ink"
-            aria-label={menu ? 'Close menu' : 'Menu'}
+            aria-label={menu ? t('app.closeMenu') : t('app.menu')}
             aria-expanded={menu}
             aria-controls="mobile-nav"
           >
             {menu ? <X className="size-5" aria-hidden /> : <Menu className="size-5" aria-hidden />}
-            {nav.problems > 0 && !menu && <span className="absolute right-0.5 top-0.5 size-2 rounded-full bg-marquee" aria-hidden />}
+            {nav.problems > 0 && !menu && <span className="absolute end-0.5 top-0.5 size-2 rounded-full bg-marquee" aria-hidden />}
           </button>
-          <button onClick={signOut} className="flex items-center gap-1.5 text-sm text-muted hover:text-ink" title={`Signed in as ${status.user?.username}`} aria-label="Sign out">
+          <button onClick={signOut} className="flex items-center gap-1.5 text-sm text-muted hover:text-ink" title={t('nav.signedInAs', { name: status.user?.username })} aria-label={t('nav.signOut')}>
             <LogOut className="size-4" aria-hidden />
-            <span className="hidden sm:inline">Sign out</span>
+            <span className="hidden sm:inline">{t('nav.signOut')}</span>
           </button>
         </div>
         {menu && <PhoneNav nav={nav} />}
@@ -99,7 +109,7 @@ function Shell({ status }: { status: Status }) {
           <Route path="*" element={<Navigate to="/discover" replace />} />
         </Routes>
       </main>
-      <footer className="mx-auto max-w-7xl px-4 pb-8 text-xs text-muted md:hidden">Box Office {status.version}</footer>
+      <footer className="mx-auto max-w-7xl px-4 pb-8 text-xs text-muted md:hidden">{t('nav.version', { version: status.version })}</footer>
       </div>
     </div>
   )

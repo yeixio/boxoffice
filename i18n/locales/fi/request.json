@@ -1,0 +1,140 @@
+{
+  "problems": {
+    "wont_play": "Se ei toistu",
+    "wrong_title": "Se on väärä elokuva tai jakso",
+    "picture": "Kuva on huono",
+    "sound": "Ääni on väärä tai epätahdissa",
+    "subtitles": "Tekstitykset puuttuvat tai ovat vääriä",
+    "other": "Jotain muuta"
+  },
+  "state": {
+    "pending": "Odottaa hyväksyntää",
+    "declined": "Hylätty",
+    "searching": "Hyväksytty, etsitään",
+    "downloadingAt": "Ladataan, {{percent}}",
+    "downloading": "Ladataan",
+    "partial": "Osa jaksoista on valmiina",
+    "available": "Valmis katsottavaksi",
+    "paused": "Hyväksytty, odottaa",
+    "removed": "Poistettu kirjastosta"
+  },
+  "site": {
+    "down": "Tämä sivusto ei vastaa: {{error}}",
+    "closed": "Tämä toivesivu ei ole juuri nyt auki."
+  },
+  "signIn": {
+    "matinee": "Matinee-tili",
+    "local": "Tili täällä",
+    "with": "Kirjaudu käyttäen",
+    "matineeHint": "Käytä käyttäjänimeä ja salasanaa, joilla katsot Matineessa.",
+    "signUpHint": "Luo tili toivoaksesi elokuvia ja sarjoja.",
+    "username": "Käyttäjänimi",
+    "name": "Nimesi",
+    "nameHint": "Mitä ylläpitäjät näkevät. Jätä tyhjäksi käyttääksesi käyttäjänimeäsi.",
+    "password": "Salasana",
+    "passwordHint": "Vähintään 8 merkkiä.",
+    "make": "Luo tilini",
+    "signIn": "Kirjaudu sisään",
+    "haveAccount": "Minulla on tili",
+    "new": "Uusi täällä? Luo tili"
+  },
+  "nav": {
+    "discover": "Löydä",
+    "requests": "Omat toiveet",
+    "problems": "Ongelmat",
+    "sections": "Osiot",
+    "account": "Oma tili"
+  },
+  "home": {
+    "hi": "Hei, {{name}}",
+    "welcome": "Etsi elokuva tai sarja ja toivo sitä. Voit seurata sitä kohdassa Omat toiveet.",
+    "find": "Etsi elokuva tai sarja",
+    "seeAll": "Näytä kaikki",
+    "nothing": "Ei vielä mitään näytettävää",
+    "notSetUp": "Ylläpitäjä ei ole saanut tämän sivuston määritystä valmiiksi. Yritä myöhemmin uudelleen.",
+    "movieGenres": "Elokuvagenret",
+    "showGenres": "Sarjagenret"
+  },
+  "search": {
+    "nothing": "Ei mitään sillä nimellä.",
+    "movies": "Elokuvat",
+    "shows": "Sarjat",
+    "looking": "Etsitään…"
+  },
+  "row": {
+    "more": "Näytä lisää"
+  },
+  "pill": {
+    "ready": "Valmis katsottavaksi",
+    "some": "Osa jaksoista",
+    "coming": "Tulossa",
+    "asked": "Pyydetty",
+    "declined": "Hylätty"
+  },
+  "kind": {
+    "movie": "Elokuva",
+    "show": "Näytä"
+  },
+  "card": {
+    "request": "Toivo: {{title}}"
+  },
+  "sheet": {
+    "out": "Ilmestyy {{date}}",
+    "starts": "Alkaa {{date}}",
+    "released": "Julkaistu {{date}}",
+    "firstAired": "Ensiesitys {{date}}",
+    "ready": "Se on kirjastossa. Hyvää katselua!",
+    "some": "Osa siitä on kirjastossa, ja loput ovat tulossa.",
+    "report": "Ilmoita ongelmasta",
+    "coming": "Se on tulossa. Ei mitään toivottavaa: se on kirjastossa heti, kun se löytyy.",
+    "asked": "Toivoit tätä. Se odottaa ylläpitäjän hyväksyntää.",
+    "takeBack": "Peru toive",
+    "declined": "Ylläpitäjä hylkäsi tämän. Voit toivoa uudelleen.",
+    "declinedWhy": "Ylläpitäjä hylkäsi tämän: ”{{reply}}” Voit toivoa uudelleen.",
+    "note": "Viesti ylläpitäjille",
+    "noteHint": "Valinnainen, esimerkiksi mitä versiota haet.",
+    "askMovie": "Toivo tätä elokuvaa",
+    "askShow": "Toivo tätä sarjaa"
+  },
+  "report": {
+    "thanks": "Kiitos. Ylläpitäjät katsovat asiaa, ja voit seurata sitä kohdassa Ongelmat.",
+    "done": "Valmis",
+    "title": "Mikä on vialla?",
+    "problem": "Ongelma",
+    "season": "Kausi",
+    "seasonHint": "Jätä tyhjäksi, jos se koskee koko sarjaa.",
+    "episode": "Jakso",
+    "more": "Kerro lisää",
+    "say": "Kerro, mitä tapahtui.",
+    "optional": "Valinnainen.",
+    "send": "Lähetä ilmoitus"
+  },
+  "mine": {
+    "title": "Omat toiveet",
+    "none": "Ei vielä mitään toivottua",
+    "empty": "Etsi elokuva tai sarja kohdasta <link>Löydä</link> ja paina <strong>+</strong> toivoaksesi sitä.",
+    "admin": "Ylläpitäjä: ”{{reply}}”",
+    "asked": "Toivottu {{date}}",
+    "takeBack": "Peru"
+  },
+  "issues": {
+    "title": "Ongelmat",
+    "sub": "Onko elokuvassa tai sarjassa jotain vialla? Avaa se Löydä-sivulla tai etsi se nimellä ja valitse Ilmoita ongelmasta.",
+    "none": "Ei ilmoitettuja ongelmia",
+    "season": "Kausi {{season}}",
+    "episode": "Kausi {{season}}, jakso {{episode}}",
+    "waiting": "Odottaa ylläpitäjää",
+    "fixed": "Korjattu"
+  },
+  "account": {
+    "title": "Oma tili",
+    "signedIn": "Kirjautuneena: <strong>{{name}}</strong>.",
+    "signedInMatinee": "Kirjautuneena: <strong>{{name}}</strong> Matinee-tililläsi.",
+    "change": "Vaihda salasanasi",
+    "current": "Nykyinen salasana",
+    "new": "Uusi salasana",
+    "changed": "Vaihdettu. Sinut on kirjattu ulos kaikkialta muualta.",
+    "changeButton": "Vaihda salasana",
+    "signOut": "Kirjaudu ulos"
+  }
+}

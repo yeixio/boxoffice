@@ -1,0 +1,55 @@
+{
+  "size": {
+    "B": "{{value}} B",
+    "KB": "{{value}} KB",
+    "MB": "{{value}} MB",
+    "GB": "{{value}} GB",
+    "TB": "{{value}} TB",
+    "PB": "{{value}} PB"
+  },
+  "duration": {
+    "minutes_one": "{{count}} منٹ",
+    "minutes_other": "{{count}} منٹ",
+    "hours": "{{hours}} گھنٹے",
+    "hoursMinutes": "{{hours}} گھنٹے {{minutes}} منٹ"
+  },
+  "loading": "لوڈ ہو رہا ہے…",
+  "close": "بند کریں",
+  "language": {
+    "title": "زبان",
+    "label": "زبان",
+    "automatic": "خودکار ({{language}})",
+    "hint": "وہ زبان جس میں Box Office آپ کو دکھائی دیتا ہے، ہر اس آلے پر جس سے آپ سائن ان کرتے ہیں۔ خودکار ہر براؤزر کی زبان اپناتا ہے۔",
+    "machine": "یہ ترجمہ مشین سے کیا گیا ہے، اس لیے کچھ الفاظ درست نہ ہوں۔",
+    "help": "اسے بہتر بنانے میں مدد کریں"
+  },
+  "sort": {
+    "az": "ا سے ے",
+    "za": "ے سے ا",
+    "oldest": "پرانی پہلے",
+    "newest": "نئی پہلے",
+    "soonest": "قریب ترین پہلے",
+    "latest": "نئے ترین پہلے",
+    "smallest": "چھوٹے ترین پہلے",
+    "largest": "بڑے ترین پہلے",
+    "lowest": "سب سے کم پہلے",
+    "highest": "سب سے زیادہ پہلے",
+    "worst": "بدترین پہلے",
+    "best": "بہترین پہلے",
+    "shortest": "مختصر ترین پہلے",
+    "longest": "طویل ترین پہلے",
+    "fewest": "کم تعداد پہلے",
+    "most": "زیادہ پہلے",
+    "least": "کم پہلے",
+    "by": "ترتیب بلحاظ",
+    "show": "{{order}} دکھائیں",
+    "flip": "{{option}}، {{order}}۔ اس کے بجائے {{other}} دکھائیں"
+  },
+  "pager": {
+    "pages": "{{label}} صفحات",
+    "range": "{{total}} میں سے {{from}}–{{to}}",
+    "previous": "پچھلا صفحہ",
+    "next": "اگلا صفحہ",
+    "page": "{{pages}} میں سے صفحہ {{page}}"
+  }
+}

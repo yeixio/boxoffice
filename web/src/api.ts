@@ -39,7 +39,7 @@ export const del = (path: string) => api<void>('DELETE', path)
 
 // ---- types, as the server sends them ----
 
-export type User = { id: number; username: string }
+export type User = { id: number; username: string; language?: string }
 // movedIn is set once an admin has finished moving in from the old apps.
 export type Status = { setup: boolean; version: string; user?: User; movedIn?: boolean }
 

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { useEffect, useState } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
@@ -23,25 +24,26 @@ export function usePageSize(sizes: [number, number, number]) {
 // Pager moves between pages of a list. It shows only when there's more
 // than one page.
 export function Pager({ page, size, total, onPage, label }: { page: number; size: number; total: number; onPage: (p: number) => void; label: string }) {
+  const { t } = useTranslation('common')
   const pages = Math.max(1, Math.ceil(total / size))
   if (pages <= 1) return null
   const from = page * size + 1
   const to = Math.min(total, from + size - 1)
   const btn = 'inline-flex min-h-9 min-w-9 items-center justify-center rounded-md border border-line bg-card text-sm hover:border-ink/40 disabled:cursor-not-allowed disabled:opacity-40'
   return (
-    <nav className="mt-3 flex items-center justify-between gap-3 text-sm text-muted" aria-label={`${label} pages`}>
+    <nav className="mt-3 flex items-center justify-between gap-3 text-sm text-muted" aria-label={t('pager.pages', { label })}>
       <span className="tabular-nums">
-        {from}–{to} of {total}
+        {t('pager.range', { from, to, total })}
       </span>
       <div className="flex items-center gap-2">
-        <button className={btn} disabled={page === 0} onClick={() => onPage(page - 1)} aria-label="Previous page">
-          <ChevronLeft className="size-4" />
+        <button className={btn} disabled={page === 0} onClick={() => onPage(page - 1)} aria-label={t('pager.previous')}>
+          <ChevronLeft className="size-4 rtl:rotate-180" />
         </button>
         <span className="tabular-nums">
-          Page {page + 1} of {pages}
+          {t('pager.page', { page: page + 1, pages })}
         </span>
-        <button className={btn} disabled={page >= pages - 1} onClick={() => onPage(page + 1)} aria-label="Next page">
-          <ChevronRight className="size-4" />
+        <button className={btn} disabled={page >= pages - 1} onClick={() => onPage(page + 1)} aria-label={t('pager.next')}>
+          <ChevronRight className="size-4 rtl:rotate-180" />
         </button>
       </div>
     </nav>

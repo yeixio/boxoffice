@@ -1,0 +1,54 @@
+{
+  "size": {
+    "B": "{{value}} B",
+    "KB": "{{value}} KB",
+    "MB": "{{value}} MB",
+    "GB": "{{value}} GB",
+    "TB": "{{value}} TB",
+    "PB": "{{value}} PB"
+  },
+  "duration": {
+    "minutes_other": "{{count}}분",
+    "hours": "{{hours}}시간",
+    "hoursMinutes": "{{hours}}시간 {{minutes}}분"
+  },
+  "loading": "불러오는 중…",
+  "close": "닫기",
+  "language": {
+    "title": "언어",
+    "label": "언어",
+    "automatic": "자동 ({{language}})",
+    "hint": "Box Office가 표시하는 언어로, 로그인하는 모든 기기에 적용돼요. 자동은 각 브라우저의 언어를 따라요.",
+    "machine": "이 번역은 기계 번역이라 어색한 표현이 있을 수 있어요.",
+    "help": "개선에 참여하기"
+  },
+  "sort": {
+    "az": "A에서 Z",
+    "za": "Z에서 A",
+    "oldest": "오래된순",
+    "newest": "최신순",
+    "soonest": "빠른 순",
+    "latest": "최신순",
+    "smallest": "작은 순",
+    "largest": "큰 순",
+    "lowest": "낮은 순",
+    "highest": "높은 순",
+    "worst": "나쁜 순",
+    "best": "좋은 순",
+    "shortest": "짧은 순",
+    "longest": "긴 순",
+    "fewest": "적은 순",
+    "most": "많은 순",
+    "least": "적은 순",
+    "by": "정렬 기준",
+    "show": "정렬: {{order}}",
+    "flip": "{{option}}, {{order}}. 대신 {{other}} 보기"
+  },
+  "pager": {
+    "pages": "{{label}} 페이지",
+    "range": "{{total}}개 중 {{from}}–{{to}}",
+    "previous": "이전 페이지",
+    "next": "다음 페이지",
+    "page": "{{pages}}페이지 중 {{page}}페이지"
+  }
+}

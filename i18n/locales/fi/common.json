@@ -1,0 +1,55 @@
+{
+  "size": {
+    "B": "{{value}} t",
+    "KB": "{{value}} kt",
+    "MB": "{{value}} Mt",
+    "GB": "{{value}} Gt",
+    "TB": "{{value}} Tt",
+    "PB": "{{value}} Pt"
+  },
+  "duration": {
+    "minutes_one": "{{count}} min",
+    "minutes_other": "{{count}} min",
+    "hours": "{{hours}} h",
+    "hoursMinutes": "{{hours}} t {{minutes}} min"
+  },
+  "loading": "Ladataan…",
+  "close": "Sulje",
+  "language": {
+    "title": "Kieli",
+    "label": "Kieli",
+    "automatic": "Automaattinen ({{language}})",
+    "hint": "Kieli, jolla Box Office näytetään sinulle kaikilla laitteilla, joilla kirjaudut sisään. Automaattinen seuraa kunkin selaimen kieltä.",
+    "machine": "Tämä käännös on konekäännös, joten osa sanamuodoista voi olla pielessä.",
+    "help": "Auta parantamaan sitä"
+  },
+  "sort": {
+    "az": "A–Ö",
+    "za": "Ö–A",
+    "oldest": "Vanhimmat ensin",
+    "newest": "Uusimmat ensin",
+    "soonest": "Lähimmät ensin",
+    "latest": "Uusimmat ensin",
+    "smallest": "Pienimmät ensin",
+    "largest": "Suurimmat ensin",
+    "lowest": "Pienin ensin",
+    "highest": "Suurin ensin",
+    "worst": "Huonoimmat ensin",
+    "best": "Parhaat ensin",
+    "shortest": "Lyhimmät ensin",
+    "longest": "Pisimmät ensin",
+    "fewest": "Vähiten ensin",
+    "most": "Eniten ensin",
+    "least": "Matalimmat ensin",
+    "by": "Järjestä",
+    "show": "Näytä {{order}}",
+    "flip": "{{option}}, {{order}}. Näytä sen sijaan {{other}}"
+  },
+  "pager": {
+    "pages": "{{label}}: sivut",
+    "range": "{{from}}–{{to}} / {{total}}",
+    "previous": "Edellinen sivu",
+    "next": "Seuraava sivu",
+    "page": "Sivu {{page}} / {{pages}}"
+  }
+}

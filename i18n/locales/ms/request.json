@@ -1,0 +1,140 @@
+{
+  "problems": {
+    "wont_play": "Ia tidak dapat dimainkan",
+    "wrong_title": "Filem atau episod yang salah",
+    "picture": "Gambarnya buruk",
+    "sound": "Bunyinya salah atau tidak segerak",
+    "subtitles": "Sari kata hilang atau salah",
+    "other": "Lain-lain"
+  },
+  "state": {
+    "pending": "Menunggu kelulusan",
+    "declined": "Ditolak",
+    "searching": "Diluluskan, sedang dicari",
+    "downloadingAt": "Memuat turun, {{percent}}",
+    "downloading": "Memuat turun",
+    "partial": "Sesetengah episod sudah sedia",
+    "available": "Sedia untuk ditonton",
+    "paused": "Diluluskan, ditangguhkan",
+    "removed": "Dialih keluar daripada pustaka"
+  },
+  "site": {
+    "down": "Laman ini tidak menjawab: {{error}}",
+    "closed": "Laman permintaan ini tidak dibuka sekarang."
+  },
+  "signIn": {
+    "matinee": "Akaun Matinee",
+    "local": "Akaun di sini",
+    "with": "Log masuk dengan",
+    "matineeHint": "Gunakan nama pengguna dan kata laluan yang anda gunakan untuk menonton dalam Matinee.",
+    "signUpHint": "Cipta akaun untuk meminta filem dan rancangan.",
+    "username": "Nama pengguna",
+    "name": "Nama anda",
+    "nameHint": "Apa yang dilihat pentadbir. Biarkan kosong untuk menggunakan nama pengguna anda.",
+    "password": "Kata laluan",
+    "passwordHint": "Sekurang-kurangnya 8 aksara.",
+    "make": "Cipta akaun saya",
+    "signIn": "Log masuk",
+    "haveAccount": "Saya ada akaun",
+    "new": "Baharu di sini? Cipta akaun"
+  },
+  "nav": {
+    "discover": "Teroka",
+    "requests": "Permintaan saya",
+    "problems": "Masalah",
+    "sections": "Bahagian",
+    "account": "Akaun anda"
+  },
+  "home": {
+    "hi": "Hai, {{name}}",
+    "welcome": "Cari filem atau rancangan dan mintanya. Anda boleh mengikutinya di bawah Permintaan saya.",
+    "find": "Cari filem atau rancangan",
+    "seeAll": "Lihat semua",
+    "nothing": "Belum ada apa-apa untuk ditunjukkan",
+    "notSetUp": "Pentadbir belum selesai menyediakan laman ini. Cuba lagi kemudian.",
+    "movieGenres": "Genre filem",
+    "showGenres": "Genre rancangan"
+  },
+  "search": {
+    "nothing": "Tiada apa dengan nama itu.",
+    "movies": "Filem",
+    "shows": "Rancangan",
+    "looking": "Mencari…"
+  },
+  "row": {
+    "more": "Tunjuk lagi"
+  },
+  "pill": {
+    "ready": "Sedia untuk ditonton",
+    "some": "Sesetengah episod",
+    "coming": "Dalam perjalanan",
+    "asked": "Diminta",
+    "declined": "Ditolak"
+  },
+  "kind": {
+    "movie": "Filem",
+    "show": "Tunjukkan"
+  },
+  "card": {
+    "request": "Minta {{title}}"
+  },
+  "sheet": {
+    "out": "Keluar {{date}}",
+    "starts": "Bermula {{date}}",
+    "released": "Dikeluarkan {{date}}",
+    "firstAired": "Mula disiarkan {{date}}",
+    "ready": "Ia ada dalam pustaka. Selamat menonton!",
+    "some": "Sebahagiannya ada dalam pustaka, dan selebihnya dalam perjalanan.",
+    "report": "Laporkan masalah",
+    "coming": "Ia dalam perjalanan. Tiada apa untuk diminta: ia akan ada dalam pustaka sebaik ditemui.",
+    "asked": "Anda memintanya. Ia menunggu pentadbir meluluskannya.",
+    "takeBack": "Tarik balik",
+    "declined": "Pentadbir menolak ini. Anda boleh memintanya semula.",
+    "declinedWhy": "Pentadbir menolak ini: \"{{reply}}\" Anda boleh memintanya semula.",
+    "note": "Nota untuk pentadbir",
+    "noteHint": "Pilihan, seperti versi yang anda cari.",
+    "askMovie": "Minta filem ini",
+    "askShow": "Minta rancangan ini"
+  },
+  "report": {
+    "thanks": "Terima kasih. Pentadbir akan melihatnya, dan anda boleh mengikutinya di bawah Masalah.",
+    "done": "Selesai",
+    "title": "Apa yang tidak kena?",
+    "problem": "Masalah",
+    "season": "Musim",
+    "seasonHint": "Biarkan kosong jika ia melibatkan keseluruhan rancangan.",
+    "episode": "Episod",
+    "more": "Beritahu kami lagi",
+    "say": "Nyatakan apa yang berlaku.",
+    "optional": "Pilihan.",
+    "send": "Hantar laporan"
+  },
+  "mine": {
+    "title": "Permintaan saya",
+    "none": "Belum ada yang diminta",
+    "empty": "Cari filem atau rancangan di <link>Teroka</link> dan tekan <strong>+</strong> untuk memintanya.",
+    "admin": "Pentadbir: \"{{reply}}\"",
+    "asked": "Diminta {{date}}",
+    "takeBack": "Tarik balik"
+  },
+  "issues": {
+    "title": "Masalah",
+    "sub": "Ada yang tidak kena dengan filem atau rancangan? Bukanya di Teroka atau cari mengikut nama, dan pilih Laporkan masalah.",
+    "none": "Tiada masalah dilaporkan",
+    "season": "Musim {{season}}",
+    "episode": "Musim {{season}}, episod {{episode}}",
+    "waiting": "Menunggu pentadbir",
+    "fixed": "Dibaiki"
+  },
+  "account": {
+    "title": "Akaun anda",
+    "signedIn": "Log masuk sebagai <strong>{{name}}</strong>.",
+    "signedInMatinee": "Log masuk sebagai <strong>{{name}}</strong> dengan akaun Matinee anda.",
+    "change": "Tukar kata laluan anda",
+    "current": "Kata laluan semasa",
+    "new": "Kata laluan baharu",
+    "changed": "Ditukar. Anda telah dilog keluar di semua tempat lain.",
+    "changeButton": "Tukar kata laluan",
+    "signOut": "Log keluar"
+  }
+}
