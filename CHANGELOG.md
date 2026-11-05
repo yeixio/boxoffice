@@ -32,6 +32,10 @@ What changed in Box Office, newest first. The format follows [Keep a Changelog](
 - Move in finds the old app and its folders by itself ([#2](https://github.com/yeixio/boxoffice/pull/2)), and follows an app's URL base ([#3](https://github.com/yeixio/boxoffice/pull/3)).
 - **The first Box Office:** the server, the web UI, the Radarr- and Sonarr-compatible API for Matinee, and a step-by-step move-in from Radarr, Sonarr and NZBGet that never changes the old app ([#1](https://github.com/yeixio/boxoffice/pull/1)).
 
+### Changed
+
+- **Automatic upgrades are off by default.** RSS sync and the library patrol still look for missing titles by themselves; turn on Settings → Missing titles and upgrades → Automatic upgrades to have them go after better copies too. Looking for an upgrade from a title's page works either way.
+
 ### Fixed
 
 - An episode whose video file has a meaningless name is matched by the download's name ([#24](https://github.com/yeixio/boxoffice/pull/24)).

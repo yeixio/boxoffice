@@ -218,6 +218,7 @@ func TestPatrolOrderAndCap(t *testing.T) {
 	}
 
 	downloader.SaveSettings(ctx, st, downloader.Settings{Enabled: true})
+	SaveAutoSettings(ctx, st, AutoSettings{Enabled: true, PerDay: DefaultPerDay, RSS: true, RSSMinutes: DefaultRSSMinutes, Upgrades: true})
 	downloader.SaveCapSettings(ctx, st, downloader.CapSettings{Enabled: true, GB: 1, UpgradesAt: 70, MissingAt: 90, ResetDay: 1})
 	st.AddDataUsage(ctx, 1, 750e6) // 75% of 1 GB: upgrades wait
 	r, err := s.jobWanted(ctx, "{}")
@@ -284,5 +285,49 @@ func TestRSSSync(t *testing.T) {
 	mu.Unlock()
 	if res = s.SyncRSS(ctx); res.Releases != 1 || len(res.Grabbed) != 1 || res.Grabbed[0] != "Show.S01E02.1080p.WEB-DL-GRP" {
 		t.Fatalf("new episode %+v", res)
+	}
+}
+
+func TestUpgradesOffByDefault(t *testing.T) {
+	var mu sync.Mutex
+	items := []string{item("The.Matrix.1999.1080p.WEB-DL-GRP", "m1", 7e9)}
+	srv, asked := fakeIndexer(t, func(r *http.Request) (int, string) {
+		mu.Lock()
+		defer mu.Unlock()
+		return 200, feedOf(items...)
+	})
+	s, st, m := setup(t, srv.URL)
+	ctx := context.Background()
+	ix := testIndexer(t, st)
+	ix.EnableRSS = true
+	st.UpdateIndexer(ctx, ix)
+	downloader.SaveSettings(ctx, st, downloader.Settings{Enabled: true})
+	// A WEBRip, below the profile's cutoff, and the profile takes upgrades.
+	st.AddFile(ctx, store.File{Kind: "movie", OwnerID: m.ID, Path: m.Path + "/x.mkv", Quality: 9})
+
+	// It's still listed as an upgrade, for Settings and by-hand searches.
+	if list, _ := s.WantedList(ctx); len(list) != 1 || !list[0].Upgrade {
+		t.Fatalf("wanted %+v", list)
+	}
+	// Neither the patrol nor RSS sync go after it.
+	if _, err := s.jobWanted(ctx, "{}"); err != nil {
+		t.Fatal(err)
+	}
+	for _, q := range *asked {
+		if strings.Contains(q, "t=movie") {
+			t.Fatalf("the patrol searched for an upgrade: %v", *asked)
+		}
+	}
+	if res := s.SyncRSS(ctx); res.Releases != 1 || len(res.Grabbed) != 0 {
+		t.Fatalf("rss with upgrades off %+v", res)
+	}
+
+	// Turned on, RSS sync takes the better copy.
+	SaveAutoSettings(ctx, st, AutoSettings{Enabled: true, PerDay: DefaultPerDay, RSS: true, RSSMinutes: DefaultRSSMinutes, Upgrades: true})
+	mu.Lock()
+	items = append([]string{strings.Replace(item("The.Matrix.1999.1080p.BluRay-GRP", "m2", 9e9), "15:04:05", "16:04:05", 1)}, items...)
+	mu.Unlock()
+	if res := s.SyncRSS(ctx); len(res.Grabbed) != 1 {
+		t.Fatalf("rss with upgrades on %+v", res)
 	}
 }

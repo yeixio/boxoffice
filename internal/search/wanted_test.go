@@ -16,11 +16,12 @@ func TestAutoSettings(t *testing.T) {
 	_, st, _ := setup(t, "http://nowhere.invalid")
 	ctx := context.Background()
 	a, err := LoadAutoSettings(ctx, st)
-	if err != nil || !a.Enabled || a.PerDay != DefaultPerDay {
+	// Missing titles are searched for by default; upgrades aren't.
+	if err != nil || !a.Enabled || !a.RSS || a.Upgrades || a.PerDay != DefaultPerDay {
 		t.Fatalf("defaults %+v %v", a, err)
 	}
-	SaveAutoSettings(ctx, st, AutoSettings{Enabled: false, PerDay: 1e6})
-	if a, _ = LoadAutoSettings(ctx, st); a.Enabled || a.PerDay != MaxPerDay {
+	SaveAutoSettings(ctx, st, AutoSettings{Enabled: false, PerDay: 1e6, Upgrades: true})
+	if a, _ = LoadAutoSettings(ctx, st); a.Enabled || !a.Upgrades || a.PerDay != MaxPerDay {
 		t.Fatalf("saved %+v", a)
 	}
 }
@@ -62,6 +63,7 @@ func TestWantedMovieUpgrade(t *testing.T) {
 	}
 
 	downloader.SaveSettings(ctx, st, downloader.Settings{Enabled: true})
+	SaveAutoSettings(ctx, st, AutoSettings{Enabled: true, PerDay: DefaultPerDay, RSS: true, RSSMinutes: DefaultRSSMinutes, Upgrades: true})
 	r, err = s.jobWanted(ctx, "{}")
 	if err != nil || r.Status != "done" {
 		t.Fatalf("job %+v %v", r, err)

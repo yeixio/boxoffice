@@ -151,7 +151,11 @@ func (s *Service) syncRSS(ctx context.Context) RSSResult {
 	if len(releases) == 0 || ctx.Err() != nil {
 		return res
 	}
-	got, problems, err := s.takeFromFeed(ctx, releases, c.Level == downloader.CapUpgrades)
+	a, err := LoadAutoSettings(ctx, s.Store)
+	if err != nil {
+		return RSSResult{Skipped: err.Error()}
+	}
+	got, problems, err := s.takeFromFeed(ctx, releases, c.Level == downloader.CapUpgrades || !a.Upgrades)
 	if err != nil {
 		res.Problems = append(res.Problems, err.Error())
 	}

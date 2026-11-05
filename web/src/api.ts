@@ -146,7 +146,7 @@ export type Upcoming = {
 }
 
 export type AutoSearch = {
-  settings: { enabled: boolean; perDay: number; rss: boolean; rssMinutes: number }
+  settings: { enabled: boolean; perDay: number; rss: boolean; rssMinutes: number; upgrades: boolean }
   missing: number
   upgrades: number
   paused?: string
