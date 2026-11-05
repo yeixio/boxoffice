@@ -365,6 +365,29 @@ export type Downloads = {
   cap: DataCap
   waiting?: string
 }
+// The downloads folder's file browser.
+export type DownloadFile = {
+  name: string
+  // Relative to the downloads folder, with forward slashes.
+  path: string
+  dir: boolean
+  link?: boolean
+  size: number
+  files?: number
+  modified: string
+  quarantined?: boolean
+  busy?: boolean
+  download?: { id: number; name: string; status: DownloadStatus; kind?: 'movie' | 'series'; titleId?: number }
+  moving?: boolean
+  moved?: string
+  video?: boolean
+}
+export type DownloadFiles = {
+  root: string
+  listing: { path: string; entries: DownloadFile[]; size: number; quarantine: number; moves: { path: string; running: boolean; message?: string }[] }
+  disk?: { total: number; free: number }
+  problem?: string
+}
 // The monthly data cap, and how much of it is used.
 export type DataCapSettings = { enabled: boolean; gb: number; upgradesAt: number; missingAt: number; resetDay: number }
 export type DataCap = DataCapSettings & { used: number; limit: number; since: string; resets: string; level: '' | 'upgrades' | 'missing' | 'full' }

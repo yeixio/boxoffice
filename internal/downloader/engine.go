@@ -54,7 +54,10 @@ type Engine struct {
 	again map[int64]bool
 	// importing holds downloads being moved into the library by hand.
 	importing map[int64]bool
-	once      sync.Once
+	// moves holds folders picked in the file browser to move into the
+	// library, by their path in the downloads folder.
+	moves map[string]*folderMove
+	once  sync.Once
 }
 
 // Importer moves the files of a finished download into the library and
