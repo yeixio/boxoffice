@@ -13,6 +13,7 @@ import { MovieDetail } from './pages/MovieDetail'
 import { Shows } from './pages/Shows'
 import { ShowDetail } from './pages/ShowDetail'
 import { Music } from './pages/Music'
+import { AuthorPage, Books } from './pages/Books'
 import { ArtistDetail } from './pages/ArtistDetail'
 import { Calendar } from './pages/Calendar'
 import { Activity } from './pages/Activity'
@@ -80,6 +81,10 @@ function Shell({ status }: { status: Status }) {
           <Route path="/shows/:id" element={<ShowDetail />} />
           <Route path="/music" element={<Music />} />
           <Route path="/music/:id" element={<ArtistDetail />} />
+          <Route path="/books" element={<Books key="ebook" format="ebook" />} />
+          <Route path="/books/:id" element={<AuthorPage key="ebook" format="ebook" />} />
+          <Route path="/audiobooks" element={<Books key="audiobook" format="audiobook" />} />
+          <Route path="/audiobooks/:id" element={<AuthorPage key="audiobook" format="audiobook" />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/downloads" element={<Downloads />} />
           <Route path="/activity" element={<Activity />} />

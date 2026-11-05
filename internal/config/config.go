@@ -33,6 +33,9 @@ type Config struct {
 	// http://musicbrainz.local:5000/ws/2, in place of musicbrainz.org;
 	// BOXOFFICE_MUSICBRAINZ_URL.
 	MusicBrainz string
+	// OpenLibrary is another Open Library to look books up on, in place
+	// of openlibrary.org; BOXOFFICE_OPENLIBRARY_URL.
+	OpenLibrary string
 	// Announce tells the home network Box Office is here, so Matinee can
 	// find it; BOXOFFICE_ANNOUNCE=false turns it off.
 	Announce bool
@@ -56,6 +59,7 @@ func load(args []string, env func(string) string) (Config, error) {
 		Announce:    !off(env("BOXOFFICE_ANNOUNCE")),
 		Refresh:     12 * time.Hour,
 		MusicBrainz: strings.TrimRight(env("BOXOFFICE_MUSICBRAINZ_URL"), "/"),
+		OpenLibrary: strings.TrimRight(env("BOXOFFICE_OPENLIBRARY_URL"), "/"),
 	}
 	if v := env("BOXOFFICE_REFRESH_EVERY"); v != "" {
 		d, err := time.ParseDuration(v)

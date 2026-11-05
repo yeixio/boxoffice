@@ -207,6 +207,7 @@ Most settings live in the web UI under **Settings**. The server itself takes a f
 | `BOXOFFICE_API_KEY` | | made on first start | Fixes the API key Matinee and other apps use, such as from a Kubernetes Secret |
 | `BOXOFFICE_REFRESH_EVERY` | `-refresh-every` | `12h` | How often titles are refreshed from TMDB (at least `1h`) |
 | `BOXOFFICE_MUSICBRAINZ_URL` | | `https://musicbrainz.org/ws/2` | A MusicBrainz mirror to look music up on, if you run one |
+| `BOXOFFICE_OPENLIBRARY_URL` | | `https://openlibrary.org` | Another Open Library to look books up on, if you run one |
 | `BOXOFFICE_LOG_FORMAT` | `-log-format` | `text` | `text` or `json` |
 | `BOXOFFICE_DEBUG` | `-debug` | off | Log more. The Health page can also switch debug logging on and off while it runs |
 
