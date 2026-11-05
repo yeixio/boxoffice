@@ -39,6 +39,7 @@ type authorOut struct {
 	Books            int   `json:"books"`
 	WantedEbooks     int   `json:"wantedEbooks"`
 	WantedAudiobooks int   `json:"wantedAudiobooks"`
+	HaveAudiobooks   int   `json:"haveAudiobooks"`
 	NewAudiobooks    bool  `json:"newAudiobooks"`
 	BookList         []struct {
 		ID            int64  `json:"id"`

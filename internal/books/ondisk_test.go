@@ -38,10 +38,14 @@ func TestFindOnDisk(t *testing.T) {
 	write(t, filepath.Join(audio, "Sanderson, Brandon", "Warbreaker", "01.mp3"), 7)
 	write(t, filepath.Join(audio, "Sanderson, Brandon", "Warbreaker", "02.mp3"), 8)
 	write(t, filepath.Join(audio, "Sanderson, Brandon", "Unknown Book", "01.mp3"), 8)
+	// "Author - Title" right in the root folder, as the Scan button reads it.
+	write(t, filepath.Join(audio, "Brandon Sanderson - Elantris (2005)", "Elantris.m4b"), 9)
+	write(t, filepath.Join(ebooks, "Brandon Sanderson - Warbreaker.epub"), 4)
+	write(t, filepath.Join(ebooks, "Someone Else - Warbreaker.epub"), 4)
 
 	s := &Service{Store: st}
 	n, err := s.FindOnDisk(ctx, a.ID)
-	if err != nil || n != 3 {
+	if err != nil || n != 5 {
 		t.Fatalf("found %d: %v", n, err)
 	}
 	bs, _ := st.Books(ctx, a.ID)
@@ -55,11 +59,14 @@ func TestFindOnDisk(t *testing.T) {
 	if got["Elantris"].EbookFile == nil {
 		t.Fatal("a loose ebook file wasn't found")
 	}
-	if f := got["Warbreaker"].AudiobookFile; f == nil || f.Size != 15 || !got["Warbreaker"].WantAudiobook || got["Warbreaker"].WantEbook {
+	if f := got["Warbreaker"].AudiobookFile; f == nil || f.Size != 15 || !got["Warbreaker"].WantAudiobook {
 		t.Fatalf("warbreaker %+v", got["Warbreaker"])
 	}
 	au, _ := st.Author(ctx, a.ID)
-	if au.HaveEbooks != 2 || au.HaveAudiobooks != 1 {
+	if got["Elantris"].AudiobookFile == nil || got["Warbreaker"].EbookFile == nil || filepath.Base(got["Warbreaker"].EbookFile.Path) != "Brandon Sanderson - Warbreaker.epub" {
+		t.Fatalf("top-level Author - Title copies weren't found: %+v %+v", got["Elantris"], got["Warbreaker"])
+	}
+	if au.HaveEbooks != 3 || au.HaveAudiobooks != 2 {
 		t.Fatalf("author %+v", au)
 	}
 	if n, _ := s.FindOnDisk(ctx, a.ID); n != 0 {

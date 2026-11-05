@@ -45,7 +45,8 @@ func bookKey(name string) string {
 
 // FindOnDisk looks in the root folders for an author's books that are
 // there already, in the "<Author>/<Title> (<Year>)" layout Readarr,
-// Calibre-Web and Audiobookshelf use, and counts each one found as the
+// Calibre-Web and Audiobookshelf use, or as "<Author> - <Title>" right in
+// the root folder, and counts each one found as the
 // book's copy in that format, and as wanted. It only looks: nothing is
 // moved, renamed or deleted. It says how many it found.
 func (s *Service) FindOnDisk(ctx context.Context, authorID int64) (int, error) {
@@ -78,10 +79,13 @@ func (s *Service) FindOnDisk(ctx context.Context, authorID int64) (int, error) {
 				continue
 			}
 			for _, e := range entries {
-				if !e.IsDir() || !slices.Contains(names, norm(e.Name())) {
-					continue
+				var n int
+				var err error
+				if e.IsDir() && slices.Contains(names, norm(e.Name())) {
+					n, err = s.findIn(ctx, filepath.Join(r.Path, e.Name()), format, byKey)
+				} else if who, title, ok := strings.Cut(e.Name(), " - "); ok && slices.Contains(names, norm(who)) {
+					n, err = s.record(ctx, filepath.Join(r.Path, e.Name()), title, e.IsDir(), format, byKey)
 				}
-				n, err := s.findIn(ctx, filepath.Join(r.Path, e.Name()), format, byKey)
 				found += n
 				if err != nil {
 					return found, err
@@ -100,40 +104,56 @@ func (s *Service) findIn(ctx context.Context, dir, format string, byKey map[stri
 	}
 	found := 0
 	for _, e := range entries {
-		name := e.Name()
-		if strings.HasPrefix(name, ".") {
+		if strings.HasPrefix(e.Name(), ".") {
 			continue
 		}
-		if !e.IsDir() {
-			name = strings.TrimSuffix(name, filepath.Ext(name))
-		}
-		books := byKey[bookKey(name)]
-		if len(books) == 0 {
-			continue
-		}
-		b := books[0]
-		if b.File(format) != nil {
-			continue
-		}
-		p := filepath.Join(dir, e.Name())
-		path, size := copyAt(p, e.IsDir(), format)
-		if path == "" {
-			continue
-		}
-		if _, err := s.Store.AddFile(ctx, store.File{Kind: format, OwnerID: b.ID, Path: path, Size: size}); err != nil {
-			if errors.Is(err, store.ErrExists) {
-				continue
-			}
+		n, err := s.record(ctx, filepath.Join(dir, e.Name()), e.Name(), e.IsDir(), format, byKey)
+		found += n
+		if err != nil {
 			return found, err
 		}
-		if !b.Wants(format) {
-			if err := s.Store.SetBookWanted(ctx, b.ID, format, true); err != nil {
-				return found, err
-			}
-		}
-		found++
 	}
 	return found, nil
+}
+
+// record counts the file or folder at p, named for a book's title, as
+// that book's copy in a format, if it's one of the author's books with no
+// copy yet. It says whether it did (1 or 0).
+func (s *Service) record(ctx context.Context, p, name string, dir bool, format string, byKey map[string][]store.Book) (int, error) {
+	if !dir {
+		name = strings.TrimSuffix(name, filepath.Ext(name))
+	}
+	books := byKey[bookKey(name)]
+	if len(books) == 0 {
+		return 0, nil
+	}
+	b := books[0]
+	if b.File(format) != nil {
+		return 0, nil
+	}
+	path, size := copyAt(p, dir, format)
+	if path == "" {
+		return 0, nil
+	}
+	if _, err := s.Store.AddFile(ctx, store.File{Kind: format, OwnerID: b.ID, Path: path, Size: size}); err != nil {
+		if errors.Is(err, store.ErrExists) {
+			return 0, nil
+		}
+		return 0, err
+	}
+	if !b.Wants(format) {
+		if err := s.Store.SetBookWanted(ctx, b.ID, format, true); err != nil {
+			return 0, err
+		}
+	}
+	// byKey holds copies, so a second folder for the same book is skipped.
+	books[0] = b
+	if format == store.Ebook {
+		books[0].EbookFile = &store.File{Path: path}
+	} else {
+		books[0].AudiobookFile = &store.File{Path: path}
+	}
+	return 1, nil
 }
 
 // copyAt says what at p is a book's copy in a format: an ebook's best file,

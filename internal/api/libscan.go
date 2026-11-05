@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/yeixio/boxoffice/internal/books"
 	"github.com/yeixio/boxoffice/internal/libscan"
 	"github.com/yeixio/boxoffice/internal/music"
 	"github.com/yeixio/boxoffice/internal/store"
@@ -35,7 +36,7 @@ func libScanError(err error) error {
 		return errorf(http.StatusNotFound, "there's no such root folder, or it hasn't been scanned")
 	case errors.Is(err, libscan.ErrBusy):
 		return errorf(http.StatusConflict, err.Error())
-	case errors.Is(err, music.ErrOff):
+	case errors.Is(err, music.ErrOff), errors.As(err, new(books.ErrOff)):
 		return errorf(http.StatusConflict, err.Error())
 	}
 	return err
