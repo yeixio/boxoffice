@@ -85,6 +85,20 @@ media: []
 #      persistentVolumeClaim:
 #        claimName: tv-library
 
+# Where downloads go while they're fetched, checked and unpacked, before
+# they're moved into the library. Without a volume here they go to a
+# downloads folder on the data volume above, which is fine for a try but
+# small for real use: give downloads a volume with room for a few releases.
+# Box Office never uses a folder inside a library for this.
+downloads:
+  mountPath: /downloads
+  # A folder of the volume to use, such as one of its own on a shared
+  # downloads share.
+  subPath: ""
+  volume: {}
+#    persistentVolumeClaim:
+#      claimName: boxoffice-downloads
+
 # A second place for backups that's a mounted volume (Backups → Also send
 # to → Another folder). S3-compatible storage needs no mount: set it up
 # under Backups.

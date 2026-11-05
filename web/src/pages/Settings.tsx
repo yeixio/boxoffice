@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { AlertTriangle, Copy, Folder, FolderUp, KeyRound, Plus, Trash2 } from 'lucide-react'
-import { del, get, post, put, type Connections, type Profile, type RootFolder, type Settings as SettingsData, type SystemInfo } from '../api'
-import { bytes, count, day } from '../format'
+import { Copy, Folder, FolderUp, KeyRound, Plus, Trash2 } from 'lucide-react'
+import { del, get, post, put, type Profile, type RootFolder, type Settings as SettingsData, type SystemInfo } from '../api'
+import { bytes, day } from '../format'
 import { useProfiles, useQualities, useRootFolders } from '../hooks'
+import { Connections, DownloadSettings } from './Connections'
 import { Badge, Button, Card, ErrorNote, Field, Heading, Input, Modal, Spinner, Toggle } from '../ui'
 
 export function Settings() {
@@ -24,7 +25,16 @@ export function Settings() {
           <Profiles />
         </div>
       </div>
-      <ImportedConnections />
+      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+        <div className="flex flex-col gap-6">
+          <DownloadSettings />
+          <Connections section="news-servers" />
+        </div>
+        <div className="flex flex-col gap-6">
+          <Connections section="indexers" />
+          <Connections section="download-clients" />
+        </div>
+      </div>
       <System />
     </>
   )
@@ -339,59 +349,6 @@ function Account() {
           Change password
         </Button>
       </div>
-    </Card>
-  )
-}
-
-function ImportedConnections() {
-  const qc = useQueryClient()
-  const c = useQuery({ queryKey: ['connections'], queryFn: () => get<Connections>('/connections') })
-  const remove = useMutation({ mutationFn: (path: string) => del(path), onSuccess: () => qc.invalidateQueries({ queryKey: ['connections'] }) })
-  if (!c.data) return null
-  const d = c.data
-  if (!d.indexers.length && !d.downloadClients.length && !d.usenetServers.length) return null
-  const needs = <Badge tone="bad"><AlertTriangle className="size-3" /> needs its key</Badge>
-  const from = (s?: string) => s && <span className="text-xs text-muted">from {s}</span>
-  const row = (key: string, path: string, main: React.ReactNode, extra: React.ReactNode) => (
-    <li key={key} className="flex flex-wrap items-center gap-2 py-2 text-sm">
-      <div className="min-w-0 flex-1">{main}</div>
-      {extra}
-      <button onClick={() => remove.mutate(path)} aria-label="Remove" className="rounded p-1 text-muted hover:bg-line hover:text-bad">
-        <Trash2 className="size-4" />
-      </button>
-    </li>
-  )
-  return (
-    <Card className="mt-6">
-      <h2 className="mb-1 font-display text-lg font-semibold">Brought over from other apps</h2>
-      <p className="mb-4 text-sm text-muted">Box Office's downloader uses these once it's on. {d.blocklist > 0 && `${count(d.blocklist, 'blocked release', 'blocked releases')} came over too.`}</p>
-      <div className="grid gap-6 lg:grid-cols-3">
-        <div>
-          <h3 className="mb-2 font-medium">Indexers</h3>
-          <ul className="divide-y divide-line">
-            {d.indexers.map((i) =>
-              row(`i${i.id}`, `/indexers/${i.id}`, <><div className="font-medium">{i.name}</div><div className="truncate text-xs text-muted">{i.url}</div></>, <>{i.missingSecret ? needs : <Badge>{i.protocol}</Badge>}{from(i.source)}</>),
-            )}
-          </ul>
-        </div>
-        <div>
-          <h3 className="mb-2 font-medium">Download clients</h3>
-          <ul className="divide-y divide-line">
-            {d.downloadClients.map((dc) =>
-              row(`d${dc.id}`, `/downloadclients/${dc.id}`, <><div className="font-medium">{dc.name}</div><div className="text-xs text-muted">{dc.kind} at {dc.host}:{dc.port}</div></>, <>{dc.missingSecret && needs}{from(dc.source)}</>),
-            )}
-          </ul>
-        </div>
-        <div>
-          <h3 className="mb-2 font-medium">News servers</h3>
-          <ul className="divide-y divide-line">
-            {d.usenetServers.map((s) =>
-              row(`s${s.id}`, `/usenetservers/${s.id}`, <><div className="font-medium">{s.name}</div><div className="text-xs text-muted">{s.host}:{s.port}{s.useTls ? ', TLS' : ''}, {s.connections} connections</div></>, <>{s.optional && <Badge>fill</Badge>}{from(s.source)}</>),
-            )}
-          </ul>
-        </div>
-      </div>
-      <ErrorNote error={remove.error} />
     </Card>
   )
 }

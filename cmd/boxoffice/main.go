@@ -21,9 +21,11 @@ import (
 	"github.com/yeixio/boxoffice/internal/backup"
 	"github.com/yeixio/boxoffice/internal/catalog"
 	"github.com/yeixio/boxoffice/internal/config"
+	"github.com/yeixio/boxoffice/internal/downloader"
 	"github.com/yeixio/boxoffice/internal/jobs"
 	"github.com/yeixio/boxoffice/internal/kube"
 	"github.com/yeixio/boxoffice/internal/migrate"
+	"github.com/yeixio/boxoffice/internal/search"
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/version"
 	"github.com/yeixio/boxoffice/web"
@@ -80,8 +82,33 @@ func run() error {
 	cat := &catalog.Service{Store: db, Jobs: runner, Log: log, EnvTMDBKey: cfg.TMDBKey}
 	cat.Register()
 	backups := &backup.Manager{Store: db, Dir: cfg.BackupDir(), Log: log}
+	downloads := &downloader.Engine{Store: db, Dir: cfg.Downloads, Log: log, Importer: &downloader.LibraryImporter{Store: db},
+		Libraries: func(ctx context.Context) ([]string, error) {
+			roots, err := db.RootFolders(ctx, "")
+			var out []string
+			for _, r := range roots {
+				out = append(out, r.Path)
+			}
+			return out, err
+		}}
+	finder := &search.Service{Store: db, Engine: downloads, Client: &search.Client{}, Log: log}
+	finder.Register(runner)
+	// A download that fails is blocked, and something else looked for.
+	downloads.Failed = func(ctx context.Context, d store.Download, why string) {
+		if d.Source != "search" || d.Kind == "" {
+			return
+		}
+		db.Block(ctx, store.Blocked{Kind: d.Kind, TitleID: d.TitleID, SourceTitle: d.Name, Quality: d.Quality, Protocol: "usenet",
+			Indexer: d.Indexer, Reason: why, At: time.Now()})
+		if d.Kind == "movie" {
+			cat.SearchMovies(ctx, d.TitleID)
+		} else if len(d.EpisodeIDs) > 0 {
+			cat.SearchEpisodes(ctx, d.EpisodeIDs...)
+		}
+	}
 	srv := &api.Server{
 		Store: db, Catalog: cat, Backups: backups, Migrator: &migrate.Migrator{Catalog: cat, Backups: backups, Log: log, DataDir: cfg.DataDir}, Log: log,
+		Downloads: downloads, Search: finder,
 		Version: version.Version, Database: dbKind, DataDir: cfg.DataDir, EnvAPIKey: cfg.APIKey, Web: web.FS(),
 	}
 	if err := srv.EnsureAPIKey(ctx); err != nil {
@@ -89,7 +116,7 @@ func run() error {
 	}
 
 	var wg sync.WaitGroup
-	for _, loop := range []func(context.Context){runner.Run, backups.Run, func(ctx context.Context) { cat.RefreshEvery(ctx, cfg.Refresh) }} {
+	for _, loop := range []func(context.Context){runner.Run, backups.Run, downloads.Run, func(ctx context.Context) { cat.RefreshEvery(ctx, cfg.Refresh) }} {
 		wg.Add(1)
 		go func() { defer wg.Done(); loop(ctx) }()
 	}

@@ -64,6 +64,7 @@ jobs:
       - run: "helm template t deploy/helm/boxoffice --set postgresql.enabled=true | grep -q 'kind: StatefulSet'"
       - run: "helm template t deploy/helm/boxoffice --set database.url=postgres://u:p@db/boxoffice | grep -q BOXOFFICE_DATABASE_URL"
       - run: "helm template t deploy/helm/boxoffice --set apiKey.value=k --set tmdb.apiKey=t | grep -q BOXOFFICE_API_KEY"
+      - run: "helm template t deploy/helm/boxoffice --set downloads.subPath=bo --set downloads.volume.emptyDir.medium= | grep -q BOXOFFICE_DOWNLOADS_DIR"
       - run: helm template t deploy/helm/boxoffice --set 'media[0].name=movies' --set 'media[0].mountPath=/media/movies' --set 'media[0].volume.emptyDir.medium=' > /dev/null
 
   # Pushes from main publish ghcr.io/yeixio/boxoffice:main and :sha-<short>;

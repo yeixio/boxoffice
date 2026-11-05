@@ -47,14 +47,12 @@ type Service struct {
 	TMDBHTTP *http.Client
 }
 
-// Register adds the service's job handlers to its runner.
+// Register adds the service's job handlers to its runner. Searches are
+// run by the search package.
 func (s *Service) Register() {
 	s.Jobs.Handle(JobRefreshMovie, s.jobRefreshMovie)
 	s.Jobs.Handle(JobRefreshSeries, s.jobRefreshSeries)
 	s.Jobs.Handle(JobRefreshAll, s.jobRefreshAll)
-	for _, k := range []string{JobSearchMovie, JobSearchSeries, JobSearchEpisode} {
-		s.Jobs.Handle(k, s.jobSearch)
-	}
 }
 
 // TMDB is a client with the current key.
@@ -564,12 +562,6 @@ func (s *Service) jobRefreshAll(ctx context.Context, _ string) (jobs.Result, err
 		return jobs.Done("refreshed %d titles; %d couldn't be refreshed", n, failed), nil
 	}
 	return jobs.Done("refreshed %d titles", n), nil
-}
-
-// jobSearch will look on indexers once they're built. Until then a search
-// is recorded so Activity shows what was asked for.
-func (s *Service) jobSearch(ctx context.Context, _ string) (jobs.Result, error) {
-	return jobs.Skipped("no indexers are set up yet, so nothing was searched"), nil
 }
 
 // RefreshEvery queues a refresh of stale titles now and then every interval.

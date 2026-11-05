@@ -84,6 +84,10 @@ func (s *Store) migrate(ctx context.Context) error {
 			return err
 		}
 	}
+	// Radarr's and Sonarr's copies of one download client become one.
+	if err := s.MergeDuplicateDownloadClients(ctx); err != nil {
+		return err
+	}
 	// A new server starts with the default quality profiles.
 	var n int
 	if err := s.db.QueryRowContext(ctx, "SELECT COUNT(*) FROM quality_profiles").Scan(&n); err != nil {
