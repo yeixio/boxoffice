@@ -25,6 +25,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/jobs"
 	"github.com/yeixio/boxoffice/internal/kube"
 	"github.com/yeixio/boxoffice/internal/migrate"
+	"github.com/yeixio/boxoffice/internal/notify"
 	"github.com/yeixio/boxoffice/internal/search"
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/version"
@@ -106,6 +107,9 @@ func run() error {
 			cat.SearchEpisodes(ctx, d.EpisodeIDs...)
 		}
 	}
+	// What happens to downloads is kept for Matinee to pass on to people.
+	notes := &notify.Recorder{Store: db, Log: log}
+	downloads.Notify = notes.Download
 	srv := &api.Server{
 		Store: db, Catalog: cat, Backups: backups, Migrator: &migrate.Migrator{Catalog: cat, Backups: backups, Log: log, DataDir: cfg.DataDir}, Log: log,
 		Downloads: downloads, Search: finder,
