@@ -9,9 +9,8 @@ import (
 )
 
 func TestBody(t *testing.T) {
-	s := nntptest.New()
+	s := nntptest.New("me", "pw")
 	defer s.Close()
-	s.Username, s.Password = "me", "pw"
 	s.Add("a@b", []byte("line one\r\n.starts with a dot\r\n..two dots\r\nend\r\n"))
 	ctx := context.Background()
 	if _, err := Dial(ctx, Server{Host: s.Host(), Port: s.Port(), Username: "me", Password: "nope"}); !errors.Is(err, ErrAuth) {

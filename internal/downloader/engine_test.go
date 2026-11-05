@@ -160,9 +160,8 @@ func checkFiles(t *testing.T, dir string, want map[string][]byte) {
 }
 
 func TestDownloadWhole(t *testing.T) {
-	srv := nntptest.New()
+	srv := nntptest.New("u", "p")
 	defer srv.Close()
-	srv.Username, srv.Password = "u", "p"
 	data, want, _ := release(t, srv, true)
 	e, st := newEngine(t, srv)
 	enable(t, st, Settings{})

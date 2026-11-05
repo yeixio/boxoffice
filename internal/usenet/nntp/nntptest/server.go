@@ -22,13 +22,17 @@ type Server struct {
 	Fetches  atomic.Int32
 }
 
-// New starts a server on a free local port.
-func New() *Server {
+// New starts a server on a free local port. A username and password, if
+// given, are what it asks for.
+func New(credentials ...string) *Server {
 	ln, err := net.Listen("tcp", "127.0.0.1:0")
 	if err != nil {
 		panic(err)
 	}
 	s := &Server{ln: ln, articles: map[string][]byte{}}
+	if len(credentials) == 2 {
+		s.Username, s.Password = credentials[0], credentials[1]
+	}
 	go s.serve()
 	return s
 }
