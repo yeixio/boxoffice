@@ -2,8 +2,10 @@ package api
 
 import (
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -47,6 +49,8 @@ func (s *Server) downloadRoutes() []route {
 		{"POST /api/v1/downloads/{id}/import", true, act(func(r *http.Request, id int64) error { return badRequest(s.Downloads.Import(r.Context(), id)) })},
 		{"POST /api/v1/downloads/{id}/reprocess", true, act(func(r *http.Request, id int64) error { return badRequest(s.Downloads.Reprocess(r.Context(), id)) })},
 		{"POST /api/v1/downloads/{id}/top", true, act(func(r *http.Request, id int64) error { return s.Downloads.MoveToTop(r.Context(), id) })},
+		{"POST /api/v1/downloads/{id}/bottom", true, act(func(r *http.Request, id int64) error { return s.Downloads.MoveToBottom(r.Context(), id) })},
+		{"POST /api/v1/downloads/bulk", true, s.bulkDownloads},
 		{"DELETE /api/v1/downloads/{id}", true, act(func(r *http.Request, id int64) error {
 			return s.Downloads.Remove(r.Context(), id, r.URL.Query().Get("deleteFiles") == "true")
 		})},
@@ -76,6 +80,66 @@ func badRequest(err error) error {
 		return err
 	}
 	return errorf(http.StatusBadRequest, err.Error())
+}
+
+// bulkDownloads does one action to several downloads. Each is tried on
+// its own, so one that can't (it finished meanwhile, say) doesn't stop the
+// rest; the answer says which didn't and why.
+func (s *Server) bulkDownloads(w http.ResponseWriter, r *http.Request) error {
+	var in struct {
+		Action      string  `json:"action"`
+		IDs         []int64 `json:"ids"`
+		DeleteFiles bool    `json:"deleteFiles"`
+	}
+	if err := readJSON(r, &in); err != nil {
+		return err
+	}
+	ctx := r.Context()
+	e := s.Downloads
+	do := map[string]func(int64) error{
+		"pause":     func(id int64) error { return e.Pause(ctx, id) },
+		"resume":    func(id int64) error { return e.Resume(ctx, id) },
+		"retry":     func(id int64) error { return e.Retry(ctx, id) },
+		"import":    func(id int64) error { return e.Import(ctx, id) },
+		"reprocess": func(id int64) error { return e.Reprocess(ctx, id) },
+		"top":       func(id int64) error { return e.MoveToTop(ctx, id) },
+		"bottom":    func(id int64) error { return e.MoveToBottom(ctx, id) },
+		"remove": func(id int64) error {
+			// Quarantined files are never deleted, whatever was asked.
+			d, err := s.Store.Download(ctx, id)
+			if err != nil {
+				return err
+			}
+			return e.Remove(ctx, id, in.DeleteFiles && d.Quarantined == "")
+		},
+	}[in.Action]
+	if do == nil {
+		return errorf(http.StatusBadRequest, fmt.Sprintf("there's no %q for downloads", in.Action))
+	}
+	if len(in.IDs) == 0 || len(in.IDs) > 1000 {
+		return errorf(http.StatusBadRequest, "pick between 1 and 1000 downloads")
+	}
+	ids := slices.Clone(in.IDs)
+	// Moving each to the top in turn would turn them upside down, so the
+	// last goes first; they end up at the top in the order given.
+	if in.Action == "top" {
+		slices.Reverse(ids)
+	}
+	type failure struct {
+		ID    int64  `json:"id"`
+		Error string `json:"error"`
+	}
+	failed := []failure{}
+	for _, id := range ids {
+		if err := do(id); err != nil {
+			msg := err.Error()
+			if errors.Is(err, store.ErrNotFound) {
+				msg = "it's gone"
+			}
+			failed = append(failed, failure{id, msg})
+		}
+	}
+	return writeJSON(w, http.StatusOK, map[string]any{"done": len(ids) - len(failed), "failed": failed})
 }
 
 func (s *Server) downloads(w http.ResponseWriter, r *http.Request) error {

@@ -1,12 +1,13 @@
 import { useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { ArrowUpToLine, CircleCheck, Clock, FolderInput, CircleX, Download as DownloadIcon, Pause, Play, PackageOpen, RotateCcw, ShieldAlert, Trash2, Upload } from 'lucide-react'
+import { ArrowUpToLine, CircleCheck, ListChecks, Clock, FolderInput, CircleX, Download as DownloadIcon, Pause, Play, PackageOpen, RotateCcw, ShieldAlert, Trash2, Upload } from 'lucide-react'
 import { api, del, get, post, put, type Download, type Downloads as DownloadsData } from '../api'
 import { bytes, when } from '../format'
 import { useQualities } from '../hooks'
 import { SortControl, sortList, useSort, words, type SortOption } from '../sort'
 import { Badge, Button, Card, Empty, ErrorNote, Heading, Modal, Spinner, Toggle } from '../ui'
+import { BulkBar, PickBox, SelectAll, type BulkList } from './DownloadsBulk'
 
 export function useDownloads() {
   return useQuery({ queryKey: ['downloads'], queryFn: () => get<DownloadsData>('/downloads'), refetchInterval: 2000 })
@@ -85,13 +86,46 @@ export function Downloads() {
   const clear = useMutation({ mutationFn: () => del('/downloads/history'), onSuccess: refresh })
   const sort = useSort('downloads-history', historySorts)
   const history = useMemo(() => sortList(d.data?.history ?? [], sort.option, sort.dir, newestFirst), [d.data?.history, sort.option, sort.dir])
+  // Picking several downloads at once, in one list at a time.
+  const [picking, setPicking] = useState<BulkList | null>(null)
+  const [picked, setPicked] = useState<Set<number>>(new Set())
+  const startPicking = (list: BulkList) => {
+    setPicking(list)
+    setPicked(new Set())
+  }
+  const stopPicking = () => {
+    setPicking(null)
+    setPicked(new Set())
+  }
+  const toggle = (id: number) =>
+    setPicked((p) => {
+      const n = new Set(p)
+      if (n.has(id)) n.delete(id)
+      else n.add(id)
+      return n
+    })
   if (d.isPending) return <Spinner />
   if (d.isError) return <ErrorNote error={d.error} />
   const data = d.data
   const s = data.settings
   const active = data.queue.find((x) => x.status === 'downloading')
+  const pickedList = picking === 'queue' ? data.queue : picking === 'history' ? history : []
+  const pickHead = (list: BulkList, items: Download[]) =>
+    items.length > 0 &&
+    (picking === list ? (
+      <>
+        <SelectAll items={items} picked={picked} onChange={setPicked} />
+        <Button variant="ghost" onClick={stopPicking}>
+          Done
+        </Button>
+      </>
+    ) : (
+      <Button variant="ghost" onClick={() => startPicking(list)}>
+        <ListChecks className="size-4" aria-hidden /> Select
+      </Button>
+    ))
   return (
-    <>
+    <div className={picking && picked.size > 0 ? 'pb-44 sm:pb-28' : ''}>
       <Heading
         title="Downloads"
         sub={
@@ -151,7 +185,10 @@ export function Downloads() {
       )}
 
       <section className="mb-8">
-        <h2 className="mb-3 font-display text-xl font-semibold">Queue</h2>
+        <div className="mb-3 flex flex-wrap items-center gap-2">
+          <h2 className="mr-auto font-display text-xl font-semibold">Queue</h2>
+          {pickHead('queue', data.queue)}
+        </div>
         {data.queue.length === 0 ? (
           <Empty icon={<DownloadIcon className="size-8" />} title="Nothing to download">
             Releases Box Office grabs show up here. You can also add an NZB file yourself.
@@ -159,7 +196,13 @@ export function Downloads() {
         ) : (
           <ul className="flex flex-col gap-3">
             {data.queue.map((x) => (
-              <QueueItem key={x.id} d={x} rate={x.id === active?.id ? data.speed : 0} first={x.id === data.queue[0].id} />
+              <QueueItem
+                key={x.id}
+                d={x}
+                rate={x.id === active?.id ? data.speed : 0}
+                first={x.id === data.queue[0].id}
+                pick={picking === 'queue' ? { picked: picked.has(x.id), toggle: () => toggle(x.id) } : undefined}
+              />
             ))}
           </ul>
         )}
@@ -169,7 +212,8 @@ export function Downloads() {
         <div className="mb-3 flex flex-wrap items-center gap-2">
           <h2 className="mr-auto font-display text-xl font-semibold">History</h2>
           {data.history.length > 1 && <SortControl sort={sort} className="order-last w-full sm:order-none sm:w-auto" />}
-          {data.history.length > 0 && (
+          {pickHead('history', history)}
+          {data.history.length > 0 && picking !== 'history' && (
             <Button variant="ghost" busy={clear.isPending} onClick={() => clear.mutate()}>
               Clear history
             </Button>
@@ -180,7 +224,7 @@ export function Downloads() {
         ) : (
           <ul className="divide-y divide-line rounded-xl border border-line bg-card">
             {history.map((x) => (
-              <HistoryItem key={x.id} d={x} />
+              <HistoryItem key={x.id} d={x} pick={picking === 'history' ? { picked: picked.has(x.id), toggle: () => toggle(x.id) } : undefined} />
             ))}
           </ul>
         )}
@@ -191,9 +235,12 @@ export function Downloads() {
           {data.folder.freeSpace > 0 && `, with ${bytes(data.folder.freeSpace)} free`}.
         </p>
       )}
-    </>
+      {picking && <BulkBar list={picking} items={pickedList} picked={picked} onDone={stopPicking} />}
+    </div>
   )
 }
+
+type Pick = { picked: boolean; toggle: () => void }
 
 // TurnOn says why downloading is off and what's needed to turn it on.
 function TurnOn({ data }: { data: DownloadsData }) {
@@ -233,7 +280,7 @@ function useAction() {
   })
 }
 
-function QueueItem({ d, rate, first }: { d: Download; rate: number; first: boolean }) {
+function QueueItem({ d, rate, first, pick }: { d: Download; rate: number; first: boolean; pick?: Pick }) {
   const qualities = useQualities()
   const act = useAction()
   const [removing, setRemoving] = useState(false)
@@ -244,9 +291,10 @@ function QueueItem({ d, rate, first }: { d: Download; rate: number; first: boole
   // Checking, repairing and unpacking say how far they've got.
   const step = working && d.stepTotal ? Math.min(100, ((d.stepDone ?? 0) / d.stepTotal) * 100) : undefined
   return (
-    <li className="rounded-xl border border-line bg-card p-4">
+    <li className={`rounded-xl border bg-card p-4 ${pick?.picked ? 'border-marquee' : 'border-line'}`}>
       <div className="flex flex-wrap items-start gap-x-3 gap-y-2">
-        <div className="min-w-0 flex-1 basis-60">
+        {pick && <PickBox d={d} picked={pick.picked} onToggle={pick.toggle} />}
+        <div className="min-w-0 flex-1 basis-60" onClick={pick?.toggle}>
           <div className="break-words font-medium">{d.name}</div>
           <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted">
             <Badge tone={statusTone[d.status]}>{statusName[d.status] ?? d.status}</Badge>
@@ -255,7 +303,7 @@ function QueueItem({ d, rate, first }: { d: Download; rate: number; first: boole
             {title(d)}
           </div>
         </div>
-        <div className="flex shrink-0 gap-1">
+        <div className={`flex shrink-0 gap-1 ${pick ? 'hidden' : ''}`}>
           {(d.status === 'queued' || d.status === 'downloading') && (
             <IconButton label="Pause" busy={busy} onClick={() => act.mutate({ id: d.id, what: 'pause' })}>
               <Pause className="size-4" />
@@ -306,14 +354,15 @@ function QueueItem({ d, rate, first }: { d: Download; rate: number; first: boole
   )
 }
 
-function HistoryItem({ d }: { d: Download }) {
+function HistoryItem({ d, pick }: { d: Download; pick?: Pick }) {
   const act = useAction()
   const [removing, setRemoving] = useState(false)
   const ok = d.status === 'completed'
   const held = !!d.quarantined
   const waiting = ok && !!d.canImport
   return (
-    <li className="flex flex-wrap items-start gap-3 px-4 py-3">
+    <li className={`flex flex-wrap items-start gap-3 px-4 py-3 ${pick?.picked ? 'bg-marquee/5' : ''}`}>
+      {pick && <PickBox d={d} picked={pick.picked} onToggle={pick.toggle} />}
       {held ? (
         <ShieldAlert className="mt-0.5 size-5 shrink-0 text-gold" aria-label="Quarantined" />
       ) : waiting ? (
@@ -323,7 +372,7 @@ function HistoryItem({ d }: { d: Download }) {
       ) : (
         <CircleX className="mt-0.5 size-5 shrink-0 text-bad" aria-label="Failed" />
       )}
-      <div className="min-w-0 flex-1 basis-56">
+      <div className="min-w-0 flex-1 basis-56" onClick={pick?.toggle}>
         <div className="break-words text-sm font-medium">
           {d.name} {held && <Badge tone="gold">Quarantined</Badge>}
         </div>
@@ -331,18 +380,18 @@ function HistoryItem({ d }: { d: Download }) {
           {bytes(d.size)} · {when(d.finishedAt)} {title(d)}
         </div>
         {d.message && <p className={`mt-1 break-words text-xs ${ok ? 'text-muted' : 'text-bad'}`}>{d.message}</p>}
-        {waiting && (
+        {waiting && !pick && (
           <Button className="mt-2 px-2.5 py-1 text-xs" busy={act.isPending && act.variables?.what === 'import'} onClick={() => act.mutate({ id: d.id, what: 'import' })}>
             <FolderInput className="size-3.5" aria-hidden /> Move into library
           </Button>
         )}
-        {d.canReprocess && (
+        {d.canReprocess && !pick && (
           <Button className="mt-2 px-2.5 py-1 text-xs" busy={act.isPending && act.variables?.what === 'reprocess'} onClick={() => act.mutate({ id: d.id, what: 'reprocess' })}>
             <PackageOpen className="size-3.5" aria-hidden /> Unpack again, without downloading
           </Button>
         )}
       </div>
-      <div className="flex shrink-0 gap-1">
+      <div className={`flex shrink-0 gap-1 ${pick ? 'hidden' : ''}`}>
         {!ok && !held && (
           <IconButton label="Download again" busy={act.isPending} onClick={() => act.mutate({ id: d.id, what: 'retry' })}>
             <RotateCcw className="size-4" />

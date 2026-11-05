@@ -409,6 +409,15 @@ func (e *Engine) MoveToTop(ctx context.Context, id int64) error {
 	return nil
 }
 
+// MoveToBottom puts a queued download last.
+func (e *Engine) MoveToBottom(ctx context.Context, id int64) error {
+	if err := e.Store.MoveDownloadToBottom(ctx, id); err != nil {
+		return err
+	}
+	e.Wake()
+	return nil
+}
+
 // ClearHistory forgets finished downloads (their files stay).
 func (e *Engine) ClearHistory(ctx context.Context) error {
 	list, err := e.Store.ClearDownloadHistory(ctx)
