@@ -1,0 +1,68 @@
+name: Move-in report
+description: Something didn't come across from Radarr, Sonarr or NZBGet, or came across wrong.
+labels: ["move-in"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks: every setup is a little different, and reports like this are how Move in gets better. Remove API keys, passwords and private URLs from anything you paste.
+  - type: dropdown
+    id: app
+    attributes:
+      label: Which app were you moving in from?
+      options:
+        - Radarr
+        - Sonarr
+        - NZBGet
+        - Something else (say below)
+    validations:
+      required: true
+  - type: input
+    id: app-version
+    attributes:
+      label: Its version
+      description: Radarr and Sonarr show it under System → Status; Box Office shows it on the Look it over step.
+      placeholder: Radarr 5.14.0.9383
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Box Office version
+      description: At the bottom of each page, or the image tag.
+    validations:
+      required: true
+  - type: dropdown
+    id: step
+    attributes:
+      label: Which step?
+      options:
+        - Connect (finding the app or signing in)
+        - Look it over (the preview)
+        - Move in (bringing things over)
+        - Matinee (switching Matinee over)
+        - After moving in
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What didn't come across, or came across wrong?
+      description: For example "3 movies were left out as 'can't come across'", "indexer priorities were lost", "files weren't found at their paths".
+    validations:
+      required: true
+  - type: textarea
+    id: paths
+    attributes:
+      label: How the two apps see your library
+      description: The paths each app uses for the same folder, such as `/movies` in Radarr and `/media/movies` in Box Office, and whether they run in Docker or Kubernetes.
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Health → Log can download them.
+      render: text
+    validations:
+      required: false

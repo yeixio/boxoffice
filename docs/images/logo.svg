@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 470 96" width="470" height="96" role="img" aria-label="Box Office">
+  <style>
+    .word { fill: #1f1b16; font: 600 46px "Space Grotesk", "Inter", "Segoe UI", system-ui, sans-serif; letter-spacing: 9px; }
+    @media (prefers-color-scheme: dark) { .word { fill: #f2eadc; } }
+  </style>
+  <g transform="translate(4 8) scale(2.5)">
+    <path fill="#d7372b" d="M4 8a2 2 0 0 1 2-2h20a2 2 0 0 1 2 2v4a4 4 0 0 0 0 8v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-4a4 4 0 0 0 0-8z"/>
+    <path fill="#f6f1e7" d="M11 11h10v2H11zm0 4h10v2H11zm0 4h6v2h-6z"/>
+  </g>
+  <text class="word" x="98" y="64">BOX OFFICE</text>
+</svg>
