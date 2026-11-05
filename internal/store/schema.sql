@@ -255,6 +255,7 @@ CREATE TABLE IF NOT EXISTS downloads (
 	folder       TEXT NOT NULL DEFAULT '',
 	message      TEXT NOT NULL DEFAULT '',
 	imported_to  TEXT NOT NULL DEFAULT '',
+	quarantined  TEXT NOT NULL DEFAULT '',       -- where its files went when they looked unsafe
 	added_at     BIGINT NOT NULL,
 	started_at   BIGINT NOT NULL DEFAULT 0,
 	finished_at  BIGINT NOT NULL DEFAULT 0

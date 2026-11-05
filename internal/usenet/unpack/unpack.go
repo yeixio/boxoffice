@@ -28,47 +28,49 @@ var (
 	reOldVol  = regexp.MustCompile(`(?i)\.(r\d\d|s\d\d)$`)
 	re7zSplit = regexp.MustCompile(`(?i)\.7z\.0*(\d+)$`)
 	reZipVol  = regexp.MustCompile(`(?i)\.z\d\d$`)
-	reNumVol  = regexp.MustCompile(`\.0*(\d+)$`)
 )
 
 // Archive is an archive to extract, by its first volume.
 type Archive struct {
 	Path string
 	Kind string // rar, 7z or zip
+	// Volumes are a RAR set's files in order, found by their headers, as
+	// obfuscated posts name them anything.
+	Volumes []string
 }
 
 // Find lists the archives among files (names in dir), by first volume.
+// RAR archives are found by content, whatever they're called; 7-Zip and
+// ZIP by name.
 func Find(dir string, files []string) []Archive {
 	var out []Archive
+	rars := map[string]bool{}
+	for _, s := range findRARSets(dir, files) {
+		a := Archive{Path: s[0].path, Kind: "rar"}
+		for _, v := range s {
+			a.Volumes = append(a.Volumes, v.path)
+			rars[v.path] = true
+		}
+		out = append(out, a)
+	}
 	for _, f := range files {
 		low := strings.ToLower(f)
 		p := filepath.Join(dir, f)
 		switch {
 		case strings.HasSuffix(low, ".rar"):
-			if m := rePart.FindStringSubmatch(f); m != nil && m[1] != "1" {
-				continue
+			// Named .rar but its headers didn't read as one: extracting it
+			// says what's wrong.
+			if !rars[p] && (rePart.FindStringSubmatch(f) == nil || rePart.FindStringSubmatch(f)[1] == "1") {
+				out = append(out, Archive{Path: p, Kind: "rar"})
 			}
-			out = append(out, Archive{p, "rar"})
 		case strings.HasSuffix(low, ".7z"):
-			out = append(out, Archive{p, "7z"})
+			out = append(out, Archive{Path: p, Kind: "7z"})
 		case re7zSplit.MatchString(f):
 			if re7zSplit.FindStringSubmatch(f)[1] == "1" {
-				out = append(out, Archive{p, "7z"})
+				out = append(out, Archive{Path: p, Kind: "7z"})
 			}
 		case strings.HasSuffix(low, ".zip"):
-			out = append(out, Archive{p, "zip"})
-		}
-	}
-	// Old-style sets with a .r00 but no .rar, as some posts are renamed:
-	// any file that starts a RAR is the first volume.
-	if !slices.ContainsFunc(out, func(a Archive) bool { return a.Kind == "rar" }) {
-		for _, f := range files {
-			if strings.HasSuffix(strings.ToLower(f), ".r00") || reNumVol.MatchString(f) && reNumVol.FindStringSubmatch(f)[1] == "1" {
-				if isRAR(filepath.Join(dir, f)) {
-					out = append(out, Archive{filepath.Join(dir, f), "rar"})
-					break
-				}
-			}
+			out = append(out, Archive{Path: p, Kind: "zip"})
 		}
 	}
 	return out
@@ -80,17 +82,6 @@ func IsVolume(name string) bool {
 	low := strings.ToLower(name)
 	return strings.HasSuffix(low, ".rar") || reOldVol.MatchString(name) || strings.HasSuffix(low, ".7z") ||
 		re7zSplit.MatchString(name) || strings.HasSuffix(low, ".zip") || reZipVol.MatchString(name)
-}
-
-func isRAR(p string) bool {
-	f, err := os.Open(p)
-	if err != nil {
-		return false
-	}
-	defer f.Close()
-	b := make([]byte, 7)
-	io.ReadFull(f, b)
-	return string(b[:6]) == "Rar!\x1a\x07"
 }
 
 // Result is what extracting an archive did.
@@ -105,7 +96,7 @@ type Result struct {
 func Extract(ctx context.Context, a Archive, dir, password string) (Result, error) {
 	switch a.Kind {
 	case "rar":
-		return extractRAR(ctx, a.Path, dir, password)
+		return extractRAR(ctx, a, dir, password)
 	case "7z":
 		return extract7z(ctx, a.Path, dir, password)
 	case "zip":
@@ -173,10 +164,22 @@ func passwordErr(err error) bool {
 	return strings.Contains(s, "password") || strings.Contains(s, "encrypt") || errors.Is(err, rardecode.ErrBadPassword)
 }
 
-func extractRAR(ctx context.Context, path, dir, password string) (Result, error) {
+func extractRAR(ctx context.Context, a Archive, dir, password string) (Result, error) {
 	var opts []rardecode.Option
 	if password != "" {
 		opts = append(opts, rardecode.Password(password))
+	}
+	path := a.Path
+	var vfs *volumeFS
+	if len(a.Volumes) > 0 {
+		for i, p := range a.Volumes {
+			if v, ok := probeRAR(p); ok && v.num >= 0 && v.num != i {
+				return Result{}, fmt.Errorf("volume %d of the archive is missing", i+1)
+			}
+		}
+		vfs = &volumeFS{paths: a.Volumes, width: max(4, len(fmt.Sprint(len(a.Volumes))))}
+		opts = append(opts, rardecode.FileSystem(vfs))
+		path = vfs.name(0)
 	}
 	rc, err := rardecode.OpenReader(path, opts...)
 	if err != nil {
@@ -212,7 +215,13 @@ func extractRAR(ctx context.Context, path, dir, password string) (Result, error)
 			res.Files = append(res.Files, rel)
 		}
 	}
-	res.Volumes = rc.Volumes()
+	for _, v := range rc.Volumes() {
+		res.Volumes = append(res.Volumes, filepath.Join(filepath.Dir(a.Path), v))
+	}
+	if vfs != nil {
+		// Every volume of the set, not just the ones read.
+		res.Volumes = slices.Clone(a.Volumes)
+	}
 	return res, nil
 }
 

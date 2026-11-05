@@ -7,6 +7,7 @@ import (
 	_ "embed"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -82,6 +83,16 @@ func (s *Store) migrate(ctx context.Context) error {
 		}
 		if _, err := s.db.ExecContext(ctx, stmt); err != nil {
 			return err
+		}
+	}
+	// Columns added since a table was first made.
+	for _, c := range []struct{ table, column, def string }{
+		{"downloads", "quarantined", "TEXT NOT NULL DEFAULT ''"},
+	} {
+		if _, err := s.db.ExecContext(ctx, "SELECT "+c.column+" FROM "+c.table+" WHERE 1 = 0"); err != nil {
+			if _, err := s.db.ExecContext(ctx, "ALTER TABLE "+c.table+" ADD COLUMN "+c.column+" "+c.def); err != nil {
+				return fmt.Errorf("add %s.%s: %w", c.table, c.column, err)
+			}
 		}
 	}
 	// Radarr's and Sonarr's copies of one download client become one.

@@ -38,8 +38,8 @@ func sum(t *testing.T, p string) string {
 
 func TestFind(t *testing.T) {
 	got := Find("/d", []string{"a.part1.rar", "a.part2.rar", "a.part10.rar", "b.7z.001", "b.7z.002", "c.zip", "d.mkv", "e.rar"})
-	want := []Archive{{"/d/a.part1.rar", "rar"}, {"/d/b.7z.001", "7z"}, {"/d/c.zip", "zip"}, {"/d/e.rar", "rar"}}
-	if !slices.Equal(got, want) {
+	want := []Archive{{"/d/a.part1.rar", "rar", nil}, {"/d/b.7z.001", "7z", nil}, {"/d/c.zip", "zip", nil}, {"/d/e.rar", "rar", nil}}
+	if !slices.EqualFunc(got, want, func(a, b Archive) bool { return a.Path == b.Path && a.Kind == b.Kind }) {
 		t.Fatalf("got %v", got)
 	}
 	for _, v := range []string{"x.r00", "x.part2.rar", "x.7z.003", "x.z01"} {
@@ -72,14 +72,14 @@ func TestRARVolumes(t *testing.T) {
 
 func TestRARMissingVolume(t *testing.T) {
 	dir := copyTestdata(t, "multi.part1.rar", "multi.part3.rar")
-	if _, err := Extract(context.Background(), Archive{filepath.Join(dir, "multi.part1.rar"), "rar"}, dir, ""); err == nil {
+	if _, err := Extract(context.Background(), Archive{Path: filepath.Join(dir, "multi.part1.rar"), Kind: "rar"}, dir, ""); err == nil {
 		t.Fatal("extracted with a volume missing")
 	}
 }
 
 func TestRARPassword(t *testing.T) {
 	dir := copyTestdata(t, "locked.rar")
-	a := Archive{filepath.Join(dir, "locked.rar"), "rar"}
+	a := Archive{Path: filepath.Join(dir, "locked.rar"), Kind: "rar"}
 	if _, err := Extract(context.Background(), a, dir, ""); !errors.Is(err, ErrPassword) {
 		t.Fatalf("no password: %v", err)
 	}
@@ -96,14 +96,14 @@ func TestRARPassword(t *testing.T) {
 
 func Test7zAndZip(t *testing.T) {
 	dir := copyTestdata(t, "plain.7z", "plain.zip")
-	res, err := Extract(context.Background(), Archive{filepath.Join(dir, "plain.7z"), "7z"}, dir, "")
+	res, err := Extract(context.Background(), Archive{Path: filepath.Join(dir, "plain.7z"), Kind: "7z"}, dir, "")
 	if err != nil {
 		t.Fatal(err)
 	}
 	if sum(t, filepath.Join(dir, "movie.mkv")) != movieMD5 || !slices.Contains(res.Files, filepath.Join("sub", "inner.txt")) {
 		t.Fatalf("7z: %+v", res)
 	}
-	if _, err := Extract(context.Background(), Archive{filepath.Join(dir, "plain.zip"), "zip"}, dir, ""); err != nil {
+	if _, err := Extract(context.Background(), Archive{Path: filepath.Join(dir, "plain.zip"), Kind: "zip"}, dir, ""); err != nil {
 		t.Fatal(err)
 	}
 }
