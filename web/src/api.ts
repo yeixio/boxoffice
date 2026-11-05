@@ -376,6 +376,8 @@ export type Downloads = {
   folder: { path: string; freeSpace: number; problem?: string }
   cap: DataCap
   waiting?: string
+  // How many finished downloads there are, of which history is a page.
+  historyTotal?: number
 }
 // The downloads folder's file browser.
 export type DownloadFile = {

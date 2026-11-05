@@ -145,6 +145,37 @@ func (s *Store) DownloadHistory(ctx context.Context, limit int) ([]Download, err
 	return s.downloads(ctx, "status IN ('completed', 'failed') ORDER BY finished_at DESC, id DESC LIMIT ?", limit)
 }
 
+// historyOrder is how a page of the history can be sorted, by name.
+var historyOrder = map[string]string{
+	"finished": "finished_at",
+	"added":    "added_at",
+	"name":     "LOWER(name)",
+	"size":     "size",
+	// What needs a look first: failed (quarantined among them), then
+	// waiting to go into the library, then done.
+	"status": "CASE WHEN status = 'failed' THEN 0 WHEN imported_to = '' AND kind <> '' THEN 2 ELSE 3 END",
+}
+
+// DownloadHistoryPage is one page of finished downloads, sorted by one of
+// historyOrder's keys (newest finished first when it isn't one), and how
+// many there are in all.
+func (s *Store) DownloadHistoryPage(ctx context.Context, sort string, asc bool, offset, limit int) ([]Download, int, error) {
+	var total int
+	if err := s.row(ctx, "SELECT COUNT(*) FROM downloads WHERE status IN ('completed', 'failed')").Scan(&total); err != nil {
+		return nil, 0, err
+	}
+	col, ok := historyOrder[sort]
+	if !ok {
+		col, asc = historyOrder["finished"], false
+	}
+	dir := " DESC"
+	if asc {
+		dir = " ASC"
+	}
+	list, err := s.downloads(ctx, "status IN ('completed', 'failed') ORDER BY "+col+dir+", id DESC LIMIT ? OFFSET ?", limit, max(offset, 0))
+	return list, total, err
+}
+
 // SetDownloadStatus moves a download to a status, with a note. Finishing
 // stamps the time; starting to download stamps that.
 func (s *Store) SetDownloadStatus(ctx context.Context, id int64, status, message string) error {
