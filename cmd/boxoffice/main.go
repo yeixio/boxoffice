@@ -133,9 +133,10 @@ func run() error {
 	if cfg.OpenLibrary != "" {
 		ol.Base = cfg.OpenLibrary
 	}
+	shelf := &books.Service{Store: db, OpenLibrary: ol}
 	srv := &api.Server{
-		Store: db, Catalog: cat, Music: tunes, LibScan: &libscan.Service{Store: db, Catalog: cat, Music: tunes, Log: log}, Backups: backups, Migrator: &migrate.Migrator{Catalog: cat, Backups: backups, Log: log, DataDir: cfg.DataDir}, Log: log,
-		Books:     &books.Service{Store: db, OpenLibrary: ol},
+		Store: db, Catalog: cat, Music: tunes, LibScan: &libscan.Service{Store: db, Catalog: cat, Music: tunes, Books: shelf, Log: log}, Backups: backups, Migrator: &migrate.Migrator{Catalog: cat, Backups: backups, Log: log, DataDir: cfg.DataDir}, Log: log,
+		Books:     shelf,
 		Downloads: downloads, Search: finder,
 		Version: version.Version, Database: dbKind, DataDir: cfg.DataDir, EnvAPIKey: cfg.APIKey, Web: web.FS(),
 		Monitoring: mon,

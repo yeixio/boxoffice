@@ -259,7 +259,7 @@ function RootFolders({ kind, type }: { kind: RootKind; type?: MediaType }) {
         ))}
       </ul>
       {scannable(kind) && !!folders.data?.length && (
-        <p className="mt-2 text-xs text-muted">Scan looks for {kind === 'movie' ? 'movies' : kind === 'series' ? 'shows' : 'artists'} already in a folder that aren't on the list, so you can add them where they are.</p>
+        <p className="mt-2 text-xs text-muted">Scan looks for {kind === 'movie' ? 'movies' : kind === 'series' ? 'shows' : kind === 'music' ? 'artists' : 'authors'} already in a folder that aren't on the list, so you can add them where they are.</p>
       )}
       <ErrorNote error={remove.error} />
       {picking && <FolderPicker kind={kind} title={rootTitle(kind, type)} onClose={() => setPicking(false)} />}
