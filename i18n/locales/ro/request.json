@@ -1,0 +1,140 @@
+{
+  "problems": {
+    "wont_play": "Nu pornește",
+    "wrong_title": "E filmul sau episodul greșit",
+    "picture": "Imaginea e proastă",
+    "sound": "Sunetul e greșit sau desincronizat",
+    "subtitles": "Subtitrările lipsesc sau sunt greșite",
+    "other": "Altceva"
+  },
+  "state": {
+    "pending": "Așteaptă aprobarea",
+    "declined": "Refuzat",
+    "searching": "Aprobat, se caută",
+    "downloadingAt": "Se descarcă, {{percent}}",
+    "downloading": "Se descarcă",
+    "partial": "Unele episoade sunt gata",
+    "available": "Gata de vizionat",
+    "paused": "Aprobat, în așteptare",
+    "removed": "Eliminat din bibliotecă"
+  },
+  "site": {
+    "down": "Acest site nu răspunde: {{error}}",
+    "closed": "Acest site de cereri nu e deschis acum."
+  },
+  "signIn": {
+    "matinee": "Cont Matinee",
+    "local": "Cont aici",
+    "with": "Conectează-te cu",
+    "matineeHint": "Folosește numele de utilizator și parola cu care vizionezi în Matinee.",
+    "signUpHint": "Creează un cont pentru a cere filme și seriale.",
+    "username": "Nume de utilizator",
+    "name": "Numele tău",
+    "nameHint": "Ce văd administratorii. Lasă gol pentru a folosi numele de utilizator.",
+    "password": "Parolă",
+    "passwordHint": "Cel puțin 8 caractere.",
+    "make": "Creează-mi contul",
+    "signIn": "Conectează-te",
+    "haveAccount": "Am un cont",
+    "new": "Ești nou aici? Creează un cont"
+  },
+  "nav": {
+    "discover": "Descoperă",
+    "requests": "Cererile mele",
+    "problems": "Probleme",
+    "sections": "Secțiuni",
+    "account": "Contul tău"
+  },
+  "home": {
+    "hi": "Salut, {{name}}",
+    "welcome": "Găsește un film sau un serial și cere-l. Îl poți urmări la Cererile mele.",
+    "find": "Găsește un film sau un serial",
+    "seeAll": "Vezi tot",
+    "nothing": "Nimic de arătat încă",
+    "notSetUp": "Administratorul nu a terminat de configurat acest site. Încearcă din nou mai târziu.",
+    "movieGenres": "Genuri de filme",
+    "showGenres": "Genuri de seriale"
+  },
+  "search": {
+    "nothing": "Nimic cu acest nume.",
+    "movies": "Filme",
+    "shows": "Seriale",
+    "looking": "Se caută…"
+  },
+  "row": {
+    "more": "Arată mai mult"
+  },
+  "pill": {
+    "ready": "Gata de vizionat",
+    "some": "Unele episoade",
+    "coming": "Pe drum",
+    "asked": "Cerut",
+    "declined": "Refuzat"
+  },
+  "kind": {
+    "movie": "Film",
+    "show": "Arată"
+  },
+  "card": {
+    "request": "Cere {{title}}"
+  },
+  "sheet": {
+    "out": "Apare {{date}}",
+    "starts": "Începe {{date}}",
+    "released": "Lansat {{date}}",
+    "firstAired": "Prima difuzare {{date}}",
+    "ready": "E în bibliotecă. Vizionare plăcută!",
+    "some": "O parte din el e în bibliotecă, iar restul e pe drum.",
+    "report": "Raportează o problemă",
+    "coming": "E pe drum. Nu e nimic de cerut: va fi în bibliotecă imediat ce e găsit.",
+    "asked": "L-ai cerut. Așteaptă aprobarea unui administrator.",
+    "takeBack": "Retrage",
+    "declined": "Un administrator l-a refuzat. Poți cere din nou.",
+    "declinedWhy": "Un administrator l-a refuzat: „{{reply}}” Poți cere din nou.",
+    "note": "Notă pentru administratori",
+    "noteHint": "Opțional, de exemplu ce versiune vrei.",
+    "askMovie": "Cere acest film",
+    "askShow": "Cere acest serial"
+  },
+  "report": {
+    "thanks": "Mulțumim. Administratorii vor verifica, iar tu poți urmări la Probleme.",
+    "done": "Gata",
+    "title": "Ce nu e în regulă?",
+    "problem": "Problemă",
+    "season": "Sezon",
+    "seasonHint": "Lasă gol dacă e vorba de tot serialul.",
+    "episode": "Episod",
+    "more": "Spune-ne mai multe",
+    "say": "Spune ce s-a întâmplat.",
+    "optional": "Opțional.",
+    "send": "Trimite raportul"
+  },
+  "mine": {
+    "title": "Cererile mele",
+    "none": "Încă nu ai cerut nimic",
+    "empty": "Găsește un film sau un serial în <link>Descoperă</link> și apasă <strong>+</strong> pentru a-l cere.",
+    "admin": "Administrator: „{{reply}}”",
+    "asked": "Cerut {{date}}",
+    "takeBack": "Retrage"
+  },
+  "issues": {
+    "title": "Probleme",
+    "sub": "Ceva nu e în regulă cu un film sau un serial? Deschide-l în Descoperă sau găsește-l după nume și alege Raportează o problemă.",
+    "none": "Nicio problemă raportată",
+    "season": "Sezonul {{season}}",
+    "episode": "Sezonul {{season}}, episodul {{episode}}",
+    "waiting": "Așteaptă un administrator",
+    "fixed": "Rezolvat"
+  },
+  "account": {
+    "title": "Contul tău",
+    "signedIn": "Conectat ca <strong>{{name}}</strong>.",
+    "signedInMatinee": "Conectat ca <strong>{{name}}</strong> cu contul tău Matinee.",
+    "change": "Schimbă parola",
+    "current": "Parola actuală",
+    "new": "Parolă nouă",
+    "changed": "Schimbată. Ai fost deconectat de peste tot în altă parte.",
+    "changeButton": "Schimbă parola",
+    "signOut": "Deconectează-te"
+  }
+}

@@ -1,0 +1,140 @@
+{
+  "problems": {
+    "wont_play": "Nem játszható le",
+    "wrong_title": "Rossz film vagy epizód",
+    "picture": "Rossz a kép",
+    "sound": "Rossz a hang, vagy nincs szinkronban",
+    "subtitles": "Hiányzik vagy rossz a felirat",
+    "other": "Valami más"
+  },
+  "state": {
+    "pending": "Jóváhagyásra vár",
+    "declined": "Elutasítva",
+    "searching": "Jóváhagyva, keresés folyamatban",
+    "downloadingAt": "Letöltés, {{percent}}",
+    "downloading": "Letöltés",
+    "partial": "Néhány epizód kész",
+    "available": "Megnézhető",
+    "paused": "Jóváhagyva, várakoztatva",
+    "removed": "Eltávolítva a könyvtárból"
+  },
+  "site": {
+    "down": "Ez az oldal nem válaszol: {{error}}",
+    "closed": "Ez a kéréses oldal most nincs nyitva."
+  },
+  "signIn": {
+    "matinee": "Matinee-fiók",
+    "local": "Itteni fiók",
+    "with": "Bejelentkezés ezzel",
+    "matineeHint": "Azt a felhasználónevet és jelszót használd, amellyel a Matinee-ben nézel.",
+    "signUpHint": "Hozz létre fiókot, hogy filmeket és sorozatokat kérhess.",
+    "username": "Felhasználónév",
+    "name": "A neved",
+    "nameHint": "Ezt látják a rendszergazdák. Hagyd üresen a felhasználóneved használatához.",
+    "password": "Jelszó",
+    "passwordHint": "Legalább 8 karakter.",
+    "make": "Fiókom létrehozása",
+    "signIn": "Bejelentkezés",
+    "haveAccount": "Van fiókom",
+    "new": "Új vagy itt? Hozz létre fiókot"
+  },
+  "nav": {
+    "discover": "Felfedezés",
+    "requests": "Kéréseim",
+    "problems": "Problémák",
+    "sections": "Szakaszok",
+    "account": "A fiókod"
+  },
+  "home": {
+    "hi": "Szia, {{name}}",
+    "welcome": "Keress egy filmet vagy sorozatot, és kérd. A Kéréseim alatt követheted.",
+    "find": "Film vagy sorozat keresése",
+    "seeAll": "Összes",
+    "nothing": "Még nincs mit mutatni",
+    "notSetUp": "A rendszergazda még nem fejezte be az oldal beállítását. Próbáld újra később.",
+    "movieGenres": "Filmműfajok",
+    "showGenres": "Sorozatműfajok"
+  },
+  "search": {
+    "nothing": "Nincs semmi ilyen néven.",
+    "movies": "Filmek",
+    "shows": "Sorozatok",
+    "looking": "Keresés…"
+  },
+  "row": {
+    "more": "Több megjelenítése"
+  },
+  "pill": {
+    "ready": "Megnézhető",
+    "some": "Néhány epizód",
+    "coming": "Úton",
+    "asked": "Kérve",
+    "declined": "Elutasítva"
+  },
+  "kind": {
+    "movie": "Film",
+    "show": "Mutat"
+  },
+  "card": {
+    "request": "{{title}} kérése"
+  },
+  "sheet": {
+    "out": "Megjelenik: {{date}}",
+    "starts": "Kezdődik: {{date}}",
+    "released": "Megjelent: {{date}}",
+    "firstAired": "Először vetítve: {{date}}",
+    "ready": "A könyvtárban van. Jó szórakozást!",
+    "some": "Egy része a könyvtárban van, a többi úton van.",
+    "report": "Probléma jelentése",
+    "coming": "Úton van. Nincs mit kérni: amint megtalálja, a könyvtárban lesz.",
+    "asked": "Ezt te kérted. Rendszergazdai jóváhagyásra vár.",
+    "takeBack": "Visszavonás",
+    "declined": "Egy rendszergazda elutasította. Újra kérheted.",
+    "declinedWhy": "Egy rendszergazda elutasította: „{{reply}}” Újra kérheted.",
+    "note": "Megjegyzés a rendszergazdáknak",
+    "noteHint": "Nem kötelező, például melyik változatot szeretnéd.",
+    "askMovie": "A film kérése",
+    "askShow": "A sorozat kérése"
+  },
+  "report": {
+    "thanks": "Köszönjük. A rendszergazdák megnézik, és a Problémák alatt követheted.",
+    "done": "Kész",
+    "title": "Mi a baj?",
+    "problem": "Probléma",
+    "season": "Évad",
+    "seasonHint": "Hagyd üresen, ha az egész sorozatról van szó.",
+    "episode": "Epizód",
+    "more": "Mondj többet",
+    "say": "Írd le, mi történt.",
+    "optional": "Nem kötelező.",
+    "send": "Jelentés elküldése"
+  },
+  "mine": {
+    "title": "Kéréseim",
+    "none": "Még nem kértél semmit",
+    "empty": "Keress egy filmet vagy sorozatot a <link>Felfedezésben</link>, és nyomd meg a <strong>+</strong> gombot a kéréshez.",
+    "admin": "Rendszergazda: „{{reply}}”",
+    "asked": "Kérve: {{date}}",
+    "takeBack": "Visszavonás"
+  },
+  "issues": {
+    "title": "Problémák",
+    "sub": "Valami gond van egy filmmel vagy sorozattal? Nyisd meg a Felfedezésben vagy keresd meg név szerint, és válaszd a Probléma jelentése lehetőséget.",
+    "none": "Nincs jelentett probléma",
+    "season": "{{season}}. évad",
+    "episode": "{{season}}. évad, {{episode}}. epizód",
+    "waiting": "Rendszergazdára vár",
+    "fixed": "Javítva"
+  },
+  "account": {
+    "title": "A fiókod",
+    "signedIn": "Bejelentkezve mint <strong>{{name}}</strong>.",
+    "signedInMatinee": "Bejelentkezve mint <strong>{{name}}</strong>, a Matinee-fiókoddal.",
+    "change": "Jelszó módosítása",
+    "current": "Jelenlegi jelszó",
+    "new": "Új jelszó",
+    "changed": "Módosítva. Mindenhol máshol ki lettél jelentkeztetve.",
+    "changeButton": "Jelszó módosítása",
+    "signOut": "Kijelentkezés"
+  }
+}

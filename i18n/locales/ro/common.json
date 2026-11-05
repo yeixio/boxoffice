@@ -1,0 +1,56 @@
+{
+  "size": {
+    "B": "{{value}} B",
+    "KB": "{{value}} KB",
+    "MB": "{{value}} MB",
+    "GB": "{{value}} GB",
+    "TB": "{{value}} TB",
+    "PB": "{{value}} PB"
+  },
+  "duration": {
+    "minutes_one": "{{count}} min",
+    "minutes_few": "{{count}} min",
+    "minutes_other": "{{count}} de min",
+    "hours": "{{hours}} h",
+    "hoursMinutes": "{{hours}} h {{minutes}} min"
+  },
+  "loading": "Se încarcă…",
+  "close": "Închide",
+  "language": {
+    "title": "Limbă",
+    "label": "Limbă",
+    "automatic": "Automat ({{language}})",
+    "hint": "Limba în care îți apare Box Office, pe fiecare dispozitiv pe care te conectezi. Automat urmează limba fiecărui browser.",
+    "machine": "Această traducere a fost făcută automat, așa că unele formulări pot fi inexacte.",
+    "help": "Ajută la îmbunătățirea ei"
+  },
+  "sort": {
+    "az": "A–Z",
+    "za": "Z–A",
+    "oldest": "Cele mai vechi primele",
+    "newest": "Cele mai noi primele",
+    "soonest": "Cele mai apropiate întâi",
+    "latest": "Cele mai recente întâi",
+    "smallest": "Cele mai mici întâi",
+    "largest": "Cele mai mari întâi",
+    "lowest": "Cele mai mici primele",
+    "highest": "Cele mai mari primele",
+    "worst": "Cele mai slabe întâi",
+    "best": "Cele mai bune întâi",
+    "shortest": "Cele mai scurte întâi",
+    "longest": "Cele mai lungi întâi",
+    "fewest": "Cele mai puține întâi",
+    "most": "Cele mai multe întâi",
+    "least": "Cele mai puțin întâi",
+    "by": "Sortează după",
+    "show": "Afișează {{order}}",
+    "flip": "{{option}}, {{order}}. Afișează în schimb {{other}}"
+  },
+  "pager": {
+    "pages": "Pagini {{label}}",
+    "range": "{{from}}–{{to}} din {{total}}",
+    "previous": "Pagina anterioară",
+    "next": "Pagina următoare",
+    "page": "Pagina {{page}} din {{pages}}"
+  }
+}
