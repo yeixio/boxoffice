@@ -49,6 +49,7 @@ Box Office is a library manager. It doesn't come with any content, indexers or n
 - [Configuration](#configuration)
 - [FAQ](#faq)
 - [How it's built](#how-its-built)
+- [Ecosystem](#ecosystem)
 - [Contributing](#contributing)
 
 ## Try it in one line
@@ -322,6 +323,16 @@ deploy/helm/boxoffice  Helm chart
 ```
 
 The API under `/api/v1` is plain JSON over HTTP. `GET /api/v1/status` needs no sign-in and says which Box Office this is, which is how Matinee finds it.
+
+## Ecosystem
+
+Box Office is one of a family of free, self-hosted apps for the home. Each works on its own, and they're built to sit side by side:
+
+| Project | What it does |
+|---------|--------------|
+| [**Matinee**](https://github.com/yeixio/matinee) | A fast, open-source media server for your movies, TV, music, audiobooks and podcasts, with web, phone and TV apps. |
+| **Box Office** (this repository) | Manages your movie and TV library in place of Radarr, Sonarr and NZBGet, and plugs straight into Matinee. |
+| [**Air-Mixer**](https://github.com/yeixio/air-mixer) | One home for every speaker you own: receives, routes and mixes audio across speakers from different ecosystems, starting with AirPlay in both directions. |
 
 ## Contributing
 

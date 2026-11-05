@@ -2,14 +2,19 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { CircleAlert, ScanSearch, Search } from 'lucide-react'
-import { del, get, post, type LibScan, type LookupArtist, type LookupMovie, type LookupShow, type RootFolder, type RootKind, type ScanFound, type ScanMatch } from '../api'
+import { del, get, post, type LibScan, type LookupArtist, type LookupAuthor, type LookupMovie, type LookupShow, type RootFolder, type RootKind, type ScanFound, type ScanMatch } from '../api'
 import { bytes, count } from '../format'
 import { monitorOptions, useProfiles, useShowDefaults } from '../hooks'
 import { Badge, Button, ErrorNote, Field, Input, Modal, Poster, Select, Spinner, Toggle } from '../ui'
 
 // Kinds of root folder a scan can add from: the ones Box Office has a list
 // for.
-export const scannable = (kind: RootKind) => kind === 'movie' || kind === 'series' || kind === 'music'
+export const scannable = (kind: RootKind) => kind === 'movie' || kind === 'series' || kind === 'music' || isBooks(kind)
+
+// Ebook and audiobook root folders hold a folder per author.
+const isBooks = (kind: RootKind) => kind === 'ebook' || kind === 'audiobook'
+// Kinds matched somewhere other than TMDB, with no quality profile.
+const notTMDB = (kind: RootKind) => kind === 'music' || isBooks(kind)
 
 const running = (s?: LibScan | null) => s?.status === 'scanning' || s?.status === 'adding'
 
@@ -22,7 +27,7 @@ export function useLibScan(rootId: number) {
 }
 
 const noun = (kind: RootKind, n: number) => {
-  const one = kind === 'movie' ? 'movie' : kind === 'series' ? 'show' : 'artist'
+  const one = kind === 'movie' ? 'movie' : kind === 'series' ? 'show' : isBooks(kind) ? 'author' : 'artist'
   return n === 1 ? one : one + 's'
 }
 
@@ -106,7 +111,7 @@ function ScanReview({ folder, onClose, onRescan }: { folder: RootFolder; onClose
       post<LibScan>(`/rootfolders/${folder.id}/scan/add`, {
         picks: selected.map((f) => {
           const m = picks[f.path] ?? f.match!
-          return { path: f.path, tmdbId: m.tmdbId, mbid: m.mbid }
+          return { path: f.path, tmdbId: m.tmdbId, mbid: m.mbid, olKey: m.olKey }
         }),
         profileId,
         monitored,
@@ -127,11 +132,11 @@ function ScanReview({ folder, onClose, onRescan }: { folder: RootFolder; onClose
   })
   useEffect(() => {
     if (s?.status === 'done') {
-      qc.invalidateQueries({ queryKey: [kind === 'movie' ? 'movies' : kind === 'series' ? 'series' : 'artists'] })
+      qc.invalidateQueries({ queryKey: [kind === 'movie' ? 'movies' : kind === 'series' ? 'series' : isBooks(kind) ? 'authors' : 'artists'] })
     }
   }, [s?.status, kind, qc])
 
-  const title = `Scan for ${kind === 'movie' ? 'movies' : kind === 'series' ? 'shows' : 'artists'}`
+  const title = `Scan for ${kind === 'movie' ? 'movies' : kind === 'series' ? 'shows' : isBooks(kind) ? 'authors' : 'artists'}`
   if (!s) return <Modal title={title} onClose={onClose} wide>{scan.isPending ? <Spinner /> : <p className="text-sm text-muted">There's no scan of this folder now.</p>}</Modal>
   return (
     <Modal title={title} onClose={onClose} wide>
@@ -218,7 +223,7 @@ function ScanReview({ folder, onClose, onRescan }: { folder: RootFolder; onClose
                 <ul className="flex flex-col gap-1 text-sm">
                   {groups.added.map((f) => (
                     <li key={f.path}>
-                      <Link className="text-marquee" to={`/${kind === 'movie' ? 'movies' : kind === 'series' ? 'shows' : 'music'}/${f.added}`} onClick={onClose}>
+                      <Link className="text-marquee" to={`/${kind === 'movie' ? 'movies' : kind === 'series' ? 'shows' : kind === 'ebook' ? 'books' : kind === 'audiobook' ? 'audiobooks' : 'music'}/${f.added}`} onClick={onClose}>
                         {(picks[f.path] ?? f.match)?.title ?? f.name}
                       </Link>{' '}
                       <span className="text-xs text-muted">from {f.name}</span>
@@ -229,7 +234,7 @@ function ScanReview({ folder, onClose, onRescan }: { folder: RootFolder; onClose
             )}
             {selected.length > 0 && (
               <div className="grid gap-4 rounded-lg border border-line p-4 sm:grid-cols-2">
-                {kind !== 'music' && (
+                {!notTMDB(kind) && (
                   <Field label="Quality profile">
                     {(id) => <Select id={id} value={profileId} onChange={(v) => setProfileId(Number(v))} options={(profiles.data ?? []).map((p) => ({ value: p.id, label: p.name }))} />}
                   </Field>
@@ -243,13 +248,15 @@ function ScanReview({ folder, onClose, onRescan }: { folder: RootFolder; onClose
                   <Toggle
                     checked={monitored}
                     onChange={setMonitored}
-                    label={kind === 'music' ? 'Watch for their new albums' : kind === 'series' ? 'Watch for missing and new episodes, and upgrades' : 'Watch for upgrades as the profile allows'}
+                    label={kind === 'music' ? 'Watch for their new albums' : kind === 'ebook' ? 'Watch for their new books as ebooks' : kind === 'audiobook' ? 'Watch for their new books as audiobooks' : kind === 'series' ? 'Watch for missing and new episodes, and upgrades' : 'Watch for upgrades as the profile allows'}
                   />
                 </div>
               </div>
             )}
             <ErrorNote error={add.error || dismiss.error} />
-            <p className="text-xs text-muted">Box Office leaves the files where they are. Nothing is moved, renamed or deleted, and nothing is searched for until you ask.</p>
+            <p className="text-xs text-muted">Box Office leaves the files where they are. Nothing is moved, renamed or deleted, and nothing is searched for until you ask.
+              {isBooks(kind) && ' Books already in the folder aren’t marked as wanted, so they aren’t fetched again; pick any others you want on the author’s page.'}
+            </p>
             <div className="flex flex-wrap justify-between gap-2">
               <div className="flex gap-2">
                 <Button variant="ghost" busy={dismiss.isPending} onClick={() => dismiss.mutate()}>
@@ -259,7 +266,7 @@ function ScanReview({ folder, onClose, onRescan }: { folder: RootFolder; onClose
                   Scan again
                 </Button>
               </div>
-              <Button variant="primary" busy={add.isPending} disabled={selected.length === 0 || (kind !== 'music' && !profileId)} onClick={() => add.mutate()}>
+              <Button variant="primary" busy={add.isPending} disabled={selected.length === 0 || (!notTMDB(kind) && !profileId)} onClick={() => add.mutate()}>
                 Add {selected.length ? count(selected.length, noun(kind, 1), noun(kind, 2)) : ''}
               </Button>
             </div>
@@ -326,6 +333,7 @@ function Summary({ scan }: { scan: LibScan }) {
 function contents(kind: RootKind, f: ScanFound) {
   if (f.files === 0) return ''
   if (kind === 'music') return `${count(f.files, 'track', 'tracks')}, ${bytes(f.size)}`
+  if (isBooks(kind)) return `${count(f.files, 'file', 'files')}, ${bytes(f.size)}`
   if (kind === 'series') return `${count(f.episodes ?? 0, 'episode', 'episodes')}, ${bytes(f.size)}`
   return `${count(f.files, 'video', 'videos')}, ${bytes(f.size)}`
 }
@@ -362,26 +370,28 @@ function FoundRow({ kind, found: f, pick, checked, onCheck, onChange }: { kind: 
 
 // ChangeMatch searches for what a folder really is.
 function ChangeMatch({ kind, found, onClose, onPick }: { kind: RootKind; found: ScanFound; onClose: () => void; onPick: (m: ScanMatch) => void }) {
-  const [term, setTerm] = useState(found.guess.title + (found.guess.year && kind !== 'music' ? ' ' + found.guess.year : ''))
+  const [term, setTerm] = useState(found.guess.title + (found.guess.year && !notTMDB(kind) ? ' ' + found.guess.year : ''))
   const [q, setQ] = useState(term)
   useEffect(() => {
     const t = setTimeout(() => setQ(term.trim()), 400)
     return () => clearTimeout(t)
   }, [term])
-  const path = kind === 'movie' ? '/lookup/movies' : kind === 'series' ? '/lookup/series' : '/lookup/artists'
+  const path = kind === 'movie' ? '/lookup/movies' : kind === 'series' ? '/lookup/series' : isBooks(kind) ? '/lookup/authors' : '/lookup/artists'
   const results = useQuery({
     queryKey: ['lookup', kind, q],
     queryFn: async (): Promise<(ScanMatch & { id?: number })[]> => {
-      const r = await get<(LookupMovie | LookupShow | LookupArtist)[]>(`${path}?q=${encodeURIComponent(q)}`)
+      const r = await get<(LookupMovie | LookupShow | LookupArtist | LookupAuthor)[]>(`${path}?q=${encodeURIComponent(q)}`)
       return r.map((x) =>
-        'mbid' in x
+        'key' in x
+          ? { olKey: x.key, title: x.name, poster: x.photo, disambiguation: [[x.born, x.died].filter(Boolean).join('–'), x.topWork].filter(Boolean).join(', '), id: x.id }
+          : 'mbid' in x
           ? { mbid: x.mbid, title: x.name, disambiguation: x.disambiguation ?? [x.type, x.country].filter(Boolean).join(', '), id: x.id }
           : { tmdbId: x.tmdbId, title: x.title, year: x.year, poster: x.poster, overview: x.overview, id: x.id },
       )
     },
     enabled: q.length > 1,
   })
-  const where = kind === 'music' ? 'MusicBrainz' : 'TMDB'
+  const where = kind === 'music' ? 'MusicBrainz' : isBooks(kind) ? 'Open Library' : 'TMDB'
   return (
     <Modal title={`What is ${found.name}?`} onClose={onClose} wide>
       <div className="flex flex-col gap-4">
@@ -392,7 +402,7 @@ function ChangeMatch({ kind, found, onClose, onPick }: { kind: RootKind; found: 
             className="pl-9"
             value={term}
             onChange={(e) => setTerm(e.target.value)}
-            placeholder={kind === 'movie' ? 'Title, "Title 1999", tmdb:603 or an IMDb id' : kind === 'series' ? 'Title, tmdb:95396 or tvdb:371980' : 'Artist name, or a MusicBrainz id'}
+            placeholder={kind === 'movie' ? 'Title, "Title 1999", tmdb:603 or an IMDb id' : kind === 'series' ? 'Title, tmdb:95396 or tvdb:371980' : isBooks(kind) ? 'Author name, or an Open Library id like OL23919A' : 'Artist name, or a MusicBrainz id'}
           />
         </div>
         {results.isFetching && <Spinner label={`Looking on ${where}`} />}
@@ -400,7 +410,7 @@ function ChangeMatch({ kind, found, onClose, onPick }: { kind: RootKind; found: 
         {results.data?.length === 0 && <p className="text-sm text-muted">{where} has nothing by that name.</p>}
         <ul className="flex flex-col divide-y divide-line">
           {results.data?.map((r) => (
-            <li key={r.tmdbId ?? r.mbid} className="flex gap-4 py-3">
+            <li key={r.tmdbId ?? r.mbid ?? r.olKey} className="flex gap-4 py-3">
               {kind !== 'music' && <Poster src={r.poster} title={r.title} className="w-12 shrink-0" />}
               <div className="min-w-0 flex-1">
                 <div className="font-display font-semibold">

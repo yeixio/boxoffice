@@ -109,7 +109,7 @@ CREATE INDEX IF NOT EXISTS episodes_air ON episodes (air_date);
 -- A file on disk for a movie or an episode.
 CREATE TABLE IF NOT EXISTS media_files (
 	id         INTEGER PRIMARY KEY AUTOINCREMENT,
-	kind       TEXT NOT NULL, -- movie or episode
+	kind       TEXT NOT NULL, -- movie, episode, ebook or audiobook (an audiobook's path is its folder)
 	owner_id   BIGINT NOT NULL,
 	path       TEXT NOT NULL UNIQUE,
 	size       BIGINT NOT NULL DEFAULT 0,
@@ -390,6 +390,7 @@ CREATE TABLE IF NOT EXISTS authors (
 	-- Whether books that come out from now on are wanted in each format.
 	new_ebooks     INTEGER NOT NULL DEFAULT 0,
 	new_audiobooks INTEGER NOT NULL DEFAULT 0,
+	locked         INTEGER NOT NULL DEFAULT 0, -- Do not touch: Box Office never searches for or changes these books' files
 	added_at       BIGINT NOT NULL,
 	refreshed_at   BIGINT NOT NULL DEFAULT 0
 );

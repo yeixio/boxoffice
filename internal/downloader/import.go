@@ -74,10 +74,13 @@ func videos(dir string, files []string) []string {
 // folder.
 func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir string, files []string) (string, error) {
 	// A title on Do not touch never gets a file moved in.
-	if d.Kind == "movie" || d.Kind == "series" {
+	if d.Kind == "movie" || d.Kind == "series" || store.IsBookKind(d.Kind) {
 		if err := li.Store.CheckUnlocked(ctx, d.Kind, d.TitleID); err != nil {
 			return "", err
 		}
+	}
+	if store.IsBookKind(d.Kind) {
+		return li.importBook(ctx, d, dir, files)
 	}
 	vids := videos(dir, files)
 	if len(vids) == 0 {
@@ -197,7 +200,7 @@ func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir str
 		}
 		return filepath.Dir(placed[0]), nil
 	}
-	return "", errors.New("it isn't for a movie or a show")
+	return "", errors.New("it isn't for a movie, a show or a book")
 }
 
 // ReadOnlyError means the library folder doesn't take writes, as when

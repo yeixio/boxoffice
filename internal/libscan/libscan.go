@@ -27,10 +27,12 @@ import (
 	"sync"
 	"time"
 
+	"github.com/yeixio/boxoffice/internal/books"
 	"github.com/yeixio/boxoffice/internal/catalog"
 	"github.com/yeixio/boxoffice/internal/mediatypes"
 	"github.com/yeixio/boxoffice/internal/music"
 	"github.com/yeixio/boxoffice/internal/musicbrainz"
+	"github.com/yeixio/boxoffice/internal/openlibrary"
 	"github.com/yeixio/boxoffice/internal/quality"
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/tmdb"
@@ -41,6 +43,7 @@ type Service struct {
 	Store   *store.Store
 	Catalog *catalog.Service
 	Music   *music.Service
+	Books   *books.Service
 	Log     *slog.Logger
 
 	mu    sync.Mutex
@@ -116,6 +119,7 @@ type Found struct {
 type Match struct {
 	TMDBID         int64  `json:"tmdbId,omitempty"`
 	MBID           string `json:"mbid,omitempty"`
+	OLKey          string `json:"olKey,omitempty"`
 	Title          string `json:"title"`
 	Year           int    `json:"year,omitempty"`
 	Poster         string `json:"poster,omitempty"`
@@ -127,7 +131,7 @@ type Match struct {
 type Have struct {
 	ID    int64  `json:"id"`
 	Title string `json:"title"`
-	Path  string `json:"path"`
+	Path  string `json:"path,omitempty"`
 }
 
 // Error is a mistake in what was asked, fit to show whoever asked.
@@ -147,8 +151,12 @@ const scanTimeout = 2 * time.Hour
 // Scannable says whether root folders of a kind can be scanned: those
 // whose titles Box Office can add.
 func Scannable(kind string) bool {
-	return kind == "movie" || kind == "series" || kind == mediatypes.Music
+	return kind == "movie" || kind == "series" || kind == mediatypes.Music || isBooks(kind)
 }
+
+// isBooks says a root folder holds ebooks or audiobooks: one folder per
+// author, which is matched on Open Library.
+func isBooks(kind string) bool { return kind == store.Ebook || kind == store.Audiobook }
 
 func (s *Service) root(ctx context.Context, id int) (store.RootFolder, error) {
 	roots, err := s.Store.RootFolders(ctx, "")
@@ -219,6 +227,13 @@ func (s *Service) Start(ctx context.Context, rootID int) (Scan, error) {
 			return Scan{}, music.ErrOff
 		}
 	}
+	if isBooks(root.Kind) {
+		if on, err := mediatypes.Enabled(ctx, s.Store, root.Kind); err != nil {
+			return Scan{}, err
+		} else if !on {
+			return Scan{}, books.ErrOff{Format: root.Kind}
+		}
+	}
 	if st, err := os.Stat(root.Path); err != nil || !st.IsDir() {
 		return Scan{}, badf("Box Office can't see the folder %s", root.Path)
 	}
@@ -283,6 +298,18 @@ func (s *Service) scan(ctx context.Context, sc *Scan) error {
 			byName[strings.ToLower(filepath.Base(l.Path))] = l
 		}
 	}
+	// Authors have no folder of their own on the list, so an author's
+	// folder is on the list when an author of that name is.
+	authors := map[string]bool{}
+	if isBooks(sc.Kind) {
+		list, err := s.Store.Authors(ctx)
+		if err != nil {
+			return err
+		}
+		for _, a := range list {
+			authors[norm(a.Name)] = true
+		}
+	}
 	rootKey := key(sc.Root)
 	for _, f := range files {
 		for d := filepath.Dir(f); d != "/" && d != "." && key(d) != rootKey; d = filepath.Dir(d) {
@@ -305,13 +332,13 @@ func (s *Service) scan(ctx context.Context, sc *Scan) error {
 		}
 		path := filepath.Join(sc.Root, name)
 		if !e.IsDir() {
-			if e.Type().IsRegular() && (isVideo(name) || isAudio(name)) {
+			if e.Type().IsRegular() && (isVideo(name) || isAudio(name) || isEbook(name)) {
 				loose++
 			}
 			continue
 		}
 		folders++
-		if have[key(path)] {
+		if have[key(path)] || isBooks(sc.Kind) && authors[norm(authorName(name))] {
 			listedN++
 			continue
 		}
@@ -350,6 +377,9 @@ func (s *Service) lookupStep(kind string) string {
 	if kind == mediatypes.Music {
 		return "Looking them up on MusicBrainz"
 	}
+	if isBooks(kind) {
+		return "Looking them up on Open Library"
+	}
 	return "Looking them up on TMDB"
 }
 
@@ -359,6 +389,21 @@ var (
 	videoExts = []string{".mkv", ".mp4", ".m4v", ".avi", ".ts", ".m2ts", ".wmv", ".mov", ".mpg", ".mpeg", ".webm"}
 	audioExts = []string{".flac", ".mp3", ".m4a", ".m4b", ".aac", ".ogg", ".opus", ".wav", ".alac", ".wma", ".ape", ".aiff"}
 )
+
+var ebookExts = []string{".epub", ".mobi", ".azw", ".azw3", ".pdf", ".kfx", ".fb2", ".djvu"}
+
+func isEbook(name string) bool {
+	return slices.Contains(ebookExts, strings.ToLower(filepath.Ext(name)))
+}
+
+// authorName is the author a top-level book folder is for: "Brandon
+// Sanderson", or the author in "Brandon Sanderson - Mistborn".
+func authorName(folder string) string {
+	if a, _, ok := strings.Cut(folder, " - "); ok && strings.TrimSpace(a) != "" {
+		return strings.TrimSpace(a)
+	}
+	return strings.TrimSpace(folder)
+}
 
 func isVideo(name string) bool {
 	return slices.Contains(videoExts, strings.ToLower(filepath.Ext(name)))
@@ -410,6 +455,27 @@ func videosIn(dir string) []video {
 // count fills in what's in a found folder.
 func count(f *Found, kind string) {
 	f.Guess = ParseName(f.Name)
+	if isBooks(kind) {
+		f.Guess = Guess{Title: authorName(f.Name)}
+		n := 0
+		filepath.WalkDir(f.Path, func(path string, d fs.DirEntry, err error) error {
+			n++
+			if err != nil || n > maxWalk {
+				return filepath.SkipDir
+			}
+			if d.Type().IsRegular() && (kind == store.Ebook && isEbook(d.Name()) || kind == store.Audiobook && isAudio(d.Name())) {
+				if info, err := d.Info(); err == nil {
+					f.Files++
+					f.Size += info.Size()
+				}
+			}
+			return nil
+		})
+		if f.Files == 0 {
+			f.Note = map[string]string{store.Ebook: "there are no ebooks in it", store.Audiobook: "there are no audiobooks in it"}[kind]
+		}
+		return
+	}
 	if kind == mediatypes.Music {
 		n := 0
 		filepath.WalkDir(f.Path, func(path string, d fs.DirEntry, err error) error {
@@ -450,7 +516,7 @@ func count(f *Found, kind string) {
 const lookups = 4
 
 func (s *Service) matchAll(ctx context.Context, sc *Scan, todo []*Found) error {
-	if sc.Kind != mediatypes.Music && len(todo) > 0 {
+	if (sc.Kind == "movie" || sc.Kind == "series") && len(todo) > 0 {
 		if err := s.Catalog.TMDB(ctx).Check(ctx); err != nil {
 			return fmt.Errorf("Box Office can't match the folders without TMDB: %w", err)
 		}
@@ -459,8 +525,8 @@ func (s *Service) matchAll(ctx context.Context, sc *Scan, todo []*Found) error {
 	var wg sync.WaitGroup
 	done := 0
 	workers := lookups
-	if sc.Kind == mediatypes.Music {
-		workers = 1 // MusicBrainz takes one request a second
+	if sc.Kind == mediatypes.Music || isBooks(sc.Kind) {
+		workers = 1 // MusicBrainz and Open Library take one request a second
 	}
 	for range workers {
 		wg.Go(func() {
@@ -496,6 +562,8 @@ func (s *Service) match(ctx context.Context, kind string, f *Found) {
 		err = s.matchShow(ctx, f)
 	case mediatypes.Music:
 		err = s.matchArtist(ctx, f)
+	case store.Ebook, store.Audiobook:
+		err = s.matchAuthor(ctx, f)
 	}
 	if err != nil {
 		f.Problem = "Box Office couldn't look it up: " + err.Error()
@@ -522,6 +590,10 @@ func (s *Service) checkHave(ctx context.Context, kind string, f *Found) {
 	case mediatypes.Music:
 		if a, err := s.Store.ArtistByMBID(ctx, f.Match.MBID); err == nil {
 			f.Have = &Have{a.ID, a.Name, a.Path}
+		}
+	case store.Ebook, store.Audiobook:
+		if a, err := s.Store.AuthorByKey(ctx, f.Match.OLKey); err == nil {
+			f.Have = &Have{ID: a.ID, Title: a.Name}
 		}
 	}
 }
@@ -660,6 +732,34 @@ func (s *Service) matchArtist(ctx context.Context, f *Found) error {
 	return nil
 }
 
+// matchAuthor finds an author on Open Library. It often has a few records
+// for one writer; the one with the most books is taken.
+func (s *Service) matchAuthor(ctx context.Context, f *Found) error {
+	found, err := s.Books.OpenLibrary.SearchAuthors(ctx, f.Guess.Title)
+	if err != nil {
+		return err
+	}
+	if len(found) == 0 {
+		return nil
+	}
+	pick, named := found[0], false
+	for _, a := range found {
+		if same(a.Name, f.Guess.Title) && (!named || a.Works > pick.Works) {
+			pick, named = a, true
+		}
+	}
+	f.Sure = named
+	about := []string{}
+	if pick.Born != "" || pick.Died != "" {
+		about = append(about, strings.Trim(pick.Born+"–"+pick.Died, "–"))
+	}
+	if pick.TopWork != "" {
+		about = append(about, pick.TopWork)
+	}
+	f.Match = &Match{OLKey: pick.Key, Title: pick.Name, Poster: pick.Photo, Disambiguation: strings.Join(about, ", ")}
+	return nil
+}
+
 func artistMatch(a musicbrainz.Artist) *Match {
 	return &Match{MBID: a.MBID, Title: a.Name, Disambiguation: a.Disambiguation}
 }
@@ -670,6 +770,7 @@ type Pick struct {
 	Path   string `json:"path"`
 	TMDBID int64  `json:"tmdbId,omitempty"`
 	MBID   string `json:"mbid,omitempty"`
+	OLKey  string `json:"olKey,omitempty"`
 }
 
 // AddRequest is which found folders to add, and how.
@@ -713,7 +814,16 @@ func (s *Service) Add(ctx context.Context, rootID int, req AddRequest) (Scan, er
 			s.mu.Unlock()
 			return Scan{}, badf("%s is on the list already", sc.Found[i].Name)
 		}
-		if sc.Kind == mediatypes.Music && !musicbrainz.IsMBID(p.MBID) || sc.Kind != mediatypes.Music && p.TMDBID <= 0 {
+		var picked bool
+		switch {
+		case sc.Kind == mediatypes.Music:
+			picked = musicbrainz.IsMBID(p.MBID)
+		case isBooks(sc.Kind):
+			picked = openlibrary.IsAuthorKey(p.OLKey)
+		default:
+			picked = p.TMDBID > 0
+		}
+		if !picked {
 			s.mu.Unlock()
 			return Scan{}, badf("pick what %s is first", sc.Found[i].Name)
 		}
@@ -758,6 +868,29 @@ func (s *Service) addOne(ctx context.Context, sc *Scan, p Pick, req AddRequest) 
 	st, err := os.Lstat(p.Path)
 	if err != nil || !st.IsDir() {
 		return 0, "the folder isn't there any more"
+	}
+	if isBooks(sc.Kind) {
+		// Box Office doesn't keep track of book files yet, so the author
+		// goes on the list and the books on disk are left as they are:
+		// none of them are wanted, so none are fetched again.
+		a, err := s.Books.Add(ctx, books.AddOptions{Key: p.OLKey, Format: sc.Kind, New: req.Monitored})
+		if a.ID != 0 {
+			if err != nil {
+				s.Log.Warn("fetching an author's books", "author", a.Name, "err", err)
+			}
+			return a.ID, ""
+		}
+		var off books.ErrOff
+		var ce *catalog.Error
+		switch {
+		case errors.As(err, &off):
+			return 0, err.Error()
+		case errors.Is(err, catalog.ErrExists):
+			return 0, "they're on the list already"
+		case errors.As(err, &ce):
+			return 0, ce.Message
+		}
+		return 0, err.Error()
 	}
 	if listed, err := s.Store.ListedFolders(ctx); err == nil {
 		for _, l := range listed {

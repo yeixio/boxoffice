@@ -100,6 +100,7 @@ func (s *Store) migrate(ctx context.Context) error {
 		{"usenet_servers", "expires", "BIGINT NOT NULL DEFAULT 0"},
 		{"downloads", "edition", "TEXT NOT NULL DEFAULT ''"},
 		{"downloads", "mode", "TEXT NOT NULL DEFAULT ''"},
+		{"authors", "locked", "INTEGER NOT NULL DEFAULT 0"},
 	} {
 		if _, err := s.db.ExecContext(ctx, "SELECT "+c.column+" FROM "+c.table+" WHERE 1 = 0"); err != nil {
 			if _, err := s.db.ExecContext(ctx, "ALTER TABLE "+c.table+" ADD COLUMN "+c.column+" "+c.def); err != nil {
@@ -332,12 +333,16 @@ func (s *Store) UpdateProfile(ctx context.Context, p quality.Profile) error {
 var ErrLocked = errors.New("it's set to Do not touch, so Box Office leaves its files alone; pick another quality profile for it first")
 
 // TitleLocked says whether a movie, a show, or an episode's show is on the
-// Do not touch profile. kind is movie, series or episode.
+// Do not touch profile, or a book's author is set to Do not touch. kind is
+// movie, series, episode, author, or ebook or audiobook for a book.
 func (s *Store) TitleLocked(ctx context.Context, kind string, id int64) (bool, error) {
 	q := map[string]string{
 		"movie":   "SELECT p.locked FROM movies t JOIN quality_profiles p ON p.id = t.profile_id WHERE t.id = ?",
 		"series":  "SELECT p.locked FROM series t JOIN quality_profiles p ON p.id = t.profile_id WHERE t.id = ?",
 		"episode": "SELECT p.locked FROM episodes e JOIN series t ON t.id = e.series_id JOIN quality_profiles p ON p.id = t.profile_id WHERE e.id = ?",
+		"author":  "SELECT locked FROM authors WHERE id = ?",
+		Ebook:     "SELECT a.locked FROM books b JOIN authors a ON a.id = b.author_id WHERE b.id = ?",
+		Audiobook: "SELECT a.locked FROM books b JOIN authors a ON a.id = b.author_id WHERE b.id = ?",
 	}[kind]
 	if q == "" {
 		return false, fmt.Errorf("no such kind of title %q", kind)
@@ -350,11 +355,26 @@ func (s *Store) TitleLocked(ctx context.Context, kind string, id int64) (bool, e
 	return locked == 1, err
 }
 
-// CheckUnlocked is ErrLocked when the title is on Do not touch.
+// ErrAuthorLocked is ErrLocked for a book: its author is on Do not touch.
+// errors.Is(ErrAuthorLocked, ErrLocked) holds.
+var ErrAuthorLocked error = authorLocked{}
+
+type authorLocked struct{}
+
+func (authorLocked) Error() string {
+	return "its author is set to Do not touch, so Box Office leaves their books alone; turn that off on the author's page first"
+}
+func (authorLocked) Is(target error) bool { return target == ErrLocked }
+
+// CheckUnlocked is ErrLocked when the title is on Do not touch
+// (ErrAuthorLocked for a book).
 func (s *Store) CheckUnlocked(ctx context.Context, kind string, id int64) error {
 	if locked, err := s.TitleLocked(ctx, kind, id); err != nil {
 		return err
 	} else if locked {
+		if IsBookKind(kind) || kind == "author" {
+			return ErrAuthorLocked
+		}
 		return ErrLocked
 	}
 	return nil

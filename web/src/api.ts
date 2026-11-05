@@ -338,11 +338,15 @@ export type MetricsSettings = { on: boolean; token?: string; path: string }
 // ---- downloads ----
 
 export type DownloadStatus = 'queued' | 'downloading' | 'paused' | 'downloaded' | 'verifying' | 'repairing' | 'unpacking' | 'importing' | 'completed' | 'failed'
+// What a download or a file is for: a movie, a show, or a book in one
+// format.
+export type TitleKind = 'movie' | 'series' | 'ebook' | 'audiobook'
+
 export type Download = {
   id: number
   name: string
   status: DownloadStatus
-  kind?: 'movie' | 'series'
+  kind?: TitleKind
   titleId?: number
   quality: number
   indexer?: string
@@ -375,7 +379,7 @@ export type QuarantineItem = {
   files: number
   since: string
   reason?: string
-  download?: { id: number; name: string; status: string; kind?: 'movie' | 'series'; titleId?: number }
+  download?: { id: number; name: string; status: string; kind?: TitleKind; titleId?: number }
   busy?: boolean
 }
 export type Quarantine = { items: QuarantineItem[]; size: number; days: number }
@@ -406,7 +410,7 @@ export type DownloadFile = {
   // A download is still using it, and busyWith is what it's doing.
   busy?: boolean
   busyWith?: DownloadStatus
-  download?: { id: number; name: string; status: DownloadStatus; kind?: 'movie' | 'series'; titleId?: number }
+  download?: { id: number; name: string; status: DownloadStatus; kind?: TitleKind; titleId?: number }
   moving?: boolean
   moved?: string
   video?: boolean
@@ -435,6 +439,8 @@ export type Candidate = {
   infoUrl?: string
   pack?: boolean
   episodes?: number[]
+  // A book release's format, as its name gives it: EPUB, M4B.
+  format?: string
 }
 export type ReleaseResults = { releases: Candidate[]; errors?: string[]; searched: number }
 export type IndexerCaps = { categories: { id: number; name: string; subs?: { id: number; name: string }[] }[]; movieSearch: boolean; tvSearch: boolean }
@@ -473,7 +479,7 @@ export type AlbumTypes = { types: string[]; defaults: string[] }
 
 // A root folder scan: folders on disk that aren't on the list, matched to
 // TMDB or MusicBrainz and ready to add where they are.
-export type ScanMatch = { tmdbId?: number; mbid?: string; title: string; year?: number; poster?: string; overview?: string; disambiguation?: string }
+export type ScanMatch = { tmdbId?: number; mbid?: string; olKey?: string; title: string; year?: number; poster?: string; overview?: string; disambiguation?: string }
 export type ScanFound = {
   path: string
   name: string
@@ -546,11 +552,31 @@ export type Author = {
   bio?: string
   newEbooks: boolean
   newAudiobooks: boolean
+  // Do not touch: no searches, downloads or file changes for their books.
+  locked: boolean
   addedAt: string
   books: number
   wantedEbooks: number
   wantedAudiobooks: number
+  haveEbooks: number
+  haveAudiobooks: number
 }
-export type Book = { id: number; authorId: number; olKey: string; title: string; subtitle?: string; year?: number; editions: number; wantEbook: boolean; wantAudiobook: boolean; cover?: string }
+export type BookFile = { id: number; path: string; size: number; addedAt: string }
+export type Book = {
+  id: number
+  authorId: number
+  olKey: string
+  title: string
+  subtitle?: string
+  year?: number
+  editions: number
+  wantEbook: boolean
+  wantAudiobook: boolean
+  cover?: string
+  // The copies in the library; an audiobook's is its folder.
+  ebookFile?: BookFile
+  audiobookFile?: BookFile
+  authorName?: string
+}
 export type AuthorDetail = Author & { bookList: Book[] }
 export type LookupAuthor = { key: string; name: string; born?: string; died?: string; topWork?: string; works?: number; photo?: string; id?: number }

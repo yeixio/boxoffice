@@ -182,12 +182,12 @@ func (s *Service) UpgradesLeft(ctx context.Context, a AutoSettings) (left, used 
 	return max(a.UpgradesPerMonth-used, 0), used, nil
 }
 
-// Wanted is a movie or an episode Box Office would search for by itself:
-// one with no file, or one whose file is below its profile's cutoff while
-// the profile takes upgrades.
+// Wanted is a movie, an episode or a book Box Office would search for by
+// itself: one with no file, or one whose file is below its profile's
+// cutoff while the profile takes upgrades.
 type Wanted struct {
-	Kind     string    `json:"kind"` // movie or episode
-	ID       int64     `json:"id"`   // the movie's or the episode's
+	Kind     string    `json:"kind"` // movie, episode, ebook or audiobook
+	ID       int64     `json:"id"`   // the movie's, the episode's or the book's
 	SeriesID int64     `json:"seriesId,omitempty"`
 	Subject  string    `json:"subject"`
 	Upgrade  bool      `json:"upgrade"`
@@ -225,7 +225,7 @@ func (w Wanted) due(now time.Time) bool {
 	return w.Searched.IsZero() || now.Sub(w.Searched) >= againAfter(w.Misses)
 }
 
-// WantedList is every movie and episode that's missing or due an upgrade,
+// WantedList is every movie, episode and book that's missing or due an upgrade,
 // in the order automatic searches take them: newly missing, missing for
 // longer, then upgrades; within each, never searched, then the longest ago.
 func (s *Service) WantedList(ctx context.Context) ([]Wanted, error) {
@@ -305,6 +305,11 @@ func (s *Service) WantedList(ctx context.Context) ([]Wanted, error) {
 			out = append(out, w)
 		}
 	}
+	books, err := s.wantedBooks(ctx, now.Year())
+	if err != nil {
+		return nil, err
+	}
+	out = append(out, books...)
 	slices.SortStableFunc(out, func(a, b Wanted) int {
 		if c := cmp.Compare(a.tier(), b.tier()); c != 0 {
 			return c
@@ -524,6 +529,37 @@ func (s *Service) jobWanted(ctx context.Context, _ string) (jobs.Result, error) 
 				o.searches++
 			}
 			r, err := s.pick(ctx, res, "movie", w.ID, 0)
+			if err != nil {
+				o.problems = append(o.problems, fmt.Sprintf("%s: %v", w.Subject, err))
+				continue
+			}
+			if r.Status == "done" && strings.HasPrefix(r.Message, "grabbed ") {
+				o.grabbed++
+				o.got = append(o.got, w.Subject)
+			}
+			continue
+		}
+		if store.IsBookKind(w.Kind) {
+			if b, err := s.busy(ctx, w.Kind, w.ID, 0, ""); err != nil {
+				return jobs.Result{}, err
+			} else if b {
+				o.busy++
+				continue
+			}
+			res, err := s.Book(ctx, w.ID, w.Kind)
+			if errors.Is(err, ErrNoIndexers) {
+				return jobs.Skipped("%s", err.Error()), nil
+			}
+			searchedAny = true
+			missing++
+			if err != nil {
+				o.problems = append(o.problems, fmt.Sprintf("%s: %v", w.Subject, err))
+				continue
+			}
+			if res.Searched > 0 {
+				o.searches++
+			}
+			r, err := s.pick(ctx, res, w.Kind, w.ID, 0)
 			if err != nil {
 				o.problems = append(o.problems, fmt.Sprintf("%s: %v", w.Subject, err))
 				continue
