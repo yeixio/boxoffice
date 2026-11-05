@@ -7,6 +7,7 @@ import { bytes, when } from '../format'
 import { useQualities } from '../hooks'
 import { SortControl, sortList, useSort, words, type SortOption } from '../sort'
 import { Badge, Button, Card, Empty, ErrorNote, Heading, Modal, Spinner, Toggle } from '../ui'
+import { DownloadFiles } from './DownloadFiles'
 
 export function useDownloads() {
   return useQuery({ queryKey: ['downloads'], queryFn: () => get<DownloadsData>('/downloads'), refetchInterval: 2000 })
@@ -185,6 +186,7 @@ export function Downloads() {
           </ul>
         )}
       </section>
+      <DownloadFiles />
       {data.folder.path && (
         <p className="mt-6 text-xs text-muted">
           Downloads go to {data.folder.path}
