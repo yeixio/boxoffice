@@ -22,6 +22,7 @@ import { Import } from './pages/Import'
 import { Backups } from './pages/Backups'
 import { Settings } from './pages/Settings'
 import { Health } from './pages/Health'
+import { Requests } from './pages/Requests'
 
 export function App() {
   const status = useQuery({ queryKey: ['status'], queryFn: () => get<Status>('/status') })
@@ -88,6 +89,7 @@ function Shell({ status }: { status: Status }) {
           <Route path="/audiobooks" element={<Books key="audiobook" format="audiobook" />} />
           <Route path="/audiobooks/:id" element={<AuthorPage key="audiobook" format="audiobook" />} />
           <Route path="/calendar" element={<Calendar />} />
+          <Route path="/requests" element={<Requests />} />
           <Route path="/downloads" element={<Downloads />} />
           <Route path="/activity" element={<Activity />} />
           <Route path="/health" element={<Health />} />

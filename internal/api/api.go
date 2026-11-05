@@ -31,6 +31,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/libscan"
 	"github.com/yeixio/boxoffice/internal/migrate"
 	"github.com/yeixio/boxoffice/internal/music"
+	"github.com/yeixio/boxoffice/internal/portal"
 	"github.com/yeixio/boxoffice/internal/search"
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/tmdb"
@@ -58,7 +59,9 @@ type Server struct {
 	Downloads *downloader.Engine
 	Search    *search.Service
 	// LibScan scans root folders for what's on disk but not on the list.
-	LibScan  *libscan.Service
+	LibScan *libscan.Service
+	// Portal is the request site, for the people who ask for titles.
+	Portal   *portal.Service
 	Log      *slog.Logger
 	Version  string
 	Database string // sqlite or postgres, for the System page
@@ -239,6 +242,7 @@ func (s *Server) Handler() http.Handler {
 	routes = append(routes, s.quarantineRoutes()...)
 	routes = append(routes, s.connectionRoutes()...)
 	routes = append(routes, s.libScanRoutes()...)
+	routes = append(routes, s.portalRoutes()...)
 	for _, r := range routes {
 		mux.Handle(r.pattern, s.wrap(r))
 	}
@@ -294,8 +298,19 @@ func (s *Server) web() http.Handler {
 			p = "index.html"
 		}
 		if _, err := fs.Stat(s.Web, p); err != nil {
+			p = "index.html"
 			r = r.Clone(r.Context())
 			r.URL.Path = "/"
+		}
+		// On the request site's own host name, the page says so, and the
+		// web UI shows the request site at /.
+		if p == "index.html" && s.portalHost(r) {
+			if page, err := fs.ReadFile(s.Web, p); err == nil {
+				w.Header().Set("Content-Type", "text/html; charset=utf-8")
+				w.Header().Set("Cache-Control", "no-cache")
+				w.Write([]byte(strings.Replace(string(page), "<head>", `<head><meta name="boxoffice-portal" content="/">`, 1)))
+				return
+			}
 		}
 		if strings.HasPrefix(p, "assets/") {
 			w.Header().Set("Cache-Control", "public, max-age=31536000, immutable")

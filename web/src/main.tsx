@@ -6,6 +6,7 @@ import '@fontsource-variable/inter'
 import '@fontsource-variable/space-grotesk'
 import './index.css'
 import { App } from './App'
+import { Portal } from './portal/Portal'
 import { ApiError } from './api'
 
 const queries = new QueryClient({
@@ -14,12 +15,16 @@ const queries = new QueryClient({
   },
 })
 
+// The request site is the whole site on its own host name (the server marks
+// the page), and lives under /request everywhere else.
+const portalHost = !!document.querySelector('meta[name="boxoffice-portal"]')
+const portalPath = location.pathname === '/request' || location.pathname.startsWith('/request/')
+const portal = portalHost || portalPath
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queries}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <BrowserRouter basename={portalPath && !portalHost ? '/request' : undefined}>{portal ? <Portal /> : <App />}</BrowserRouter>
     </QueryClientProvider>
   </StrictMode>,
 )
