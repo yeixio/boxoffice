@@ -3,10 +3,11 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ArrowUpCircle, ChevronDown, ListChecks, RefreshCw, Search, Trash2 } from 'lucide-react'
 import { Releases } from '../Releases'
-import { del, get, patch, post, type Episode, type Profile, type Series } from '../api'
+import { DeleteFiles, RemoveTitle } from '../RemoveFiles'
+import { get, patch, post, type Episode, type Profile, type Series } from '../api'
 import { bytes, day, episodeCode } from '../format'
 import { qualityName, useProfiles, useQualities } from '../hooks'
-import { Badge, Button, Card, ErrorNote, Field, Modal, Poster, Select, Spinner, Toggle } from '../ui'
+import { Badge, Button, Card, ErrorNote, Field, Poster, Select, Spinner, Toggle } from '../ui'
 
 type Detail = { series: Series; episodes: Episode[] }
 
@@ -32,13 +33,10 @@ export function ShowDetail() {
       setTimeout(() => qc.invalidateQueries({ queryKey: key }), 3000)
     },
   })
-  const remove = useMutation({
-    mutationFn: () => del(`/series/${id}`),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['series'] })
-      nav('/shows')
-    },
-  })
+  const removed = () => {
+    qc.invalidateQueries({ queryKey: ['series'] })
+    nav('/shows')
+  }
 
   if (show.isPending) return <Spinner />
   if (show.isError) return <ErrorNote error={show.error} />
@@ -106,25 +104,14 @@ export function ShowDetail() {
             episodes={episodes.filter((e) => e.season === se.number)}
             onMonitor={(v) => season.mutate({ n: se.number, monitored: v })}
             onEpisode={(e) => set({ series: s, episodes: episodes.map((x) => (x.id === e.id ? e : x)) })}
+            onShow={set}
+            showTitle={s.title}
             defaultOpen={se.number === seasons[0]?.number}
           />
         ))}
       </div>
 
-      {confirmDelete && (
-        <Modal title={`Remove ${s.title}?`} onClose={() => setConfirmDelete(false)}>
-          <p className="text-sm">It comes off Box Office's list. Its files stay where they are on disk.</p>
-          <ErrorNote error={remove.error} />
-          <div className="mt-5 flex justify-end gap-2">
-            <Button variant="ghost" onClick={() => setConfirmDelete(false)}>
-              Keep it
-            </Button>
-            <Button variant="danger" busy={remove.isPending} onClick={() => remove.mutate()}>
-              Remove
-            </Button>
-          </div>
-        </Modal>
-      )}
+      {confirmDelete && <RemoveTitle kind="series" id={s.id} title={s.title} onClose={() => setConfirmDelete(false)} onRemoved={removed} />}
     </div>
   )
 }
@@ -137,6 +124,8 @@ function SeasonBlock({
   episodes,
   onMonitor,
   onEpisode,
+  onShow,
+  showTitle,
   defaultOpen,
 }: {
   seriesId: number
@@ -146,6 +135,8 @@ function SeasonBlock({
   episodes: Episode[]
   onMonitor: (v: boolean) => void
   onEpisode: (e: Episode) => void
+  onShow: (d: Detail) => void
+  showTitle: string
   defaultOpen: boolean
 }) {
   const [open, setOpen] = useState(defaultOpen)
@@ -154,6 +145,8 @@ function SeasonBlock({
   const toggle = useMutation({ mutationFn: (e: Episode) => patch<Episode>(`/episodes/${e.id}`, { monitored: !e.monitored }), onSuccess: onEpisode })
   const search = useMutation({ mutationFn: (e: Episode) => post(`/episodes/${e.id}/search`) })
   const [releases, setReleases] = useState<Episode | 'season' | null>(null)
+  const [deleting, setDeleting] = useState<Episode | 'season' | null>(null)
+  const seasonName = number === 0 ? 'Specials' : `Season ${number}`
   const now = Date.now()
   const rank = (q: number) => qualities.data?.findIndex((x) => x.id === q) ?? -1
   // Below the profile's good-enough quality, with upgrades on.
@@ -165,7 +158,7 @@ function SeasonBlock({
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 px-5 py-3">
         <button className="flex min-w-0 flex-1 basis-full flex-wrap items-center gap-x-3 text-left sm:basis-0" onClick={() => setOpen(!open)} aria-expanded={open}>
           <ChevronDown className={`size-4 shrink-0 transition ${open ? '' : '-rotate-90'}`} aria-hidden />
-          <span className="whitespace-nowrap font-display text-lg font-semibold">{number === 0 ? 'Specials' : `Season ${number}`}</span>
+          <span className="whitespace-nowrap font-display text-lg font-semibold">{seasonName}</span>
           <span className="text-sm text-muted">
             {have} of {episodes.length} on disk
             {upgrades > 0 && `, ${upgrades} to upgrade`}
@@ -174,6 +167,11 @@ function SeasonBlock({
         {anyAired && (
           <Button variant="ghost" onClick={() => setReleases('season')}>
             <ListChecks className="size-4" aria-hidden /> Choose a release
+          </Button>
+        )}
+        {have > 0 && (
+          <Button variant="ghost" onClick={() => setDeleting('season')} aria-label={`Delete ${seasonName}'s files from disk`} title="Delete its files from disk">
+            <Trash2 className="size-4" aria-hidden /> <span className="sm:hidden">Delete files</span>
           </Button>
         )}
         <Toggle checked={monitored} onChange={onMonitor} label={<span className="text-muted">Watch</span>} />
@@ -221,6 +219,16 @@ function SeasonBlock({
                         <ListChecks className="size-3.5" aria-hidden /> Choose
                       </button>
                     )}
+                    {e.file && (
+                      <button
+                        className="rounded p-1 text-muted hover:bg-line hover:text-bad"
+                        onClick={() => setDeleting(e)}
+                        aria-label={`Delete ${episodeCode(e.season, e.number)}'s file from disk`}
+                        title="Delete its file from disk"
+                      >
+                        <Trash2 className="size-3.5" aria-hidden />
+                      </button>
+                    )}
                   </span>
                 </li>
               )
@@ -229,6 +237,30 @@ function SeasonBlock({
       )}
       {releases === 'season' && (
         <Releases path={`/series/${seriesId}/seasons/${number}/releases`} title={number === 0 ? 'Specials' : `Season ${number}`} onClose={() => setReleases(null)} />
+      )}
+      {deleting === 'season' && (
+        <DeleteFiles<Detail>
+          path={`/series/${seriesId}/seasons/${number}/files`}
+          title={`${showTitle} ${seasonName}`}
+          what="season"
+          onClose={() => setDeleting(null)}
+          onDone={(d) => {
+            onShow(d)
+            setDeleting(null)
+          }}
+        />
+      )}
+      {deleting && deleting !== 'season' && (
+        <DeleteFiles<Episode>
+          path={`/episodes/${deleting.id}/file`}
+          title={`${showTitle} ${episodeCode(deleting.season, deleting.number)}`}
+          what="episode"
+          onClose={() => setDeleting(null)}
+          onDone={(e) => {
+            onEpisode(e)
+            setDeleting(null)
+          }}
+        />
       )}
       {releases && releases !== 'season' && (
         <Releases path={`/episodes/${releases.id}/releases`} title={episodeCode(releases.season, releases.number)} onClose={() => setReleases(null)} />

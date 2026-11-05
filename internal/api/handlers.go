@@ -359,13 +359,19 @@ func (s *Server) editMovie(w http.ResponseWriter, r *http.Request) error {
 	return s.movie(w, r)
 }
 
-// deleteMovie takes a movie off the list. Its files are never touched.
+// deleteMovie takes a movie off the list. Its folder stays on disk unless
+// deleteFiles=true asks for it to be deleted too (see removal.go).
 func (s *Server) deleteMovie(w http.ResponseWriter, r *http.Request) error {
-	id, err := pathID(r, "id")
+	m, p, err := s.moviePlan(r)
 	if err != nil {
 		return err
 	}
-	if err := s.Store.DeleteMovie(r.Context(), id); err != nil {
+	if flag(r, "deleteFiles") {
+		if err := s.carryOut(r, p, m.Title); err != nil {
+			return err
+		}
+	}
+	if err := s.Store.DeleteMovie(r.Context(), m.ID); err != nil {
 		return err
 	}
 	w.WriteHeader(http.StatusNoContent)
@@ -467,12 +473,19 @@ func (s *Server) editSeries(w http.ResponseWriter, r *http.Request) error {
 	return s.series(w, r)
 }
 
+// deleteSeries takes a show off the list. Its folder stays on disk unless
+// deleteFiles=true asks for it to be deleted too (see removal.go).
 func (s *Server) deleteSeries(w http.ResponseWriter, r *http.Request) error {
-	id, err := pathID(r, "id")
+	t, p, err := s.seriesPlan(r)
 	if err != nil {
 		return err
 	}
-	if err := s.Store.DeleteSeries(r.Context(), id); err != nil {
+	if flag(r, "deleteFiles") {
+		if err := s.carryOut(r, p, t.Title); err != nil {
+			return err
+		}
+	}
+	if err := s.Store.DeleteSeries(r.Context(), t.ID); err != nil {
 		return err
 	}
 	w.WriteHeader(http.StatusNoContent)
