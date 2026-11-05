@@ -37,6 +37,7 @@ Examples of unacceptable behavior include:
 - Deliberately submitting malicious code, malware, credential-stealing functionality, or other harmful contributions.
 - Knowingly providing fabricated benchmarks, compatibility results, bug reports, or security information.
 - Attempting to pressure, threaten, or harass maintainers into accepting a contribution or feature.
+- Sharing, requesting or linking to copyright-infringing content, or to sources of it.
 - Using project spaces primarily to promote unrelated products, services, political campaigns, or spam.
 - Any conduct that would reasonably be considered inappropriate in a professional open-source community.
 

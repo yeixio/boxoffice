@@ -13,9 +13,11 @@ Fixes #
 
 ## Checklist
 
+- [ ] I agree to the [Box Office Contributor License Agreement](../CLA.md).
 - [ ] Tests added or updated where it makes sense
 - [ ] README or docs updated if behavior changed
 - [ ] A line under **Unreleased** in CHANGELOG.md if users would notice
 - [ ] No secrets, personal data or private URLs included
+- [ ] No real indexers, release names or links to content (placeholders only)
 - [ ] `/radarr` and `/sonarr` changes only add fields or routes (Matinee depends on them)
 - [ ] Nothing new deletes files without showing what first

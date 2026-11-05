@@ -551,7 +551,7 @@ function IndexerForm({ indexer, state, onClose }: { indexer: Indexer | null; sta
               <Steps>
                 <li>Sign in to the indexer's website.</li>
                 <li>Open its API page (often under your profile, or "API" in the menu).</li>
-                <li>Copy the API address it gives, like https://api.nzbgeek.info. If it only gives a website, use that.</li>
+                <li>Copy the API address it gives, like https://api.indexer.example. If it only gives a website, use that.</li>
               </Steps>
               For an indexer in Prowlarr, use Prowlarr's address for it, like http://prowlarr:9696/1.
             </>
