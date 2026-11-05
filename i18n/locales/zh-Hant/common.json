@@ -1,0 +1,54 @@
+{
+  "size": {
+    "B": "{{value}} B",
+    "KB": "{{value}} KB",
+    "MB": "{{value}} MB",
+    "GB": "{{value}} GB",
+    "TB": "{{value}} TB",
+    "PB": "{{value}} PB"
+  },
+  "duration": {
+    "minutes_other": "{{count}} 分鐘",
+    "hours": "{{hours}} 小時",
+    "hoursMinutes": "{{hours}} 小時 {{minutes}} 分鐘"
+  },
+  "loading": "正在載入…",
+  "close": "關閉",
+  "language": {
+    "title": "語言",
+    "label": "語言",
+    "automatic": "自動（{{language}}）",
+    "hint": "Box Office 顯示的語言，適用於你登入的每臺裝置。“自動”會跟隨各瀏覽器的語言。",
+    "machine": "此翻譯由機器完成，部分措辭可能不準確。",
+    "help": "幫助改進"
+  },
+  "sort": {
+    "az": "A 到 Z",
+    "za": "Z 到 A",
+    "oldest": "最舊的在前",
+    "newest": "最新的在前",
+    "soonest": "最早在前",
+    "latest": "最新在前",
+    "smallest": "最小在前",
+    "largest": "最大在前",
+    "lowest": "從低到高",
+    "highest": "從高到低",
+    "worst": "最差在前",
+    "best": "最好在前",
+    "shortest": "最短在前",
+    "longest": "最長在前",
+    "fewest": "最少在前",
+    "most": "最多在前",
+    "least": "最少在前",
+    "by": "排序方式",
+    "show": "按{{order}}顯示",
+    "flip": "{{option}}，{{order}}。改為{{other}}"
+  },
+  "pager": {
+    "pages": "{{label}}分頁",
+    "range": "第 {{from}}–{{to}} 個，共 {{total}} 個",
+    "previous": "上一頁",
+    "next": "下一頁",
+    "page": "第 {{page}} 頁，共 {{pages}} 頁"
+  }
+}
