@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"slices"
+	"strconv"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -153,6 +154,12 @@ func (e *Engine) download(ctx context.Context, r *running, d *store.Download, sr
 	defer cancel(nil)
 	var states []*fileState
 	var done int64
+	// Each try writes to part files of its own. A part file an earlier try
+	// left (Box Office stopped mid-download, say) can stay locked on a
+	// network share for a while, and opening it again is refused; so old
+	// ones are cleared away if they can be, and never reused.
+	clearParts(job.dir)
+	try := strconv.FormatInt(time.Now().UnixNano(), 36)
 	for _, f := range files {
 		if slices.Contains(d.DoneFiles, f.index) {
 			if _, err := os.Stat(filepath.Join(job.dir, f.name)); err == nil {
@@ -161,10 +168,10 @@ func (e *Engine) download(ctx context.Context, r *running, d *store.Download, sr
 			}
 			d.DoneFiles = slices.DeleteFunc(d.DoneFiles, func(i int) bool { return i == f.index })
 		}
-		tmp := filepath.Join(job.dir, fmt.Sprintf(".boxoffice-%d.part", f.index))
-		fh, err := os.OpenFile(tmp, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0o640)
+		tmp := filepath.Join(job.dir, fmt.Sprintf(".boxoffice-%d-%s.part", f.index, try))
+		fh, err := os.OpenFile(tmp, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0o640)
 		if err != nil {
-			return err
+			return fmt.Errorf("Box Office couldn't make a file in its download folder %s: %w", job.dir, err)
 		}
 		st := &fileState{nf: f, fh: fh, tmp: tmp}
 		st.remaining.Store(int32(len(f.file.Segments)))
@@ -344,4 +351,18 @@ func humanBytes(n int64) string {
 		exp++
 	}
 	return fmt.Sprintf("%.1f %cB", float64(n)/float64(div), "kMGTPE"[exp])
+}
+
+// clearParts deletes the part files earlier tries left in dir, as far as
+// it can; one that can't go yet is left for the folder's cleanup.
+func clearParts(dir string) {
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		return
+	}
+	for _, de := range entries {
+		if n := de.Name(); strings.HasPrefix(n, ".boxoffice-") && strings.HasSuffix(n, ".part") && de.Type().IsRegular() {
+			os.Remove(filepath.Join(dir, n))
+		}
+	}
 }

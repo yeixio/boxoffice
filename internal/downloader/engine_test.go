@@ -291,3 +291,34 @@ func TestFolderInsideLibrary(t *testing.T) {
 		t.Fatal("a downloads folder inside the library passed")
 	}
 }
+
+// A part file an earlier try left, which can't be opened again (as when a
+// network share still has it locked), doesn't stop the download: each try
+// writes part files of its own.
+func TestStalePartFile(t *testing.T) {
+	srv := nntptest.New("u", "p")
+	defer srv.Close()
+	data, want, _ := release(t, srv, true)
+	e, st := newEngine(t, srv)
+	enable(t, st, Settings{})
+	ctx := context.Background()
+	d, err := e.Add(ctx, store.Download{Source: "upload"}, data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	d.Folder = "resumed"
+	st.SaveDownloadProgress(ctx, d)
+	for i := range 4 {
+		// A folder in the way can't be opened as a file, nor cleared.
+		os.MkdirAll(filepath.Join(e.Dir, "resumed", fmt.Sprintf(".boxoffice-%d.part", i)), 0o755)
+	}
+	run(t, e)
+	d = waitFor(t, st, d.ID, store.DownloadCompleted, store.DownloadFailed)
+	if d.Status != store.DownloadCompleted {
+		t.Fatalf("failed: %s", d.Message)
+	}
+	for i := range 4 {
+		os.Remove(filepath.Join(e.Dir, "resumed", fmt.Sprintf(".boxoffice-%d.part", i)))
+	}
+	checkFiles(t, filepath.Join(e.Dir, d.Folder), want)
+}
