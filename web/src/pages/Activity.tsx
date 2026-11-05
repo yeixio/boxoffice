@@ -15,7 +15,23 @@ export function Activity() {
       {jobs.isPending && <Spinner />}
       {jobs.data?.length === 0 && <Empty icon={<History className="size-8" />} title="Nothing yet" />}
       {!!jobs.data?.length && (
-        <div className="overflow-x-auto rounded-xl border border-line bg-card">
+        <ul className="divide-y divide-line rounded-xl border border-line bg-card sm:hidden">
+          {jobs.data.map((j) => (
+            <li key={j.id} className="px-4 py-3">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0 font-medium">{j.subject}</div>
+                <Badge tone={tone[j.status] ?? 'plain'}>{j.status}</Badge>
+              </div>
+              {j.message && <p className="mt-1 break-words text-sm text-muted">{j.message}</p>}
+              <div className="mt-1 text-xs text-muted">
+                {j.kind} · {when(j.finishedAt || j.startedAt || j.createdAt)}
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+      {!!jobs.data?.length && (
+        <div className="hidden overflow-x-auto rounded-xl border border-line bg-card sm:block">
           <table className="w-full text-left text-sm">
             <thead className="border-b border-line text-muted">
               <tr>

@@ -231,8 +231,12 @@ func (e *Engine) download(ctx context.Context, r *running, d *store.Download, sr
 					cancel(err)
 					return
 				}
-				if allowance >= 0 && r.failed.Load() > allowance+allowance/10+64<<10 && r.failed.Load() > 0 {
-					cancel(fmt.Errorf("too much of this release is gone from your news servers (%s missing) to repair; try another release", humanBytes(r.failed.Load())))
+				if lost := r.failed.Load(); lost > allowance+allowance/10+64<<10 {
+					if allowance == 0 {
+						cancel(fmt.Errorf("%s of this release is gone from your news servers, and it has no par2 files to repair it; try another release", humanBytes(lost)))
+					} else {
+						cancel(fmt.Errorf("too much of this release is gone from your news servers (%s missing) to repair; try another release", humanBytes(lost)))
+					}
 					return
 				}
 				if s.fs.remaining.Add(-1) == 0 {

@@ -179,7 +179,7 @@ func TestDownloadWhole(t *testing.T) {
 		t.Fatalf("failed: %s", d.Message)
 	}
 	checkFiles(t, filepath.Join(e.Dir, d.Folder), want)
-	if !strings.Contains(d.Message, "renamed 1 obfuscated file") {
+	if !strings.Contains(d.Message, "Renamed 1 obfuscated file") {
 		t.Fatalf("message %q", d.Message)
 	}
 	// The recovery volumes weren't needed, so they weren't fetched.
@@ -204,7 +204,7 @@ func TestDownloadRepair(t *testing.T) {
 	run(t, e)
 	d, _ := e.Add(context.Background(), store.Download{}, data)
 	d = waitFor(t, st, d.ID, store.DownloadCompleted, store.DownloadFailed)
-	if d.Status != store.DownloadCompleted || !strings.Contains(d.Message, "repaired") {
+	if d.Status != store.DownloadCompleted || !strings.Contains(d.Message, "Repaired") {
 		t.Fatalf("%s: %s", d.Status, d.Message)
 	}
 	checkFiles(t, filepath.Join(e.Dir, d.Folder), want)

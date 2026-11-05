@@ -34,10 +34,11 @@ func (e *Engine) postProcess(ctx context.Context, r *running, d *store.Download,
 	if len(files) == 0 {
 		return errors.New("the download finished with no files in it")
 	}
-	msg := "Downloaded to " + d.Folder
+	lead := ""
 	if len(notes) > 0 {
-		msg = strings.Join(notes, "; ") + ". " + msg
+		lead = sentence(strings.Join(notes, "; ")) + ". "
 	}
+	msg := lead + "Downloaded to " + d.Folder
 	set, err := LoadSettings(ctx, e.Store)
 	if err != nil {
 		return err
@@ -46,7 +47,7 @@ func (e *Engine) postProcess(ctx context.Context, r *running, d *store.Download,
 	case d.Kind == "":
 		// Added by hand: it stays in the downloads folder.
 	case !set.Import:
-		msg += ". Moving downloads into the library is off, so it's waiting there"
+		msg += ". Moving downloads into the library is off, so it's waiting there."
 	case e.Importer == nil:
 	default:
 		status(store.DownloadImporting, "")
@@ -56,10 +57,7 @@ func (e *Engine) postProcess(ctx context.Context, r *running, d *store.Download,
 		}
 		e.Store.SetDownloadImported(context.WithoutCancel(ctx), d.ID, to)
 		d.ImportedTo = to
-		msg = "Moved into the library at " + to
-		if len(notes) > 0 {
-			msg = strings.Join(notes, "; ") + ". " + msg
-		}
+		msg = lead + "Moved into the library at " + to
 		// Nothing's left worth keeping.
 		e.removeFolder(*d)
 	}

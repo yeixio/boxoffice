@@ -13,6 +13,7 @@ import (
 	"strings"
 	"syscall"
 
+	"github.com/yeixio/boxoffice/internal/arrapi"
 	"github.com/yeixio/boxoffice/internal/quality"
 	"github.com/yeixio/boxoffice/internal/store"
 )
@@ -89,7 +90,7 @@ func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir str
 		}
 		name := fileName(m.Title, m.Year) + strings.ToLower(filepath.Ext(vids[0]))
 		dest := filepath.Join(m.Path, name)
-		if err := li.place(ctx, dir, vids[0], dest, m.Path, "movie", m.ID, q, m.File); err != nil {
+		if err := li.place(ctx, dir, vids[0], dest, m.RootFolder, m.Path, "movie", m.ID, q, m.File); err != nil {
 			return "", err
 		}
 		return dest, nil
@@ -125,7 +126,7 @@ func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir str
 				name += " - " + cleanFileName(ep.Title)
 			}
 			dest := filepath.Join(t.Path, fmt.Sprintf("Season %02d", season), name+strings.ToLower(filepath.Ext(v)))
-			if err := li.place(ctx, dir, v, dest, t.Path, "episode", ep.ID, q, ep.File); err != nil {
+			if err := li.place(ctx, dir, v, dest, t.RootFolder, t.Path, "episode", ep.ID, q, ep.File); err != nil {
 				return "", err
 			}
 			placed = append(placed, dest)
@@ -158,9 +159,9 @@ func checkLibrary(root, path string) error {
 	return nil
 }
 
-// place moves one file into the library, records it, and removes the copy
-// it replaces.
-func (li *LibraryImporter) place(ctx context.Context, dir, rel, dest, titlePath, kind string, owner int64, q int, old *store.File) error {
+// place moves one file into the library, records it, and moves the copy it
+// replaces to the root folder's .recycle folder.
+func (li *LibraryImporter) place(ctx context.Context, dir, rel, dest, root, titlePath, kind string, owner int64, q int, old *store.File) error {
 	src := filepath.Join(dir, rel)
 	if err := os.MkdirAll(filepath.Dir(dest), 0o755); err != nil {
 		return err
@@ -186,11 +187,13 @@ func (li *LibraryImporter) place(ctx context.Context, dir, rel, dest, titlePath,
 	if _, err := li.Store.AddFile(ctx, store.File{Kind: kind, OwnerID: owner, Path: dest, Size: st.Size(), Quality: q}); err != nil {
 		return err
 	}
-	// The copy this one replaces goes, if it was a different file in the
-	// same title's folder.
+	// The copy this one replaces is set aside, if it was a different file
+	// in the same title's folder.
 	if old != nil && old.Path != dest {
 		if rel, err := filepath.Rel(filepath.Clean(titlePath), old.Path); err == nil && rel != "." && !strings.HasPrefix(rel, "..") {
-			os.Remove(old.Path)
+			if err := arrapi.Recycle(root, old.Path); err != nil {
+				return fmt.Errorf("moved in, but couldn't set the old copy aside: %w", err)
+			}
 		}
 	}
 	return nil

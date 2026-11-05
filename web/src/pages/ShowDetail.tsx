@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ChevronDown, RefreshCw, Search, Trash2 } from 'lucide-react'
+import { Releases } from '../Releases'
 import { del, get, patch, post, type Episode, type Series } from '../api'
 import { bytes, day, episodeCode } from '../format'
 import { qualityName, useProfiles, useQualities } from '../hooks'
@@ -146,6 +147,7 @@ function SeasonBlock({
   const have = episodes.filter((e) => e.file).length
   const toggle = useMutation({ mutationFn: (e: Episode) => patch<Episode>(`/episodes/${e.id}`, { monitored: !e.monitored }), onSuccess: onEpisode })
   const search = useMutation({ mutationFn: (e: Episode) => post(`/episodes/${e.id}/search`) })
+  const [releases, setReleases] = useState<Episode | null>(null)
   const now = Date.now()
   return (
     <Card className="p-0">
@@ -171,6 +173,11 @@ function SeasonBlock({
                   <span className="w-16 font-mono text-xs text-muted">{episodeCode(e.season, e.number)}</span>
                   <span className="min-w-0 flex-1 truncate">{e.title || 'To be announced'}</span>
                   <span className="w-28 text-muted">{day(e.airDate)}</span>
+                  {aired && (
+                    <button className="text-xs text-muted hover:text-ink hover:underline" onClick={() => setReleases(e)}>
+                      Releases
+                    </button>
+                  )}
                   <span className="w-40 text-right">
                     {e.file ? (
                       <Badge tone="ok">
@@ -193,6 +200,7 @@ function SeasonBlock({
             })}
         </ul>
       )}
+      {releases && <Releases path={`/episodes/${releases.id}/releases`} title={episodeCode(releases.season, releases.number)} onClose={() => setReleases(null)} />}
     </Card>
   )
 }

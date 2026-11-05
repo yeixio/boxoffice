@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
-import { RefreshCw, Search, Trash2 } from 'lucide-react'
+import { ListFilter, RefreshCw, Search, Trash2 } from 'lucide-react'
+import { Releases } from '../Releases'
 import { del, get, patch, post, type Movie } from '../api'
 import { bytes, day } from '../format'
 import { qualityName, useProfiles, useQualities } from '../hooks'
@@ -16,6 +17,7 @@ export function MovieDetail() {
   const qualities = useQualities()
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [note, setNote] = useState('')
+  const [releases, setReleases] = useState(false)
 
   const edit = useMutation({
     mutationFn: (body: Partial<Pick<Movie, 'monitored' | 'profileId'>>) => patch<Movie>(`/movies/${id}`, body),
@@ -81,6 +83,9 @@ export function MovieDetail() {
             <Button variant="primary" busy={action.isPending && action.variables === 'search'} onClick={() => action.mutate('search')}>
               <Search className="size-4" aria-hidden /> Look for it
             </Button>
+            <Button onClick={() => setReleases(true)}>
+              <ListFilter className="size-4" aria-hidden /> Choose a release
+            </Button>
             <Button busy={action.isPending && action.variables === 'refresh'} onClick={() => action.mutate('refresh')}>
               <RefreshCw className="size-4" aria-hidden /> Refresh details
             </Button>
@@ -89,6 +94,7 @@ export function MovieDetail() {
             </Button>
           </div>
           {note && <p className="mt-3 text-sm text-muted">{note}</p>}
+          {releases && <Releases path={`/movies/${id}/releases`} title={m.title} onClose={() => setReleases(false)} />}
           <ErrorNote error={action.error || edit.error} />
         </div>
       </div>

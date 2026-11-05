@@ -212,8 +212,8 @@ export type Progress = {
 }
 export type SwitchResult = { app: string; before: string; after: string; rootFolder?: string; qualityProfileId?: number }
 
-export type Indexer = { id: number; name: string; protocol: string; kind: string; url: string; hasApiKey: boolean; categories: number[]; enableRss: boolean; enableSearch: boolean; priority: number; source?: string; missingSecret: boolean }
-export type DownloadClient = { id: number; name: string; kind: string; protocol: string; host: string; port: number; useTls: boolean; category?: string; hasPassword: boolean; enabled: boolean; source?: string; missingSecret: boolean }
+export type Indexer = { id: number; name: string; protocol: string; kind: string; url: string; apiPath?: string; hasApiKey: boolean; categories: number[]; enableRss: boolean; enableSearch: boolean; priority: number; source?: string; missingSecret: boolean }
+export type DownloadClient = { id: number; name: string; kind: string; protocol: string; host: string; port: number; useTls: boolean; urlBase?: string; username?: string; category?: string; priority: number; hasPassword: boolean; enabled: boolean; source?: string; missingSecret: boolean }
 export type UsenetServer = { id: number; name: string; host: string; port: number; useTls: boolean; username?: string; hasPassword: boolean; connections: number; level: number; optional: boolean; retention: number; enabled: boolean; source?: string }
 export type Connections = { indexers: Indexer[]; downloadClients: DownloadClient[]; usenetServers: UsenetServer[]; blocklist: number }
 
@@ -222,3 +222,52 @@ export type SystemInfo = { version: string; database: string; dataDir: string; g
 // A problem Box Office found in itself, and how to fix it.
 export type HealthIssue = { id: string; level: 'error' | 'warning' | 'notice'; title: string; detail: string; steps: string[]; link?: { to: string; label: string } }
 export type Health = { issues: HealthIssue[]; checked: string }
+
+// ---- downloads ----
+
+export type DownloadStatus = 'queued' | 'downloading' | 'paused' | 'verifying' | 'repairing' | 'unpacking' | 'importing' | 'completed' | 'failed'
+export type Download = {
+  id: number
+  name: string
+  status: DownloadStatus
+  kind?: 'movie' | 'series'
+  titleId?: number
+  quality: number
+  indexer?: string
+  source?: string
+  size: number
+  doneBytes: number
+  failedBytes: number
+  folder?: string
+  message?: string
+  importedTo?: string
+  addedAt: string
+  startedAt?: string
+  finishedAt?: string
+}
+export type DownloadSettings = { enabled: boolean; paused: boolean; speedLimit: number; import: boolean }
+export type Downloads = {
+  settings: DownloadSettings
+  queue: Download[]
+  history: Download[]
+  speed: number
+  servers?: { id: number; name: string; active: number; max: number; error?: string }[]
+  newsServers: number
+  folder: { path: string; freeSpace: number; problem?: string }
+}
+
+export type Candidate = {
+  key: string
+  title: string
+  size: number
+  publishedAt?: string
+  grabs?: number
+  indexer: string
+  protocol: string
+  quality: number
+  accepted: boolean
+  rejections?: string[]
+  infoUrl?: string
+}
+export type ReleaseResults = { releases: Candidate[]; errors?: string[]; searched: number }
+export type IndexerCaps = { categories: { id: number; name: string; subs?: { id: number; name: string }[] }[]; movieSearch: boolean; tvSearch: boolean }

@@ -224,10 +224,10 @@ func (c *Checker) connections(ctx context.Context) ([]Issue, error) {
 		ID: "connections-secret", Level: "warning", Title: plural(len(names), "connection needs", "connections need") + " a password or API key",
 		Detail: from + " hides these from other apps, so they came over blank and Box Office can't use them yet: " + strings.Join(names, ", ") + ".",
 		Steps: []string{
-			"In Settings, under Brought over from other apps, remove the ones marked needs its key.",
-			"Move in from " + from + " again, and leave \"Have it make a backup of itself\" switched on: Box Office reads the hidden keys from that backup. Titles already here are kept as they are.",
+			"In Settings, open each one marked needs its key, and paste its password or API key. Each form says where to find it.",
+			"Or remove the ones you no longer use.",
 		},
-		Link: &Link{To: "/import", Label: "Open Move in"},
+		Link: &Link{To: "/settings#indexers", Label: "Open Settings"},
 	}}, nil
 }
 

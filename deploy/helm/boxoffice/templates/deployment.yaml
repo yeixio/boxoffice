@@ -32,6 +32,10 @@ spec:
               value: ":7272"
             - name: BOXOFFICE_DATA_DIR
               value: /data
+            {{- if .Values.downloads.volume }}
+            - name: BOXOFFICE_DOWNLOADS_DIR
+              value: {{ .Values.downloads.mountPath }}
+            {{- end }}
             {{- if include "boxoffice.usesPostgres" . }}
             - name: BOXOFFICE_DATABASE_URL
               valueFrom:
@@ -84,6 +88,10 @@ spec:
               subPath: {{ . }}
               {{- end }}
             {{- end }}
+            {{- if .Values.downloads.volume }}
+            - name: downloads
+              mountPath: {{ .Values.downloads.mountPath }}
+            {{- end }}
             {{- with .Values.backupVolume.mountPath }}
             - name: backups
               mountPath: {{ . }}
@@ -98,6 +106,10 @@ spec:
         {{- range .Values.media }}
         - name: media-{{ .name }}
           {{- toYaml .volume | nindent 10 }}
+        {{- end }}
+        {{- if .Values.downloads.volume }}
+        - name: downloads
+          {{- toYaml .Values.downloads.volume | nindent 10 }}
         {{- end }}
         {{- if .Values.backupVolume.mountPath }}
         - name: backups

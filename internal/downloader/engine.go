@@ -15,6 +15,7 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/yeixio/boxoffice/internal/quality"
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/usenet/nzb"
 )
@@ -108,6 +109,9 @@ func (e *Engine) Add(ctx context.Context, d store.Download, nzbData []byte) (sto
 		d.Name, d.Password = passwordFromName(d.Name)
 	}
 	d.Size = n.Bytes()
+	if d.Quality == 0 {
+		d.Quality = quality.Parse(d.Name).ID
+	}
 	if err := os.MkdirAll(filepath.Join(e.Dir, ".nzb"), 0o750); err != nil {
 		return d, fmt.Errorf("make the downloads folder: %w", err)
 	}

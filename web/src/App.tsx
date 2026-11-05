@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { NavLink, Navigate, Route, Routes, useLocation } from 'react-router-dom'
-import { CalendarDays, Clapperboard, DatabaseBackup, Film, HeartPulse, History, LogOut, Menu, Settings as Cog, Truck, Tv, X } from 'lucide-react'
+import { CalendarDays, Clapperboard, DatabaseBackup, Download as DownloadIcon, Film, HeartPulse, History, LogOut, Menu, Settings as Cog, Truck, Tv, X } from 'lucide-react'
 import { get, post, type Status } from './api'
 import { Spinner } from './ui'
 import { Tray } from './Tray'
@@ -12,6 +12,7 @@ import { Shows } from './pages/Shows'
 import { ShowDetail } from './pages/ShowDetail'
 import { Calendar } from './pages/Calendar'
 import { Activity } from './pages/Activity'
+import { Downloads, speed, useDownloads } from './pages/Downloads'
 import { Import } from './pages/Import'
 import { Backups } from './pages/Backups'
 import { Settings } from './pages/Settings'
@@ -31,6 +32,7 @@ const allNav = [
   { to: '/movies', label: 'Movies', icon: Film },
   { to: '/shows', label: 'Shows', icon: Tv },
   { to: '/calendar', label: 'Coming up', icon: CalendarDays },
+  { to: '/downloads', label: 'Downloads', icon: DownloadIcon },
   { to: '/activity', label: 'Activity', icon: History },
   { to: '/health', label: 'Health', icon: HeartPulse },
   { to: '/import', label: 'Move in', icon: Truck },
@@ -43,11 +45,16 @@ function Shell({ status }: { status: Status }) {
   const nav = allNav.filter((n) => n.to !== '/import' || !status.movedIn)
   // Health shows how many problems need fixing.
   const problems = needsAttention(useHealth().data)
-  const badge = (to: string) =>
+  // Downloads shows the speed while something's downloading.
+  const dl = useDownloads().data
+  const rate = dl?.settings.enabled && !dl.settings.paused ? dl.speed : 0
+  const badge = (to: string, menu = false) =>
     to === '/health' && problems > 0 ? (
       <span className="rounded-full bg-marquee px-1.5 text-xs font-semibold leading-5 text-marquee-ink" aria-label={`${problems} to fix`}>
         {problems}
       </span>
+    ) : to === '/downloads' && rate > 0 ? (
+      <span className={`rounded-full border border-line px-1.5 text-xs leading-5 tabular-nums ${menu ? '' : 'hidden 2xl:inline'}`}>{speed(rate)}</span>
     ) : null
   // On a phone the sections fold into a menu, closed again on moving.
   const [menu, setMenu] = useState(false)
@@ -97,7 +104,7 @@ function Shell({ status }: { status: Status }) {
           </button>
           <button onClick={signOut} className="flex items-center gap-1.5 text-sm text-muted hover:text-ink" title={`Signed in as ${status.user?.username}`} aria-label="Sign out">
             <LogOut className="size-4" aria-hidden />
-            <span className="hidden sm:inline">Sign out</span>
+            <span className="hidden sm:inline md:hidden 2xl:inline">Sign out</span>
           </button>
         </div>
         {menu && (
@@ -110,7 +117,7 @@ function Shell({ status }: { status: Status }) {
               >
                 <Icon className="size-5" aria-hidden />
                 {label}
-                {badge(to)}
+                {badge(to, true)}
               </NavLink>
             ))}
           </nav>
@@ -125,6 +132,7 @@ function Shell({ status }: { status: Status }) {
           <Route path="/shows" element={<Shows />} />
           <Route path="/shows/:id" element={<ShowDetail />} />
           <Route path="/calendar" element={<Calendar />} />
+          <Route path="/downloads" element={<Downloads />} />
           <Route path="/activity" element={<Activity />} />
           <Route path="/health" element={<Health />} />
           <Route path="/import" element={<Import />} />
