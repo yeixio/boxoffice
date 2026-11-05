@@ -96,6 +96,7 @@ type activityItem struct {
 	SeriesID int64  `json:"seriesId,omitempty"`
 	Title    string `json:"title"`
 	Year     int    `json:"year,omitempty"`
+	Poster   string `json:"poster,omitempty"`
 	// Episodes are the episodes it's for, as season and episode numbers.
 	Episodes []activityEpisode `json:"episodes,omitempty"`
 	// Stage is one of queued, downloading, paused, waiting (downloaded,
@@ -260,7 +261,7 @@ func (c *titleCache) item(ctx context.Context, d store.Download) (activityItem, 
 		if m == nil {
 			return it, false
 		}
-		it.MovieID, it.TMDBID, it.IMDBID, it.Title, it.Year = m.ID, m.TMDBID, m.IMDBID, m.Title, m.Year
+		it.MovieID, it.TMDBID, it.IMDBID, it.Title, it.Year, it.Poster = m.ID, m.TMDBID, m.IMDBID, m.Title, m.Year, m.Poster
 	case "series":
 		if c.series == nil {
 			c.series, c.eps = map[int64]*store.Series{}, map[int64][]store.Episode{}
@@ -276,7 +277,7 @@ func (c *titleCache) item(ctx context.Context, d store.Download) (activityItem, 
 		if t == nil {
 			return it, false
 		}
-		it.SeriesID, it.TVDBID, it.TMDBID, it.IMDBID, it.Title, it.Year = t.ID, t.TVDBID, t.TMDBID, t.IMDBID, t.Title, t.Year
+		it.SeriesID, it.TVDBID, it.TMDBID, it.IMDBID, it.Title, it.Year, it.Poster = t.ID, t.TVDBID, t.TMDBID, t.IMDBID, t.Title, t.Year, t.Poster
 		for _, e := range c.eps[t.ID] {
 			if slices.Contains(d.EpisodeIDs, e.ID) {
 				it.Episodes = append(it.Episodes, activityEpisode{e.Season, e.Number})
