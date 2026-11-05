@@ -1,0 +1,140 @@
+{
+  "problems": {
+    "wont_play": "재생이 안 돼요",
+    "wrong_title": "영화나 에피소드가 달라요",
+    "picture": "화질이 나빠요",
+    "sound": "소리가 이상하거나 안 맞아요",
+    "subtitles": "자막이 없거나 틀려요",
+    "other": "기타"
+  },
+  "state": {
+    "pending": "승인 대기 중",
+    "declined": "거절됨",
+    "searching": "승인됨, 찾는 중",
+    "downloadingAt": "다운로드 중, {{percent}}",
+    "downloading": "다운로드 중",
+    "partial": "일부 에피소드 준비됨",
+    "available": "시청 가능",
+    "paused": "승인됨, 보류 중",
+    "removed": "라이브러리에서 삭제됨"
+  },
+  "site": {
+    "down": "이 사이트가 응답하지 않아요: {{error}}",
+    "closed": "이 요청 사이트는 지금 열려 있지 않아요."
+  },
+  "signIn": {
+    "matinee": "Matinee 계정",
+    "local": "여기 계정",
+    "with": "로그인 방식",
+    "matineeHint": "Matinee에서 시청할 때 쓰는 사용자 이름과 비밀번호를 쓰세요.",
+    "signUpHint": "계정을 만들어 영화와 프로그램을 요청하세요.",
+    "username": "사용자 이름",
+    "name": "이름",
+    "nameHint": "관리자에게 보이는 이름이에요. 비우면 사용자 이름을 써요.",
+    "password": "비밀번호",
+    "passwordHint": "8자 이상.",
+    "make": "내 계정 만들기",
+    "signIn": "로그인",
+    "haveAccount": "계정이 있어요",
+    "new": "처음이세요? 계정 만들기"
+  },
+  "nav": {
+    "discover": "둘러보기",
+    "requests": "내 요청",
+    "problems": "문제",
+    "sections": "섹션",
+    "account": "내 계정"
+  },
+  "home": {
+    "hi": "안녕하세요, {{name}}님",
+    "welcome": "영화나 프로그램을 찾아 요청하세요. 진행 상황은 내 요청에서 볼 수 있어요.",
+    "find": "영화나 프로그램 찾기",
+    "seeAll": "모두 보기",
+    "nothing": "아직 표시할 항목이 없습니다",
+    "notSetUp": "관리자가 아직 이 사이트 설정을 마치지 않았어요. 나중에 다시 시도하세요.",
+    "movieGenres": "영화 장르",
+    "showGenres": "프로그램 장르"
+  },
+  "search": {
+    "nothing": "그 이름은 없어요.",
+    "movies": "영화",
+    "shows": "프로그램",
+    "looking": "찾는 중…"
+  },
+  "row": {
+    "more": "더 표시"
+  },
+  "pill": {
+    "ready": "시청 가능",
+    "some": "일부 에피소드",
+    "coming": "준비 중",
+    "asked": "요청됨",
+    "declined": "거절됨"
+  },
+  "kind": {
+    "movie": "영화",
+    "show": "표시"
+  },
+  "card": {
+    "request": "{{title}} 요청"
+  },
+  "sheet": {
+    "out": "{{date}} 공개 예정",
+    "starts": "{{date}} 시작",
+    "released": "{{date}} 공개",
+    "firstAired": "{{date}} 첫 방영",
+    "ready": "라이브러리에 있어요. 즐겁게 보세요!",
+    "some": "일부는 라이브러리에 있고, 나머지도 오는 중이에요.",
+    "report": "문제 신고",
+    "coming": "오는 중이에요. 요청할 필요 없어요. 찾으면 라이브러리에 들어가요.",
+    "asked": "요청했어요. 관리자 승인을 기다리는 중이에요.",
+    "takeBack": "요청 취소",
+    "declined": "관리자가 거절했어요. 다시 요청할 수 있어요.",
+    "declinedWhy": "관리자가 거절했어요: “{{reply}}” 다시 요청할 수 있어요.",
+    "note": "관리자에게 메모",
+    "noteHint": "선택 사항. 원하는 버전 등.",
+    "askMovie": "이 영화 요청",
+    "askShow": "이 프로그램 요청"
+  },
+  "report": {
+    "thanks": "고마워요. 관리자가 살펴볼 거예요. 진행 상황은 문제에서 볼 수 있어요.",
+    "done": "완료",
+    "title": "무엇이 문제인가요?",
+    "problem": "문제",
+    "season": "시즌",
+    "seasonHint": "프로그램 전체라면 비워 두세요.",
+    "episode": "에피소드",
+    "more": "자세히 알려 주세요",
+    "say": "무슨 일이 있었는지 적어 주세요.",
+    "optional": "선택 사항.",
+    "send": "신고 보내기"
+  },
+  "mine": {
+    "title": "내 요청",
+    "none": "아직 요청한 것이 없어요",
+    "empty": "<link>둘러보기</link>에서 영화나 프로그램을 찾고 <strong>+</strong>를 눌러 요청하세요.",
+    "admin": "관리자: “{{reply}}”",
+    "asked": "{{date}}에 요청",
+    "takeBack": "취소"
+  },
+  "issues": {
+    "title": "문제",
+    "sub": "영화나 프로그램에 문제가 있나요? 둘러보기에서 열거나 이름으로 찾은 뒤 문제 신고를 고르세요.",
+    "none": "신고된 문제가 없어요",
+    "season": "시즌 {{season}}",
+    "episode": "시즌 {{season}}, 에피소드 {{episode}}",
+    "waiting": "관리자 대기 중",
+    "fixed": "해결됨"
+  },
+  "account": {
+    "title": "내 계정",
+    "signedIn": "<strong>{{name}}</strong>(으)로 로그인됨.",
+    "signedInMatinee": "Matinee 계정으로 <strong>{{name}}</strong>(으)로 로그인됨.",
+    "change": "비밀번호 변경",
+    "current": "현재 비밀번호",
+    "new": "새 비밀번호",
+    "changed": "변경했어요. 다른 모든 곳에서 로그아웃됐어요.",
+    "changeButton": "비밀번호 변경",
+    "signOut": "로그아웃"
+  }
+}
