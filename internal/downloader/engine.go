@@ -374,9 +374,18 @@ func (e *Engine) removeFolder(d store.Download) {
 		e.Log.Warn("not deleting a folder outside the downloads folder", "folder", d.Folder)
 		return
 	}
-	if err := os.RemoveAll(p); err != nil {
-		e.Log.Warn("couldn't delete a download's files", "folder", p, "err", err)
+	// Network shares can refuse a delete for a moment, so it gets a few
+	// tries; what's still there after that stays for the user to clear.
+	var err error
+	for i := range removeTries {
+		if i > 0 {
+			time.Sleep(removeWait << (i - 1))
+		}
+		if err = os.RemoveAll(p); err == nil {
+			return
+		}
 	}
+	e.Log.Warn("couldn't delete a download's files", "folder", p, "err", err)
 }
 
 // inside resolves a folder name to its path in the downloads folder, and
