@@ -337,7 +337,7 @@ export type MetricsSettings = { on: boolean; token?: string; path: string }
 
 // ---- downloads ----
 
-export type DownloadStatus = 'queued' | 'downloading' | 'paused' | 'verifying' | 'repairing' | 'unpacking' | 'importing' | 'completed' | 'failed'
+export type DownloadStatus = 'queued' | 'downloading' | 'paused' | 'downloaded' | 'verifying' | 'repairing' | 'unpacking' | 'importing' | 'completed' | 'failed'
 export type Download = {
   id: number
   name: string

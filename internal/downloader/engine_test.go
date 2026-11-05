@@ -322,3 +322,59 @@ func TestStalePartFile(t *testing.T) {
 	}
 	checkFiles(t, filepath.Join(e.Dir, d.Folder), want)
 }
+
+// While one download is unpacked, the next downloads; one that's done
+// downloading meanwhile waits its turn to unpack, and can be removed then,
+// but not once its turn comes.
+func TestUnpackWaitsItsTurn(t *testing.T) {
+	srv := nntptest.New()
+	defer srv.Close()
+	data, _, _ := release(t, srv, false)
+	e, st := newEngine(t, srv)
+	enable(t, st, Settings{})
+	ctx := context.Background()
+	e.init()
+	e.post <- struct{}{} // something else is being unpacked
+	run(t, e)
+	a, _ := e.Add(ctx, store.Download{Name: "First"}, data)
+	b, _ := e.Add(ctx, store.Download{Name: "Second"}, data)
+	waitFor(t, st, a.ID, store.DownloadDownloaded)
+	// The first waiting to unpack doesn't hold up the second.
+	waitFor(t, st, b.ID, store.DownloadDownloaded)
+	if err := e.Pause(ctx, b.ID); err == nil {
+		t.Fatal("paused a download with nothing left to download")
+	}
+	if err := e.Remove(ctx, b.ID, true); err != nil {
+		t.Fatalf("removing one waiting to unpack: %v", err)
+	}
+	<-e.post
+	a = waitFor(t, st, a.ID, store.DownloadCompleted, store.DownloadFailed)
+	if a.Status != store.DownloadCompleted {
+		t.Fatalf("%s: %s", a.Status, a.Message)
+	}
+	if _, err := st.Download(ctx, b.ID); err == nil {
+		t.Fatal("the removed download is back")
+	}
+}
+
+func TestRemoveLockedWhileUnpacking(t *testing.T) {
+	srv := nntptest.New()
+	defer srv.Close()
+	data, _, _ := release(t, srv, false)
+	e, st := newEngine(t, srv)
+	ctx := context.Background()
+	d, err := e.Add(ctx, store.Download{}, data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, s := range []string{store.DownloadVerifying, store.DownloadRepairing, store.DownloadUnpacking, store.DownloadImporting} {
+		st.SetDownloadStatus(ctx, d.ID, s, "")
+		if err := e.Remove(ctx, d.ID, true); err == nil {
+			t.Fatalf("removed while %s", s)
+		}
+	}
+	st.SetDownloadStatus(ctx, d.ID, store.DownloadQueued, "")
+	if err := e.Remove(ctx, d.ID, true); err != nil {
+		t.Fatal(err)
+	}
+}

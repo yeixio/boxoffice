@@ -14,12 +14,15 @@ const (
 	DownloadQueued      = "queued"
 	DownloadDownloading = "downloading"
 	DownloadPaused      = "paused"
-	DownloadVerifying   = "verifying"
-	DownloadRepairing   = "repairing"
-	DownloadUnpacking   = "unpacking"
-	DownloadImporting   = "importing"
-	DownloadCompleted   = "completed"
-	DownloadFailed      = "failed"
+	// DownloadDownloaded is fetched, and waiting for its turn to be
+	// checked and unpacked while another is.
+	DownloadDownloaded = "downloaded"
+	DownloadVerifying  = "verifying"
+	DownloadRepairing  = "repairing"
+	DownloadUnpacking  = "unpacking"
+	DownloadImporting  = "importing"
+	DownloadCompleted  = "completed"
+	DownloadFailed     = "failed"
 )
 
 // Download is one release being downloaded, or downloaded.
@@ -297,7 +300,7 @@ func (s *Store) ClearDownloadHistory(ctx context.Context) ([]Download, error) {
 // RequeueInterruptedDownloads puts downloads that were mid-way when Box
 // Office stopped back in the queue, to carry on.
 func (s *Store) RequeueInterruptedDownloads(ctx context.Context) error {
-	_, err := s.exec(ctx, "UPDATE downloads SET status = 'queued' WHERE status IN ('downloading', 'verifying', 'repairing', 'unpacking', 'importing')")
+	_, err := s.exec(ctx, "UPDATE downloads SET status = 'queued' WHERE status IN ('downloading', 'downloaded', 'verifying', 'repairing', 'unpacking', 'importing')")
 	return err
 }
 

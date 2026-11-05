@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -8,6 +9,7 @@ import (
 	"slices"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/yeixio/boxoffice/internal/arrapi"
 	"github.com/yeixio/boxoffice/internal/downloader"
@@ -52,7 +54,8 @@ func (s *Server) downloadRoutes() []route {
 		{"POST /api/v1/downloads/{id}/bottom", true, act(func(r *http.Request, id int64) error { return s.Downloads.MoveToBottom(r.Context(), id) })},
 		{"POST /api/v1/downloads/bulk", true, s.bulkDownloads},
 		{"DELETE /api/v1/downloads/{id}", true, act(func(r *http.Request, id int64) error {
-			return s.Downloads.Remove(r.Context(), id, r.URL.Query().Get("deleteFiles") == "true")
+			q := r.URL.Query()
+			return badRequest(s.removeDownload(r.Context(), id, q.Get("deleteFiles") == "true", q.Get("block") == "true"))
 		})},
 
 		{"GET /api/v1/movies/{id}/releases", true, s.releases(func(r *http.Request, id int64) (search.Results, error) { return s.Search.Movie(r.Context(), id) })},
@@ -82,6 +85,26 @@ func badRequest(err error) error {
 	return errorf(http.StatusBadRequest, err.Error())
 }
 
+// removeDownload takes a download off the list; with deleteFiles its
+// folder goes too (never quarantined files, whatever was asked), and with
+// block the release goes on the blocklist so it isn't grabbed again.
+func (s *Server) removeDownload(ctx context.Context, id int64, deleteFiles, block bool) error {
+	d, err := s.Store.Download(ctx, id)
+	if err != nil {
+		return err
+	}
+	if err := s.Downloads.Remove(ctx, id, deleteFiles && d.Quarantined == ""); err != nil {
+		return err
+	}
+	if block && d.Kind != "" {
+		if err := s.Store.Block(context.WithoutCancel(ctx), store.Blocked{Kind: d.Kind, TitleID: d.TitleID, SourceTitle: d.Name, Quality: d.Quality,
+			Protocol: "usenet", Indexer: d.Indexer, Reason: "Removed from the downloads by hand", At: time.Now()}); err != nil {
+			return fmt.Errorf("it was removed, but couldn't go on the blocklist: %w", err)
+		}
+	}
+	return nil
+}
+
 // bulkDownloads does one action to several downloads. Each is tried on
 // its own, so one that can't (it finished meanwhile, say) doesn't stop the
 // rest; the answer says which didn't and why.
@@ -90,6 +113,7 @@ func (s *Server) bulkDownloads(w http.ResponseWriter, r *http.Request) error {
 		Action      string  `json:"action"`
 		IDs         []int64 `json:"ids"`
 		DeleteFiles bool    `json:"deleteFiles"`
+		Block       bool    `json:"block"`
 	}
 	if err := readJSON(r, &in); err != nil {
 		return err
@@ -104,14 +128,7 @@ func (s *Server) bulkDownloads(w http.ResponseWriter, r *http.Request) error {
 		"reprocess": func(id int64) error { return e.Reprocess(ctx, id) },
 		"top":       func(id int64) error { return e.MoveToTop(ctx, id) },
 		"bottom":    func(id int64) error { return e.MoveToBottom(ctx, id) },
-		"remove": func(id int64) error {
-			// Quarantined files are never deleted, whatever was asked.
-			d, err := s.Store.Download(ctx, id)
-			if err != nil {
-				return err
-			}
-			return e.Remove(ctx, id, in.DeleteFiles && d.Quarantined == "")
-		},
+		"remove":    func(id int64) error { return s.removeDownload(ctx, id, in.DeleteFiles, in.Block) },
 	}[in.Action]
 	if do == nil {
 		return errorf(http.StatusBadRequest, fmt.Sprintf("there's no %q for downloads", in.Action))
