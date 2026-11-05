@@ -226,6 +226,19 @@ func (s *Store) MoveDownloadToTop(ctx context.Context, id int64) error {
 	return affected(res)
 }
 
+// MoveDownloadToBottom puts a queued download last.
+func (s *Store) MoveDownloadToBottom(ctx context.Context, id int64) error {
+	var pos int
+	if err := s.row(ctx, "SELECT COALESCE(MAX(position), 0) FROM downloads").Scan(&pos); err != nil {
+		return err
+	}
+	res, err := s.exec(ctx, "UPDATE downloads SET position = ? WHERE id = ?", pos+1, id)
+	if err != nil {
+		return err
+	}
+	return affected(res)
+}
+
 func (s *Store) DeleteDownload(ctx context.Context, id int64) error {
 	res, err := s.exec(ctx, "DELETE FROM downloads WHERE id = ?", id)
 	if err != nil {
