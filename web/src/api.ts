@@ -45,7 +45,7 @@ export type Status = { setup: boolean; version: string; user?: User; movedIn?: b
 
 export type Quality = { id: number; name: string; source: string; resolution: number }
 export type Profile = { id: number; name: string; allowed: number[]; cutoff: number; upgrade: boolean }
-export type RootFolder = { id: number; kind: 'movie' | 'series'; path: string; freeSpace: number; accessible: boolean }
+export type RootFolder = { id: number; kind: RootKind; path: string; freeSpace: number; accessible: boolean }
 
 export type MediaFile = { id: number; path: string; size: number; quality: number; addedAt: string }
 
@@ -154,7 +154,11 @@ export type AutoSearch = {
 }
 export type Job = { id: number; kind: string; subject: string; status: string; message?: string; createdAt: string; startedAt?: string; finishedAt?: string }
 
-export type Settings = { apiKey: string; apiKeyFromEnv: boolean; hasTmdbKey: boolean; tmdbKeyFromEnv: boolean }
+// A kind of media beyond movies and TV that an admin can turn on.
+export type MediaTypeKey = 'music' | 'audiobook' | 'ebook' | 'comic'
+export type MediaType = { key: MediaTypeKey; name: string; summary: string; replaces?: string; enabled: boolean; suggested: string[] }
+export type RootKind = 'movie' | 'series' | MediaTypeKey
+export type Settings = { apiKey: string; apiKeyFromEnv: boolean; hasTmdbKey: boolean; tmdbKeyFromEnv: boolean; mediaTypes: MediaType[] }
 
 export type BackupRemote = {
   kind: '' | 'folder' | 's3'

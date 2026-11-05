@@ -16,6 +16,7 @@ import (
 	"time"
 
 	"github.com/yeixio/boxoffice/internal/alerts"
+	"github.com/yeixio/boxoffice/internal/mediatypes"
 	"github.com/yeixio/boxoffice/internal/monitor"
 )
 
@@ -290,8 +291,15 @@ func (s *Server) storageUses(ctx context.Context) []monitorUse {
 	roots, _ := s.Store.RootFolders(ctx, "")
 	for _, f := range roots {
 		use := "movies"
-		if f.Kind == "series" {
+		switch f.Kind {
+		case "series":
 			use = "tv"
+		case "movie":
+		default:
+			use = strings.ToLower(f.Kind)
+			if t, ok := mediatypes.Lookup(f.Kind); ok {
+				use = strings.ToLower(t.Name)
+			}
 		}
 		uses = append(uses, monitorUse{Use: use, Path: f.Path})
 	}

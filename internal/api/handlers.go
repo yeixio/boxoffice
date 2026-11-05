@@ -19,6 +19,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/backup"
 	"github.com/yeixio/boxoffice/internal/catalog"
 	"github.com/yeixio/boxoffice/internal/health"
+	"github.com/yeixio/boxoffice/internal/mediatypes"
 	"github.com/yeixio/boxoffice/internal/migrate"
 	"github.com/yeixio/boxoffice/internal/quality"
 	"github.com/yeixio/boxoffice/internal/store"
@@ -45,20 +46,70 @@ func (s *Server) system(w http.ResponseWriter, r *http.Request) error {
 func (s *Server) settings(w http.ResponseWriter, r *http.Request) error {
 	ctx := r.Context()
 	key, _ := s.Store.Setting(ctx, catalog.SettingTMDBKey)
+	types, err := s.mediaTypes(ctx)
+	if err != nil {
+		return err
+	}
 	return writeJSON(w, http.StatusOK, map[string]any{
 		"apiKey": s.APIKey(ctx), "apiKeyFromEnv": s.EnvAPIKey != "",
 		"hasTmdbKey": key != "" || s.Catalog.EnvTMDBKey != "", "tmdbKeyFromEnv": key == "" && s.Catalog.EnvTMDBKey != "",
+		"mediaTypes": types,
 	})
+}
+
+// mediaTypeView is a media type as Settings shows it: whether it's on and,
+// when it is but has no root folder yet, the folders Box Office can see
+// where its library is usually mounted.
+type mediaTypeView struct {
+	mediatypes.State
+	Suggested []string `json:"suggested"`
+}
+
+func (s *Server) mediaTypes(ctx context.Context) ([]mediaTypeView, error) {
+	states, err := mediatypes.States(ctx, s.Store)
+	if err != nil {
+		return nil, err
+	}
+	out := make([]mediaTypeView, 0, len(states))
+	for _, t := range states {
+		v := mediaTypeView{State: t, Suggested: []string{}}
+		if t.Enabled {
+			roots, err := s.Store.RootFolders(ctx, t.Key)
+			if err != nil {
+				return nil, err
+			}
+			if len(roots) == 0 {
+				for _, f := range t.Folders {
+					if st, err := os.Stat(f); err == nil && st.IsDir() {
+						v.Suggested = append(v.Suggested, f)
+					}
+				}
+			}
+		}
+		out = append(out, v)
+	}
+	return out, nil
 }
 
 func (s *Server) saveSettings(w http.ResponseWriter, r *http.Request) error {
 	var in struct {
-		TMDBKey *string `json:"tmdbKey"`
+		TMDBKey    *string         `json:"tmdbKey"`
+		MediaTypes map[string]bool `json:"mediaTypes"`
 	}
 	if err := readJSON(r, &in); err != nil {
 		return err
 	}
 	ctx := r.Context()
+	for k := range in.MediaTypes {
+		if _, ok := mediatypes.Lookup(k); !ok {
+			return errorf(http.StatusBadRequest, "there's no media type "+k)
+		}
+	}
+	for k, on := range in.MediaTypes {
+		if err := mediatypes.SetEnabled(ctx, s.Store, k, on); err != nil {
+			return err
+		}
+	}
 	if in.TMDBKey != nil {
 		k := strings.TrimSpace(*in.TMDBKey)
 		if k != "" {
@@ -173,7 +224,17 @@ func (s *Server) addRootFolder(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 	if in.Kind != "movie" && in.Kind != "series" {
-		return errorf(http.StatusBadRequest, "a root folder is for movies or series")
+		t, ok := mediatypes.Lookup(in.Kind)
+		if !ok {
+			return errorf(http.StatusBadRequest, "a root folder is for movies, series, or one of the media types in Settings")
+		}
+		on, err := mediatypes.Enabled(r.Context(), s.Store, in.Kind)
+		if err != nil {
+			return err
+		}
+		if !on {
+			return errorf(http.StatusBadRequest, "turn on "+t.Name+" in Settings first")
+		}
 	}
 	if !filepath.IsAbs(in.Path) {
 		return errorf(http.StatusBadRequest, "enter the folder's full path")

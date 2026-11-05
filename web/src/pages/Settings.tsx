@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Copy, Folder, FolderUp, KeyRound, Plus, Trash2 } from 'lucide-react'
-import { del, get, post, put, type Profile, type Recycle, type RootFolder, type Settings as SettingsData, type SystemInfo } from '../api'
+import { del, get, post, put, type MediaType, type MediaTypeKey, type Profile, type Recycle, type RootFolder, type RootKind, type Settings as SettingsData, type SystemInfo } from '../api'
 import { bytes, count, day } from '../format'
 import { useProfiles, useQualities, useRootFolders } from '../hooks'
 import { AutoSearchSettings, Connections, DataCapSettingsCard, DownloadSettings } from './Connections'
@@ -15,6 +15,7 @@ export function Settings() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <div className="flex flex-col gap-6">
           <General />
+          <MediaTypes />
           <ConnectMatinee />
           <MoveIn />
           <Account />
@@ -22,6 +23,7 @@ export function Settings() {
         <div className="flex flex-col gap-6">
           <RootFolders kind="movie" />
           <RootFolders kind="series" />
+          <MediaTypeFolders />
           <RecycleFolders />
           <Profiles />
         </div>
@@ -154,21 +156,90 @@ function ConnectMatinee() {
   )
 }
 
-function RootFolders({ kind }: { kind: 'movie' | 'series' }) {
+// MediaTypes turns on the kinds of media beyond movies and TV. Each is off
+// until it's turned on here.
+function MediaTypes() {
+  const qc = useQueryClient()
+  const s = useSettings()
+  const save = useMutation({
+    mutationFn: (v: { key: MediaTypeKey; on: boolean }) => put<SettingsData>('/settings', { mediaTypes: { [v.key]: v.on } }),
+    onSuccess: (d) => {
+      qc.setQueryData(['settings'], d)
+      qc.invalidateQueries({ queryKey: ['rootfolders'] })
+    },
+  })
+  return (
+    <Card>
+      <h2 className="mb-1 font-display text-lg font-semibold">More than movies and TV</h2>
+      <p className="mb-4 text-sm text-muted">
+        Turn on the other kinds of media you want Box Office to look after. Each is off until you turn it on, and turning one off later keeps its folders and settings. Box Office
+        never changes files already in these libraries.
+      </p>
+      {s.isPending && <Spinner />}
+      <ErrorNote error={s.error} />
+      <div className="flex flex-col gap-4">
+        {s.data?.mediaTypes.map((t) => (
+          <Toggle
+            key={t.key}
+            checked={t.enabled}
+            disabled={save.isPending}
+            onChange={(on) => save.mutate({ key: t.key, on })}
+            label={
+              <span>
+                <span className="font-medium">{t.name}</span>
+                {t.replaces && <span className="text-muted"> (in place of {t.replaces})</span>}
+                <span className="block text-sm text-muted">{t.summary}</span>
+              </span>
+            }
+          />
+        ))}
+      </div>
+      {s.data?.mediaTypes.some((t) => t.enabled) && (
+        <p className="mt-4 text-sm text-muted">Pick a root folder for each one you turned on, below. Adding and searching for these arrives in the next Box Office updates.</p>
+      )}
+      <ErrorNote error={save.error} />
+    </Card>
+  )
+}
+
+// MediaTypeFolders shows a root folder card for each media type that's on.
+function MediaTypeFolders() {
+  const s = useSettings()
+  return (
+    <>
+      {s.data?.mediaTypes
+        .filter((t) => t.enabled)
+        .map((t) => (
+          <RootFolders key={t.key} kind={t.key} type={t} />
+        ))}
+    </>
+  )
+}
+
+const rootTitle = (kind: RootKind, type?: MediaType) => (kind === 'movie' ? 'Movie' : kind === 'series' ? 'TV' : (type?.name ?? kind))
+
+function RootFolders({ kind, type }: { kind: RootKind; type?: MediaType }) {
   const qc = useQueryClient()
   const folders = useRootFolders(kind)
   const [picking, setPicking] = useState(false)
-  const remove = useMutation({ mutationFn: (f: RootFolder) => del(`/rootfolders/${f.id}`), onSuccess: () => qc.invalidateQueries({ queryKey: ['rootfolders', kind] }) })
+  const remove = useMutation({
+    mutationFn: (f: RootFolder) => del(`/rootfolders/${f.id}`),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['rootfolders', kind] })
+      qc.invalidateQueries({ queryKey: ['settings'] })
+    },
+  })
   return (
     <Card>
       <div className="mb-3 flex items-center justify-between">
-        <h2 className="font-display text-lg font-semibold">{kind === 'movie' ? 'Movie' : 'TV'} root folders</h2>
+        <h2 className="font-display text-lg font-semibold">{rootTitle(kind, type)} root folders</h2>
         <Button variant="ghost" onClick={() => setPicking(true)}>
           <Plus className="size-4" aria-hidden /> Add
         </Button>
       </div>
       {folders.isPending && <Spinner />}
       {folders.data?.length === 0 && <p className="text-sm text-muted">None yet. Each title gets its own folder inside one of these.</p>}
+      {folders.data?.length === 0 && type && type.suggested.length > 0 && <SuggestedFolders kind={kind} type={type} />}
       <ul className="flex flex-col divide-y divide-line">
         {folders.data?.map((f) => (
           <li key={f.id} className="flex items-center gap-3 py-2 text-sm">
@@ -182,7 +253,7 @@ function RootFolders({ kind }: { kind: 'movie' | 'series' }) {
         ))}
       </ul>
       <ErrorNote error={remove.error} />
-      {picking && <FolderPicker kind={kind} onClose={() => setPicking(false)} />}
+      {picking && <FolderPicker kind={kind} title={rootTitle(kind, type)} onClose={() => setPicking(false)} />}
     </Card>
   )
 }
@@ -278,7 +349,33 @@ function RecycleFolders() {
   )
 }
 
-function FolderPicker({ kind, onClose }: { kind: 'movie' | 'series'; onClose: () => void }) {
+// SuggestedFolders offers, with one click, the folders Box Office found
+// where a media type's library is usually mounted.
+function SuggestedFolders({ kind, type }: { kind: RootKind; type: MediaType }) {
+  const qc = useQueryClient()
+  const add = useMutation({
+    mutationFn: (path: string) => post('/rootfolders', { kind, path }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['rootfolders', kind] })
+      qc.invalidateQueries({ queryKey: ['settings'] })
+    },
+  })
+  return (
+    <div className="mt-2 text-sm">
+      <p className="mb-2">Box Office found {type.suggested.length === 1 ? 'a folder that looks like' : 'folders that look like'} your {type.name.toLowerCase()} library:</p>
+      <div className="flex flex-wrap gap-2">
+        {type.suggested.map((p) => (
+          <Button key={p} busy={add.isPending && add.variables === p} onClick={() => add.mutate(p)}>
+            <Plus className="size-4" aria-hidden /> <code>{p}</code>
+          </Button>
+        ))}
+      </div>
+      <ErrorNote error={add.error} />
+    </div>
+  )
+}
+
+function FolderPicker({ kind, title, onClose }: { kind: RootKind; title: string; onClose: () => void }) {
   const qc = useQueryClient()
   const [path, setPath] = useState('/')
   const [typed, setTyped] = useState('/')
@@ -287,6 +384,7 @@ function FolderPicker({ kind, onClose }: { kind: 'movie' | 'series'; onClose: ()
     mutationFn: () => post('/rootfolders', { kind, path: typed }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['rootfolders', kind] })
+      qc.invalidateQueries({ queryKey: ['settings'] })
       onClose()
     },
   })
@@ -295,7 +393,7 @@ function FolderPicker({ kind, onClose }: { kind: 'movie' | 'series'; onClose: ()
     setTyped(p)
   }
   return (
-    <Modal title={`Add a ${kind === 'movie' ? 'movie' : 'TV'} root folder`} onClose={onClose}>
+    <Modal title={`Add a ${title === 'TV' ? title : title.toLowerCase()} root folder`} onClose={onClose}>
       <div className="flex flex-col gap-3">
         <Input aria-label="Folder" value={typed} onChange={(e) => setTyped(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && go(typed)} />
         <ul className="max-h-72 overflow-y-auto rounded-md border border-line text-sm">
