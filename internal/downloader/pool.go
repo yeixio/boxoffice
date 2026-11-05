@@ -32,6 +32,8 @@ type pool struct {
 	// left of a block account, -1 for none.
 	used *atomic.Int64
 	left atomic.Int64
+	// closed: connections handed back are closed, not kept.
+	closed atomic.Bool
 }
 
 func newPool(s store.UsenetServer) *pool {
@@ -109,7 +111,7 @@ func (p *pool) get(ctx context.Context) (*nntp.Conn, error) {
 // put returns a connection; a broken one (err set) is closed instead.
 func (p *pool) put(c *nntp.Conn, broken bool) {
 	p.active.Add(-1)
-	if broken {
+	if broken || p.closed.Load() {
 		c.Close()
 	} else {
 		p.mu.Lock()
@@ -119,7 +121,11 @@ func (p *pool) put(c *nntp.Conn, broken bool) {
 	<-p.slots
 }
 
+// closeIdle closes the idle connections, and those still in use as
+// they're handed back, so none are left open once the next download has
+// its own. Anyone still fetching through it can, but nothing is kept.
 func (p *pool) closeIdle() {
+	p.closed.Store(true)
 	p.mu.Lock()
 	idle := p.idle
 	p.idle = nil

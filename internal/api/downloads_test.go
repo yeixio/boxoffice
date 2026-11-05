@@ -7,6 +7,7 @@ import (
 	"log/slog"
 	"os"
 	"path/filepath"
+	"slices"
 	"testing"
 
 	"github.com/yeixio/boxoffice/internal/downloader"
@@ -104,5 +105,47 @@ func TestQuarantineBulk(t *testing.T) {
 	call(t, hs, "POST", "/api/v1/downloads/quarantine/release", `{"paths":["_quarantine/worse"]}`, &a)
 	if _, err := os.Stat(filepath.Join(dir, "worse/y.exe")); a.Done != 1 || err != nil {
 		t.Fatalf("release: %+v %v", a, err)
+	}
+}
+
+// Removing a download can put its release on the blocklist, or not.
+func TestRemoveDownloadBlock(t *testing.T) {
+	s, hs, _ := monitorServer(t)
+	s.Downloads = &downloader.Engine{Store: s.Store, Dir: t.TempDir(), Log: slog.New(slog.NewTextHandler(io.Discard, nil))}
+	ctx := context.Background()
+	add := func(name string) int64 {
+		d, err := s.Store.AddDownload(ctx, store.Download{Name: name, Kind: "movie", TitleID: 7, Status: store.DownloadQueued})
+		if err != nil {
+			t.Fatal(err)
+		}
+		return d.ID
+	}
+	a, b, c := add("Keep.Looking"), add("Bad.Release"), add("Also.Bad")
+	if code := call(t, hs, "DELETE", fmt.Sprintf("/api/v1/downloads/%d", a), "", nil); code != 204 {
+		t.Fatal(code)
+	}
+	if code := call(t, hs, "DELETE", fmt.Sprintf("/api/v1/downloads/%d?block=true", b), "", nil); code != 204 {
+		t.Fatal(code)
+	}
+	if code := call(t, hs, "POST", "/api/v1/downloads/bulk", fmt.Sprintf(`{"action":"remove","ids":[%d],"block":true}`, c), nil); code != 200 {
+		t.Fatal(code)
+	}
+	list, err := s.Store.BlockedFor(ctx, "movie", 7)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var got []string
+	for _, x := range list {
+		got = append(got, x.SourceTitle)
+	}
+	slices.Sort(got)
+	if fmt.Sprint(got) != "[Also.Bad Bad.Release]" {
+		t.Fatal(got)
+	}
+	// One being unpacked can't be removed.
+	d := add("Busy")
+	s.Store.SetDownloadStatus(ctx, d, store.DownloadUnpacking, "")
+	if code := call(t, hs, "DELETE", fmt.Sprintf("/api/v1/downloads/%d", d), "", nil); code != 400 {
+		t.Fatal(code)
 	}
 }

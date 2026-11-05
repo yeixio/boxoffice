@@ -194,7 +194,11 @@ func (e *Engine) Pause(ctx context.Context, id int64) error {
 	if err != nil {
 		return err
 	}
-	if d.Status != store.DownloadQueued && d.Status != store.DownloadDownloading {
+	switch d.Status {
+	case store.DownloadQueued, store.DownloadDownloading:
+	case store.DownloadDownloaded, store.DownloadVerifying, store.DownloadRepairing, store.DownloadUnpacking, store.DownloadImporting:
+		return errors.New("it's all downloaded, so there's nothing left to pause")
+	default:
 		return fmt.Errorf("a download that's %s can't be paused", d.Status)
 	}
 	if err := e.Store.SetDownloadStatus(ctx, id, store.DownloadPaused, ""); err != nil {
@@ -359,6 +363,9 @@ func (e *Engine) Remove(ctx context.Context, id int64, deleteFiles bool) error {
 	if err != nil {
 		return err
 	}
+	if err := e.locked(d); err != nil {
+		return err
+	}
 	e.stop(id, errRemoved)
 	if err := e.Store.DeleteDownload(ctx, id); err != nil {
 		return err
@@ -366,6 +373,23 @@ func (e *Engine) Remove(ctx context.Context, id int64, deleteFiles bool) error {
 	os.Remove(e.nzbPath(id))
 	if deleteFiles {
 		e.removeFolder(d)
+	}
+	return nil
+}
+
+// locked says why a download can't be removed now: while it's being
+// checked, repaired, unpacked or moved into the library, its files are
+// in use, so it's left to finish first.
+func (e *Engine) locked(d store.Download) error {
+	e.init()
+	e.mu.Lock()
+	importing := e.importing[d.ID]
+	e.mu.Unlock()
+	switch {
+	case importing || d.Status == store.DownloadImporting:
+		return errors.New("it's being moved into the library; remove it once that's done")
+	case d.Status == store.DownloadVerifying, d.Status == store.DownloadRepairing, d.Status == store.DownloadUnpacking:
+		return errors.New("it's being checked and unpacked; remove it once that's done")
 	}
 	return nil
 }
@@ -660,8 +684,15 @@ func (e *Engine) process(ctx context.Context, r *running, d store.Download, srv 
 		e.Wake()
 		select {
 		case e.post <- struct{}{}:
-		case <-ctx.Done():
-			err = ctx.Err()
+		default:
+			// Another is being unpacked; this one waits its turn, and can
+			// still be removed meanwhile.
+			e.Store.SetDownloadStatus(context.WithoutCancel(ctx), d.ID, store.DownloadDownloaded, "Downloaded; it's unpacked once the one before it is")
+			select {
+			case e.post <- struct{}{}:
+			case <-ctx.Done():
+				err = ctx.Err()
+			}
 		}
 		if err == nil {
 			err = e.postProcess(ctx, r, &d, job)
