@@ -4,6 +4,7 @@
 package music
 
 import (
+	"cmp"
 	"context"
 	"errors"
 	"path/filepath"
@@ -97,6 +98,9 @@ type AddOptions struct {
 	RootFolder string   `json:"rootFolder"`
 	Monitored  bool     `json:"monitored"`
 	AlbumTypes []string `json:"albumTypes"`
+	// Path is the artist's folder when it's on disk already (found by a
+	// root folder scan); empty puts it in the root folder by name.
+	Path string `json:"-"`
 }
 
 func checkTypes(types []string) error {
@@ -129,6 +133,13 @@ func (s *Service) Add(ctx context.Context, o AddOptions) (store.Artist, error) {
 	if err != nil {
 		return store.Artist{}, err
 	}
+	path := ""
+	if o.Path != "" {
+		path = filepath.Clean(o.Path)
+		if filepath.Dir(path) != root {
+			return store.Artist{}, &catalog.Error{Message: path + " isn't a folder in " + root}
+		}
+	}
 	a, err := s.MusicBrainz.Artist(ctx, o.MBID)
 	if errors.Is(err, musicbrainz.ErrNotFound) {
 		return store.Artist{}, &catalog.Error{Message: "MusicBrainz doesn't know that artist"}
@@ -138,7 +149,7 @@ func (s *Service) Add(ctx context.Context, o AddOptions) (store.Artist, error) {
 	}
 	added, err := s.Store.AddArtist(ctx, store.Artist{MBID: a.MBID, Name: a.Name, SortName: a.SortName, Type: a.Type, Country: a.Country,
 		Disambiguation: a.Disambiguation, Monitored: o.Monitored, AlbumTypes: o.AlbumTypes, RootFolder: root,
-		Path: filepath.Join(root, catalog.FolderName(a.Name, 0))})
+		Path: cmp.Or(path, filepath.Join(root, catalog.FolderName(a.Name, 0)))})
 	if errors.Is(err, store.ErrExists) {
 		return store.Artist{}, catalog.ErrExists
 	}

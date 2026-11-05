@@ -27,6 +27,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/backup"
 	"github.com/yeixio/boxoffice/internal/catalog"
 	"github.com/yeixio/boxoffice/internal/downloader"
+	"github.com/yeixio/boxoffice/internal/libscan"
 	"github.com/yeixio/boxoffice/internal/migrate"
 	"github.com/yeixio/boxoffice/internal/music"
 	"github.com/yeixio/boxoffice/internal/search"
@@ -53,10 +54,12 @@ type Server struct {
 	// Downloads is the downloader, and Search finds releases for it.
 	Downloads *downloader.Engine
 	Search    *search.Service
-	Log       *slog.Logger
-	Version   string
-	Database  string // sqlite or postgres, for the System page
-	DataDir   string
+	// LibScan scans root folders for what's on disk but not on the list.
+	LibScan  *libscan.Service
+	Log      *slog.Logger
+	Version  string
+	Database string // sqlite or postgres, for the System page
+	DataDir  string
 	// EnvAPIKey, when set, is the API key, and can't be changed in the UI:
 	// it comes from the deployment, such as a Kubernetes Secret.
 	EnvAPIKey string
@@ -216,6 +219,7 @@ func (s *Server) Handler() http.Handler {
 	routes = append(routes, s.downloadFileRoutes()...)
 	routes = append(routes, s.quarantineRoutes()...)
 	routes = append(routes, s.connectionRoutes()...)
+	routes = append(routes, s.libScanRoutes()...)
 	for _, r := range routes {
 		mux.Handle(r.pattern, s.wrap(r))
 	}

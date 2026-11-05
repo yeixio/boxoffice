@@ -6,6 +6,7 @@ What changed in Box Office, newest first. The format follows [Keep a Changelog](
 
 ### Added
 
+- **Scan a root folder for what's on disk but not on the list.** Each movie, TV and music root folder in Settings has a Scan button: it runs in the background, matches each folder to TMDB or MusicBrainz, and lets you check the matches and add the ones you pick where they are, with their files. Nothing is moved, renamed or deleted.
 - **Music:** follow artists from MusicBrainz and pick which of their albums, EPs and singles you want, once Music is turned on in Settings ([#41](https://github.com/yeixio/boxoffice/pull/41)). Searching and downloading them comes next.
 - **Music, audiobooks, ebooks and comics can be turned on in Settings,** each off by default, with its own root folders and one-click suggestions for where the library is mounted ([#38](https://github.com/yeixio/boxoffice/pull/38)). Adding and searching for them comes next.
 - **New shows watch only their last 3 aired seasons, and any still to come,** so a long-running show doesn't flood the library patrol and upgrades. The rule and the number of seasons are in Settings → New shows, and can be changed per show when adding it. Matinee requests follow the same default; shows already on the list and ones brought in by Move in keep what they have. Specials stay off.

@@ -261,6 +261,9 @@ func (s *Server) deleteRootFolder(w http.ResponseWriter, r *http.Request) error 
 	if err := s.Store.DeleteRootFolder(r.Context(), int(id)); err != nil {
 		return err
 	}
+	if s.LibScan != nil {
+		s.LibScan.Dismiss(int(id))
+	}
 	w.WriteHeader(http.StatusNoContent)
 	return nil
 }

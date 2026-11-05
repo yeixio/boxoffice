@@ -464,3 +464,40 @@ export type Album = { id: number; artistId: number; mbid: string; title: string;
 export type ArtistDetail = Artist & { albumList: Album[] }
 export type LookupArtist = { mbid: string; name: string; sortName: string; type?: string; country?: string; disambiguation?: string; began?: string; ended?: string; id?: number }
 export type AlbumTypes = { types: string[]; defaults: string[] }
+
+// A root folder scan: folders on disk that aren't on the list, matched to
+// TMDB or MusicBrainz and ready to add where they are.
+export type ScanMatch = { tmdbId?: number; mbid?: string; title: string; year?: number; poster?: string; overview?: string; disambiguation?: string }
+export type ScanFound = {
+  path: string
+  name: string
+  files: number
+  size: number
+  episodes?: number
+  guess: { title: string; year?: number }
+  match?: ScanMatch
+  sure: boolean
+  have?: { id: number; title: string; path: string }
+  note?: string
+  problem?: string
+  added?: number
+}
+export type LibScan = {
+  rootId: number
+  root: string
+  kind: RootKind
+  status: 'scanning' | 'ready' | 'adding' | 'done' | 'failed'
+  step: string
+  done: number
+  total: number
+  error?: string
+  folders: number
+  listed: number
+  elsewhere: number
+  loose: number
+  found: ScanFound[]
+  added: number
+  notAdded: number
+  started: string
+  finished?: string
+}

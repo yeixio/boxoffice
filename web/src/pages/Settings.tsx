@@ -6,6 +6,7 @@ import { del, get, post, put, type MediaType, type MediaTypeKey, type Profile, t
 import { bytes, count, day } from '../format'
 import { monitorOptions, useProfiles, useQualities, useRootFolders, useShowDefaults } from '../hooks'
 import { AutoSearchSettings, Connections, DataCapSettingsCard, DownloadSettings, NumberField } from './Connections'
+import { ScanButton, scannable } from './LibraryScan'
 import { Badge, Button, Card, ErrorNote, Field, Heading, Input, Modal, Select, Spinner, Toggle } from '../ui'
 
 export function Settings() {
@@ -243,16 +244,20 @@ function RootFolders({ kind, type }: { kind: RootKind; type?: MediaType }) {
       {folders.data?.length === 0 && type && type.suggested.length > 0 && <SuggestedFolders kind={kind} type={type} />}
       <ul className="flex flex-col divide-y divide-line">
         {folders.data?.map((f) => (
-          <li key={f.id} className="flex items-center gap-3 py-2 text-sm">
+          <li key={f.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2 text-sm">
             <Folder className="size-4 text-muted" aria-hidden />
-            <code className="flex-1 break-all">{f.path}</code>
+            <code className="min-w-48 flex-1 break-all">{f.path}</code>
             {f.accessible ? <span className="text-xs text-muted">{bytes(f.freeSpace)} free</span> : <Badge tone="bad">can't see it</Badge>}
+            {f.accessible && scannable(kind) && <ScanButton folder={f} />}
             <button onClick={() => remove.mutate(f)} aria-label={`Remove ${f.path}`} className="rounded p-1 text-muted hover:bg-line hover:text-bad">
               <Trash2 className="size-4" />
             </button>
           </li>
         ))}
       </ul>
+      {scannable(kind) && !!folders.data?.length && (
+        <p className="mt-2 text-xs text-muted">Scan looks for {kind === 'movie' ? 'movies' : kind === 'series' ? 'shows' : 'artists'} already in a folder that aren't on the list, so you can add them where they are.</p>
+      )}
       <ErrorNote error={remove.error} />
       {picking && <FolderPicker kind={kind} title={rootTitle(kind, type)} onClose={() => setPicking(false)} />}
     </Card>

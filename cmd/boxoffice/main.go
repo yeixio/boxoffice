@@ -25,6 +25,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/downloader"
 	"github.com/yeixio/boxoffice/internal/jobs"
 	"github.com/yeixio/boxoffice/internal/kube"
+	"github.com/yeixio/boxoffice/internal/libscan"
 	"github.com/yeixio/boxoffice/internal/migrate"
 	"github.com/yeixio/boxoffice/internal/monitor"
 	"github.com/yeixio/boxoffice/internal/music"
@@ -124,8 +125,9 @@ func run() error {
 	// What happens to downloads is kept for Matinee to pass on to people.
 	notes := &notify.Recorder{Store: db, Log: log}
 	downloads.Notify = notes.Download
+	tunes := &music.Service{Store: db, MusicBrainz: mb}
 	srv := &api.Server{
-		Store: db, Catalog: cat, Music: &music.Service{Store: db, MusicBrainz: mb}, Backups: backups, Migrator: &migrate.Migrator{Catalog: cat, Backups: backups, Log: log, DataDir: cfg.DataDir}, Log: log,
+		Store: db, Catalog: cat, Music: tunes, LibScan: &libscan.Service{Store: db, Catalog: cat, Music: tunes, Log: log}, Backups: backups, Migrator: &migrate.Migrator{Catalog: cat, Backups: backups, Log: log, DataDir: cfg.DataDir}, Log: log,
 		Downloads: downloads, Search: finder,
 		Version: version.Version, Database: dbKind, DataDir: cfg.DataDir, EnvAPIKey: cfg.APIKey, Web: web.FS(),
 		Monitoring: mon,
