@@ -66,8 +66,9 @@ type Server struct {
 	// monitor.go); nil makes one with no log lines.
 	Monitoring *Monitoring
 
-	started  time.Time
-	failures sync.Map // username -> *failure
+	started     time.Time
+	failures    sync.Map // username -> *failure
+	healthCount healthCount
 }
 
 type failure struct {
@@ -180,6 +181,7 @@ func (s *Server) Handler() http.Handler {
 
 		{"POST /api/v1/migrations/preview", true, s.previewMigration},
 		{"GET /api/v1/health", true, s.health},
+		{"GET /api/v1/stats", true, s.getStats},
 		{"GET /api/v1/migrations/find", true, s.findApp},
 		{"PUT /api/v1/migrations/done", true, s.setMovedIn(true)},
 		{"DELETE /api/v1/migrations/done", true, s.setMovedIn(false)},
