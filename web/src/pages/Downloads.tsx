@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { ArrowUpToLine, CircleCheck, CircleX, Download as DownloadIcon, Pause, Play, RotateCcw, ShieldAlert, Trash2, Upload } from 'lucide-react'
+import { ArrowUpToLine, CircleCheck, CircleX, Download as DownloadIcon, Pause, Play, PackageOpen, RotateCcw, ShieldAlert, Trash2, Upload } from 'lucide-react'
 import { api, del, get, post, put, type Download, type Downloads as DownloadsData } from '../api'
 import { bytes, when } from '../format'
 import { useQualities } from '../hooks'
@@ -204,7 +204,7 @@ function title(d: Download) {
 function useAction() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: ({ id, what }: { id: number; what: 'pause' | 'resume' | 'retry' | 'top' }) => post(`/downloads/${id}/${what}`),
+    mutationFn: ({ id, what }: { id: number; what: 'pause' | 'resume' | 'retry' | 'reprocess' | 'top' }) => post(`/downloads/${id}/${what}`),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['downloads'] }),
   })
 }
@@ -290,10 +290,15 @@ function HistoryItem({ d }: { d: Download }) {
           {bytes(d.size)} · {when(d.finishedAt)} {title(d)}
         </div>
         {d.message && <p className={`mt-1 break-words text-xs ${ok ? 'text-muted' : 'text-bad'}`}>{d.message}</p>}
+        {d.canReprocess && (
+          <Button className="mt-2 px-2.5 py-1 text-xs" busy={act.isPending && act.variables?.what === 'reprocess'} onClick={() => act.mutate({ id: d.id, what: 'reprocess' })}>
+            <PackageOpen className="size-3.5" aria-hidden /> Unpack again, without downloading
+          </Button>
+        )}
       </div>
       <div className="flex shrink-0 gap-1">
         {!ok && !held && (
-          <IconButton label="Try again" busy={act.isPending} onClick={() => act.mutate({ id: d.id, what: 'retry' })}>
+          <IconButton label="Download again" busy={act.isPending} onClick={() => act.mutate({ id: d.id, what: 'retry' })}>
             <RotateCcw className="size-4" />
           </IconButton>
         )}

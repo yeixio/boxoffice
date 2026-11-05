@@ -293,14 +293,42 @@ type volumeFS struct {
 
 func (v *volumeFS) name(i int) string { return fmt.Sprintf("vol.part%0*d.rar", v.width, i+1) }
 
-// real is the real path of a volume rardecode names.
+// real is the real path of a volume rardecode names. RAR 3 and 4 sets
+// made with old-style naming have it ask for .r00, .r01… after the first,
+// so those names count too.
 func (v *volumeFS) real(name string) string {
+	old := v.name(0)
 	for i := range v.paths {
-		if v.name(i) == name {
+		if i > 0 {
+			old = nextOldName(old)
+		}
+		if v.name(i) == name || old == name {
 			return v.paths[i]
 		}
 	}
 	return ""
+}
+
+// nextOldName is the volume after name in old-style naming, as rardecode
+// works it out: .rar, .r00 … .r99, .s00 …
+func nextOldName(name string) string {
+	i := strings.LastIndex(name, ".")
+	b := []byte(name[i+1:])
+	if len(b) < 3 || b[1] < '0' || b[1] > '9' || b[2] < '0' || b[2] > '9' {
+		return name[:i+2] + "00"
+	}
+	for j := 2; j >= 0; j-- {
+		if b[j] != '9' {
+			b[j]++
+			break
+		}
+		if j == 0 {
+			b[j] = 'A'
+		} else {
+			b[j] = '0'
+		}
+	}
+	return name[:i+1] + string(b)
 }
 
 func (v *volumeFS) Open(name string) (fs.File, error) {

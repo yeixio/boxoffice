@@ -43,10 +43,13 @@ type Download struct {
 	Message     string  `json:"message,omitempty"`
 	ImportedTo  string  `json:"importedTo,omitempty"`
 	// Quarantined is where the files were moved when they looked unsafe.
-	Quarantined string    `json:"quarantined,omitempty"`
-	AddedAt     time.Time `json:"addedAt"`
-	StartedAt   time.Time `json:"startedAt,omitzero"`
-	FinishedAt  time.Time `json:"finishedAt,omitzero"`
+	Quarantined string `json:"quarantined,omitempty"`
+	// CanReprocess says its files are still there to check and unpack
+	// again, without downloading them again. It's worked out, not stored.
+	CanReprocess bool      `json:"canReprocess,omitempty"`
+	AddedAt      time.Time `json:"addedAt"`
+	StartedAt    time.Time `json:"startedAt,omitzero"`
+	FinishedAt   time.Time `json:"finishedAt,omitzero"`
 }
 
 // Finished says whether the download is history.
@@ -183,6 +186,21 @@ func (s *Store) ResetDownload(ctx context.Context, id int64) error {
 	}
 	res, err := s.exec(ctx, `UPDATE downloads SET status = 'queued', message = '', done_bytes = 0, failed_bytes = 0, done_files = '[]', quarantined = '',
 		started_at = 0, finished_at = 0, position = ? WHERE id = ?`, pos+1, id)
+	if err != nil {
+		return err
+	}
+	return affected(res)
+}
+
+// RequeueDownload puts a finished download back in the queue keeping what
+// it fetched, so only what's missing is downloaded and the rest is checked
+// and unpacked again.
+func (s *Store) RequeueDownload(ctx context.Context, id int64) error {
+	var pos int
+	if err := s.row(ctx, "SELECT COALESCE(MAX(position), 0) FROM downloads").Scan(&pos); err != nil {
+		return err
+	}
+	res, err := s.exec(ctx, "UPDATE downloads SET status = 'queued', message = '', finished_at = 0, position = ? WHERE id = ?", pos+1, id)
 	if err != nil {
 		return err
 	}

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/binary"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -128,5 +129,61 @@ func TestDownloadNoVideo(t *testing.T) {
 	d = waitFor(t, st, d.ID, store.DownloadCompleted, store.DownloadFailed)
 	if d.Status != store.DownloadFailed || !strings.Contains(d.Message, "no video") || d.Quarantined == "" {
 		t.Fatalf("%s: %s", d.Status, d.Message)
+	}
+}
+
+type flakyImporter struct{ fail bool }
+
+func (f *flakyImporter) Import(_ context.Context, _ store.Download, _ string, _ []string) (string, error) {
+	if f.fail {
+		return "", errors.New("the library is offline")
+	}
+	return "/library/Amerikatsi (2022)", nil
+}
+
+// A download that fails after it's fetched can be unpacked again without
+// downloading it again.
+func TestReprocess(t *testing.T) {
+	srv := nntptest.New()
+	defer srv.Close()
+	var files [][2]any
+	for i, to := range []string{"39f5d2cb5d2e2f132f5f3091c5087f1c.rar", "77aa01bc", "e1e1e1e1e1.rar"} {
+		b, err := os.ReadFile(filepath.Join("..", "usenet", "unpack", "testdata", fmt.Sprintf("multi.part%d.rar", i+1)))
+		if err != nil {
+			t.Fatal(err)
+		}
+		files = append(files, [2]any{to, b})
+	}
+	e, st := newEngine(t, srv)
+	imp := &flakyImporter{fail: true}
+	e.Importer = imp
+	enable(t, st, Settings{Import: true})
+	run(t, e)
+	ctx := context.Background()
+	d, err := e.Add(ctx, store.Download{Source: "search", Kind: "movie", TitleID: 1}, postFiles(srv, "Amerikatsi.2022", files))
+	if err != nil {
+		t.Fatal(err)
+	}
+	d = waitFor(t, st, d.ID, store.DownloadCompleted, store.DownloadFailed)
+	if d.Status != store.DownloadFailed || !e.CanReprocess(d) {
+		t.Fatalf("%s: %s (can reprocess: %v)", d.Status, d.Message, e.CanReprocess(d))
+	}
+	fetched := srv.Fetches.Load()
+	imp.fail = false
+	if err := e.Reprocess(ctx, d.ID); err != nil {
+		t.Fatal(err)
+	}
+	d = waitFor(t, st, d.ID, store.DownloadCompleted, store.DownloadFailed)
+	if d.Status != store.DownloadCompleted || d.ImportedTo == "" {
+		t.Fatalf("%s: %s", d.Status, d.Message)
+	}
+	if n := srv.Fetches.Load(); n != fetched {
+		t.Fatalf("fetched %d more articles", n-fetched)
+	}
+	// Gone files can't be unpacked again.
+	os.RemoveAll(filepath.Join(e.Dir, d.Folder))
+	d.Status = store.DownloadFailed
+	if e.CanReprocess(d) {
+		t.Fatal("reprocessable with no files")
 	}
 }

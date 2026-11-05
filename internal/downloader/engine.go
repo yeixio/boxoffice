@@ -43,7 +43,9 @@ type Engine struct {
 	working map[int64]*running // every download in progress, fetching or after
 	srv     *servers
 	post    chan struct{} // one download is checked and unpacked at a time
-	once    sync.Once
+	// again holds downloads to check and unpack again without fetching.
+	again map[int64]bool
+	once  sync.Once
 }
 
 // Importer moves the files of a finished download into the library and
@@ -71,6 +73,7 @@ func (e *Engine) init() {
 	e.once.Do(func() {
 		e.wake = make(chan struct{}, 1)
 		e.working = map[int64]*running{}
+		e.again = map[int64]bool{}
 		e.post = make(chan struct{}, 1)
 	})
 }
@@ -208,7 +211,51 @@ func (e *Engine) Retry(ctx context.Context, id int64) error {
 	if _, err := os.Stat(e.nzbPath(id)); err != nil {
 		return errors.New("the NZB for this download is gone, so search for the release again")
 	}
+	e.init()
+	e.mu.Lock()
+	delete(e.again, id)
+	e.mu.Unlock()
 	if err := e.Store.ResetDownload(ctx, id); err != nil {
+		return err
+	}
+	e.Wake()
+	return nil
+}
+
+// CanReprocess says whether a failed download's files are still in its
+// folder, so it can be checked, repaired and unpacked again without
+// downloading it again.
+func (e *Engine) CanReprocess(d store.Download) bool {
+	if d.Status != store.DownloadFailed || d.Quarantined != "" || len(d.DoneFiles) == 0 || d.Folder == "" {
+		return false
+	}
+	if _, err := os.Stat(e.nzbPath(d.ID)); err != nil {
+		return false
+	}
+	dir, ok := e.inside(d.Folder)
+	return ok && len(listFiles(dir)) > 0
+}
+
+// Reprocess runs a failed download's checking, repair and unpacking again
+// on the files it already has, fetching nothing but recovery volumes a
+// repair needs. (If Box Office restarts first, it carries on as a normal
+// download, fetching only files that aren't there.)
+func (e *Engine) Reprocess(ctx context.Context, id int64) error {
+	d, err := e.Store.Download(ctx, id)
+	if err != nil {
+		return err
+	}
+	if !e.CanReprocess(d) {
+		return errors.New("its files aren't in the downloads folder any more, so it has to be downloaded again")
+	}
+	e.init()
+	e.mu.Lock()
+	e.again[id] = true
+	e.mu.Unlock()
+	if err := e.Store.RequeueDownload(ctx, id); err != nil {
+		e.mu.Lock()
+		delete(e.again, id)
+		e.mu.Unlock()
 		return err
 	}
 	e.Wake()

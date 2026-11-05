@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/binary"
+	"fmt"
 	"hash/crc32"
 	"os"
 	"path/filepath"
@@ -16,6 +17,12 @@ import (
 // one file, the old format no current RAR can make, with volumes named
 // by names.
 func writeRAR4(t *testing.T, dir, file string, data []byte, names []string) {
+	writeRAR4Named(t, dir, file, data, names, true)
+}
+
+// writeRAR4Named writes the set, with the new-naming flag or without it
+// (old-style .rar, .r00, … naming, as most scene releases use).
+func writeRAR4Named(t *testing.T, dir, file string, data []byte, names []string, newNaming bool) {
 	t.Helper()
 	block := func(typ byte, flags uint16, body []byte) []byte {
 		h := make([]byte, 7, 7+len(body))
@@ -32,7 +39,10 @@ func writeRAR4(t *testing.T, dir, file string, data []byte, names []string) {
 		part := data[i*chunk : min(len(data), (i+1)*chunk)]
 		var b bytes.Buffer
 		b.Write(sigRAR4)
-		arc := uint16(0x0001 | 0x0010) // volume, new naming
+		arc := uint16(0x0001) // volume
+		if newNaming {
+			arc |= 0x0010
+		}
 		if i == 0 {
 			arc |= 0x0100
 		}
@@ -170,6 +180,38 @@ func TestTwoSets(t *testing.T) {
 	for _, a := range arcs {
 		if _, err := Extract(context.Background(), a, dir, ""); err != nil {
 			t.Fatal(err)
+		}
+	}
+}
+
+// Mike's second case: an old-style set (rardecode asks for .r00 after the
+// first volume) posted under hashes.
+func TestObfuscatedOldNaming(t *testing.T) {
+	dir := t.TempDir()
+	data := bytes.Repeat([]byte("Amerikatsi "), 5000)
+	var names []string
+	for i := range 12 {
+		names = append(names, fmt.Sprintf("%08x", i*7919+1))
+	}
+	names[0] = "a76b5b9d1ee1b2a88b2ef31390d20f72.rar"
+	writeRAR4Named(t, dir, "amerikatsi.mkv", data, names, false)
+	arcs := Find(dir, names)
+	if len(arcs) != 1 || len(arcs[0].Volumes) != 12 {
+		t.Fatalf("found %+v", arcs)
+	}
+	res, err := Extract(context.Background(), arcs[0], dir, "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if b, _ := os.ReadFile(filepath.Join(dir, "amerikatsi.mkv")); !bytes.Equal(b, data) || len(res.Volumes) != 12 {
+		t.Fatal("movie differs")
+	}
+}
+
+func TestNextOldName(t *testing.T) {
+	for in, want := range map[string]string{"v.part0001.rar": "v.part0001.r00", "v.r00": "v.r01", "v.r99": "v.s00"} {
+		if got := nextOldName(in); got != want {
+			t.Errorf("%s: %s, want %s", in, got, want)
 		}
 	}
 }

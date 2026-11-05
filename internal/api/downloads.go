@@ -42,6 +42,7 @@ func (s *Server) downloadRoutes() []route {
 		{"POST /api/v1/downloads/{id}/pause", true, act(func(r *http.Request, id int64) error { return badRequest(s.Downloads.Pause(r.Context(), id)) })},
 		{"POST /api/v1/downloads/{id}/resume", true, act(func(r *http.Request, id int64) error { return s.Downloads.Resume(r.Context(), id) })},
 		{"POST /api/v1/downloads/{id}/retry", true, act(func(r *http.Request, id int64) error { return badRequest(s.Downloads.Retry(r.Context(), id)) })},
+		{"POST /api/v1/downloads/{id}/reprocess", true, act(func(r *http.Request, id int64) error { return badRequest(s.Downloads.Reprocess(r.Context(), id)) })},
 		{"POST /api/v1/downloads/{id}/top", true, act(func(r *http.Request, id int64) error { return s.Downloads.MoveToTop(r.Context(), id) })},
 		{"DELETE /api/v1/downloads/{id}", true, act(func(r *http.Request, id int64) error {
 			return s.Downloads.Remove(r.Context(), id, r.URL.Query().Get("deleteFiles") == "true")
@@ -75,6 +76,9 @@ func (s *Server) downloads(w http.ResponseWriter, r *http.Request) error {
 	history, err := s.Store.DownloadHistory(ctx, 100)
 	if err != nil {
 		return err
+	}
+	for i, d := range history {
+		history[i].CanReprocess = s.Downloads.CanReprocess(d)
 	}
 	live := s.Downloads.Live()
 	for i, d := range queue {

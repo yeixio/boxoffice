@@ -243,6 +243,8 @@ export type Download = {
   importedTo?: string
   // Where its files were moved when they looked unsafe.
   quarantined?: string
+  // Its files are still there to check and unpack again.
+  canReprocess?: boolean
   addedAt: string
   startedAt?: string
   finishedAt?: string

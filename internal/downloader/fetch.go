@@ -93,6 +93,17 @@ func (e *Engine) fetch(ctx context.Context, r *running, d *store.Download, srv *
 	d.Size = size
 	r.size.Store(size)
 	e.Store.SaveDownloadProgress(context.WithoutCancel(ctx), *d)
+	e.mu.Lock()
+	again := e.again[d.ID]
+	delete(e.again, d.ID)
+	e.mu.Unlock()
+	if again {
+		// Checking and unpacking again: the files are already here,
+		// whatever they've been renamed or unpacked to.
+		r.bytes.Store(d.DoneBytes)
+		r.failed.Store(d.FailedBytes)
+		return job, nil
+	}
 	if err := e.download(ctx, r, d, srv, job, want); err != nil {
 		return nil, err
 	}
