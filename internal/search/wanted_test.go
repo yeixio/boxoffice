@@ -2,6 +2,7 @@ package search
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strings"
 	"testing"
@@ -171,5 +172,36 @@ func TestAgainAfter(t *testing.T) {
 	now := time.Now()
 	if (Wanted{Searched: now.Add(-2 * day), Misses: 2}).due(now) || !(Wanted{Searched: now.Add(-4 * day), Misses: 2}).due(now) || !(Wanted{}).due(now) {
 		t.Fatal("due judged wrong")
+	}
+}
+
+// Missing titles don't starve upgrades: the automatic search takes them in
+// turn.
+func TestWantedTakesTurns(t *testing.T) {
+	if got := interleave([]int{1, 3, 5, 7}, []int{2, 4}); fmt.Sprint(got) != "[1 2 3 4 5 7]" {
+		t.Fatal(got)
+	}
+}
+
+// Choosing a release for a season by hand: packs are marked, and judged
+// against every aired episode.
+func TestSeasonReleases(t *testing.T) {
+	srv, _ := indexer(t, item("Show.S01.1080p.BluRay.x264-GRP", "pack", 20e9))
+	s, st, m := setup(t, srv.URL)
+	ctx := context.Background()
+	show, _ := st.AddSeries(ctx, store.Series{TMDBID: 1, TVDBID: 11, Title: "Show", ProfileID: m.ProfileID, RootFolder: "/tv", Path: "/tv/Show",
+		Monitored: true, Seasons: []store.Season{{Number: 1, Monitored: true}, {Number: 2, Monitored: true}}})
+	aired, soon := time.Now().AddDate(-1, 0, 0), time.Now().AddDate(0, 1, 0)
+	st.UpsertEpisode(ctx, store.Episode{SeriesID: show.ID, Season: 1, Number: 1, AirDate: &aired, Monitored: true})
+	st.UpsertEpisode(ctx, store.Episode{SeriesID: show.ID, Season: 2, Number: 1, AirDate: &soon, Monitored: true})
+	res, err := s.SeasonReleases(ctx, show.ID, 1)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if c := res.Releases[0]; !c.Pack || !c.Accepted {
+		t.Fatalf("pack %+v", c)
+	}
+	if _, err := s.SeasonReleases(ctx, show.ID, 2); !errors.Is(err, ErrNothingAired) {
+		t.Fatalf("season 2: %v", err)
 	}
 }

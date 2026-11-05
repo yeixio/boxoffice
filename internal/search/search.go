@@ -54,6 +54,10 @@ type Candidate struct {
 	Quality    int      `json:"quality"`
 	Accepted   bool     `json:"accepted"`
 	Rejections []string `json:"rejections,omitempty"`
+	// Pack is a whole season in one release; Episodes are the episode
+	// numbers a release holds, as its name gives them.
+	Pack     bool  `json:"pack,omitempty"`
+	Episodes []int `json:"episodes,omitempty"`
 
 	kind     string
 	titleID  int64

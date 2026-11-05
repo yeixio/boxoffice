@@ -141,7 +141,8 @@ type Wanted struct {
 const newFor = 30 * 24 * time.Hour
 
 // tier is the order the patrol takes things in: newly missing, missing
-// for longer, then upgrades.
+// for longer, then upgrades (jobWanted takes missing ones and upgrades in
+// turn, so upgrades aren't starved).
 func (w Wanted) tier() int {
 	switch {
 	case w.Upgrade:
@@ -383,6 +384,20 @@ func (s *Service) jobWanted(ctx context.Context, _ string) (jobs.Result, error) 
 		}
 		due = append(due, w)
 	}
+	// Missing titles and upgrades take turns, so a long list of missing
+	// ones can't keep upgrades from ever coming up. Each keeps its own
+	// order (newly missing first).
+	{
+		var lack, better []Wanted
+		for _, w := range due {
+			if w.Upgrade {
+				better = append(better, w)
+			} else {
+				lack = append(lack, w)
+			}
+		}
+		due = interleave(lack, better)
+	}
 	// The episodes due of each season, to search for together.
 	type seasonKey struct {
 		series int64
@@ -504,4 +519,18 @@ func busyNote(n int) string {
 		return ""
 	}
 	return fmt.Sprintf("; %d already downloading", n)
+}
+
+// interleave takes from a and b in turn, so neither starves the other.
+func interleave[T any](a, b []T) []T {
+	out := make([]T, 0, len(a)+len(b))
+	for i := 0; i < len(a) || i < len(b); i++ {
+		if i < len(a) {
+			out = append(out, a[i])
+		}
+		if i < len(b) {
+			out = append(out, b[i])
+		}
+	}
+	return out
 }

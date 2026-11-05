@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"slices"
 	"strings"
+	"time"
 
 	"github.com/yeixio/boxoffice/internal/quality"
 	"github.com/yeixio/boxoffice/internal/store"
@@ -61,6 +62,7 @@ func (s *Service) judgeEpisodes(ctx context.Context, r Release, t store.Series, 
 		c.reject(fmt.Sprintf("it's a whole season; Box Office takes those when %d or more episodes of a season are wanted", seasonSearchFrom))
 		return c
 	}
+	c.Pack, c.Episodes = len(eps) == 0, eps
 	c.episodes = episodeCovers(c, p, season, eps, want)
 	if len(c.episodes) == 0 && c.Accepted {
 		seasons := map[int]bool{}
@@ -117,6 +119,34 @@ func (s *Service) Season(ctx context.Context, t store.Series, season int, want [
 	}
 	s.logResults(fmt.Sprintf("%s season %d", t.Title, season), out)
 	return out, nil
+}
+
+// ErrNothingAired means a season has no episodes out yet to search for.
+var ErrNothingAired = errors.New("none of its episodes have aired yet")
+
+// SeasonReleases is Season for choosing by hand: every aired episode of
+// the season counts as wanted, so packs and singles are judged against
+// all of them.
+func (s *Service) SeasonReleases(ctx context.Context, seriesID int64, season int) (Results, error) {
+	t, err := s.Store.Series(ctx, seriesID)
+	if err != nil {
+		return Results{}, err
+	}
+	all, err := s.Store.Episodes(ctx, seriesID)
+	if err != nil {
+		return Results{}, err
+	}
+	now := time.Now()
+	var want []store.Episode
+	for _, e := range all {
+		if e.Season == season && e.AirDate != nil && e.AirDate.Before(now) {
+			want = append(want, e)
+		}
+	}
+	if len(want) == 0 {
+		return Results{}, fmt.Errorf("season %d: %w", season, ErrNothingAired)
+	}
+	return s.Season(ctx, t, season, want)
 }
 
 func isPack(c Candidate) bool {

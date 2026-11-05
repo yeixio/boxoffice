@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
-import { ChevronDown, RefreshCw, Search, Trash2 } from 'lucide-react'
+import { ArrowUpCircle, ChevronDown, ListChecks, RefreshCw, Search, Trash2 } from 'lucide-react'
 import { Releases } from '../Releases'
-import { del, get, patch, post, type Episode, type Series } from '../api'
+import { del, get, patch, post, type Episode, type Profile, type Series } from '../api'
 import { bytes, day, episodeCode } from '../format'
 import { qualityName, useProfiles, useQualities } from '../hooks'
 import { Badge, Button, Card, ErrorNote, Field, Modal, Poster, Select, Spinner, Toggle } from '../ui'
@@ -99,6 +99,8 @@ export function ShowDetail() {
         {seasons.map((se) => (
           <SeasonBlock
             key={se.number}
+            seriesId={s.id}
+            profile={profiles.data?.find((p) => p.id === s.profileId)}
             number={se.number}
             monitored={se.monitored}
             episodes={episodes.filter((e) => e.season === se.number)}
@@ -128,6 +130,8 @@ export function ShowDetail() {
 }
 
 function SeasonBlock({
+  seriesId,
+  profile,
   number,
   monitored,
   episodes,
@@ -135,6 +139,8 @@ function SeasonBlock({
   onEpisode,
   defaultOpen,
 }: {
+  seriesId: number
+  profile?: Profile
   number: number
   monitored: boolean
   episodes: Episode[]
@@ -147,18 +153,29 @@ function SeasonBlock({
   const have = episodes.filter((e) => e.file).length
   const toggle = useMutation({ mutationFn: (e: Episode) => patch<Episode>(`/episodes/${e.id}`, { monitored: !e.monitored }), onSuccess: onEpisode })
   const search = useMutation({ mutationFn: (e: Episode) => post(`/episodes/${e.id}/search`) })
-  const [releases, setReleases] = useState<Episode | null>(null)
+  const [releases, setReleases] = useState<Episode | 'season' | null>(null)
   const now = Date.now()
+  const rank = (q: number) => qualities.data?.findIndex((x) => x.id === q) ?? -1
+  // Below the profile's good-enough quality, with upgrades on.
+  const wantsUpgrade = (e: Episode) => !!(e.file && profile?.upgrade && rank(e.file.quality) < rank(profile.cutoff))
+  const anyAired = episodes.some((e) => e.airDate && new Date(e.airDate).getTime() <= now)
+  const upgrades = episodes.filter(wantsUpgrade).length
   return (
     <Card className="p-0">
-      <div className="flex items-center gap-4 px-5 py-3">
-        <button className="flex flex-1 items-center gap-3 text-left" onClick={() => setOpen(!open)} aria-expanded={open}>
-          <ChevronDown className={`size-4 transition ${open ? '' : '-rotate-90'}`} aria-hidden />
-          <span className="font-display text-lg font-semibold">{number === 0 ? 'Specials' : `Season ${number}`}</span>
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 px-5 py-3">
+        <button className="flex min-w-0 flex-1 basis-full flex-wrap items-center gap-x-3 text-left sm:basis-0" onClick={() => setOpen(!open)} aria-expanded={open}>
+          <ChevronDown className={`size-4 shrink-0 transition ${open ? '' : '-rotate-90'}`} aria-hidden />
+          <span className="whitespace-nowrap font-display text-lg font-semibold">{number === 0 ? 'Specials' : `Season ${number}`}</span>
           <span className="text-sm text-muted">
             {have} of {episodes.length} on disk
+            {upgrades > 0 && `, ${upgrades} to upgrade`}
           </span>
         </button>
+        {anyAired && (
+          <Button variant="ghost" onClick={() => setReleases('season')}>
+            <ListChecks className="size-4" aria-hidden /> Choose a release
+          </Button>
+        )}
         <Toggle checked={monitored} onChange={onMonitor} label={<span className="text-muted">Watch</span>} />
       </div>
       {open && (
@@ -167,32 +184,42 @@ function SeasonBlock({
             .sort((a, b) => b.number - a.number)
             .map((e) => {
               const aired = e.airDate && new Date(e.airDate).getTime() <= now
+              const upgrade = wantsUpgrade(e)
+              const looking = search.isSuccess && search.variables?.id === e.id
               return (
-                <li key={e.id} className="flex flex-wrap items-center gap-x-4 gap-y-1 px-5 py-2.5 text-sm">
+                <li key={e.id} className="flex flex-wrap items-center gap-x-4 gap-y-2 px-5 py-2.5 text-sm">
                   <input type="checkbox" checked={e.monitored} onChange={() => toggle.mutate(e)} aria-label={`Watch for ${episodeCode(e.season, e.number)}`} className="accent-[var(--marquee)]" />
                   <span className="w-16 font-mono text-xs text-muted">{episodeCode(e.season, e.number)}</span>
-                  <span className="min-w-0 flex-1 truncate">{e.title || 'To be announced'}</span>
+                  <span className="min-w-0 flex-1 basis-40 truncate">{e.title || 'To be announced'}</span>
                   <span className="w-28 text-muted">{day(e.airDate)}</span>
-                  {aired && (
-                    <button className="text-xs text-muted hover:text-ink hover:underline" onClick={() => setReleases(e)}>
-                      Releases
-                    </button>
-                  )}
-                  <span className="w-40 text-right">
+                  <span className="ml-auto flex flex-wrap items-center justify-end gap-2">
                     {e.file ? (
-                      <Badge tone="ok">
+                      <Badge tone={upgrade ? 'gold' : 'ok'}>
+                        {upgrade && <ArrowUpCircle className="size-3" aria-label="Upgrade wanted" />}
                         {qualityName(qualities.data, e.file.quality)} · {bytes(e.file.size)}
                       </Badge>
                     ) : aired ? (
-                      e.monitored ? (
-                        <button className="text-marquee hover:underline" onClick={() => search.mutate(e)}>
-                          {search.isSuccess && search.variables?.id === e.id ? 'Looking…' : 'Look for it'}
-                        </button>
-                      ) : (
-                        <Badge>Skipped</Badge>
-                      )
+                      !e.monitored && <Badge>Skipped</Badge>
                     ) : (
                       <Badge tone="gold">Coming</Badge>
+                    )}
+                    {aired && e.monitored && (!e.file || upgrade) && (
+                      <button
+                        className="rounded px-1.5 py-0.5 text-xs text-marquee hover:bg-line"
+                        onClick={() => search.mutate(e)}
+                        title={e.file ? 'Look for a better copy and grab the best one' : 'Look for it and grab the best release'}
+                      >
+                        {looking ? 'Looking…' : e.file ? 'Look for an upgrade' : 'Look for it'}
+                      </button>
+                    )}
+                    {aired && (
+                      <button
+                        className="flex items-center gap-1 rounded px-1.5 py-0.5 text-xs text-muted hover:bg-line hover:text-ink"
+                        onClick={() => setReleases(e)}
+                        aria-label={`Choose a release for ${episodeCode(e.season, e.number)}`}
+                      >
+                        <ListChecks className="size-3.5" aria-hidden /> Choose
+                      </button>
                     )}
                   </span>
                 </li>
@@ -200,7 +227,12 @@ function SeasonBlock({
             })}
         </ul>
       )}
-      {releases && <Releases path={`/episodes/${releases.id}/releases`} title={episodeCode(releases.season, releases.number)} onClose={() => setReleases(null)} />}
+      {releases === 'season' && (
+        <Releases path={`/series/${seriesId}/seasons/${number}/releases`} title={number === 0 ? 'Specials' : `Season ${number}`} onClose={() => setReleases(null)} />
+      )}
+      {releases && releases !== 'season' && (
+        <Releases path={`/episodes/${releases.id}/releases`} title={episodeCode(releases.season, releases.number)} onClose={() => setReleases(null)} />
+      )}
     </Card>
   )
 }
