@@ -24,6 +24,16 @@ const JobSearchWanted = "search-wanted"
 const (
 	SettingAuto       = "search_auto"         // "off" turns automatic searches off; on otherwise
 	SettingAutoPerDay = "search_auto_per_day" // searches a day; DefaultPerDay when unset
+	SettingRSS        = "search_rss"          // "off" turns RSS sync off; on otherwise
+	SettingRSSMinutes = "search_rss_minutes"  // how often; DefaultRSSMinutes when unset
+)
+
+// RSS sync: every 15 minutes unless changed, and never more often than
+// every 10.
+const (
+	DefaultRSSMinutes = 15
+	MinRSSMinutes     = 10
+	MaxRSSMinutes     = 24 * 60
 )
 
 // DefaultPerDay is how many automatic searches a day Box Office makes
@@ -44,6 +54,10 @@ func againAfter(misses int) time.Duration { return waits[min(max(misses-1, 0), l
 type AutoSettings struct {
 	Enabled bool `json:"enabled"`
 	PerDay  int  `json:"perDay"` // searches a day, across all titles
+	// RSS sync: reading the indexers' lists of new releases for anything
+	// wanted.
+	RSS        bool `json:"rss"`
+	RSSMinutes int  `json:"rssMinutes"`
 }
 
 // LoadAutoSettings reads the settings; automatic searches are on, at
@@ -57,9 +71,19 @@ func LoadAutoSettings(ctx context.Context, st *store.Store) (AutoSettings, error
 	if err != nil {
 		return AutoSettings{}, err
 	}
-	a := AutoSettings{Enabled: v != "off", PerDay: DefaultPerDay}
+	a := AutoSettings{Enabled: v != "off", PerDay: DefaultPerDay, RSSMinutes: DefaultRSSMinutes}
 	if p, err := strconv.Atoi(n); err == nil && p > 0 {
 		a.PerDay = min(p, MaxPerDay)
+	}
+	if v, err = st.Setting(ctx, SettingRSS); err != nil {
+		return a, err
+	}
+	a.RSS = v != "off"
+	if v, err = st.Setting(ctx, SettingRSSMinutes); err != nil {
+		return a, err
+	}
+	if m, err := strconv.Atoi(v); err == nil && m > 0 {
+		a.RSSMinutes = min(max(m, MinRSSMinutes), MaxRSSMinutes)
 	}
 	return a, nil
 }
@@ -77,7 +101,21 @@ func SaveAutoSettings(ctx context.Context, st *store.Store, a AutoSettings) erro
 	if a.PerDay > 0 && a.PerDay != DefaultPerDay {
 		per = strconv.Itoa(min(a.PerDay, MaxPerDay))
 	}
-	return st.SetSetting(ctx, SettingAutoPerDay, per)
+	if err := st.SetSetting(ctx, SettingAutoPerDay, per); err != nil {
+		return err
+	}
+	rss := ""
+	if !a.RSS {
+		rss = "off"
+	}
+	if err := st.SetSetting(ctx, SettingRSS, rss); err != nil {
+		return err
+	}
+	mins := ""
+	if a.RSSMinutes > 0 && a.RSSMinutes != DefaultRSSMinutes {
+		mins = strconv.Itoa(min(max(a.RSSMinutes, MinRSSMinutes), MaxRSSMinutes))
+	}
+	return st.SetSetting(ctx, SettingRSSMinutes, mins)
 }
 
 // Wanted is a movie or an episode Box Office would search for by itself:
@@ -87,13 +125,32 @@ type Wanted struct {
 	Kind     string    `json:"kind"` // movie or episode
 	ID       int64     `json:"id"`   // the movie's or the episode's
 	SeriesID int64     `json:"seriesId,omitempty"`
-	Season   int       `json:"season,omitempty"`
 	Subject  string    `json:"subject"`
 	Upgrade  bool      `json:"upgrade"`
 	Have     int       `json:"have,omitempty"` // the file's quality, for an upgrade
 	Cutoff   int       `json:"cutoff"`
 	Searched time.Time `json:"searched,omitzero"` // when it was last searched for
 	Misses   int       `json:"misses,omitempty"`  // searches in a row that found nothing to take
+	// New means it came out in the last few weeks: missing titles that are
+	// new go before ones missing for longer.
+	New    bool `json:"new,omitempty"`
+	Season int  `json:"season,omitempty"` // an episode's
+}
+
+// newFor is how long a missing title counts as new.
+const newFor = 30 * 24 * time.Hour
+
+// tier is the order the patrol takes things in: newly missing, missing
+// for longer, then upgrades (jobWanted takes missing ones and upgrades in
+// turn, so upgrades aren't starved).
+func (w Wanted) tier() int {
+	switch {
+	case w.Upgrade:
+		return 2
+	case w.New:
+		return 0
+	}
+	return 1
 }
 
 // due says whether it's time to search for it again.
@@ -102,8 +159,8 @@ func (w Wanted) due(now time.Time) bool {
 }
 
 // WantedList is every movie and episode that's missing or due an upgrade,
-// never searched first, then the longest ago; missing before upgrades
-// when that's even.
+// in the order automatic searches take them: newly missing, missing for
+// longer, then upgrades; within each, never searched, then the longest ago.
 func (s *Service) WantedList(ctx context.Context) ([]Wanted, error) {
 	ps, err := s.Store.Profiles(ctx)
 	if err != nil {
@@ -135,6 +192,7 @@ func (s *Service) WantedList(ctx context.Context) ([]Wanted, error) {
 			if !released(m, now) {
 				continue
 			}
+			w.New = releasedSince(m, now.Add(-newFor))
 		case p.CutoffUnmet(m.File.Quality):
 			w.Upgrade, w.Have = true, m.File.Quality
 		default:
@@ -167,10 +225,11 @@ func (s *Service) WantedList(ctx context.Context) ([]Wanted, error) {
 			if !e.Monitored || !seasons[e.Season] || e.Season == 0 || e.AirDate == nil || !e.AirDate.Before(now) {
 				continue
 			}
-			w := Wanted{Kind: "episode", ID: e.ID, SeriesID: t.ID, Season: e.Season, Subject: fmt.Sprintf("%s S%02dE%02d", t.Title, e.Season, e.Number),
-				Cutoff: p.Cutoff, Searched: searched[e.ID].At, Misses: searched[e.ID].Misses}
+			w := Wanted{Kind: "episode", ID: e.ID, SeriesID: t.ID, Subject: fmt.Sprintf("%s S%02dE%02d", t.Title, e.Season, e.Number),
+				Cutoff: p.Cutoff, Searched: searched[e.ID].At, Misses: searched[e.ID].Misses, Season: e.Season}
 			switch {
 			case e.File == nil:
+				w.New = e.AirDate.After(now.Add(-newFor))
 			case p.CutoffUnmet(e.File.Quality):
 				w.Upgrade, w.Have = true, e.File.Quality
 			default:
@@ -180,14 +239,11 @@ func (s *Service) WantedList(ctx context.Context) ([]Wanted, error) {
 		}
 	}
 	slices.SortStableFunc(out, func(a, b Wanted) int {
-		if c := a.Searched.Compare(b.Searched); c != 0 {
+		if c := cmp.Compare(a.tier(), b.tier()); c != 0 {
 			return c
 		}
-		if a.Upgrade != b.Upgrade {
-			if !a.Upgrade {
-				return -1
-			}
-			return 1
+		if c := a.Searched.Compare(b.Searched); c != 0 {
+			return c
 		}
 		return cmp.Compare(a.Subject, b.Subject)
 	})
@@ -213,6 +269,20 @@ func released(m store.Movie, now time.Time) bool {
 		return m.InCinemas.Before(now.AddDate(0, 0, -90))
 	}
 	return m.Status == "Released"
+}
+
+// releasedSince says whether a movie came out (as released means) after t.
+func releasedSince(m store.Movie, t time.Time) bool {
+	var out time.Time
+	for _, d := range []*time.Time{m.DigitalRelease, m.PhysicalRelease} {
+		if d != nil && (out.IsZero() || d.Before(out)) {
+			out = *d
+		}
+	}
+	if out.IsZero() && m.InCinemas != nil {
+		out = m.InCinemas.AddDate(0, 0, 90)
+	}
+	return !out.IsZero() && out.After(t)
 }
 
 // AutoSearchEvery queues the automatic search once an hour, a few minutes
@@ -251,147 +321,195 @@ func (s *Service) AutoDue(ctx context.Context) (bool, string) {
 	return true, ""
 }
 
-// jobWanted searches for the next few missing titles and upgrades: a
-// twenty-fourth of the day's searches each hour, taking missing titles and
-// upgrades in turn so neither waits on the other. Three or more wanted
-// episodes of one season are searched for together, as one search.
+// jobWanted is the library patrol: it searches for the next few missing
+// titles and upgrades, a twenty-fourth of the day's searches each hour,
+// and never more than half of what the indexers have left today. Newly
+// missing titles go first, then ones missing longer, then upgrades; a
+// season with a few episodes wanted is searched as one. Near the month's
+// data cap, upgrades wait, then everything does.
 func (s *Service) jobWanted(ctx context.Context, _ string) (jobs.Result, error) {
 	if ok, why := s.AutoDue(ctx); !ok {
 		return jobs.Skipped("%s", why), nil
 	}
+	ctx = automatic(ctx)
 	a, err := LoadAutoSettings(ctx, s.Store)
 	if err != nil {
 		return jobs.Result{}, err
 	}
+	c, err := downloader.LoadCap(ctx, s.Store)
+	if err != nil {
+		return jobs.Result{}, err
+	}
+	if c.Level == downloader.CapMissing || c.Level == downloader.CapFull {
+		return jobs.Skipped("%s", c.Why()), nil
+	}
 	budget := max(1, (a.PerDay+23)/24)
+	ixs, notes, err := s.indexers(ctx)
+	if errors.Is(err, ErrNoIndexers) {
+		return jobs.Skipped("%s", err.Error()), nil
+	}
+	if err != nil {
+		return jobs.Result{}, err
+	}
+	if len(ixs) == 0 {
+		return jobs.Skipped("no indexer can be searched now (%s)", strings.Join(notes, "; ")), nil
+	}
+	{
+		room, tight, err := s.autoSearchRoom(ctx, ixs)
+		if err != nil {
+			return jobs.Result{}, err
+		}
+		if room == 0 {
+			return jobs.Skipped("%s", tight), nil
+		}
+		if room > 0 {
+			budget = min(budget, room)
+		}
+	}
 	list, err := s.WantedList(ctx)
 	if err != nil {
 		return jobs.Result{}, err
 	}
 	now := time.Now()
-	var g grabTally
-	var missingDue, upgradeDue []Wanted
-	type seasonKey struct {
-		series int64
-		season int
-	}
-	seasons := map[seasonKey][]Wanted{}
+	upgradesPaused := c.Level == downloader.CapUpgrades
+	var due []Wanted
+	held := 0
 	for _, w := range list {
 		if !w.due(now) {
 			continue
 		}
-		kind, titleID, episodeID := "movie", w.ID, int64(0)
-		if w.Kind == "episode" {
-			kind, titleID, episodeID = "series", w.SeriesID, w.ID
-		}
-		if b, err := s.busy(ctx, kind, titleID, episodeID, ""); err != nil {
-			return jobs.Result{}, err
-		} else if b {
-			g.busy++
+		if w.Upgrade && upgradesPaused {
+			held++
 			continue
 		}
-		if w.Upgrade {
-			upgradeDue = append(upgradeDue, w)
-		} else {
-			missingDue = append(missingDue, w)
-		}
-		if w.Kind == "episode" {
-			k := seasonKey{w.SeriesID, w.Season}
-			seasons[k] = append(seasons[k], w)
-		}
+		due = append(due, w)
 	}
-	var missing, upgrades int
-	var got []string
-	searched := 0
-	done := map[int64]bool{} // episodes a season search covered
-	for _, w := range interleave(missingDue, upgradeDue) {
-		if searched >= budget || ctx.Err() != nil {
-			break
-		}
-		if w.Kind == "episode" && done[w.ID] {
-			continue
-		}
-		searched++
-		before := g.grabbed
-		if w.Kind == "episode" {
-			if group := seasons[seasonKey{w.SeriesID, w.Season}]; len(group) >= seasonAt {
-				t, err := s.Store.Series(ctx, w.SeriesID)
-				if err != nil {
-					g.problems = append(g.problems, fmt.Sprintf("%s: %v", w.Subject, err))
-					continue
-				}
-				var eps []store.Episode
-				for _, x := range group {
-					done[x.ID] = true
-					if x.Upgrade {
-						upgrades++
-					} else {
-						missing++
-					}
-					if e, err := s.Store.Episode(ctx, x.ID); err == nil {
-						eps = append(eps, e)
-					}
-				}
-				err = s.seasonGrab(ctx, t, w.Season, eps, &g)
-				if errors.Is(err, ErrNoIndexers) {
-					return jobs.Skipped("%s", err.Error()), nil
-				}
-				if err != nil {
-					g.problems = append(g.problems, fmt.Sprintf("%s season %d: %v", t.Title, w.Season, err))
-				}
-				if g.grabbed > before {
-					got = append(got, fmt.Sprintf("%s season %d", t.Title, w.Season))
-				}
-				continue
+	// Missing titles and upgrades take turns, so a long list of missing
+	// ones can't keep upgrades from ever coming up. Each keeps its own
+	// order (newly missing first).
+	{
+		var lack, better []Wanted
+		for _, w := range due {
+			if w.Upgrade {
+				better = append(better, w)
+			} else {
+				lack = append(lack, w)
 			}
 		}
-		if w.Upgrade {
-			upgrades++
-		} else {
-			missing++
-		}
-		kind, titleID, episodeID := "movie", w.ID, int64(0)
-		var res Results
-		if w.Kind == "movie" {
-			res, err = s.Movie(ctx, w.ID)
-		} else {
-			kind, titleID, episodeID = "series", w.SeriesID, w.ID
-			res, err = s.Episode(ctx, w.ID)
-		}
-		if errors.Is(err, ErrNoIndexers) {
-			return jobs.Skipped("%s", err.Error()), nil
-		}
-		if err != nil {
-			g.problems = append(g.problems, fmt.Sprintf("%s: %v", w.Subject, err))
-			continue
-		}
-		r, err := s.pick(ctx, res, kind, titleID, episodeID)
-		if err != nil {
-			g.problems = append(g.problems, fmt.Sprintf("%s: %v", w.Subject, err))
-			continue
-		}
-		if r.Status == "done" && strings.HasPrefix(r.Message, "grabbed ") {
-			g.grabbed++
-			got = append(got, w.Subject)
+		due = interleave(lack, better)
+	}
+	// The episodes due of each season, to search for together.
+	type seasonKey struct {
+		series int64
+		season int
+	}
+	seasons := map[seasonKey][]int64{}
+	for _, w := range due {
+		if w.Kind == "episode" {
+			k := seasonKey{w.SeriesID, w.Season}
+			seasons[k] = append(seasons[k], w.ID)
 		}
 	}
-	if searched == 0 {
+	done := map[seasonKey]bool{}
+	var missing, upgrades int
+	var o outcome
+	searchedAny := false
+	for _, w := range due {
+		if o.searches >= budget || ctx.Err() != nil {
+			break
+		}
+		if w.Kind == "movie" {
+			if b, err := s.busy(ctx, "movie", w.ID, 0, ""); err != nil {
+				return jobs.Result{}, err
+			} else if b {
+				o.busy++
+				continue
+			}
+			res, err := s.Movie(ctx, w.ID)
+			if errors.Is(err, ErrNoIndexers) {
+				return jobs.Skipped("%s", err.Error()), nil
+			}
+			searchedAny = true
+			if w.Upgrade {
+				upgrades++
+			} else {
+				missing++
+			}
+			if err != nil {
+				o.problems = append(o.problems, fmt.Sprintf("%s: %v", w.Subject, err))
+				continue
+			}
+			if res.Searched > 0 {
+				o.searches++
+			}
+			r, err := s.pick(ctx, res, "movie", w.ID, 0)
+			if err != nil {
+				o.problems = append(o.problems, fmt.Sprintf("%s: %v", w.Subject, err))
+				continue
+			}
+			if r.Status == "done" && strings.HasPrefix(r.Message, "grabbed ") {
+				o.grabbed++
+				o.got = append(o.got, w.Subject)
+			}
+			continue
+		}
+		k := seasonKey{w.SeriesID, w.Season}
+		ids := []int64{w.ID}
+		if len(seasons[k]) >= seasonSearchFrom {
+			if done[k] {
+				continue
+			}
+			done[k] = true
+			ids = seasons[k]
+		}
+		t, err := s.Store.Series(ctx, w.SeriesID)
+		if err != nil {
+			o.problems = append(o.problems, fmt.Sprintf("%s: %v", w.Subject, err))
+			continue
+		}
+		var eps []store.Episode
+		for _, id := range ids {
+			e, err := s.Store.Episode(ctx, id)
+			if err != nil {
+				continue
+			}
+			eps = append(eps, e)
+			if e.File != nil {
+				upgrades++
+			} else {
+				missing++
+			}
+		}
+		got, err := s.findEpisodes(ctx, t, w.Season, eps)
+		if err != nil {
+			return jobs.Result{}, err
+		}
+		if got.noIndexers {
+			return jobs.Skipped("%s", ErrNoIndexers.Error()), nil
+		}
+		searchedAny = true
+		o.add(got)
+	}
+	heldNote := ""
+	if held > 0 {
+		heldNote = fmt.Sprintf("; %s waiting: %s", count(held, "upgrade", "upgrades"), c.Why())
+	}
+	if !searchedAny {
 		if len(list) == 0 {
 			return jobs.Done("nothing is missing, and nothing needs upgrading"), nil
 		}
-		return jobs.Done("everything wanted was searched for recently%s", busyNote(g.busy)), nil
+		return jobs.Done("everything wanted was searched for recently%s%s", busyNote(o.busy), heldNote), nil
 	}
-	msg := fmt.Sprintf("looked for %s in %d %s; grabbed %d", describeWant(missing, upgrades, "title", "titles"), searched,
-		plural(searched, "search", "searches"), g.grabbed)
-	if len(got) > 0 {
-		msg += " (" + strings.Join(got, ", ") + ")"
+	msg := fmt.Sprintf("looked for %s in %s; grabbed %d", describeWant(missing, upgrades, "title", "titles"), count(o.searches, "search", "searches"), o.grabbed)
+	if len(o.got) > 0 {
+		msg += " (" + strings.Join(o.got, ", ") + ")"
 	}
-	if g.off && g.found > 0 {
-		msg += "; downloading is off, so packs found weren't grabbed"
+	if o.off {
+		msg += "; downloading is off, so nothing was grabbed"
 	}
-	msg += busyNote(g.busy)
-	if len(g.problems) > 0 {
-		msg += "; " + strings.Join(g.problems, "; ")
+	msg += busyNote(o.busy) + heldNote
+	if len(o.problems) > 0 {
+		msg += "; " + compactProblems(o.problems)
 	}
 	return jobs.Done("%s", msg), nil
 }
@@ -401,4 +519,18 @@ func busyNote(n int) string {
 		return ""
 	}
 	return fmt.Sprintf("; %d already downloading", n)
+}
+
+// interleave takes from a and b in turn, so neither starves the other.
+func interleave[T any](a, b []T) []T {
+	out := make([]T, 0, len(a)+len(b))
+	for i := 0; i < len(a) || i < len(b); i++ {
+		if i < len(a) {
+			out = append(out, a[i])
+		}
+		if i < len(b) {
+			out = append(out, b[i])
+		}
+	}
+	return out
 }

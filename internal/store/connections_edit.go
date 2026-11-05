@@ -27,9 +27,10 @@ func (s *Store) CreateIndexer(ctx context.Context, ix Indexer) (int64, error) {
 	if ix.Settings == nil {
 		ix.Settings = json.RawMessage("{}")
 	}
-	return s.insert(ctx, `INSERT INTO indexers (name, protocol, kind, url, api_path, api_key, categories, enable_rss, enable_search, priority, settings, source, missing_secret)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)`,
-		ix.Name, ix.Protocol, ix.Kind, ix.URL, ix.APIPath, ix.APIKey, string(cats), b2i(ix.EnableRSS), b2i(ix.EnableSearch), ix.Priority, string(ix.Settings), ix.Source)
+	return s.insert(ctx, `INSERT INTO indexers (name, protocol, kind, url, api_path, api_key, categories, enable_rss, enable_search, priority, settings, source, missing_secret,
+		daily_queries, daily_grabs) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?)`,
+		ix.Name, ix.Protocol, ix.Kind, ix.URL, ix.APIPath, ix.APIKey, string(cats), b2i(ix.EnableRSS), b2i(ix.EnableSearch), ix.Priority, string(ix.Settings), ix.Source,
+		ix.DailyQueries, ix.DailyGrabs)
 }
 
 // UpdateIndexer saves an indexer as given. A key filled in clears the
@@ -37,9 +38,9 @@ func (s *Store) CreateIndexer(ctx context.Context, ix Indexer) (int64, error) {
 func (s *Store) UpdateIndexer(ctx context.Context, ix Indexer) error {
 	cats, _ := json.Marshal(ix.Categories)
 	res, err := s.exec(ctx, `UPDATE indexers SET name = ?, protocol = ?, kind = ?, url = ?, api_path = ?, api_key = ?, categories = ?, enable_rss = ?,
-		enable_search = ?, priority = ?, missing_secret = ? WHERE id = ?`,
+		enable_search = ?, priority = ?, missing_secret = ?, daily_queries = ?, daily_grabs = ? WHERE id = ?`,
 		ix.Name, ix.Protocol, ix.Kind, ix.URL, ix.APIPath, ix.APIKey, string(cats), b2i(ix.EnableRSS), b2i(ix.EnableSearch), ix.Priority,
-		b2i(ix.MissingSecret && ix.APIKey == ""), ix.ID)
+		b2i(ix.MissingSecret && ix.APIKey == ""), ix.DailyQueries, ix.DailyGrabs, ix.ID)
 	if err != nil {
 		return uniqueErr(err)
 	}
@@ -90,15 +91,17 @@ func (s *Store) UsenetServer(ctx context.Context, id int64) (UsenetServer, error
 }
 
 func (s *Store) CreateUsenetServer(ctx context.Context, u UsenetServer) (int64, error) {
-	return s.insert(ctx, `INSERT INTO usenet_servers (name, host, port, use_tls, username, password, connections, level, optional, retention, enabled, settings, source)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '{}', '')`,
-		u.Name, u.Host, u.Port, b2i(u.UseTLS), u.Username, u.Password, u.Connections, u.Level, b2i(u.Optional), u.Retention, b2i(u.Enabled))
+	return s.insert(ctx, `INSERT INTO usenet_servers (name, host, port, use_tls, username, password, connections, level, optional, retention, enabled, settings, source,
+		quota, quota_since, expires) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '{}', '', ?, ?, ?)`,
+		u.Name, u.Host, u.Port, b2i(u.UseTLS), u.Username, u.Password, u.Connections, u.Level, b2i(u.Optional), u.Retention, b2i(u.Enabled),
+		u.Quota, secs(u.QuotaSince), secs(u.Expires))
 }
 
 func (s *Store) UpdateUsenetServer(ctx context.Context, u UsenetServer) error {
 	res, err := s.exec(ctx, `UPDATE usenet_servers SET name = ?, host = ?, port = ?, use_tls = ?, username = ?, password = ?, connections = ?, level = ?,
-		optional = ?, retention = ?, enabled = ? WHERE id = ?`,
-		u.Name, u.Host, u.Port, b2i(u.UseTLS), u.Username, u.Password, u.Connections, u.Level, b2i(u.Optional), u.Retention, b2i(u.Enabled), u.ID)
+		optional = ?, retention = ?, enabled = ?, quota = ?, quota_since = ?, expires = ? WHERE id = ?`,
+		u.Name, u.Host, u.Port, b2i(u.UseTLS), u.Username, u.Password, u.Connections, u.Level, b2i(u.Optional), u.Retention, b2i(u.Enabled),
+		u.Quota, secs(u.QuotaSince), secs(u.Expires), u.ID)
 	if err != nil {
 		return uniqueErr(err)
 	}

@@ -98,7 +98,7 @@ func run() error {
 			}
 			return out, err
 		}}
-	finder := &search.Service{Store: db, Engine: downloads, Client: &search.Client{}, Log: log}
+	finder := &search.Service{Store: db, Engine: downloads, Client: &search.Client{Spacing: search.DefaultSpacing}, Log: log}
 	finder.Register(runner)
 	// A download that fails is blocked, and something else looked for.
 	downloads.Failed = func(ctx context.Context, d store.Download, why string) {
@@ -134,7 +134,8 @@ func run() error {
 
 	var wg sync.WaitGroup
 	for _, loop := range []func(context.Context){runner.Run, backups.Run, downloads.Run, mon.Monitor.Run, alerter.Run,
-		func(ctx context.Context) { cat.RefreshEvery(ctx, cfg.Refresh) }, func(ctx context.Context) { finder.AutoSearchEvery(ctx, runner) }} {
+		func(ctx context.Context) { cat.RefreshEvery(ctx, cfg.Refresh) }, func(ctx context.Context) { finder.AutoSearchEvery(ctx, runner) },
+		finder.RSSEvery, finder.PruneEvery} {
 		wg.Add(1)
 		go func() { defer wg.Done(); loop(ctx) }()
 	}

@@ -2,9 +2,11 @@ package api
 
 import (
 	"cmp"
+	"math"
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 
 	"github.com/yeixio/boxoffice/internal/downloader"
 	"github.com/yeixio/boxoffice/internal/store"
@@ -20,6 +22,7 @@ func (s *Server) connectionRoutes() []route {
 		{"POST /api/v1/indexers", true, s.saveIndexer(false)},
 		{"PUT /api/v1/indexers/{id}", true, s.saveIndexer(true)},
 		{"POST /api/v1/indexers/test", true, s.testIndexer},
+		{"POST /api/v1/indexers/{id}/reset", true, s.resetIndexer},
 		{"POST /api/v1/downloadclients", true, s.saveDownloadClient(false)},
 		{"PUT /api/v1/downloadclients/{id}", true, s.saveDownloadClient(true)},
 		{"POST /api/v1/usenetservers", true, s.saveUsenetServer(false)},
@@ -39,6 +42,8 @@ type indexerIn struct {
 	EnableRSS    bool   `json:"enableRss"`
 	EnableSearch bool   `json:"enableSearch"`
 	Priority     int    `json:"priority"`
+	DailyQueries int    `json:"dailyQueries"`
+	DailyGrabs   int    `json:"dailyGrabs"`
 }
 
 func checkURL(raw string) (string, error) {
@@ -87,7 +92,23 @@ func (s *Server) indexerFrom(r *http.Request, in indexerIn, id int64) (store.Ind
 	ix.Categories = in.Categories
 	ix.EnableRSS, ix.EnableSearch = in.EnableRSS, in.EnableSearch
 	ix.Priority = min(max(in.Priority, 1), 50)
+	ix.DailyQueries, ix.DailyGrabs = min(max(in.DailyQueries, 0), 1e6), min(max(in.DailyGrabs, 0), 1e6)
 	return ix, nil
+}
+
+// resetIndexer ends an indexer's rest after errors, to try it now.
+func (s *Server) resetIndexer(w http.ResponseWriter, r *http.Request) error {
+	id, err := pathID(r, "id")
+	if err != nil {
+		return err
+	}
+	if _, err := s.Store.Indexer(r.Context(), id); err != nil {
+		return err
+	}
+	if err := s.Search.ResetIndexer(r.Context(), id); err != nil {
+		return err
+	}
+	return s.connections(w, r)
 }
 
 func hostOf(raw string) string {
@@ -228,6 +249,10 @@ type usenetServerIn struct {
 	Connections int    `json:"connections"`
 	Level       int    `json:"level"`
 	Enabled     bool   `json:"enabled"`
+	// A block account: GB left on it now (0 for an unlimited plan), and
+	// the day it expires (YYYY-MM-DD, blank for never).
+	QuotaGB float64 `json:"quotaGb"`
+	Expires string  `json:"expires"`
 }
 
 func (s *Server) usenetServerFrom(r *http.Request, in usenetServerIn, id int64) (store.UsenetServer, error) {
@@ -263,6 +288,32 @@ func (s *Server) usenetServerFrom(r *http.Request, in usenetServerIn, id int64) 
 	u.Connections = min(max(in.Connections, 1), 100)
 	u.Level = min(max(in.Level, 0), 9)
 	u.Enabled = in.Enabled
+	// Data left is counted from when it's entered: a new number starts
+	// the count again.
+	quota := int64(max(in.QuotaGB, 0) * 1e9)
+	if quota == 0 {
+		u.Quota, u.QuotaSince = 0, time.Time{}
+	} else if quota != u.Quota {
+		left := u.Quota
+		if u.Quota > 0 && !u.QuotaSince.IsZero() {
+			if qs, err := s.Downloads.Quotas(r.Context()); err == nil {
+				left = qs[u.ID].Left
+			}
+		}
+		// The form shows what's left, rounded; sending that back unchanged
+		// keeps the count going.
+		if u.Quota == 0 || int64(math.Round(float64(left)/1e8)) != int64(math.Round(float64(quota)/1e8)) {
+			u.Quota, u.QuotaSince = quota, time.Now()
+		}
+	}
+	u.Expires = time.Time{}
+	if e := strings.TrimSpace(in.Expires); e != "" {
+		t, err := time.ParseInLocation(time.DateOnly, e, time.Local)
+		if err != nil {
+			return u, errorf(http.StatusBadRequest, "enter the day the account expires as a date, like 2027-06-30")
+		}
+		u.Expires = t.AddDate(0, 0, 1) // it works through the day it expires
+	}
 	return u, nil
 }
 

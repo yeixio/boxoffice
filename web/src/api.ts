@@ -143,11 +143,14 @@ export type Upcoming = {
 }
 
 export type AutoSearch = {
-  settings: { enabled: boolean; perDay: number }
+  settings: { enabled: boolean; perDay: number; rss: boolean; rssMinutes: number }
   missing: number
   upgrades: number
   paused?: string
+  rssPaused?: string
+  cap?: string
   last?: Job
+  lastRss?: { at: string; releases: number; grabbed?: string[]; problems?: string[]; skipped?: string }
 }
 export type Job = { id: number; kind: string; subject: string; status: string; message?: string; createdAt: string; startedAt?: string; finishedAt?: string }
 
@@ -227,10 +230,29 @@ export type Progress = {
 }
 export type SwitchResult = { app: string; before: string; after: string; rootFolder?: string; qualityProfileId?: number }
 
-export type Indexer = { id: number; name: string; protocol: string; kind: string; url: string; apiPath?: string; hasApiKey: boolean; categories: number[]; enableRss: boolean; enableSearch: boolean; priority: number; source?: string; missingSecret: boolean }
+export type Indexer = { id: number; name: string; protocol: string; kind: string; url: string; apiPath?: string; hasApiKey: boolean; categories: number[]; enableRss: boolean; enableSearch: boolean; priority: number; source?: string; missingSecret: boolean; dailyQueries: number; dailyGrabs: number }
+export type IndexerState = {
+  resting: boolean
+  restingUntil?: string
+  failures: number
+  lastError?: string
+  rssSyncedAt?: string
+  today: { queries: number; grabs: number; auto: number }
+  queryLimit?: number
+  grabLimit?: number
+  limitsReported: boolean
+}
+export type QuotaState = { used: number; left: number; problem?: string }
 export type DownloadClient = { id: number; name: string; kind: string; protocol: string; host: string; port: number; useTls: boolean; urlBase?: string; username?: string; category?: string; priority: number; hasPassword: boolean; enabled: boolean; source?: string; missingSecret: boolean }
-export type UsenetServer = { id: number; name: string; host: string; port: number; useTls: boolean; username?: string; hasPassword: boolean; connections: number; level: number; optional: boolean; retention: number; enabled: boolean; source?: string }
-export type Connections = { indexers: Indexer[]; downloadClients: DownloadClient[]; usenetServers: UsenetServer[]; blocklist: number }
+export type UsenetServer = { id: number; name: string; host: string; port: number; useTls: boolean; username?: string; hasPassword: boolean; connections: number; level: number; optional: boolean; retention: number; enabled: boolean; source?: string; quota: number; quotaSince?: string; expires?: string }
+export type Connections = {
+  indexers: Indexer[]
+  downloadClients: DownloadClient[]
+  usenetServers: UsenetServer[]
+  blocklist: number
+  indexerStates: Record<number, IndexerState>
+  quotas: Record<number, QuotaState>
+}
 
 export type SystemInfo = { version: string; database: string; dataDir: string; go: string; os: string; startedAt: string; movies: number; series: number }
 
@@ -340,7 +362,12 @@ export type Downloads = {
   servers?: { id: number; name: string; active: number; max: number; error?: string }[]
   newsServers: number
   folder: { path: string; freeSpace: number; problem?: string }
+  cap: DataCap
+  waiting?: string
 }
+// The monthly data cap, and how much of it is used.
+export type DataCapSettings = { enabled: boolean; gb: number; upgradesAt: number; missingAt: number; resetDay: number }
+export type DataCap = DataCapSettings & { used: number; limit: number; since: string; resets: string; level: '' | 'upgrades' | 'missing' | 'full' }
 
 export type Candidate = {
   key: string

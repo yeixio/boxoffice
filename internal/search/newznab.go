@@ -12,6 +12,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/yeixio/boxoffice/internal/store"
@@ -31,6 +32,10 @@ type Release struct {
 	Indexer     string    `json:"indexer"`
 	Protocol    string    `json:"protocol"`
 	Password    string    `json:"-"`
+	// What the indexer says it's of, when it says (extended results).
+	IMDBID string `json:"-"`
+	TMDBID int64  `json:"-"`
+	TVDBID int64  `json:"-"`
 }
 
 // Query is what to search for.
@@ -43,10 +48,17 @@ type Query struct {
 	Season  int
 	Episode int
 	Cats    []int
+	Offset  int // to page through results
 }
 
 type rss struct {
 	Channel struct {
+		Limits *struct {
+			APICurrent  int `xml:"apicurrent,attr"`
+			APIMax      int `xml:"apimax,attr"`
+			GrabCurrent int `xml:"grabcurrent,attr"`
+			GrabMax     int `xml:"grabmax,attr"`
+		} `xml:"apilimits"`
 		Items []struct {
 			Title     string `xml:"title"`
 			GUID      string `xml:"guid"`
@@ -75,6 +87,74 @@ type apiError struct {
 // Client talks Newznab (and Torznab, its torrent twin) to an indexer.
 type Client struct {
 	HTTP *http.Client
+	// Spacing is the least time between two requests to one indexer, to
+	// be kind to it; 0 for none.
+	Spacing time.Duration
+
+	mu   sync.Mutex
+	next map[string]time.Time // by indexer address
+}
+
+// DefaultSpacing is the wait between two requests to one indexer.
+const DefaultSpacing = 2 * time.Second
+
+// Limits are an indexer's daily limits and how much of them is used, as it
+// reports them (Newznab's apilimits); 0 where it doesn't say.
+type Limits struct {
+	APIMax, APIUsed, GrabMax, GrabUsed int
+}
+
+// IndexerError is an indexer turning a request down or failing.
+type IndexerError struct {
+	Msg string
+	// Limited means the indexer's daily limit is used up, or it asked Box
+	// Office to slow down; RetryAfter is when it said to come back, if it
+	// said.
+	Limited    bool
+	RetryAfter time.Duration
+}
+
+func (e *IndexerError) Error() string { return e.Msg }
+
+// wait holds a request until the indexer's spacing is over.
+func (c *Client) wait(ctx context.Context, ix store.Indexer) error {
+	if c.Spacing <= 0 {
+		return nil
+	}
+	c.mu.Lock()
+	if c.next == nil {
+		c.next = map[string]time.Time{}
+	}
+	now := time.Now()
+	at := c.next[ix.URL]
+	if at.Before(now) {
+		at = now
+	}
+	c.next[ix.URL] = at.Add(c.Spacing)
+	c.mu.Unlock()
+	if d := at.Sub(now); d > 0 {
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-time.After(d):
+		}
+	}
+	return nil
+}
+
+// retryAfter reads a Retry-After header: seconds, or a date.
+func retryAfter(h string) time.Duration {
+	h = strings.TrimSpace(h)
+	if h == "" {
+		return 0
+	}
+	if n, err := strconv.Atoi(h); err == nil && n > 0 {
+		return time.Duration(n) * time.Second
+	}
+	if t, err := http.ParseTime(h); err == nil {
+		return max(time.Until(t), 0)
+	}
+	return 0
 }
 
 func (c *Client) http() *http.Client {
@@ -115,30 +195,55 @@ func (c *Client) get(ctx context.Context, ix store.Indexer, params url.Values) (
 		return nil, err
 	}
 	req.Header.Set("User-Agent", "BoxOffice")
+	if err := c.wait(ctx, ix); err != nil {
+		return nil, err
+	}
 	res, err := c.http().Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("%s can't be reached: %w", ix.Name, scrub(err, ix.APIKey))
+		if ctx.Err() != nil {
+			return nil, ctx.Err()
+		}
+		return nil, &IndexerError{Msg: fmt.Sprintf("%s can't be reached: %v", ix.Name, scrub(err, ix.APIKey))}
 	}
 	defer res.Body.Close()
 	body, err := io.ReadAll(io.LimitReader(res.Body, 16<<20))
 	if err != nil {
+		return nil, &IndexerError{Msg: fmt.Sprintf("%s stopped answering: %v", ix.Name, scrub(err, ix.APIKey))}
+	}
+	if err := statusError(ix, res); err != nil {
 		return nil, err
-	}
-	if res.StatusCode == 401 || res.StatusCode == 403 {
-		return nil, fmt.Errorf("%s turned down the API key", ix.Name)
-	}
-	if res.StatusCode >= 400 {
-		return nil, fmt.Errorf("%s answered %s", ix.Name, res.Status)
 	}
 	var ae apiError
 	if xml.Unmarshal(body, &ae) == nil && ae.XMLName.Local == "error" {
-		switch ae.Code {
-		case 100, 101, 102:
-			return nil, fmt.Errorf("%s turned down the API key: %s", ix.Name, ae.Description)
-		}
-		return nil, fmt.Errorf("%s said: %s", ix.Name, ae.Description)
+		return nil, newznabError(ix, ae)
 	}
 	return body, nil
+}
+
+func statusError(ix store.Indexer, res *http.Response) error {
+	switch {
+	case res.StatusCode == 401 || res.StatusCode == 403:
+		return &IndexerError{Msg: fmt.Sprintf("%s turned down the API key", ix.Name)}
+	case res.StatusCode == http.StatusTooManyRequests:
+		return &IndexerError{Msg: fmt.Sprintf("%s asked Box Office to slow down", ix.Name), Limited: true, RetryAfter: retryAfter(res.Header.Get("Retry-After"))}
+	case res.StatusCode >= 400:
+		return &IndexerError{Msg: fmt.Sprintf("%s answered %s", ix.Name, res.Status), RetryAfter: retryAfter(res.Header.Get("Retry-After"))}
+	}
+	return nil
+}
+
+// newznabError explains a Newznab error code: 100 to 102 are the key,
+// 500 the daily API limit, 501 the daily download limit.
+func newznabError(ix store.Indexer, ae apiError) error {
+	switch ae.Code {
+	case 100, 101, 102:
+		return &IndexerError{Msg: fmt.Sprintf("%s turned down the API key: %s", ix.Name, ae.Description)}
+	case 500:
+		return &IndexerError{Msg: fmt.Sprintf("%s's daily search limit is used up (%s)", ix.Name, ae.Description), Limited: true}
+	case 501:
+		return &IndexerError{Msg: fmt.Sprintf("%s's daily download limit is used up (%s)", ix.Name, ae.Description), Limited: true}
+	}
+	return &IndexerError{Msg: fmt.Sprintf("%s said: %s", ix.Name, ae.Description)}
 }
 
 // scrub takes the API key out of an error, which may quote the URL.
@@ -151,7 +256,16 @@ func scrub(err error, key string) error {
 
 // Search asks one indexer.
 func (c *Client) Search(ctx context.Context, ix store.Indexer, q Query) ([]Release, error) {
+	rs, _, err := c.Query(ctx, ix, q)
+	return rs, err
+}
+
+// Query asks one indexer, and says what it reports of its limits.
+func (c *Client) Query(ctx context.Context, ix store.Indexer, q Query) ([]Release, Limits, error) {
 	p := url.Values{"t": {q.Type}, "extended": {"1"}, "limit": {"100"}}
+	if q.Offset > 0 {
+		p.Set("offset", strconv.Itoa(q.Offset))
+	}
 	if q.Text != "" {
 		p.Set("q", q.Text)
 	}
@@ -179,18 +293,27 @@ func (c *Client) Search(ctx context.Context, ix store.Indexer, q Query) ([]Relea
 	}
 	body, err := c.get(ctx, ix, p)
 	if err != nil {
-		return nil, err
+		return nil, Limits{}, err
 	}
-	return parseRSS(body, ix)
+	return parseFeed(body, ix)
 }
 
 func parseRSS(body []byte, ix store.Indexer) ([]Release, error) {
+	rs, _, err := parseFeed(body, ix)
+	return rs, err
+}
+
+func parseFeed(body []byte, ix store.Indexer) ([]Release, Limits, error) {
 	var feed rss
 	dec := xml.NewDecoder(strings.NewReader(string(body)))
 	dec.Strict = false
 	dec.CharsetReader = func(_ string, r io.Reader) (io.Reader, error) { return r, nil }
 	if err := dec.Decode(&feed); err != nil {
-		return nil, fmt.Errorf("%s sent something that isn't a list of releases", ix.Name)
+		return nil, Limits{}, &IndexerError{Msg: fmt.Sprintf("%s sent something that isn't a list of releases", ix.Name)}
+	}
+	var lim Limits
+	if l := feed.Channel.Limits; l != nil {
+		lim = Limits{APIMax: l.APIMax, APIUsed: l.APICurrent, GrabMax: l.GrabMax, GrabUsed: l.GrabCurrent}
 	}
 	var out []Release
 	for _, it := range feed.Channel.Items {
@@ -224,6 +347,14 @@ func parseRSS(body []byte, ix store.Indexer) ([]Release, error) {
 				if t, err := time.Parse(time.RFC1123Z, a.Value); err == nil {
 					r.PublishedAt = t.UTC()
 				}
+			case "imdb", "imdbid":
+				if v := strings.TrimPrefix(strings.TrimSpace(a.Value), "tt"); v != "" && v != "0" {
+					r.IMDBID = "tt" + v
+				}
+			case "tmdbid":
+				r.TMDBID, _ = strconv.ParseInt(a.Value, 10, 64)
+			case "tvdbid":
+				r.TVDBID, _ = strconv.ParseInt(a.Value, 10, 64)
 			}
 		}
 		if r.GUID == "" {
@@ -233,7 +364,7 @@ func parseRSS(body []byte, ix store.Indexer) ([]Release, error) {
 			out = append(out, r)
 		}
 	}
-	return out, nil
+	return out, lim, nil
 }
 
 // Category is one of an indexer's categories.
@@ -301,13 +432,34 @@ func (c *Client) FetchNZB(ctx context.Context, ix store.Indexer, r Release) ([]b
 		return nil, err
 	}
 	req.Header.Set("User-Agent", "BoxOffice")
+	if err := c.wait(ctx, ix); err != nil {
+		return nil, err
+	}
 	res, err := c.http().Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("%s can't be reached: %w", ix.Name, scrub(err, ix.APIKey))
+		if ctx.Err() != nil {
+			return nil, ctx.Err()
+		}
+		return nil, &IndexerError{Msg: fmt.Sprintf("%s can't be reached: %v", ix.Name, scrub(err, ix.APIKey))}
 	}
 	defer res.Body.Close()
 	if res.StatusCode >= 400 {
+		if err := statusError(ix, res); res.StatusCode == http.StatusTooManyRequests {
+			return nil, err
+		}
 		return nil, fmt.Errorf("%s wouldn't give the NZB: %s", ix.Name, res.Status)
 	}
-	return io.ReadAll(io.LimitReader(res.Body, 64<<20))
+	data, err := io.ReadAll(io.LimitReader(res.Body, 64<<20))
+	if err != nil {
+		return nil, err
+	}
+	// An indexer out of downloads for the day answers with an error, not
+	// an NZB.
+	if len(data) < 4096 {
+		var ae apiError
+		if xml.Unmarshal(data, &ae) == nil && ae.XMLName.Local == "error" {
+			return nil, newznabError(ix, ae)
+		}
+	}
+	return data, nil
 }

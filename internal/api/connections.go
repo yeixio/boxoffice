@@ -85,7 +85,16 @@ func (s *Server) connections(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
-	return writeJSON(w, http.StatusOK, map[string]any{"indexers": idx, "downloadClients": dcs, "usenetServers": servers, "blocklist": blocked})
+	states, err := s.Search.IndexerStates(ctx)
+	if err != nil {
+		return err
+	}
+	quotas, err := s.Downloads.Quotas(ctx)
+	if err != nil {
+		return err
+	}
+	return writeJSON(w, http.StatusOK, map[string]any{"indexers": idx, "downloadClients": dcs, "usenetServers": servers, "blocklist": blocked,
+		"indexerStates": states, "quotas": quotas})
 }
 
 func (s *Server) deleteConnection(del func(*http.Request, int64) error) func(http.ResponseWriter, *http.Request) error {

@@ -48,3 +48,12 @@ export function runtime(minutes?: number): string {
   const m = minutes % 60
   return m ? `${Math.floor(minutes / 60)} h ${m} min` : `${minutes / 60} h`
 }
+
+// gb is a data amount the way internet plans and Usenet blocks count it,
+// in 1000s: 2.1 TB, 450 GB.
+export function gb(n: number): string {
+  if (!Number.isFinite(n) || n <= 0) return '0 GB'
+  if (n >= 1e12) return `${(n / 1e12).toFixed(n >= 1e13 ? 0 : 1)} TB`
+  if (n >= 1e9) return `${(n / 1e9).toFixed(n >= 1e11 ? 0 : 1)} GB`
+  return `${Math.round(n / 1e6)} MB`
+}

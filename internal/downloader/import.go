@@ -109,7 +109,6 @@ func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir str
 			return "", err
 		}
 		var placed []string
-		kept := 0
 		for _, v := range vids {
 			season, numbers := episodeNumbers(filepath.Base(v))
 			if len(numbers) == 0 {
@@ -119,15 +118,14 @@ func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir str
 			if i < 0 {
 				continue
 			}
-			ep := eps[i]
-			// A release with several episodes (a season pack) doesn't
-			// replace a copy that's as good or better. The one episode a
-			// release was picked for replaces its copy regardless.
-			chosen := len(d.EpisodeIDs) == 1 && d.EpisodeIDs[0] == ep.ID
-			if !chosen && ep.File != nil && quality.Rank(ep.File.Quality) >= quality.Rank(q) {
-				kept++
+			// A download for some episodes (a season pack grabbed for the
+			// ones wanted, say) leaves the others' copies alone.
+			if len(d.EpisodeIDs) > 0 && !slices.ContainsFunc(eps, func(e store.Episode) bool {
+				return e.Season == season && slices.Contains(numbers, e.Number) && slices.Contains(d.EpisodeIDs, e.ID)
+			}) {
 				continue
 			}
+			ep := eps[i]
 			code := fmt.Sprintf("S%02dE%02d", season, numbers[0])
 			for _, n := range numbers[1:] {
 				code += fmt.Sprintf("E%02d", n)
@@ -141,9 +139,6 @@ func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir str
 				return "", err
 			}
 			placed = append(placed, dest)
-		}
-		if len(placed) == 0 && kept > 0 {
-			return "", errors.New("the library already has copies at least as good of every episode in it")
 		}
 		if len(placed) == 0 {
 			return "", errors.New("none of its video files are named for an episode of the show (like S01E02)")
