@@ -1,17 +1,24 @@
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { ArrowUpToLine, CircleCheck, ListChecks, Clock, FolderInput, CircleX, Download as DownloadIcon, Pause, Play, PackageOpen, RotateCcw, ShieldAlert, Trash2, Upload } from 'lucide-react'
 import { api, del, get, post, put, type Download, type Downloads as DownloadsData } from '../api'
 import { bytes, when } from '../format'
 import { useQualities } from '../hooks'
-import { SortControl, sortList, useSort, words, type SortOption } from '../sort'
+import { SortControl, useSort, words, type SortOption } from '../sort'
 import { Badge, Button, Card, Empty, ErrorNote, Heading, Modal, Spinner, Toggle } from '../ui'
 import { BulkBar, PickBox, SelectAll, type BulkList } from './DownloadsBulk'
 import { DownloadFiles } from './DownloadFiles'
+import { Quarantine } from './DownloadsQuarantine'
+import { Pager, usePageSize } from './Pager'
 
-export function useDownloads() {
-  return useQuery({ queryKey: ['downloads'], queryFn: () => get<DownloadsData>('/downloads'), refetchInterval: 2000 })
+// HistoryPage is which page of the history to fetch, sorted how; the
+// server pages and sorts it, as it can grow long.
+type HistoryPage = { offset: number; limit: number; sort: string; dir: 'asc' | 'desc' }
+
+export function useDownloads(page?: HistoryPage) {
+  const q = page ? `?historyOffset=${page.offset}&historyLimit=${page.limit}&historySort=${page.sort}&historyDir=${page.dir}` : ''
+  return useQuery({ queryKey: ['downloads', page ?? null], queryFn: () => get<DownloadsData>('/downloads' + q), refetchInterval: 2000, placeholderData: keepPreviousData })
 }
 
 const statusTone: Record<string, 'ok' | 'bad' | 'gold' | 'plain' | 'marquee'> = {
@@ -48,6 +55,7 @@ function eta(left: number, rate: number) {
   if (s < 60) return 'under a minute left'
   if (s < 3600) return `${Math.round(s / 60)} min left`
   const h = Math.floor(s / 3600)
+  if (h >= 48) return `${Math.floor(h / 24)} d ${h % 24} h left`
   return `${h} h ${Math.round((s % 3600) / 60)} min left`
 }
 
@@ -69,11 +77,21 @@ const historySorts: SortOption<Download>[] = [
   { key: 'status', label: 'Status', value: outcome, dir: 'asc', says: { asc: 'Problems first', desc: 'Done first' } },
 ]
 
-const newestFirst = (d: Download) => -d.id
-
 export function Downloads() {
   const qc = useQueryClient()
-  const d = useDownloads()
+  const sort = useSort('downloads-history', historySorts)
+  // A few rows at a time on a phone, more on a bigger screen.
+  const queueSize = usePageSize([4, 6, 8])
+  const historySize = usePageSize([6, 10, 15])
+  const [queuePage, setQueuePage] = useState(0)
+  const [historyPage, setHistoryPage] = useState(0)
+  useEffect(() => setHistoryPage(0), [sort.option.key, sort.dir, historySize])
+  const d = useDownloads({ offset: historyPage * historySize, limit: historySize, sort: sort.option.key, dir: sort.dir })
+  // A page past the end (the history got shorter) goes back to the last.
+  const total = d.data?.historyTotal ?? 0
+  useEffect(() => {
+    if (historyPage > 0 && historyPage * historySize >= total) setHistoryPage(Math.max(0, Math.ceil(total / historySize) - 1))
+  }, [total, historyPage, historySize])
   const refresh = () => qc.invalidateQueries({ queryKey: ['downloads'] })
   const settings = useMutation({
     mutationFn: (s: Partial<DownloadsData['settings']>) => put('/downloads/settings', { ...d.data!.settings, ...s }),
@@ -85,8 +103,6 @@ export function Downloads() {
     onSuccess: refresh,
   })
   const clear = useMutation({ mutationFn: () => del('/downloads/history'), onSuccess: refresh })
-  const sort = useSort('downloads-history', historySorts)
-  const history = useMemo(() => sortList(d.data?.history ?? [], sort.option, sort.dir, newestFirst), [d.data?.history, sort.option, sort.dir])
   // Picking several downloads at once, in one list at a time.
   const [picking, setPicking] = useState<BulkList | null>(null)
   const [picked, setPicked] = useState<Set<number>>(new Set())
@@ -110,12 +126,24 @@ export function Downloads() {
   const data = d.data
   const s = data.settings
   const active = data.queue.find((x) => x.status === 'downloading')
-  const pickedList = picking === 'queue' ? data.queue : picking === 'history' ? history : []
-  const pickHead = (list: BulkList, items: Download[]) =>
+  const history = data.history
+  const historyTotal = data.historyTotal ?? history.length
+  // The queue's own pages; a page past the end (the queue got shorter)
+  // shows the last one.
+  const queuePages = Math.max(1, Math.ceil(data.queue.length / queueSize))
+  const qp = Math.min(queuePage, queuePages - 1)
+  const queue = data.queue.slice(qp * queueSize, (qp + 1) * queueSize)
+  // Turning the page drops what was picked: Select all picks a page.
+  const turn = (set: (p: number) => void) => (p: number) => {
+    set(p)
+    setPicked(new Set())
+  }
+  const pickedList = picking === 'queue' ? queue : picking === 'history' ? history : []
+  const pickHead = (list: BulkList, items: Download[], paged: boolean) =>
     items.length > 0 &&
     (picking === list ? (
       <>
-        <SelectAll items={items} picked={picked} onChange={setPicked} />
+        <SelectAll items={items} picked={picked} onChange={setPicked} paged={paged} />
         <Button variant="ghost" onClick={stopPicking}>
           Done
         </Button>
@@ -168,6 +196,7 @@ export function Downloads() {
           </>
         }
       />
+      {s.enabled && <Stats data={data} />}
       <ErrorNote error={upload.error || settings.error} />
       {!s.enabled && <TurnOn data={data} />}
       {s.enabled && data.folder.problem && (
@@ -188,7 +217,7 @@ export function Downloads() {
       <section className="mb-8">
         <div className="mb-3 flex flex-wrap items-center gap-2">
           <h2 className="mr-auto font-display text-xl font-semibold">Queue</h2>
-          {pickHead('queue', data.queue)}
+          {pickHead('queue', queue, queuePages > 1)}
         </div>
         {data.queue.length === 0 ? (
           <Empty icon={<DownloadIcon className="size-8" />} title="Nothing to download">
@@ -196,7 +225,7 @@ export function Downloads() {
           </Empty>
         ) : (
           <ul className="flex flex-col gap-3">
-            {data.queue.map((x) => (
+            {queue.map((x) => (
               <QueueItem
                 key={x.id}
                 d={x}
@@ -207,13 +236,14 @@ export function Downloads() {
             ))}
           </ul>
         )}
+        <Pager page={qp} size={queueSize} total={data.queue.length} onPage={turn(setQueuePage)} label="Queue" />
       </section>
 
       <section>
         <div className="mb-3 flex flex-wrap items-center gap-2">
           <h2 className="mr-auto font-display text-xl font-semibold">History</h2>
-          {data.history.length > 1 && <SortControl sort={sort} className="order-last w-full sm:order-none sm:w-auto" />}
-          {pickHead('history', history)}
+          {historyTotal > 1 && <SortControl sort={sort} className="order-last w-full sm:order-none sm:w-auto" />}
+          {pickHead('history', history, historyTotal > historySize)}
           {data.history.length > 0 && picking !== 'history' && (
             <Button variant="ghost" busy={clear.isPending} onClick={() => clear.mutate()}>
               Clear history
@@ -229,7 +259,9 @@ export function Downloads() {
             ))}
           </ul>
         )}
+        <Pager page={historyPage} size={historySize} total={historyTotal} onPage={turn(setHistoryPage)} label="History" />
       </section>
+      <Quarantine />
       <DownloadFiles />
       {data.folder.path && (
         <p className="mt-6 text-xs text-muted">
@@ -243,6 +275,31 @@ export function Downloads() {
 }
 
 type Pick = { picked: boolean; toggle: () => void }
+
+// Stats sums up the queue: how fast, how much is left and how long that
+// takes at this speed, and how much has come this month.
+function Stats({ data }: { data: DownloadsData }) {
+  const left = data.queue.reduce((n, x) => n + Math.max(0, x.size - x.doneBytes), 0)
+  const rate = data.settings.paused ? 0 : data.speed
+  const c = data.cap
+  const tiles: [string, string, string?][] = [
+    ['Speed', data.settings.paused ? 'Paused' : rate > 0 ? speed(rate) : 'Idle', data.settings.speedLimit > 0 ? `Limit ${speed(data.settings.speedLimit * 1024)}` : undefined],
+    ['In the queue', left > 0 ? bytes(left) : 'Nothing', data.queue.length > 0 ? `${data.queue.length} download${data.queue.length === 1 ? '' : 's'} left` : undefined],
+    ['Time to finish', left > 0 && rate > 0 ? eta(left, rate).replace(' left', '') : '—', left > 0 && rate > 0 ? 'at the current speed' : left > 0 ? 'once it downloads' : undefined],
+    ['This month', bytes(c.used), c.enabled && c.limit > 0 ? `of ${c.gb.toLocaleString()} GB (${Math.min(100, Math.round((c.used / c.limit) * 100))}%)` : 'no data cap set'],
+  ]
+  return (
+    <dl className="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
+      {tiles.map(([label, value, note]) => (
+        <div key={label} className="rounded-xl border border-line bg-card px-4 py-3">
+          <dt className="text-xs text-muted">{label}</dt>
+          <dd className="mt-0.5 font-display text-lg font-semibold tabular-nums">{value}</dd>
+          {note && <dd className="text-xs text-muted">{note}</dd>}
+        </div>
+      ))}
+    </dl>
+  )
+}
 
 // TurnOn says why downloading is off and what's needed to turn it on.
 function TurnOn({ data }: { data: DownloadsData }) {
@@ -424,7 +481,7 @@ function RemoveDialog({ d, onClose }: { d: Download; onClose: () => void }) {
       <p className="mb-4 break-words text-sm">{d.name}</p>
       {d.quarantined && (
         <p className="text-sm text-muted">
-          Its files stay in quarantine at <code className="break-all">{d.quarantined}</code>. Box Office never deletes them; delete them yourself once you've looked, and don't open them.
+          Its files stay in quarantine at <code className="break-all">{d.quarantined}</code>; delete or release them under Quarantine below. Don't open them.
         </p>
       )}
       {d.folder && !d.quarantined && (

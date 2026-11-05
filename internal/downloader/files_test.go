@@ -178,14 +178,14 @@ func TestImportPath(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if len(l.Moves) == 1 && !l.Moves[0].Running {
-			if len(l.Entries) != 0 {
-				t.Fatalf("left over %+v (%s)", l.Entries, l.Moves[0].Message)
-			}
+		// Browse lists the folder before it reads how moves went, so a
+		// move that finishes in between shows as done with the folder still
+		// there; the next look has it gone.
+		if len(l.Moves) == 1 && !l.Moves[0].Running && len(l.Entries) == 0 {
 			break
 		}
 		if time.Now().After(deadline) {
-			t.Fatal("never finished")
+			t.Fatalf("never finished: %+v, left over %+v", l.Moves, l.Entries)
 		}
 		time.Sleep(20 * time.Millisecond)
 	}

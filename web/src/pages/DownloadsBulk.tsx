@@ -41,7 +41,7 @@ const icons: Record<BulkAction, React.ReactNode> = {
 }
 
 // SelectAll is the checkbox in a section's header while picking.
-export function SelectAll({ items, picked, onChange }: { items: Download[]; picked: Set<number>; onChange: (ids: Set<number>) => void }) {
+export function SelectAll({ items, picked, onChange, paged }: { items: Download[]; picked: Set<number>; onChange: (ids: Set<number>) => void; paged?: boolean }) {
   const n = items.filter((d) => picked.has(d.id)).length
   return (
     <label className="flex min-h-9 cursor-pointer items-center gap-2 text-sm">
@@ -54,7 +54,7 @@ export function SelectAll({ items, picked, onChange }: { items: Download[]; pick
         }}
         onChange={(e) => onChange(new Set(e.target.checked ? items.map((d) => d.id) : []))}
       />
-      {n > 0 ? `${n} selected` : 'Select all'}
+      {n > 0 ? `${n} selected` : paged ? 'Select this page' : 'Select all'}
     </label>
   )
 }
@@ -174,7 +174,7 @@ function BulkRemove({ items, busy, error, onRemove, onClose }: { items: Download
           }
         />
       )}
-      {held > 0 && <p className="mt-3 text-sm text-muted">Files in quarantine stay there; Box Office never deletes them.</p>}
+      {held > 0 && <p className="mt-3 text-sm text-muted">Files in quarantine stay there; delete them under Quarantine below.</p>}
       <ErrorNote error={error} />
       <div className="mt-5 flex justify-end gap-2">
         <Button onClick={onClose}>Keep them</Button>

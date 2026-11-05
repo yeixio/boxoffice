@@ -152,10 +152,18 @@ func (s *Server) downloads(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
-	history, err := s.Store.DownloadHistory(ctx, 100)
+	// The history comes a page at a time, sorted here, as it can grow long.
+	q := r.URL.Query()
+	limit, _ := strconv.Atoi(q.Get("historyLimit"))
+	if limit <= 0 || limit > 500 {
+		limit = 100
+	}
+	offset, _ := strconv.Atoi(q.Get("historyOffset"))
+	history, historyTotal, err := s.Store.DownloadHistoryPage(ctx, q.Get("historySort"), q.Get("historyDir") == "asc", offset, limit)
 	if err != nil {
 		return err
 	}
+
 	for i, d := range history {
 		history[i].CanReprocess = s.Downloads.CanReprocess(d)
 		history[i].CanImport = s.Downloads.CanImport(d)
@@ -193,7 +201,7 @@ func (s *Server) downloads(w http.ResponseWriter, r *http.Request) error {
 	}
 	out := map[string]any{
 		"settings": set, "queue": queue, "history": history, "speed": live.Speed, "servers": live.Servers,
-		"newsServers": enabled, "folder": folder, "cap": dataCap,
+		"newsServers": enabled, "folder": folder, "cap": dataCap, "historyTotal": historyTotal,
 	}
 	if why := s.Downloads.Waiting(); why != "" {
 		out["waiting"] = why
@@ -234,6 +242,7 @@ func (s *Server) saveDownloadSettings(w http.ResponseWriter, r *http.Request) er
 	if in.SpeedLimit < 0 {
 		in.SpeedLimit = 0
 	}
+	in.QuarantineDays = min(max(in.QuarantineDays, 0), 3650)
 	cur, err := downloader.LoadSettings(ctx, s.Store)
 	if err != nil {
 		return err

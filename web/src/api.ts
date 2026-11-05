@@ -353,7 +353,19 @@ export type Download = {
   startedAt?: string
   finishedAt?: string
 }
-export type DownloadSettings = { enabled: boolean; paused: boolean; speedLimit: number; import: boolean }
+export type DownloadSettings = { enabled: boolean; paused: boolean; speedLimit: number; import: boolean; deleteFailed: boolean; quarantineDays: number }
+// One release held in the quarantine folder.
+export type QuarantineItem = {
+  path: string
+  name: string
+  size: number
+  files: number
+  since: string
+  reason?: string
+  download?: { id: number; name: string; status: string; kind?: 'movie' | 'series'; titleId?: number }
+  busy?: boolean
+}
+export type Quarantine = { items: QuarantineItem[]; size: number; days: number }
 export type Downloads = {
   settings: DownloadSettings
   queue: Download[]
@@ -364,6 +376,8 @@ export type Downloads = {
   folder: { path: string; freeSpace: number; problem?: string }
   cap: DataCap
   waiting?: string
+  // How many finished downloads there are, of which history is a page.
+  historyTotal?: number
 }
 // The downloads folder's file browser.
 export type DownloadFile = {

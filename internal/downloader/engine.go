@@ -538,6 +538,9 @@ func (e *Engine) Run(ctx context.Context) {
 		if n%6 == 0 {
 			e.saveData(ctx)
 		}
+		if n%720 == 0 { // hourly
+			e.PurgeQuarantine(ctx)
+		}
 		e.startNext(ctx, &wg)
 		select {
 		case <-ctx.Done():
@@ -685,7 +688,11 @@ func (e *Engine) process(ctx context.Context, r *running, d store.Download, srv 
 		// Box Office is stopping; it carries on at the next start.
 	default:
 		e.Log.Warn("download failed", "name", d.Name, "err", err)
-		e.Store.SetDownloadStatus(bg, d.ID, store.DownloadFailed, sentence(err.Error()))
+		msg := sentence(err.Error())
+		if e.dropHopeless(bg, d, err) {
+			msg += ". Its files were deleted, as they can't be used"
+		}
+		e.Store.SetDownloadStatus(bg, d.ID, store.DownloadFailed, msg)
 		if d.Quarantined != "" {
 			e.notify(bg, d, store.EventQuarantined, err.Error())
 		} else {
@@ -695,6 +702,42 @@ func (e *Engine) process(ctx context.Context, r *running, d store.Download, srv 
 			e.Failed(bg, d, sentence(err.Error()))
 		}
 	}
+}
+
+// hopelessError marks a failure no retry of the same files can fix: too
+// much is gone from the news servers, or too much is damaged to repair.
+// (A failed unpack isn't one: Unpack again can still work.)
+type hopelessError struct{ error }
+
+func (h hopelessError) Unwrap() error { return h.error }
+
+func hopeless(err error) error { return hopelessError{err} }
+
+// dropHopeless deletes a failed download's files when they can't be used
+// and the settings say so, and says whether it did. Quarantined files are
+// left to the quarantine's own rules.
+func (e *Engine) dropHopeless(ctx context.Context, d store.Download, err error) bool {
+	var h hopelessError
+	if !errors.As(err, &h) || d.Quarantined != "" || d.Folder == "" {
+		return false
+	}
+	if set, serr := LoadSettings(ctx, e.Store); serr != nil || !set.DeleteFailed {
+		return false
+	}
+	dir, ok := e.inside(d.Folder)
+	if !ok {
+		return false
+	}
+	if _, serr := os.Stat(dir); serr != nil {
+		return false
+	}
+	e.removeFolder(d)
+	_, serr := os.Stat(dir)
+	if serr == nil {
+		return false
+	}
+	e.Log.Info("deleted a failed download's files", "name", d.Name, "folder", d.Folder)
+	return true
 }
 
 func (e *Engine) notify(ctx context.Context, d store.Download, event, why string) {
