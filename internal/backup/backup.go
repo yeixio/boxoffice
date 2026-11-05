@@ -109,8 +109,10 @@ type Manager struct {
 	Store *store.Store
 	Dir   string // on this server's disk
 	Log   *slog.Logger
-	now   func() time.Time
-	mu    sync.Mutex
+	// Failed hears of a scheduled backup that failed, for the alerts.
+	Failed func(ctx context.Context, err error)
+	now    func() time.Time
+	mu     sync.Mutex
 }
 
 func (m *Manager) clock() time.Time {
@@ -421,6 +423,9 @@ func (m *Manager) runDue(ctx context.Context) {
 	}
 	if _, err := m.Make(ctx, ReasonScheduled); err != nil {
 		m.Log.Warn("scheduled backup failed", "err", err)
+		if m.Failed != nil {
+			m.Failed(ctx, err)
+		}
 	}
 }
 

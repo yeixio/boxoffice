@@ -223,6 +223,68 @@ export type SystemInfo = { version: string; database: string; dataDir: string; g
 export type HealthIssue = { id: string; level: 'error' | 'warning' | 'notice'; title: string; detail: string; steps: string[]; link?: { to: string; label: string } }
 export type Health = { issues: HealthIssue[]; checked: string }
 
+// ---- server monitoring (Health → Server, Log, Alerts) ----
+
+export type MonitorPoint = { t: number; cpu: number; hostCpu?: number; mem: number; out: number; req: number; serverErrors: number; problems: number; downloads: number; downloadRate: number }
+export type MonitorSystem = {
+  os: string
+  arch: string
+  goVersion: string
+  hostname?: string
+  pid: number
+  started: number
+  scope: 'group' | 'process'
+  cores: number
+  cpuLimit?: number
+  cpu: number
+  hostCpu?: number
+  load?: number[]
+  memTotal?: number
+  memAvailable?: number
+  memory: number
+  memLimit?: number
+  goHeap: number
+  goroutines: number
+  bytesOut: number
+  requests: number
+  serverErrors: number
+  warnings: number
+  errors: number
+  history: MonitorPoint[]
+}
+export type LogAttr = { key: string; value: string }
+export type LogLevel = 'debug' | 'info' | 'warn' | 'error'
+export type LogLine = { seq: number; time: number; level: LogLevel; message: string; attrs?: LogAttr[] }
+export type Problem = { level: 'warn' | 'error'; message: string; detail?: string; count: number; first: number; last: number; attrs?: LogAttr[] }
+export type MonitorDisk = { total: number; free: number; reachable: boolean; uses: { use: 'data' | 'downloads' | 'backups' | 'movies' | 'tv'; path: string }[] }
+export type Alert = { id: string; rule: string; key: string; level: 'info' | 'warning' | 'critical'; title: string; message: string; time: number; resolved?: boolean; sent: number; failed?: string[] }
+export type Monitor = {
+  version: string
+  database: string
+  databaseMs: number
+  databaseError?: string
+  debug: boolean
+  debugForced?: boolean
+  system: MonitorSystem
+  disks: MonitorDisk[]
+  downloads: Partial<Record<DownloadStatus, number>>
+  downloadFailures: number
+  jobs: { queued: number; running: number; failed: number }
+  problems: Problem[]
+  alerts: Alert[]
+  logLines: number
+  logsSince?: number
+}
+
+export type WebhookKind = 'discord' | 'ntfy' | 'homeassistant' | 'json'
+export type Toggle = { on: boolean }
+export type RateRule = { on: boolean; count: number; minutes: number }
+export type AlertRules = { disk: { on: boolean; percent: number }; folder: Toggle; errors: RateRule; downloads: RateRule; restart: Toggle; backup: Toggle }
+export type AlertEmail = { on: boolean; host: string; port: number; security: 'starttls' | 'tls' | 'none'; username: string; password?: string; from: string; to: string; hasPassword?: boolean }
+export type AlertWebhook = { id: string; kind: WebhookKind; name?: string; url?: string; token?: string; hint?: string; hasToken?: boolean }
+export type AlertSettings = { email: AlertEmail; webhooks: AlertWebhook[]; rules: AlertRules; firing: Alert[]; history: Alert[]; links: boolean; forwarded: boolean }
+export type MetricsSettings = { on: boolean; token?: string; path: string }
+
 // ---- downloads ----
 
 export type DownloadStatus = 'queued' | 'downloading' | 'paused' | 'verifying' | 'repairing' | 'unpacking' | 'importing' | 'completed' | 'failed'

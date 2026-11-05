@@ -19,6 +19,7 @@ import (
 // result.
 func (e *Engine) postProcess(ctx context.Context, r *running, d *store.Download, job *fetchJob) error {
 	status := func(s, stage string) {
+		e.Log.Debug("download stage", "name", d.Name, "id", d.ID, "status", s, "stage", stage)
 		r.setStage(stage)
 		e.Store.SetDownloadStatus(context.WithoutCancel(ctx), d.ID, s, "")
 	}
@@ -35,6 +36,7 @@ func (e *Engine) postProcess(ctx context.Context, r *running, d *store.Download,
 	if len(files) == 0 {
 		return errors.New("the download finished with no files in it")
 	}
+	e.Log.Debug("download unpacked", "name", d.Name, "id", d.ID, "files", len(files), "repair notes", strings.Join(notes, "; "))
 	found := screen.Check(job.dir, files, d.Kind != "")
 	if len(found) == 0 {
 		found = e.checkLength(ctx, d, job.dir, files)
@@ -62,6 +64,7 @@ func (e *Engine) postProcess(ctx context.Context, r *running, d *store.Download,
 		msg = e.importInto(context.WithoutCancel(ctx), d, job.dir, lead)
 	}
 	r.setStage("")
+	e.Log.Info("download finished", "name", d.Name, "id", d.ID, "result", msg)
 	return e.Store.SetDownloadStatus(context.WithoutCancel(ctx), d.ID, store.DownloadCompleted, msg)
 }
 

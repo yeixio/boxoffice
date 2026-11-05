@@ -59,6 +59,9 @@ type Server struct {
 	EnvAPIKey string
 	// Web is the built web UI; nil serves a short page saying so.
 	Web fs.FS
+	// Monitoring is the Health page's server section and the alerts (see
+	// monitor.go); nil makes one with no log lines.
+	Monitoring *Monitoring
 
 	started  time.Time
 	failures sync.Map // username -> *failure
@@ -169,6 +172,17 @@ func (s *Server) Handler() http.Handler {
 		{"DELETE /api/v1/usenetservers/{id}", true, s.deleteConnection(func(r *http.Request, id int64) error { return s.Store.DeleteUsenetServer(r.Context(), id) })},
 		{"GET /api/v1/blocklist", true, s.blocklist},
 		{"GET /api/v1/imported", true, s.importedSettings},
+
+		{"GET /api/v1/admin/monitor", true, s.getMonitor},
+		{"GET /api/v1/admin/logs", true, s.getLogs},
+		{"GET /api/v1/admin/logs/download", true, s.downloadLogs},
+		{"PUT /api/v1/admin/debug", true, s.putDebug},
+		{"GET /api/v1/admin/alerts", true, s.getAlerts},
+		{"PUT /api/v1/admin/alerts", true, s.putAlerts},
+		{"POST /api/v1/admin/alerts/test", true, s.testAlerts},
+		{"GET /api/v1/admin/metrics", true, s.getMetricsSettings},
+		{"POST /api/v1/admin/metrics/token", true, s.newMetricsToken},
+		{"DELETE /api/v1/admin/metrics/token", true, s.deleteMetricsToken},
 	}
 	routes = append(routes, s.downloadRoutes()...)
 	routes = append(routes, s.connectionRoutes()...)
@@ -181,6 +195,8 @@ func (s *Server) Handler() http.Handler {
 	key := s.APIKey
 	mux.Handle("/radarr/", http.StripPrefix("/radarr", arrapi.New(arrapi.Radarr, s.Catalog, key, s.Version, s.Log)))
 	mux.Handle("/sonarr/", http.StripPrefix("/sonarr", arrapi.New(arrapi.Sonarr, s.Catalog, key, s.Version, s.Log)))
+	// Prometheus, with the token from Health → Prometheus (see alerts.go).
+	mux.HandleFunc("GET /metrics", s.metrics)
 	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte("ok\n")) })
 	mux.HandleFunc("GET /readyz", func(w http.ResponseWriter, r *http.Request) {
 		ctx, cancel := context.WithTimeout(r.Context(), 3*time.Second)
@@ -192,7 +208,7 @@ func (s *Server) Handler() http.Handler {
 		w.Write([]byte("ok\n"))
 	})
 	mux.Handle("/", s.web())
-	return securityHeaders(mux)
+	return s.counted(securityHeaders(mux))
 }
 
 func securityHeaders(h http.Handler) http.Handler {

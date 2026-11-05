@@ -97,6 +97,8 @@ func (e *Engine) fetch(ctx context.Context, r *running, d *store.Download, srv *
 	again := e.again[d.ID]
 	delete(e.again, d.ID)
 	e.mu.Unlock()
+	e.Log.Info("download started", "name", d.Name, "id", d.ID, "files", len(job.files), "fetching", len(want), "size", size,
+		"par2 index", hasIndex, "folder", d.Folder, "again", again)
 	if again {
 		// Checking and unpacking again: the files are already here,
 		// whatever they've been renamed or unpacked to.
@@ -104,9 +106,13 @@ func (e *Engine) fetch(ctx context.Context, r *running, d *store.Download, srv *
 		r.failed.Store(d.FailedBytes)
 		return job, nil
 	}
+	start := time.Now()
 	if err := e.download(ctx, r, d, srv, job, want); err != nil {
 		return nil, err
 	}
+	took := time.Since(start)
+	e.Log.Info("download fetched", "name", d.Name, "id", d.ID, "bytes", r.bytes.Load(), "missing", r.failed.Load(),
+		"took", took.Round(time.Second).String(), "average", humanBytes(int64(float64(r.bytes.Load())/max(took.Seconds(), 1)))+"/s")
 	return job, nil
 }
 
@@ -283,6 +289,7 @@ func (e *Engine) segment(ctx context.Context, r *running, srv *servers, s segmen
 		if attempt >= 6 {
 			return fmt.Errorf("the news servers stopped answering: %w", err)
 		}
+		e.Log.Debug("news server didn't answer; trying again in 10s", "article", s.seg.MessageID, "attempt", attempt+1, "err", err)
 		select {
 		case <-time.After(10 * time.Second):
 		case <-ctx.Done():

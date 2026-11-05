@@ -328,10 +328,13 @@ func (e *Engine) importInto(ctx context.Context, d *store.Download, dir, lead st
 	var ro *ReadOnlyError
 	switch {
 	case errors.As(err, &ro):
+		e.Log.Info("download waits to go into the library: its root folder is read-only", "name", d.Name, "id", d.ID, "root", ro.Root)
 		return lead + fmt.Sprintf("Downloaded, and waiting to go into the library: %s is read-only for Box Office for now. Nothing was moved; it's in the downloads folder until you choose Move into library.", ro.Root)
 	case err != nil:
+		e.Log.Warn("couldn't move a download into the library", "name", d.Name, "id", d.ID, "err", err)
 		return lead + "Downloaded, but it couldn't go into the library yet: " + err.Error() + ". It's in the downloads folder until you choose Move into library."
 	}
+	e.Log.Info("download moved into the library", "name", d.Name, "id", d.ID, "to", to)
 	e.Store.SetDownloadImported(ctx, d.ID, to)
 	d.ImportedTo = to
 	e.removeFolder(*d)
@@ -536,7 +539,7 @@ func (e *Engine) startNext(ctx context.Context, wg *sync.WaitGroup) {
 	if err != nil {
 		return
 	}
-	srv := newServers(list)
+	srv := newServers(list, e.Log)
 	if len(srv.pools) == 0 {
 		e.Store.SetDownloadStatus(ctx, d.ID, store.DownloadPaused, "add a news server in Settings first, then resume")
 		return
