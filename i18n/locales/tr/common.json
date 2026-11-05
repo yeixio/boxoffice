@@ -1,0 +1,55 @@
+{
+  "size": {
+    "B": "{{value}} B",
+    "KB": "{{value}} KB",
+    "MB": "{{value}} MB",
+    "GB": "{{value}} GB",
+    "TB": "{{value}} TB",
+    "PB": "{{value}} PB"
+  },
+  "duration": {
+    "minutes_one": "{{count}} dk",
+    "minutes_other": "{{count}} dk",
+    "hours": "{{hours}} sa",
+    "hoursMinutes": "{{hours}} sa {{minutes}} dk"
+  },
+  "loading": "Yükleniyor…",
+  "close": "Kapat",
+  "language": {
+    "title": "Dil",
+    "label": "Dil",
+    "automatic": "Otomatik ({{language}})",
+    "hint": "Box Office'in size gösterildiği dil, giriş yaptığınız her cihazda. Otomatik, her tarayıcının dilini izler.",
+    "machine": "Bu çeviri makine tarafından yapıldı, bu yüzden bazı ifadeler hatalı olabilir.",
+    "help": "İyileştirmeye yardım et"
+  },
+  "sort": {
+    "az": "A’dan Z’ye",
+    "za": "Z’den A’ya",
+    "oldest": "Önce en eski",
+    "newest": "Önce en yeni",
+    "soonest": "En yakın önce",
+    "latest": "En yeni önce",
+    "smallest": "En küçük önce",
+    "largest": "En büyük önce",
+    "lowest": "Önce en düşük",
+    "highest": "Önce en yüksek",
+    "worst": "En kötü önce",
+    "best": "En iyi önce",
+    "shortest": "En kısa önce",
+    "longest": "En uzun önce",
+    "fewest": "En az önce",
+    "most": "En çok önce",
+    "least": "En az önce",
+    "by": "Sırala",
+    "show": "{{order}} göster",
+    "flip": "{{option}}, {{order}}. Bunun yerine {{other}} göster"
+  },
+  "pager": {
+    "pages": "{{label}} sayfaları",
+    "range": "{{from}}–{{to}} / {{total}}",
+    "previous": "Önceki sayfa",
+    "next": "Sonraki sayfa",
+    "page": "Sayfa {{page}} / {{pages}}"
+  }
+}

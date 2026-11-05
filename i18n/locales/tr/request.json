@@ -1,0 +1,140 @@
+{
+  "problems": {
+    "wont_play": "Oynatılmıyor",
+    "wrong_title": "Yanlış film veya bölüm",
+    "picture": "Görüntü kötü",
+    "sound": "Ses yanlış veya senkron dışı",
+    "subtitles": "Altyazılar eksik veya yanlış",
+    "other": "Başka bir şey"
+  },
+  "state": {
+    "pending": "Onay bekliyor",
+    "declined": "Reddedildi",
+    "searching": "Onaylandı, aranıyor",
+    "downloadingAt": "İndiriliyor, {{percent}}",
+    "downloading": "İndiriliyor",
+    "partial": "Bazı bölümler hazır",
+    "available": "İzlemeye hazır",
+    "paused": "Onaylandı, beklemede",
+    "removed": "Kütüphaneden kaldırıldı"
+  },
+  "site": {
+    "down": "Bu site yanıt vermiyor: {{error}}",
+    "closed": "Bu istek sitesi şu anda açık değil."
+  },
+  "signIn": {
+    "matinee": "Matinee hesabı",
+    "local": "Buradaki hesap",
+    "with": "Şununla giriş yap",
+    "matineeHint": "Matinee'de izlerken kullandığınız kullanıcı adı ve parolayı kullanın.",
+    "signUpHint": "Film ve dizi istemek için bir hesap oluşturun.",
+    "username": "Kullanıcı adı",
+    "name": "Adınız",
+    "nameHint": "Yöneticilerin gördüğü. Kullanıcı adınızı kullanmak için boş bırakın.",
+    "password": "Parola",
+    "passwordHint": "En az 8 karakter.",
+    "make": "Hesabımı oluştur",
+    "signIn": "Giriş yap",
+    "haveAccount": "Hesabım var",
+    "new": "Burada yeni misiniz? Hesap oluşturun"
+  },
+  "nav": {
+    "discover": "Keşfet",
+    "requests": "İsteklerim",
+    "problems": "Sorunlar",
+    "sections": "Bölümler",
+    "account": "Hesabın"
+  },
+  "home": {
+    "hi": "Merhaba, {{name}}",
+    "welcome": "Bir film veya dizi bulun ve isteyin. İsteklerim altından takip edebilirsiniz.",
+    "find": "Bir film veya dizi bulun",
+    "seeAll": "Tümünü gör",
+    "nothing": "Henüz gösterilecek bir şey yok",
+    "notSetUp": "Yönetici bu siteyi kurmayı henüz bitirmedi. Daha sonra yeniden deneyin.",
+    "movieGenres": "Film türleri",
+    "showGenres": "Dizi türleri"
+  },
+  "search": {
+    "nothing": "Bu adla bir şey yok.",
+    "movies": "Filmler",
+    "shows": "Diziler",
+    "looking": "Aranıyor…"
+  },
+  "row": {
+    "more": "Daha fazla göster"
+  },
+  "pill": {
+    "ready": "İzlemeye hazır",
+    "some": "Bazı bölümler",
+    "coming": "Yolda",
+    "asked": "İstendi",
+    "declined": "Reddedildi"
+  },
+  "kind": {
+    "movie": "Film",
+    "show": "Göster"
+  },
+  "card": {
+    "request": "{{title}} iste"
+  },
+  "sheet": {
+    "out": "Çıkış {{date}}",
+    "starts": "Başlangıç {{date}}",
+    "released": "Yayınlandı {{date}}",
+    "firstAired": "İlk yayın {{date}}",
+    "ready": "Kütüphanede. İyi seyirler!",
+    "some": "Bir kısmı kütüphanede, geri kalanı yolda.",
+    "report": "Sorun bildir",
+    "coming": "Yolda. İstenecek bir şey yok: bulunduğu anda kütüphanede olacak.",
+    "asked": "Bunu istediniz. Bir yöneticinin onaylamasını bekliyor.",
+    "takeBack": "Geri al",
+    "declined": "Bir yönetici bunu reddetti. Yeniden isteyebilirsiniz.",
+    "declinedWhy": "Bir yönetici bunu reddetti: \"{{reply}}\" Yeniden isteyebilirsiniz.",
+    "note": "Yöneticilere not",
+    "noteHint": "İsteğe bağlı, örneğin hangi sürümü istediğiniz.",
+    "askMovie": "Bu filmi iste",
+    "askShow": "Bu diziyi iste"
+  },
+  "report": {
+    "thanks": "Teşekkürler. Yöneticiler bakacak; Sorunlar altından takip edebilirsiniz.",
+    "done": "Bitti",
+    "title": "Sorun ne?",
+    "problem": "Sorun",
+    "season": "Sezon",
+    "seasonHint": "Tüm diziyle ilgiliyse boş bırakın.",
+    "episode": "Bölüm",
+    "more": "Biraz daha anlatın",
+    "say": "Ne olduğunu söyleyin.",
+    "optional": "İsteğe bağlı.",
+    "send": "Bildirimi gönder"
+  },
+  "mine": {
+    "title": "İsteklerim",
+    "none": "Henüz bir şey istenmedi",
+    "empty": "<link>Keşfet</link> üzerinde bir film veya dizi bulun ve istemek için <strong>+</strong> düğmesine basın.",
+    "admin": "Yönetici: \"{{reply}}\"",
+    "asked": "{{date}} istendi",
+    "takeBack": "Geri al"
+  },
+  "issues": {
+    "title": "Sorunlar",
+    "sub": "Bir film veya dizide sorun mu var? Keşfet'te açın veya adıyla bulun ve Sorun bildir'i seçin.",
+    "none": "Bildirilen sorun yok",
+    "season": "{{season}}. Sezon",
+    "episode": "Sezon {{season}}, bölüm {{episode}}",
+    "waiting": "Bir yönetici bekleniyor",
+    "fixed": "Düzeltildi"
+  },
+  "account": {
+    "title": "Hesabın",
+    "signedIn": "<strong>{{name}}</strong> olarak giriş yapıldı.",
+    "signedInMatinee": "Matinee hesabınızla <strong>{{name}}</strong> olarak giriş yapıldı.",
+    "change": "Parolanızı değiştirin",
+    "current": "Mevcut parola",
+    "new": "Yeni parola",
+    "changed": "Değiştirildi. Diğer her yerde oturumunuz kapatıldı.",
+    "changeButton": "Parolayı değiştir",
+    "signOut": "Çıkış yap"
+  }
+}
