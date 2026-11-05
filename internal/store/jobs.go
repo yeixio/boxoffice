@@ -111,3 +111,8 @@ func (s *Store) PruneJobs(ctx context.Context, before time.Time) error {
 	_, err := s.exec(ctx, "DELETE FROM jobs WHERE status NOT IN ('queued', 'running') AND finished_at < ?", before.Unix())
 	return err
 }
+
+// LastJob is the newest job of a kind.
+func (s *Store) LastJob(ctx context.Context, kind string) (Job, error) {
+	return scanJob(s.row(ctx, "SELECT "+jobCols+" FROM jobs WHERE kind = ? ORDER BY id DESC LIMIT 1", kind))
+}

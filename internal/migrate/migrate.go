@@ -523,13 +523,15 @@ func mapProfile(lp lProfile) quality.Profile {
 		}
 	}
 	walk(lp.Items, false, false)
-	// A group's id as the cutoff: its best quality.
+	// A group's id as the cutoff: its lowest quality, since in Radarr and
+	// Sonarr a copy of any quality in the group meets the cutoff (a
+	// WEBRip in the "WEB 1080p" group isn't upgraded to a WEB-DL).
 	if cutoff < 0 {
 		for _, it := range lp.Items {
 			if it.Quality == nil && groupID(it) == lp.Cutoff {
 				for _, sub := range it.Items {
 					if sub.Quality != nil {
-						if q := quality.Parse(sub.Quality.Name); q.ID != 0 && (cutoff < 0 || quality.Rank(q.ID) > quality.Rank(cutoff)) {
+						if q := quality.Parse(sub.Quality.Name); q.ID != 0 && (cutoff < 0 || quality.Rank(q.ID) < quality.Rank(cutoff)) {
 							cutoff = q.ID
 						}
 					}

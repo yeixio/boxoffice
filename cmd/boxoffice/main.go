@@ -133,7 +133,8 @@ func run() error {
 	srv.RestoreDebugLogging(ctx)
 
 	var wg sync.WaitGroup
-	for _, loop := range []func(context.Context){runner.Run, backups.Run, downloads.Run, mon.Monitor.Run, alerter.Run, func(ctx context.Context) { cat.RefreshEvery(ctx, cfg.Refresh) }} {
+	for _, loop := range []func(context.Context){runner.Run, backups.Run, downloads.Run, mon.Monitor.Run, alerter.Run,
+		func(ctx context.Context) { cat.RefreshEvery(ctx, cfg.Refresh) }, func(ctx context.Context) { finder.AutoSearchEvery(ctx, runner) }} {
 		wg.Add(1)
 		go func() { defer wg.Done(); loop(ctx) }()
 	}

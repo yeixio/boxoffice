@@ -97,10 +97,16 @@ func (p Profile) Wants(has bool, have, q int) bool {
 	if !has {
 		return true
 	}
-	if !p.UpgradeOK || Rank(have) >= Rank(p.Cutoff) {
+	if !p.CutoffUnmet(have) {
 		return false
 	}
 	return Rank(q) > Rank(have)
+}
+
+// CutoffUnmet says whether a copy of quality have is one the profile
+// still looks to upgrade: upgrades are on and it's below the cutoff.
+func (p Profile) CutoffUnmet(have int) bool {
+	return p.UpgradeOK && Rank(have) < Rank(p.Cutoff)
 }
 
 // Defaults are the profiles a new server starts with.

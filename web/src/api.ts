@@ -134,6 +134,13 @@ export type Upcoming = {
   hasFile: boolean
 }
 
+export type AutoSearch = {
+  settings: { enabled: boolean; perDay: number }
+  missing: number
+  upgrades: number
+  paused?: string
+  last?: Job
+}
 export type Job = { id: number; kind: string; subject: string; status: string; message?: string; createdAt: string; startedAt?: string; finishedAt?: string }
 
 export type Settings = { apiKey: string; apiKeyFromEnv: boolean; hasTmdbKey: boolean; tmdbKeyFromEnv: boolean }

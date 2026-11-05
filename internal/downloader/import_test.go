@@ -2,9 +2,12 @@ package downloader
 
 import (
 	"context"
+	"errors"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
+	"time"
 
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/store/storetest"
@@ -92,5 +95,75 @@ func TestImportSourceStuck(t *testing.T) {
 	}
 	if m, _ = st.Movie(ctx, m.ID); m.File == nil || m.File.Path != to {
 		t.Fatalf("file %+v", m.File)
+	}
+}
+
+// An upgrade whose file name is the same as the copy it replaces sets the
+// old one aside in .recycle; it's never written over.
+func TestImportUpgradeSameName(t *testing.T) {
+	st := storetest.Open(t)
+	ctx := context.Background()
+	lib := t.TempDir()
+	profiles, _ := st.Profiles(ctx)
+	m, err := st.AddMovie(ctx, store.Movie{TMDBID: 1, Title: "Up", Year: 2020, ProfileID: profiles[0].ID, RootFolder: lib, Path: filepath.Join(lib, "Up (2020)"), Monitored: true})
+	if err != nil {
+		t.Fatal(err)
+	}
+	os.MkdirAll(m.Path, 0o755)
+	oldPath := filepath.Join(m.Path, "Up (2020).mkv")
+	os.WriteFile(oldPath, []byte("old copy"), 0o644)
+	os.WriteFile(filepath.Join(m.Path, "Up (2020).srt"), []byte("old subs"), 0o644)
+	st.AddFile(ctx, store.File{Kind: "movie", OwnerID: m.ID, Path: oldPath, Quality: 4})
+
+	dl := t.TempDir()
+	os.WriteFile(filepath.Join(dl, "Up.2020.1080p.BluRay.mkv"), make([]byte, 5000), 0o644)
+	os.WriteFile(filepath.Join(dl, "Up.2020.1080p.BluRay.srt"), []byte("new subs"), 0o644)
+	li := &LibraryImporter{Store: st}
+	to, err := li.Import(ctx, store.Download{Kind: "movie", TitleID: m.ID, Name: "Up.2020.1080p.BluRay"}, dl, listFiles(dl))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if info, err := os.Stat(to); to != oldPath || err != nil || info.Size() != 5000 {
+		t.Fatalf("new copy at %s: %v", to, err)
+	}
+	day := filepath.Join(lib, ".recycle", time.Now().UTC().Format("2006-01-02"))
+	if b, err := os.ReadFile(filepath.Join(day, "Up (2020).mkv")); err != nil || string(b) != "old copy" {
+		t.Fatalf("old copy in .recycle: %q %v", b, err)
+	}
+	if b, err := os.ReadFile(filepath.Join(day, "Up (2020).srt")); err != nil || string(b) != "old subs" {
+		t.Fatalf("old subtitles in .recycle: %q %v", b, err)
+	}
+	if m, _ = st.Movie(ctx, m.ID); m.File == nil || m.File.Quality != 11 {
+		t.Fatalf("file %+v", m.File)
+	}
+}
+
+// A move that fails puts back the copy it set aside.
+func TestImportUpgradeFailsKeepsOld(t *testing.T) {
+	st := storetest.Open(t)
+	ctx := context.Background()
+	lib := t.TempDir()
+	profiles, _ := st.Profiles(ctx)
+	m, _ := st.AddMovie(ctx, store.Movie{TMDBID: 1, Title: "Up", Year: 2020, ProfileID: profiles[0].ID, RootFolder: lib, Path: filepath.Join(lib, "Up (2020)"), Monitored: true})
+	os.MkdirAll(m.Path, 0o755)
+	oldPath := filepath.Join(m.Path, "Up (2020).mkv")
+	os.WriteFile(oldPath, []byte("old copy"), 0o644)
+	st.AddFile(ctx, store.File{Kind: "movie", OwnerID: m.ID, Path: oldPath, Quality: 4})
+	orig := rename
+	rename = func(src, dest string) error {
+		if dest == oldPath && strings.Contains(src, "BluRay") {
+			return errors.New("disk on fire")
+		}
+		return orig(src, dest)
+	}
+	t.Cleanup(func() { rename = orig })
+	dl := t.TempDir()
+	os.WriteFile(filepath.Join(dl, "Up.2020.1080p.BluRay.mkv"), make([]byte, 5000), 0o644)
+	li := &LibraryImporter{Store: st}
+	if _, err := li.Import(ctx, store.Download{Kind: "movie", TitleID: m.ID, Name: "Up.2020.1080p.BluRay"}, dl, listFiles(dl)); err == nil {
+		t.Fatal("no error")
+	}
+	if b, err := os.ReadFile(oldPath); err != nil || string(b) != "old copy" {
+		t.Fatalf("old copy not put back: %q %v", b, err)
 	}
 }

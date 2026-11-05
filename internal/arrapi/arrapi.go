@@ -393,12 +393,19 @@ func (h *Handler) fileRoot(ctx context.Context, f store.File) (string, error) {
 // Recycle moves a file into root's .recycle folder. A file that's already
 // gone is fine.
 func Recycle(root, path string) error {
+	_, err := RecycleTo(root, path)
+	return err
+}
+
+// RecycleTo is Recycle, and says where the file went ("" when there was
+// no file to move).
+func RecycleTo(root, path string) (string, error) {
 	if _, err := os.Lstat(path); errors.Is(err, os.ErrNotExist) {
-		return nil
+		return "", nil
 	}
 	dir := filepath.Join(root, ".recycle", time.Now().UTC().Format("2006-01-02"))
 	if err := os.MkdirAll(dir, 0o755); err != nil {
-		return err
+		return "", err
 	}
 	dest := filepath.Join(dir, filepath.Base(path))
 	for i := 1; ; i++ {
@@ -408,7 +415,10 @@ func Recycle(root, path string) error {
 		ext := filepath.Ext(path)
 		dest = filepath.Join(dir, fmt.Sprintf("%s.%d%s", strings.TrimSuffix(filepath.Base(path), ext), i, ext))
 	}
-	return os.Rename(path, dest)
+	if err := os.Rename(path, dest); err != nil {
+		return "", err
+	}
+	return dest, nil
 }
 
 func equal(a, b string) bool {

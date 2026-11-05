@@ -251,15 +251,25 @@ func (s *Store) RequeueInterruptedDownloads(ctx context.Context) error {
 	return err
 }
 
-// GrabbedRecently says whether a release was added to the downloads
-// already, so a search doesn't grab it twice.
-func (s *Store) GrabbedRecently(ctx context.Context, kind string, titleID int64, name string) (bool, error) {
+// GrabbedBefore says whether a release of that name was added to the
+// downloads for the title already.
+func (s *Store) GrabbedBefore(ctx context.Context, kind string, titleID int64, name string) (bool, error) {
 	var n int
-	err := s.row(ctx, "SELECT COUNT(*) FROM downloads WHERE kind = ? AND title_id = ? AND (name = ? OR status NOT IN ('completed', 'failed'))", kind, titleID, name).Scan(&n)
+	err := s.row(ctx, "SELECT COUNT(*) FROM downloads WHERE kind = ? AND title_id = ? AND name = ?", kind, titleID, name).Scan(&n)
 	return n > 0, err
 }
 
 func itoa(n int64) string {
 	b, _ := json.Marshal(n)
 	return string(b)
+}
+
+// Pending is a title's downloads that may still bring it a file: those
+// not finished, and finished ones from the last two weeks that are waiting
+// to be moved into the library. Automatic searches leave such a title
+// alone, so a copy isn't grabbed twice.
+func (s *Store) Pending(ctx context.Context, kind string, titleID int64) ([]Download, error) {
+	since := time.Now().AddDate(0, 0, -14).Unix()
+	return s.downloads(ctx, `kind = ? AND title_id = ? AND (status NOT IN ('completed', 'failed')
+		OR (status = 'completed' AND imported_to = '' AND quarantined = '' AND finished_at > ?)) ORDER BY id`, kind, titleID, since)
 }

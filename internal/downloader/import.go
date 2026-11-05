@@ -170,11 +170,18 @@ func checkLibrary(root, path string) error {
 }
 
 // place moves one file into the library, records it, and moves the copy it
-// replaces to the root folder's .recycle folder.
+// replaces to the root folder's .recycle folder. Nothing in the library is
+// deleted or written over: a file already where the new one goes (an
+// upgrade of a copy with the same name, say) is set aside first, and put
+// back if the new one can't be moved in.
 func (li *LibraryImporter) place(ctx context.Context, dir, rel, dest, root, titlePath, kind string, owner int64, q int, old *store.File) error {
 	src := filepath.Join(dir, rel)
 	if err := os.MkdirAll(filepath.Dir(dest), 0o755); err != nil {
 		return err
+	}
+	aside, err := arrapi.RecycleTo(root, dest)
+	if err != nil {
+		return fmt.Errorf("couldn't set aside the copy already at %s: %w", dest, err)
 	}
 	if err := move(src, dest); err != nil {
 		// The library copy is whole and in place; only the original in
@@ -182,17 +189,27 @@ func (li *LibraryImporter) place(ctx context.Context, dir, rel, dest, root, titl
 		// cleanup takes another go at it.
 		var left *sourceLeftError
 		if !errors.As(err, &left) {
+			if aside != "" {
+				if _, serr := os.Lstat(dest); errors.Is(serr, fs.ErrNotExist) {
+					rename(aside, dest)
+				}
+			}
 			return err
 		}
 	}
-	// Subtitles named like the video go along.
+	// Subtitles named like the video go along, setting aside any already
+	// there.
 	base := strings.TrimSuffix(filepath.Base(src), filepath.Ext(src))
 	if entries, err := os.ReadDir(filepath.Dir(src)); err == nil {
 		for _, e := range entries {
 			ext := strings.ToLower(filepath.Ext(e.Name()))
 			if slices.Contains(subtitleExts, ext) && strings.HasPrefix(e.Name(), base) {
 				extra := strings.TrimSuffix(strings.TrimPrefix(e.Name(), base), filepath.Ext(e.Name()))
-				move(filepath.Join(filepath.Dir(src), e.Name()), strings.TrimSuffix(dest, filepath.Ext(dest))+extra+ext)
+				to := strings.TrimSuffix(dest, filepath.Ext(dest)) + extra + ext
+				if _, err := arrapi.RecycleTo(root, to); err != nil {
+					continue
+				}
+				move(filepath.Join(filepath.Dir(src), e.Name()), to)
 			}
 		}
 	}

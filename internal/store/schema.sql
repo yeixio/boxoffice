@@ -272,3 +272,14 @@ CREATE TABLE IF NOT EXISTS notifications (
 	at   BIGINT NOT NULL,
 	data TEXT NOT NULL
 );
+
+-- When Box Office last searched the indexers for a movie or an episode, so
+-- automatic searches for missing titles and upgrades take turns, and how
+-- many searches in a row found nothing it could take, so those wait longer.
+CREATE TABLE IF NOT EXISTS searched (
+	kind   TEXT NOT NULL, -- movie or episode
+	id     BIGINT NOT NULL,
+	at     BIGINT NOT NULL,
+	misses INTEGER NOT NULL DEFAULT 0,
+	PRIMARY KEY (kind, id)
+);

@@ -5,7 +5,7 @@ import { Copy, Folder, FolderUp, KeyRound, Plus, Trash2 } from 'lucide-react'
 import { del, get, post, put, type Profile, type RootFolder, type Settings as SettingsData, type SystemInfo } from '../api'
 import { bytes, day } from '../format'
 import { useProfiles, useQualities, useRootFolders } from '../hooks'
-import { Connections, DownloadSettings } from './Connections'
+import { AutoSearchSettings, Connections, DownloadSettings } from './Connections'
 import { Badge, Button, Card, ErrorNote, Field, Heading, Input, Modal, Spinner, Toggle } from '../ui'
 
 export function Settings() {
@@ -28,6 +28,7 @@ export function Settings() {
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
         <div className="flex flex-col gap-6">
           <DownloadSettings />
+          <AutoSearchSettings />
           <Connections section="news-servers" />
         </div>
         <div className="flex flex-col gap-6">
