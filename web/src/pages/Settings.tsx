@@ -2,11 +2,11 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Copy, Folder, FolderUp, KeyRound, Plus, Trash2 } from 'lucide-react'
-import { del, get, post, put, type Profile, type RootFolder, type Settings as SettingsData, type SystemInfo } from '../api'
-import { bytes, day } from '../format'
+import { del, get, post, put, type Profile, type Recycle, type RootFolder, type Settings as SettingsData, type SystemInfo } from '../api'
+import { bytes, count, day } from '../format'
 import { useProfiles, useQualities, useRootFolders } from '../hooks'
 import { AutoSearchSettings, Connections, DataCapSettingsCard, DownloadSettings } from './Connections'
-import { Badge, Button, Card, ErrorNote, Field, Heading, Input, Modal, Spinner, Toggle } from '../ui'
+import { Badge, Button, Card, ErrorNote, Field, Heading, Input, Modal, Select, Spinner, Toggle } from '../ui'
 
 export function Settings() {
   return (
@@ -22,6 +22,7 @@ export function Settings() {
         <div className="flex flex-col gap-6">
           <RootFolders kind="movie" />
           <RootFolders kind="series" />
+          <RecycleFolders />
           <Profiles />
         </div>
       </div>
@@ -182,6 +183,97 @@ function RootFolders({ kind }: { kind: 'movie' | 'series' }) {
       </ul>
       <ErrorNote error={remove.error} />
       {picking && <FolderPicker kind={kind} onClose={() => setPicking(false)} />}
+    </Card>
+  )
+}
+
+// RecycleFolders shows the copies upgrades replaced, set aside in each
+// library's .recycle folder, and frees their space.
+function RecycleFolders() {
+  const qc = useQueryClient()
+  const recycle = useQuery({ queryKey: ['recycle'], queryFn: () => get<Recycle>('/recycle') })
+  const [confirm, setConfirm] = useState(false)
+  const set = (r: Recycle) => qc.setQueryData(['recycle'], r)
+  const keep = useMutation({ mutationFn: (keepDays: number) => put<Recycle>('/recycle', { keepDays }), onSuccess: set })
+  const empty = useMutation({
+    mutationFn: () => post<Recycle>('/recycle/empty'),
+    onSuccess: (r) => {
+      set(r)
+      setConfirm(false)
+    },
+  })
+  const folders = recycle.data?.folders ?? []
+  const total = folders.reduce((n, f) => n + f.size, 0)
+  const files = folders.reduce((n, f) => n + f.count, 0)
+  return (
+    <Card>
+      <h2 className="mb-1 font-display text-lg font-semibold">Recycle folders</h2>
+      <p className="mb-4 text-sm text-muted">
+        When a better copy replaces one, the old copy is set aside in a <code>.recycle</code> folder in its library folder, by the day it was replaced, rather than deleted. To keep one,
+        move it out of there yourself before it's deleted. These copies still take space until they're deleted.
+      </p>
+      {recycle.isPending ? (
+        <Spinner />
+      ) : recycle.isError ? (
+        <ErrorNote error={recycle.error} />
+      ) : (
+        <div className="flex flex-col gap-4">
+          {folders.length === 0 ? (
+            <p className="text-sm">Nothing has been set aside yet.</p>
+          ) : (
+            <ul className="flex flex-col divide-y divide-line text-sm">
+              {folders.map((f) => (
+                <li key={f.folder} className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2">
+                  <code className="min-w-0 flex-1 basis-48 break-all">{f.folder}</code>
+                  <span className="text-muted">
+                    {count(f.count, 'file', 'files')}, {bytes(f.size)}
+                    {f.oldest && `, oldest ${day(f.oldest)}`}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+          <Field label="Delete replaced copies" hint="Box Office checks every few hours and deletes, for good, copies set aside longer than this.">
+            {(id) => (
+              <Select
+                id={id}
+                value={recycle.data.keepDays}
+                onChange={(v) => keep.mutate(Number(v))}
+                options={[
+                  { value: 0, label: 'Never (empty them yourself)' },
+                  { value: 7, label: 'After 7 days' },
+                  { value: 14, label: 'After 14 days' },
+                  { value: 30, label: 'After 30 days' },
+                  { value: 90, label: 'After 90 days' },
+                  ...([0, 7, 14, 30, 90].includes(recycle.data.keepDays) ? [] : [{ value: recycle.data.keepDays, label: `After ${recycle.data.keepDays} days` }]),
+                ]}
+              />
+            )}
+          </Field>
+          <div>
+            <Button variant="danger" disabled={total === 0} onClick={() => setConfirm(true)}>
+              <Trash2 className="size-4" aria-hidden /> Empty recycle folders{total > 0 && ` (${bytes(total)})`}
+            </Button>
+          </div>
+          <ErrorNote error={keep.error} />
+        </div>
+      )}
+      {confirm && (
+        <Modal title="Empty the recycle folders?" onClose={() => setConfirm(false)}>
+          <p className="text-sm">
+            This deletes {count(files, 'replaced copy', 'replaced copies')} ({bytes(total)}) for good, freeing the space. They can't be got back. The copies in your library aren't touched.
+          </p>
+          <ErrorNote error={empty.error} />
+          <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+            <Button variant="ghost" onClick={() => setConfirm(false)}>
+              Keep them
+            </Button>
+            <Button variant="danger" busy={empty.isPending} onClick={() => empty.mutate()}>
+              <Trash2 className="size-4" aria-hidden /> Delete {bytes(total)}
+            </Button>
+          </div>
+        </Modal>
+      )}
     </Card>
   )
 }

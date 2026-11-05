@@ -409,3 +409,11 @@ export type Candidate = {
 }
 export type ReleaseResults = { releases: Candidate[]; errors?: string[]; searched: number }
 export type IndexerCaps = { categories: { id: number; name: string; subs?: { id: number; name: string }[] }[]; movieSearch: boolean; tvSearch: boolean }
+
+// What deleting files from the library takes. folder is set when a whole
+// title's folder goes; files names up to 200 of them, biggest first.
+export type DeletePlan = { folder?: string; files: { path: string; size: number }[]; count: number; size: number; problem?: string }
+// Deleting a movie's, a season's or an episode's files, keeping the title.
+export type FileRemoval = DeletePlan & { releases: { name: string; indexer?: string }[]; watched: boolean }
+export type RecycleFolder = { root: string; folder: string; count: number; size: number; oldest?: string }
+export type Recycle = { folders: RecycleFolder[]; keepDays: number }

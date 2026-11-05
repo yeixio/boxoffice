@@ -230,7 +230,7 @@ export function AutoSearchSettings() {
       <p className="mb-4 text-sm text-muted">
         Box Office finds what's wanted two ways. RSS sync reads each indexer's list of new releases every few minutes, which catches new episodes and movies as they're posted. The library patrol
         searches every hour for a few monitored titles that have no copy yet (new ones first, then ones missing longer), then for ones below the quality profile's good-enough quality. A better copy
-        replaces the old one, which goes to the library's .recycle folder; nothing is deleted.
+        replaces the old one, which is set aside in the library's .recycle folder (see Recycle folders above to free that space).
       </p>
       <div className="flex flex-col gap-4">
         <p className="text-sm">

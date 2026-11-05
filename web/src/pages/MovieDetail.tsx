@@ -3,10 +3,11 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ListFilter, RefreshCw, Search, Trash2 } from 'lucide-react'
 import { Releases } from '../Releases'
-import { del, get, patch, post, type Movie } from '../api'
+import { DeleteFiles, RemoveTitle } from '../RemoveFiles'
+import { get, patch, post, type Movie } from '../api'
 import { bytes, day } from '../format'
 import { qualityName, useProfiles, useQualities } from '../hooks'
-import { Badge, Button, Card, ErrorNote, Field, Modal, Poster, Select, Spinner, Toggle } from '../ui'
+import { Badge, Button, Card, ErrorNote, Field, Poster, Select, Spinner, Toggle } from '../ui'
 
 export function MovieDetail() {
   const id = Number(useParams().id)
@@ -18,6 +19,7 @@ export function MovieDetail() {
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [note, setNote] = useState('')
   const [releases, setReleases] = useState(false)
+  const [deleteFile, setDeleteFile] = useState(false)
 
   const edit = useMutation({
     mutationFn: (body: Partial<Pick<Movie, 'monitored' | 'profileId'>>) => patch<Movie>(`/movies/${id}`, body),
@@ -33,13 +35,10 @@ export function MovieDetail() {
       setTimeout(() => qc.invalidateQueries({ queryKey: ['movie', id] }), 2500)
     },
   })
-  const remove = useMutation({
-    mutationFn: () => del(`/movies/${id}`),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['movies'] })
-      nav('/movies')
-    },
-  })
+  const removed = () => {
+    qc.invalidateQueries({ queryKey: ['movies'] })
+    nav('/movies')
+  }
 
   if (movie.isPending) return <Spinner />
   if (movie.isError) return <ErrorNote error={movie.error} />
@@ -125,6 +124,11 @@ export function MovieDetail() {
               <dd>{bytes(m.file.size)}</dd>
               <dt className="text-muted">Added</dt>
               <dd>{day(m.file.addedAt)}</dd>
+              <dd className="col-span-2 mt-2">
+                <Button variant="danger" onClick={() => setDeleteFile(true)}>
+                  <Trash2 className="size-4" aria-hidden /> Delete file from disk
+                </Button>
+              </dd>
             </dl>
           ) : (
             <p className="text-sm text-muted">Not on disk yet.</p>
@@ -132,19 +136,19 @@ export function MovieDetail() {
         </Card>
       </div>
 
-      {confirmDelete && (
-        <Modal title={`Remove ${m.title}?`} onClose={() => setConfirmDelete(false)}>
-          <p className="text-sm">It comes off Box Office's list and Matinee's requests. Its files stay where they are on disk.</p>
-          <ErrorNote error={remove.error} />
-          <div className="mt-5 flex justify-end gap-2">
-            <Button variant="ghost" onClick={() => setConfirmDelete(false)}>
-              Keep it
-            </Button>
-            <Button variant="danger" busy={remove.isPending} onClick={() => remove.mutate()}>
-              Remove
-            </Button>
-          </div>
-        </Modal>
+      {confirmDelete && <RemoveTitle kind="movie" id={m.id} title={m.title} onClose={() => setConfirmDelete(false)} onRemoved={removed} />}
+      {deleteFile && (
+        <DeleteFiles<Movie>
+          path={`/movies/${m.id}/file`}
+          title={`${m.title}'s file`}
+          what="movie"
+          onClose={() => setDeleteFile(false)}
+          onDone={(next) => {
+            qc.setQueryData(['movie', id], next)
+            qc.invalidateQueries({ queryKey: ['movies'] })
+            setDeleteFile(false)
+          }}
+        />
       )}
     </div>
   )
