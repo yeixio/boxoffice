@@ -83,7 +83,7 @@ func TestLinksStayInside(t *testing.T) {
 	if _, err := e.Browse(context.Background(), "lib"); err == nil {
 		t.Fatal("browsed through a link out of the downloads folder")
 	}
-	if _, _, err := e.OpenFile("lib/keep.mkv"); err == nil {
+	if _, _, err := e.OpenFile(context.Background(), "lib/keep.mkv"); err == nil {
 		t.Fatal("opened a file through a link")
 	}
 	if err := e.ImportPath(context.Background(), "lib/keep.mkv", "movie", 1); err == nil {
@@ -118,6 +118,20 @@ func TestDeletePath(t *testing.T) {
 	if err := e.DeletePath(ctx, "Busy/a.mkv"); err == nil {
 		t.Fatal("deleted a queued download's files")
 	}
+	if _, _, err := e.OpenFile(ctx, "Busy/a.mkv"); err == nil {
+		t.Fatal("downloaded a queued download's files")
+	}
+	for _, p := range []string{"", "Busy"} {
+		l, err := e.Browse(ctx, p)
+		if err != nil {
+			t.Fatal(err)
+		}
+		for _, f := range l.Entries {
+			if busy := f.Path == "Busy" || f.Path == "Busy/a.mkv"; f.Busy != busy || busy && f.BusyWith != store.DownloadQueued {
+				t.Errorf("%s busy %v %q", f.Path, f.Busy, f.BusyWith)
+			}
+		}
+	}
 	if err := e.DeletePath(ctx, "Old"); err != nil {
 		t.Fatal(err)
 	}
@@ -134,7 +148,7 @@ func TestReleaseAndOpen(t *testing.T) {
 	d, _ := st.AddDownload(ctx, store.Download{Name: "Rel"})
 	st.SetDownloadStatus(ctx, d.ID, store.DownloadFailed, "quarantined")
 	st.SetDownloadQuarantined(ctx, d.ID, filepath.Join(e.Dir, QuarantineDir, "Rel"))
-	if _, _, err := e.OpenFile(QuarantineDir + "/Rel/movie.mkv"); err == nil {
+	if _, _, err := e.OpenFile(context.Background(), QuarantineDir + "/Rel/movie.mkv"); err == nil {
 		t.Fatal("opened a quarantined file")
 	}
 	if err := e.ImportPath(ctx, QuarantineDir+"/Rel", "movie", 1); err == nil {
@@ -151,7 +165,7 @@ func TestReleaseAndOpen(t *testing.T) {
 	if d.Quarantined != "" || d.Folder != "Rel (2)" {
 		t.Fatalf("download %+v", d)
 	}
-	f, info, err := e.OpenFile("Rel (2)/movie.mkv")
+	f, info, err := e.OpenFile(context.Background(), "Rel (2)/movie.mkv")
 	if err != nil || info.Size() != 10 {
 		t.Fatal(err)
 	}

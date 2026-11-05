@@ -160,6 +160,17 @@ function Usage({ data }: { data: FilesData }) {
   )
 }
 
+// What a download using a file or folder is doing, said on it.
+const busyName: Record<string, string> = {
+  queued: 'Waiting to download',
+  downloading: 'Downloading',
+  paused: 'Download paused',
+  verifying: 'Checking',
+  repairing: 'Repairing',
+  unpacking: 'Unpacking',
+  importing: 'Moving into library',
+}
+
 function Row({ f, locked, onOpen, onDelete, onRelease, onImport }: { f: DownloadFile; locked: boolean; onOpen: () => void; onDelete: () => void; onRelease: () => void; onImport: () => void }) {
   const isQuarantine = f.path === QUARANTINE
   const releasable = f.quarantined && f.path.split('/').length === 2
@@ -176,11 +187,19 @@ function Row({ f, locked, onOpen, onDelete, onRelease, onImport }: { f: Download
     <File className="size-5 text-muted" aria-hidden />
   )
   const name = isQuarantine ? 'Quarantine' : f.name
+  // The downloader is still using it: it's greyed out, says what's going
+  // on, and offers nothing until the download is done.
+  const inUse = !!f.busy || !!f.moving
+  const label = f.moving ? busyName.importing : (busyName[f.busyWith ?? ''] ?? 'In use by a download')
   return (
-    <li className="flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2.5">
+    <li
+      className={`flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2.5 ${inUse ? 'opacity-55' : ''}`}
+      aria-disabled={inUse || undefined}
+      title={inUse ? `${label}. You can change this once the download is done.` : undefined}
+    >
       <span className="shrink-0">{icon}</span>
       <div className="min-w-0 flex-1 basis-48">
-        {f.dir ? (
+        {f.dir && !inUse ? (
           <button onClick={onOpen} className="break-all text-left text-sm font-medium hover:text-marquee hover:underline">
             {name}
           </button>
@@ -193,8 +212,12 @@ function Row({ f, locked, onOpen, onDelete, onRelease, onImport }: { f: Download
           {f.link && <span>Link (not followed)</span>}
           <span>{when(f.modified)}</span>
           {f.quarantined && f.path.split('/').length === 2 && <Badge tone="gold">Quarantined</Badge>}
-          {f.busy && <Badge tone="marquee">In use by a download</Badge>}
-          {f.moving && <Badge tone="gold">Moving into library</Badge>}
+          {inUse && (
+            <Badge tone={f.busyWith === 'downloading' ? 'marquee' : f.busyWith === 'queued' || f.busyWith === 'paused' ? 'plain' : 'gold'}>
+              {f.busyWith !== 'queued' && f.busyWith !== 'paused' && <LoaderCircle className="size-3 animate-spin" aria-hidden />}
+              {label}
+            </Badge>
+          )}
           {f.download?.kind && f.download.titleId ? (
             <Link to={f.download.kind === 'movie' ? `/movies/${f.download.titleId}` : `/shows/${f.download.titleId}`} className="text-marquee hover:underline">
               {f.download.kind === 'movie' ? 'Movie' : 'Show'}
@@ -202,7 +225,7 @@ function Row({ f, locked, onOpen, onDelete, onRelease, onImport }: { f: Download
           ) : null}
         </div>
       </div>
-      {!isQuarantine && (
+      {!isQuarantine && !inUse && (
         <div className="ml-auto flex shrink-0 gap-1">
           {!f.quarantined && !f.link && (f.dir || f.video) && (
             <IconButton label="Move into library" disabled={!canChange} onClick={onImport}>

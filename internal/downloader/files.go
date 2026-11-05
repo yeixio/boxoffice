@@ -42,8 +42,11 @@ type Entry struct {
 	// downloaded, opened or moved into the library, only released or
 	// deleted.
 	Quarantined bool `json:"quarantined,omitempty"`
-	// Busy says a download is still using it, so it can't be changed.
-	Busy bool `json:"busy,omitempty"`
+	// Busy says a download is still using it, so it can't be changed or
+	// downloaded, and BusyWith what the download is doing: one of the
+	// download statuses (downloading, unpacking, importing and the rest).
+	Busy     bool   `json:"busy,omitempty"`
+	BusyWith string `json:"busyWith,omitempty"`
 	// Download is the download it came from, when Box Office knows.
 	Download *EntryDownload `json:"download,omitempty"`
 	// Moving says it's being moved into the library now, and Moved what
@@ -118,12 +121,12 @@ func (e *Engine) root() (*os.Root, error) {
 // browseState is what the browser needs from the downloads: who uses which
 // folder, and which download each folder came from.
 type browseState struct {
-	busy  map[string]bool
+	busy  map[string]string // folder -> what the download is doing
 	owner map[string]store.Download
 }
 
 func (e *Engine) folderUse(ctx context.Context) (browseState, error) {
-	st := browseState{busy: map[string]bool{}, owner: map[string]store.Download{}}
+	st := browseState{busy: map[string]string{}, owner: map[string]store.Download{}}
 	queue, err := e.Store.DownloadQueue(ctx)
 	if err != nil {
 		return st, err
@@ -146,7 +149,7 @@ func (e *Engine) folderUse(ctx context.Context) (browseState, error) {
 	}
 	for _, d := range queue {
 		if d.Folder != "" {
-			st.busy[d.Folder] = true
+			st.busy[d.Folder] = d.Status
 			st.owner[d.Folder] = d
 		}
 	}
@@ -157,13 +160,13 @@ func (e *Engine) folderUse(ctx context.Context) (browseState, error) {
 	}
 	for p, j := range e.moves {
 		if j.running {
-			st.busy[top(p)] = true
+			st.busy[top(p)] = store.DownloadImporting
 		}
 	}
 	e.mu.Unlock()
 	for _, id := range importing {
 		if d, err := e.Store.Download(ctx, id); err == nil && d.Folder != "" {
-			st.busy[d.Folder] = true
+			st.busy[d.Folder] = store.DownloadImporting
 		}
 	}
 	return st, nil
@@ -237,7 +240,8 @@ func (e *Engine) Browse(ctx context.Context, p string) (Listing, error) {
 			ent.Video = isVideo(ent.Name) && !ent.Quarantined
 		}
 		t := top(ent.Path)
-		ent.Busy = state.busy[t]
+		ent.BusyWith = state.busy[t]
+		ent.Busy = ent.BusyWith != ""
 		if d, ok := state.owner[t]; ok && t == ent.Path {
 			ent.Download = &EntryDownload{ID: d.ID, Name: d.Name, Status: d.Status, Kind: d.Kind, TitleID: d.TitleID}
 		}
@@ -312,7 +316,7 @@ func (e *Engine) changeable(ctx context.Context, rel string) (browseState, error
 	if err != nil {
 		return state, err
 	}
-	if state.busy[top(rel)] {
+	if state.busy[top(rel)] != "" {
 		return state, errors.New("a download is still using it; wait for it to finish, or remove the download on the Downloads page")
 	}
 	return state, nil
@@ -411,7 +415,7 @@ func (e *Engine) Release(ctx context.Context, p string) (string, error) {
 
 // OpenFile opens a file in the downloads folder to download it. Files in
 // quarantine can't be; release them first.
-func (e *Engine) OpenFile(p string) (*os.File, os.FileInfo, error) {
+func (e *Engine) OpenFile(ctx context.Context, p string) (*os.File, os.FileInfo, error) {
 	rel, err := cleanRel(p)
 	if err != nil {
 		return nil, nil, err
@@ -421,6 +425,14 @@ func (e *Engine) OpenFile(p string) (*os.File, os.FileInfo, error) {
 	}
 	if rel == "" {
 		return nil, nil, ErrOutside
+	}
+	// A download still being fetched or unpacked isn't whole yet.
+	state, err := e.folderUse(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+	if state.busy[top(rel)] != "" {
+		return nil, nil, errors.New("a download is still using it; wait for it to finish")
 	}
 	root, err := e.root()
 	if err != nil {

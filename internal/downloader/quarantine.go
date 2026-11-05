@@ -48,7 +48,7 @@ func (e *Engine) Quarantine(ctx context.Context) ([]QuarantineItem, error) {
 	out := []QuarantineItem{}
 	for _, de := range entries {
 		rel := QuarantineDir + "/" + de.Name()
-		it := QuarantineItem{Path: rel, Name: de.Name(), Busy: state.busy[rel]}
+		it := QuarantineItem{Path: rel, Name: de.Name(), Busy: state.busy[rel] != ""}
 		if info, err := de.Info(); err == nil {
 			it.Since = info.ModTime()
 			if de.IsDir() {

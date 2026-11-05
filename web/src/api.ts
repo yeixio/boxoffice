@@ -390,7 +390,9 @@ export type DownloadFile = {
   files?: number
   modified: string
   quarantined?: boolean
+  // A download is still using it, and busyWith is what it's doing.
   busy?: boolean
+  busyWith?: DownloadStatus
   download?: { id: number; name: string; status: DownloadStatus; kind?: 'movie' | 'series'; titleId?: number }
   moving?: boolean
   moved?: string
