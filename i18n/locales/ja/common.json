@@ -1,0 +1,54 @@
+{
+  "size": {
+    "B": "{{value}} B",
+    "KB": "{{value}} KB",
+    "MB": "{{value}} MB",
+    "GB": "{{value}} GB",
+    "TB": "{{value}} TB",
+    "PB": "{{value}} PB"
+  },
+  "duration": {
+    "minutes_other": "{{count}} 分",
+    "hours": "{{hours}} 時間",
+    "hoursMinutes": "{{hours}} 時間 {{minutes}} 分"
+  },
+  "loading": "読み込み中…",
+  "close": "閉じる",
+  "language": {
+    "title": "言語",
+    "label": "言語",
+    "automatic": "自動（{{language}}）",
+    "hint": "Box Office の表示言語です。サインインするすべてのデバイスで使われます。「自動」は各ブラウザの言語に合わせます。",
+    "machine": "この翻訳は機械翻訳のため、不自然な表現があるかもしれません。",
+    "help": "改善に協力する"
+  },
+  "sort": {
+    "az": "A から Z",
+    "za": "Z から A",
+    "oldest": "古い順",
+    "newest": "新しい順",
+    "soonest": "早い順",
+    "latest": "新しい順",
+    "smallest": "小さい順",
+    "largest": "大きい順",
+    "lowest": "低い順",
+    "highest": "高い順",
+    "worst": "悪い順",
+    "best": "良い順",
+    "shortest": "短い順",
+    "longest": "長い順",
+    "fewest": "少ない順",
+    "most": "多い順",
+    "least": "少ない順",
+    "by": "並べ替え",
+    "show": "{{order}}で表示",
+    "flip": "{{option}}、{{order}}。{{other}}で表示する"
+  },
+  "pager": {
+    "pages": "{{label}} ページ",
+    "range": "{{from}}–{{to}} / {{total}}",
+    "previous": "前のページ",
+    "next": "次のページ",
+    "page": "{{page}} / {{pages}} ページ"
+  }
+}
