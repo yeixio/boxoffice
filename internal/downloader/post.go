@@ -37,7 +37,7 @@ func (e *Engine) postProcess(ctx context.Context, r *running, d *store.Download,
 		return errors.New("the download finished with no files in it")
 	}
 	e.Log.Debug("download unpacked", "name", d.Name, "id", d.ID, "files", len(files), "repair notes", strings.Join(notes, "; "))
-	found := screen.Check(job.dir, files, d.Kind != "")
+	found := screen.CheckFor(job.dir, files, wants(d.Kind))
 	if len(found) == 0 {
 		found = e.checkLength(ctx, d, job.dir, files)
 	}
@@ -66,6 +66,19 @@ func (e *Engine) postProcess(ctx context.Context, r *running, d *store.Download,
 	r.setStage("")
 	e.Log.Info("download finished", "name", d.Name, "id", d.ID, "result", msg)
 	return e.Store.SetDownloadStatus(context.WithoutCancel(ctx), d.ID, store.DownloadCompleted, msg)
+}
+
+// wants is what a download for a kind of title must hold.
+func wants(kind string) string {
+	switch kind {
+	case "":
+		return screen.WantNothing
+	case store.Ebook:
+		return screen.WantEbook
+	case store.Audiobook:
+		return screen.WantAudio
+	}
+	return screen.WantVideo
 }
 
 // repair checks the files against par2, fetching recovery volumes and

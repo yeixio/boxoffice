@@ -6,15 +6,19 @@ import (
 
 	"github.com/yeixio/boxoffice/internal/books"
 	"github.com/yeixio/boxoffice/internal/openlibrary"
+	"github.com/yeixio/boxoffice/internal/search"
 	"github.com/yeixio/boxoffice/internal/store"
 )
 
 // booksErr turns the book list's own errors into answers.
 func booksErr(err error) error {
 	var off books.ErrOff
+	var formatOff search.FormatOffError
 	switch {
-	case errors.As(err, &off):
+	case errors.As(err, &off), errors.As(err, &formatOff):
 		return errorf(http.StatusConflict, err.Error())
+	case errors.Is(err, search.ErrNoIndexers):
+		return errorf(http.StatusBadRequest, err.Error())
 	case errors.Is(err, openlibrary.ErrNotFound):
 		return errorf(http.StatusNotFound, err.Error())
 	}
@@ -185,4 +189,64 @@ func (s *Server) wantBook(w http.ResponseWriter, r *http.Request) error {
 		return booksErr(err)
 	}
 	return writeJSON(w, http.StatusOK, viewBook(b))
+}
+
+// allBooks lists every book on the list, with its author, for picking the
+// book a file is for.
+func (s *Server) allBooks(w http.ResponseWriter, r *http.Request) error {
+	bs, err := s.Store.AllBooks(r.Context())
+	if err != nil {
+		return err
+	}
+	out := make([]bookView, 0, len(bs))
+	for _, b := range bs {
+		out = append(out, viewBook(b))
+	}
+	return writeJSON(w, http.StatusOK, out)
+}
+
+func (s *Server) book(w http.ResponseWriter, r *http.Request) error {
+	id, err := pathID(r, "id")
+	if err != nil {
+		return err
+	}
+	b, err := s.Store.Book(r.Context(), id)
+	if err != nil {
+		return err
+	}
+	return writeJSON(w, http.StatusOK, viewBook(b))
+}
+
+// bookReleases searches the indexers for a book in a format, for picking
+// a release by hand.
+func (s *Server) bookReleases(w http.ResponseWriter, r *http.Request) error {
+	id, err := pathID(r, "id")
+	if err != nil {
+		return err
+	}
+	res, err := s.Search.Book(r.Context(), id, r.URL.Query().Get("format"))
+	if err != nil {
+		return booksErr(err)
+	}
+	return writeJSON(w, http.StatusOK, res)
+}
+
+// searchBook searches for a book in a format in the background, and grabs
+// the best release.
+func (s *Server) searchBook(w http.ResponseWriter, r *http.Request) error {
+	id, err := pathID(r, "id")
+	if err != nil {
+		return err
+	}
+	var in struct {
+		Format string `json:"format"`
+	}
+	if err := readJSON(r, &in); err != nil {
+		return err
+	}
+	if err := s.Books.Search(r.Context(), id, in.Format); err != nil {
+		return booksErr(err)
+	}
+	w.WriteHeader(http.StatusAccepted)
+	return nil
 }

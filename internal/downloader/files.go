@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/yeixio/boxoffice/internal/store"
+	"github.com/yeixio/boxoffice/internal/usenet/screen"
 )
 
 // The downloads folder's file browser: what's in the downloads folder, and
@@ -473,8 +474,8 @@ func (e *Engine) ImportPath(ctx context.Context, p, kind string, titleID int64) 
 	if e.Importer == nil {
 		return errors.New("moving into the library isn't set up")
 	}
-	if kind != "movie" && kind != "series" {
-		return errors.New("choose the movie or show it's for")
+	if kind != "movie" && kind != "series" && !store.IsBookKind(kind) {
+		return errors.New("choose the movie, show or book it's for")
 	}
 	state, err := e.changeable(ctx, rel)
 	if err != nil {
@@ -498,8 +499,10 @@ func (e *Engine) ImportPath(ctx context.Context, p, kind string, titleID int64) 
 	switch {
 	case info.IsDir():
 		files = listFiles(dir)
-	case info.Mode().IsRegular() && isVideo(info.Name()):
+	case info.Mode().IsRegular() && (isVideo(info.Name()) || kind == store.Ebook && screen.IsEbook(info.Name()) || kind == store.Audiobook && screen.IsAudio(info.Name())):
 		dir, files = filepath.Dir(dir), []string{info.Name()}
+	case store.IsBookKind(kind):
+		return errors.New("only a folder, or an ebook or audio file, can go into the library as a book")
 	default:
 		return errors.New("only a folder or a video file can go into the library")
 	}

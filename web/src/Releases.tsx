@@ -1,4 +1,4 @@
-// Releases lists what the indexers have for a movie or an episode, with
+// Releases lists what the indexers have for a movie, an episode or a book, with
 // what Box Office makes of each, and grabs one by hand.
 import { useMemo } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -60,7 +60,7 @@ export function Releases({ path, title, onClose }: { path: string; title: string
                       <div className="min-w-0 flex-1 basis-64">
                         <div className={`break-all text-sm font-medium ${r.accepted ? '' : 'text-muted'}`}>{r.title}</div>
                         <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted">
-                          {q && <Badge tone={r.accepted ? 'ok' : 'plain'}>{q.name}</Badge>}
+                          {r.format ? <Badge tone={r.accepted ? 'ok' : 'plain'}>{r.format}</Badge> : q && <Badge tone={r.accepted ? 'ok' : 'plain'}>{q.name}</Badge>}
                           {r.pack && <Badge tone="marquee">Whole season</Badge>}
                           {!r.pack && r.episodes && r.episodes.length > 1 && <Badge>{r.episodes.length} episodes</Badge>}
                           <span>{bytes(r.size)}</span>
