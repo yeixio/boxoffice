@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Copy, Folder, FolderUp, KeyRound, Plus, Trash2 } from 'lucide-react'
+import { Copy, Lock, Folder, FolderUp, KeyRound, Plus, Trash2 } from 'lucide-react'
 import { del, get, post, put, type Profile, type Recycle, type RootFolder, type Settings as SettingsData, type ShowDefaults, type SystemInfo } from '../api'
 import { bytes, count, day } from '../format'
 import { monitorOptions, useProfiles, useQualities, useRootFolders, useShowDefaults } from '../hooks'
@@ -384,6 +384,18 @@ function Profiles() {
       <ul className="flex flex-col divide-y divide-line">
         {profiles.data?.map((p) => (
           <li key={p.id}>
+            {p.locked ? (
+              <div className="flex gap-2 py-2 text-sm">
+                <Lock className="mt-0.5 size-4 shrink-0 text-muted" aria-hidden />
+                <span>
+                  <span className="font-medium">{p.name}</span>
+                  <span className="block text-xs text-muted">
+                    Built in. Box Office never searches for, downloads, upgrades, replaces or deletes the files of titles on it. Put a title on it from its page, or many at once with
+                    Select on Movies or Shows.
+                  </span>
+                </span>
+              </div>
+            ) : (
             <button className="w-full py-2 text-left text-sm hover:text-marquee" onClick={() => setEditing(p)}>
               <span className="font-medium">{p.name}</span>
               <span className="block text-xs text-muted">
@@ -391,6 +403,7 @@ function Profiles() {
                 {p.upgrade ? ', upgrades on' : ''}
               </span>
             </button>
+            )}
           </li>
         ))}
       </ul>

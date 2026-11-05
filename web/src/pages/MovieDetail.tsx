@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { ListFilter, RefreshCw, Search, Trash2 } from 'lucide-react'
 import { Releases } from '../Releases'
 import { DeleteFiles, RemoveTitle } from '../RemoveFiles'
+import { LockedNote } from '../Bulk'
 import { get, patch, post, type Movie } from '../api'
 import { bytes, day } from '../format'
 import { qualityName, useProfiles, useQualities } from '../hooks'
@@ -43,6 +44,7 @@ export function MovieDetail() {
   if (movie.isPending) return <Spinner />
   if (movie.isError) return <ErrorNote error={movie.error} />
   const m = movie.data
+  const locked = !!profiles.data?.find((p) => p.id === m.profileId)?.locked
   const dates = [
     ['In cinemas', m.inCinemas],
     ['Digital', m.digitalRelease],
@@ -78,13 +80,18 @@ export function MovieDetail() {
               ))}
             </dl>
           )}
+          {locked && <LockedNote />}
           <div className="mt-6 flex flex-wrap gap-2">
-            <Button variant="primary" busy={action.isPending && action.variables === 'search'} onClick={() => action.mutate('search')}>
-              <Search className="size-4" aria-hidden /> Look for it
-            </Button>
-            <Button onClick={() => setReleases(true)}>
-              <ListFilter className="size-4" aria-hidden /> Choose a release
-            </Button>
+            {!locked && (
+              <>
+                <Button variant="primary" busy={action.isPending && action.variables === 'search'} onClick={() => action.mutate('search')}>
+                  <Search className="size-4" aria-hidden /> Look for it
+                </Button>
+                <Button onClick={() => setReleases(true)}>
+                  <ListFilter className="size-4" aria-hidden /> Choose a release
+                </Button>
+              </>
+            )}
             <Button busy={action.isPending && action.variables === 'refresh'} onClick={() => action.mutate('refresh')}>
               <RefreshCw className="size-4" aria-hidden /> Refresh details
             </Button>
@@ -124,11 +131,13 @@ export function MovieDetail() {
               <dd>{bytes(m.file.size)}</dd>
               <dt className="text-muted">Added</dt>
               <dd>{day(m.file.addedAt)}</dd>
-              <dd className="col-span-2 mt-2">
-                <Button variant="danger" onClick={() => setDeleteFile(true)}>
-                  <Trash2 className="size-4" aria-hidden /> Delete file from disk
-                </Button>
-              </dd>
+              {!locked && (
+                <dd className="col-span-2 mt-2">
+                  <Button variant="danger" onClick={() => setDeleteFile(true)}>
+                    <Trash2 className="size-4" aria-hidden /> Delete file from disk
+                  </Button>
+                </dd>
+              )}
             </dl>
           ) : (
             <p className="text-sm text-muted">Not on disk yet.</p>

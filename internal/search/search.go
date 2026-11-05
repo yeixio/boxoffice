@@ -198,6 +198,9 @@ func (s *Service) Movie(ctx context.Context, id int64) (Results, error) {
 	if err != nil {
 		return Results{}, err
 	}
+	if err := s.Store.CheckUnlocked(ctx, "movie", m.ID); err != nil {
+		return Results{}, err
+	}
 	rs, notes, n, err := s.ask(ctx, func(ix store.Indexer) Query {
 		q := Query{Type: "movie", TMDBID: m.TMDBID, Cats: cats(ix, 2000, 2999, 2000)}
 		if m.IMDBID != "" {
@@ -250,6 +253,9 @@ func (s *Service) Episode(ctx context.Context, id int64) (Results, error) {
 	}
 	t, err := s.Store.Series(ctx, e.SeriesID)
 	if err != nil {
+		return Results{}, err
+	}
+	if err := s.Store.CheckUnlocked(ctx, "series", t.ID); err != nil {
 		return Results{}, err
 	}
 	rs, notes, n, err := s.ask(ctx, func(ix store.Indexer) Query {
@@ -478,6 +484,11 @@ func (s *Service) grab(ctx context.Context, c Candidate) (store.Download, error)
 	if c.Protocol != "usenet" {
 		return store.Download{}, errors.New("torrent downloads aren't supported yet")
 	}
+	if c.kind != "" && c.titleID != 0 {
+		if err := s.Store.CheckUnlocked(ctx, c.kind, c.titleID); err != nil {
+			return store.Download{}, err
+		}
+	}
 	ix, err := s.Store.Indexer(ctx, c.IndexerID)
 	if err != nil {
 		return store.Download{}, errors.New("the indexer that found it is gone")
@@ -575,7 +586,7 @@ func (s *Service) jobMovie(ctx context.Context, payload string) (jobs.Result, er
 		return jobs.Result{}, err
 	}
 	res, err := s.Movie(ctx, id)
-	if errors.Is(err, ErrNoIndexers) {
+	if errors.Is(err, ErrNoIndexers) || errors.Is(err, store.ErrLocked) {
 		return jobs.Skipped("%s", err.Error()), nil
 	}
 	if err != nil {
@@ -594,7 +605,7 @@ func (s *Service) jobEpisode(ctx context.Context, payload string) (jobs.Result, 
 		return jobs.Result{}, err
 	}
 	res, err := s.Episode(ctx, id)
-	if errors.Is(err, ErrNoIndexers) {
+	if errors.Is(err, ErrNoIndexers) || errors.Is(err, store.ErrLocked) {
 		return jobs.Skipped("%s", err.Error()), nil
 	}
 	if err != nil {
@@ -621,6 +632,9 @@ func (s *Service) jobSeries(ctx context.Context, payload string) (jobs.Result, e
 	p, err := s.profile(ctx, t.ProfileID)
 	if err != nil {
 		return jobs.Result{}, err
+	}
+	if p.Locked {
+		return jobs.Skipped("%s", store.ErrLocked.Error()), nil
 	}
 	eps, err := s.Store.Episodes(ctx, id)
 	if err != nil {

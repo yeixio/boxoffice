@@ -1,19 +1,21 @@
 import { useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
-import { Film, Plus } from 'lucide-react'
+import { CheckSquare, Film, Lock, Plus } from 'lucide-react'
 import { get, type Movie, type Quality } from '../api'
 import { bytes, day, runtime } from '../format'
-import { qualityName, useQualities } from '../hooks'
+import { qualityName, useProfiles, useQualities } from '../hooks'
 import { SortControl, sortList, useSort, words, type SortOption } from '../sort'
 import { Badge, Button, Empty, ErrorNote, Heading, Input, Poster, Spinner } from '../ui'
 import { AddTitle } from './AddTitle'
+import { BulkBar, Pickable, useSelection } from '../Bulk'
 
 const filters = {
-  all: { label: 'All', test: () => true },
-  missing: { label: 'Wanted', test: (m: Movie) => m.monitored && !m.file },
-  have: { label: 'Have', test: (m: Movie) => !!m.file },
-  unmonitored: { label: 'Not watched for', test: (m: Movie) => !m.monitored },
+  all: { label: 'All', test: (_m: Movie, _l: Set<number>) => true },
+  missing: { label: 'Wanted', test: (m: Movie, _l: Set<number>) => m.monitored && !m.file },
+  have: { label: 'Have', test: (m: Movie, _l: Set<number>) => !!m.file },
+  unmonitored: { label: 'Not watched for', test: (m: Movie, _l: Set<number>) => !m.monitored },
+  locked: { label: 'Do not touch', test: (m: Movie, locked: Set<number>) => locked.has(m.profileId) },
 } as const
 
 // released is when a movie came out to watch at home, or failing that in
@@ -49,16 +51,19 @@ const byTitle = (m: Movie) => m.sortTitle || m.title
 export function Movies() {
   const movies = useQuery({ queryKey: ['movies'], queryFn: () => get<Movie[]>('/movies') })
   const [adding, setAdding] = useState(false)
+  const sel = useSelection()
   const [filter, setFilter] = useState<keyof typeof filters>('all')
   const [text, setText] = useState('')
   const qualities = useQualities()
+  const profiles = useProfiles()
+  const locked = useMemo(() => new Set((profiles.data ?? []).filter((p) => p.locked).map((p) => p.id)), [profiles.data])
   const sorts = useMemo(() => movieSorts(qualities.data), [qualities.data])
   const sort = useSort('movies', sorts)
   const sorted = useMemo(() => sortList(movies.data ?? [], sort.option, sort.dir, byTitle), [movies.data, sort.option, sort.dir])
   const shown = useMemo(() => {
     const t = text.trim().toLowerCase()
-    return sorted.filter((m) => filters[filter].test(m) && (!t || m.title.toLowerCase().includes(t)))
-  }, [sorted, filter, text])
+    return sorted.filter((m) => filters[filter].test(m, locked) && (!t || m.title.toLowerCase().includes(t)))
+  }, [sorted, filter, text, locked])
   // Under each poster: the year, or what the list is sorted by.
   const fact = (m: Movie) => {
     switch (sort.option.key) {
@@ -86,9 +91,16 @@ export function Movies() {
         title="Movies"
         sub={movies.data ? `${movies.data.length} on the list, ${have} on disk` : undefined}
         actions={
-          <Button variant="primary" onClick={() => setAdding(true)}>
-            <Plus className="size-4" aria-hidden /> Add movie
-          </Button>
+          <>
+            {!sel.on && !!movies.data?.length && (
+              <Button onClick={sel.start}>
+                <CheckSquare className="size-4" aria-hidden /> Select
+              </Button>
+            )}
+            <Button variant="primary" onClick={() => setAdding(true)}>
+              <Plus className="size-4" aria-hidden /> Add movie
+            </Button>
+          </>
         }
       />
       {adding && <AddTitle kind="movie" onClose={() => setAdding(false)} />}
@@ -121,19 +133,43 @@ export function Movies() {
           </div>
           {shown.length === 0 && <p className="py-10 text-center text-sm text-muted">No movies match.</p>}
           <ul className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            {shown.map((m) => (
-              <li key={m.id}>
-                <Link to={`/movies/${m.id}`} className="group block">
+            {shown.map((m) => {
+              const tile = (
+                <>
                   <Poster src={m.poster} title={m.title} className="transition group-hover:ring-2 group-hover:ring-marquee" />
                   <div className="mt-2 truncate font-medium">{m.title}</div>
                   <div className="flex items-center gap-2 text-xs text-muted">
                     <span className="min-w-0 truncate">{fact(m)}</span>
-                    {m.file ? <Badge tone="ok">On disk</Badge> : m.monitored ? <Badge tone="gold">Wanted</Badge> : <Badge>Paused</Badge>}
+                    {locked.has(m.profileId) ? (
+                      <Badge>
+                        <Lock className="size-3" aria-label="Do not touch" />
+                      </Badge>
+                    ) : m.file ? (
+                      <Badge tone="ok">On disk</Badge>
+                    ) : m.monitored ? (
+                      <Badge tone="gold">Wanted</Badge>
+                    ) : (
+                      <Badge>Paused</Badge>
+                    )}
                   </div>
-                </Link>
-              </li>
-            ))}
+                </>
+              )
+              return (
+                <li key={m.id}>
+                  {sel.on ? (
+                    <Pickable sel={sel} id={m.id} title={m.title}>
+                      {tile}
+                    </Pickable>
+                  ) : (
+                    <Link to={`/movies/${m.id}`} className="group block">
+                      {tile}
+                    </Link>
+                  )}
+                </li>
+              )
+            })}
           </ul>
+          {sel.on && <BulkBar kind="movies" sel={sel} shown={shown.map((m) => m.id)} />}
         </>
       )}
     </>
