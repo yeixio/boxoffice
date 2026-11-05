@@ -30,3 +30,25 @@ func TestLoad(t *testing.T) {
 		t.Fatal("a one-minute refresh was accepted")
 	}
 }
+
+func TestTMDBKey(t *testing.T) {
+	defer func(k string) { DefaultTMDBKey = k }(DefaultTMDBKey)
+	none := func(string) string { return "" }
+	DefaultTMDBKey = ""
+	if c, _ := load(nil, none); c.TMDBKey != "" {
+		t.Fatalf("a build without a key has %q", c.TMDBKey)
+	}
+	DefaultTMDBKey = "built-in"
+	if c, _ := load(nil, none); c.TMDBKey != "built-in" {
+		t.Fatalf("the built-in key isn't used: %q", c.TMDBKey)
+	}
+	own := func(k string) string {
+		if k == "BOXOFFICE_TMDB_KEY" {
+			return "mine"
+		}
+		return ""
+	}
+	if c, _ := load(nil, own); c.TMDBKey != "mine" {
+		t.Fatalf("BOXOFFICE_TMDB_KEY doesn't win over the built-in key: %q", c.TMDBKey)
+	}
+}
