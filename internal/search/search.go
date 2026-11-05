@@ -496,6 +496,12 @@ func (s *Service) grab(ctx context.Context, c Candidate) (store.Download, error)
 	if err := s.grabAllowed(ctx, ix, isAuto(ctx)); err != nil {
 		return store.Download{}, err
 	}
+	upgrade := false
+	if isAuto(ctx) {
+		if upgrade, err = s.autoUpgradeAllowed(ctx, c); err != nil {
+			return store.Download{}, err
+		}
+	}
 	data, err := s.Client.FetchNZB(ctx, ix, c.Release)
 	if ctx.Err() == nil {
 		var ie *IndexerError
@@ -514,8 +520,61 @@ func (s *Service) grab(ctx context.Context, c Candidate) (store.Download, error)
 	}
 	q, _ := quality.ByID(c.Quality)
 	s.logger().Info("grabbing a release", "release", c.Title, "indexer", ix.Name, "quality", q.Name, "size", c.Size, "kind", c.kind, "title", c.titleID)
-	return s.Engine.Add(ctx, store.Download{Name: c.Title, Kind: c.kind, TitleID: c.titleID, EpisodeIDs: c.episodes, Quality: c.Quality,
+	d, err := s.Engine.Add(ctx, store.Download{Name: c.Title, Kind: c.kind, TitleID: c.titleID, EpisodeIDs: c.episodes, Quality: c.Quality,
 		Indexer: c.Indexer, Source: "search", Password: c.Password}, data)
+	if err == nil && upgrade {
+		if e := s.Store.CountAutoUpgrade(context.WithoutCancel(ctx)); e != nil {
+			s.logger().Warn("couldn't count an automatic upgrade", "release", c.Title, "err", e)
+		}
+	}
+	return d, err
+}
+
+// ErrUpgradeOff means Box Office won't grab an upgrade by itself: they're
+// off for the title, or this month's are used up.
+var ErrUpgradeOff = errors.New("automatic upgrades are off for it")
+
+// autoUpgradeAllowed says whether an automatic grab replaces copies on
+// disk (a movie with a file, or episodes that all have one), and refuses
+// one that does when the title's automatic upgrades are off or the
+// month's limit is reached.
+func (s *Service) autoUpgradeAllowed(ctx context.Context, c Candidate) (bool, error) {
+	pref := ""
+	switch {
+	case c.kind == "movie" && c.titleID != 0:
+		m, err := s.Store.Movie(ctx, c.titleID)
+		if err != nil || m.File == nil {
+			return false, nil
+		}
+		pref = m.AutoUpgrade
+	case c.kind == "series" && c.titleID != 0 && len(c.episodes) > 0:
+		for _, id := range c.episodes {
+			e, err := s.Store.Episode(ctx, id)
+			if err != nil || e.File == nil {
+				return false, nil
+			}
+		}
+		t, err := s.Store.Series(ctx, c.titleID)
+		if err != nil {
+			return false, nil
+		}
+		pref = t.AutoUpgrade
+	default:
+		return false, nil
+	}
+	a, err := LoadAutoSettings(ctx, s.Store)
+	if err != nil {
+		return true, err
+	}
+	if !a.upgradeOn(pref) {
+		return true, ErrUpgradeOff
+	}
+	if left, _, err := s.UpgradesLeft(ctx, a); err != nil {
+		return true, err
+	} else if left == 0 {
+		return true, fmt.Errorf("this month's %d automatic %s used up", a.UpgradesPerMonth, plural(a.UpgradesPerMonth, "upgrade is", "upgrades are"))
+	}
+	return true, nil
 }
 
 // ---- the jobs ----

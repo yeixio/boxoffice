@@ -69,6 +69,7 @@ export type Movie = {
   rating?: number
   monitored: boolean
   profileId: number
+  autoUpgrade?: '' | 'on' | 'off'
   rootFolder: string
   path: string
   addedAt: string
@@ -90,6 +91,7 @@ export type Series = {
   runtime?: number
   monitored: boolean
   profileId: number
+  autoUpgrade?: '' | 'on' | 'off'
   rootFolder: string
   path: string
   addedAt: string
@@ -146,9 +148,10 @@ export type Upcoming = {
 }
 
 export type AutoSearch = {
-  settings: { enabled: boolean; perDay: number; rss: boolean; rssMinutes: number; upgrades: boolean }
+  settings: { enabled: boolean; perDay: number; rss: boolean; rssMinutes: number; upgrades: boolean; upgradesPerMonth: number }
   missing: number
   upgrades: number
+  upgradesThisMonth: number
   paused?: string
   rssPaused?: string
   cap?: string

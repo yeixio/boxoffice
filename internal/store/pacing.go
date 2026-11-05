@@ -239,3 +239,18 @@ func (s *Store) DataUsage(ctx context.Context, since string) (map[int64]int64, e
 	}
 	return out, rows.Err()
 }
+
+// CountAutoUpgrade notes an upgrade Box Office grabbed by itself today.
+func (s *Store) CountAutoUpgrade(ctx context.Context) error {
+	_, err := s.exec(ctx, `INSERT INTO auto_upgrades (day, n) VALUES (?, 1)
+		ON CONFLICT (day) DO UPDATE SET n = auto_upgrades.n + 1`, DataDay(time.Now()))
+	return err
+}
+
+// AutoUpgradesSince is how many upgrades Box Office grabbed by itself from
+// a day on (inclusive).
+func (s *Store) AutoUpgradesSince(ctx context.Context, since string) (int, error) {
+	var n int
+	err := s.row(ctx, "SELECT CAST(COALESCE(SUM(n), 0) AS INTEGER) FROM auto_upgrades WHERE day >= ?", since).Scan(&n)
+	return n, err
+}

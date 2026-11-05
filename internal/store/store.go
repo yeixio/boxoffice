@@ -89,6 +89,8 @@ func (s *Store) migrate(ctx context.Context) error {
 	for _, c := range []struct{ table, column, def string }{
 		{"downloads", "quarantined", "TEXT NOT NULL DEFAULT ''"},
 		{"quality_profiles", "locked", "INTEGER NOT NULL DEFAULT 0"},
+		{"movies", "auto_upgrade", "TEXT NOT NULL DEFAULT ''"},
+		{"series", "auto_upgrade", "TEXT NOT NULL DEFAULT ''"},
 		{"movies", "rating", "DOUBLE PRECISION NOT NULL DEFAULT 0"},
 		{"series", "rating", "DOUBLE PRECISION NOT NULL DEFAULT 0"},
 		{"indexers", "daily_queries", "INTEGER NOT NULL DEFAULT 0"},

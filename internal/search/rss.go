@@ -155,7 +155,14 @@ func (s *Service) syncRSS(ctx context.Context) RSSResult {
 	if err != nil {
 		return RSSResult{Skipped: err.Error()}
 	}
-	got, problems, err := s.takeFromFeed(ctx, releases, c.Level == downloader.CapUpgrades || !a.Upgrades)
+	left, _, err := s.UpgradesLeft(ctx, a)
+	if err != nil {
+		return RSSResult{Skipped: err.Error()}
+	}
+	skip := func(w Wanted) bool {
+		return w.Upgrade && (c.Level == downloader.CapUpgrades || left == 0 || !a.upgradeOn(w.AutoUpgrade))
+	}
+	got, problems, err := s.takeFromFeed(ctx, releases, skip)
 	if err != nil {
 		res.Problems = append(res.Problems, err.Error())
 	}
@@ -207,7 +214,7 @@ func (s *Service) readFeed(ctx context.Context, ix store.Indexer, st store.Index
 
 // takeFromFeed matches releases to the wanted movies and episodes, and
 // grabs the best for each.
-func (s *Service) takeFromFeed(ctx context.Context, releases []Release, upgradesPaused bool) ([]string, []string, error) {
+func (s *Service) takeFromFeed(ctx context.Context, releases []Release, skip func(Wanted) bool) ([]string, []string, error) {
 	list, err := s.WantedList(ctx)
 	if err != nil {
 		return nil, nil, err
@@ -230,7 +237,7 @@ func (s *Service) takeFromFeed(ctx context.Context, releases []Release, upgrades
 	movies := map[int64]store.Movie{}
 	shows := map[int64]*showWant{}
 	for _, w := range list {
-		if w.Upgrade && upgradesPaused {
+		if skip(w) {
 			continue
 		}
 		switch w.Kind {

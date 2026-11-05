@@ -27,6 +27,7 @@ const (
 	SettingRSS        = "search_rss"          // "off" turns RSS sync off; on otherwise
 	SettingRSSMinutes = "search_rss_minutes"  // how often; DefaultRSSMinutes when unset
 	SettingUpgrades   = "search_upgrades"     // "on" lets the patrol and RSS sync grab upgrades; off otherwise
+	SettingUpgradeCap = "search_upgrades_per_month" // most automatic upgrades a month; no limit when unset
 )
 
 // RSS sync: every 15 minutes unless changed, and never more often than
@@ -64,6 +65,9 @@ type AutoSettings struct {
 	// titles are searched for either way, and upgrades can always be
 	// looked for by hand.
 	Upgrades bool `json:"upgrades"`
+	// UpgradesPerMonth caps the upgrades they grab in a calendar month,
+	// across all titles; 0 means no limit.
+	UpgradesPerMonth int `json:"upgradesPerMonth"`
 }
 
 // LoadAutoSettings reads the settings; automatic searches for missing
@@ -96,6 +100,12 @@ func LoadAutoSettings(ctx context.Context, st *store.Store) (AutoSettings, error
 		return a, err
 	}
 	a.Upgrades = v == "on"
+	if v, err = st.Setting(ctx, SettingUpgradeCap); err != nil {
+		return a, err
+	}
+	if n, err := strconv.Atoi(v); err == nil && n > 0 {
+		a.UpgradesPerMonth = n
+	}
 	return a, nil
 }
 
@@ -133,7 +143,43 @@ func SaveAutoSettings(ctx context.Context, st *store.Store, a AutoSettings) erro
 	if a.Upgrades {
 		up = "on"
 	}
-	return st.SetSetting(ctx, SettingUpgrades, up)
+	if err := st.SetSetting(ctx, SettingUpgrades, up); err != nil {
+		return err
+	}
+	most := ""
+	if a.UpgradesPerMonth > 0 {
+		most = strconv.Itoa(a.UpgradesPerMonth)
+	}
+	return st.SetSetting(ctx, SettingUpgradeCap, most)
+}
+
+// upgradeOn says whether Box Office looks for upgrades of a title by
+// itself: the title's own choice ("on" or "off"), or else Settings'.
+func (a AutoSettings) upgradeOn(title string) bool {
+	switch title {
+	case "on":
+		return true
+	case "off":
+		return false
+	}
+	return a.Upgrades
+}
+
+// monthStart is the first day of the calendar month, as store.DataDay
+// writes days.
+func monthStart(now time.Time) string {
+	now = now.Local()
+	return store.DataDay(time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, time.Local))
+}
+
+// UpgradesLeft is how many more upgrades Box Office may grab by itself
+// this month, and how many it has: left is -1 when there's no limit.
+func (s *Service) UpgradesLeft(ctx context.Context, a AutoSettings) (left, used int, err error) {
+	used, err = s.Store.AutoUpgradesSince(ctx, monthStart(time.Now()))
+	if err != nil || a.UpgradesPerMonth <= 0 {
+		return -1, used, err
+	}
+	return max(a.UpgradesPerMonth-used, 0), used, nil
 }
 
 // Wanted is a movie or an episode Box Office would search for by itself:
@@ -153,6 +199,9 @@ type Wanted struct {
 	// new go before ones missing for longer.
 	New    bool `json:"new,omitempty"`
 	Season int  `json:"season,omitempty"` // an episode's
+	// AutoUpgrade is the movie's or the show's own choice about automatic
+	// upgrades: "" to follow Settings, "on" or "off".
+	AutoUpgrade string `json:"autoUpgrade,omitempty"`
 }
 
 // newFor is how long a missing title counts as new.
@@ -204,7 +253,7 @@ func (s *Service) WantedList(ctx context.Context) ([]Wanted, error) {
 		if !m.Monitored || !ok || p.Locked {
 			continue
 		}
-		w := Wanted{Kind: "movie", ID: m.ID, Subject: movieSubject(m), Cutoff: p.Cutoff, Searched: searched[m.ID].At, Misses: searched[m.ID].Misses}
+		w := Wanted{Kind: "movie", ID: m.ID, Subject: movieSubject(m), Cutoff: p.Cutoff, Searched: searched[m.ID].At, Misses: searched[m.ID].Misses, AutoUpgrade: m.AutoUpgrade}
 		switch {
 		case m.File == nil:
 			if !released(m, now) {
@@ -244,7 +293,7 @@ func (s *Service) WantedList(ctx context.Context) ([]Wanted, error) {
 				continue
 			}
 			w := Wanted{Kind: "episode", ID: e.ID, SeriesID: t.ID, Subject: fmt.Sprintf("%s S%02dE%02d", t.Title, e.Season, e.Number),
-				Cutoff: p.Cutoff, Searched: searched[e.ID].At, Misses: searched[e.ID].Misses, Season: e.Season}
+				Cutoff: p.Cutoff, Searched: searched[e.ID].At, Misses: searched[e.ID].Misses, Season: e.Season, AutoUpgrade: t.AutoUpgrade}
 			switch {
 			case e.File == nil:
 				w.New = e.AirDate.After(now.Add(-newFor))
@@ -390,14 +439,25 @@ func (s *Service) jobWanted(ctx context.Context, _ string) (jobs.Result, error) 
 	}
 	now := time.Now()
 	upgradesPaused := c.Level == downloader.CapUpgrades
+	// Upgrades left this month: each search grabs at most one release.
+	left, _, err := s.UpgradesLeft(ctx, a)
+	if err != nil {
+		return jobs.Result{}, err
+	}
 	var due []Wanted
 	held := 0
 	for _, w := range list {
 		if !w.due(now) {
 			continue
 		}
-		if w.Upgrade && !a.Upgrades {
+		if w.Upgrade && !a.upgradeOn(w.AutoUpgrade) {
 			continue
+		}
+		if w.Upgrade && left >= 0 {
+			if left == 0 {
+				continue
+			}
+			left--
 		}
 		if w.Upgrade && upgradesPaused {
 			held++

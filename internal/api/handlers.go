@@ -377,6 +377,8 @@ type editInput struct {
 	ProfileID  *int    `json:"profileId"`
 	RootFolder *string `json:"rootFolder"`
 	Path       *string `json:"path"`
+	// "" to follow Settings, or "on" or "off" for this title.
+	AutoUpgrade *string `json:"autoUpgrade"`
 }
 
 func (s *Server) checkEdit(r *http.Request, in editInput, kind string) error {
@@ -384,6 +386,9 @@ func (s *Server) checkEdit(r *http.Request, in editInput, kind string) error {
 		if _, err := s.Store.Profile(r.Context(), *in.ProfileID); err != nil {
 			return errorf(http.StatusBadRequest, "there's no such quality profile")
 		}
+	}
+	if in.AutoUpgrade != nil && *in.AutoUpgrade != "" && *in.AutoUpgrade != "on" && *in.AutoUpgrade != "off" {
+		return errorf(http.StatusBadRequest, `automatic upgrades are "on", "off", or "" to follow Settings`)
 	}
 	if in.Path != nil && !filepath.IsAbs(*in.Path) {
 		return errorf(http.StatusBadRequest, "give the folder's full path")
@@ -428,6 +433,9 @@ func (s *Server) editMovie(w http.ResponseWriter, r *http.Request) error {
 	}
 	if in.Path != nil {
 		m.Path = filepath.Clean(*in.Path)
+	}
+	if in.AutoUpgrade != nil {
+		m.AutoUpgrade = *in.AutoUpgrade
 	}
 	if err := s.Store.UpdateMovie(r.Context(), m); err != nil {
 		return err
@@ -566,6 +574,9 @@ func (s *Server) editSeries(w http.ResponseWriter, r *http.Request) error {
 	}
 	if in.Path != nil {
 		t.Path = filepath.Clean(*in.Path)
+	}
+	if in.AutoUpgrade != nil {
+		t.AutoUpgrade = *in.AutoUpgrade
 	}
 	if err := s.Store.UpdateSeries(r.Context(), t); err != nil {
 		return err

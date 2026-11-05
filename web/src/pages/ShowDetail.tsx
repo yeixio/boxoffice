@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ArrowUpCircle, ChevronDown, ListChecks, RefreshCw, Search, Trash2 } from 'lucide-react'
+import { AutoUpgradeField } from '../AutoUpgrade'
 import { LockedNote } from '../Bulk'
 import { Releases } from '../Releases'
 import { DeleteFiles, RemoveTitle } from '../RemoveFiles'
@@ -25,7 +26,7 @@ export function ShowDetail() {
     qc.setQueryData(key, d)
     qc.invalidateQueries({ queryKey: ['series'] })
   }
-  const edit = useMutation({ mutationFn: (body: Partial<Pick<Series, 'monitored' | 'profileId'>>) => patch<Detail>(`/series/${id}`, body), onSuccess: set })
+  const edit = useMutation({ mutationFn: (body: Partial<Pick<Series, 'monitored' | 'profileId' | 'autoUpgrade'>>) => patch<Detail>(`/series/${id}`, body), onSuccess: set })
   const season = useMutation({ mutationFn: ({ n, monitored }: { n: number; monitored: boolean }) => patch<Detail>(`/series/${id}/seasons/${n}`, { monitored }), onSuccess: set })
   const action = useMutation({
     mutationFn: (what: 'search' | 'refresh') => post(`/series/${id}/${what}`),
@@ -91,6 +92,7 @@ export function ShowDetail() {
           <Field label="Quality profile">
             {(fid) => <Select id={fid} value={s.profileId} onChange={(v) => edit.mutate({ profileId: Number(v) })} options={(profiles.data ?? []).map((p) => ({ value: p.id, label: p.name }))} />}
           </Field>
+          {!locked && <AutoUpgradeField value={s.autoUpgrade} onChange={(v) => edit.mutate({ autoUpgrade: v as Series['autoUpgrade'] })} upgradeOK={!!profiles.data?.find((p) => p.id === s.profileId)?.upgrade} />}
         </div>
         <div className="mt-3 text-sm">
           <span className="text-muted">Folder </span>
