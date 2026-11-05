@@ -26,6 +26,7 @@ const (
 	SettingAutoPerDay = "search_auto_per_day" // searches a day; DefaultPerDay when unset
 	SettingRSS        = "search_rss"          // "off" turns RSS sync off; on otherwise
 	SettingRSSMinutes = "search_rss_minutes"  // how often; DefaultRSSMinutes when unset
+	SettingUpgrades   = "search_upgrades"     // "on" lets the patrol and RSS sync grab upgrades; off otherwise
 )
 
 // RSS sync: every 15 minutes unless changed, and never more often than
@@ -58,10 +59,16 @@ type AutoSettings struct {
 	// wanted.
 	RSS        bool `json:"rss"`
 	RSSMinutes int  `json:"rssMinutes"`
+	// Upgrades lets the patrol and RSS sync look for better copies of
+	// files below their profile's cutoff. Off unless turned on; missing
+	// titles are searched for either way, and upgrades can always be
+	// looked for by hand.
+	Upgrades bool `json:"upgrades"`
 }
 
-// LoadAutoSettings reads the settings; automatic searches are on, at
-// DefaultPerDay, until changed. They only run while downloading is on.
+// LoadAutoSettings reads the settings; automatic searches for missing
+// titles are on, at DefaultPerDay, and automatic upgrades off, until
+// changed. They only run while downloading is on.
 func LoadAutoSettings(ctx context.Context, st *store.Store) (AutoSettings, error) {
 	v, err := st.Setting(ctx, SettingAuto)
 	if err != nil {
@@ -85,6 +92,10 @@ func LoadAutoSettings(ctx context.Context, st *store.Store) (AutoSettings, error
 	if m, err := strconv.Atoi(v); err == nil && m > 0 {
 		a.RSSMinutes = min(max(m, MinRSSMinutes), MaxRSSMinutes)
 	}
+	if v, err = st.Setting(ctx, SettingUpgrades); err != nil {
+		return a, err
+	}
+	a.Upgrades = v == "on"
 	return a, nil
 }
 
@@ -115,7 +126,14 @@ func SaveAutoSettings(ctx context.Context, st *store.Store, a AutoSettings) erro
 	if a.RSSMinutes > 0 && a.RSSMinutes != DefaultRSSMinutes {
 		mins = strconv.Itoa(min(max(a.RSSMinutes, MinRSSMinutes), MaxRSSMinutes))
 	}
-	return st.SetSetting(ctx, SettingRSSMinutes, mins)
+	if err := st.SetSetting(ctx, SettingRSSMinutes, mins); err != nil {
+		return err
+	}
+	up := ""
+	if a.Upgrades {
+		up = "on"
+	}
+	return st.SetSetting(ctx, SettingUpgrades, up)
 }
 
 // Wanted is a movie or an episode Box Office would search for by itself:
@@ -376,6 +394,9 @@ func (s *Service) jobWanted(ctx context.Context, _ string) (jobs.Result, error) 
 	held := 0
 	for _, w := range list {
 		if !w.due(now) {
+			continue
+		}
+		if w.Upgrade && !a.Upgrades {
 			continue
 		}
 		if w.Upgrade && upgradesPaused {

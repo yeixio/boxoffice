@@ -252,12 +252,13 @@ export function AutoSearchSettings() {
       </h2>
       <p className="mb-4 text-sm text-muted">
         Box Office finds what's wanted two ways. RSS sync reads each indexer's list of new releases every few minutes, which catches new episodes and movies as they're posted. The library patrol
-        searches every hour for a few monitored titles that have no copy yet (new ones first, then ones missing longer), then for ones below the quality profile's good-enough quality. A better copy
-        replaces the old one, which is set aside in the library's .recycle folder (see Recycle folders above to free that space).
+        searches every hour for a few monitored titles that have no copy yet (new ones first, then ones missing longer). With Automatic upgrades on, both also look for better copies of files below
+        the quality profile's good-enough quality. A better copy replaces the old one, which is set aside in the library's .recycle folder (see Recycle folders above to free that space).
       </p>
       <div className="flex flex-col gap-4">
         <p className="text-sm">
-          Wanted now: {count(a.data.missing, 'missing title', 'missing titles')}, {count(a.data.upgrades, 'upgrade', 'upgrades')}.
+          Wanted now: {count(a.data.missing, 'missing title', 'missing titles')}, {count(a.data.upgrades, 'upgrade', 'upgrades')}
+          {!s.upgrades && a.data.upgrades > 0 && ' (looked for only when you ask, from a title\'s page)'}.
         </p>
         {a.data.cap && <p className="text-sm text-gold">{a.data.cap}.</p>}
         <Toggle
@@ -301,6 +302,20 @@ export function AutoSearchSettings() {
               <span className="block text-xs text-muted">
                 Only while Download releases is on. Each title waits a day before it's searched again, and longer (up to 30 days) while searches keep finding nothing. A season with 3 or more
                 episodes wanted is searched as one, which can bring a season pack.
+              </span>
+            </>
+          }
+        />
+        <Toggle
+          checked={s.upgrades}
+          onChange={(v) => save.mutate({ upgrades: v })}
+          disabled={save.isPending}
+          label={
+            <>
+              Automatic upgrades
+              <span className="block text-xs text-muted">
+                Off by default. When on, RSS sync and the patrol also grab better copies of files below their profile's good-enough quality, for profiles with upgrades on. You can always look for an
+                upgrade yourself from a title's page.
               </span>
             </>
           }
