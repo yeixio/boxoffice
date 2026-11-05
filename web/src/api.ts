@@ -44,7 +44,7 @@ export type User = { id: number; username: string }
 export type Status = { setup: boolean; version: string; user?: User; movedIn?: boolean }
 
 export type Quality = { id: number; name: string; source: string; resolution: number }
-export type Profile = { id: number; name: string; allowed: number[]; cutoff: number; upgrade: boolean }
+export type Profile = { id: number; name: string; allowed: number[]; cutoff: number; upgrade: boolean; locked?: boolean }
 export type RootFolder = { id: number; kind: RootKind; path: string; freeSpace: number; accessible: boolean }
 
 export type MediaFile = { id: number; path: string; size: number; quality: number; addedAt: string }

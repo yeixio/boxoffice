@@ -64,6 +64,17 @@ type Profile struct {
 	Allowed   []int  `json:"allowed"` // quality IDs
 	Cutoff    int    `json:"cutoff"`  // a quality ID in Allowed
 	UpgradeOK bool   `json:"upgrade"` // keep looking for better copies until the cutoff
+	// Locked is the Do not touch profile: Box Office never searches for,
+	// grabs, replaces, moves or deletes the files of a title on it.
+	Locked bool `json:"locked"`
+}
+
+// DoNotTouchName is the name of the Do not touch profile.
+const DoNotTouchName = "Do not touch"
+
+// DoNotTouch is the profile for media Box Office must leave as it is.
+func DoNotTouch() Profile {
+	return Profile{Name: DoNotTouchName, Allowed: ids(0, 17), Cutoff: 0, Locked: true}
 }
 
 // Check says what's wrong with a profile, if anything.
@@ -85,8 +96,9 @@ func (p Profile) Check() error {
 	return nil
 }
 
-// Accepts says whether a copy of quality q is one the profile takes.
-func (p Profile) Accepts(q int) bool { return slices.Contains(p.Allowed, q) }
+// Accepts says whether a copy of quality q is one the profile takes. Do
+// not touch takes none.
+func (p Profile) Accepts(q int) bool { return !p.Locked && slices.Contains(p.Allowed, q) }
 
 // Wants says whether a title whose best copy has quality have (or no copy,
 // when has is false) still wants a copy of quality q.
@@ -106,7 +118,7 @@ func (p Profile) Wants(has bool, have, q int) bool {
 // CutoffUnmet says whether a copy of quality have is one the profile
 // still looks to upgrade: upgrades are on and it's below the cutoff.
 func (p Profile) CutoffUnmet(have int) bool {
-	return p.UpgradeOK && Rank(have) < Rank(p.Cutoff)
+	return !p.Locked && p.UpgradeOK && Rank(have) < Rank(p.Cutoff)
 }
 
 // Defaults are the profiles a new server starts with.
