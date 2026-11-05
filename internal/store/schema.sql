@@ -321,3 +321,35 @@ CREATE TABLE IF NOT EXISTS data_usage (
 	bytes     BIGINT NOT NULL DEFAULT 0,
 	PRIMARY KEY (day, server_id)
 );
+
+-- Music, once it's turned on in Settings: artists from MusicBrainz and
+-- their albums (MusicBrainz release groups).
+CREATE TABLE IF NOT EXISTS artists (
+	id             INTEGER PRIMARY KEY AUTOINCREMENT,
+	mbid           TEXT NOT NULL UNIQUE,
+	name           TEXT NOT NULL,
+	sort_name      TEXT NOT NULL,
+	type           TEXT NOT NULL DEFAULT '',
+	country        TEXT NOT NULL DEFAULT '',
+	disambiguation TEXT NOT NULL DEFAULT '',
+	monitored      INTEGER NOT NULL DEFAULT 1,
+	-- Which kinds of album new ones are watched for: JSON list such as
+	-- ["Album"], ["Album","EP"]; "Album" means studio albums only.
+	album_types    TEXT NOT NULL DEFAULT '["Album"]',
+	root_folder    TEXT NOT NULL,
+	path           TEXT NOT NULL,
+	added_at       BIGINT NOT NULL,
+	refreshed_at   BIGINT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS albums (
+	id              INTEGER PRIMARY KEY AUTOINCREMENT,
+	artist_id       BIGINT NOT NULL REFERENCES artists(id) ON DELETE CASCADE,
+	mbid            TEXT NOT NULL UNIQUE,
+	title           TEXT NOT NULL,
+	type            TEXT NOT NULL DEFAULT '',
+	secondary_types TEXT NOT NULL DEFAULT '[]', -- JSON list
+	released        TEXT NOT NULL DEFAULT '',   -- YYYY, YYYY-MM or YYYY-MM-DD
+	monitored       INTEGER NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS albums_artist ON albums (artist_id);

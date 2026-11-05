@@ -1,8 +1,8 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { NavLink, Navigate, Route, Routes, useLocation } from 'react-router-dom'
-import { CalendarDays, Clapperboard, DatabaseBackup, Download as DownloadIcon, Film, HeartPulse, History, LogOut, Menu, Settings as Cog, Truck, Tv, X } from 'lucide-react'
-import { get, post, type Status } from './api'
+import { CalendarDays, Clapperboard, DatabaseBackup, Download as DownloadIcon, Film, HeartPulse, History, LogOut, Menu, Music as MusicIcon, Settings as Cog, Truck, Tv, X } from 'lucide-react'
+import { get, post, type Settings as SettingsData, type Status } from './api'
 import { Spinner } from './ui'
 import { Tray } from './Tray'
 import { SignIn } from './pages/SignIn'
@@ -10,6 +10,8 @@ import { Movies } from './pages/Movies'
 import { MovieDetail } from './pages/MovieDetail'
 import { Shows } from './pages/Shows'
 import { ShowDetail } from './pages/ShowDetail'
+import { Music } from './pages/Music'
+import { ArtistDetail } from './pages/ArtistDetail'
 import { Calendar } from './pages/Calendar'
 import { Activity } from './pages/Activity'
 import { Downloads, speed, useDownloads } from './pages/Downloads'
@@ -31,6 +33,7 @@ export function App() {
 const allNav = [
   { to: '/movies', label: 'Movies', icon: Film },
   { to: '/shows', label: 'Shows', icon: Tv },
+  { to: '/music', label: 'Music', icon: MusicIcon },
   { to: '/calendar', label: 'Coming up', icon: CalendarDays },
   { to: '/downloads', label: 'Downloads', icon: DownloadIcon },
   { to: '/activity', label: 'Activity', icon: History },
@@ -42,7 +45,10 @@ const allNav = [
 
 function Shell({ status }: { status: Status }) {
   const qc = useQueryClient()
-  const nav = allNav.filter((n) => n.to !== '/import' || !status.movedIn)
+  // Music shows only once it's turned on in Settings.
+  const settings = useQuery({ queryKey: ['settings'], queryFn: () => get<SettingsData>('/settings') })
+  const on = (key: string) => !!settings.data?.mediaTypes.find((t) => t.key === key)?.enabled
+  const nav = allNav.filter((n) => (n.to !== '/import' || !status.movedIn) && (n.to !== '/music' || on('music')))
   // Health shows how many problems need fixing.
   const problems = needsAttention(useHealth().data)
   // Downloads shows the speed while something's downloading.
@@ -84,7 +90,7 @@ function Shell({ status }: { status: Status }) {
                   `flex shrink-0 items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm font-medium transition ${isActive ? 'bg-ink text-paper' : 'text-muted hover:text-ink'}`
                 }
               >
-                <Icon className="size-4" aria-hidden />
+                <Icon className="hidden size-4 2xl:block" aria-hidden />
                 {label}
                 {badge(to)}
               </NavLink>
@@ -131,6 +137,8 @@ function Shell({ status }: { status: Status }) {
           <Route path="/movies/:id" element={<MovieDetail />} />
           <Route path="/shows" element={<Shows />} />
           <Route path="/shows/:id" element={<ShowDetail />} />
+          <Route path="/music" element={<Music />} />
+          <Route path="/music/:id" element={<ArtistDetail />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/downloads" element={<Downloads />} />
           <Route path="/activity" element={<Activity />} />

@@ -28,6 +28,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/catalog"
 	"github.com/yeixio/boxoffice/internal/downloader"
 	"github.com/yeixio/boxoffice/internal/migrate"
+	"github.com/yeixio/boxoffice/internal/music"
 	"github.com/yeixio/boxoffice/internal/search"
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/tmdb"
@@ -43,8 +44,10 @@ const (
 
 // Server is the whole HTTP side of Box Office.
 type Server struct {
-	Store    *store.Store
-	Catalog  *catalog.Service
+	Store   *store.Store
+	Catalog *catalog.Service
+	// Music is the music list, used while music is turned on.
+	Music    *music.Service
 	Backups  *backup.Manager
 	Migrator *migrate.Migrator
 	// Downloads is the downloader, and Search finds releases for it.
@@ -63,8 +66,9 @@ type Server struct {
 	// monitor.go); nil makes one with no log lines.
 	Monitoring *Monitoring
 
-	started  time.Time
-	failures sync.Map // username -> *failure
+	started     time.Time
+	failures    sync.Map // username -> *failure
+	healthCount healthCount
 }
 
 type failure struct {
@@ -122,6 +126,16 @@ func (s *Server) Handler() http.Handler {
 		{"DELETE /api/v1/rootfolders/{id}", true, s.deleteRootFolder},
 		{"GET /api/v1/fs", true, s.browse},
 
+		{"GET /api/v1/lookup/artists", true, s.lookupArtists},
+		{"GET /api/v1/artists", true, s.artists},
+		{"POST /api/v1/artists", true, s.addArtist},
+		{"GET /api/v1/artists/albumtypes", true, s.albumTypes},
+		{"GET /api/v1/artists/{id}", true, s.artist},
+		{"PATCH /api/v1/artists/{id}", true, s.editArtist},
+		{"DELETE /api/v1/artists/{id}", true, s.deleteArtist},
+		{"POST /api/v1/artists/{id}/refresh", true, s.refreshArtist},
+		{"PATCH /api/v1/albums/{id}", true, s.editAlbum},
+
 		{"GET /api/v1/lookup/movies", true, s.lookupMovies},
 		{"GET /api/v1/lookup/series", true, s.lookupSeries},
 		{"GET /api/v1/movies", true, s.movies},
@@ -169,6 +183,7 @@ func (s *Server) Handler() http.Handler {
 
 		{"POST /api/v1/migrations/preview", true, s.previewMigration},
 		{"GET /api/v1/health", true, s.health},
+		{"GET /api/v1/stats", true, s.getStats},
 		{"GET /api/v1/migrations/find", true, s.findApp},
 		{"PUT /api/v1/migrations/done", true, s.setMovedIn(true)},
 		{"DELETE /api/v1/migrations/done", true, s.setMovedIn(false)},
@@ -559,4 +574,6 @@ func (s *Server) changePassword(w http.ResponseWriter, r *http.Request) error {
 }
 
 // imageSources are where posters and backdrops are shown from.
-const imageSources = "https://image.tmdb.org https://artworks.thetvdb.com https://thetvdb.com https://assets.fanart.tv"
+// Album covers come from the Cover Art Archive, which sends browsers on to
+// archive.org.
+const imageSources = "https://image.tmdb.org https://artworks.thetvdb.com https://thetvdb.com https://assets.fanart.tv https://coverartarchive.org https://archive.org https://*.archive.org"

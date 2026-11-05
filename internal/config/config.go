@@ -24,6 +24,10 @@ type Config struct {
 	LogFormat   string        // text or json; BOXOFFICE_LOG_FORMAT
 	Debug       bool          // BOXOFFICE_DEBUG
 	Refresh     time.Duration // how often titles are refreshed from TMDB; BOXOFFICE_REFRESH_EVERY
+	// MusicBrainz is a MusicBrainz mirror's web service, such as
+	// http://musicbrainz.local:5000/ws/2, in place of musicbrainz.org;
+	// BOXOFFICE_MUSICBRAINZ_URL.
+	MusicBrainz string
 	// Announce tells the home network Box Office is here, so Matinee can
 	// find it; BOXOFFICE_ANNOUNCE=false turns it off.
 	Announce bool
@@ -46,6 +50,7 @@ func load(args []string, env func(string) string) (Config, error) {
 		Debug:       env("BOXOFFICE_DEBUG") != "",
 		Announce:    !off(env("BOXOFFICE_ANNOUNCE")),
 		Refresh:     12 * time.Hour,
+		MusicBrainz: strings.TrimRight(env("BOXOFFICE_MUSICBRAINZ_URL"), "/"),
 	}
 	if v := env("BOXOFFICE_REFRESH_EVERY"); v != "" {
 		d, err := time.ParseDuration(v)

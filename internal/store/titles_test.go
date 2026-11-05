@@ -23,7 +23,10 @@ func TestSeriesSortFacts(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	day := func(d int) *time.Time { at := time.Now().UTC().Truncate(time.Second).AddDate(0, 0, d); return &at }
+	// One clock reading for the whole test: reading it again for the
+	// checks fails whenever a second ticks over in between.
+	today := time.Now().UTC().Truncate(time.Second)
+	day := func(d int) *time.Time { at := today.AddDate(0, 0, d); return &at }
 	for _, e := range []store.Episode{
 		{SeriesID: show.ID, Season: 0, Number: 1, AirDate: day(-1), Monitored: true},
 		{SeriesID: show.ID, Season: 1, Number: 1, AirDate: day(-14), Monitored: true},
