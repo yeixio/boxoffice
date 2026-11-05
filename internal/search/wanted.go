@@ -22,11 +22,11 @@ const JobSearchWanted = "search-wanted"
 
 // Settings keys.
 const (
-	SettingAuto       = "search_auto"         // "off" turns automatic searches off; on otherwise
-	SettingAutoPerDay = "search_auto_per_day" // searches a day; DefaultPerDay when unset
-	SettingRSS        = "search_rss"          // "off" turns RSS sync off; on otherwise
-	SettingRSSMinutes = "search_rss_minutes"  // how often; DefaultRSSMinutes when unset
-	SettingUpgrades   = "search_upgrades"     // "on" lets the patrol and RSS sync grab upgrades; off otherwise
+	SettingAuto       = "search_auto"               // "off" turns automatic searches off; on otherwise
+	SettingAutoPerDay = "search_auto_per_day"       // searches a day; DefaultPerDay when unset
+	SettingRSS        = "search_rss"                // "off" turns RSS sync off; on otherwise
+	SettingRSSMinutes = "search_rss_minutes"        // how often; DefaultRSSMinutes when unset
+	SettingUpgrades   = "search_upgrades"           // "on" lets the patrol and RSS sync grab upgrades; off otherwise
 	SettingUpgradeCap = "search_upgrades_per_month" // most automatic upgrades a month; no limit when unset
 )
 
