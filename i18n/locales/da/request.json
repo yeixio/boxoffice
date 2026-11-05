@@ -1,0 +1,140 @@
+{
+  "problems": {
+    "wont_play": "Den vil ikke afspilles",
+    "wrong_title": "Det er den forkerte film eller det forkerte afsnit",
+    "picture": "Billedet er dårligt",
+    "sound": "Lyden er forkert eller ude af synk",
+    "subtitles": "Undertekster mangler eller er forkerte",
+    "other": "Noget andet"
+  },
+  "state": {
+    "pending": "Venter på godkendelse",
+    "declined": "Afvist",
+    "searching": "Godkendt, leder efter den",
+    "downloadingAt": "Downloader, {{percent}}",
+    "downloading": "Downloader",
+    "partial": "Nogle afsnit er klar",
+    "available": "Klar til at se",
+    "paused": "Godkendt, sat i bero",
+    "removed": "Fjernet fra biblioteket"
+  },
+  "site": {
+    "down": "Dette websted svarer ikke: {{error}}",
+    "closed": "Denne ønskeside er ikke åben lige nu."
+  },
+  "signIn": {
+    "matinee": "Matinee-konto",
+    "local": "Konto her",
+    "with": "Log ind med",
+    "matineeHint": "Brug det brugernavn og den adgangskode, du ser med i Matinee.",
+    "signUpHint": "Opret en konto for at ønske film og serier.",
+    "username": "Brugernavn",
+    "name": "Dit navn",
+    "nameHint": "Det, administratorerne ser. Lad stå tomt for at bruge dit brugernavn.",
+    "password": "Adgangskode",
+    "passwordHint": "Mindst 8 tegn.",
+    "make": "Opret min konto",
+    "signIn": "Log ind",
+    "haveAccount": "Jeg har en konto",
+    "new": "Ny her? Opret en konto"
+  },
+  "nav": {
+    "discover": "Udforsk",
+    "requests": "Mine ønsker",
+    "problems": "Problemer",
+    "sections": "Afsnit",
+    "account": "Din konto"
+  },
+  "home": {
+    "hi": "Hej {{name}}",
+    "welcome": "Find en film eller serie, og ønsk den. Du kan følge den under Mine ønsker.",
+    "find": "Find en film eller serie",
+    "seeAll": "Se alle",
+    "nothing": "Intet at vise endnu",
+    "notSetUp": "Administratoren er ikke færdig med at sætte dette websted op. Prøv igen senere.",
+    "movieGenres": "Filmgenrer",
+    "showGenres": "Seriegenrer"
+  },
+  "search": {
+    "nothing": "Intet med det navn.",
+    "movies": "Film",
+    "shows": "Serier",
+    "looking": "Leder…"
+  },
+  "row": {
+    "more": "Vis mere"
+  },
+  "pill": {
+    "ready": "Klar til at se",
+    "some": "Nogle afsnit",
+    "coming": "På vej",
+    "asked": "Anmodet",
+    "declined": "Afvist"
+  },
+  "kind": {
+    "movie": "Film",
+    "show": "Vis"
+  },
+  "card": {
+    "request": "Ønsk {{title}}"
+  },
+  "sheet": {
+    "out": "Udkommer {{date}}",
+    "starts": "Starter {{date}}",
+    "released": "Udgivet {{date}}",
+    "firstAired": "Først sendt {{date}}",
+    "ready": "Den er i biblioteket. God fornøjelse!",
+    "some": "Noget af den er i biblioteket, og resten er på vej.",
+    "report": "Rapportér et problem",
+    "coming": "Den er på vej. Intet at ønske: den er i biblioteket, så snart den er fundet.",
+    "asked": "Du ønskede dette. Det venter på, at en administrator godkender det.",
+    "takeBack": "Træk tilbage",
+    "declined": "En administrator afviste dette. Du kan ønske igen.",
+    "declinedWhy": "En administrator afviste dette: \"{{reply}}\" Du kan ønske igen.",
+    "note": "Note til administratorerne",
+    "noteHint": "Valgfrit, f.eks. hvilken version du er ude efter.",
+    "askMovie": "Ønsk denne film",
+    "askShow": "Ønsk denne serie"
+  },
+  "report": {
+    "thanks": "Tak. Administratorerne kigger på det, og du kan følge det under Problemer.",
+    "done": "Færdig",
+    "title": "Hvad er galt?",
+    "problem": "Problem",
+    "season": "Sæson",
+    "seasonHint": "Lad stå tomt, hvis det gælder hele serien.",
+    "episode": "Afsnit",
+    "more": "Fortæl mere",
+    "say": "Sig, hvad der skete.",
+    "optional": "Valgfrit.",
+    "send": "Send rapporten"
+  },
+  "mine": {
+    "title": "Mine ønsker",
+    "none": "Intet ønsket endnu",
+    "empty": "Find en film eller serie på <link>Udforsk</link>, og tryk på <strong>+</strong> for at ønske den.",
+    "admin": "Administrator: \"{{reply}}\"",
+    "asked": "Ønsket {{date}}",
+    "takeBack": "Træk tilbage"
+  },
+  "issues": {
+    "title": "Problemer",
+    "sub": "Noget galt med en film eller serie? Åbn den på Udforsk, eller find den ved navn, og vælg Rapportér et problem.",
+    "none": "Ingen rapporterede problemer",
+    "season": "Sæson {{season}}",
+    "episode": "Sæson {{season}}, afsnit {{episode}}",
+    "waiting": "Venter på en administrator",
+    "fixed": "Rettet"
+  },
+  "account": {
+    "title": "Din konto",
+    "signedIn": "Logget ind som <strong>{{name}}</strong>.",
+    "signedInMatinee": "Logget ind som <strong>{{name}}</strong> med din Matinee-konto.",
+    "change": "Skift din adgangskode",
+    "current": "Nuværende adgangskode",
+    "new": "Ny adgangskode",
+    "changed": "Ændret. Du er logget ud alle andre steder.",
+    "changeButton": "Skift adgangskode",
+    "signOut": "Log ud"
+  }
+}

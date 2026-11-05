@@ -1,0 +1,140 @@
+{
+  "problems": {
+    "wont_play": "Nejde přehrát",
+    "wrong_title": "Je to špatný film nebo díl",
+    "picture": "Obraz je špatný",
+    "sound": "Zvuk je špatně nebo nesedí",
+    "subtitles": "Titulky chybí nebo jsou špatně",
+    "other": "Něco jiného"
+  },
+  "state": {
+    "pending": "Čeká na schválení",
+    "declined": "Odmítnuto",
+    "searching": "Schváleno, hledá se",
+    "downloadingAt": "Stahuje se, {{percent}}",
+    "downloading": "Stahování",
+    "partial": "Některé díly jsou připravené",
+    "available": "Připraveno ke zhlédnutí",
+    "paused": "Schváleno, pozdrženo",
+    "removed": "Odebráno z knihovny"
+  },
+  "site": {
+    "down": "Tato stránka neodpovídá: {{error}}",
+    "closed": "Tato stránka žádostí teď není otevřená."
+  },
+  "signIn": {
+    "matinee": "Účet Matinee",
+    "local": "Účet zde",
+    "with": "Přihlásit se přes",
+    "matineeHint": "Použijte uživatelské jméno a heslo, se kterými sledujete v Matinee.",
+    "signUpHint": "Vytvořte si účet a žádejte o filmy a seriály.",
+    "username": "Uživatelské jméno",
+    "name": "Vaše jméno",
+    "nameHint": "To, co vidí správci. Nechte prázdné, chcete-li použít uživatelské jméno.",
+    "password": "Heslo",
+    "passwordHint": "Alespoň 8 znaků.",
+    "make": "Vytvořit účet",
+    "signIn": "Přihlásit se",
+    "haveAccount": "Mám účet",
+    "new": "Jste tu poprvé? Vytvořte si účet"
+  },
+  "nav": {
+    "discover": "Objevovat",
+    "requests": "Moje žádosti",
+    "problems": "Problémy",
+    "sections": "Sekce",
+    "account": "Tvůj účet"
+  },
+  "home": {
+    "hi": "Ahoj, {{name}}",
+    "welcome": "Najděte film nebo seriál a požádejte o něj. Sledovat ho můžete v sekci Moje žádosti.",
+    "find": "Najít film nebo seriál",
+    "seeAll": "Zobrazit vše",
+    "nothing": "Zatím není co ukázat",
+    "notSetUp": "Správce ještě nedokončil nastavení této stránky. Zkuste to později.",
+    "movieGenres": "Filmové žánry",
+    "showGenres": "Seriálové žánry"
+  },
+  "search": {
+    "nothing": "Nic s tímto názvem.",
+    "movies": "Filmy",
+    "shows": "Seriály",
+    "looking": "Hledání…"
+  },
+  "row": {
+    "more": "Zobrazit více"
+  },
+  "pill": {
+    "ready": "Připraveno ke zhlédnutí",
+    "some": "Některé díly",
+    "coming": "Na cestě",
+    "asked": "Vyžádáno",
+    "declined": "Odmítnuto"
+  },
+  "kind": {
+    "movie": "Film",
+    "show": "Zobrazit"
+  },
+  "card": {
+    "request": "Požádat o {{title}}"
+  },
+  "sheet": {
+    "out": "Vychází {{date}}",
+    "starts": "Začíná {{date}}",
+    "released": "Vydáno {{date}}",
+    "firstAired": "Poprvé vysíláno {{date}}",
+    "ready": "Je v knihovně. Příjemnou zábavu!",
+    "some": "Část je v knihovně a zbytek je na cestě.",
+    "report": "Nahlásit problém",
+    "coming": "Je na cestě. Není o co žádat: bude v knihovně, jakmile se najde.",
+    "asked": "Požádali jste o to. Čeká na schválení správcem.",
+    "takeBack": "Vzít zpět",
+    "declined": "Správce to odmítl. Můžete požádat znovu.",
+    "declinedWhy": "Správce to odmítl: „{{reply}}“ Můžete požádat znovu.",
+    "note": "Poznámka pro správce",
+    "noteHint": "Volitelné, například jakou verzi hledáte.",
+    "askMovie": "Požádat o tento film",
+    "askShow": "Požádat o tento seriál"
+  },
+  "report": {
+    "thanks": "Děkujeme. Správci se na to podívají a vy to můžete sledovat v sekci Problémy.",
+    "done": "Hotovo",
+    "title": "Co je špatně?",
+    "problem": "Problém",
+    "season": "Řada",
+    "seasonHint": "Nechte prázdné, pokud jde o celý seriál.",
+    "episode": "Díl",
+    "more": "Řekněte nám víc",
+    "say": "Popište, co se stalo.",
+    "optional": "Volitelné.",
+    "send": "Odeslat hlášení"
+  },
+  "mine": {
+    "title": "Moje žádosti",
+    "none": "Zatím o nic nežádáno",
+    "empty": "Najděte film nebo seriál v <link>Objevovat</link> a stiskněte <strong>+</strong>, abyste o něj požádali.",
+    "admin": "Správce: „{{reply}}“",
+    "asked": "Požádáno {{date}}",
+    "takeBack": "Zrušit"
+  },
+  "issues": {
+    "title": "Problémy",
+    "sub": "Je něco špatně s filmem nebo seriálem? Otevřete ho v Objevovat nebo ho najděte podle názvu a zvolte Nahlásit problém.",
+    "none": "Žádné nahlášené problémy",
+    "season": "Řada {{season}}",
+    "episode": "Řada {{season}}, díl {{episode}}",
+    "waiting": "Čeká na správce",
+    "fixed": "Opraveno"
+  },
+  "account": {
+    "title": "Tvůj účet",
+    "signedIn": "Přihlášeni jako <strong>{{name}}</strong>.",
+    "signedInMatinee": "Přihlášeni jako <strong>{{name}}</strong> účtem Matinee.",
+    "change": "Změnit heslo",
+    "current": "Současné heslo",
+    "new": "Nové heslo",
+    "changed": "Změněno. Všude jinde jste odhlášeni.",
+    "changeButton": "Změnit heslo",
+    "signOut": "Odhlásit se"
+  }
+}
