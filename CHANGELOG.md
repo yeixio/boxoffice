@@ -6,6 +6,7 @@ What changed in Box Office, newest first. The format follows [Keep a Changelog](
 
 ### Added
 
+- **Music, audiobooks, ebooks and comics can be turned on in Settings,** each off by default, with its own root folders and one-click suggestions for where the library is mounted ([#38](https://github.com/yeixio/boxoffice/pull/38)). Adding and searching for them comes next.
 - **Removing titles can delete their files from disk,** showing the folder, file count and size first, and deleting only what it showed ([#28](https://github.com/yeixio/boxoffice/pull/28)). Recycle folders can be emptied from Settings, or after a number of days.
 - **Downloads housekeeping:** failed downloads that can't be repaired are deleted, quarantine has its own section with release, delete and auto-delete after a number of days, long lists are paged, and the queue is summed up at the top ([#27](https://github.com/yeixio/boxoffice/pull/27)).
 - Bulk actions on the Downloads queue and history ([#26](https://github.com/yeixio/boxoffice/pull/26)).
