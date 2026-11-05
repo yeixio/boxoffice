@@ -217,6 +217,8 @@ func TestDownloadTooBroken(t *testing.T) {
 		srv.Remove(id)
 	}
 	e, st := newEngine(t, srv)
+	events := make(chan string, 10)
+	e.Notify = func(_ context.Context, d store.Download, event, why string) { events <- event }
 	enable(t, st, Settings{})
 	run(t, e)
 	d, _ := e.Add(context.Background(), store.Download{}, data)
@@ -224,6 +226,8 @@ func TestDownloadTooBroken(t *testing.T) {
 	if d.Status != store.DownloadFailed {
 		t.Fatalf("%s: %s", d.Status, d.Message)
 	}
+	nextEvent(t, events, store.EventGrabbed)
+	nextEvent(t, events, store.EventFailed)
 	// Try again, with the articles back.
 	_, _, _ = release(t, srv, false)
 	if err := e.Retry(context.Background(), d.ID); err != nil {
@@ -232,6 +236,20 @@ func TestDownloadTooBroken(t *testing.T) {
 	d = waitFor(t, st, d.ID, store.DownloadCompleted, store.DownloadFailed)
 	if d.Status != store.DownloadCompleted {
 		t.Fatalf("retry: %s", d.Message)
+	}
+	// Added by hand, so it stays in the downloads folder.
+	nextEvent(t, events, store.EventDownloaded)
+}
+
+func nextEvent(t *testing.T, events chan string, want string) {
+	t.Helper()
+	select {
+	case got := <-events:
+		if got != want {
+			t.Fatalf("event %s, want %s", got, want)
+		}
+	case <-time.After(10 * time.Second):
+		t.Fatalf("no %s event", want)
 	}
 }
 

@@ -34,6 +34,9 @@ type Engine struct {
 	// Failed hears of a download that failed, to block the release and
 	// look for another.
 	Failed func(ctx context.Context, d store.Download, why string)
+	// Notify hears what happened to a download (store.EventGrabbed and the
+	// rest), to tell people about it; why is what went wrong, if anything.
+	Notify func(ctx context.Context, d store.Download, event, why string)
 
 	meter   meter
 	limit   limiter
@@ -147,6 +150,7 @@ func (e *Engine) Add(ctx context.Context, d store.Download, nzbData []byte) (sto
 	}
 	d.Status = want
 	e.Wake()
+	e.notify(ctx, d, store.EventGrabbed, "")
 	return d, nil
 }
 
@@ -602,6 +606,11 @@ func (e *Engine) process(ctx context.Context, r *running, d store.Download, srv 
 	e.Store.SaveDownloadProgress(bg, d)
 	switch cause := context.Cause(ctx); {
 	case err == nil:
+		if d.ImportedTo != "" {
+			e.notify(bg, d, store.EventImported, "")
+		} else {
+			e.notify(bg, d, store.EventDownloaded, "")
+		}
 	case errors.Is(cause, errPaused):
 		// Paused by hand, or everything was paused or turned off: back to
 		// waiting, as it was.
@@ -614,9 +623,20 @@ func (e *Engine) process(ctx context.Context, r *running, d store.Download, srv 
 	default:
 		e.Log.Warn("download failed", "name", d.Name, "err", err)
 		e.Store.SetDownloadStatus(bg, d.ID, store.DownloadFailed, sentence(err.Error()))
+		if d.Quarantined != "" {
+			e.notify(bg, d, store.EventQuarantined, err.Error())
+		} else {
+			e.notify(bg, d, store.EventFailed, err.Error())
+		}
 		if e.Failed != nil {
 			e.Failed(bg, d, sentence(err.Error()))
 		}
+	}
+}
+
+func (e *Engine) notify(ctx context.Context, d store.Download, event, why string) {
+	if e.Notify != nil {
+		e.Notify(context.WithoutCancel(ctx), d, event, why)
 	}
 }
 

@@ -261,3 +261,14 @@ CREATE TABLE IF NOT EXISTS downloads (
 	finished_at  BIGINT NOT NULL DEFAULT 0
 );
 CREATE INDEX IF NOT EXISTS downloads_status ON downloads (status, position);
+
+-- What Box Office tells people about: a download starting, a title arriving
+-- in the library, a download that failed or looked unsafe. Matinee reads
+-- them (GET /radarr/api/v3/boxoffice/notifications) and passes them on to
+-- the people who asked for the title, and to admins. Data is the
+-- notification as JSON; only the last few weeks are kept.
+CREATE TABLE IF NOT EXISTS notifications (
+	id   INTEGER PRIMARY KEY AUTOINCREMENT,
+	at   BIGINT NOT NULL,
+	data TEXT NOT NULL
+);
