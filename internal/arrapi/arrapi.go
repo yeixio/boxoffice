@@ -363,6 +363,11 @@ func (h *Handler) deleteFile(w http.ResponseWriter, r *http.Request) error {
 	if f.Kind != want {
 		return errNotFound
 	}
+	if err := h.Catalog.Store.CheckUnlocked(ctx, f.Kind, f.OwnerID); errors.Is(err, store.ErrLocked) {
+		return fail(http.StatusConflict, "Box Office has this title set to Do not touch, so it leaves its files alone")
+	} else if err != nil {
+		return err
+	}
 	root, err := h.fileRoot(ctx, f)
 	if err != nil {
 		return err

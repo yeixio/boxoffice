@@ -66,8 +66,9 @@ type Server struct {
 	// monitor.go); nil makes one with no log lines.
 	Monitoring *Monitoring
 
-	started  time.Time
-	failures sync.Map // username -> *failure
+	started     time.Time
+	failures    sync.Map // username -> *failure
+	healthCount healthCount
 }
 
 type failure struct {
@@ -140,6 +141,7 @@ func (s *Server) Handler() http.Handler {
 		{"GET /api/v1/movies", true, s.movies},
 		{"POST /api/v1/movies", true, s.addMovie},
 		{"GET /api/v1/movies/{id}", true, s.movie},
+		{"POST /api/v1/movies/bulk", true, s.bulkMovies},
 		{"PATCH /api/v1/movies/{id}", true, s.editMovie},
 		{"DELETE /api/v1/movies/{id}", true, s.deleteMovie},
 		{"GET /api/v1/movies/{id}/removal", true, s.movieRemoval},
@@ -152,6 +154,7 @@ func (s *Server) Handler() http.Handler {
 		{"GET /api/v1/series/defaults", true, s.showDefaults},
 		{"PUT /api/v1/series/defaults", true, s.saveShowDefaults},
 		{"GET /api/v1/series/{id}", true, s.series},
+		{"POST /api/v1/series/bulk", true, s.bulkSeries},
 		{"PATCH /api/v1/series/{id}", true, s.editSeries},
 		{"DELETE /api/v1/series/{id}", true, s.deleteSeries},
 		{"GET /api/v1/series/{id}/removal", true, s.seriesRemoval},
@@ -180,6 +183,7 @@ func (s *Server) Handler() http.Handler {
 
 		{"POST /api/v1/migrations/preview", true, s.previewMigration},
 		{"GET /api/v1/health", true, s.health},
+		{"GET /api/v1/stats", true, s.getStats},
 		{"GET /api/v1/migrations/find", true, s.findApp},
 		{"PUT /api/v1/migrations/done", true, s.setMovedIn(true)},
 		{"DELETE /api/v1/migrations/done", true, s.setMovedIn(false)},
@@ -360,6 +364,8 @@ func (s *Server) wrap(rt route) http.Handler {
 			writeError(w, http.StatusConflict, "that's there already")
 		case errors.Is(err, catalog.ErrExists):
 			writeError(w, http.StatusConflict, "that's on the list already")
+		case errors.Is(err, store.ErrLocked):
+			writeError(w, http.StatusConflict, "This title is set to Do not touch, so Box Office leaves its files alone. Pick another quality profile for it first.")
 		case errors.Is(err, store.ErrInUse):
 			writeError(w, http.StatusConflict, "titles still use it; move them to another first")
 		case errors.Is(err, tmdb.ErrNoKey):

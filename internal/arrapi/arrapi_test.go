@@ -78,7 +78,8 @@ func TestMatineeRadarrClient(t *testing.T) {
 		t.Fatal("a wrong key was accepted")
 	}
 	profiles, err := c.QualityProfiles(ctx)
-	if err != nil || len(profiles) != 3 {
+	// The three defaults, and Do not touch.
+	if err != nil || len(profiles) != 4 || profiles[3].Name != "Do not touch" {
 		t.Fatalf("profiles: %+v, %v", profiles, err)
 	}
 	folders, err := c.RootFolders(ctx)

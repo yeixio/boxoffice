@@ -88,6 +88,7 @@ func (s *Store) migrate(ctx context.Context) error {
 	// Columns added since a table was first made.
 	for _, c := range []struct{ table, column, def string }{
 		{"downloads", "quarantined", "TEXT NOT NULL DEFAULT ''"},
+		{"quality_profiles", "locked", "INTEGER NOT NULL DEFAULT 0"},
 		{"movies", "rating", "DOUBLE PRECISION NOT NULL DEFAULT 0"},
 		{"series", "rating", "DOUBLE PRECISION NOT NULL DEFAULT 0"},
 		{"indexers", "daily_queries", "INTEGER NOT NULL DEFAULT 0"},
@@ -116,6 +117,21 @@ func (s *Store) migrate(ctx context.Context) error {
 			if _, err := s.CreateProfile(ctx, p); err != nil {
 				return err
 			}
+		}
+	}
+	// Every server has the Do not touch profile.
+	if err := s.db.QueryRowContext(ctx, "SELECT COUNT(*) FROM quality_profiles WHERE locked = 1").Scan(&n); err != nil {
+		return err
+	}
+	if n == 0 {
+		p := quality.DoNotTouch()
+		if _, err := s.CreateProfile(ctx, p); errors.Is(err, ErrExists) {
+			// Someone has a profile of that name already.
+			p.Name += " (Box Office)"
+			_, err = s.CreateProfile(ctx, p)
+			return err
+		} else if err != nil {
+			return err
 		}
 	}
 	return nil
@@ -249,18 +265,18 @@ func (s *Store) SetSetting(ctx context.Context, key, value string) error {
 func scanProfile(r interface{ Scan(...any) error }) (quality.Profile, error) {
 	var p quality.Profile
 	var allowed string
-	var upgrade int
-	if err := r.Scan(&p.ID, &p.Name, &allowed, &p.Cutoff, &upgrade); err != nil {
+	var upgrade, locked int
+	if err := r.Scan(&p.ID, &p.Name, &allowed, &p.Cutoff, &upgrade, &locked); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return p, ErrNotFound
 		}
 		return p, err
 	}
-	p.UpgradeOK = upgrade == 1
+	p.UpgradeOK, p.Locked = upgrade == 1, locked == 1
 	return p, json.Unmarshal([]byte(allowed), &p.Allowed)
 }
 
-const profileCols = "id, name, allowed, cutoff, upgrade"
+const profileCols = "id, name, allowed, cutoff, upgrade, locked"
 
 func (s *Store) Profiles(ctx context.Context) ([]quality.Profile, error) {
 	rows, err := s.query(ctx, "SELECT "+profileCols+" FROM quality_profiles ORDER BY id")
@@ -288,10 +304,10 @@ func (s *Store) CreateProfile(ctx context.Context, p quality.Profile) (quality.P
 		return p, err
 	}
 	allowed, _ := json.Marshal(p.Allowed)
-	id, err := s.insert(ctx, "INSERT INTO quality_profiles (name, allowed, cutoff, upgrade) VALUES (?, ?, ?, ?)",
-		strings.TrimSpace(p.Name), string(allowed), p.Cutoff, b2i(p.UpgradeOK))
+	id, err := s.insert(ctx, "INSERT INTO quality_profiles (name, allowed, cutoff, upgrade, locked) VALUES (?, ?, ?, ?, ?)",
+		strings.TrimSpace(p.Name), string(allowed), p.Cutoff, b2i(p.UpgradeOK), b2i(p.Locked))
 	p.ID = int(id)
-	return p, err
+	return p, uniqueErr(err)
 }
 
 func (s *Store) UpdateProfile(ctx context.Context, p quality.Profile) error {
@@ -305,6 +321,39 @@ func (s *Store) UpdateProfile(ctx context.Context, p quality.Profile) error {
 		return uniqueErr(err)
 	}
 	return affected(res)
+}
+
+// ErrLocked means a title is on the Do not touch profile, so Box Office
+// leaves its files as they are.
+var ErrLocked = errors.New("it's set to Do not touch, so Box Office leaves its files alone; pick another quality profile for it first")
+
+// TitleLocked says whether a movie, a show, or an episode's show is on the
+// Do not touch profile. kind is movie, series or episode.
+func (s *Store) TitleLocked(ctx context.Context, kind string, id int64) (bool, error) {
+	q := map[string]string{
+		"movie":   "SELECT p.locked FROM movies t JOIN quality_profiles p ON p.id = t.profile_id WHERE t.id = ?",
+		"series":  "SELECT p.locked FROM series t JOIN quality_profiles p ON p.id = t.profile_id WHERE t.id = ?",
+		"episode": "SELECT p.locked FROM episodes e JOIN series t ON t.id = e.series_id JOIN quality_profiles p ON p.id = t.profile_id WHERE e.id = ?",
+	}[kind]
+	if q == "" {
+		return false, fmt.Errorf("no such kind of title %q", kind)
+	}
+	var locked int
+	err := s.row(ctx, q, id).Scan(&locked)
+	if errors.Is(err, sql.ErrNoRows) {
+		return false, nil
+	}
+	return locked == 1, err
+}
+
+// CheckUnlocked is ErrLocked when the title is on Do not touch.
+func (s *Store) CheckUnlocked(ctx context.Context, kind string, id int64) error {
+	if locked, err := s.TitleLocked(ctx, kind, id); err != nil {
+		return err
+	} else if locked {
+		return ErrLocked
+	}
+	return nil
 }
 
 // ErrInUse means something still refers to the row.

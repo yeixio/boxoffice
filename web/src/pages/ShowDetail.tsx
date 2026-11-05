@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ArrowUpCircle, ChevronDown, ListChecks, RefreshCw, Search, Trash2 } from 'lucide-react'
+import { LockedNote } from '../Bulk'
 import { Releases } from '../Releases'
 import { DeleteFiles, RemoveTitle } from '../RemoveFiles'
 import { get, patch, post, type Episode, type Profile, type Series } from '../api'
@@ -42,6 +43,7 @@ export function ShowDetail() {
   if (show.isError) return <ErrorNote error={show.error} />
   const { series: s, episodes } = show.data
   const seasons = [...s.seasons].sort((a, b) => b.number - a.number)
+  const locked = !!profiles.data?.find((p) => p.id === s.profileId)?.locked
 
   return (
     <div>
@@ -64,10 +66,13 @@ export function ShowDetail() {
             </Badge>
           </div>
           {s.overview && <p className="mt-4 max-w-3xl leading-relaxed">{s.overview}</p>}
+          {locked && <LockedNote />}
           <div className="mt-6 flex flex-wrap gap-2">
-            <Button variant="primary" busy={action.isPending && action.variables === 'search'} onClick={() => action.mutate('search')}>
-              <Search className="size-4" aria-hidden /> Look for wanted episodes
-            </Button>
+            {!locked && (
+              <Button variant="primary" busy={action.isPending && action.variables === 'search'} onClick={() => action.mutate('search')}>
+                <Search className="size-4" aria-hidden /> Look for wanted episodes
+              </Button>
+            )}
             <Button busy={action.isPending && action.variables === 'refresh'} onClick={() => action.mutate('refresh')}>
               <RefreshCw className="size-4" aria-hidden /> Refresh details
             </Button>
@@ -153,6 +158,7 @@ function SeasonBlock({
   const wantsUpgrade = (e: Episode) => !!(e.file && profile?.upgrade && rank(e.file.quality) < rank(profile.cutoff))
   const anyAired = episodes.some((e) => e.airDate && new Date(e.airDate).getTime() <= now)
   const upgrades = episodes.filter(wantsUpgrade).length
+  const locked = !!profile?.locked
   return (
     <Card className="p-0">
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 px-5 py-3">
@@ -164,12 +170,12 @@ function SeasonBlock({
             {upgrades > 0 && `, ${upgrades} to upgrade`}
           </span>
         </button>
-        {anyAired && (
+        {anyAired && !locked && (
           <Button variant="ghost" onClick={() => setReleases('season')}>
             <ListChecks className="size-4" aria-hidden /> Choose a release
           </Button>
         )}
-        {have > 0 && (
+        {have > 0 && !locked && (
           <Button variant="ghost" onClick={() => setDeleting('season')} aria-label={`Delete ${seasonName}'s files from disk`} title="Delete its files from disk">
             <Trash2 className="size-4" aria-hidden /> <span className="sm:hidden">Delete files</span>
           </Button>
@@ -201,7 +207,7 @@ function SeasonBlock({
                     ) : (
                       <Badge tone="gold">Coming</Badge>
                     )}
-                    {aired && e.monitored && (!e.file || upgrade) && (
+                    {!locked && aired && e.monitored && (!e.file || upgrade) && (
                       <button
                         className="rounded px-1.5 py-0.5 text-xs text-marquee hover:bg-line"
                         onClick={() => search.mutate(e)}
@@ -210,7 +216,7 @@ function SeasonBlock({
                         {looking ? 'Looking…' : e.file ? 'Look for an upgrade' : 'Look for it'}
                       </button>
                     )}
-                    {aired && (
+                    {aired && !locked && (
                       <button
                         className="flex items-center gap-1 rounded px-1.5 py-0.5 text-xs text-muted hover:bg-line hover:text-ink"
                         onClick={() => setReleases(e)}
@@ -219,7 +225,7 @@ function SeasonBlock({
                         <ListChecks className="size-3.5" aria-hidden /> Choose
                       </button>
                     )}
-                    {e.file && (
+                    {e.file && !locked && (
                       <button
                         className="rounded p-1 text-muted hover:bg-line hover:text-bad"
                         onClick={() => setDeleting(e)}

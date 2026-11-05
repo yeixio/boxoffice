@@ -205,3 +205,33 @@ func TestSeasonReleases(t *testing.T) {
 		t.Fatalf("season 2: %v", err)
 	}
 }
+
+// A movie on Do not touch is never wanted, searched for or grabbed.
+func TestDoNotTouchNotSearched(t *testing.T) {
+	srv, asked := indexer(t, item("The.Matrix.1999.1080p.BluRay.x264-GRP", "b", 9e9))
+	s, st, m := setup(t, srv.URL)
+	ctx := context.Background()
+	downloader.SaveSettings(ctx, st, downloader.Settings{Enabled: true})
+	ps, _ := st.Profiles(ctx)
+	for _, p := range ps {
+		if p.Locked {
+			m.ProfileID = p.ID
+		}
+	}
+	st.UpdateMovie(ctx, m)
+	if list, _ := s.WantedList(ctx); len(list) != 0 {
+		t.Fatalf("wanted %+v", list)
+	}
+	if _, err := s.Movie(ctx, m.ID); !errors.Is(err, store.ErrLocked) {
+		t.Fatalf("search: %v", err)
+	}
+	if r, _ := s.jobMovie(ctx, fmt.Sprintf(`{"id":%d}`, m.ID)); r.Status != "skipped" {
+		t.Fatalf("job %+v", r)
+	}
+	if len(*asked) != 0 {
+		t.Fatalf("asked the indexer %v", *asked)
+	}
+	if _, err := s.grab(ctx, Candidate{Release: Release{Protocol: "usenet"}, kind: "movie", titleID: m.ID}); !errors.Is(err, store.ErrLocked) {
+		t.Fatalf("grab: %v", err)
+	}
+}

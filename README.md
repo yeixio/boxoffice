@@ -235,6 +235,28 @@ No. Box Office only reads from them. The one thing it asks for is a backup of th
 </details>
 
 <details>
+<summary><b>Can I show it on a dashboard like Homepage?</b></summary>
+
+Yes. `GET /api/v1/stats`, with the API key in an `X-Api-Key` header, gives a short summary as JSON: `movies`, `moviesOnDisk`, `moviesMissing`, `series`, `episodes`, `episodesOnDisk`, `episodesMissing`, `downloading`, `queued`, `speed` (bytes a second) and `problems` (Health issues to fix, checked every 5 minutes at most). In [Homepage](https://gethomepage.dev) it fits the custom API widget:
+
+```yaml
+- Box Office:
+    href: https://boxoffice.example.com
+    icon: mdi-ticket-confirmation-outline
+    widget:
+      type: customapi
+      url: http://boxoffice:7272/api/v1/stats
+      headers:
+        X-Api-Key: your-api-key
+      mappings:
+        - {field: movies, label: Movies, format: number}
+        - {field: series, label: Shows, format: number}
+        - {field: downloading, label: Downloading, format: number}
+        - {field: problems, label: To fix, format: number}
+```
+</details>
+
+<details>
 <summary><b>Does it do torrents?</b></summary>
 
 Not yet. Torznab indexers and torrent clients can be moved in and are kept, but Box Office only downloads from Usenet for now. Torrent support is on the [roadmap](ROADMAP.md).

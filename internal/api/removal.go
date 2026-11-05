@@ -129,7 +129,19 @@ func (s *Server) moviePlan(r *http.Request) (store.Movie, library.Plan, error) {
 		return m, library.Plan{}, err
 	}
 	p, err := library.FolderPlan(r.Context(), s.Store, "movie", id, m.RootFolder, m.Path)
+	if err == nil {
+		err = s.lockPlan(r.Context(), "movie", id, &p)
+	}
 	return m, p, err
+}
+
+// lockPlan makes a plan for a title on Do not touch delete nothing.
+func (s *Server) lockPlan(ctx context.Context, kind string, id int64, p *library.Plan) error {
+	locked, err := s.Store.TitleLocked(ctx, kind, id)
+	if err == nil && locked {
+		p.Problem = "it's set to Do not touch, so Box Office never deletes its files (pick another quality profile for it first)"
+	}
+	return err
 }
 
 func (s *Server) movieRemoval(w http.ResponseWriter, r *http.Request) error {
@@ -150,6 +162,9 @@ func (s *Server) seriesPlan(r *http.Request) (store.Series, library.Plan, error)
 		return t, library.Plan{}, err
 	}
 	p, err := library.FolderPlan(r.Context(), s.Store, "series", id, t.RootFolder, t.Path)
+	if err == nil {
+		err = s.lockPlan(r.Context(), "series", id, &p)
+	}
 	return t, p, err
 }
 
@@ -177,7 +192,11 @@ func (s *Server) movieFilePlan(r *http.Request) (store.Movie, fileRemoval, []sto
 		return m, fileRemoval{}, nil, err
 	}
 	imports = imports[:min(len(imports), 1)]
-	return m, fileRemoval{Plan: library.FilesPlan(m.RootFolder, m.Path, files), Releases: releases(imports), Watched: m.Monitored}, imports, nil
+	fr := fileRemoval{Plan: library.FilesPlan(m.RootFolder, m.Path, files), Releases: releases(imports), Watched: m.Monitored}
+	if err := s.lockPlan(r.Context(), "movie", m.ID, &fr.Plan); err != nil {
+		return m, fileRemoval{}, nil, err
+	}
+	return m, fr, imports, nil
 }
 
 func (s *Server) movieByPath(r *http.Request) (store.Movie, error) {
@@ -243,7 +262,11 @@ func (s *Server) episodesPlan(ctx context.Context, t store.Series, eps []store.E
 		}
 		imports = latestPer(all, ids)
 	}
-	return fileRemoval{Plan: library.FilesPlan(t.RootFolder, t.Path, files), Releases: releases(imports), Watched: watched}, imports, nil
+	fr := fileRemoval{Plan: library.FilesPlan(t.RootFolder, t.Path, files), Releases: releases(imports), Watched: watched}
+	if err := s.lockPlan(ctx, "series", t.ID, &fr.Plan); err != nil {
+		return fileRemoval{}, nil, err
+	}
+	return fr, imports, nil
 }
 
 func (s *Server) seasonEpisodes(r *http.Request) (store.Series, int, []store.Episode, error) {

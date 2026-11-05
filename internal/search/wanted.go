@@ -183,7 +183,7 @@ func (s *Service) WantedList(ctx context.Context) ([]Wanted, error) {
 	}
 	for _, m := range movies {
 		p, ok := profiles[m.ProfileID]
-		if !m.Monitored || !ok {
+		if !m.Monitored || !ok || p.Locked {
 			continue
 		}
 		w := Wanted{Kind: "movie", ID: m.ID, Subject: movieSubject(m), Cutoff: p.Cutoff, Searched: searched[m.ID].At, Misses: searched[m.ID].Misses}
@@ -210,7 +210,7 @@ func (s *Service) WantedList(ctx context.Context) ([]Wanted, error) {
 	}
 	for _, t := range shows {
 		p, ok := profiles[t.ProfileID]
-		if !t.Monitored || !ok {
+		if !t.Monitored || !ok || p.Locked {
 			continue
 		}
 		seasons := map[int]bool{}
