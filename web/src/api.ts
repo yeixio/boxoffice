@@ -473,7 +473,7 @@ export type AlbumTypes = { types: string[]; defaults: string[] }
 
 // A root folder scan: folders on disk that aren't on the list, matched to
 // TMDB or MusicBrainz and ready to add where they are.
-export type ScanMatch = { tmdbId?: number; mbid?: string; title: string; year?: number; poster?: string; overview?: string; disambiguation?: string }
+export type ScanMatch = { tmdbId?: number; mbid?: string; olKey?: string; title: string; year?: number; poster?: string; overview?: string; disambiguation?: string }
 export type ScanFound = {
   path: string
   name: string
