@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -12,6 +13,7 @@ import (
 	"strconv"
 	"strings"
 	"syscall"
+	"time"
 
 	"github.com/yeixio/boxoffice/internal/arrapi"
 	"github.com/yeixio/boxoffice/internal/quality"
@@ -175,7 +177,13 @@ func (li *LibraryImporter) place(ctx context.Context, dir, rel, dest, root, titl
 		return err
 	}
 	if err := move(src, dest); err != nil {
-		return err
+		// The library copy is whole and in place; only the original in
+		// the downloads folder is left over, and the download folder's
+		// cleanup takes another go at it.
+		var left *sourceLeftError
+		if !errors.As(err, &left) {
+			return err
+		}
 	}
 	// Subtitles named like the video go along.
 	base := strings.TrimSuffix(filepath.Base(src), filepath.Ext(src))
@@ -209,10 +217,54 @@ func (li *LibraryImporter) place(ctx context.Context, dir, rel, dest, root, titl
 
 // move renames a file, or copies it when it's going to another disk.
 func move(src, dest string) error {
-	err := os.Rename(src, dest)
+	err := rename(src, dest)
 	if err == nil || !errors.Is(err, syscall.EXDEV) {
 		return err
 	}
+	if err := copyFile(src, dest); err != nil {
+		return err
+	}
+	// A network share can refuse to delete a file for a moment after it
+	// was read (SMB reports it as an input/output error), so this takes a
+	// few tries. The library copy is already whole by now, so failing
+	// here doesn't undo the move.
+	var rerr error
+	for i := range removeTries {
+		if i > 0 {
+			time.Sleep(removeWait << (i - 1))
+		}
+		if rerr = remove(src); rerr == nil || errors.Is(rerr, fs.ErrNotExist) {
+			return nil
+		}
+	}
+	return &sourceLeftError{src, rerr}
+}
+
+// rename and remove are os.Rename and os.Remove, swapped out in tests.
+var (
+	rename      = os.Rename
+	remove      = os.Remove
+	removeTries = 5
+	removeWait  = 250 * time.Millisecond
+)
+
+// sourceLeftError means a file went into the library, verified whole, but
+// the original couldn't be removed from the downloads folder.
+type sourceLeftError struct {
+	src string
+	err error
+}
+
+func (e *sourceLeftError) Error() string {
+	return fmt.Sprintf("moved into the library, but couldn't remove %s: %v", e.src, e.err)
+}
+
+func (e *sourceLeftError) Unwrap() error { return e.err }
+
+// copyFile copies src to dest through a temporary file, and only puts it
+// at dest once it's checked whole. src is closed before it returns, so it
+// can be removed.
+func copyFile(src, dest string) error {
 	in, err := os.Open(src)
 	if err != nil {
 		return err
@@ -247,7 +299,7 @@ func move(src, dest string) error {
 		os.Remove(tmp)
 		return err
 	}
-	return os.Remove(src)
+	return nil
 }
 
 func episodeNumbers(name string) (int, []int) {

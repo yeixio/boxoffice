@@ -67,3 +67,30 @@ func TestEpisodeNumbers(t *testing.T) {
 		t.Fatal("a folder outside the library passed")
 	}
 }
+
+// The original staying behind on the downloads share doesn't fail the
+// import: the library copy is whole, and it's recorded.
+func TestImportSourceStuck(t *testing.T) {
+	crossDevice(t, 100)
+	st := storetest.Open(t)
+	ctx := context.Background()
+	lib := t.TempDir()
+	profiles, _ := st.Profiles(ctx)
+	m, err := st.AddMovie(ctx, store.Movie{TMDBID: 1, Title: "Cave", Year: 2016, ProfileID: profiles[0].ID, RootFolder: lib, Path: filepath.Join(lib, "Cave (2016)"), Monitored: true})
+	if err != nil {
+		t.Fatal(err)
+	}
+	dl := t.TempDir()
+	os.WriteFile(filepath.Join(dl, "Cave.2016.1080p.WEB.mkv"), make([]byte, 5000), 0o644)
+	li := &LibraryImporter{Store: st}
+	to, err := li.Import(ctx, store.Download{Kind: "movie", TitleID: m.ID, Name: "Cave.2016.1080p.WEB"}, dl, listFiles(dl))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if info, err := os.Stat(to); err != nil || info.Size() != 5000 {
+		t.Fatalf("library copy: %v", err)
+	}
+	if m, _ = st.Movie(ctx, m.ID); m.File == nil || m.File.Path != to {
+		t.Fatalf("file %+v", m.File)
+	}
+}
