@@ -34,7 +34,7 @@ What changed in Box Office, newest first. The format follows [Keep a Changelog](
 
 ### Changed
 
-- **Automatic upgrades are off by default.** RSS sync and the library patrol still look for missing titles by themselves; turn on Settings → Missing titles and upgrades → Automatic upgrades to have them go after better copies too. Looking for an upgrade from a title's page works either way.
+- **Automatic upgrades are off by default.** RSS sync and the library patrol still look for missing titles by themselves; turn on Settings → Missing titles and upgrades → Automatic upgrades to have them go after better copies too. Looking for an upgrade from a title's page works either way. Each movie and show can turn automatic upgrades on or off for itself from its page, and **Most automatic upgrades a month** caps how many Box Office grabs by itself.
 
 ### Fixed
 

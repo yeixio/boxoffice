@@ -2,6 +2,7 @@ package search
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -329,5 +330,105 @@ func TestUpgradesOffByDefault(t *testing.T) {
 	mu.Unlock()
 	if res := s.SyncRSS(ctx); len(res.Grabbed) != 1 {
 		t.Fatalf("rss with upgrades on %+v", res)
+	}
+}
+
+// A title's own choice wins over Settings, and the month's limit stops
+// automatic upgrades once it's reached.
+func TestUpgradesPerTitleAndMonthlyLimit(t *testing.T) {
+	srv, asked := fakeIndexer(t, func(r *http.Request) (int, string) {
+		return 200, feedOf(item("The.Matrix.1999.1080p.WEB-DL-GRP", "m1", 7e9))
+	})
+	s, st, m := setup(t, srv.URL)
+	ctx := context.Background()
+	downloader.SaveSettings(ctx, st, downloader.Settings{Enabled: true})
+	// withFile adds a movie with a WEBRip, below the cutoff.
+	withFile := func(m store.Movie, pref string) store.Movie {
+		if m.ID == 0 {
+			m, _ = st.AddMovie(ctx, m)
+		}
+		st.AddFile(ctx, store.File{Kind: "movie", OwnerID: m.ID, Path: m.Path + "/x.mkv", Quality: 9})
+		m, _ = st.Movie(ctx, m.ID)
+		m.AutoUpgrade = pref
+		st.UpdateMovie(ctx, m)
+		return m
+	}
+	movieSearches := func() int {
+		n := 0
+		for _, q := range *asked {
+			if strings.Contains(q, "t=movie") {
+				n++
+			}
+		}
+		return n
+	}
+
+	// Off in Settings, on for the Matrix: the patrol goes after it, and
+	// the grab counts toward the month.
+	m = withFile(m, "on")
+	if r, err := s.jobWanted(ctx, "{}"); err != nil || movieSearches() != 1 || !strings.Contains(r.Message, "1 title to upgrade") {
+		t.Fatalf("on for the title: %+v %v, asked %v", r, err, *asked)
+	}
+	q, _ := st.DownloadQueue(ctx)
+	if len(q) != 1 {
+		t.Fatalf("queue %+v", q)
+	}
+	st.DeleteDownload(ctx, q[0].ID)
+	if n, _ := st.AutoUpgradesSince(ctx, monthStart(time.Now())); n != 1 {
+		t.Fatalf("counted %d upgrades", n)
+	}
+
+	// On in Settings, off for another movie: it's left alone.
+	SaveAutoSettings(ctx, st, AutoSettings{Enabled: true, PerDay: DefaultPerDay, RSS: true, RSSMinutes: DefaultRSSMinutes, Upgrades: true})
+	withFile(store.Movie{TMDBID: 800, Title: "Kept", Year: 2001, ProfileID: m.ProfileID, RootFolder: "/m", Path: "/m/Kept", Monitored: true}, "off")
+	s.jobWanted(ctx, "{}")
+	if movieSearches() != 1 {
+		t.Fatalf("off for the title, searched anyway: %v", *asked)
+	}
+	// And a grab Box Office makes by itself is refused; one by hand isn't.
+	m.AutoUpgrade = "off"
+	st.UpdateMovie(ctx, m)
+	res, err := s.Movie(ctx, m.ID)
+	if err != nil || len(res.Releases) == 0 {
+		t.Fatal(res, err)
+	}
+	if _, err := s.grab(automatic(ctx), res.Releases[0]); !errors.Is(err, ErrUpgradeOff) {
+		t.Fatalf("automatic grab with the title off: %v", err)
+	}
+	if _, err := s.grab(ctx, res.Releases[0]); err != nil {
+		t.Fatalf("by hand: %v", err)
+	}
+	if n, _ := st.AutoUpgradesSince(ctx, monthStart(time.Now())); n != 1 {
+		t.Fatalf("a grab by hand counted: %d", n)
+	}
+	q, _ = st.DownloadQueue(ctx)
+	for _, d := range q {
+		st.DeleteDownload(ctx, d.ID)
+	}
+
+	// Following Settings, 1 a month and 1 used: nothing more this month.
+	SaveAutoSettings(ctx, st, AutoSettings{Enabled: true, PerDay: DefaultPerDay, RSS: true, RSSMinutes: DefaultRSSMinutes, Upgrades: true, UpgradesPerMonth: 1})
+	if a, _ := LoadAutoSettings(ctx, st); a.UpgradesPerMonth != 1 {
+		t.Fatalf("saved %+v", a)
+	}
+	m.AutoUpgrade = ""
+	st.UpdateMovie(ctx, m)
+	withFile(store.Movie{TMDBID: 801, Title: "Third", Year: 2002, ProfileID: m.ProfileID, RootFolder: "/m", Path: "/m/Third", Monitored: true}, "")
+	before := movieSearches()
+	s.jobWanted(ctx, "{}")
+	if movieSearches() != before {
+		t.Fatalf("searched past the month's limit: %v", *asked)
+	}
+	if _, err := s.grab(automatic(ctx), res.Releases[0]); err == nil || !strings.Contains(err.Error(), "used up") {
+		t.Fatalf("grab past the limit: %v", err)
+	}
+	ix := testIndexer(t, st)
+	ix.EnableRSS = true
+	st.UpdateIndexer(ctx, ix)
+	if r := s.SyncRSS(ctx); len(r.Grabbed) != 0 || len(r.Problems) != 0 {
+		t.Fatalf("rss past the limit %+v", r)
+	}
+	if left, used, _ := s.UpgradesLeft(ctx, AutoSettings{UpgradesPerMonth: 3}); left != 2 || used != 1 {
+		t.Fatalf("left %d used %d", left, used)
 	}
 }

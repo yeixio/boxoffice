@@ -31,7 +31,11 @@ func (s *Server) autoSearch(w http.ResponseWriter, r *http.Request) error {
 			missing++
 		}
 	}
-	out := map[string]any{"settings": set, "missing": missing, "upgrades": upgrades}
+	_, used, err := s.Search.UpgradesLeft(ctx, set)
+	if err != nil {
+		return err
+	}
+	out := map[string]any{"settings": set, "missing": missing, "upgrades": upgrades, "upgradesThisMonth": used}
 	if ok, why := s.Search.AutoDue(ctx); !ok {
 		out["paused"] = why
 	}
@@ -61,6 +65,9 @@ func (s *Server) saveAutoSearch(w http.ResponseWriter, r *http.Request) error {
 	}
 	if in.PerDay < 1 {
 		return errorf(http.StatusBadRequest, "make it at least 1 search a day, or turn automatic searches off")
+	}
+	if in.UpgradesPerMonth < 0 {
+		return errorf(http.StatusBadRequest, "make the most upgrades a month 0 for no limit, or more")
 	}
 	if in.RSSMinutes < search.MinRSSMinutes {
 		return errorf(http.StatusBadRequest, fmt.Sprintf("RSS sync can run every %d minutes at most often", search.MinRSSMinutes))

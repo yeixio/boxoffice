@@ -258,7 +258,7 @@ export function AutoSearchSettings() {
       <div className="flex flex-col gap-4">
         <p className="text-sm">
           Wanted now: {count(a.data.missing, 'missing title', 'missing titles')}, {count(a.data.upgrades, 'upgrade', 'upgrades')}
-          {!s.upgrades && a.data.upgrades > 0 && ' (looked for only when you ask, from a title\'s page)'}.
+          {!s.upgrades && a.data.upgrades > 0 && ' (looked for by themselves only for titles with upgrades turned on)'}.
         </p>
         {a.data.cap && <p className="text-sm text-gold">{a.data.cap}.</p>}
         <Toggle
@@ -315,10 +315,19 @@ export function AutoSearchSettings() {
               Automatic upgrades
               <span className="block text-xs text-muted">
                 Off by default. When on, RSS sync and the patrol also grab better copies of files below their profile's good-enough quality, for profiles with upgrades on. You can always look for an
-                upgrade yourself from a title's page.
+                upgrade yourself from a title's page. Each movie and show can also turn them on or off for itself, from its page.
               </span>
             </>
           }
+        />
+        <NumberField
+          label="Most automatic upgrades a month"
+          suffix={`${count(a.data.upgradesThisMonth, 'grabbed', 'grabbed')} this month`}
+          value={s.upgradesPerMonth}
+          min={0}
+          busy={save.isPending}
+          onSave={(v) => save.mutate({ upgradesPerMonth: v })}
+          hint="0 means no limit. Counts every upgrade RSS sync and the patrol grab, including ones for titles with upgrades turned on for themselves; ones you grab yourself don't count. Starts again on the 1st."
         />
         <Field
           label="Searches a day"

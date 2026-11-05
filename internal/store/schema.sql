@@ -57,7 +57,8 @@ CREATE TABLE IF NOT EXISTS movies (
 	root_folder      TEXT NOT NULL,
 	path             TEXT NOT NULL,
 	added_at         BIGINT NOT NULL,
-	refreshed_at     BIGINT NOT NULL DEFAULT 0
+	refreshed_at     BIGINT NOT NULL DEFAULT 0,
+	auto_upgrade     TEXT NOT NULL DEFAULT '' -- '' follows Settings; 'on' or 'off' for this movie
 );
 
 CREATE TABLE IF NOT EXISTS series (
@@ -80,7 +81,8 @@ CREATE TABLE IF NOT EXISTS series (
 	root_folder  TEXT NOT NULL,
 	path         TEXT NOT NULL,
 	added_at     BIGINT NOT NULL,
-	refreshed_at BIGINT NOT NULL DEFAULT 0
+	refreshed_at BIGINT NOT NULL DEFAULT 0,
+	auto_upgrade TEXT NOT NULL DEFAULT '' -- '' follows Settings; 'on' or 'off' for this show
 );
 CREATE INDEX IF NOT EXISTS series_tvdb ON series (tvdb_id);
 
@@ -311,6 +313,13 @@ CREATE TABLE IF NOT EXISTS indexer_usage (
 	grabs      INTEGER NOT NULL DEFAULT 0,
 	auto       INTEGER NOT NULL DEFAULT 0,
 	PRIMARY KEY (indexer_id, day)
+);
+
+-- Upgrades Box Office grabbed by itself, by local day, for the monthly
+-- limit on automatic upgrades.
+CREATE TABLE IF NOT EXISTS auto_upgrades (
+	day TEXT NOT NULL PRIMARY KEY,
+	n   INTEGER NOT NULL DEFAULT 0
 );
 
 -- Bytes downloaded from each news server, by local day, for the monthly

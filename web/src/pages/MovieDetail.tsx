@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { ListFilter, RefreshCw, Search, Trash2 } from 'lucide-react'
 import { Releases } from '../Releases'
 import { DeleteFiles, RemoveTitle } from '../RemoveFiles'
+import { AutoUpgradeField } from '../AutoUpgrade'
 import { LockedNote } from '../Bulk'
 import { get, patch, post, type Movie } from '../api'
 import { bytes, day } from '../format'
@@ -23,7 +24,7 @@ export function MovieDetail() {
   const [deleteFile, setDeleteFile] = useState(false)
 
   const edit = useMutation({
-    mutationFn: (body: Partial<Pick<Movie, 'monitored' | 'profileId'>>) => patch<Movie>(`/movies/${id}`, body),
+    mutationFn: (body: Partial<Pick<Movie, 'monitored' | 'profileId' | 'autoUpgrade'>>) => patch<Movie>(`/movies/${id}`, body),
     onSuccess: (m) => {
       qc.setQueryData(['movie', id], m)
       qc.invalidateQueries({ queryKey: ['movies'] })
@@ -109,10 +110,11 @@ export function MovieDetail() {
         <Card>
           <h2 className="mb-4 font-display text-lg font-semibold">How Box Office handles it</h2>
           <div className="flex flex-col gap-4">
-            <Toggle checked={m.monitored} onChange={(v) => edit.mutate({ monitored: v })} label="Watch for it, and get upgrades as the profile allows" />
+            <Toggle checked={m.monitored} onChange={(v) => edit.mutate({ monitored: v })} label="Watch for it" />
             <Field label="Quality profile">
               {(fid) => <Select id={fid} value={m.profileId} onChange={(v) => edit.mutate({ profileId: Number(v) })} options={(profiles.data ?? []).map((p) => ({ value: p.id, label: p.name }))} />}
             </Field>
+            {!locked && <AutoUpgradeField value={m.autoUpgrade} onChange={(v) => edit.mutate({ autoUpgrade: v as Movie['autoUpgrade'] })} upgradeOK={!!profiles.data?.find((p) => p.id === m.profileId)?.upgrade} />}
             <div className="text-sm">
               <div className="text-muted">Folder</div>
               <code className="break-all">{m.path}</code>

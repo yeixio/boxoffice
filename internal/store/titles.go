@@ -30,7 +30,10 @@ type Movie struct {
 	Path            string     `json:"path"`
 	AddedAt         time.Time  `json:"addedAt"`
 	RefreshedAt     time.Time  `json:"refreshedAt"`
-	File            *File      `json:"file,omitempty"`
+	// AutoUpgrade is "" to follow Settings, or "on" or "off" for this
+	// movie: whether Box Office looks for upgrades of it by itself.
+	AutoUpgrade string `json:"autoUpgrade"`
+	File        *File  `json:"file,omitempty"`
 }
 
 // File is a copy on disk of a movie or an episode.
@@ -45,7 +48,7 @@ type File struct {
 }
 
 const movieCols = `m.id, m.tmdb_id, m.imdb_id, m.title, m.sort_title, m.year, m.overview, m.poster, m.backdrop, m.runtime, m.status,
-	m.in_cinemas, m.digital_release, m.physical_release, m.rating, m.monitored, m.profile_id, m.root_folder, m.path, m.added_at, m.refreshed_at,
+	m.in_cinemas, m.digital_release, m.physical_release, m.rating, m.monitored, m.profile_id, m.root_folder, m.path, m.added_at, m.refreshed_at, m.auto_upgrade,
 	f.id, f.path, f.size, f.quality, f.added_at`
 
 const movieFrom = ` FROM movies m LEFT JOIN media_files f ON f.kind = 'movie' AND f.owner_id = m.id`
@@ -59,7 +62,7 @@ func scanMovie(r interface{ Scan(...any) error }) (Movie, error) {
 	var fpath sql.NullString
 	var fq sql.NullInt64
 	err := r.Scan(&m.ID, &m.TMDBID, &m.IMDBID, &m.Title, &m.SortTitle, &m.Year, &m.Overview, &m.Poster, &m.Backdrop, &m.Runtime, &m.Status,
-		&cin, &dig, &phy, &m.Rating, &mon, &m.ProfileID, &m.RootFolder, &m.Path, &added, &refreshed,
+		&cin, &dig, &phy, &m.Rating, &mon, &m.ProfileID, &m.RootFolder, &m.Path, &added, &refreshed, &m.AutoUpgrade,
 		&fid, &fpath, &fsize, &fq, &fadded)
 	if errors.Is(err, sql.ErrNoRows) {
 		return m, ErrNotFound
@@ -128,8 +131,8 @@ func (s *Store) AddMovie(ctx context.Context, m Movie) (Movie, error) {
 
 // UpdateMovie saves what an admin can change: monitoring, profile, folder.
 func (s *Store) UpdateMovie(ctx context.Context, m Movie) error {
-	res, err := s.exec(ctx, "UPDATE movies SET monitored = ?, profile_id = ?, root_folder = ?, path = ? WHERE id = ?",
-		b2i(m.Monitored), m.ProfileID, m.RootFolder, m.Path, m.ID)
+	res, err := s.exec(ctx, "UPDATE movies SET monitored = ?, profile_id = ?, root_folder = ?, path = ?, auto_upgrade = ? WHERE id = ?",
+		b2i(m.Monitored), m.ProfileID, m.RootFolder, m.Path, m.AutoUpgrade, m.ID)
 	if err != nil {
 		return err
 	}
@@ -194,6 +197,7 @@ type Series struct {
 	Path        string    `json:"path"`
 	AddedAt     time.Time `json:"addedAt"`
 	RefreshedAt time.Time `json:"refreshedAt"`
+	AutoUpgrade string    `json:"autoUpgrade"` // as Movie's
 	Seasons     []Season  `json:"seasons"`
 	// Counts over monitored, aired episodes.
 	EpisodeCount int `json:"episodeCount"`
@@ -225,14 +229,14 @@ type Episode struct {
 }
 
 const seriesCols = `id, tmdb_id, tvdb_id, imdb_id, title, sort_title, year, overview, poster, backdrop, status, network, runtime, rating,
-	monitored, profile_id, root_folder, path, added_at, refreshed_at`
+	monitored, profile_id, root_folder, path, added_at, refreshed_at, auto_upgrade`
 
 func scanSeries(r interface{ Scan(...any) error }) (Series, error) {
 	var t Series
 	var mon int
 	var added, refreshed int64
 	err := r.Scan(&t.ID, &t.TMDBID, &t.TVDBID, &t.IMDBID, &t.Title, &t.SortTitle, &t.Year, &t.Overview, &t.Poster, &t.Backdrop, &t.Status, &t.Network, &t.Runtime, &t.Rating,
-		&mon, &t.ProfileID, &t.RootFolder, &t.Path, &added, &refreshed)
+		&mon, &t.ProfileID, &t.RootFolder, &t.Path, &added, &refreshed, &t.AutoUpgrade)
 	if errors.Is(err, sql.ErrNoRows) {
 		return t, ErrNotFound
 	}
@@ -371,8 +375,8 @@ func (s *Store) EnsureSeason(ctx context.Context, seriesID int64, se Season) err
 }
 
 func (s *Store) UpdateSeries(ctx context.Context, t Series) error {
-	res, err := s.exec(ctx, "UPDATE series SET monitored = ?, profile_id = ?, root_folder = ?, path = ? WHERE id = ?",
-		b2i(t.Monitored), t.ProfileID, t.RootFolder, t.Path, t.ID)
+	res, err := s.exec(ctx, "UPDATE series SET monitored = ?, profile_id = ?, root_folder = ?, path = ?, auto_upgrade = ? WHERE id = ?",
+		b2i(t.Monitored), t.ProfileID, t.RootFolder, t.Path, t.AutoUpgrade, t.ID)
 	if err != nil {
 		return err
 	}
