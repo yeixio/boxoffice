@@ -234,7 +234,7 @@ func TestImportLater(t *testing.T) {
 		t.Fatal(err)
 	}
 	deadline := time.Now().Add(5 * time.Second)
-	for d.ImportedTo == "" && time.Now().Before(deadline) {
+	for (d.ImportedTo == "" || d.Status != store.DownloadCompleted) && time.Now().Before(deadline) {
 		time.Sleep(20 * time.Millisecond)
 		d, _ = st.Download(ctx, d.ID)
 	}
