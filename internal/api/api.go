@@ -25,6 +25,7 @@ import (
 
 	"github.com/yeixio/boxoffice/internal/arrapi"
 	"github.com/yeixio/boxoffice/internal/backup"
+	"github.com/yeixio/boxoffice/internal/books"
 	"github.com/yeixio/boxoffice/internal/catalog"
 	"github.com/yeixio/boxoffice/internal/downloader"
 	"github.com/yeixio/boxoffice/internal/libscan"
@@ -48,7 +49,9 @@ type Server struct {
 	Store   *store.Store
 	Catalog *catalog.Service
 	// Music is the music list, used while music is turned on.
-	Music    *music.Service
+	Music *music.Service
+	// Books is the list of books, for ebooks and audiobooks.
+	Books    *books.Service
 	Backups  *backup.Manager
 	Migrator *migrate.Migrator
 	// Downloads is the downloader, and Search finds releases for it.
@@ -138,6 +141,15 @@ func (s *Server) Handler() http.Handler {
 		{"DELETE /api/v1/artists/{id}", true, s.deleteArtist},
 		{"POST /api/v1/artists/{id}/refresh", true, s.refreshArtist},
 		{"PATCH /api/v1/albums/{id}", true, s.editAlbum},
+		{"GET /api/v1/lookup/authors", true, s.lookupAuthors},
+		{"GET /api/v1/authors", true, s.authors},
+		{"POST /api/v1/authors", true, s.addAuthor},
+		{"GET /api/v1/authors/{id}", true, s.author},
+		{"PATCH /api/v1/authors/{id}", true, s.editAuthor},
+		{"DELETE /api/v1/authors/{id}", true, s.deleteAuthor},
+		{"POST /api/v1/authors/{id}/refresh", true, s.refreshAuthor},
+		{"PUT /api/v1/authors/{id}/wanted", true, s.wantAllBooks},
+		{"PUT /api/v1/books/{id}/wanted", true, s.wantBook},
 
 		{"GET /api/v1/lookup/movies", true, s.lookupMovies},
 		{"GET /api/v1/lookup/series", true, s.lookupSeries},
@@ -581,4 +593,4 @@ func (s *Server) changePassword(w http.ResponseWriter, r *http.Request) error {
 // imageSources are where posters and backdrops are shown from.
 // Album covers come from the Cover Art Archive, which sends browsers on to
 // archive.org.
-const imageSources = "https://image.tmdb.org https://artworks.thetvdb.com https://thetvdb.com https://assets.fanart.tv https://coverartarchive.org https://archive.org https://*.archive.org"
+const imageSources = "https://image.tmdb.org https://artworks.thetvdb.com https://thetvdb.com https://assets.fanart.tv https://coverartarchive.org https://archive.org https://*.archive.org https://covers.openlibrary.org"
