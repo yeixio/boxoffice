@@ -625,7 +625,10 @@
       "wantAll": "Cần mọi cuốn sách của họ dưới dạng sách điện tử",
       "wantNew": "Cần sách mới dưới dạng sách điện tử khi phát hành",
       "want": "Cần {{title}} dưới dạng sách điện tử",
-      "stop": "Không cần {{title}} dưới dạng sách điện tử nữa"
+      "stop": "Không cần {{title}} dưới dạng sách điện tử nữa",
+      "wantIt": "Cần dưới dạng sách điện tử",
+      "releasesTitle": "{{title}} (sách điện tử)",
+      "searching": "Box Office đang tìm trên các trình lập chỉ mục của bạn và sẽ tải sách điện tử tốt nhất tìm được. Xem kết quả trong Hoạt động."
     },
     "audiobook": {
       "wantedSort": "Sách nói cần có",
@@ -634,7 +637,10 @@
       "wantAll": "Cần mọi cuốn sách của họ dưới dạng sách nói",
       "wantNew": "Cần sách mới dưới dạng sách nói khi phát hành",
       "want": "Cần {{title}} dưới dạng sách nói",
-      "stop": "Không cần {{title}} dưới dạng sách nói nữa"
+      "stop": "Không cần {{title}} dưới dạng sách nói nữa",
+      "wantIt": "Cần dưới dạng sách nói",
+      "releasesTitle": "{{title}} (sách nói)",
+      "searching": "Box Office đang tìm trên các trình lập chỉ mục của bạn và sẽ tải sách nói tốt nhất tìm được. Xem kết quả trong Hoạt động."
     },
     "authors_other": "{{count}} tác giả",
     "sub": "{{authors}}, {{wanted}}",
@@ -653,14 +659,24 @@
     "works_other": "{{count}} tác phẩm",
     "wantAllHint": "Tắt: bạn chọn những cuốn mình muốn từ trang của tác giả. Open Library cũng liệt kê tuyển tập và bản dịch, nên tự chọn thường tốt hơn.",
     "lookup": "Box Office tra cứu sách trên Open Library, việc này mất vài giây với tác giả có nhiều sách.",
-    "next": "Tìm kiếm và tải sách sẽ có trong bản cập nhật Box Office tiếp theo.",
     "refresh": "Làm mới từ Open Library",
     "wantAllCount_other": "Cần cả {{count}}",
     "wantNone": "Không cuốn nào",
     "heading": "Sách",
     "noBooks": "Open Library chưa liệt kê sách nào cho {{name}}.",
-    "order": "Sách có nhiều ấn bản nhất được xếp trước.",
-    "removeBody": "Box Office ngừng theo dõi {{name}} cho cả sách điện tử lẫn sách nói, và quên sách của họ. Các tệp đã có trong thư viện của bạn vẫn ở nguyên chỗ."
+    "removeBody": "Box Office ngừng theo dõi {{name}} cho cả sách điện tử lẫn sách nói, và quên sách của họ. Các tệp đã có trong thư viện của bạn vẫn ở nguyên chỗ.",
+    "orderPick": "Sách có nhiều ấn bản nhất xếp trước. Chọn một bìa để tìm cuốn sách đó.",
+    "locked": "Đừng động vào",
+    "lockedHint": "Box Office sẽ không tìm, tải hay di chuyển bất kỳ cuốn sách nào của {{name}}, dù là sách điện tử hay sách nói. Dùng cho những cuốn sách bạn tự quản lý.",
+    "lockedNote": "Tác giả này được đặt là Đừng động vào, nên Box Office không tìm sách của họ.",
+    "allOnDisk_other": "Cả {{count}} đều có trên ổ đĩa",
+    "missing_other": "Thiếu {{missing}} trên {{count}}",
+    "onDiskCount_other": "{{count}} trên ổ đĩa",
+    "open": "Mở {{title}}",
+    "editions_other": "{{count}} ấn bản",
+    "lookFor": "Tìm nó",
+    "lookingFor": "Đang tìm",
+    "alsoLooks": "Box Office cũng tự tìm những sách cần, vài cuốn mỗi giờ."
   },
   "discover": {
     "sub": "Những gì đang thịnh hành và sắp ra mắt, và thêm nhiều thứ giống những gì bạn có.",
@@ -833,7 +849,14 @@
     "addFromShows": "Nó phải có trong thư viện của bạn trước; hãy thêm nó từ Chương trình.",
     "titles": "Tựa",
     "episodeNote": "Mỗi video vào tập mà tên của nó cho biết, như S01E02.",
-    "moveInto": "Chuyển vào {{title}}"
+    "moveInto": "Chuyển vào {{title}}",
+    "movesEbook": "Box Office chuyển tệp sách điện tử tốt nhất (ưu tiên EPUB) vào thư mục của tác giả và đặt tên giúp bạn. Bản đã có sẵn ở đó được để sang một bên, không bị xóa.",
+    "movesEbookFolder": "Box Office chuyển tệp sách điện tử tốt nhất (ưu tiên EPUB) vào thư mục của tác giả và đặt tên giúp bạn, rồi xóa phần còn lại của thư mục. Bản đã có sẵn ở đó được để sang một bên, không bị xóa.",
+    "movesAudiobook": "Box Office chuyển các tệp âm thanh, theo thứ tự, vào thư mục của cuốn sách trong thư mục của tác giả. Bản đã có sẵn ở đó được để sang một bên, không bị xóa.",
+    "movesAudiobookFolder": "Box Office chuyển các tệp âm thanh, theo thứ tự, vào thư mục của cuốn sách trong thư mục của tác giả, rồi xóa phần còn lại của thư mục. Bản đã có sẵn ở đó được để sang một bên, không bị xóa.",
+    "findBook": "Tìm cuốn sách",
+    "addFromBooks": "Nó phải có trong thư viện của bạn trước; hãy thêm nó từ Sách, ở trang tác giả.",
+    "addFromAudiobooks": "Nó phải có trong thư viện của bạn trước; hãy thêm nó từ Sách nói, ở trang tác giả."
   },
   "dlBulk": {
     "pause": "Tạm dừng",
@@ -1514,5 +1537,9 @@
       "showProfile": "Hồ sơ chương trình",
       "seasons": "Chương trình được phê duyệt sẽ theo dõi các mùa đặt trong Cài đặt → Chương trình mới."
     }
+  },
+  "kind": {
+    "ebook": "Sách điện tử",
+    "audiobook": "Sách nói"
   }
 }

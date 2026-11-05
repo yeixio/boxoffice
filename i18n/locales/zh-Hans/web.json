@@ -625,7 +625,10 @@
       "wantAll": "想要其所有书的电子书",
       "wantNew": "新书出版时想要电子书",
       "want": "想要 {{title}} 的电子书",
-      "stop": "不再想要 {{title}} 的电子书"
+      "stop": "不再想要 {{title}} 的电子书",
+      "wantIt": "想要电子书",
+      "releasesTitle": "{{title}}（电子书）",
+      "searching": "Box Office 正在搜索你的索引器，会抓取找到的最佳电子书。结果可在活动中查看。"
     },
     "audiobook": {
       "wantedSort": "想要的有声书",
@@ -634,7 +637,10 @@
       "wantAll": "想要其所有书的有声书",
       "wantNew": "新书出版时想要有声书",
       "want": "想要 {{title}} 的有声书",
-      "stop": "不再想要 {{title}} 的有声书"
+      "stop": "不再想要 {{title}} 的有声书",
+      "wantIt": "想要有声书",
+      "releasesTitle": "{{title}}（有声书）",
+      "searching": "Box Office 正在搜索你的索引器，会抓取找到的最佳有声书。结果可在活动中查看。"
     },
     "authors_other": "{{count}} 位作者",
     "sub": "{{authors}}，{{wanted}}",
@@ -653,14 +659,24 @@
     "works_other": "{{count}} 部作品",
     "wantAllHint": "关闭，你在作者页面挑选想要的。Open Library 也会列出合集和译本，所以挑选通常更好。",
     "lookup": "Box Office 在 Open Library 上查找书籍，作品很多的作者需要几秒钟。",
-    "next": "搜索和下载书籍将在 Box Office 的下一次更新中推出。",
     "refresh": "从 Open Library 刷新",
     "wantAllCount_other": "全部 {{count}} 本都想要",
     "wantNone": "都不想要",
     "heading": "图书",
     "noBooks": "Open Library 上还没有 {{name}} 的书。",
-    "order": "版本最多的书排在前面。",
-    "removeBody": "Box Office 会同时停止在电子书和有声书中关注 {{name}}，并忘记其书籍。媒体库中已有的文件保持原处。"
+    "removeBody": "Box Office 会同时停止在电子书和有声书中关注 {{name}}，并忘记其书籍。媒体库中已有的文件保持原处。",
+    "orderPick": "版本最多的书排在前面。选一个封面来寻找那本书。",
+    "locked": "不要动",
+    "lockedHint": "Box Office 不会搜索、下载或移动 {{name}} 的任何书，无论是电子书还是有声书。用于你自己管理的书。",
+    "lockedNote": "该作者设为“不要动”，所以 Box Office 不会寻找其书籍。",
+    "allOnDisk_other": "全部 {{count}} 本已在磁盘",
+    "missing_other": "{{count}} 本中缺 {{missing}} 本",
+    "onDiskCount_other": "磁盘上有 {{count}} 本",
+    "open": "打开 {{title}}",
+    "editions_other": "{{count}} 个版本",
+    "lookFor": "寻找",
+    "lookingFor": "正在寻找",
+    "alsoLooks": "Box Office 也会自己寻找想要的书，每小时几本。"
   },
   "discover": {
     "sub": "热门和即将上映的作品，以及与你已有内容相似的作品。",
@@ -833,7 +849,14 @@
     "addFromShows": "它必须先在你的媒体库中；请从剧集添加。",
     "titles": "作品",
     "episodeNote": "每个视频会放到其名称所示的单集，例如 S01E02。",
-    "moveInto": "移入 {{title}}"
+    "moveInto": "移入 {{title}}",
+    "movesEbook": "Box Office 会把最佳电子书文件（优先 EPUB）移入作者的文件夹并为你命名。那里已有的版本会被另行存放，而不是删除。",
+    "movesEbookFolder": "Box Office 会把最佳电子书文件（优先 EPUB）移入作者的文件夹并为你命名，然后删除文件夹中剩余的内容。那里已有的版本会被另行存放，而不是删除。",
+    "movesAudiobook": "Box Office 会把音频文件按顺序移入作者文件夹中的这本书的文件夹。那里已有的版本会被另行存放，而不是删除。",
+    "movesAudiobookFolder": "Box Office 会把音频文件按顺序移入作者文件夹中的这本书的文件夹，然后删除文件夹中剩余的内容。那里已有的版本会被另行存放，而不是删除。",
+    "findBook": "寻找图书",
+    "addFromBooks": "它必须先在你的媒体库中；请在图书中其作者的页面添加。",
+    "addFromAudiobooks": "它必须先在你的媒体库中；请在有声书中其作者的页面添加。"
   },
   "dlBulk": {
     "pause": "暂停",
@@ -1514,5 +1537,9 @@
       "showProfile": "剧集配置",
       "seasons": "批准的剧集会关注 设置 → 新剧集 中设定的季。"
     }
+  },
+  "kind": {
+    "ebook": "电子书",
+    "audiobook": "有声书"
   }
 }

@@ -661,7 +661,10 @@
       "wantAll": "Minden könyve legyen keresett e-könyvként",
       "wantNew": "Az új könyvek legyenek keresettek e-könyvként, amikor megjelennek",
       "want": "{{title}} legyen keresett e-könyvként",
-      "stop": "{{title}} ne legyen keresett e-könyvként"
+      "stop": "{{title}} ne legyen keresett e-könyvként",
+      "wantIt": "Legyen keresett e-könyvként",
+      "releasesTitle": "{{title}} (e-könyv)",
+      "searching": "A Box Office átnézi az indexelőidet, és letölti a legjobb e-könyvet, amit talál. A Tevékenység oldalon látod, hogyan sikerült."
     },
     "audiobook": {
       "wantedSort": "Keresett hangoskönyvek",
@@ -671,7 +674,10 @@
       "wantAll": "Minden könyve legyen keresett hangoskönyvként",
       "wantNew": "Az új könyvek legyenek keresettek hangoskönyvként, amikor megjelennek",
       "want": "{{title}} legyen keresett hangoskönyvként",
-      "stop": "{{title}} ne legyen keresett hangoskönyvként"
+      "stop": "{{title}} ne legyen keresett hangoskönyvként",
+      "wantIt": "Legyen keresett hangoskönyvként",
+      "releasesTitle": "{{title}} (hangoskönyv)",
+      "searching": "A Box Office átnézi az indexelőidet, és letölti a legjobb hangoskönyvet, amit talál. A Tevékenység oldalon látod, hogyan sikerült."
     },
     "authors_one": "{{count}} szerző",
     "authors_other": "{{count}} szerző",
@@ -693,15 +699,29 @@
     "works_other": "{{count}} mű",
     "wantAllHint": "Kikapcsolva: a szerző oldalán választod ki, amelyeket szeretnél. Az Open Library gyűjteményeket és fordításokat is listáz, ezért gyakran jobb választani.",
     "lookup": "A Box Office az Open Libraryben keresi meg a könyveket, ez sok könyvvel rendelkező szerzőknél néhány másodpercig tart.",
-    "next": "A könyvek keresése és letöltése a Box Office következő frissítésében érkezik.",
     "refresh": "Frissítés az Open Libraryből",
     "wantAllCount_one": "Mind a(z) {{count}} legyen keresett",
     "wantAllCount_other": "Mind a(z) {{count}} legyen keresett",
     "wantNone": "Egyik sem",
     "heading": "Könyvek",
     "noBooks": "Az Open Library még nem listáz könyvet ehhez: {{name}}.",
-    "order": "A legtöbb kiadással rendelkező könyvek vannak elöl.",
-    "removeBody": "A Box Office nem követi tovább: {{name}}, sem e-könyvekhez, sem hangoskönyvekhez, és elfelejti a könyveit. A könyvtáraidban már meglévő fájlok ott maradnak, ahol vannak."
+    "removeBody": "A Box Office nem követi tovább: {{name}}, sem e-könyvekhez, sem hangoskönyvekhez, és elfelejti a könyveit. A könyvtáraidban már meglévő fájlok ott maradnak, ahol vannak.",
+    "orderPick": "Elöl a legtöbb kiadással rendelkező könyvek. Válassz egy borítót, hogy megkeresd azt a könyvet.",
+    "locked": "Ne nyúlj hozzá",
+    "lockedHint": "A Box Office nem keresi, nem tölti le és nem helyezi át {{name}} egyetlen könyvét sem, se e-könyvként, se hangoskönyvként. Azokhoz a könyvekhez használd, amelyekről magad gondoskodsz.",
+    "lockedNote": "Ez a szerző Ne nyúlj hozzá beállítású, ezért a Box Office nem keresi a könyveit.",
+    "allOnDisk_one": "A lemezen: {{count}}",
+    "allOnDisk_other": "Mind a(z) {{count}} a lemezen",
+    "missing_one": "Hiányzik: {{missing}} / {{count}}",
+    "missing_other": "Hiányzik: {{missing}} / {{count}}",
+    "onDiskCount_one": "A lemezen: {{count}}",
+    "onDiskCount_other": "A lemezen: {{count}}",
+    "open": "{{title}} megnyitása",
+    "editions_one": "{{count}} kiadás",
+    "editions_other": "{{count}} kiadás",
+    "lookFor": "Keresd meg",
+    "lookingFor": "Keresés folyamatban",
+    "alsoLooks": "A Box Office magától is keresi a keresett könyveket, óránként néhányat."
   },
   "discover": {
     "sub": "Mi népszerű és mi érkezik hamarosan, és több abból, amit szeretsz.",
@@ -899,7 +919,14 @@
     "addFromShows": "Előbb a könyvtáradban kell lennie; add hozzá a Sorozatoknál.",
     "titles": "Címek",
     "episodeNote": "Minden videó ahhoz az epizódhoz kerül, amelyet a neve megad, például S01E02.",
-    "moveInto": "Áthelyezés ide: {{title}}"
+    "moveInto": "Áthelyezés ide: {{title}}",
+    "movesEbook": "A Box Office a legjobb e-könyv-fájlt (elsőként EPUB) a szerző mappájába helyezi, és elnevezi helyetted. Az ott már meglévő példányt félreteszi, nem törli.",
+    "movesEbookFolder": "A Box Office a legjobb e-könyv-fájlt (elsőként EPUB) a szerző mappájába helyezi, és elnevezi helyetted, majd törli a mappából megmaradt részt. Az ott már meglévő példányt félreteszi, nem törli.",
+    "movesAudiobook": "A Box Office a hangfájlokat sorrendben a könyv mappájába helyezi a szerző mappáján belül. Az ott már meglévő példányt félreteszi, nem törli.",
+    "movesAudiobookFolder": "A Box Office a hangfájlokat sorrendben a könyv mappájába helyezi a szerző mappáján belül, majd törli a mappából megmaradt részt. Az ott már meglévő példányt félreteszi, nem törli.",
+    "findBook": "Könyv keresése",
+    "addFromBooks": "Előbb a könyvtáradban kell lennie; add hozzá a Könyveknél, a szerzőjénél.",
+    "addFromAudiobooks": "Előbb a könyvtáradban kell lennie; add hozzá a Hangoskönyveknél, a szerzőjénél."
   },
   "dlBulk": {
     "pause": "Szünet",
@@ -1604,5 +1631,9 @@
       "showProfile": "Sorozatprofil",
       "seasons": "A jóváhagyott sorozatok a Beállítások → Új sorozatok alatt megadott évadokat figyelik."
     }
+  },
+  "kind": {
+    "ebook": "E-könyv",
+    "audiobook": "Hangoskönyv"
   }
 }

@@ -661,7 +661,10 @@
       "wantAll": "Toivo kaikkia hänen kirjojaan e-kirjoina",
       "wantNew": "Toivo uusia kirjoja e-kirjoina, kun ne ilmestyvät",
       "want": "Toivo {{title}} e-kirjana",
-      "stop": "Lakkaa toivomasta {{title}} e-kirjana"
+      "stop": "Lakkaa toivomasta {{title}} e-kirjana",
+      "wantIt": "Toivo sitä e-kirjana",
+      "releasesTitle": "{{title}} (e-kirja)",
+      "searching": "Box Office hakee indeksoijistasi ja noutaa parhaan löytämänsä e-kirjan. Toiminta-sivulta näet, miten kävi."
     },
     "audiobook": {
       "wantedSort": "Toivotut äänikirjat",
@@ -671,7 +674,10 @@
       "wantAll": "Toivo kaikkia hänen kirjojaan äänikirjoina",
       "wantNew": "Toivo uusia kirjoja äänikirjoina, kun ne ilmestyvät",
       "want": "Toivo {{title}} äänikirjana",
-      "stop": "Lakkaa toivomasta {{title}} äänikirjana"
+      "stop": "Lakkaa toivomasta {{title}} äänikirjana",
+      "wantIt": "Toivo sitä äänikirjana",
+      "releasesTitle": "{{title}} (äänikirja)",
+      "searching": "Box Office hakee indeksoijistasi ja noutaa parhaan löytämänsä äänikirjan. Toiminta-sivulta näet, miten kävi."
     },
     "authors_one": "{{count}} kirjailija",
     "authors_other": "{{count}} kirjailijaa",
@@ -693,15 +699,29 @@
     "works_other": "{{count}} teosta",
     "wantAllHint": "Pois: valitset haluamasi kirjailijan sivulta. Open Library listaa myös kokoelmat ja käännökset, joten valitseminen on usein parempi.",
     "lookup": "Box Office hakee kirjat Open Librarysta, mikä vie muutaman sekunnin kirjailijoilla, joilla niitä on paljon.",
-    "next": "Kirjojen haku ja lataus tulevat Box Officen seuraavassa päivityksessä.",
     "refresh": "Päivitä Open Librarysta",
     "wantAllCount_one": "Toivo {{count}}",
     "wantAllCount_other": "Toivo kaikki {{count}}",
     "wantNone": "Älä toivo mitään",
     "heading": "Kirjat",
     "noBooks": "Open Library ei vielä listaa kirjoja kirjailijalle {{name}}.",
-    "order": "Eniten painoksia saaneet kirjat ensin.",
-    "removeBody": "Box Office lakkaa seuraamasta kirjailijaa {{name}} sekä e-kirjojen että äänikirjojen osalta ja unohtaa hänen kirjansa. Kirjastoissasi jo olevat tiedostot jäävät paikoilleen."
+    "removeBody": "Box Office lakkaa seuraamasta kirjailijaa {{name}} sekä e-kirjojen että äänikirjojen osalta ja unohtaa hänen kirjansa. Kirjastoissasi jo olevat tiedostot jäävät paikoilleen.",
+    "orderPick": "Kirjat, joilla on eniten painoksia, tulevat ensin. Valitse kansi etsiäksesi sitä kirjaa.",
+    "locked": "Älä koske",
+    "lockedHint": "Box Office ei etsi, lataa eikä siirrä yhtäkään kirjailijan {{name}} kirjaa, ei e-kirjana eikä äänikirjana. Käytä tätä kirjoille, joista huolehdit itse.",
+    "lockedNote": "Tämä kirjailija on asetettu tilaan Älä koske, joten Box Office ei etsi hänen kirjojaan.",
+    "allOnDisk_one": "{{count}} levyllä",
+    "allOnDisk_other": "Kaikki {{count}} levyllä",
+    "missing_one": "{{missing}}/{{count}} puuttuu",
+    "missing_other": "{{missing}}/{{count}} puuttuu",
+    "onDiskCount_one": "{{count}} levyllä",
+    "onDiskCount_other": "{{count}} levyllä",
+    "open": "Avaa {{title}}",
+    "editions_one": "{{count}} painos",
+    "editions_other": "{{count}} painosta",
+    "lookFor": "Etsi sitä",
+    "lookingFor": "Etsitään",
+    "alsoLooks": "Box Office etsii toivottuja kirjoja myös itse, muutaman tunnissa."
   },
   "discover": {
     "sub": "Mikä on suosittua ja tulossa, ja lisää samanlaista kuin mitä sinulla on.",
@@ -899,7 +919,14 @@
     "addFromShows": "Sen pitää ensin olla kirjastossasi; lisää se kohdasta Sarjat.",
     "titles": "Nimikkeet",
     "episodeNote": "Jokainen video menee jaksoon, jonka sen nimi kertoo, kuten S01E02.",
-    "moveInto": "Siirrä kohteeseen {{title}}"
+    "moveInto": "Siirrä kohteeseen {{title}}",
+    "movesEbook": "Box Office siirtää parhaan e-kirjatiedoston (EPUB ensin) kirjailijan kansioon ja nimeää sen puolestasi. Jo siellä oleva kopio siirretään sivuun, ei poisteta.",
+    "movesEbookFolder": "Box Office siirtää parhaan e-kirjatiedoston (EPUB ensin) kirjailijan kansioon ja nimeää sen puolestasi, ja poistaa sitten kansiosta jäljelle jääneen. Jo siellä oleva kopio siirretään sivuun, ei poisteta.",
+    "movesAudiobook": "Box Office siirtää äänitiedostot järjestyksessä kirjan kansioon kirjailijan kansion sisälle. Jo siellä oleva kopio siirretään sivuun, ei poisteta.",
+    "movesAudiobookFolder": "Box Office siirtää äänitiedostot järjestyksessä kirjan kansioon kirjailijan kansion sisälle ja poistaa sitten kansiosta jäljelle jääneen. Jo siellä oleva kopio siirretään sivuun, ei poisteta.",
+    "findBook": "Etsi kirja",
+    "addFromBooks": "Sen pitää ensin olla kirjastossasi; lisää se kohdasta Kirjat, sen kirjailijan sivulta.",
+    "addFromAudiobooks": "Sen pitää ensin olla kirjastossasi; lisää se kohdasta Äänikirjat, sen kirjailijan sivulta."
   },
   "dlBulk": {
     "pause": "Tauko",
@@ -1604,5 +1631,9 @@
       "showProfile": "Sarjojen profiili",
       "seasons": "Hyväksytyt sarjat seuraavat kausia, jotka on asetettu kohdassa Asetukset → Uudet sarjat."
     }
+  },
+  "kind": {
+    "ebook": "E-kirja",
+    "audiobook": "Äänikirja"
   }
 }

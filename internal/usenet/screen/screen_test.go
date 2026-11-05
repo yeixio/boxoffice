@@ -62,3 +62,30 @@ func TestNoVideo(t *testing.T) {
 		t.Fatalf("a hand-added download needn't hold a video: %v", f)
 	}
 }
+
+func TestCheckBooks(t *testing.T) {
+	dir := t.TempDir()
+	os.WriteFile(filepath.Join(dir, "book.epub"), append([]byte("PK\x03\x04"), make([]byte, 100)...), 0o644)
+	os.WriteFile(filepath.Join(dir, "fake.mobi"), append([]byte("Rar!\x1a\x07\x00"), make([]byte, 100)...), 0o644)
+	os.WriteFile(filepath.Join(dir, "book.epub.exe"), make([]byte, 100), 0o644)
+	os.WriteFile(filepath.Join(dir, "01.mp3"), make([]byte, 100), 0o644)
+	os.WriteFile(filepath.Join(dir, "readme.txt"), make([]byte, 10), 0o644)
+	if f := CheckFor(dir, []string{"book.epub"}, WantEbook); len(f) != 0 {
+		t.Fatalf("an EPUB (a ZIP inside) was flagged: %v", f)
+	}
+	if f := CheckFor(dir, []string{"fake.mobi"}, WantEbook); len(f) != 1 {
+		t.Fatalf("a RAR named .mobi: %v", f)
+	}
+	if f := CheckFor(dir, []string{"book.epub.exe"}, WantEbook); len(f) != 1 || f[0].Why != "it's a .exe file pretending to be an ebook" {
+		t.Fatalf("exe: %v", f)
+	}
+	if f := CheckFor(dir, []string{"readme.txt", "01.mp3"}, WantEbook); len(f) != 1 || f[0].File != "" {
+		t.Fatalf("no ebook: %v", f)
+	}
+	if f := CheckFor(dir, []string{"01.mp3"}, WantAudio); len(f) != 0 {
+		t.Fatalf("audiobook: %v", f)
+	}
+	if f := CheckFor(dir, []string{"book.epub"}, WantAudio); len(f) != 1 {
+		t.Fatalf("an ebook passed as an audiobook: %v", f)
+	}
+}

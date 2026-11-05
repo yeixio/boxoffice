@@ -661,7 +661,10 @@
       "wantAll": "Elk boek van deze auteur als e-book willen",
       "wantNew": "Nieuwe boeken als e-book willen zodra ze uitkomen",
       "want": "{{title}} als e-book willen",
-      "stop": "{{title}} niet meer als e-book willen"
+      "stop": "{{title}} niet meer als e-book willen",
+      "wantIt": "Als e-book willen",
+      "releasesTitle": "{{title}} (e-book)",
+      "searching": "Box Office doorzoekt je indexers en pakt het beste e-book dat het vindt. Bij Activiteit zie je hoe het ging."
     },
     "audiobook": {
       "wantedSort": "Gewenste luisterboeken",
@@ -671,7 +674,10 @@
       "wantAll": "Elk boek van deze auteur als luisterboek willen",
       "wantNew": "Nieuwe boeken als luisterboek willen zodra ze uitkomen",
       "want": "{{title}} als luisterboek willen",
-      "stop": "{{title}} niet meer als luisterboek willen"
+      "stop": "{{title}} niet meer als luisterboek willen",
+      "wantIt": "Als luisterboek willen",
+      "releasesTitle": "{{title}} (luisterboek)",
+      "searching": "Box Office doorzoekt je indexers en pakt het beste luisterboek dat het vindt. Bij Activiteit zie je hoe het ging."
     },
     "authors_one": "{{count}} auteur",
     "authors_other": "{{count}} auteurs",
@@ -693,15 +699,29 @@
     "works_other": "{{count}} werken",
     "wantAllHint": "Uit, je kiest de boeken die je wilt op de pagina van de auteur. Open Library toont ook bundels en vertalingen, dus kiezen is vaak beter.",
     "lookup": "Box Office zoekt de boeken op in Open Library, wat een paar seconden duurt voor auteurs met veel boeken.",
-    "next": "Zoeken naar en downloaden van boeken komt in de volgende update van Box Office.",
     "refresh": "Vernieuwen vanuit Open Library",
     "wantAllCount_one": "Alle {{count}} willen",
     "wantAllCount_other": "Alle {{count}} willen",
     "wantNone": "Geen willen",
     "heading": "Boeken",
     "noBooks": "Open Library heeft nog geen boeken voor {{name}}.",
-    "order": "De boeken met de meeste edities komen eerst.",
-    "removeBody": "Box Office volgt {{name}} niet meer, voor e-books en luisterboeken, en vergeet de boeken. Bestanden die al in je bibliotheken staan, blijven waar ze zijn."
+    "removeBody": "Box Office volgt {{name}} niet meer, voor e-books en luisterboeken, en vergeet de boeken. Bestanden die al in je bibliotheken staan, blijven waar ze zijn.",
+    "orderPick": "De boeken met de meeste edities staan voorop. Kies een omslag om naar dat boek te zoeken.",
+    "locked": "Niet aankomen",
+    "lockedHint": "Box Office zoekt, downloadt en verplaatst geen enkel boek van {{name}}, als e-book noch als luisterboek. Gebruik dit voor boeken die je zelf beheert.",
+    "lockedNote": "Deze auteur staat op Niet aankomen, dus Box Office zoekt niet naar hun boeken.",
+    "allOnDisk_one": "{{count}} op schijf",
+    "allOnDisk_other": "Alle {{count}} op schijf",
+    "missing_one": "{{missing}} van {{count}} ontbreekt",
+    "missing_other": "{{missing}} van {{count}} ontbreken",
+    "onDiskCount_one": "{{count}} op schijf",
+    "onDiskCount_other": "{{count}} op schijf",
+    "open": "{{title}} openen",
+    "editions_one": "{{count}} editie",
+    "editions_other": "{{count}} edities",
+    "lookFor": "Zoeken",
+    "lookingFor": "Wordt gezocht",
+    "alsoLooks": "Box Office zoekt ook zelf naar gewenste boeken, een paar per uur."
   },
   "discover": {
     "sub": "Wat populair is en binnenkort komt, en meer zoals wat je hebt.",
@@ -899,7 +919,14 @@
     "addFromShows": "Het moet eerst in je bibliotheek staan; voeg het toe via Series.",
     "titles": "Titels",
     "episodeNote": "Elke video gaat naar de aflevering die de naam aangeeft, zoals S01E02.",
-    "moveInto": "Naar {{title}} verplaatsen"
+    "moveInto": "Naar {{title}} verplaatsen",
+    "movesEbook": "Box Office verplaatst het beste e-bookbestand (EPUB eerst) naar de map van de auteur en geeft het een naam. Een kopie die er al staat, wordt opzijgezet, niet verwijderd.",
+    "movesEbookFolder": "Box Office verplaatst het beste e-bookbestand (EPUB eerst) naar de map van de auteur en geeft het een naam, en verwijdert daarna wat er van de map over is. Een kopie die er al staat, wordt opzijgezet, niet verwijderd.",
+    "movesAudiobook": "Box Office verplaatst de audiobestanden, op volgorde, naar de map van het boek in de map van de auteur. Een kopie die er al staat, wordt opzijgezet, niet verwijderd.",
+    "movesAudiobookFolder": "Box Office verplaatst de audiobestanden, op volgorde, naar de map van het boek in de map van de auteur, en verwijdert daarna wat er van de map over is. Een kopie die er al staat, wordt opzijgezet, niet verwijderd.",
+    "findBook": "Zoek het boek",
+    "addFromBooks": "Het moet eerst in je bibliotheek staan; voeg het toe via Boeken, bij de auteur.",
+    "addFromAudiobooks": "Het moet eerst in je bibliotheek staan; voeg het toe via Luisterboeken, bij de auteur."
   },
   "dlBulk": {
     "pause": "Pauze",
@@ -1604,5 +1631,9 @@
       "showProfile": "Serieprofiel",
       "seasons": "Goedgekeurde series volgen de seizoenen die zijn ingesteld onder Instellingen → Nieuwe series."
     }
+  },
+  "kind": {
+    "ebook": "E-book",
+    "audiobook": "Luisterboek"
   }
 }

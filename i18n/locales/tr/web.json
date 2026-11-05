@@ -661,7 +661,10 @@
       "wantAll": "Tüm kitapları e-kitap olarak istensin",
       "wantNew": "Yeni kitaplar çıktığında e-kitap olarak istensin",
       "want": "{{title}} e-kitap olarak istensin",
-      "stop": "{{title}} artık e-kitap olarak istenmesin"
+      "stop": "{{title}} artık e-kitap olarak istenmesin",
+      "wantIt": "E-kitap olarak istensin",
+      "releasesTitle": "{{title}} (e-kitap)",
+      "searching": "Box Office dizinleyicilerinizde arıyor ve bulduğu en iyi e-kitabı indirecek. Nasıl gittiğini Etkinlik'te görebilirsiniz."
     },
     "audiobook": {
       "wantedSort": "İstenen sesli kitaplar",
@@ -671,7 +674,10 @@
       "wantAll": "Tüm kitapları sesli kitap olarak istensin",
       "wantNew": "Yeni kitaplar çıktığında sesli kitap olarak istensin",
       "want": "{{title}} sesli kitap olarak istensin",
-      "stop": "{{title}} artık sesli kitap olarak istenmesin"
+      "stop": "{{title}} artık sesli kitap olarak istenmesin",
+      "wantIt": "Sesli kitap olarak istensin",
+      "releasesTitle": "{{title}} (sesli kitap)",
+      "searching": "Box Office dizinleyicilerinizde arıyor ve bulduğu en iyi sesli kitabı indirecek. Nasıl gittiğini Etkinlik'te görebilirsiniz."
     },
     "authors_one": "{{count}} yazar",
     "authors_other": "{{count}} yazar",
@@ -693,15 +699,29 @@
     "works_other": "{{count}} eser",
     "wantAllHint": "Kapalı: istediklerinizi yazarın sayfasından seçersiniz. Open Library derlemeleri ve çevirileri de listeler, bu yüzden seçmek genellikle daha iyidir.",
     "lookup": "Box Office kitapları Open Library'de arar; çok kitabı olan yazarlar için bu birkaç saniye sürer.",
-    "next": "Kitap arama ve indirme bir sonraki Box Office güncellemesinde geliyor.",
     "refresh": "Open Library'den yenile",
     "wantAllCount_one": "{{count}} tanesinin tümü istensin",
     "wantAllCount_other": "{{count}} tanesinin tümü istensin",
     "wantNone": "Hiçbiri",
     "heading": "Kitaplar",
     "noBooks": "Open Library henüz {{name}} için kitap listelemiyor.",
-    "order": "En çok baskısı olan kitaplar önce gelir.",
-    "removeBody": "Box Office {{name}} adlı yazarı hem e-kitaplar hem sesli kitaplar için takip etmeyi bırakır ve kitaplarını unutur. Kütüphanelerinizdeki mevcut dosyalar oldukları yerde kalır."
+    "removeBody": "Box Office {{name}} adlı yazarı hem e-kitaplar hem sesli kitaplar için takip etmeyi bırakır ve kitaplarını unutur. Kütüphanelerinizdeki mevcut dosyalar oldukları yerde kalır.",
+    "orderPick": "En çok baskısı olan kitaplar önce gelir. O kitabı aramak için bir kapak seçin.",
+    "locked": "Dokunma",
+    "lockedHint": "Box Office {{name}} adlı yazarın hiçbir kitabını, ne e-kitap ne sesli kitap olarak, aramaz, indirmez ya da taşımaz. Kendiniz ilgilendiğiniz kitaplar için kullanın.",
+    "lockedNote": "Bu yazar Dokunma olarak ayarlı, bu yüzden Box Office kitaplarını aramıyor.",
+    "allOnDisk_one": "Diskte: {{count}}",
+    "allOnDisk_other": "{{count}} kitabın tümü diskte",
+    "missing_one": "Eksik: {{missing}} / {{count}}",
+    "missing_other": "Eksik: {{missing}} / {{count}}",
+    "onDiskCount_one": "Diskte: {{count}}",
+    "onDiskCount_other": "Diskte: {{count}}",
+    "open": "{{title}} öğesini aç",
+    "editions_one": "{{count}} baskı",
+    "editions_other": "{{count}} baskı",
+    "lookFor": "Ara",
+    "lookingFor": "Aranıyor",
+    "alsoLooks": "Box Office istenen kitapları kendisi de arar, saatte birkaç tane."
   },
   "discover": {
     "sub": "Popüler olanlar, yakında gelenler ve sahip olduklarınıza benzer daha fazlası.",
@@ -899,7 +919,14 @@
     "addFromShows": "Önce kütüphanenizde olması gerekiyor; Diziler'den ekleyin.",
     "titles": "Başlıklar",
     "episodeNote": "Her video, adının belirttiği bölüme gider, örneğin S01E02.",
-    "moveInto": "{{title}} içine taşı"
+    "moveInto": "{{title}} içine taşı",
+    "movesEbook": "Box Office en iyi e-kitap dosyasını (önce EPUB) yazarın klasörüne taşır ve sizin için adlandırır. Orada zaten bulunan bir kopya silinmez, kenara ayrılır.",
+    "movesEbookFolder": "Box Office en iyi e-kitap dosyasını (önce EPUB) yazarın klasörüne taşır ve sizin için adlandırır, ardından klasörden geriye kalanı siler. Orada zaten bulunan bir kopya silinmez, kenara ayrılır.",
+    "movesAudiobook": "Box Office ses dosyalarını sırayla, yazarın klasöründeki kitap klasörüne taşır. Orada zaten bulunan bir kopya silinmez, kenara ayrılır.",
+    "movesAudiobookFolder": "Box Office ses dosyalarını sırayla, yazarın klasöründeki kitap klasörüne taşır, ardından klasörden geriye kalanı siler. Orada zaten bulunan bir kopya silinmez, kenara ayrılır.",
+    "findBook": "Kitabı bul",
+    "addFromBooks": "Önce kütüphanenizde olması gerekiyor; yazarının bulunduğu Kitaplar'dan ekleyin.",
+    "addFromAudiobooks": "Önce kütüphanenizde olması gerekiyor; yazarının bulunduğu Sesli kitaplar'dan ekleyin."
   },
   "dlBulk": {
     "pause": "Duraklat",
@@ -1604,5 +1631,9 @@
       "showProfile": "Dizi profili",
       "seasons": "Onaylanan diziler Ayarlar → Yeni diziler altında belirlenen sezonları izler."
     }
+  },
+  "kind": {
+    "ebook": "E-kitap",
+    "audiobook": "Sesli kitap"
   }
 }

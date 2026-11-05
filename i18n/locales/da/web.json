@@ -661,7 +661,10 @@
       "wantAll": "Ønsk alle deres bøger som e-bog",
       "wantNew": "Ønsk nye bøger som e-bog, når de udkommer",
       "want": "Ønsk {{title}} som e-bog",
-      "stop": "Ønsk ikke længere {{title}} som e-bog"
+      "stop": "Ønsk ikke længere {{title}} som e-bog",
+      "wantIt": "Ønsk den som e-bog",
+      "releasesTitle": "{{title}} (e-bog)",
+      "searching": "Box Office søger i dine indeksere og henter den bedste e-bog, den finder. Under Aktivitet kan du se, hvordan det gik."
     },
     "audiobook": {
       "wantedSort": "Ønskede lydbøger",
@@ -671,7 +674,10 @@
       "wantAll": "Ønsk alle deres bøger som lydbog",
       "wantNew": "Ønsk nye bøger som lydbog, når de udkommer",
       "want": "Ønsk {{title}} som lydbog",
-      "stop": "Ønsk ikke længere {{title}} som lydbog"
+      "stop": "Ønsk ikke længere {{title}} som lydbog",
+      "wantIt": "Ønsk den som lydbog",
+      "releasesTitle": "{{title}} (lydbog)",
+      "searching": "Box Office søger i dine indeksere og henter den bedste lydbog, den finder. Under Aktivitet kan du se, hvordan det gik."
     },
     "authors_one": "{{count}} forfatter",
     "authors_other": "{{count}} forfattere",
@@ -693,15 +699,29 @@
     "works_other": "{{count}} værker",
     "wantAllHint": "Fra: du vælger dem, du vil have, fra forfatterens side. Open Library viser også samlinger og oversættelser, så det er ofte bedre selv at vælge.",
     "lookup": "Box Office slår bøgerne op på Open Library, hvilket tager et par sekunder for forfattere med mange.",
-    "next": "Søgning efter og download af bøger kommer i næste Box Office-opdatering.",
     "refresh": "Opdater fra Open Library",
     "wantAllCount_one": "Ønsk {{count}}",
     "wantAllCount_other": "Ønsk alle {{count}}",
     "wantNone": "Ønsk ingen",
     "heading": "Bøger",
     "noBooks": "Open Library viser ingen bøger for {{name}} endnu.",
-    "order": "Bøgerne med flest udgaver kommer først.",
-    "removeBody": "Box Office holder op med at følge {{name}} for både e-bøger og lydbøger og glemmer deres bøger. Filer, der allerede er i dine biblioteker, bliver liggende."
+    "removeBody": "Box Office holder op med at følge {{name}} for både e-bøger og lydbøger og glemmer deres bøger. Filer, der allerede er i dine biblioteker, bliver liggende.",
+    "orderPick": "Bøgerne med flest udgaver kommer først. Vælg et omslag for at lede efter den bog.",
+    "locked": "Rør ikke",
+    "lockedHint": "Box Office søger ikke efter, henter ikke og flytter ikke nogen af {{name}}s bøger, hverken som e-bog eller lydbog. Brug det til bøger, du selv passer.",
+    "lockedNote": "Denne forfatter er sat til Rør ikke, så Box Office leder ikke efter deres bøger.",
+    "allOnDisk_one": "{{count}} på disk",
+    "allOnDisk_other": "Alle {{count}} på disk",
+    "missing_one": "{{missing}} af {{count}} mangler",
+    "missing_other": "{{missing}} af {{count}} mangler",
+    "onDiskCount_one": "{{count}} på disk",
+    "onDiskCount_other": "{{count}} på disk",
+    "open": "Åbn {{title}}",
+    "editions_one": "{{count}} udgave",
+    "editions_other": "{{count}} udgaver",
+    "lookFor": "Led efter den",
+    "lookingFor": "Leder efter den",
+    "alsoLooks": "Box Office leder også selv efter ønskede bøger, nogle stykker i timen."
   },
   "discover": {
     "sub": "Hvad der er populært og på vej, og mere i stil med det, du har.",
@@ -899,7 +919,14 @@
     "addFromShows": "Den skal først være i dit bibliotek; tilføj den fra Serier.",
     "titles": "Titler",
     "episodeNote": "Hver video går til det afsnit, dens navn angiver, f.eks. S01E02.",
-    "moveInto": "Flyt ind i {{title}}"
+    "moveInto": "Flyt ind i {{title}}",
+    "movesEbook": "Box Office flytter den bedste e-bogsfil (EPUB først) ind i forfatterens mappe og navngiver den for dig. En kopi, der allerede ligger der, lægges til side, ikke slettet.",
+    "movesEbookFolder": "Box Office flytter den bedste e-bogsfil (EPUB først) ind i forfatterens mappe og navngiver den for dig og sletter så det, der er tilbage af mappen. En kopi, der allerede ligger der, lægges til side, ikke slettet.",
+    "movesAudiobook": "Box Office flytter lydfilerne, i rækkefølge, ind i bogens mappe i forfatterens mappe. En kopi, der allerede ligger der, lægges til side, ikke slettet.",
+    "movesAudiobookFolder": "Box Office flytter lydfilerne, i rækkefølge, ind i bogens mappe i forfatterens mappe og sletter så det, der er tilbage af mappen. En kopi, der allerede ligger der, lægges til side, ikke slettet.",
+    "findBook": "Find bogen",
+    "addFromBooks": "Den skal først være i dit bibliotek; tilføj den fra Bøger, hvor dens forfatter er.",
+    "addFromAudiobooks": "Den skal først være i dit bibliotek; tilføj den fra Lydbøger, hvor dens forfatter er."
   },
   "dlBulk": {
     "pause": "Pause",
@@ -1604,5 +1631,9 @@
       "showProfile": "Serieprofil",
       "seasons": "Godkendte serier overvåger de sæsoner, der er angivet under Indstillinger → Nye serier."
     }
+  },
+  "kind": {
+    "ebook": "E-bog",
+    "audiobook": "Lydbog"
   }
 }

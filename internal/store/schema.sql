@@ -110,7 +110,7 @@ CREATE INDEX IF NOT EXISTS episodes_air ON episodes (air_date);
 -- A file on disk for a movie or an episode.
 CREATE TABLE IF NOT EXISTS media_files (
 	id         INTEGER PRIMARY KEY AUTOINCREMENT,
-	kind       TEXT NOT NULL, -- movie or episode
+	kind       TEXT NOT NULL, -- movie, episode, ebook or audiobook (an audiobook's path is its folder)
 	owner_id   BIGINT NOT NULL,
 	path       TEXT NOT NULL UNIQUE,
 	size       BIGINT NOT NULL DEFAULT 0,
@@ -118,6 +118,19 @@ CREATE TABLE IF NOT EXISTS media_files (
 	added_at   BIGINT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS media_files_owner ON media_files (kind, owner_id);
+
+-- What people asked for beyond the profile: the edition a movie should be
+-- (Director's Cut, say), and a better or another copy wanted now, from
+-- Matinee's "Get another edition" and "Ask for a better copy".
+CREATE TABLE IF NOT EXISTS title_wants (
+	kind       TEXT NOT NULL,            -- movie or episode
+	owner_id   BIGINT NOT NULL,
+	edition    TEXT NOT NULL DEFAULT '', -- the edition its copy should be
+	want       TEXT NOT NULL DEFAULT '', -- better, replace (the copy's bad) or ''
+	note       TEXT NOT NULL DEFAULT '',
+	updated_at BIGINT NOT NULL,
+	PRIMARY KEY (kind, owner_id)
+);
 
 -- Background work, and the record of it that Activity shows.
 CREATE TABLE IF NOT EXISTS jobs (
@@ -378,6 +391,7 @@ CREATE TABLE IF NOT EXISTS authors (
 	-- Whether books that come out from now on are wanted in each format.
 	new_ebooks     INTEGER NOT NULL DEFAULT 0,
 	new_audiobooks INTEGER NOT NULL DEFAULT 0,
+	locked         INTEGER NOT NULL DEFAULT 0, -- Do not touch: Box Office never searches for or changes these books' files
 	added_at       BIGINT NOT NULL,
 	refreshed_at   BIGINT NOT NULL DEFAULT 0
 );

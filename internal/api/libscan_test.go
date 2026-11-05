@@ -66,7 +66,7 @@ func TestScanMusicRoot(t *testing.T) {
 }
 
 // An audiobook root folder's scan finds authors' folders and puts the
-// authors on the list, without wanting the books already there.
+// authors on the list, with the books already there counted as on disk.
 func TestScanAudiobookRoot(t *testing.T) {
 	s, hs, _ := monitorServer(t)
 	s.Catalog = &catalog.Service{Store: s.Store, Log: s.Log}
@@ -112,7 +112,7 @@ func TestScanAudiobookRoot(t *testing.T) {
 	}
 	var list []authorOut
 	call(t, hs, "GET", "/api/v1/authors", "", &list)
-	if len(list) != 1 || list[0].Books != 3 || list[0].WantedAudiobooks != 0 || !list[0].NewAudiobooks {
+	if len(list) != 1 || list[0].Books != 3 || list[0].WantedAudiobooks != 1 || list[0].HaveAudiobooks != 1 || !list[0].NewAudiobooks {
 		t.Fatalf("authors %+v", list)
 	}
 	if after, _ := os.ReadDir(filepath.Dir(book)); len(after) != len(before) {

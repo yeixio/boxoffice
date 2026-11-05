@@ -625,7 +625,10 @@
       "wantAll": "Mahukan setiap buku mereka sebagai e-buku",
       "wantNew": "Mahukan buku baharu sebagai e-buku apabila terbit",
       "want": "Mahukan {{title}} sebagai e-buku",
-      "stop": "Berhenti mahukan {{title}} sebagai e-buku"
+      "stop": "Berhenti mahukan {{title}} sebagai e-buku",
+      "wantIt": "Mahukan sebagai e-buku",
+      "releasesTitle": "{{title}} (e-buku)",
+      "searching": "Box Office sedang mencari dalam pengindeks anda dan akan mengambil e-buku terbaik yang ditemuinya. Lihat hasilnya dalam Aktiviti."
     },
     "audiobook": {
       "wantedSort": "Buku audio dikehendaki",
@@ -634,7 +637,10 @@
       "wantAll": "Mahukan setiap buku mereka sebagai buku audio",
       "wantNew": "Mahukan buku baharu sebagai buku audio apabila terbit",
       "want": "Mahukan {{title}} sebagai buku audio",
-      "stop": "Berhenti mahukan {{title}} sebagai buku audio"
+      "stop": "Berhenti mahukan {{title}} sebagai buku audio",
+      "wantIt": "Mahukan sebagai buku audio",
+      "releasesTitle": "{{title}} (buku audio)",
+      "searching": "Box Office sedang mencari dalam pengindeks anda dan akan mengambil buku audio terbaik yang ditemuinya. Lihat hasilnya dalam Aktiviti."
     },
     "authors_other": "{{count}} pengarang",
     "sub": "{{authors}}, {{wanted}}",
@@ -653,14 +659,24 @@
     "works_other": "{{count}} karya",
     "wantAllHint": "Mati: anda memilih yang anda mahu dari halaman pengarang. Open Library juga menyenaraikan koleksi dan terjemahan, jadi memilih selalunya lebih baik.",
     "lookup": "Box Office mencari buku di Open Library, yang mengambil beberapa saat bagi pengarang dengan banyak buku.",
-    "next": "Carian dan muat turun buku akan tiba dalam kemas kini Box Office seterusnya.",
     "refresh": "Segarkan dari Open Library",
     "wantAllCount_other": "Mahukan kesemua {{count}}",
     "wantNone": "Tiada",
     "heading": "Buku",
     "noBooks": "Open Library belum menyenaraikan buku untuk {{name}}.",
-    "order": "Buku dengan edisi terbanyak dipaparkan dahulu.",
-    "removeBody": "Box Office berhenti mengikuti {{name}} untuk e-buku dan buku audio, dan melupakan buku mereka. Fail yang sudah ada dalam pustaka anda kekal di tempatnya."
+    "removeBody": "Box Office berhenti mengikuti {{name}} untuk e-buku dan buku audio, dan melupakan buku mereka. Fail yang sudah ada dalam pustaka anda kekal di tempatnya.",
+    "orderPick": "Buku dengan edisi terbanyak didahulukan. Pilih kulit buku untuk mencari buku itu.",
+    "locked": "Jangan sentuh",
+    "lockedHint": "Box Office tidak akan mencari, memuat turun atau mengalihkan mana-mana buku {{name}}, sama ada sebagai e-buku atau buku audio. Gunakannya untuk buku yang anda uruskan sendiri.",
+    "lockedNote": "Pengarang ini ditetapkan kepada Jangan sentuh, jadi Box Office tidak mencari buku-bukunya.",
+    "allOnDisk_other": "Kesemua {{count}} pada cakera",
+    "missing_other": "{{missing}} daripada {{count}} tiada",
+    "onDiskCount_other": "{{count}} pada cakera",
+    "open": "Buka {{title}}",
+    "editions_other": "{{count}} edisi",
+    "lookFor": "Cari",
+    "lookingFor": "Sedang mencari",
+    "alsoLooks": "Box Office juga mencari sendiri buku yang dikehendaki, beberapa setiap jam."
   },
   "discover": {
     "sub": "Apa yang popular dan akan datang, dan lebih banyak seperti yang anda miliki.",
@@ -833,7 +849,14 @@
     "addFromShows": "Ia perlu ada dalam pustaka anda dahulu; tambahkannya dari Rancangan.",
     "titles": "Tajuk",
     "episodeNote": "Setiap video pergi ke episod yang dinyatakan namanya, seperti S01E02.",
-    "moveInto": "Alihkan ke {{title}}"
+    "moveInto": "Alihkan ke {{title}}",
+    "movesEbook": "Box Office mengalihkan fail e-buku terbaik (EPUB dahulu) ke folder pengarang dan menamakannya untuk anda. Salinan yang sudah ada di sana diketepikan, tidak dipadam.",
+    "movesEbookFolder": "Box Office mengalihkan fail e-buku terbaik (EPUB dahulu) ke folder pengarang dan menamakannya untuk anda, kemudian memadam baki folder. Salinan yang sudah ada di sana diketepikan, tidak dipadam.",
+    "movesAudiobook": "Box Office mengalihkan fail audio, mengikut urutan, ke folder buku di dalam folder pengarang. Salinan yang sudah ada di sana diketepikan, tidak dipadam.",
+    "movesAudiobookFolder": "Box Office mengalihkan fail audio, mengikut urutan, ke folder buku di dalam folder pengarang, kemudian memadam baki folder. Salinan yang sudah ada di sana diketepikan, tidak dipadam.",
+    "findBook": "Cari buku itu",
+    "addFromBooks": "Ia perlu ada dalam pustaka anda dahulu; tambahkannya dari Buku, di halaman pengarangnya.",
+    "addFromAudiobooks": "Ia perlu ada dalam pustaka anda dahulu; tambahkannya dari Buku audio, di halaman pengarangnya."
   },
   "dlBulk": {
     "pause": "Jeda",
@@ -1514,5 +1537,9 @@
       "showProfile": "Profil rancangan",
       "seasons": "Rancangan yang diluluskan memantau musim yang ditetapkan di bawah Tetapan → Rancangan baharu."
     }
+  },
+  "kind": {
+    "ebook": "E-buku",
+    "audiobook": "Buku audio"
   }
 }

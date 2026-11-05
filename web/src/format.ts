@@ -68,3 +68,20 @@ export function gb(n: number): string {
 export function decimal(n: number, digits = 1): string {
   return number(n, digits)
 }
+
+// titleLink is where a download's or a file's title is shown, and what to
+// call it.
+export function titleLink(kind?: string, id?: number): { to: string; label: string } | null {
+  if (!kind || !id) return null
+  switch (kind) {
+    case 'movie':
+      return { to: `/movies/${id}`, label: i18n.t('web:discover.movie') }
+    case 'series':
+      return { to: `/shows/${id}`, label: i18n.t('web:discover.show') }
+    case 'ebook':
+      return { to: `/books/book/${id}`, label: i18n.t('web:kind.ebook') }
+    case 'audiobook':
+      return { to: `/audiobooks/book/${id}`, label: i18n.t('web:kind.audiobook') }
+  }
+  return null
+}

@@ -697,7 +697,10 @@
       "wantAll": "Vreau fiecare carte a sa ca ebook",
       "wantNew": "Vreau cărțile noi ca ebook când apar",
       "want": "Vreau {{title}} ca ebook",
-      "stop": "Nu mai vreau {{title}} ca ebook"
+      "stop": "Nu mai vreau {{title}} ca ebook",
+      "wantIt": "O vreau ca ebook",
+      "releasesTitle": "{{title}} (ebook)",
+      "searching": "Box Office caută în indexerele tale și va lua cel mai bun ebook pe care îl găsește. În Activitate vezi cum a mers."
     },
     "audiobook": {
       "wantedSort": "Audiobookuri dorite",
@@ -708,7 +711,10 @@
       "wantAll": "Vreau fiecare carte a sa ca audiobook",
       "wantNew": "Vreau cărțile noi ca audiobook când apar",
       "want": "Vreau {{title}} ca audiobook",
-      "stop": "Nu mai vreau {{title}} ca audiobook"
+      "stop": "Nu mai vreau {{title}} ca audiobook",
+      "wantIt": "O vreau ca audiobook",
+      "releasesTitle": "{{title}} (audiobook)",
+      "searching": "Box Office caută în indexerele tale și va lua cel mai bun audiobook pe care îl găsește. În Activitate vezi cum a mers."
     },
     "authors_one": "{{count}} autor",
     "authors_few": "{{count}} autori",
@@ -733,7 +739,6 @@
     "works_other": "{{count}} de opere",
     "wantAllHint": "Oprit: alegi cele pe care le vrei din pagina autorului. Open Library listează și colecții și traduceri, așa că alegerea e adesea mai bună.",
     "lookup": "Box Office caută cărțile pe Open Library, ceea ce durează câteva secunde pentru autorii cu multe cărți.",
-    "next": "Căutarea și descărcarea cărților vin în următoarea actualizare Box Office.",
     "refresh": "Reîmprospătează de pe Open Library",
     "wantAllCount_one": "Vreau toate",
     "wantAllCount_few": "Vreau toate cele {{count}}",
@@ -741,8 +746,27 @@
     "wantNone": "Niciuna",
     "heading": "Cărți",
     "noBooks": "Open Library nu listează încă cărți pentru {{name}}.",
-    "order": "Cărțile cu cele mai multe ediții apar primele.",
-    "removeBody": "Box Office nu-l mai urmărește pe {{name}}, nici pentru ebookuri, nici pentru audiobookuri, și îi uită cărțile. Fișierele aflate deja în bibliotecile tale rămân unde sunt."
+    "removeBody": "Box Office nu-l mai urmărește pe {{name}}, nici pentru ebookuri, nici pentru audiobookuri, și îi uită cărțile. Fișierele aflate deja în bibliotecile tale rămân unde sunt.",
+    "orderPick": "Cărțile cu cele mai multe ediții vin primele. Alege o copertă ca să cauți acea carte.",
+    "locked": "Nu atinge",
+    "lockedHint": "Box Office nu va căuta, descărca sau muta nicio carte a lui {{name}}, nici ca ebook, nici ca audiobook. Folosește-l pentru cărțile de care te ocupi singur.",
+    "lockedNote": "Acest autor e setat pe Nu atinge, așa că Box Office nu îi caută cărțile.",
+    "allOnDisk_one": "Pe disc: {{count}}",
+    "allOnDisk_few": "Pe disc toate cele {{count}}",
+    "allOnDisk_other": "Pe disc toate cele {{count}}",
+    "missing_one": "Lipsesc: {{missing}} din {{count}}",
+    "missing_few": "Lipsesc: {{missing}} din {{count}}",
+    "missing_other": "Lipsesc: {{missing}} din {{count}}",
+    "onDiskCount_one": "Pe disc: {{count}}",
+    "onDiskCount_few": "Pe disc: {{count}}",
+    "onDiskCount_other": "Pe disc: {{count}}",
+    "open": "Deschide {{title}}",
+    "editions_one": "{{count}} ediție",
+    "editions_few": "{{count}} ediții",
+    "editions_other": "{{count}} de ediții",
+    "lookFor": "Caută-l",
+    "lookingFor": "Se caută",
+    "alsoLooks": "Box Office caută și singur cărțile dorite, câteva pe oră."
   },
   "discover": {
     "sub": "Ce e popular și ce urmează, plus mai multe ca ce ai deja.",
@@ -965,7 +989,14 @@
     "addFromShows": "Trebuie să fie mai întâi în bibliotecă; adaugă-l din Seriale.",
     "titles": "Titluri",
     "episodeNote": "Fiecare videoclip merge la episodul indicat de numele său, de exemplu S01E02.",
-    "moveInto": "Mută în {{title}}"
+    "moveInto": "Mută în {{title}}",
+    "movesEbook": "Box Office mută cel mai bun fișier ebook (întâi EPUB) în dosarul autorului și îl denumește pentru tine. O copie existentă deja acolo e pusă deoparte, nu ștearsă.",
+    "movesEbookFolder": "Box Office mută cel mai bun fișier ebook (întâi EPUB) în dosarul autorului și îl denumește pentru tine, apoi șterge ce a rămas din dosar. O copie existentă deja acolo e pusă deoparte, nu ștearsă.",
+    "movesAudiobook": "Box Office mută fișierele audio, în ordine, în dosarul cărții din dosarul autorului. O copie existentă deja acolo e pusă deoparte, nu ștearsă.",
+    "movesAudiobookFolder": "Box Office mută fișierele audio, în ordine, în dosarul cărții din dosarul autorului, apoi șterge ce a rămas din dosar. O copie existentă deja acolo e pusă deoparte, nu ștearsă.",
+    "findBook": "Găsește cartea",
+    "addFromBooks": "Trebuie să fie mai întâi în bibliotecă; adaug-o din Cărți, unde e autorul ei.",
+    "addFromAudiobooks": "Trebuie să fie mai întâi în bibliotecă; adaug-o din Cărți audio, unde e autorul ei."
   },
   "dlBulk": {
     "pause": "Pauză",
@@ -1694,5 +1725,9 @@
       "showProfile": "Profil pentru seriale",
       "seasons": "Serialele aprobate urmăresc sezoanele setate în Setări → Seriale noi."
     }
+  },
+  "kind": {
+    "ebook": "Ebook",
+    "audiobook": "Audiobook"
   }
 }

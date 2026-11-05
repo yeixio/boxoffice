@@ -16,7 +16,7 @@ import (
 var dumpTables = []string{
 	"settings", "users", "quality_profiles", "root_folders", "movies", "series", "seasons", "episodes",
 	"artists", "albums", "authors", "books",
-	"media_files", "legacy_ids", "migrations", "jobs",
+	"media_files", "title_wants", "legacy_ids", "migrations", "jobs",
 	"indexers", "download_clients", "usenet_servers", "blocklist", "imported_settings", "data_usage",
 	"members", "requests", "issues",
 }

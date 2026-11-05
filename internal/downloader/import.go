@@ -74,10 +74,13 @@ func videos(dir string, files []string) []string {
 // folder.
 func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir string, files []string) (string, error) {
 	// A title on Do not touch never gets a file moved in.
-	if d.Kind == "movie" || d.Kind == "series" {
+	if d.Kind == "movie" || d.Kind == "series" || store.IsBookKind(d.Kind) {
 		if err := li.Store.CheckUnlocked(ctx, d.Kind, d.TitleID); err != nil {
 			return "", err
 		}
+	}
+	if store.IsBookKind(d.Kind) {
+		return li.importBook(ctx, d, dir, files)
 	}
 	vids := videos(dir, files)
 	if len(vids) == 0 {
@@ -96,10 +99,43 @@ func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir str
 		if err := checkLibrary(m.RootFolder, m.Path); err != nil {
 			return "", err
 		}
-		name := fileName(m.Title, m.Year) + strings.ToLower(filepath.Ext(vids[0]))
-		dest := filepath.Join(m.Path, name)
+		tw, err := li.Store.TitleWant(ctx, "movie", m.ID)
+		if err != nil {
+			return "", err
+		}
+		edition := d.Edition
+		if edition == "" {
+			edition = quality.Edition(filepath.Base(vids[0]))
+		}
+		// A copy is named for its edition when one was asked for, so it
+		// and any other edition kept next to it can be told apart (Matinee,
+		// Plex and Jellyfin read the {edition-…} tag).
+		base := fileName(m.Title, m.Year)
+		if tag := quality.EditionTag(edition); tag != "" && (d.Mode != "" || tw.Edition != "") {
+			base += " " + tag
+		}
+		dest := filepath.Join(m.Path, base+strings.ToLower(filepath.Ext(vids[0])))
+		if d.Mode == store.ModeAlongside {
+			// Another edition goes in next to the movie's copy, leaving it
+			// be; one already there by that name is set aside.
+			if m.File != nil && m.File.Path == dest {
+				return "", fmt.Errorf("the movie's copy is the %s edition already", edition)
+			}
+			if err := li.place(ctx, dir, vids[0], dest, m.RootFolder, m.Path, "edition", m.ID, q, nil); err != nil {
+				return "", err
+			}
+			return dest, nil
+		}
 		if err := li.place(ctx, dir, vids[0], dest, m.RootFolder, m.Path, "movie", m.ID, q, m.File); err != nil {
 			return "", err
+		}
+		if d.Mode == store.ModeReplace && edition != "" && !quality.SameEdition(tw.Edition, edition) {
+			// From now on the movie is wanted in this edition, so upgrades
+			// don't swap it back.
+			tw.Edition, tw.Want, tw.Note = edition, "", ""
+			if err := li.Store.SetTitleWant(ctx, tw); err != nil {
+				return "", fmt.Errorf("moved in, but couldn't note the edition: %w", err)
+			}
 		}
 		return dest, nil
 	case "series":
@@ -164,7 +200,7 @@ func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir str
 		}
 		return filepath.Dir(placed[0]), nil
 	}
-	return "", errors.New("it isn't for a movie or a show")
+	return "", errors.New("it isn't for a movie, a show or a book")
 }
 
 // ReadOnlyError means the library folder doesn't take writes, as when
@@ -240,7 +276,15 @@ func (li *LibraryImporter) place(ctx context.Context, dir, rel, dest, root, titl
 	if err != nil {
 		return err
 	}
+	if kind == "edition" {
+		_, err = li.Store.AddEditionFile(ctx, owner, dest, st.Size(), q)
+		return err
+	}
 	if _, err := li.Store.AddFile(ctx, store.File{Kind: kind, OwnerID: owner, Path: dest, Size: st.Size(), Quality: q}); err != nil {
+		return err
+	}
+	// A better or replacement copy asked for is in.
+	if err := li.Store.ClearWant(ctx, kind, owner); err != nil {
 		return err
 	}
 	// The copy this one replaces is set aside, if it was a different file

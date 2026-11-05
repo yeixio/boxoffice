@@ -163,7 +163,10 @@ func (s *Store) FillRating(ctx context.Context, kind string, id int64, rating fl
 }
 
 func (s *Store) DeleteMovie(ctx context.Context, id int64) error {
-	if _, err := s.exec(ctx, "DELETE FROM media_files WHERE kind = 'movie' AND owner_id = ?", id); err != nil {
+	if _, err := s.exec(ctx, "DELETE FROM media_files WHERE kind IN ('movie', 'edition') AND owner_id = ?", id); err != nil {
+		return err
+	}
+	if _, err := s.exec(ctx, "DELETE FROM title_wants WHERE kind = 'movie' AND owner_id = ?", id); err != nil {
 		return err
 	}
 	res, err := s.exec(ctx, "DELETE FROM movies WHERE id = ?", id)

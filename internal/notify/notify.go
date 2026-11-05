@@ -62,6 +62,8 @@ func (r *Recorder) Download(ctx context.Context, d store.Download, event, why st
 	name := d.Name
 	if m != nil {
 		name = mediaName(*m)
+	} else if n := r.bookName(ctx, d); n != "" {
+		name = n
 	}
 	n := store.Notification{Event: event, Level: store.LevelInfo, Audience: store.AudienceEveryone, Media: m, Download: d.ID}
 	if m == nil {
@@ -97,6 +99,24 @@ func (r *Recorder) Download(ctx context.Context, d store.Download, event, why st
 		return
 	}
 	r.Add(ctx, n)
+}
+
+// bookName names the book a download is for: "Dune by Frank Herbert
+// (audiobook)". Books go to admins only, as Matinee has nobody's requests
+// for them.
+func (r *Recorder) bookName(ctx context.Context, d store.Download) string {
+	if !store.IsBookKind(d.Kind) {
+		return ""
+	}
+	b, err := r.Store.Book(ctx, d.TitleID)
+	if err != nil {
+		return ""
+	}
+	a, err := r.Store.Author(ctx, b.AuthorID)
+	if err != nil {
+		return ""
+	}
+	return fmt.Sprintf("%s by %s (%s)", b.Title, a.Name, d.Kind)
 }
 
 // media is the title a download is for, if it's for one.

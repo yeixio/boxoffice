@@ -45,6 +45,8 @@ func (s *Service) Register(r *jobs.Runner) {
 	r.Handle(catalog.JobSearchSeries, s.jobSeries)
 	r.Handle(catalog.JobSearchEpisode, s.jobEpisode)
 	r.Handle(JobSearchWanted, s.jobWanted)
+	r.Handle(JobSearchAsked, s.jobAsked)
+	r.Handle(JobSearchBook, s.jobBook)
 }
 
 // Candidate is a release and what Box Office makes of it for a title.
@@ -58,11 +60,19 @@ type Candidate struct {
 	// numbers a release holds, as its name gives them.
 	Pack     bool  `json:"pack,omitempty"`
 	Episodes []int `json:"episodes,omitempty"`
+	// Edition is the movie edition its name says it is (Director's Cut,
+	// say), or "".
+	Edition string `json:"edition,omitempty"`
 
-	kind     string
-	titleID  int64
-	episodes []int64
-	priority int
+	// Format is a book release's format as its name gives it: EPUB, M4B.
+	Format string `json:"format,omitempty"`
+
+	mode       string // how an edition asked for goes in: replace or alongside
+	kind       string
+	titleID    int64
+	episodes   []int64
+	priority   int
+	formatRank int
 }
 
 // Results are a search's releases, best first, and the indexers that
@@ -194,6 +204,13 @@ func (s *Service) ask(ctx context.Context, query func(store.Indexer) Query) ([]R
 
 // Movie searches for a movie and judges each release.
 func (s *Service) Movie(ctx context.Context, id int64) (Results, error) {
+	return s.MovieFor(ctx, id, Ask{})
+}
+
+// MovieFor searches for a movie as asked: another edition of it, or a
+// better or replacement copy (see Ask). With nothing asked it follows what
+// was asked before and is still wanted (store.TitleWant), and the profile.
+func (s *Service) MovieFor(ctx context.Context, id int64, ask Ask) (Results, error) {
 	m, err := s.Store.Movie(ctx, id)
 	if err != nil {
 		return Results{}, err
@@ -221,6 +238,12 @@ func (s *Service) Movie(ctx context.Context, id int64) (Results, error) {
 	if has {
 		have = m.File.Quality
 	}
+	tw, err := s.Store.TitleWant(ctx, "movie", m.ID)
+	if err != nil {
+		return Results{}, err
+	}
+	ask = ask.with(tw)
+	p, has = ask.profile(p, has)
 	blocked, err := s.blocked(ctx, "movie", m.ID)
 	if err != nil {
 		return Results{}, err
@@ -228,7 +251,10 @@ func (s *Service) Movie(ctx context.Context, id int64) (Results, error) {
 	out := Results{Errors: notes, Searched: n}
 	for _, r := range rs {
 		c := s.judge(ctx, r, p, has, have, blocked)
-		c.kind, c.titleID = "movie", m.ID
+		c.kind, c.titleID, c.mode = "movie", m.ID, ask.Mode
+		if ask.Edition != "" && !quality.SameEdition(c.Edition, ask.Edition) {
+			c.reject("it isn't the " + ask.Edition + " edition")
+		}
 		if y := releaseYear(r.Title); y > 0 && m.Year > 0 && (y < m.Year-1 || y > m.Year+1) {
 			c.reject(fmt.Sprintf("it's from %d, and the movie's from %d", y, m.Year))
 		}
@@ -247,6 +273,12 @@ func (s *Service) Movie(ctx context.Context, id int64) (Results, error) {
 
 // Episode searches for one episode.
 func (s *Service) Episode(ctx context.Context, id int64) (Results, error) {
+	return s.EpisodeFor(ctx, id, Ask{})
+}
+
+// EpisodeFor searches for one episode as asked: a better or replacement
+// copy (see Ask). Episodes have no editions.
+func (s *Service) EpisodeFor(ctx context.Context, id int64, ask Ask) (Results, error) {
 	e, err := s.Store.Episode(ctx, id)
 	if err != nil {
 		return Results{}, err
@@ -277,6 +309,16 @@ func (s *Service) Episode(ctx context.Context, id int64) (Results, error) {
 	blocked, err := s.blocked(ctx, "series", t.ID)
 	if err != nil {
 		return Results{}, err
+	}
+	tw, err := s.Store.TitleWant(ctx, "episode", e.ID)
+	if err != nil {
+		return Results{}, err
+	}
+	ask = ask.with(tw)
+	ask.Edition, ask.Mode = "", ""
+	var has bool
+	if p, has = ask.profile(p, e.File != nil); !has {
+		e.File = nil
 	}
 	out := Results{Errors: notes, Searched: n}
 	for _, r := range rs {
@@ -334,7 +376,7 @@ func (s *Service) blocked(ctx context.Context, kind string, titleID int64) (map[
 
 func (s *Service) judge(ctx context.Context, r Release, p quality.Profile, has bool, have int, blocked map[string]bool) Candidate {
 	q := quality.Parse(r.Title)
-	c := Candidate{Release: r, Quality: q.ID, Accepted: true}
+	c := Candidate{Release: r, Quality: q.ID, Accepted: true, Edition: quality.Edition(r.Title)}
 	c.Key = key(r)
 	if r.Protocol != "usenet" {
 		c.reject("torrent downloads aren't supported yet")
@@ -387,6 +429,8 @@ func (s *Service) rank(ctx context.Context, out *Results) {
 			return 1
 		case a.Quality != b.Quality:
 			return quality.Rank(b.Quality) - quality.Rank(a.Quality)
+		case a.formatRank != b.formatRank:
+			return b.formatRank - a.formatRank
 		case a.priority != b.priority:
 			return a.priority - b.priority
 		case a.Grabs != b.Grabs:
@@ -521,7 +565,7 @@ func (s *Service) grab(ctx context.Context, c Candidate) (store.Download, error)
 	q, _ := quality.ByID(c.Quality)
 	s.logger().Info("grabbing a release", "release", c.Title, "indexer", ix.Name, "quality", q.Name, "size", c.Size, "kind", c.kind, "title", c.titleID)
 	d, err := s.Engine.Add(ctx, store.Download{Name: c.Title, Kind: c.kind, TitleID: c.titleID, EpisodeIDs: c.episodes, Quality: c.Quality,
-		Indexer: c.Indexer, Source: "search", Password: c.Password}, data)
+		Indexer: c.Indexer, Source: "search", Password: c.Password, Edition: c.Edition, Mode: c.mode}, data)
 	if err == nil && upgrade {
 		if e := s.Store.CountAutoUpgrade(context.WithoutCancel(ctx)); e != nil {
 			s.logger().Warn("couldn't count an automatic upgrade", "release", c.Title, "err", e)

@@ -255,8 +255,8 @@
     "logged": "Registrados",
     "loggedRow": "{{warnings}} avisos e {{errors}} erros desde que iniciou",
     "logKept": "Log mantido",
-    "logKeptRow_one": "a última linha, desde {{since}}",
-    "logKeptRow_many": "as últimas {{count}} de linhas, desde {{since}}",
+    "logKeptRow_one": "a última {{count}} linha, desde {{since}}",
+    "logKeptRow_many": "as últimas {{count}} linhas, desde {{since}}",
     "logKeptRow_other": "as últimas {{count}} linhas, desde {{since}}",
     "nothingYet": "nada ainda",
     "details": "Detalhes"
@@ -481,8 +481,8 @@
   "getEpisodes": {
     "all": "Todas as temporadas",
     "recentOne": "A última temporada exibida, e as novas",
-    "recent_one": "A última temporada, e as novas",
-    "recent_many": "As últimas {{count}} de temporadas, e as novas",
+    "recent_one": "{{count}} temporada recente, e as novas",
+    "recent_many": "As últimas {{count}} temporadas, e as novas",
     "recent_other": "As últimas {{count}} temporadas, e as novas",
     "future": "Só episódios ainda não lançados",
     "latest": "Só a temporada mais recente",
@@ -697,7 +697,10 @@
       "wantAll": "Desejar todos os livros dele como e-book",
       "wantNew": "Desejar os novos livros dele como e-book quando saírem",
       "want": "Desejar {{title}} como e-book",
-      "stop": "Não desejar mais {{title}} como e-book"
+      "stop": "Não desejar mais {{title}} como e-book",
+      "wantIt": "Desejar como e-book",
+      "releasesTitle": "{{title}} (e-book)",
+      "searching": "O Box Office está buscando nos seus indexadores e vai pegar o melhor e-book que encontrar. Em Atividade você vê como foi."
     },
     "audiobook": {
       "wantedSort": "Audiolivros desejados",
@@ -708,7 +711,10 @@
       "wantAll": "Desejar todos os livros dele como audiolivro",
       "wantNew": "Desejar os novos livros dele como audiolivro quando saírem",
       "want": "Desejar {{title}} como audiolivro",
-      "stop": "Não desejar mais {{title}} como audiolivro"
+      "stop": "Não desejar mais {{title}} como audiolivro",
+      "wantIt": "Desejar como audiolivro",
+      "releasesTitle": "{{title}} (audiolivro)",
+      "searching": "O Box Office está buscando nos seus indexadores e vai pegar o melhor audiolivro que encontrar. Em Atividade você vê como foi."
     },
     "authors_one": "{{count}} autor",
     "authors_many": "{{count}} de autores",
@@ -733,7 +739,6 @@
     "works_other": "{{count}} obras",
     "wantAllHint": "Desativado, você escolhe os que quiser na página do autor. O Open Library também lista coletâneas e traduções, então escolher costuma ser melhor.",
     "lookup": "O Box Office procura os livros no Open Library, o que leva alguns segundos para autores com muitos.",
-    "next": "Buscar e baixar livros chega na próxima atualização do Box Office.",
     "refresh": "Atualizar pelo Open Library",
     "wantAllCount_one": "Desejar {{count}}",
     "wantAllCount_many": "Desejar todos os {{count}}",
@@ -741,8 +746,27 @@
     "wantNone": "Nenhum",
     "heading": "Livros",
     "noBooks": "O Open Library ainda não lista livros de {{name}}.",
-    "order": "Os livros com mais edições vêm primeiro.",
-    "removeBody": "O Box Office para de seguir {{name}}, tanto para e-books quanto para audiolivros, e esquece os livros. Arquivos já nas suas bibliotecas ficam onde estão."
+    "removeBody": "O Box Office para de seguir {{name}}, tanto para e-books quanto para audiolivros, e esquece os livros. Arquivos já nas suas bibliotecas ficam onde estão.",
+    "orderPick": "Os livros com mais edições vêm primeiro. Escolha uma capa para procurar esse livro.",
+    "locked": "Não mexer",
+    "lockedHint": "O Box Office não vai buscar, baixar nem mover nenhum livro de {{name}}, nem como e-book nem como audiolivro. Use para os livros que você mesmo cuida.",
+    "lockedNote": "Este autor está como Não mexer, então o Box Office não procura os livros dele.",
+    "allOnDisk_one": "{{count}} no disco",
+    "allOnDisk_many": "Todos os {{count}} no disco",
+    "allOnDisk_other": "Todos os {{count}} no disco",
+    "missing_one": "Falta {{missing}} de {{count}}",
+    "missing_many": "Faltam {{missing}} de {{count}}",
+    "missing_other": "Faltam {{missing}} de {{count}}",
+    "onDiskCount_one": "{{count}} no disco",
+    "onDiskCount_many": "{{count}} no disco",
+    "onDiskCount_other": "{{count}} no disco",
+    "open": "Abrir {{title}}",
+    "editions_one": "{{count}} edição",
+    "editions_many": "{{count}} edições",
+    "editions_other": "{{count}} edições",
+    "lookFor": "Procurar",
+    "lookingFor": "Procurando",
+    "alsoLooks": "O Box Office também procura sozinho os livros desejados, alguns por hora."
   },
   "discover": {
     "sub": "O que está em alta e chegando, e mais do que você já tem.",
@@ -965,7 +989,14 @@
     "addFromShows": "Ela precisa estar na sua biblioteca primeiro; adicione-a em Séries.",
     "titles": "Títulos",
     "episodeNote": "Cada vídeo vai para o episódio que o nome dele indica, como S01E02.",
-    "moveInto": "Mover para {{title}}"
+    "moveInto": "Mover para {{title}}",
+    "movesEbook": "O Box Office move o melhor arquivo de e-book (EPUB primeiro) para a pasta do autor e dá o nome para você. Uma cópia que já esteja lá é deixada de lado, não excluída.",
+    "movesEbookFolder": "O Box Office move o melhor arquivo de e-book (EPUB primeiro) para a pasta do autor e dá o nome para você, depois exclui o que sobrou da pasta. Uma cópia que já esteja lá é deixada de lado, não excluída.",
+    "movesAudiobook": "O Box Office move os arquivos de áudio, em ordem, para a pasta do livro dentro da pasta do autor. Uma cópia que já esteja lá é deixada de lado, não excluída.",
+    "movesAudiobookFolder": "O Box Office move os arquivos de áudio, em ordem, para a pasta do livro dentro da pasta do autor, depois exclui o que sobrou da pasta. Uma cópia que já esteja lá é deixada de lado, não excluída.",
+    "findBook": "Encontrar o livro",
+    "addFromBooks": "Ele precisa estar na sua biblioteca primeiro; adicione-o em Livros, onde está o autor dele.",
+    "addFromAudiobooks": "Ele precisa estar na sua biblioteca primeiro; adicione-o em Audiolivros, onde está o autor dele."
   },
   "dlBulk": {
     "pause": "Pausar",
@@ -1694,5 +1725,9 @@
       "showProfile": "Perfil de séries",
       "seasons": "Séries aprovadas monitoram as temporadas definidas em Configurações → Novas séries."
     }
+  },
+  "kind": {
+    "ebook": "E-book",
+    "audiobook": "Audiolivro"
   }
 }

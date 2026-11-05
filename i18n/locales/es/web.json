@@ -697,7 +697,10 @@
       "wantAll": "Buscar todos sus libros como ebook",
       "wantNew": "Buscar los libros nuevos como ebook cuando salgan",
       "want": "Buscar {{title}} como ebook",
-      "stop": "Dejar de buscar {{title}} como ebook"
+      "stop": "Dejar de buscar {{title}} como ebook",
+      "wantIt": "Buscarlo como ebook",
+      "releasesTitle": "{{title}} (ebook)",
+      "searching": "Box Office está buscando en tus indexadores y descargará el mejor ebook que encuentre. En Actividad verás cómo ha ido."
     },
     "audiobook": {
       "wantedSort": "Audiolibros buscados",
@@ -708,7 +711,10 @@
       "wantAll": "Buscar todos sus libros como audiolibro",
       "wantNew": "Buscar los libros nuevos como audiolibro cuando salgan",
       "want": "Buscar {{title}} como audiolibro",
-      "stop": "Dejar de buscar {{title}} como audiolibro"
+      "stop": "Dejar de buscar {{title}} como audiolibro",
+      "wantIt": "Buscarlo como audiolibro",
+      "releasesTitle": "{{title}} (audiolibro)",
+      "searching": "Box Office está buscando en tus indexadores y descargará el mejor audiolibro que encuentre. En Actividad verás cómo ha ido."
     },
     "authors_one": "{{count}} autor",
     "authors_many": "{{count}} de autores",
@@ -733,7 +739,6 @@
     "works_other": "{{count}} obras",
     "wantAllHint": "Desactivado, eliges las que quieras desde la página del autor. Open Library también lista recopilaciones y traducciones, así que elegir suele ser mejor.",
     "lookup": "Box Office busca los libros en Open Library, lo que tarda unos segundos con autores que tienen muchos.",
-    "next": "Buscar y descargar libros llega en la próxima actualización de Box Office.",
     "refresh": "Actualizar desde Open Library",
     "wantAllCount_one": "Buscar los {{count}}",
     "wantAllCount_many": "Buscar los {{count}}",
@@ -741,8 +746,27 @@
     "wantNone": "No buscar ninguno",
     "heading": "Libros",
     "noBooks": "Open Library aún no lista libros de {{name}}.",
-    "order": "Primero los libros con más ediciones.",
-    "removeBody": "Box Office deja de seguir a {{name}}, tanto para ebooks como para audiolibros, y olvida sus libros. Los archivos que ya están en tus bibliotecas se quedan donde están."
+    "removeBody": "Box Office deja de seguir a {{name}}, tanto para ebooks como para audiolibros, y olvida sus libros. Los archivos que ya están en tus bibliotecas se quedan donde están.",
+    "orderPick": "Primero van los libros con más ediciones. Elige una portada para buscar ese libro.",
+    "locked": "No tocar",
+    "lockedHint": "Box Office no buscará, descargará ni moverá ningún libro de {{name}}, ni como ebook ni como audiolibro. Úsalo para los libros de los que te ocupas tú.",
+    "lockedNote": "Este autor está en No tocar, así que Box Office no busca sus libros.",
+    "allOnDisk_one": "{{count}} en disco",
+    "allOnDisk_many": "Los {{count}} en disco",
+    "allOnDisk_other": "Los {{count}} en disco",
+    "missing_one": "Falta {{missing}} de {{count}}",
+    "missing_many": "Faltan {{missing}} de {{count}}",
+    "missing_other": "Faltan {{missing}} de {{count}}",
+    "onDiskCount_one": "{{count}} en disco",
+    "onDiskCount_many": "{{count}} en disco",
+    "onDiskCount_other": "{{count}} en disco",
+    "open": "Abrir {{title}}",
+    "editions_one": "{{count}} edición",
+    "editions_many": "{{count}} ediciones",
+    "editions_other": "{{count}} ediciones",
+    "lookFor": "Buscarlo",
+    "lookingFor": "Buscando",
+    "alsoLooks": "Box Office también busca por sí solo los libros buscados, unos pocos cada hora."
   },
   "discover": {
     "sub": "Lo popular y lo que llega pronto, y más de lo que ya tienes.",
@@ -965,7 +989,14 @@
     "addFromShows": "Primero tiene que estar en tu biblioteca; añádelo desde Series.",
     "titles": "Títulos",
     "episodeNote": "Cada vídeo va al episodio que indica su nombre, como S01E02.",
-    "moveInto": "Mover a {{title}}"
+    "moveInto": "Mover a {{title}}",
+    "movesEbook": "Box Office mueve el mejor archivo de ebook (EPUB primero) a la carpeta del autor y le pone nombre. Una copia que ya esté ahí se aparta, no se borra.",
+    "movesEbookFolder": "Box Office mueve el mejor archivo de ebook (EPUB primero) a la carpeta del autor y le pone nombre, y luego borra lo que queda de la carpeta. Una copia que ya esté ahí se aparta, no se borra.",
+    "movesAudiobook": "Box Office mueve los archivos de audio, en orden, a la carpeta del libro dentro de la carpeta del autor. Una copia que ya esté ahí se aparta, no se borra.",
+    "movesAudiobookFolder": "Box Office mueve los archivos de audio, en orden, a la carpeta del libro dentro de la carpeta del autor, y luego borra lo que queda de la carpeta. Una copia que ya esté ahí se aparta, no se borra.",
+    "findBook": "Buscar el libro",
+    "addFromBooks": "Primero tiene que estar en tu biblioteca; añádelo desde Libros, donde está su autor.",
+    "addFromAudiobooks": "Primero tiene que estar en tu biblioteca; añádelo desde Audiolibros, donde está su autor."
   },
   "dlBulk": {
     "pause": "Pausa",
@@ -1694,5 +1725,9 @@
       "showProfile": "Perfil de series",
       "seasons": "Las series aprobadas vigilan las temporadas definidas en Ajustes → Series nuevas."
     }
+  },
+  "kind": {
+    "ebook": "Ebook",
+    "audiobook": "Audiolibro"
   }
 }

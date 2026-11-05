@@ -256,7 +256,7 @@
     "loggedRow": "{{warnings}} avertissements et {{errors}} erreurs depuis le démarrage",
     "logKept": "Journal conservé",
     "logKeptRow_one": "la dernière {{count}} ligne, depuis {{since}}",
-    "logKeptRow_many": "les {{count}} de dernières lignes, depuis {{since}}",
+    "logKeptRow_many": "les {{count}} dernières lignes, depuis {{since}}",
     "logKeptRow_other": "les {{count}} dernières lignes, depuis {{since}}",
     "nothingYet": "rien pour l’instant",
     "details": "Détails"
@@ -481,7 +481,7 @@
   "getEpisodes": {
     "all": "Toutes les saisons",
     "recentOne": "La dernière saison diffusée, et les nouvelles",
-    "recent_one": "La dernière saison, et les nouvelles",
+    "recent_one": "{{count}} saison récente, et les nouvelles",
     "recent_many": "Les {{count}} dernières saisons, et les nouvelles",
     "recent_other": "Les {{count}} dernières saisons, et les nouvelles",
     "future": "Seulement les épisodes pas encore sortis",
@@ -697,7 +697,10 @@
       "wantAll": "Vouloir tous ses livres en version numérique",
       "wantNew": "Vouloir ses nouveaux livres en version numérique à leur sortie",
       "want": "Vouloir {{title}} en livre numérique",
-      "stop": "Ne plus vouloir {{title}} en livre numérique"
+      "stop": "Ne plus vouloir {{title}} en livre numérique",
+      "wantIt": "Le vouloir en version numérique",
+      "releasesTitle": "{{title}} (livre numérique)",
+      "searching": "Box Office interroge vos indexeurs et récupérera le meilleur livre numérique trouvé. L’Activité montre comment ça s’est passé."
     },
     "audiobook": {
       "wantedSort": "Livres audio voulus",
@@ -708,7 +711,10 @@
       "wantAll": "Vouloir tous ses livres en livre audio",
       "wantNew": "Vouloir ses nouveaux livres en livre audio à leur sortie",
       "want": "Vouloir {{title}} en livre audio",
-      "stop": "Ne plus vouloir {{title}} en livre audio"
+      "stop": "Ne plus vouloir {{title}} en livre audio",
+      "wantIt": "Le vouloir en livre audio",
+      "releasesTitle": "{{title}} (livre audio)",
+      "searching": "Box Office interroge vos indexeurs et récupérera le meilleur livre audio trouvé. L’Activité montre comment ça s’est passé."
     },
     "authors_one": "{{count}} auteur",
     "authors_many": "{{count}} d’auteurs",
@@ -733,7 +739,6 @@
     "works_other": "{{count}} œuvres",
     "wantAllHint": "Désactivé, vous choisissez ceux que vous voulez depuis la page de l’auteur. Open Library liste aussi les recueils et les traductions, il vaut donc souvent mieux choisir.",
     "lookup": "Box Office cherche les livres sur Open Library, ce qui prend quelques secondes pour les auteurs qui en ont beaucoup.",
-    "next": "La recherche et le téléchargement de livres arrivent dans la prochaine mise à jour de Box Office.",
     "refresh": "Actualiser depuis Open Library",
     "wantAllCount_one": "Tout vouloir ({{count}})",
     "wantAllCount_many": "Tout vouloir ({{count}})",
@@ -741,8 +746,27 @@
     "wantNone": "N’en vouloir aucun",
     "heading": "Livres",
     "noBooks": "Open Library ne liste encore aucun livre pour {{name}}.",
-    "order": "Les livres avec le plus d’éditions viennent en premier.",
-    "removeBody": "Box Office cesse de suivre {{name}}, pour les livres numériques comme pour les livres audio, et oublie ses livres. Les fichiers déjà dans vos bibliothèques restent où ils sont."
+    "removeBody": "Box Office cesse de suivre {{name}}, pour les livres numériques comme pour les livres audio, et oublie ses livres. Les fichiers déjà dans vos bibliothèques restent où ils sont.",
+    "orderPick": "Les livres qui ont le plus d’éditions viennent en premier. Choisissez une couverture pour chercher ce livre.",
+    "locked": "Ne pas toucher",
+    "lockedHint": "Box Office ne cherchera, ne téléchargera ni ne déplacera aucun livre de {{name}}, ni en numérique ni en audio. Utilisez-le pour les livres dont vous vous occupez vous-même.",
+    "lockedNote": "Cet auteur est réglé sur Ne pas toucher : Box Office ne cherche donc pas ses livres.",
+    "allOnDisk_one": "{{count}} sur le disque",
+    "allOnDisk_many": "Les {{count}} sur le disque",
+    "allOnDisk_other": "Les {{count}} sur le disque",
+    "missing_one": "{{missing}} sur {{count}} manquant",
+    "missing_many": "{{missing}} sur {{count}} manquants",
+    "missing_other": "{{missing}} sur {{count}} manquants",
+    "onDiskCount_one": "{{count}} sur le disque",
+    "onDiskCount_many": "{{count}} sur le disque",
+    "onDiskCount_other": "{{count}} sur le disque",
+    "open": "Ouvrir {{title}}",
+    "editions_one": "{{count}} édition",
+    "editions_many": "{{count}} éditions",
+    "editions_other": "{{count}} éditions",
+    "lookFor": "Le chercher",
+    "lookingFor": "Recherche en cours",
+    "alsoLooks": "Box Office cherche aussi de lui-même les livres voulus, quelques-uns par heure."
   },
   "discover": {
     "sub": "Ce qui est populaire et à venir, et plus de ce que vous avez déjà.",
@@ -965,7 +989,14 @@
     "addFromShows": "Elle doit d’abord être dans votre bibliothèque ; ajoutez-la depuis Séries.",
     "titles": "Titres",
     "episodeNote": "Chaque vidéo va à l’épisode indiqué par son nom, comme S01E02.",
-    "moveInto": "Emménager dans {{title}}"
+    "moveInto": "Emménager dans {{title}}",
+    "movesEbook": "Box Office emménage le meilleur fichier numérique (EPUB d’abord) dans le dossier de l’auteur et le nomme pour vous. Une copie déjà présente est mise de côté, pas supprimée.",
+    "movesEbookFolder": "Box Office emménage le meilleur fichier numérique (EPUB d’abord) dans le dossier de l’auteur et le nomme pour vous, puis supprime ce qui reste du dossier. Une copie déjà présente est mise de côté, pas supprimée.",
+    "movesAudiobook": "Box Office emménage les fichiers audio, dans l’ordre, dans le dossier du livre, à l’intérieur du dossier de l’auteur. Une copie déjà présente est mise de côté, pas supprimée.",
+    "movesAudiobookFolder": "Box Office emménage les fichiers audio, dans l’ordre, dans le dossier du livre, à l’intérieur du dossier de l’auteur, puis supprime ce qui reste du dossier. Une copie déjà présente est mise de côté, pas supprimée.",
+    "findBook": "Trouver le livre",
+    "addFromBooks": "Il doit d’abord être dans votre bibliothèque ; ajoutez-le depuis Livres, sur la page de son auteur.",
+    "addFromAudiobooks": "Il doit d’abord être dans votre bibliothèque ; ajoutez-le depuis Livres audio, sur la page de son auteur."
   },
   "dlBulk": {
     "pause": "Pause",
@@ -1694,5 +1725,9 @@
       "showProfile": "Profil des séries",
       "seasons": "Les séries approuvées surveillent les saisons définies dans Réglages → Nouvelles séries."
     }
+  },
+  "kind": {
+    "ebook": "Livre numérique",
+    "audiobook": "Livre audio"
   }
 }

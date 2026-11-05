@@ -733,7 +733,10 @@
       "wantAll": "Chtít všechny jeho knihy jako e-knihy",
       "wantNew": "Chtít nové knihy jako e-knihy, jakmile vyjdou",
       "want": "Chtít {{title}} jako e-knihu",
-      "stop": "Už nechtít {{title}} jako e-knihu"
+      "stop": "Už nechtít {{title}} jako e-knihu",
+      "wantIt": "Chtít ji jako e-knihu",
+      "releasesTitle": "{{title}} (e-kniha)",
+      "searching": "Box Office prohledává vaše indexery a stáhne nejlepší e-knihu, kterou najde. V Aktivitě uvidíte, jak to dopadlo."
     },
     "audiobook": {
       "wantedSort": "Chtěné audioknihy",
@@ -745,7 +748,10 @@
       "wantAll": "Chtít všechny jeho knihy jako audioknihy",
       "wantNew": "Chtít nové knihy jako audioknihy, jakmile vyjdou",
       "want": "Chtít {{title}} jako audioknihu",
-      "stop": "Už nechtít {{title}} jako audioknihu"
+      "stop": "Už nechtít {{title}} jako audioknihu",
+      "wantIt": "Chtít ji jako audioknihu",
+      "releasesTitle": "{{title}} (audiokniha)",
+      "searching": "Box Office prohledává vaše indexery a stáhne nejlepší audioknihu, kterou najde. V Aktivitě uvidíte, jak to dopadlo."
     },
     "authors_one": "{{count}} autor",
     "authors_few": "{{count}} autoři",
@@ -773,7 +779,6 @@
     "works_other": "{{count}} děl",
     "wantAllHint": "Vypnuto: vybíráte ty, které chcete, na stránce autora. Open Library uvádí i sbírky a překlady, takže vybírat je často lepší.",
     "lookup": "Box Office vyhledá knihy v Open Library, což u autorů s mnoha knihami trvá pár sekund.",
-    "next": "Hledání a stahování knih přijde v příští aktualizaci Box Office.",
     "refresh": "Obnovit z Open Library",
     "wantAllCount_one": "Chtít {{count}}",
     "wantAllCount_few": "Chtít všechny {{count}}",
@@ -782,8 +787,31 @@
     "wantNone": "Nechtít žádnou",
     "heading": "Knihy",
     "noBooks": "Open Library zatím pro {{name}} neuvádí žádné knihy.",
-    "order": "Knihy s nejvíce vydáními jsou první.",
-    "removeBody": "Box Office přestane sledovat {{name}} pro e-knihy i audioknihy a zapomene jeho knihy. Soubory, které už jsou ve vašich knihovnách, zůstanou, kde jsou."
+    "removeBody": "Box Office přestane sledovat {{name}} pro e-knihy i audioknihy a zapomene jeho knihy. Soubory, které už jsou ve vašich knihovnách, zůstanou, kde jsou.",
+    "orderPick": "Knihy s nejvíce vydáními jsou první. Vyberte obálku a vyhledejte tu knihu.",
+    "locked": "Nesahat",
+    "lockedHint": "Box Office nebude hledat, stahovat ani přesouvat žádnou knihu autora {{name}}, ani jako e-knihu, ani jako audioknihu. Použijte to u knih, o které se staráte sami.",
+    "lockedNote": "Tento autor je nastaven na Nesahat, takže Box Office jeho knihy nehledá.",
+    "allOnDisk_one": "Na disku: {{count}}",
+    "allOnDisk_few": "Na disku všechny {{count}}",
+    "allOnDisk_many": "Na disku všech {{count}}",
+    "allOnDisk_other": "Na disku všech {{count}}",
+    "missing_one": "Chybí: {{missing}} z {{count}}",
+    "missing_few": "Chybí: {{missing}} z {{count}}",
+    "missing_many": "Chybí: {{missing}} z {{count}}",
+    "missing_other": "Chybí: {{missing}} z {{count}}",
+    "onDiskCount_one": "Na disku: {{count}}",
+    "onDiskCount_few": "Na disku: {{count}}",
+    "onDiskCount_many": "Na disku: {{count}}",
+    "onDiskCount_other": "Na disku: {{count}}",
+    "open": "Otevřít {{title}}",
+    "editions_one": "{{count}} vydání",
+    "editions_few": "{{count}} vydání",
+    "editions_many": "{{count}} vydání",
+    "editions_other": "{{count}} vydání",
+    "lookFor": "Vyhledat",
+    "lookingFor": "Hledá se",
+    "alsoLooks": "Box Office hledá chtěné knihy i sám, několik za hodinu."
   },
   "discover": {
     "sub": "Co je populární a co se chystá, a další podobné tomu, co máte.",
@@ -1031,7 +1059,14 @@
     "addFromShows": "Nejprve musí být ve vaší knihovně; přidejte ho v Seriálech.",
     "titles": "Tituly",
     "episodeNote": "Každé video jde k dílu, který uvádí jeho název, například S01E02.",
-    "moveInto": "Přesunout do {{title}}"
+    "moveInto": "Přesunout do {{title}}",
+    "movesEbook": "Box Office přesune nejlepší soubor e-knihy (nejdřív EPUB) do složky autora a pojmenuje ho za vás. Kopie, která tam už je, se odloží, nesmaže.",
+    "movesEbookFolder": "Box Office přesune nejlepší soubor e-knihy (nejdřív EPUB) do složky autora a pojmenuje ho za vás, pak smaže zbytek složky. Kopie, která tam už je, se odloží, nesmaže.",
+    "movesAudiobook": "Box Office přesune zvukové soubory, popořadě, do složky knihy ve složce autora. Kopie, která tam už je, se odloží, nesmaže.",
+    "movesAudiobookFolder": "Box Office přesune zvukové soubory, popořadě, do složky knihy ve složce autora, pak smaže zbytek složky. Kopie, která tam už je, se odloží, nesmaže.",
+    "findBook": "Najít knihu",
+    "addFromBooks": "Nejprve musí být ve vaší knihovně; přidejte ji v Knihách, u jejího autora.",
+    "addFromAudiobooks": "Nejprve musí být ve vaší knihovně; přidejte ji v Audioknihách, u jejího autora."
   },
   "dlBulk": {
     "pause": "Pozastavit",
@@ -1784,5 +1819,9 @@
       "showProfile": "Profil seriálů",
       "seasons": "Schválené seriály sledují řady nastavené v Nastavení → Nové seriály."
     }
+  },
+  "kind": {
+    "ebook": "E-kniha",
+    "audiobook": "Audiokniha"
   }
 }

@@ -625,7 +625,10 @@
       "wantAll": "この著者のすべての本を電子書籍で欲しい",
       "wantNew": "新刊を電子書籍で欲しい",
       "want": "{{title}} を電子書籍で欲しい",
-      "stop": "{{title}} を電子書籍の欲しいものから外す"
+      "stop": "{{title}} を電子書籍の欲しいものから外す",
+      "wantIt": "電子書籍で欲しい",
+      "releasesTitle": "{{title}}（電子書籍）",
+      "searching": "Box Office がインデクサーを検索し、見つかった最良の電子書籍を取得します。結果はアクティビティで確認できます。"
     },
     "audiobook": {
       "wantedSort": "欲しいオーディオブック",
@@ -634,7 +637,10 @@
       "wantAll": "この著者のすべての本をオーディオブックで欲しい",
       "wantNew": "新刊をオーディオブックで欲しい",
       "want": "{{title}} をオーディオブックで欲しい",
-      "stop": "{{title}} をオーディオブックの欲しいものから外す"
+      "stop": "{{title}} をオーディオブックの欲しいものから外す",
+      "wantIt": "オーディオブックで欲しい",
+      "releasesTitle": "{{title}}（オーディオブック）",
+      "searching": "Box Office がインデクサーを検索し、見つかった最良のオーディオブックを取得します。結果はアクティビティで確認できます。"
     },
     "authors_other": "{{count}} 人の著者",
     "sub": "{{authors}}、{{wanted}}",
@@ -653,14 +659,24 @@
     "works_other": "{{count}} 作品",
     "wantAllHint": "オフ。著者のページで欲しい本を選びます。Open Library には作品集や翻訳も載っているので、選ぶほうがうまくいくことが多いです。",
     "lookup": "Box Office は Open Library で本を調べます。本の多い著者では数秒かかります。",
-    "next": "本の検索とダウンロードは次の Box Office のアップデートで対応します。",
     "refresh": "Open Library から更新",
     "wantAllCount_other": "{{count}} 冊すべて欲しい",
     "wantNone": "どれも欲しくない",
     "heading": "本",
     "noBooks": "Open Library には {{name}} の本がまだありません。",
-    "order": "版の多い本から順に表示します。",
-    "removeBody": "Box Office は電子書籍とオーディオブックの両方で {{name}} のフォローをやめ、本の情報を消去します。ライブラリにあるファイルはそのまま残ります。"
+    "removeBody": "Box Office は電子書籍とオーディオブックの両方で {{name}} のフォローをやめ、本の情報を消去します。ライブラリにあるファイルはそのまま残ります。",
+    "orderPick": "版の多い本から順に並んでいます。表紙を選ぶとその本を探せます。",
+    "locked": "触らない",
+    "lockedHint": "Box Office は {{name}} の本を、電子書籍でもオーディオブックでも、検索もダウンロードも移動もしません。自分で管理している本に使ってください。",
+    "lockedNote": "この著者は「触らない」に設定されているため、Box Office は本を探しません。",
+    "allOnDisk_other": "{{count}} 冊すべてディスク上",
+    "missing_other": "{{count}} 冊中 {{missing}} 冊が未取得",
+    "onDiskCount_other": "ディスク上 {{count}} 冊",
+    "open": "{{title}} を開く",
+    "editions_other": "{{count}} 版",
+    "lookFor": "探す",
+    "lookingFor": "探しています",
+    "alsoLooks": "Box Office は欲しい本を自動でも探します。1 時間に数冊ずつです。"
   },
   "discover": {
     "sub": "人気の作品と近日公開の作品、そして手持ちに似た作品。",
@@ -833,7 +849,14 @@
     "addFromShows": "先にライブラリに入っている必要があります。番組から追加してください。",
     "titles": "タイトル",
     "episodeNote": "各動画は名前が示すエピソード（S01E02 など）に入ります。",
-    "moveInto": "{{title}} に移動"
+    "moveInto": "{{title}} に移動",
+    "movesEbook": "Box Office は最良の電子書籍ファイル（EPUB 優先）を著者のフォルダーに移して名前を付けます。すでにあるコピーは削除せず、別に保管します。",
+    "movesEbookFolder": "Box Office は最良の電子書籍ファイル（EPUB 優先）を著者のフォルダーに移して名前を付け、フォルダーの残りを削除します。すでにあるコピーは削除せず、別に保管します。",
+    "movesAudiobook": "Box Office は音声ファイルを順番どおりに、著者のフォルダー内の本のフォルダーへ移します。すでにあるコピーは削除せず、別に保管します。",
+    "movesAudiobookFolder": "Box Office は音声ファイルを順番どおりに、著者のフォルダー内の本のフォルダーへ移し、フォルダーの残りを削除します。すでにあるコピーは削除せず、別に保管します。",
+    "findBook": "本を探す",
+    "addFromBooks": "先にライブラリに入っている必要があります。本の著者のページから追加してください。",
+    "addFromAudiobooks": "先にライブラリに入っている必要があります。オーディオブックの著者のページから追加してください。"
   },
   "dlBulk": {
     "pause": "一時停止",
@@ -1514,5 +1537,9 @@
       "showProfile": "番組のプロファイル",
       "seasons": "承認された番組は、設定 → 新しい番組 で決めたシーズンを監視します。"
     }
+  },
+  "kind": {
+    "ebook": "電子書籍",
+    "audiobook": "オーディオブック"
   }
 }

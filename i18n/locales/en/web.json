@@ -661,7 +661,10 @@
       "wantAll": "Want every book of theirs as an ebook",
       "wantNew": "Want new books as ebooks when they come out",
       "want": "Want {{title}} as an ebook",
-      "stop": "Stop wanting {{title}} as an ebook"
+      "stop": "Stop wanting {{title}} as an ebook",
+      "wantIt": "Want it as an ebook",
+      "releasesTitle": "{{title}} (ebook)",
+      "searching": "Box Office is searching your indexers and will grab the best ebook it finds. Activity shows how it went."
     },
     "audiobook": {
       "wantedSort": "Audiobooks wanted",
@@ -671,7 +674,10 @@
       "wantAll": "Want every book of theirs as an audiobook",
       "wantNew": "Want new books as audiobooks when they come out",
       "want": "Want {{title}} as an audiobook",
-      "stop": "Stop wanting {{title}} as an audiobook"
+      "stop": "Stop wanting {{title}} as an audiobook",
+      "wantIt": "Want it as an audiobook",
+      "releasesTitle": "{{title}} (audiobook)",
+      "searching": "Box Office is searching your indexers and will grab the best audiobook it finds. Activity shows how it went."
     },
     "authors_one": "{{count}} author",
     "authors_other": "{{count}} authors",
@@ -693,15 +699,29 @@
     "works_other": "{{count}} works",
     "wantAllHint": "Off, you pick the ones you want from the author's page. Open Library lists collections and translations too, so picking is often better.",
     "lookup": "Box Office looks the books up on Open Library, which takes a few seconds for authors with a lot of them.",
-    "next": "Searching for and downloading books comes in the next Box Office update.",
     "refresh": "Refresh from Open Library",
     "wantAllCount_one": "Want all {{count}}",
     "wantAllCount_other": "Want all {{count}}",
     "wantNone": "Want none",
     "heading": "Books",
     "noBooks": "Open Library lists no books for {{name}} yet.",
-    "order": "The books with the most editions come first.",
-    "removeBody": "Box Office stops following {{name}} for ebooks and audiobooks alike, and forgets their books. Files already in your libraries stay where they are."
+    "removeBody": "Box Office stops following {{name}} for ebooks and audiobooks alike, and forgets their books. Files already in your libraries stay where they are.",
+    "orderPick": "The books with the most editions come first. Pick a cover to look for that book.",
+    "locked": "Do not touch",
+    "lockedHint": "Box Office won't search for, download or move any of {{name}}'s books, as ebooks or audiobooks. Use it for books you look after yourself.",
+    "lockedNote": "This author is set to Do not touch, so Box Office doesn't look for their books.",
+    "allOnDisk_one": "All {{count}} on disk",
+    "allOnDisk_other": "All {{count}} on disk",
+    "missing_one": "{{missing}} of {{count}} missing",
+    "missing_other": "{{missing}} of {{count}} missing",
+    "onDiskCount_one": "{{count}} on disk",
+    "onDiskCount_other": "{{count}} on disk",
+    "open": "Open {{title}}",
+    "editions_one": "{{count}} edition",
+    "editions_other": "{{count}} editions",
+    "lookFor": "Look for it",
+    "lookingFor": "Looking for it",
+    "alsoLooks": "Box Office also looks for wanted books by itself, a few each hour."
   },
   "discover": {
     "sub": "What's popular and coming soon, and more like what you have.",
@@ -899,7 +919,14 @@
     "addFromShows": "It has to be in your library first; add it from Shows.",
     "titles": "Titles",
     "episodeNote": "Each video goes to the episode its name says, like S01E02.",
-    "moveInto": "Move into {{title}}"
+    "moveInto": "Move into {{title}}",
+    "movesEbook": "Box Office moves the best ebook file (EPUB first) into the author's folder and names it for you. A copy already there is set aside, not deleted.",
+    "movesEbookFolder": "Box Office moves the best ebook file (EPUB first) into the author's folder and names it for you, then deletes what's left of the folder. A copy already there is set aside, not deleted.",
+    "movesAudiobook": "Box Office moves the audio files, in order, into the book's folder in the author's folder. A copy already there is set aside, not deleted.",
+    "movesAudiobookFolder": "Box Office moves the audio files, in order, into the book's folder in the author's folder, then deletes what's left of the folder. A copy already there is set aside, not deleted.",
+    "findBook": "Find the book",
+    "addFromBooks": "It has to be in your library first; add it from Books, where its author is.",
+    "addFromAudiobooks": "It has to be in your library first; add it from Audiobooks, where its author is."
   },
   "dlBulk": {
     "pause": "Pause",
@@ -1604,5 +1631,9 @@
       "showProfile": "Show profile",
       "seasons": "Approved shows watch the seasons set under Settings → New shows."
     }
+  },
+  "kind": {
+    "ebook": "Ebook",
+    "audiobook": "Audiobook"
   }
 }

@@ -625,7 +625,10 @@
       "wantAll": "想要其所有書的電子書",
       "wantNew": "新書出版時想要電子書",
       "want": "想要 {{title}} 的電子書",
-      "stop": "不再想要 {{title}} 的電子書"
+      "stop": "不再想要 {{title}} 的電子書",
+      "wantIt": "想要電子書",
+      "releasesTitle": "{{title}}（電子書）",
+      "searching": "Box Office 正在搜尋你的索引器，會抓取找到的最佳電子書。結果可在活動中查看。"
     },
     "audiobook": {
       "wantedSort": "想要的有聲書",
@@ -634,7 +637,10 @@
       "wantAll": "想要其所有書的有聲書",
       "wantNew": "新書出版時想要有聲書",
       "want": "想要 {{title}} 的有聲書",
-      "stop": "不再想要 {{title}} 的有聲書"
+      "stop": "不再想要 {{title}} 的有聲書",
+      "wantIt": "想要有聲書",
+      "releasesTitle": "{{title}}（有聲書）",
+      "searching": "Box Office 正在搜尋你的索引器，會抓取找到的最佳有聲書。結果可在活動中查看。"
     },
     "authors_other": "{{count}} 位作者",
     "sub": "{{authors}}，{{wanted}}",
@@ -653,14 +659,24 @@
     "works_other": "{{count}} 部作品",
     "wantAllHint": "關閉，你在作者頁面挑選想要的。Open Library 也會列出合集和譯本，所以挑選通常更好。",
     "lookup": "Box Office 在 Open Library 上尋找書籍，作品很多的作者需要幾秒鐘。",
-    "next": "搜尋和下載書籍將在 Box Office 的下一次更新中推出。",
     "refresh": "從 Open Library 重新整理",
     "wantAllCount_other": "全部 {{count}} 本都想要",
     "wantNone": "都不想要",
     "heading": "書籍",
     "noBooks": "Open Library 上還沒有 {{name}} 的書。",
-    "order": "版本最多的書排在前面。",
-    "removeBody": "Box Office 會同時停止在電子書和有聲書中關注 {{name}}，並忘記其書籍。媒體庫中已有的檔案保持原處。"
+    "removeBody": "Box Office 會同時停止在電子書和有聲書中關注 {{name}}，並忘記其書籍。媒體庫中已有的檔案保持原處。",
+    "orderPick": "版本最多的書排在前面。選一個封面來尋找那本書。",
+    "locked": "不要動",
+    "lockedHint": "Box Office 不會搜尋、下載或移動 {{name}} 的任何書，無論是電子書還是有聲書。用於你自己管理的書。",
+    "lockedNote": "該作者設為「不要動」，所以 Box Office 不會尋找其書籍。",
+    "allOnDisk_other": "全部 {{count}} 本已在磁碟",
+    "missing_other": "{{count}} 本中缺 {{missing}} 本",
+    "onDiskCount_other": "磁碟上有 {{count}} 本",
+    "open": "開啟 {{title}}",
+    "editions_other": "{{count}} 個版本",
+    "lookFor": "尋找",
+    "lookingFor": "正在尋找",
+    "alsoLooks": "Box Office 也會自己尋找想要的書，每小時幾本。"
   },
   "discover": {
     "sub": "熱門和即將上映的作品，以及與你已有內容相似的作品。",
@@ -820,8 +836,8 @@
     "keepQuarantine": "保留在隔離區",
     "sizeFiles_other": "{{count}} 個檔案，{{size}}。",
     "size": "{{size}}。",
-    "movesFolder": "Box Office 會把主影片（及其字幕）移入作品的資料夾併為你命名，然後刪除資料夾中剩餘的內容。那裡已有的版本會被另行存放，而不是刪除。",
-    "moves": "Box Office 會把主影片（及其字幕）移入作品的資料夾併為你命名。那裡已有的版本會被另行存放，而不是刪除。",
+    "movesFolder": "Box Office 會把主影片（及其字幕）移入作品的資料夾並為你命名，然後刪除資料夾中剩餘的內容。那裡已有的版本會被另行存放，而不是刪除。",
+    "moves": "Box Office 會把主影片（及其字幕）移入作品的資料夾並為你命名。那裡已有的版本會被另行存放，而不是刪除。",
     "itsA": "型別",
     "findMovie": "尋找電影",
     "findShow": "尋找劇集",
@@ -833,7 +849,14 @@
     "addFromShows": "它必須先在你的媒體庫中；請從劇集新增。",
     "titles": "作品",
     "episodeNote": "每個影片會放到其名稱所示的單集，例如 S01E02。",
-    "moveInto": "移入 {{title}}"
+    "moveInto": "移入 {{title}}",
+    "movesEbook": "Box Office 會把最佳電子書檔案（優先 EPUB）移入作者的資料夾並為你命名。那裡已有的版本會被另行存放，而不是刪除。",
+    "movesEbookFolder": "Box Office 會把最佳電子書檔案（優先 EPUB）移入作者的資料夾並為你命名，然後刪除資料夾中剩餘的內容。那裡已有的版本會被另行存放，而不是刪除。",
+    "movesAudiobook": "Box Office 會把音訊檔案按順序移入作者資料夾中這本書的資料夾。那裡已有的版本會被另行存放，而不是刪除。",
+    "movesAudiobookFolder": "Box Office 會把音訊檔案按順序移入作者資料夾中這本書的資料夾，然後刪除資料夾中剩餘的內容。那裡已有的版本會被另行存放，而不是刪除。",
+    "findBook": "尋找書籍",
+    "addFromBooks": "它必須先在你的媒體庫中；請在書籍中其作者的頁面新增。",
+    "addFromAudiobooks": "它必須先在你的媒體庫中；請在有聲書中其作者的頁面新增。"
   },
   "dlBulk": {
     "pause": "暫停",
@@ -1093,7 +1116,7 @@
       "grabs": "每天下載次數",
       "grabsHint": "你賬號每天的 NZB 下載（抓取）上限；不知道就填 0。",
       "reported": "索引器報告了自己的上限（每天 {{searches}} 次搜尋，{{grabs}} 次下載）；這裡的數字會代替它們。",
-      "findLimits": "尋找方法：在索引器網站上開啟你的個人資料或賬號頁面，上面列出你的會員每天允許的 API 呼叫（或 API hits）和下載（或 grabs）次數。Box Office 會控制在其內，併為會報告上限的索引器自動填寫。",
+      "findLimits": "尋找方法：在索引器網站上開啟你的個人資料或賬號頁面，上面列出你的會員每天允許的 API 呼叫（或 API hits）和下載（或 grabs）次數。Box Office 會控制在其內，並為會報告上限的索引器自動填寫。",
       "forSearch": "用於搜尋",
       "forRss": "用於 RSS 同步",
       "forRssHint": "每隔幾分鐘讀取其最新發布，尋找想要的內容。"
@@ -1514,5 +1537,9 @@
       "showProfile": "劇集配置",
       "seasons": "批准的劇集會關注 設定 → 新劇集 中設定的季。"
     }
+  },
+  "kind": {
+    "ebook": "電子書",
+    "audiobook": "有聲書"
   }
 }

@@ -3,8 +3,8 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { ChevronRight, Download as DownloadIcon, File, FileVideo, Folder, FolderInput, HardDrive, Link2, LoaderCircle, RefreshCw, Search, ShieldAlert, ShieldOff, Trash2, X } from 'lucide-react'
-import { get, post, type DownloadFile, type DownloadFiles as FilesData, type Movie, type Series } from '../api'
-import { bytes, when } from '../format'
+import { get, post, type Book, type DownloadFile, type DownloadFiles as FilesData, type Movie, type Series, type Settings as SettingsData, type TitleKind } from '../api'
+import { bytes, titleLink, when } from '../format'
 import { Badge, Button, ErrorNote, Input, Modal } from '../ui'
 
 const QUARANTINE = '_quarantine'
@@ -222,11 +222,14 @@ function Row({ f, locked, onOpen, onDelete, onRelease, onImport }: { f: Download
               {label}
             </Badge>
           )}
-          {f.download?.kind && f.download.titleId ? (
-            <Link to={f.download.kind === 'movie' ? `/movies/${f.download.titleId}` : `/shows/${f.download.titleId}`} className="text-marquee hover:underline">
-              {f.download.kind === 'movie' ? t('discover.movie') : t('discover.show')}
-            </Link>
-          ) : null}
+          {(() => {
+            const link = titleLink(f.download?.kind, f.download?.titleId)
+            return link ? (
+              <Link to={link.to} className="text-marquee hover:underline">
+                {link.label}
+              </Link>
+            ) : null
+          })()}
         </div>
       </div>
       {!isQuarantine && !inUse && (
@@ -322,7 +325,14 @@ function ReleaseDialog({ f, onClose }: { f: DownloadFile; onClose: () => void })
   )
 }
 
-type Pick = { kind: 'movie' | 'series'; id: number; title: string; year?: number }
+type Pick = { kind: TitleKind; id: number; title: string; year?: number; by?: string }
+
+const kindNames: Record<TitleKind, { label: string; find: string; from: string; moves: string }> = {
+  movie: { label: 'discover.movie', find: 'files.findMovie', from: 'files.addFromMovies', moves: 'moves' },
+  series: { label: 'discover.show', find: 'files.findShow', from: 'files.addFromShows', moves: 'moves' },
+  ebook: { label: 'kind.ebook', find: 'files.findBook', from: 'files.addFromBooks', moves: 'movesEbook' },
+  audiobook: { label: 'kind.audiobook', find: 'files.findBook', from: 'files.addFromAudiobooks', moves: 'movesAudiobook' },
+}
 
 const words = (s: string) =>
   s
@@ -351,8 +361,12 @@ function ImportDialog({ f, onClose }: { f: DownloadFile; onClose: () => void }) 
   const qc = useQueryClient()
   const movies = useQuery({ queryKey: ['movies'], queryFn: () => get<Movie[]>('/movies') })
   const shows = useQuery({ queryKey: ['series'], queryFn: () => get<Series[]>('/series') })
+  const settings = useQuery({ queryKey: ['settings'], queryFn: () => get<SettingsData>('/settings') })
+  const kinds = (['movie', 'series', 'ebook', 'audiobook'] as const).filter((k) => k === 'movie' || k === 'series' || !!settings.data?.mediaTypes.find((t) => t.key === k)?.enabled)
+  const bookKind = kinds.includes('ebook') || kinds.includes('audiobook')
+  const books = useQuery({ queryKey: ['books', 'all'], queryFn: () => get<Book[]>('/books'), enabled: bookKind })
   const looksLikeShow = /\bS\d{1,2}(E\d{1,3})?\b|\b\d{1,2}x\d{2}\b/i.test(f.name)
-  const [kind, setKind] = useState<'movie' | 'series'>(f.download?.kind ?? (looksLikeShow ? 'series' : 'movie'))
+  const [kind, setKind] = useState<TitleKind>(f.download?.kind ?? (looksLikeShow ? 'series' : 'movie'))
   const [query, setQuery] = useState('')
   const [picked, setPicked] = useState<Pick>()
   const move = useMutation({
@@ -363,20 +377,25 @@ function ImportDialog({ f, onClose }: { f: DownloadFile; onClose: () => void }) 
       onClose()
     },
   })
-  const all: Pick[] = useMemo(
-    () =>
-      kind === 'movie'
-        ? (movies.data ?? []).map((m) => ({ kind: 'movie' as const, id: m.id, title: m.title, year: m.year }))
-        : (shows.data ?? []).map((s) => ({ kind: 'series' as const, id: s.id, title: s.title, year: s.year })),
-    [kind, movies.data, shows.data],
-  )
+  const all: Pick[] = useMemo(() => {
+    switch (kind) {
+      case 'movie':
+        return (movies.data ?? []).map((m) => ({ kind, id: m.id, title: m.title, year: m.year }))
+      case 'series':
+        return (shows.data ?? []).map((s) => ({ kind, id: s.id, title: s.title, year: s.year }))
+      default:
+        return (books.data ?? []).map((b) => ({ kind, id: b.id, title: b.title, year: b.year, by: b.authorName }))
+    }
+  }, [kind, movies.data, shows.data, books.data])
   // The download's own title first, then the best guesses from the name,
   // or what's typed.
   const list = useMemo(() => {
     const q = words(query).join(' ')
     const scored = all
       .map((p) => {
-        let s = q ? (words(p.title).join(' ').includes(q) ? 1 + guess(q, p.title) : 0) : guess(f.name, p.title, p.year)
+        // Book releases usually lead with the author.
+        const named = (title: string) => Math.max(guess(f.name, title, p.year), p.by ? guess(f.name, `${p.by} ${title}`, p.year) : 0)
+        let s = q ? (words(p.title).join(' ').includes(q) ? 1 + guess(q, p.title) : 0) : named(p.title)
         if (f.download?.kind === p.kind && f.download.titleId === p.id) s += 10
         return { p, s }
       })
@@ -384,18 +403,19 @@ function ImportDialog({ f, onClose }: { f: DownloadFile; onClose: () => void }) 
     scored.sort((a, b) => b.s - a.s || a.p.title.localeCompare(b.p.title))
     return scored.slice(0, 8).map((x) => x.p)
   }, [all, query, f.name, f.download])
-  const loading = kind === 'movie' ? movies.isPending : shows.isPending
+  const loading = kind === 'movie' ? movies.isPending : kind === 'series' ? shows.isPending : books.isPending
   const first = list[0]
-  const auto = !query && first && ((f.download?.kind === kind && f.download.titleId === first.id) || guess(f.name, first.title, first.year) >= 1.5) ? first : undefined
+  const firstScore = first ? Math.max(guess(f.name, first.title, first.year), first.by ? guess(f.name, `${first.by} ${first.title}`, first.year) : 0) : 0
+  const auto = !query && first && ((f.download?.kind === kind && f.download.titleId === first.id) || firstScore >= 1.5) ? first : undefined
   const choice = picked?.kind === kind ? picked : auto
   return (
     <Modal title={t('files.moveIn')} onClose={onClose}>
       <p className="mb-1 break-all text-sm font-medium">{f.name}</p>
       <p className="mb-4 text-xs text-muted">
-        {f.dir ? t('files.sizeFiles', { count: f.files ?? 0, size: bytes(f.size) }) : t('files.size', { size: bytes(f.size) })} {f.dir ? t('files.movesFolder') : t('files.moves')}
+        {f.dir ? t('files.sizeFiles', { count: f.files ?? 0, size: bytes(f.size) }) : t('files.size', { size: bytes(f.size) })} {t(`files.${kindNames[kind].moves}${f.dir ? 'Folder' : ''}`)}
       </p>
       <div className="mb-3 inline-flex rounded-md border border-line p-0.5" role="radiogroup" aria-label={t('files.itsA')}>
-        {(['movie', 'series'] as const).map((k) => (
+        {kinds.map((k) => (
           <button
             key={k}
             role="radio"
@@ -403,19 +423,19 @@ function ImportDialog({ f, onClose }: { f: DownloadFile; onClose: () => void }) 
             onClick={() => setKind(k)}
             className={`rounded px-3 py-1.5 text-sm ${kind === k ? 'bg-marquee text-marquee-ink' : 'text-muted hover:text-ink'}`}
           >
-            {k === 'movie' ? t('discover.movie') : t('discover.show')}
+            {t(kindNames[k].label)}
           </button>
         ))}
       </div>
       <div className="relative mb-2">
         <Search className="pointer-events-none absolute top-2.5 start-3 size-4 text-muted" aria-hidden />
-        <Input className="ps-9" placeholder={kind === 'movie' ? t('files.findMovie') : t('files.findShow')} value={query} onChange={(e) => setQuery(e.target.value)} aria-label={t('files.findTitle')} />
+        <Input className="ps-9" placeholder={t(kindNames[kind].find)} value={query} onChange={(e) => setQuery(e.target.value)} aria-label={t('files.findTitle')} />
       </div>
       {loading ? (
         <p className="py-3 text-sm text-muted">{t('files.loading')}</p>
       ) : list.length === 0 ? (
         <p className="py-3 text-sm text-muted">
-          {query ? t('files.noMatch') : t('files.type')} {kind === 'movie' ? t('files.addFromMovies') : t('files.addFromShows')}
+          {query ? t('files.noMatch') : t('files.type')} {t(kindNames[kind].from)}
         </p>
       ) : (
         <ul className="mb-2 max-h-64 overflow-y-auto rounded-md border border-line" role="listbox" aria-label={t('files.titles')}>
@@ -429,7 +449,10 @@ function ImportDialog({ f, onClose }: { f: DownloadFile; onClose: () => void }) 
                   onClick={() => setPicked(p)}
                   className={`flex w-full items-center justify-between gap-2 px-3 py-2 text-start text-sm ${on ? 'bg-marquee/10 font-medium text-marquee' : 'hover:bg-line/60'}`}
                 >
-                  <span className="min-w-0 break-words">{p.title}</span>
+                  <span className="min-w-0 break-words">
+                    {p.title}
+                    {p.by && <span className="block text-xs font-normal text-muted">{p.by}</span>}
+                  </span>
                   {p.year ? <span className="shrink-0 text-xs text-muted">{p.year}</span> : null}
                 </button>
               </li>

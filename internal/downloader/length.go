@@ -27,7 +27,7 @@ var (
 // movie or episode it's for. Only the main video counts: samples,
 // trailers and extras are short, and that's fine.
 func (e *Engine) checkLength(ctx context.Context, d *store.Download, dir string, files []string) []screen.Finding {
-	if d.Kind == "" {
+	if d.Kind != "movie" && d.Kind != "series" {
 		return nil
 	}
 	var runtime int // minutes

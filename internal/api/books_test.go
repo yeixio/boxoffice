@@ -39,6 +39,7 @@ type authorOut struct {
 	Books            int   `json:"books"`
 	WantedEbooks     int   `json:"wantedEbooks"`
 	WantedAudiobooks int   `json:"wantedAudiobooks"`
+	HaveAudiobooks   int   `json:"haveAudiobooks"`
 	NewAudiobooks    bool  `json:"newAudiobooks"`
 	BookList         []struct {
 		ID            int64  `json:"id"`
@@ -97,6 +98,19 @@ func TestAuthorsAndBooks(t *testing.T) {
 	// A refresh keeps the choices made.
 	if code := call(t, hs, "POST", fmt.Sprintf("/api/v1/authors/%d/refresh", a.ID), "", &a); code != 200 || a.WantedAudiobooks != 2 || a.WantedEbooks != 3 {
 		t.Fatalf("refresh: %d %+v", code, a)
+	}
+	// Do not touch: no searches for the author's books.
+	if code := call(t, hs, "PATCH", fmt.Sprintf("/api/v1/authors/%d", a.ID), `{"locked":true}`, nil); code != 200 {
+		t.Fatal(code)
+	}
+	if code := call(t, hs, "POST", fmt.Sprintf("/api/v1/books/%d/search", elantris), `{"format":"ebook"}`, nil); code != 409 {
+		t.Fatalf("searched for a locked author's book: %d", code)
+	}
+	var one struct {
+		AuthorID int64 `json:"authorId"`
+	}
+	if code := call(t, hs, "GET", fmt.Sprintf("/api/v1/books/%d", elantris), "", &one); code != 200 || one.AuthorID != a.ID {
+		t.Fatalf("book: %d %+v", code, one)
 	}
 	if code := call(t, hs, "DELETE", fmt.Sprintf("/api/v1/authors/%d", a.ID), "", nil); code != 204 {
 		t.Fatal(code)

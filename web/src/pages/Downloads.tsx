@@ -32,7 +32,7 @@ import {
   type Download,
   type Downloads as DownloadsData,
 } from "../api";
-import { bytes, when } from "../format";
+import { bytes, titleLink, when } from "../format";
 import i18n, { formatLocale } from "../i18n";
 import { useQualities } from "../hooks";
 import { SortControl, useSort, words, type SortOption } from "../sort";
@@ -552,12 +552,11 @@ function TurnOn({ data }: { data: DownloadsData }) {
 }
 
 function title(d: Download) {
-  if (!d.kind || !d.titleId) return null;
-  const to =
-    d.kind === "movie" ? `/movies/${d.titleId}` : `/shows/${d.titleId}`;
+  const t = titleLink(d.kind, d.titleId);
+  if (!t) return null;
   return (
-    <Link to={to} className="text-xs text-marquee hover:underline">
-      {d.kind === "movie" ? i18n.t("web:discover.movie") : i18n.t("web:discover.show")}
+    <Link to={t.to} className="text-xs text-marquee hover:underline">
+      {t.label}
     </Link>
   );
 }
