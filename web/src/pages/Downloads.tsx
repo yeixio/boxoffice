@@ -100,7 +100,7 @@ export function Downloads() {
               'Everything is paused.'
             ) : (
               <>
-                {data.speed > 0 ? speed(data.speed) : 'Idle'}
+                {data.speed > 0 ? speed(data.speed) : data.waiting && data.queue.length > 0 ? `Waiting: ${data.waiting}` : 'Idle'}
                 {data.queue.length > 0 && ` · ${data.queue.length} in the queue`}
               </>
             )

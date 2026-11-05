@@ -5,6 +5,7 @@ import (
 	"errors"
 	"log/slog"
 	"slices"
+	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -27,6 +28,10 @@ type pool struct {
 	downUntil atomic.Int64
 	lastErr   atomic.Value // string
 	log       *slog.Logger
+	// used counts the bytes downloaded from the server; left is what's
+	// left of a block account, -1 for none.
+	used *atomic.Int64
+	left atomic.Int64
 }
 
 func newPool(s store.UsenetServer) *pool {
@@ -34,7 +39,31 @@ func newPool(s store.UsenetServer) *pool {
 	return &pool{srv: s, slots: make(chan struct{}, n), cfg: nntp.Server{Host: s.Host, Port: s.Port, TLS: s.UseTLS, Username: s.Username, Password: s.Password}}
 }
 
-func (p *pool) down() bool { return time.Now().Unix() < p.downUntil.Load() }
+func (p *pool) down() bool {
+	return time.Now().Unix() < p.downUntil.Load() || p.left.Load() == 0
+}
+
+// took counts n bytes downloaded from the server.
+func (p *pool) took(n int64) {
+	if p.used != nil {
+		p.used.Add(n)
+	}
+	for {
+		l := p.left.Load()
+		if l < 0 {
+			return
+		}
+		if p.left.CompareAndSwap(l, max(l-n, 0)) {
+			if l-n <= 0 {
+				p.lastErr.Store("its block is used up")
+				if p.log != nil {
+					p.log.Warn("news server's block account is used up", "server", p.srv.Host)
+				}
+			}
+			return
+		}
+	}
+}
 
 func (p *pool) rest(err error, d time.Duration) {
 	wasDown := p.down()
@@ -103,19 +132,45 @@ func (p *pool) closeIdle() {
 // servers are the pools, first-choice servers first.
 type servers struct {
 	pools []*pool
+	// skipped are servers left out because their block account is used up
+	// or expired, and why.
+	skipped []string
 }
 
-func newServers(list []store.UsenetServer, log *slog.Logger) *servers {
+// newServers makes pools for the servers that are on and have data left.
+// qs and data may be nil.
+func newServers(list []store.UsenetServer, log *slog.Logger, qs map[int64]QuotaState, data *dataCounter) *servers {
 	s := &servers{}
 	for _, u := range list {
 		if u.Enabled && u.Host != "" {
+			q, ok := qs[u.ID]
+			if !ok {
+				q.Left = -1
+			}
+			if q.Problem != "" {
+				s.skipped = append(s.skipped, u.Name+": "+q.Problem)
+				continue
+			}
 			p := newPool(u)
 			p.log = log
+			p.left.Store(q.Left)
+			if data != nil {
+				p.used = data.of(u.ID)
+			}
 			s.pools = append(s.pools, p)
 		}
 	}
 	slices.SortStableFunc(s.pools, func(a, b *pool) int { return a.srv.Level - b.srv.Level })
 	return s
+}
+
+// unusable says why there are no servers to use, when it's their block
+// accounts.
+func (s *servers) unusable() string {
+	if len(s.pools) > 0 || len(s.skipped) == 0 {
+		return ""
+	}
+	return "no news server has data left: " + strings.Join(s.skipped, "; ")
 }
 
 // connections is how many articles can be fetched at once: the first-
@@ -162,6 +217,7 @@ func (s *servers) fetch(ctx context.Context, id string, buf []byte) ([]byte, err
 			body, err := c.Body(id, buf[:0])
 			if err == nil {
 				p.put(c, false)
+				p.took(int64(len(body)))
 				return body, nil
 			}
 			if errors.Is(err, nntp.ErrNoArticle) {

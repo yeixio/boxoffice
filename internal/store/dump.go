@@ -16,7 +16,7 @@ import (
 var dumpTables = []string{
 	"settings", "users", "quality_profiles", "root_folders", "movies", "series", "seasons", "episodes",
 	"media_files", "legacy_ids", "migrations", "jobs",
-	"indexers", "download_clients", "usenet_servers", "blocklist", "imported_settings",
+	"indexers", "download_clients", "usenet_servers", "blocklist", "imported_settings", "data_usage",
 }
 
 // DumpFormat names the backup format, so a restore can tell it's one.

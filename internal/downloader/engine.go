@@ -38,8 +38,12 @@ type Engine struct {
 	// rest), to tell people about it; why is what went wrong, if anything.
 	Notify func(ctx context.Context, d store.Download, event, why string)
 
-	meter   meter
-	limit   limiter
+	meter meter
+	limit limiter
+	data  dataCounter
+	// waiting says why nothing is downloading though downloads are
+	// queued, when it's the data cap or the news servers' accounts.
+	waiting atomic.Value // string
 	wake    chan struct{}
 	mu      sync.Mutex
 	current *running           // the download being fetched, if any
@@ -438,6 +442,21 @@ type Progress struct {
 	StepTotal   int64  `json:"stepTotal,omitempty"`
 }
 
+// saveData saves the bytes downloaded so far, for the data cap and block
+// accounts.
+func (e *Engine) saveData(ctx context.Context) {
+	if err := e.data.flush(ctx, e.Store); err != nil {
+		e.Log.Warn("couldn't save how much was downloaded", "err", err)
+	}
+}
+
+// Waiting says why queued downloads aren't starting, when it's the data
+// cap or the news servers' accounts; "" otherwise.
+func (e *Engine) Waiting() string {
+	v, _ := e.waiting.Load().(string)
+	return v
+}
+
 // Live is what the engine is doing right now.
 type Live struct {
 	Speed    int64              `json:"speed"` // bytes a second
@@ -499,8 +518,14 @@ func (e *Engine) Run(ctx context.Context) {
 	tick := time.NewTicker(5 * time.Second)
 	defer tick.Stop()
 	var wg sync.WaitGroup
-	defer wg.Wait()
-	for {
+	defer func() {
+		wg.Wait()
+		e.saveData(context.WithoutCancel(ctx))
+	}()
+	for n := 0; ; n++ {
+		if n%6 == 0 {
+			e.saveData(ctx)
+		}
 		e.startNext(ctx, &wg)
 		select {
 		case <-ctx.Done():
@@ -525,6 +550,7 @@ func (e *Engine) startNext(ctx context.Context, wg *sync.WaitGroup) {
 	e.mu.Lock()
 	busy := e.current != nil
 	e.mu.Unlock()
+	e.waiting.Store("")
 	if !set.Enabled || set.Paused || busy {
 		if (!set.Enabled || set.Paused) && busy {
 			e.mu.Lock()
@@ -544,6 +570,14 @@ func (e *Engine) startNext(ctx context.Context, wg *sync.WaitGroup) {
 		return
 	}
 	d := queue[i]
+	// The month's data cap: the download that's on goes on, and the next
+	// waits for next month.
+	if c, err := LoadCap(ctx, e.Store); err != nil {
+		return
+	} else if c.Level == CapFull {
+		e.waiting.Store(c.Why())
+		return
+	}
 	if err := e.CheckFolder(ctx); err != nil {
 		e.Store.SetDownloadStatus(ctx, d.ID, store.DownloadPaused, err.Error())
 		return
@@ -552,8 +586,16 @@ func (e *Engine) startNext(ctx context.Context, wg *sync.WaitGroup) {
 	if err != nil {
 		return
 	}
-	srv := newServers(list, e.Log)
+	qs, err := quotas(ctx, e.Store, list)
+	if err != nil {
+		return
+	}
+	srv := newServers(list, e.Log, qs, &e.data)
 	if len(srv.pools) == 0 {
+		if why := srv.unusable(); why != "" {
+			e.waiting.Store(why)
+			return
+		}
 		e.Store.SetDownloadStatus(ctx, d.ID, store.DownloadPaused, "add a news server in Settings first, then resume")
 		return
 	}

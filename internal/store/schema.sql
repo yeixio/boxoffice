@@ -285,3 +285,38 @@ CREATE TABLE IF NOT EXISTS searched (
 	misses INTEGER NOT NULL DEFAULT 0,
 	PRIMARY KEY (kind, id)
 );
+
+-- How each indexer is doing: errors in a row and how long it rests after
+-- them, the limits it reports for its API, and where RSS sync got to.
+CREATE TABLE IF NOT EXISTS indexer_status (
+	indexer_id    BIGINT PRIMARY KEY,
+	failures      INTEGER NOT NULL DEFAULT 0,
+	resting_until BIGINT NOT NULL DEFAULT 0,
+	last_error    TEXT NOT NULL DEFAULT '',
+	failed_at     BIGINT NOT NULL DEFAULT 0,
+	api_max       INTEGER NOT NULL DEFAULT 0, -- as the indexer reports it, 0 if it doesn't
+	grab_max      INTEGER NOT NULL DEFAULT 0,
+	rss_guid      TEXT NOT NULL DEFAULT '',   -- the newest release RSS sync has seen
+	rss_at        BIGINT NOT NULL DEFAULT 0,  -- and when it was posted
+	rss_synced_at BIGINT NOT NULL DEFAULT 0
+);
+
+-- Each indexer's API calls and NZB downloads, by UTC day, to stay inside
+-- its daily limits. auto counts the searches Box Office made by itself.
+CREATE TABLE IF NOT EXISTS indexer_usage (
+	indexer_id BIGINT NOT NULL,
+	day        TEXT NOT NULL,
+	queries    INTEGER NOT NULL DEFAULT 0,
+	grabs      INTEGER NOT NULL DEFAULT 0,
+	auto       INTEGER NOT NULL DEFAULT 0,
+	PRIMARY KEY (indexer_id, day)
+);
+
+-- Bytes downloaded from each news server, by local day, for the monthly
+-- data cap and block accounts.
+CREATE TABLE IF NOT EXISTS data_usage (
+	day       TEXT NOT NULL,
+	server_id BIGINT NOT NULL,
+	bytes     BIGINT NOT NULL DEFAULT 0,
+	PRIMARY KEY (day, server_id)
+);

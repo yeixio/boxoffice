@@ -90,6 +90,11 @@ func (s *Store) migrate(ctx context.Context) error {
 		{"downloads", "quarantined", "TEXT NOT NULL DEFAULT ''"},
 		{"movies", "rating", "DOUBLE PRECISION NOT NULL DEFAULT 0"},
 		{"series", "rating", "DOUBLE PRECISION NOT NULL DEFAULT 0"},
+		{"indexers", "daily_queries", "INTEGER NOT NULL DEFAULT 0"},
+		{"indexers", "daily_grabs", "INTEGER NOT NULL DEFAULT 0"},
+		{"usenet_servers", "quota", "BIGINT NOT NULL DEFAULT 0"},
+		{"usenet_servers", "quota_since", "BIGINT NOT NULL DEFAULT 0"},
+		{"usenet_servers", "expires", "BIGINT NOT NULL DEFAULT 0"},
 	} {
 		if _, err := s.db.ExecContext(ctx, "SELECT "+c.column+" FROM "+c.table+" WHERE 1 = 0"); err != nil {
 			if _, err := s.db.ExecContext(ctx, "ALTER TABLE "+c.table+" ADD COLUMN "+c.column+" "+c.def); err != nil {
