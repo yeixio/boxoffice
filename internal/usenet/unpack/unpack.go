@@ -14,6 +14,7 @@ import (
 	"regexp"
 	"slices"
 	"strings"
+	"time"
 
 	"github.com/bodgit/sevenzip"
 	"github.com/nwaples/rardecode/v2"
@@ -94,6 +95,15 @@ type Result struct {
 // outside dir are refused, links are skipped, and existing files are
 // replaced.
 func Extract(ctx context.Context, a Archive, dir, password string) (Result, error) {
+	return ExtractWithProgress(ctx, a, dir, password, nil)
+}
+
+// ExtractWithProgress is Extract, telling progress of how many bytes of
+// how many have been written out.
+func ExtractWithProgress(ctx context.Context, a Archive, dir, password string, progress func(done, total int64)) (Result, error) {
+	if progress != nil {
+		ctx = context.WithValue(ctx, meterKey{}, &meter{tell: progress})
+	}
 	switch a.Kind {
 	case "rar":
 		return extractRAR(ctx, a, dir, password)
@@ -153,7 +163,40 @@ func (c ctxReader) Read(p []byte) (int, error) {
 	if err := c.ctx.Err(); err != nil {
 		return 0, err
 	}
-	return c.r.Read(p)
+	n, err := c.r.Read(p)
+	if m := meterOf(c.ctx); m != nil {
+		m.add(int64(n))
+	}
+	return n, err
+}
+
+type meterKey struct{}
+
+// meter counts the bytes written out of an archive.
+type meter struct {
+	done, total int64
+	tell        func(done, total int64)
+	last        time.Time
+}
+
+func meterOf(ctx context.Context) *meter {
+	m, _ := ctx.Value(meterKey{}).(*meter)
+	return m
+}
+
+func setTotal(ctx context.Context, n int64) {
+	if m := meterOf(ctx); m != nil {
+		m.total = n
+		m.tell(0, n)
+	}
+}
+
+func (m *meter) add(n int64) {
+	m.done += n
+	if now := time.Now(); now.Sub(m.last) > 250*time.Millisecond || m.done >= m.total {
+		m.last = now
+		m.tell(min(m.done, max(m.total, m.done)), max(m.total, m.done))
+	}
 }
 
 func passwordErr(err error) bool {
@@ -178,6 +221,17 @@ func extractRAR(ctx context.Context, a Archive, dir, password string) (Result, e
 		vfs = &volumeFS{paths: a.Volumes, width: max(4, len(fmt.Sprint(len(a.Volumes))))}
 		opts = append(opts, rardecode.FileSystem(vfs))
 		path = vfs.name(0)
+	}
+	if m := meterOf(ctx); m != nil {
+		if list, err := rardecode.List(path, opts...); err == nil {
+			var total int64
+			for _, f := range list {
+				if !f.IsDir {
+					total += f.UnPackedSize
+				}
+			}
+			setTotal(ctx, total)
+		}
 	}
 	rc, err := rardecode.OpenReader(path, opts...)
 	if err != nil {
@@ -238,6 +292,13 @@ func extract7z(ctx context.Context, path, dir, password string) (Result, error) 
 		return Result{}, err
 	}
 	defer rc.Close()
+	if meterOf(ctx) != nil {
+		var total int64
+		for _, f := range rc.File {
+			total += int64(f.UncompressedSize) //nolint:gosec
+		}
+		setTotal(ctx, total)
+	}
 	var res Result
 	for _, f := range rc.File {
 		if f.FileInfo().IsDir() || f.Mode()&fs.ModeSymlink != 0 {
@@ -272,6 +333,13 @@ func extractZip(ctx context.Context, path, dir string) (Result, error) {
 		return Result{}, err
 	}
 	defer zr.Close()
+	if meterOf(ctx) != nil {
+		var total int64
+		for _, f := range zr.File {
+			total += int64(f.UncompressedSize64) //nolint:gosec
+		}
+		setTotal(ctx, total)
+	}
 	var res Result
 	for _, f := range zr.File {
 		if f.FileInfo().IsDir() || f.Mode()&fs.ModeSymlink != 0 {
