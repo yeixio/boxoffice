@@ -51,12 +51,21 @@ type Handler struct {
 	// Key returns the API key requests must carry.
 	Key     func(ctx context.Context) string
 	Version string
+	// Pairing is what Box Office offers Matinee beyond the arr API; nil
+	// offers none of it.
+	Pairing *Pairing
 	mux     *http.ServeMux
 }
 
 // New makes the handler for an app.
 func New(app App, c *catalog.Service, key func(context.Context) string, version string, log *slog.Logger) *Handler {
-	h := &Handler{App: app, Catalog: c, Key: key, Version: version, Log: log, mux: http.NewServeMux()}
+	return NewPaired(app, c, key, version, log, nil)
+}
+
+// NewPaired makes the handler for an app, with what Box Office offers
+// Matinee beyond the arr API.
+func NewPaired(app App, c *catalog.Service, key func(context.Context) string, version string, log *slog.Logger, p *Pairing) *Handler {
+	h := &Handler{App: app, Catalog: c, Key: key, Version: version, Log: log, Pairing: p, mux: http.NewServeMux()}
 	h.route("GET /api/v3/system/status", h.status)
 	h.route("GET /api/v3/qualityprofile", h.profiles)
 	h.route("GET /api/v3/qualityprofile/{id}", h.profile)
@@ -64,6 +73,7 @@ func New(app App, c *catalog.Service, key func(context.Context) string, version 
 	h.route("GET /api/v3/calendar", h.calendar)
 	h.route("POST /api/v3/command", h.command)
 	h.route("GET /api/v3/boxoffice/notifications", h.notifications)
+	h.pairingRoutes()
 	h.discoverRoutes()
 	h.route("GET /api/v3/tag", func(w http.ResponseWriter, r *http.Request) error { return write(w, http.StatusOK, []any{}) })
 	if app == Radarr {
@@ -179,7 +189,7 @@ func (h *Handler) status(w http.ResponseWriter, r *http.Request) error {
 	}
 	return write(w, http.StatusOK, map[string]any{
 		"appName": h.App.name(), "instanceName": "Box Office", "version": version,
-		"boxOffice": h.Version, "boxOfficeId": id, "boxOfficeFeatures": []string{"notifications", "discover"}, "urlBase": "/" + string(h.App), "isProduction": true,
+		"boxOffice": h.Version, "boxOfficeId": id, "boxOfficeFeatures": h.features(), "urlBase": "/" + string(h.App), "isProduction": true,
 		"startTime": started.Format(time.RFC3339), "osName": "linux", "runtimeName": "go", "authentication": "external",
 	})
 }

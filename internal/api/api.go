@@ -246,8 +246,9 @@ func (s *Server) Handler() http.Handler {
 		writeError(w, http.StatusNotFound, "there's no such API")
 	})
 	key := s.APIKey
-	mux.Handle("/radarr/", http.StripPrefix("/radarr", arrapi.New(arrapi.Radarr, s.Catalog, key, s.Version, s.Log)))
-	mux.Handle("/sonarr/", http.StripPrefix("/sonarr", arrapi.New(arrapi.Sonarr, s.Catalog, key, s.Version, s.Log)))
+	pair := s.pairing()
+	mux.Handle("/radarr/", http.StripPrefix("/radarr", arrapi.NewPaired(arrapi.Radarr, s.Catalog, key, s.Version, s.Log, pair)))
+	mux.Handle("/sonarr/", http.StripPrefix("/sonarr", arrapi.NewPaired(arrapi.Sonarr, s.Catalog, key, s.Version, s.Log, pair)))
 	// Prometheus, with the token from Health → Prometheus (see alerts.go).
 	mux.HandleFunc("GET /metrics", s.metrics)
 	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte("ok\n")) })

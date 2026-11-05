@@ -54,7 +54,12 @@ type Download struct {
 	CanImport bool `json:"canImport,omitempty"`
 	// StepDone and StepTotal say how far checking, repairing or unpacking
 	// has got, while it runs.
-	StepDone   int64     `json:"stepDone,omitempty"`
+	StepDone int64 `json:"stepDone,omitempty"`
+	// Edition is the movie edition it was grabbed as (Director's Cut,
+	// say), and Mode how it goes into the library: "" or "replace" takes
+	// the movie's copy's place, "alongside" goes in next to it.
+	Edition    string    `json:"edition,omitempty"`
+	Mode       string    `json:"mode,omitempty"`
 	StepTotal  int64     `json:"stepTotal,omitempty"`
 	AddedAt    time.Time `json:"addedAt"`
 	StartedAt  time.Time `json:"startedAt,omitzero"`
@@ -65,14 +70,14 @@ type Download struct {
 func (d Download) Finished() bool { return d.Status == DownloadCompleted || d.Status == DownloadFailed }
 
 const downloadCols = `id, name, status, kind, title_id, episode_ids, quality, indexer, source, password, size, done_bytes, failed_bytes,
-	done_files, position, folder, message, imported_to, quarantined, added_at, started_at, finished_at`
+	done_files, position, folder, message, imported_to, quarantined, added_at, started_at, finished_at, edition, mode`
 
 func scanDownload(r interface{ Scan(...any) error }) (Download, error) {
 	var d Download
 	var eps, files string
 	var added, started, finished int64
 	err := r.Scan(&d.ID, &d.Name, &d.Status, &d.Kind, &d.TitleID, &eps, &d.Quality, &d.Indexer, &d.Source, &d.Password, &d.Size,
-		&d.DoneBytes, &d.FailedBytes, &files, &d.Position, &d.Folder, &d.Message, &d.ImportedTo, &d.Quarantined, &added, &started, &finished)
+		&d.DoneBytes, &d.FailedBytes, &files, &d.Position, &d.Folder, &d.Message, &d.ImportedTo, &d.Quarantined, &added, &started, &finished, &d.Edition, &d.Mode)
 	if errors.Is(err, sql.ErrNoRows) {
 		return d, ErrNotFound
 	}
@@ -108,9 +113,9 @@ func (s *Store) AddDownload(ctx context.Context, d Download) (Download, error) {
 	if d.Status == "" {
 		d.Status = DownloadQueued
 	}
-	id, err := s.insert(ctx, `INSERT INTO downloads (name, status, kind, title_id, episode_ids, quality, indexer, source, password, size, position, added_at)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-		d.Name, d.Status, d.Kind, d.TitleID, jsonText(d.EpisodeIDs), d.Quality, d.Indexer, d.Source, d.Password, d.Size, pos+1, now())
+	id, err := s.insert(ctx, `INSERT INTO downloads (name, status, kind, title_id, episode_ids, quality, indexer, source, password, size, position, added_at, edition, mode)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+		d.Name, d.Status, d.Kind, d.TitleID, jsonText(d.EpisodeIDs), d.Quality, d.Indexer, d.Source, d.Password, d.Size, pos+1, now(), d.Edition, d.Mode)
 	if err != nil {
 		return d, err
 	}
