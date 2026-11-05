@@ -144,6 +144,7 @@ func (s *Server) Handler() http.Handler {
 		{"GET /api/v1/movies", true, s.movies},
 		{"POST /api/v1/movies", true, s.addMovie},
 		{"GET /api/v1/movies/{id}", true, s.movie},
+		{"POST /api/v1/movies/bulk", true, s.bulkMovies},
 		{"PATCH /api/v1/movies/{id}", true, s.editMovie},
 		{"DELETE /api/v1/movies/{id}", true, s.deleteMovie},
 		{"GET /api/v1/movies/{id}/removal", true, s.movieRemoval},
@@ -156,6 +157,7 @@ func (s *Server) Handler() http.Handler {
 		{"GET /api/v1/series/defaults", true, s.showDefaults},
 		{"PUT /api/v1/series/defaults", true, s.saveShowDefaults},
 		{"GET /api/v1/series/{id}", true, s.series},
+		{"POST /api/v1/series/bulk", true, s.bulkSeries},
 		{"PATCH /api/v1/series/{id}", true, s.editSeries},
 		{"DELETE /api/v1/series/{id}", true, s.deleteSeries},
 		{"GET /api/v1/series/{id}/removal", true, s.seriesRemoval},
@@ -215,6 +217,7 @@ func (s *Server) Handler() http.Handler {
 		{"POST /api/v1/admin/metrics/token", true, s.newMetricsToken},
 		{"DELETE /api/v1/admin/metrics/token", true, s.deleteMetricsToken},
 	}
+	routes = append(routes, s.discoverRoutes()...)
 	routes = append(routes, s.downloadRoutes()...)
 	routes = append(routes, s.downloadFileRoutes()...)
 	routes = append(routes, s.quarantineRoutes()...)
@@ -365,6 +368,8 @@ func (s *Server) wrap(rt route) http.Handler {
 			writeError(w, http.StatusConflict, "that's there already")
 		case errors.Is(err, catalog.ErrExists):
 			writeError(w, http.StatusConflict, "that's on the list already")
+		case errors.Is(err, store.ErrLocked):
+			writeError(w, http.StatusConflict, "This title is set to Do not touch, so Box Office leaves its files alone. Pick another quality profile for it first.")
 		case errors.Is(err, store.ErrInUse):
 			writeError(w, http.StatusConflict, "titles still use it; move them to another first")
 		case errors.Is(err, tmdb.ErrNoKey):

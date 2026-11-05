@@ -84,6 +84,9 @@ func (s *Service) judgeEpisodes(ctx context.Context, r Release, t store.Series, 
 // Season searches for a season of a show, judging packs and single
 // episodes against the wanted episodes of it.
 func (s *Service) Season(ctx context.Context, t store.Series, season int, want []store.Episode) (Results, error) {
+	if err := s.Store.CheckUnlocked(ctx, "series", t.ID); err != nil {
+		return Results{}, err
+	}
 	rs, notes, n, err := s.ask(ctx, func(ix store.Indexer) Query {
 		q := Query{Type: "tvsearch", Season: season, Cats: cats(ix, 5000, 5999, 5000)}
 		if t.TVDBID > 0 {

@@ -45,6 +45,8 @@ type Service struct {
 	// TMDBBase and TMDBHTTP point at a test server.
 	TMDBBase string
 	TMDBHTTP *http.Client
+
+	discover discoverCache
 }
 
 // Register adds the service's job handlers to its runner. Searches are

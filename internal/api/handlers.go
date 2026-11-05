@@ -153,6 +153,7 @@ func (s *Server) createProfile(w http.ResponseWriter, r *http.Request) error {
 	if err := readJSON(r, &p); err != nil {
 		return err
 	}
+	p.Locked = false // there's one Do not touch profile, and it's built in
 	if err := p.Check(); err != nil {
 		return errorf(http.StatusBadRequest, err.Error())
 	}
@@ -176,6 +177,12 @@ func (s *Server) updateProfile(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 	p.ID = int(id)
+	if old, err := s.Store.Profile(r.Context(), p.ID); err != nil {
+		return err
+	} else if old.Locked {
+		return errorf(http.StatusBadRequest, "Do not touch is built in and can't be changed")
+	}
+	p.Locked = false
 	if err := p.Check(); err != nil {
 		return errorf(http.StatusBadRequest, err.Error())
 	}
@@ -189,6 +196,11 @@ func (s *Server) deleteProfile(w http.ResponseWriter, r *http.Request) error {
 	id, err := pathID(r, "id")
 	if err != nil {
 		return err
+	}
+	if old, err := s.Store.Profile(r.Context(), int(id)); err != nil {
+		return err
+	} else if old.Locked {
+		return errorf(http.StatusBadRequest, "Do not touch is built in and can't be removed")
 	}
 	if err := s.Store.DeleteProfile(r.Context(), int(id)); err != nil {
 		return err
@@ -447,6 +459,9 @@ func (s *Server) searchMovie(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
+	if err := s.Store.CheckUnlocked(r.Context(), "movie", id); err != nil {
+		return err
+	}
 	if err := s.Catalog.SearchMovies(r.Context(), id); err != nil {
 		return err
 	}
@@ -582,6 +597,9 @@ func (s *Server) searchSeries(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
+	if err := s.Store.CheckUnlocked(r.Context(), "series", id); err != nil {
+		return err
+	}
 	if err := s.Catalog.SearchSeries(r.Context(), id); err != nil {
 		return err
 	}
@@ -652,6 +670,9 @@ func (s *Server) editEpisode(w http.ResponseWriter, r *http.Request) error {
 func (s *Server) searchEpisode(w http.ResponseWriter, r *http.Request) error {
 	id, err := pathID(r, "id")
 	if err != nil {
+		return err
+	}
+	if err := s.Store.CheckUnlocked(r.Context(), "episode", id); err != nil {
 		return err
 	}
 	if err := s.Catalog.SearchEpisodes(r.Context(), id); err != nil {

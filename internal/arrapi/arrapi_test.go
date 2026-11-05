@@ -27,6 +27,7 @@ type env struct {
 	url    string // Box Office's address
 	movies string // its movie root folder
 	tv     string
+	fake   *tmdbtest.Fake
 }
 
 func setup(t *testing.T) env {
@@ -37,7 +38,7 @@ func setup(t *testing.T) env {
 	cat := &catalog.Service{Store: st, Jobs: jobs.New(st, log), Log: log, EnvTMDBKey: tmdbtest.Key, TMDBBase: fake.URL}
 	cat.Register()
 	dir := t.TempDir()
-	e := env{cat: cat, movies: filepath.Join(dir, "movies"), tv: filepath.Join(dir, "tv")}
+	e := env{cat: cat, fake: fake, movies: filepath.Join(dir, "movies"), tv: filepath.Join(dir, "tv")}
 	ctx := context.Background()
 	for kind, p := range map[string]string{"movie": e.movies, "series": e.tv} {
 		os.MkdirAll(p, 0o755)
@@ -77,7 +78,8 @@ func TestMatineeRadarrClient(t *testing.T) {
 		t.Fatal("a wrong key was accepted")
 	}
 	profiles, err := c.QualityProfiles(ctx)
-	if err != nil || len(profiles) != 3 {
+	// The three defaults, and Do not touch.
+	if err != nil || len(profiles) != 4 || profiles[3].Name != "Do not touch" {
 		t.Fatalf("profiles: %+v, %v", profiles, err)
 	}
 	folders, err := c.RootFolders(ctx)

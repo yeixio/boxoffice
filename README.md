@@ -61,6 +61,7 @@ Open http://localhost:7272 and make the admin account. To have it file things in
 
 ## What it does
 
+- **Discover what to watch.** The home page shows what's trending, popular and coming soon on TMDB, recommendations based on your library, and genres and networks to browse. Each poster says whether it's already on disk or wanted, and the **+** on it adds the title in one click.
 - **Movies and shows you want.** Add a title by name and Box Office looks it up on [TMDB](https://www.themoviedb.org/): poster, description, rating, and for shows every season and episode. Each title has a quality profile, a folder, and a switch to watch for it. **Coming up** lists new episodes and movies on their way.
 - **Searches on its own.** RSS sync reads each connected indexer's newest listings every 15 minutes, so new episodes are found when they become available. An hourly library patrol looks for a few missing titles and upgrades at a time, newest first, and looks for a whole season when three or more of its episodes are wanted.
 - **Kind to the services you use and your data plan.** Searches are spaced out and kept under each indexer's daily limit (read from the indexer when it says, or typed in), an indexer that's having trouble rests for a while, and a monthly **data cap** makes upgrades wait first, then missing titles, before you hit your internet provider's limit. Block accounts on news servers count down too.

@@ -44,7 +44,8 @@ export type User = { id: number; username: string }
 export type Status = { setup: boolean; version: string; user?: User; movedIn?: boolean }
 
 export type Quality = { id: number; name: string; source: string; resolution: number }
-export type Profile = { id: number; name: string; allowed: number[]; cutoff: number; upgrade: boolean }
+// locked is the Do not touch profile, which is never picked for a new title on its own.
+export type Profile = { id: number; name: string; allowed: number[]; cutoff: number; upgrade: boolean; locked?: boolean }
 export type RootFolder = { id: number; kind: RootKind; path: string; freeSpace: number; accessible: boolean }
 
 export type MediaFile = { id: number; path: string; size: number; quality: number; addedAt: string }
@@ -122,6 +123,8 @@ export type LookupShow = {
   year?: number
   overview?: string
   poster?: string
+  backdrop?: string
+  rating?: number
   network?: string
   status?: string
   seasons?: { number: number; episodes: number }[]
@@ -501,3 +504,28 @@ export type LibScan = {
   started: string
   finished?: string
 }
+
+// ---- discover ----
+
+// Where a title from TMDB stands here: on disk, partly on disk (a show),
+// wanted, or on the list but paused. None means it's not on the list.
+export type DiscoverStatus = 'available' | 'partial' | 'wanted' | 'paused'
+export type DiscoverKind = 'movie' | 'series'
+export type DiscoverTitle = {
+  kind: DiscoverKind
+  tmdbId: number
+  title: string
+  year?: number
+  overview?: string
+  poster?: string
+  backdrop?: string
+  rating?: number
+  date?: string
+  status?: DiscoverStatus
+  id?: number
+}
+export type DiscoverRow = { id: string; title: string; because?: string; items: DiscoverTitle[]; more?: boolean }
+export type DiscoverPage = DiscoverRow & { page: number; pages: number }
+export type Genre = { id: number; name: string }
+export type Network = { id: number; name: string; logo?: string }
+export type DiscoverHome = { rows: DiscoverRow[]; browse: { movieGenres: Genre[]; seriesGenres: Genre[]; networks: Network[] } }

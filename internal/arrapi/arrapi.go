@@ -64,6 +64,7 @@ func New(app App, c *catalog.Service, key func(context.Context) string, version 
 	h.route("GET /api/v3/calendar", h.calendar)
 	h.route("POST /api/v3/command", h.command)
 	h.route("GET /api/v3/boxoffice/notifications", h.notifications)
+	h.discoverRoutes()
 	h.route("GET /api/v3/tag", func(w http.ResponseWriter, r *http.Request) error { return write(w, http.StatusOK, []any{}) })
 	if app == Radarr {
 		h.route("GET /api/v3/movie", h.movies)
@@ -178,7 +179,7 @@ func (h *Handler) status(w http.ResponseWriter, r *http.Request) error {
 	}
 	return write(w, http.StatusOK, map[string]any{
 		"appName": h.App.name(), "instanceName": "Box Office", "version": version,
-		"boxOffice": h.Version, "boxOfficeId": id, "boxOfficeFeatures": []string{"notifications"}, "urlBase": "/" + string(h.App), "isProduction": true,
+		"boxOffice": h.Version, "boxOfficeId": id, "boxOfficeFeatures": []string{"notifications", "discover"}, "urlBase": "/" + string(h.App), "isProduction": true,
 		"startTime": started.Format(time.RFC3339), "osName": "linux", "runtimeName": "go", "authentication": "external",
 	})
 }
@@ -361,6 +362,11 @@ func (h *Handler) deleteFile(w http.ResponseWriter, r *http.Request) error {
 	}
 	if f.Kind != want {
 		return errNotFound
+	}
+	if err := h.Catalog.Store.CheckUnlocked(ctx, f.Kind, f.OwnerID); errors.Is(err, store.ErrLocked) {
+		return fail(http.StatusConflict, "Box Office has this title set to Do not touch, so it leaves its files alone")
+	} else if err != nil {
+		return err
 	}
 	root, err := h.fileRoot(ctx, f)
 	if err != nil {
