@@ -154,6 +154,9 @@ export type AutoSearch = {
 }
 export type Job = { id: number; kind: string; subject: string; status: string; message?: string; createdAt: string; startedAt?: string; finishedAt?: string }
 
+// ShowDefaults say which seasons a new show watches when nobody picks.
+export type ShowDefaults = { monitor: string; recent: number }
+
 export type Settings = { apiKey: string; apiKeyFromEnv: boolean; hasTmdbKey: boolean; tmdbKeyFromEnv: boolean }
 
 export type BackupRemote = {

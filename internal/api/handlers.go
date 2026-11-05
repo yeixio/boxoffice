@@ -426,6 +426,27 @@ func (s *Server) series(w http.ResponseWriter, r *http.Request) error {
 	return writeJSON(w, http.StatusOK, map[string]any{"series": t, "episodes": eps})
 }
 
+// showDefaults are which seasons a new show watches when nobody picks:
+// Settings' "New shows" card, and the add-show form's starting choice.
+func (s *Server) showDefaults(w http.ResponseWriter, r *http.Request) error {
+	d, err := catalog.LoadShowDefaults(r.Context(), s.Store)
+	if err != nil {
+		return err
+	}
+	return writeJSON(w, http.StatusOK, d)
+}
+
+func (s *Server) saveShowDefaults(w http.ResponseWriter, r *http.Request) error {
+	var in catalog.ShowDefaults
+	if err := readJSON(r, &in); err != nil {
+		return err
+	}
+	if err := catalog.SaveShowDefaults(r.Context(), s.Store, in); err != nil {
+		return err
+	}
+	return s.showDefaults(w, r)
+}
+
 func (s *Server) addSeries(w http.ResponseWriter, r *http.Request) error {
 	var in addInput
 	if err := readJSON(r, &in); err != nil {

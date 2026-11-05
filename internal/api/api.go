@@ -136,6 +136,8 @@ func (s *Server) Handler() http.Handler {
 		{"POST /api/v1/movies/{id}/refresh", true, s.refreshMovie},
 		{"GET /api/v1/series", true, s.seriesList},
 		{"POST /api/v1/series", true, s.addSeries},
+		{"GET /api/v1/series/defaults", true, s.showDefaults},
+		{"PUT /api/v1/series/defaults", true, s.saveShowDefaults},
 		{"GET /api/v1/series/{id}", true, s.series},
 		{"PATCH /api/v1/series/{id}", true, s.editSeries},
 		{"DELETE /api/v1/series/{id}", true, s.deleteSeries},
