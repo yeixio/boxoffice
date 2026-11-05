@@ -180,17 +180,12 @@ func (h *Handler) addSeries(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 	o := catalog.AddOptions{RootFolder: in.RootFolderPath, Path: in.Path, Monitored: in.monitored(),
-		Search: in.AddOptions.SearchForMissingEpisodes, Monitor: strings.ToLower(in.AddOptions.Monitor)}
+		Search: in.AddOptions.SearchForMissingEpisodes}
 	if in.QualityProfileID > 0 {
 		o.ProfileID = ids.fromApp(in.QualityProfileID)
 	}
 	var seasons map[int]bool
-	if len(in.Seasons) > 0 {
-		seasons = map[int]bool{}
-		for _, se := range in.Seasons {
-			seasons[se.SeasonNumber] = se.Monitored
-		}
-	}
+	o.Monitor, seasons = addMonitor(in)
 	t, err := h.Catalog.AddSeriesInfo(ctx, info, o, seasons)
 	if errors.Is(err, catalog.ErrExists) {
 		return invalid("TvdbId", "This series has already been added")
@@ -296,4 +291,42 @@ func (h *Handler) episode(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 	return write(w, http.StatusOK, episodeJSON(e))
+}
+
+// addMonitor turns a Sonarr client's addOptions.monitor and season list
+// into Box Office's rule. Sonarr's rule wins over the season list, as in
+// Sonarr. "all", or no rule with every regular season switched on (how
+// Matinee asks for a show), means the client made no real choice, so the
+// show gets the default from Settings: on a long show, only the last few
+// seasons. A list that picks some seasons is kept as it is.
+func addMonitor(in titleInput) (string, map[int]bool) {
+	var seasons map[int]bool
+	everything := true
+	for _, se := range in.Seasons {
+		if seasons == nil {
+			seasons = map[int]bool{}
+		}
+		seasons[se.SeasonNumber] = se.Monitored
+		if se.SeasonNumber > 0 && !se.Monitored {
+			everything = false
+		}
+	}
+	switch m := strings.ToLower(in.AddOptions.Monitor); m {
+	case "all":
+		return "", nil
+	case "", "unknown":
+		if everything {
+			return "", nil
+		}
+		return "", seasons
+	case "latestseason", "lastseason", catalog.MonitorLatest:
+		return catalog.MonitorLatest, nil
+	case catalog.MonitorFuture, catalog.MonitorNone, catalog.MonitorRecent:
+		return m, nil
+	default: // missing, existing, firstSeason, pilot and the like
+		if seasons == nil {
+			return catalog.MonitorAll, nil
+		}
+		return catalog.MonitorAll, seasons
+	}
 }

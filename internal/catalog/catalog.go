@@ -108,9 +108,13 @@ type AddOptions struct {
 	Monitored bool   `json:"monitored"`
 	// Search starts looking for it once added.
 	Search bool `json:"search"`
-	// Monitor picks a show's episodes: all, future (not yet aired), none,
-	// or latest (the newest season). Specials are never monitored.
+	// Monitor picks a show's episodes: all, recent (the last Recent
+	// seasons that have aired, and new ones), future (not yet aired),
+	// latest (the newest season), or none. Empty uses the default from
+	// Settings (see ShowDefaults). Specials are never monitored.
 	Monitor string `json:"monitor,omitempty"`
+	// Recent is how many aired seasons "recent" keeps; 0 uses the default.
+	Recent int `json:"recent,omitempty"`
 }
 
 // resolve fills in a profile and root folder, and checks the ones given.
@@ -321,19 +325,17 @@ func (s *Service) AddSeriesInfo(ctx context.Context, info tmdb.Show, o AddOption
 	if err := s.resolve(ctx, "series", &o); err != nil {
 		return store.Series{}, err
 	}
+	if seasons == nil {
+		if err := s.monitorFor(ctx, &o); err != nil {
+			return store.Series{}, err
+		}
+		seasons = WatchedSeasons(info.Seasons, o.Monitor, o.Recent, time.Now())
+	}
 	t := fromTMDBShow(info)
 	t.Monitored, t.ProfileID, t.RootFolder = o.Monitored, o.ProfileID, o.RootFolder
 	t.Path = cmp.Or(o.Path, filepath.Join(o.RootFolder, FolderName(t.Title, t.Year)))
-	latest := 0
 	for _, se := range info.Seasons {
-		latest = max(latest, se.Number)
-	}
-	for _, se := range info.Seasons {
-		mon := se.Number > 0 && (o.Monitor == "" || o.Monitor == "all" || o.Monitor == "future" || (o.Monitor == "latest" && se.Number == latest))
-		if seasons != nil {
-			mon = seasons[se.Number]
-		}
-		t.Seasons = append(t.Seasons, store.Season{Number: se.Number, Monitored: mon})
+		t.Seasons = append(t.Seasons, store.Season{Number: se.Number, Monitored: seasons[se.Number]})
 	}
 	added, err := s.Store.AddSeries(ctx, t)
 	if errors.Is(err, store.ErrExists) {

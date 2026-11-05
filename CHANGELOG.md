@@ -6,6 +6,7 @@ What changed in Box Office, newest first. The format follows [Keep a Changelog](
 
 ### Added
 
+- **New shows watch only their last 3 aired seasons, and any still to come,** so a long-running show doesn't flood the library patrol and upgrades. The rule and the number of seasons are in Settings → New shows, and can be changed per show when adding it. Matinee requests follow the same default; shows already on the list and ones brought in by Move in keep what they have. Specials stay off.
 - **Removing titles can delete their files from disk,** showing the folder, file count and size first, and deleting only what it showed ([#28](https://github.com/yeixio/boxoffice/pull/28)). Recycle folders can be emptied from Settings, or after a number of days.
 - **Downloads housekeeping:** failed downloads that can't be repaired are deleted, quarantine has its own section with release, delete and auto-delete after a number of days, long lists are paged, and the queue is summed up at the top ([#27](https://github.com/yeixio/boxoffice/pull/27)).
 - Bulk actions on the Downloads queue and history ([#26](https://github.com/yeixio/boxoffice/pull/26)).

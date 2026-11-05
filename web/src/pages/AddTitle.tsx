@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate } from 'react-router-dom'
 import { Search } from 'lucide-react'
 import { get, post, type LookupMovie, type LookupShow, type Movie, type Series } from '../api'
-import { useProfiles, useRootFolders } from '../hooks'
+import { monitorOptions, useProfiles, useRootFolders, useShowDefaults } from '../hooks'
 import { Button, ErrorNote, Field, Input, Modal, Poster, Select, Spinner, Toggle } from '../ui'
 
 type Kind = 'movie' | 'series'
@@ -74,7 +74,9 @@ function AddOptions({ kind, title, onBack, onDone }: { kind: Kind; title: Lookup
   const [root, setRoot] = useState('')
   const [monitored, setMonitored] = useState(true)
   const [search, setSearch] = useState(true)
-  const [monitor, setMonitor] = useState('all')
+  const defaults = useShowDefaults()
+  const [monitor, setMonitor] = useState('')
+  const [recent, setRecent] = useState('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<unknown>(null)
   useEffect(() => {
@@ -83,8 +85,14 @@ function AddOptions({ kind, title, onBack, onDone }: { kind: Kind; title: Lookup
   useEffect(() => {
     if (!root && folders.data?.length) setRoot(folders.data[0].path)
   }, [folders.data, root])
+  useEffect(() => {
+    if (!monitor && defaults.data) {
+      setMonitor(defaults.data.monitor)
+      setRecent(String(defaults.data.recent))
+    }
+  }, [defaults.data, monitor])
 
-  if (profiles.isPending || folders.isPending) return <Spinner />
+  if (profiles.isPending || folders.isPending || (kind === 'series' && defaults.isPending)) return <Spinner />
   if (!folders.data?.length) {
     return (
       <p className="text-sm">
@@ -96,11 +104,12 @@ function AddOptions({ kind, title, onBack, onDone }: { kind: Kind; title: Lookup
       </p>
     )
   }
+  const seasons = Math.max(1, Math.round(Number(recent)) || defaults.data?.recent || 3)
   const add = async () => {
     setBusy(true)
     setError(null)
     try {
-      const body = { tmdbId: title.tmdbId, profileId, rootFolder: root, monitored, search, ...(kind === 'series' ? { monitor } : {}) }
+      const body = { tmdbId: title.tmdbId, profileId, rootFolder: root, monitored, search, ...(kind === 'series' ? { monitor, recent: seasons } : {}) }
       const added = await post<Movie | Series>(kind === 'movie' ? '/movies' : '/series', body)
       await qc.invalidateQueries({ queryKey: [kind === 'movie' ? 'movies' : 'series'] })
       onDone()
@@ -117,20 +126,13 @@ function AddOptions({ kind, title, onBack, onDone }: { kind: Kind; title: Lookup
         <Field label="Quality profile">{(id) => <Select id={id} value={profileId} onChange={(v) => setProfileId(Number(v))} options={(profiles.data ?? []).map((p) => ({ value: p.id, label: p.name }))} />}</Field>
         <Field label="Root folder">{(id) => <Select id={id} value={root} onChange={setRoot} options={folders.data.map((f) => ({ value: f.path, label: f.path }))} />}</Field>
         {kind === 'series' && (
-          <Field label="Which episodes to get">
-            {(id) => (
-              <Select
-                id={id}
-                value={monitor}
-                onChange={setMonitor}
-                options={[
-                  { value: 'all', label: 'All episodes' },
-                  { value: 'future', label: 'Only ones not out yet' },
-                  { value: 'latest', label: 'The latest season' },
-                  { value: 'none', label: 'None for now' },
-                ]}
-              />
-            )}
+          <Field label="Which episodes to get" hint="Specials are left out. You can switch any season on or off later from the show's page.">
+            {(id) => <Select id={id} value={monitor} onChange={setMonitor} options={monitorOptions(seasons)} />}
+          </Field>
+        )}
+        {kind === 'series' && monitor === 'recent' && (
+          <Field label="How many seasons" hint="Counts seasons that have started airing. A show with this many or fewer gets every season.">
+            {(id) => <Input id={id} type="number" min={1} max={99} value={recent} onChange={(e) => setRecent(e.target.value)} className="max-w-32" />}
           </Field>
         )}
       </div>

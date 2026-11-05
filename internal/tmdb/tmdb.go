@@ -257,6 +257,8 @@ type Show struct {
 type SeasonInfo struct {
 	Number   int `json:"number"`
 	Episodes int `json:"episodes"`
+	// AirDate is when the season starts; nil when TMDB doesn't know yet.
+	AirDate *time.Time `json:"airDate,omitempty"`
 }
 
 type apiShow struct {
@@ -273,8 +275,9 @@ type apiShow struct {
 		Name string `json:"name"`
 	} `json:"networks"`
 	Seasons []struct {
-		Number   int `json:"season_number"`
-		Episodes int `json:"episode_count"`
+		Number   int    `json:"season_number"`
+		Episodes int    `json:"episode_count"`
+		AirDate  string `json:"air_date"`
 	} `json:"seasons"`
 	ExternalIDs struct {
 		TVDBID int64  `json:"tvdb_id"`
@@ -295,7 +298,7 @@ func (s apiShow) show() Show {
 		out.Runtime = s.RunTimes[0]
 	}
 	for _, se := range s.Seasons {
-		out.Seasons = append(out.Seasons, SeasonInfo{Number: se.Number, Episodes: se.Episodes})
+		out.Seasons = append(out.Seasons, SeasonInfo{Number: se.Number, Episodes: se.Episodes, AirDate: parseDate(se.AirDate)})
 	}
 	return out
 }
