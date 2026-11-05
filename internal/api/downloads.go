@@ -52,6 +52,10 @@ func (s *Server) downloadRoutes() []route {
 		{"GET /api/v1/movies/{id}/releases", true, s.releases(func(r *http.Request, id int64) (search.Results, error) { return s.Search.Movie(r.Context(), id) })},
 		{"GET /api/v1/episodes/{id}/releases", true, s.releases(func(r *http.Request, id int64) (search.Results, error) { return s.Search.Episode(r.Context(), id) })},
 		{"POST /api/v1/releases/{key}/grab", true, s.grabRelease},
+
+		{"GET /api/v1/search/auto", true, s.autoSearch},
+		{"PUT /api/v1/search/auto", true, s.saveAutoSearch},
+		{"POST /api/v1/search/auto/run", true, s.runAutoSearch},
 	}
 }
 

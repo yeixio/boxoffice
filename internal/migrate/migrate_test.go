@@ -20,6 +20,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/backup"
 	"github.com/yeixio/boxoffice/internal/catalog"
 	"github.com/yeixio/boxoffice/internal/jobs"
+	"github.com/yeixio/boxoffice/internal/quality"
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/store/storetest"
 	"github.com/yeixio/boxoffice/internal/tmdb/tmdbtest"
@@ -460,5 +461,26 @@ func TestMatineeRoot(t *testing.T) {
 		if r, err := w.m.matineeRoot(ctx, "radarr", want); err != nil || r != got {
 			t.Errorf("%q: got %q, %v; want %q", want, r, err, got)
 		}
+	}
+}
+
+// A group as the cutoff: any quality in it is good enough, as in Radarr
+// and Sonarr, so the cutoff is the group's lowest.
+func TestMapProfileGroupCutoff(t *testing.T) {
+	var lp lProfile
+	if err := json.Unmarshal([]byte(`{"id": 4, "name": "HD-1080p", "upgradeAllowed": true, "cutoff": 1001, "items": [
+		{"quality": {"id": 4, "name": "HDTV-720p"}, "allowed": true},
+		{"id": 1001, "name": "WEB 1080p", "allowed": true, "items": [
+			{"quality": {"id": 15, "name": "WEBRip-1080p"}, "allowed": true},
+			{"quality": {"id": 3, "name": "WEBDL-1080p"}, "allowed": true}]},
+		{"quality": {"id": 7, "name": "Bluray-1080p"}, "allowed": true}]}`), &lp); err != nil {
+		t.Fatal(err)
+	}
+	p := mapProfile(lp)
+	if want := quality.Parse("WEBRip-1080p").ID; p.Cutoff != want || !p.UpgradeOK {
+		t.Fatalf("profile %+v, want cutoff %d", p, want)
+	}
+	if p.CutoffUnmet(quality.Parse("WEBRip-1080p").ID) || !p.CutoffUnmet(quality.Parse("HDTV-720p").ID) {
+		t.Fatal("cutoff judged wrong")
 	}
 }

@@ -4,8 +4,8 @@
 import { useState, type ReactNode } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AlertTriangle, CircleCheck, Pencil, Plus, Trash2 } from 'lucide-react'
-import { del, get, post, put, type Connections as ConnectionsData, type DownloadClient, type IndexerCaps, type Indexer, type UsenetServer } from '../api'
-import { bytes, count } from '../format'
+import { del, get, post, put, type AutoSearch, type Connections as ConnectionsData, type DownloadClient, type IndexerCaps, type Indexer, type UsenetServer } from '../api'
+import { bytes, count, when } from '../format'
 import { Badge, Button, Card, ErrorNote, Field, Input, Modal, Select, Toggle } from '../ui'
 import { useDownloads } from './Downloads'
 
@@ -80,6 +80,78 @@ export function DownloadSettings() {
         </p>
         {d.data.folder.problem && <ErrorNote error={d.data.folder.problem} />}
         <ErrorNote error={save.error} />
+      </div>
+    </Card>
+  )
+}
+
+// ---- automatic searches ----
+
+export function AutoSearchSettings() {
+  const qc = useQueryClient()
+  const a = useQuery({ queryKey: ['search-auto'], queryFn: () => get<AutoSearch>('/search/auto') })
+  const [perDay, setPerDay] = useState<string | null>(null)
+  const done = (v: AutoSearch) => qc.setQueryData(['search-auto'], v)
+  const save = useMutation({ mutationFn: (s: Partial<AutoSearch['settings']>) => put<AutoSearch>('/search/auto', { ...a.data!.settings, ...s }), onSuccess: done })
+  const run = useMutation({ mutationFn: () => post<AutoSearch>('/search/auto/run', {}), onSuccess: done })
+  if (!a.data) return null
+  const s = a.data.settings
+  const last = a.data.last
+  return (
+    <Card>
+      <h2 id="automatic-searches" className="mb-1 scroll-mt-24 font-display text-lg font-semibold">
+        Missing titles and upgrades
+      </h2>
+      <p className="mb-4 text-sm text-muted">
+        Every hour, Box Office searches for a few monitored movies and episodes that have no copy yet, and for ones whose copy is below the
+        quality profile's good-enough quality while the profile has upgrades on. A better copy replaces the old one, which goes to the
+        library's .recycle folder; nothing is deleted.
+      </p>
+      <div className="flex flex-col gap-4">
+        <p className="text-sm">
+          Wanted now: {count(a.data.missing, 'missing title', 'missing titles')}, {count(a.data.upgrades, 'upgrade', 'upgrades')}.
+        </p>
+        <Toggle
+          checked={s.enabled}
+          onChange={(v) => save.mutate({ enabled: v })}
+          disabled={save.isPending}
+          label={
+            <>
+              Search automatically
+              <span className="block text-xs text-muted">Only while Download releases is on. Missing titles go first. Each title waits a day before it's searched again, and longer (up to 30 days) while searches keep finding nothing.</span>
+            </>
+          }
+        />
+        <Field
+          label="Searches a day"
+          hint="Each search asks every indexer once. Keep it under your indexer's daily API limit, which its website shows on your account or profile page; leave room for searches you start yourself."
+        >
+          {(id) => (
+            <div className="flex gap-2">
+              <Input id={id} type="number" min={1} value={perDay ?? String(s.perDay)} onChange={(e) => setPerDay(e.target.value)} className="max-w-40" />
+              {perDay !== null && Number(perDay) !== s.perDay && (
+                <Button busy={save.isPending} onClick={() => save.mutate({ perDay: Math.max(1, Number(perDay) || 1) }, { onSuccess: () => setPerDay(null) })}>
+                  Save
+                </Button>
+              )}
+            </div>
+          )}
+        </Field>
+        {a.data.paused ? (
+          <p className="text-xs text-muted">Not searching: {a.data.paused}.</p>
+        ) : (
+          <div>
+            <Button variant="plain" busy={run.isPending} onClick={() => run.mutate()}>
+              Search now
+            </Button>
+          </div>
+        )}
+        {last && (
+          <p className="text-xs text-muted">
+            Last search {when(last.finishedAt || last.createdAt)}: {last.status === 'queued' || last.status === 'running' ? 'running now' : last.message}
+          </p>
+        )}
+        <ErrorNote error={save.error || run.error} />
       </div>
     </Card>
   )

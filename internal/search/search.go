@@ -43,6 +43,7 @@ func (s *Service) Register(r *jobs.Runner) {
 	r.Handle(catalog.JobSearchMovie, s.jobMovie)
 	r.Handle(catalog.JobSearchSeries, s.jobSeries)
 	r.Handle(catalog.JobSearchEpisode, s.jobEpisode)
+	r.Handle(JobSearchWanted, s.jobWanted)
 }
 
 // Candidate is a release and what Box Office makes of it for a title.
@@ -222,6 +223,7 @@ func (s *Service) Movie(ctx context.Context, id int64) (Results, error) {
 		out.Releases = append(out.Releases, c)
 	}
 	s.rank(ctx, &out)
+	s.markSearched(ctx, "movie", m.ID, out)
 	s.logResults(fmt.Sprintf("%s (%d)", m.Title, m.Year), out)
 	return out, nil
 }
@@ -283,8 +285,21 @@ func (s *Service) Episode(ctx context.Context, id int64) (Results, error) {
 		out.Releases = append(out.Releases, c)
 	}
 	s.rank(ctx, &out)
+	s.markSearched(ctx, "episode", e.ID, out)
 	s.logResults(fmt.Sprintf("%s S%02dE%02d", t.Title, e.Season, e.Number), out)
 	return out, nil
+}
+
+// markSearched notes the search and whether it found something to take,
+// so automatic searches take turns and wait longer for what isn't out.
+func (s *Service) markSearched(ctx context.Context, kind string, id int64, res Results) {
+	if res.Searched == 0 {
+		return
+	}
+	found := slices.ContainsFunc(res.Releases, func(c Candidate) bool { return c.Accepted })
+	if err := s.Store.MarkSearched(ctx, kind, id, found); err != nil {
+		s.logger().Warn("couldn't note a search", "kind", kind, "id", id, "err", err)
+	}
 }
 
 // ---- judging ----
@@ -499,7 +514,8 @@ func payloadID(p string) (int64, error) {
 }
 
 // pick grabs the best release of a search, if there's one to take.
-func (s *Service) pick(ctx context.Context, res Results, kind string, titleID int64) (jobs.Result, error) {
+// episodeID is the episode searched for, or 0 for a movie.
+func (s *Service) pick(ctx context.Context, res Results, kind string, titleID, episodeID int64) (jobs.Result, error) {
 	note := ""
 	if len(res.Errors) > 0 {
 		note = " (" + strings.Join(res.Errors, "; ") + ")"
@@ -515,7 +531,7 @@ func (s *Service) pick(ctx context.Context, res Results, kind string, titleID in
 		return jobs.Done("found %d %s, none of them right%s", len(res.Releases), plural(len(res.Releases), "release", "releases"), note), nil
 	}
 	best := res.Releases[i]
-	if busy, err := s.Store.GrabbedRecently(ctx, kind, titleID, best.Title); err != nil {
+	if busy, err := s.busy(ctx, kind, titleID, episodeID, best.Title); err != nil {
 		return jobs.Result{}, err
 	} else if busy {
 		return jobs.Skipped("it's downloading already"), nil
@@ -527,6 +543,24 @@ func (s *Service) pick(ctx context.Context, res Results, kind string, titleID in
 		return jobs.Result{}, err
 	}
 	return jobs.Done("grabbed %s (%s) from %s%s", best.Title, q.Name, best.Indexer, note), nil
+}
+
+// busy says whether a movie, or one episode of a show, has a download on
+// the way already, or release name was grabbed for it before.
+func (s *Service) busy(ctx context.Context, kind string, titleID, episodeID int64, name string) (bool, error) {
+	pending, err := s.Store.Pending(ctx, kind, titleID)
+	if err != nil {
+		return false, err
+	}
+	for _, d := range pending {
+		if episodeID == 0 || len(d.EpisodeIDs) == 0 || slices.Contains(d.EpisodeIDs, episodeID) {
+			return true, nil
+		}
+	}
+	if name == "" {
+		return false, nil
+	}
+	return s.Store.GrabbedBefore(ctx, kind, titleID, name)
 }
 
 func (s *Service) jobMovie(ctx context.Context, payload string) (jobs.Result, error) {
@@ -541,7 +575,7 @@ func (s *Service) jobMovie(ctx context.Context, payload string) (jobs.Result, er
 	if err != nil {
 		return jobs.Result{}, err
 	}
-	return s.pick(ctx, res, "movie", id)
+	return s.pick(ctx, res, "movie", id, 0)
 }
 
 func (s *Service) jobEpisode(ctx context.Context, payload string) (jobs.Result, error) {
@@ -560,21 +594,25 @@ func (s *Service) jobEpisode(ctx context.Context, payload string) (jobs.Result, 
 	if err != nil {
 		return jobs.Result{}, err
 	}
-	return s.pick(ctx, res, "series", e.SeriesID)
+	return s.pick(ctx, res, "series", e.SeriesID, e.ID)
 }
 
 // maxEpisodes caps how many episodes one show search looks for, to be kind
 // to the indexers' daily limits.
 const maxEpisodes = 25
 
-// jobSeries searches for a show's missing episodes: monitored, aired, and
-// with no file.
+// jobSeries searches for a show's missing episodes (monitored, aired, and
+// with no file) and the ones whose copy the profile still wants upgraded.
 func (s *Service) jobSeries(ctx context.Context, payload string) (jobs.Result, error) {
 	id, err := payloadID(payload)
 	if err != nil {
 		return jobs.Result{}, err
 	}
 	t, err := s.Store.Series(ctx, id)
+	if err != nil {
+		return jobs.Result{}, err
+	}
+	p, err := s.profile(ctx, t.ProfileID)
 	if err != nil {
 		return jobs.Result{}, err
 	}
@@ -587,23 +625,36 @@ func (s *Service) jobSeries(ctx context.Context, payload string) (jobs.Result, e
 		seasons[se.Number] = se.Monitored
 	}
 	now := time.Now()
-	var want []store.Episode
+	var missing, upgrades []store.Episode
 	for _, e := range eps {
-		if e.Monitored && seasons[e.Season] && e.Season > 0 && e.File == nil && e.AirDate != nil && e.AirDate.Before(now) {
-			want = append(want, e)
+		if !e.Monitored || !seasons[e.Season] || e.Season == 0 || e.AirDate == nil || !e.AirDate.Before(now) {
+			continue
+		}
+		switch {
+		case e.File == nil:
+			missing = append(missing, e)
+		case p.CutoffUnmet(e.File.Quality):
+			upgrades = append(upgrades, e)
 		}
 	}
+	want := append(missing, upgrades...)
 	if len(want) == 0 {
-		return jobs.Done("no episodes are missing"), nil
+		return jobs.Done("no episodes are missing, and none need upgrading"), nil
 	}
 	more := len(want) > maxEpisodes
 	want = want[:min(len(want), maxEpisodes)]
-	grabbed, found := 0, 0
+	grabbed, found, busy := 0, 0, 0
 	var problems []string
 	off := false
 	for _, e := range want {
 		if ctx.Err() != nil {
 			return jobs.Result{}, ctx.Err()
+		}
+		if b, err := s.busy(ctx, "series", t.ID, e.ID, ""); err != nil {
+			return jobs.Result{}, err
+		} else if b {
+			busy++
+			continue
 		}
 		res, err := s.Episode(ctx, e.ID)
 		if errors.Is(err, ErrNoIndexers) {
@@ -618,6 +669,11 @@ func (s *Service) jobSeries(ctx context.Context, payload string) (jobs.Result, e
 			continue
 		}
 		found++
+		if b, err := s.busy(ctx, "series", t.ID, e.ID, res.Releases[i].Title); err != nil {
+			return jobs.Result{}, err
+		} else if b {
+			continue
+		}
 		if _, err := s.grab(ctx, res.Releases[i]); errors.Is(err, ErrOff) {
 			off = true
 		} else if err != nil {
@@ -626,11 +682,15 @@ func (s *Service) jobSeries(ctx context.Context, payload string) (jobs.Result, e
 			grabbed++
 		}
 	}
-	msg := fmt.Sprintf("looked for %d missing %s; found %d", len(want), plural(len(want), "episode", "episodes"), found)
+	msg := fmt.Sprintf("looked for %s", describeWant(len(missing), len(upgrades), "episode", "episodes"))
+	msg += fmt.Sprintf("; found %d", found)
 	if off && found > 0 {
 		msg += ", but downloading is off, so none were grabbed"
 	} else {
 		msg += fmt.Sprintf(", grabbed %d", grabbed)
+	}
+	if busy > 0 {
+		msg += fmt.Sprintf("; %d already downloading", busy)
 	}
 	if more {
 		msg += fmt.Sprintf(" (the first %d; search again for the rest)", maxEpisodes)
@@ -640,6 +700,22 @@ func (s *Service) jobSeries(ctx context.Context, payload string) (jobs.Result, e
 		msg += " (" + strings.Join(slices.Compact(problems), "; ") + ")"
 	}
 	return jobs.Done("%s", msg), nil
+}
+
+// describeWant says "3 missing episodes and 2 to upgrade", or less.
+func describeWant(missing, upgrades int, one, many string) string {
+	var parts []string
+	if missing > 0 {
+		parts = append(parts, fmt.Sprintf("%d missing %s", missing, plural(missing, one, many)))
+	}
+	if upgrades > 0 {
+		if missing > 0 {
+			parts = append(parts, fmt.Sprintf("%d to upgrade", upgrades))
+		} else {
+			parts = append(parts, fmt.Sprintf("%d %s to upgrade", upgrades, plural(upgrades, one, many)))
+		}
+	}
+	return strings.Join(parts, " and ")
 }
 
 func plural(n int, one, many string) string {
