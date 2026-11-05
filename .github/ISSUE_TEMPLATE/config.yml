@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Using Matinee too?
+    url: https://github.com/yeixio/matinee/issues
+    about: Problems with playing, the apps or Matinee's own settings go to Matinee.
+  - name: Report a security problem
+    url: https://github.com/yeixio/boxoffice/security/advisories/new
+    about: Privately, not as a public issue.

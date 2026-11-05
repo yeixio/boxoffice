@@ -1,0 +1,108 @@
+# Canonical GitHub label definitions for Box Office.
+# Colors are six-digit hex values without '#'.
+# Sync with scripts/sync-github-labels.sh.
+
+# Kind
+- name: bug
+  color: d73a4a
+  description: Something isn't working
+
+- name: enhancement
+  color: a2eeef
+  description: New feature or improvement
+
+- name: documentation
+  color: 0075ca
+  description: Docs, guides and examples
+
+- name: performance
+  color: fbca04
+  description: Speed, memory, disk or network use
+
+- name: security
+  color: b60205
+  description: Security-related work
+
+- name: question
+  color: d876e3
+  description: Further information is requested
+
+- name: move-in
+  color: c8352a
+  description: Moving in from Radarr, Sonarr or NZBGet
+
+# Contributor entry points
+- name: good first issue
+  color: 7057ff
+  description: Small, well-scoped, a good way to start
+
+- name: help wanted
+  color: 008672
+  description: Open for anyone to pick up
+
+- name: needs design
+  color: f9d0c4
+  description: Needs a short design discussion before code
+
+# Difficulty
+- name: difficulty/easy
+  color: c2e0c6
+  description: An evening or two; little context needed
+
+- name: difficulty/medium
+  color: fef2c0
+  description: Touches a few packages; a week or so of evenings
+
+- name: difficulty/hard
+  color: f4c7b8
+  description: Large or cross-cutting; talk to a maintainer first
+
+# Area
+- name: area/move-in
+  color: c5def5
+  description: Reading Radarr, Sonarr and NZBGet, previews and path maps
+
+- name: area/search
+  color: c5def5
+  description: Indexers, Newznab, RSS sync, library patrol and pacing
+
+- name: area/downloader
+  color: c5def5
+  description: Usenet downloads, par2, unpacking, screening and importing
+
+- name: area/library
+  color: c5def5
+  description: Movies, shows, quality profiles, TMDB and files on disk
+
+- name: area/server
+  color: c5def5
+  description: HTTP API, auth, storage, backups and Health
+
+- name: area/web
+  color: c5def5
+  description: The React web UI
+
+- name: area/matinee
+  color: c5def5
+  description: The Radarr/Sonarr-compatible API and working with Matinee
+
+- name: area/deploy
+  color: c5def5
+  description: Docker, Compose, Helm and Kubernetes
+
+- name: area/ci
+  color: c5def5
+  description: Build, CI and releases
+
+# Triage
+- name: duplicate
+  color: cfd3d7
+  description: This issue or pull request already exists
+
+- name: invalid
+  color: e4e669
+  description: This doesn't seem right
+
+- name: wontfix
+  color: ffffff
+  description: This will not be worked on

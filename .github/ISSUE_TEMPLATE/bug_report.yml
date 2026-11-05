@@ -1,0 +1,91 @@
+name: Bug report
+description: Something in Box Office doesn't work.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        One problem per report, please. Remove passwords, API keys, news server sign-ins and private URLs from anything you paste.
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Checks
+      options:
+        - label: I searched existing issues
+          required: true
+        - label: I removed secrets and private URLs from logs and screenshots
+          required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Box Office version
+      description: At the bottom of each page, or the image tag.
+    validations:
+      required: true
+  - type: dropdown
+    id: install
+    attributes:
+      label: How do you run it?
+      options:
+        - Docker / Compose
+        - Kubernetes (Helm)
+        - NAS app (Unraid, Synology, TrueNAS, ...)
+        - From source
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: database
+    attributes:
+      label: Database
+      options:
+        - SQLite (default)
+        - PostgreSQL
+        - Not sure
+    validations:
+      required: true
+  - type: input
+    id: matinee
+    attributes:
+      label: What plays your library?
+      placeholder: Matinee 0.2.2, Plex, Jellyfin, nothing yet
+    validations:
+      required: false
+  - type: textarea
+    id: release
+    attributes:
+      label: The release, if it's about a specific download
+      description: Its name, its indexer, and what the Downloads page said about it.
+      render: text
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Health → Log can download them, or `docker logs boxoffice`, `kubectl logs`.
+      render: text
+    validations:
+      required: false

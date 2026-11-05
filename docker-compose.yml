@@ -1,0 +1,36 @@
+# Box Office and Matinee side by side on one machine, sharing your library.
+#   1. Change the /path/to/... folders below to yours.
+#   2. mkdir -p boxoffice-data matinee-data   (so they belong to you, not root)
+#   3. docker compose up -d
+#   4. Open Box Office at http://localhost:7272 and Matinee at http://localhost:7171.
+#   5. In Matinee, Settings → Add-ons → Box Office finds it at http://boxoffice:7272.
+# Only want Box Office? Delete the matinee service.
+services:
+  boxoffice:
+    image: ghcr.io/yeixio/boxoffice:main
+    ports:
+      - "7272:7272"
+    # Box Office writes to your library and downloads folders as this user.
+    # `id -u` and `id -g` print yours; 1000 is the first user on most Linux.
+    user: "${PUID:-1000}:${PGID:-1000}"
+    environment:
+      BOXOFFICE_DOWNLOADS_DIR: /downloads
+      # BOXOFFICE_TMDB_KEY: your-themoviedb-key  (or paste it in Settings)
+    volumes:
+      - ./boxoffice-data:/data
+      # The same folders Matinee reads, at the same paths, but writable.
+      - /path/to/movies:/media/movies
+      - /path/to/tv:/media/tv
+      # Room for a few releases while they download and unpack.
+      - /path/to/downloads:/downloads
+    restart: unless-stopped
+
+  matinee:
+    image: ghcr.io/yeixio/matinee:latest
+    ports:
+      - "7171:7171"
+    volumes:
+      - ./matinee-data:/data
+      - /path/to/movies:/media/movies:ro
+      - /path/to/tv:/media/tv:ro
+    restart: unless-stopped

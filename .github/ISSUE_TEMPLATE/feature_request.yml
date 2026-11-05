@@ -1,0 +1,34 @@
+name: Feature request
+description: Something Box Office should do, or do better.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Check the [roadmap](https://github.com/yeixio/boxoffice/blob/main/ROADMAP.md) first: it may already be planned.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: The problem, not the solution. "I want new episodes of a show only in 1080p, but movies in 4K" is better than "add a setting".
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like Box Office to do?
+    validations:
+      required: true
+  - type: textarea
+    id: today
+    attributes:
+      label: How do you do it today?
+      description: In Radarr, Sonarr, NZBGet or another app, if you do.
+    validations:
+      required: false
+  - type: checkboxes
+    id: help
+    attributes:
+      label: Helping out
+      options:
+        - label: I'd like to build this myself
