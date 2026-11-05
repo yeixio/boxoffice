@@ -91,6 +91,9 @@ spec:
             {{- if .Values.downloads.volume }}
             - name: downloads
               mountPath: {{ .Values.downloads.mountPath }}
+              {{- with .Values.downloads.subPath }}
+              subPath: {{ . }}
+              {{- end }}
             {{- end }}
             {{- with .Values.backupVolume.mountPath }}
             - name: backups

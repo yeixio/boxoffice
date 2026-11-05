@@ -92,6 +92,9 @@ media: []
 # Box Office never uses a folder inside a library for this.
 downloads:
   mountPath: /downloads
+  # A folder of the volume to use, such as one of its own on a shared
+  # downloads share.
+  subPath: ""
   volume: {}
 #    persistentVolumeClaim:
 #      claimName: boxoffice-downloads
