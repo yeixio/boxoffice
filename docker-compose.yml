@@ -7,7 +7,7 @@
 # Only want Box Office? Delete the matinee service.
 services:
   boxoffice:
-    image: ghcr.io/yeixio/boxoffice:main
+    image: ghcr.io/yeixio/boxoffice:latest
     ports:
       - "7272:7272"
     # Box Office writes to your library and downloads folders as this user.
