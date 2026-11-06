@@ -1,0 +1,170 @@
+name: Release
+
+# Press Run workflow under Actions → Release to release main. It picks the
+# next version (patch by default), checks that main passed CI and that
+# CHANGELOG.md has a section for it, tags it and ships it. Pushing a tag such
+# as v0.2.0 by hand still works too.
+#
+# A version with a suffix (v0.2.0-beta.1) is a pre-release: it gets its own
+# image tag but doesn't move :latest, and needs no CHANGELOG section.
+#
+# Images: a release publishes ghcr.io/yeixio/boxoffice:0.2.0, :0.2 and
+# :latest (stable releases only). Pushes to main keep publishing :main and
+# :sha-<short> from CI, which is the beta channel.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: Which part of the last version goes up
+        type: choice
+        options: [patch, minor, major]
+        default: patch
+      version:
+        description: Or an exact version, such as v0.3.0-beta.1 (leave empty to bump)
+        type: string
+        required: false
+      force:
+        description: Release even if CI didn't pass on this commit
+        type: boolean
+        default: false
+
+permissions:
+  # actions: read lets a pressed release check CI on the commit.
+  actions: read
+  contents: write
+  packages: write
+
+# One release at a time, so two presses can't pick the same version.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  # The tag this run releases: the pushed tag, or a new one on main.
+  tag:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: tag
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BUMP: ${{ inputs.bump }}
+          VERSION: ${{ inputs.version }}
+          FORCE: ${{ inputs.force && '1' || '' }}
+          CHANGELOG: CHANGELOG.md
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = push ]; then
+            echo "tag=$GITHUB_REF_NAME" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [ "$GITHUB_REF" != refs/heads/main ]; then
+            echo "::error::Release from main, not $GITHUB_REF_NAME."
+            exit 1
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          scripts/cut-release.sh
+
+  test:
+    needs: tag
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.tag.outputs.tag }}
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - run: make lint
+      - run: go test -count=1 ./...
+
+  image:
+    needs: [tag, test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.tag.outputs.tag }}
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+          flavor: latest=false
+          # v1.2.3 publishes 1.2.3, 1.2 and latest; the chart's appVersion is 1.2.3.
+          tags: |
+            type=semver,pattern={{version}},value=${{ needs.tag.outputs.tag }}
+            type=semver,pattern={{major}}.{{minor}},value=${{ needs.tag.outputs.tag }},enable=${{ !contains(needs.tag.outputs.tag, '-') }}
+            type=raw,value=latest,enable=${{ !contains(needs.tag.outputs.tag, '-') }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: VERSION=${{ needs.tag.outputs.tag }}
+          secrets: |
+            tmdb_key=${{ secrets.TMDB_API_KEY }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  chart:
+    needs: [tag, image]
+    env:
+      TAG: ${{ needs.tag.outputs.tag }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.tag.outputs.tag }}
+      - uses: azure/setup-helm@v4
+      - name: Package and push the chart to ghcr.io/yeixio/charts
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="${TAG#v}"
+          echo "$TOKEN" | helm registry login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+          helm package deploy/helm/boxoffice --version "$VERSION" --app-version "$VERSION" -d dist
+          helm push "dist/boxoffice-$VERSION.tgz" oci://ghcr.io/${{ github.repository_owner }}/charts
+      - uses: actions/upload-artifact@v4
+        with:
+          name: chart
+          path: dist/*.tgz
+
+  release:
+    needs: [tag, image, chart]
+    env:
+      TAG: ${{ needs.tag.outputs.tag }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.tag.outputs.tag }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: chart
+          path: dist
+      - name: Write the release notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: scripts/release-notes.sh "$TAG" > notes.md
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.tag.outputs.tag }}
+          name: Box Office ${{ needs.tag.outputs.tag }}
+          prerelease: ${{ contains(needs.tag.outputs.tag, '-') }}
+          body_path: notes.md
+          files: dist/*
