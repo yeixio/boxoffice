@@ -395,7 +395,11 @@ func TestUpgradesPerTitleAndMonthlyLimit(t *testing.T) {
 	if _, err := s.grab(automatic(ctx), res.Releases[0]); !errors.Is(err, ErrUpgradeOff) {
 		t.Fatalf("automatic grab with the title off: %v", err)
 	}
-	if _, err := s.grab(ctx, res.Releases[0]); err != nil {
+	// Not marked either way (Matinee's search commands): the rules hold.
+	if _, err := s.grab(ctx, res.Releases[0]); !errors.Is(err, ErrUpgradeOff) {
+		t.Fatalf("unmarked grab with the title off: %v", err)
+	}
+	if _, err := s.grab(byHand(ctx), res.Releases[0]); err != nil {
 		t.Fatalf("by hand: %v", err)
 	}
 	if n, _ := st.AutoUpgradesSince(ctx, monthStart(time.Now())); n != 1 {
@@ -430,5 +434,39 @@ func TestUpgradesPerTitleAndMonthlyLimit(t *testing.T) {
 	}
 	if left, used, _ := s.UpgradesLeft(ctx, AutoSettings{UpgradesPerMonth: 3}); left != 2 || used != 1 {
 		t.Fatalf("left %d used %d", left, used)
+	}
+}
+
+// Searches Box Office or Matinee start for a movie that has a copy (a
+// title just added, Matinee's search command) follow the automatic
+// upgrade rules; one a person starts in Box Office doesn't.
+func TestMovieSearchJobFollowsUpgradeRules(t *testing.T) {
+	srv, asked := fakeIndexer(t, func(r *http.Request) (int, string) {
+		return 200, feedOf(item("The.Matrix.1999.1080p.WEB-DL-GRP", "m1", 7e9))
+	})
+	s, st, m := setup(t, srv.URL)
+	ctx := context.Background()
+	downloader.SaveSettings(ctx, st, downloader.Settings{Enabled: true})
+	st.AddFile(ctx, store.File{Kind: "movie", OwnerID: m.ID, Path: m.Path + "/x.mkv", Quality: 9})
+	job := fmt.Sprintf(`{"id":%d}`, m.ID)
+
+	r, err := s.jobMovie(ctx, job)
+	if err != nil || r.Status != "skipped" || !strings.Contains(r.Message, "automatic upgrades are off") || len(*asked) != 0 {
+		t.Fatalf("upgrades off: %+v %v, asked %v", r, err, *asked)
+	}
+	SaveAutoSettings(ctx, st, AutoSettings{Enabled: true, PerDay: DefaultPerDay, RSS: true, RSSMinutes: DefaultRSSMinutes, Upgrades: true, UpgradesPerMonth: 1})
+	st.CountAutoUpgrade(ctx)
+	if r, _ = s.jobMovie(ctx, job); r.Status != "skipped" || !strings.Contains(r.Message, "1 automatic upgrade is used up") || len(*asked) != 0 {
+		t.Fatalf("limit used: %+v, asked %v", r, *asked)
+	}
+	// By hand: searched and grabbed, and not counted.
+	if r, err = s.jobMovie(ctx, fmt.Sprintf(`{"id":%d,"byHand":true}`, m.ID)); err != nil || !strings.Contains(r.Message, "grabbed") {
+		t.Fatalf("by hand: %+v %v", r, err)
+	}
+	if q, _ := st.DownloadQueue(ctx); len(q) != 1 {
+		t.Fatalf("queue %+v", q)
+	}
+	if n, _ := st.AutoUpgradesSince(ctx, monthStart(time.Now())); n != 1 {
+		t.Fatalf("counted %d", n)
 	}
 }

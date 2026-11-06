@@ -142,11 +142,18 @@ func TestSeriesSearchUpgrades(t *testing.T) {
 	st.AddFile(ctx, store.File{Kind: "episode", OwnerID: eps[1].ID, Path: "/tv/Show/Season 01/e2.mkv", Quality: 11}) // above the cutoff
 	// Episode 3 is missing.
 
+	// Not started by hand (a show just added, or Matinee asking), with
+	// automatic upgrades off: only the missing episode.
 	r, err := s.jobSeries(ctx, fmt.Sprintf(`{"id":%d}`, show.ID))
+	if err != nil || r.Message != "looked for 1 missing episode in 1 search; found 1, grabbed 1" {
+		t.Fatalf("not by hand %+v %v", r, err)
+	}
+	// By hand, from the show's page: the upgrade too.
+	r, err = s.jobSeries(ctx, fmt.Sprintf(`{"id":%d,"byHand":true}`, show.ID))
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !strings.Contains(r.Message, "1 missing episode and 1 to upgrade") || !strings.Contains(r.Message, "grabbed 2") {
+	if !strings.Contains(r.Message, "1 missing episode and 1 to upgrade") || !strings.Contains(r.Message, "grabbed 1") || !strings.Contains(r.Message, "1 already downloading") {
 		t.Fatalf("job %+v", r)
 	}
 	q, _ := st.DownloadQueue(ctx)
@@ -158,7 +165,7 @@ func TestSeriesSearchUpgrades(t *testing.T) {
 		t.Fatalf("queue %v", got)
 	}
 	// Both are downloading: searching again grabs nothing more.
-	r, _ = s.jobSeries(ctx, fmt.Sprintf(`{"id":%d}`, show.ID))
+	r, _ = s.jobSeries(ctx, fmt.Sprintf(`{"id":%d,"byHand":true}`, show.ID))
 	if !strings.Contains(r.Message, "grabbed 0") || !strings.Contains(r.Message, "2 already downloading") {
 		t.Fatalf("again %+v", r)
 	}

@@ -39,6 +39,18 @@ func automatic(ctx context.Context) context.Context { return context.WithValue(c
 
 func isAuto(ctx context.Context) bool { v, _ := ctx.Value(autoKey{}).(bool); return v }
 
+type handKey struct{}
+
+// byHand marks a context as a person in Box Office picking a release, or
+// asking for one movie or episode (or one show's wanted episodes), so an
+// upgrade it grabs is theirs: it neither needs automatic upgrades on nor
+// counts toward the month's limit. Everything else (the patrol, RSS sync,
+// searches when a title is added, Matinee's search commands) follows the
+// automatic upgrade rules.
+func byHand(ctx context.Context) context.Context { return context.WithValue(ctx, handKey{}, true) }
+
+func isByHand(ctx context.Context) bool { v, _ := ctx.Value(handKey{}).(bool); return v }
+
 // noted records how a request to an indexer went.
 func (s *Service) noted(ctx context.Context, ix store.Indexer, lim Limits, err error) {
 	bg := context.WithoutCancel(ctx)
