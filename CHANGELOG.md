@@ -13,6 +13,7 @@ What changed in Box Office, newest first. The format follows [Keep a Changelog](
 ### Changed
 
 - **The image is now Debian slim with FFmpeg,** in place of distroless, for Problem files' remuxing. It runs as the same user (65532), so volumes and the Helm chart's security settings stay as they are.
+- **New README screenshots.** They show the sidebar, Discover, Music, Books, the Requests page and the phone menu, with made-up titles and artwork.
 
 ### Fixed
 
