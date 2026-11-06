@@ -1885,5 +1885,22 @@
       "mail3": "Annen leverandør: hjelpesidene viser utgående server (SMTP) og port. Vanligvis 587 med STARTTLS eller 465 med TLS.",
       "mail4": "Bøker kommer fra adressen du sender som, så det er den du godkjenner på lesebrettet."
     }
+  },
+  "qualityCheck": {
+    "title": "Kvalitetssjekk",
+    "sub": "Box Office ser inn i hver film- og episodefil for å se hvor stort bildet egentlig er, og retter kvaliteter som ble gjettet feil ut fra et navn. Filer uten kvalitet får den nærmeste som profilen deres tar. Filer blir bare lest, aldri endret. Hvor en kopi kom fra, kan ikke ses i filen, så en gjetning starter aldri en oppgradering: bare et bilde som virkelig er mindre, gjør at en kopi rangeres lavere.",
+    "checked": "Sjekket: {{checked}} av {{files}} filer",
+    "running": "Sjekker nå: {{done}} ferdige",
+    "unknown": "Fortsatt ukjente: {{count}}",
+    "unreadable": "Kunne ikke leses: {{count}}",
+    "noFFprobe": "ffprobe er ikke installert der Box Office kjører, så det går ikke å se inn i filer.",
+    "again": "Sjekk alle filer på nytt",
+    "corrections": "Rettede kvaliteter",
+    "none": "Ingenting rettet ennå.",
+    "wasNow": "Var {{was}}, nå {{now}}",
+    "more": "Ikke vist her: {{count}} til",
+    "correctedFrom": "Rettet fra {{was}} etter å ha sett inn i filen",
+    "picture": "Bilde og lyd",
+    "bits": "{{bits}}-bit"
   }
 }

@@ -163,21 +163,7 @@ func Parse(name string) Quality {
 	if res == 576 {
 		res = 480
 	}
-	source := ""
-	switch {
-	case reRemux.MatchString(name):
-		source = "remux"
-	case reBluray.MatchString(name):
-		source = "bluray"
-	case reWebRip.MatchString(name):
-		source = "webrip"
-	case reWeb.MatchString(name):
-		source = "web"
-	case reHDTV.MatchString(name):
-		source = "tv"
-	case reDVD.MatchString(name):
-		source = "dvd"
-	}
+	source := sourceOf(name)
 	if source == "" && res == 0 {
 		return All[0]
 	}
@@ -205,4 +191,28 @@ func Parse(name string) Quality {
 		}
 	}
 	return All[0]
+}
+
+// SourceOf is where a release's or file's name says the copy came from
+// (remux, bluray, webrip, web, tv or dvd), or "" when it doesn't say.
+func SourceOf(name string) string {
+	return sourceOf(strings.NewReplacer(".", " ", "_", " ").Replace(name))
+}
+
+func sourceOf(name string) string {
+	switch {
+	case reRemux.MatchString(name):
+		return "remux"
+	case reBluray.MatchString(name):
+		return "bluray"
+	case reWebRip.MatchString(name):
+		return "webrip"
+	case reWeb.MatchString(name):
+		return "web"
+	case reHDTV.MatchString(name):
+		return "tv"
+	case reDVD.MatchString(name):
+		return "dvd"
+	}
+	return ""
 }

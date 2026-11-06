@@ -37,6 +37,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/openlibrary"
 	"github.com/yeixio/boxoffice/internal/portal"
 	"github.com/yeixio/boxoffice/internal/problems"
+	"github.com/yeixio/boxoffice/internal/qualitycheck"
 	"github.com/yeixio/boxoffice/internal/search"
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/version"
@@ -149,8 +150,10 @@ func run() error {
 	shelf := &books.Service{Store: db, OpenLibrary: ol, Jobs: runner}
 	// The problem files look runs daily, and on Look again.
 	finds := &problems.Service{Store: db, Log: log}
+	// The quality check looks inside new files every few minutes.
+	checker := &qualitycheck.Service{Store: db, Log: log}
 	srv := &api.Server{
-		Store: db, Catalog: cat, Music: tunes, LibScan: &libscan.Service{Store: db, Catalog: cat, Music: tunes, Books: shelf, Log: log}, Problems: finds, Backups: backups, Migrator: &migrate.Migrator{Catalog: cat, Books: shelf, Backups: backups, Log: log, DataDir: cfg.DataDir}, Log: log,
+		Store: db, Catalog: cat, Music: tunes, LibScan: &libscan.Service{Store: db, Catalog: cat, Music: tunes, Books: shelf, Log: log}, Problems: finds, QualityCheck: checker, Backups: backups, Migrator: &migrate.Migrator{Catalog: cat, Books: shelf, Backups: backups, Log: log, DataDir: cfg.DataDir}, Log: log,
 		Books:     shelf,
 		Portal:    &portal.Service{Store: db, Catalog: cat, Notify: notes, Log: log},
 		Downloads: downloads, Search: finder,
@@ -182,7 +185,7 @@ func run() error {
 	var wg sync.WaitGroup
 	for _, loop := range []func(context.Context){runner.Run, backups.Run, downloads.Run, mon.Monitor.Run, alerter.Run,
 		func(ctx context.Context) { cat.RefreshEvery(ctx, cfg.Refresh) }, func(ctx context.Context) { finder.AutoSearchEvery(ctx, runner) },
-		finder.RSSEvery, finder.PruneEvery, finds.Run, func(ctx context.Context) { api.RecycleSweepEvery(ctx, db, log) }} {
+		finder.RSSEvery, finder.PruneEvery, finds.Run, checker.Run, func(ctx context.Context) { api.RecycleSweepEvery(ctx, db, log) }} {
 		wg.Add(1)
 		go func() { defer wg.Done(); loop(ctx) }()
 	}
