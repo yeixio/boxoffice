@@ -75,8 +75,6 @@ func (c *Checker) Check(ctx context.Context) []Issue {
 	return out
 }
 
-var settingsLink = &Link{To: "/settings", Label: "Open Settings"}
-
 func (c *Checker) tmdb(ctx context.Context) ([]Issue, error) {
 	if c.TMDBKey == nil || c.TMDBKey(ctx) != "" {
 		return nil, nil
@@ -90,7 +88,7 @@ func (c *Checker) tmdb(ctx context.Context) ([]Issue, error) {
 			"Copy the API Key (the longer API Read Access Token works too).",
 			"In Box Office, open Settings, paste it under TMDB and click Check and save.",
 		},
-		Link: settingsLink,
+		Link: &Link{To: "/settings#tmdb", Label: "Open Settings"},
 	}}, nil
 }
 
@@ -99,6 +97,7 @@ var kindName = map[string]string{"movie": "movie", "series": "TV"}
 func (c *Checker) rootFolders(ctx context.Context) ([]Issue, error) {
 	var out []Issue
 	for _, kind := range []string{"movie", "series"} {
+		folders := &Link{To: "/settings#folders-" + kind, Label: "Open Settings"}
 		fs, err := c.Store.RootFolders(ctx, kind)
 		if err != nil {
 			return nil, err
@@ -111,7 +110,7 @@ func (c *Checker) rootFolders(ctx context.Context) ([]Issue, error) {
 					fmt.Sprintf("Make sure your %s library is mounted into Box Office (in Kubernetes, the media list in its Helm values; in Docker, a -v volume).", kindName[kind]),
 					fmt.Sprintf("In Settings, under %s root folders, click Add and enter the folder's path as Box Office sees it, such as %s.", titleCase(kindName[kind]), map[string]string{"movie": "/media/movies", "series": "/media/tv"}[kind]),
 				},
-				Link: settingsLink,
+				Link: folders,
 			})
 		}
 		for _, f := range fs {
@@ -126,7 +125,7 @@ func (c *Checker) rootFolders(ctx context.Context) ([]Issue, error) {
 						"Check the volume holding it is mounted into Box Office at that path: in Kubernetes, the media list in its Helm values (then sync); in Docker, the -v volume.",
 						"If the library is at another path now, add that path as a root folder in Settings and remove this one.",
 					},
-					Link: settingsLink,
+					Link: folders,
 				})
 				continue
 			case !writable(f.Path):
@@ -144,7 +143,7 @@ func (c *Checker) rootFolders(ctx context.Context) ([]Issue, error) {
 					ID: id + "-space", Level: "warning", Title: "Little space left on " + f.Path,
 					Detail: fmt.Sprintf("Only %s is free, so downloads may not fit.", gib(free)),
 					Steps:  []string{"Free some space on that disk, or add a root folder on another disk in Settings."},
-					Link:   settingsLink,
+					Link:   folders,
 				})
 			}
 		}

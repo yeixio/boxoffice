@@ -77,7 +77,7 @@ function NoTMDB({ error }: { error: unknown }) {
   if (error instanceof ApiError && error.status === 503) {
     return (
       <Empty icon={<Compass className="size-8" />} title={t('discover.needsTmdb')}>
-        <Trans i18nKey="discover.needsTmdbBody" components={{ link: <Link to="/settings" className="font-medium text-marquee" /> }} />
+        <Trans i18nKey="discover.needsTmdbBody" components={{ link: <Link to="/settings#tmdb" className="font-medium text-marquee" /> }} />
       </Empty>
     )
   }

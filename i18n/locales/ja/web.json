@@ -976,7 +976,43 @@
     "newHint": "8 文字以上。すべてのデバイスでもう一度サインインします。",
     "change": "パスワードを変更",
     "system": "Box Office {{version}}（{{os}}、{{go}}、{{db}}）· データは <code>{{dir}}</code> · {{since}} から稼働",
-    "languageHint": "Box Office の表示言語です。サインインするすべてのデバイスで使われます。「自動」は各ブラウザの言語に合わせます。"
+    "languageHint": "Box Office の表示言語です。サインインするすべてのデバイスで使われます。「自動」は各ブラウザの言語に合わせます。",
+    "sections": {
+      "general": {
+        "label": "一般",
+        "sub": "あなたの言語とパスワード、そして Box Office がタイトルを調べるのに使う TMDB キー。"
+      },
+      "library": {
+        "label": "ライブラリ",
+        "sub": "Box Office が扱うメディアの種類、各ライブラリの場所、整理のしかた。"
+      },
+      "downloads": {
+        "label": "ダウンロード",
+        "sub": "Box Office のダウンロード方法:内蔵の Usenet ダウンローダーとニュースサーバー、またはお使いのダウンロードアプリ。"
+      },
+      "searching": {
+        "label": "検索",
+        "sub": "Box Office がリリースを探す場所、求める画質、検索の頻度と量。"
+      },
+      "apps": {
+        "label": "アプリとデバイス",
+        "sub": "Matinee との接続、電子書籍リーダーへの送信、Radarr・Sonarr・Lidarr・Readarr からの引っ越し。"
+      },
+      "elsewhere": {
+        "label": "ほかのページ"
+      }
+    },
+    "search": {
+      "placeholder": "設定を検索",
+      "hint": "設定にある言葉を入力してください(例:ポート、画質、パスワード)。/ キーでこの欄に戻れます。",
+      "found": "「{{query}}」に一致する設定",
+      "none": "「{{query}}」に一致する設定はありません。",
+      "noneHint": "短い言葉や別の言葉(アプリ名など)で試してください。",
+      "inside": "フォーム内: {{fields}}"
+    },
+    "openPage": "{{page}}を開く",
+    "ereadersOff": "電子書籍をメールで Kindle、PocketBook などのリーダーに送れます。設定するには{{ebooks}}をオンにしてください。",
+    "turnOnType": "{{name}}をオンにする"
   },
   "mediaTypes": {
     "music": {

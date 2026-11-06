@@ -1052,7 +1052,43 @@
     "newHint": "En az 8 karakter. Her cihaz yeniden giriş yapar.",
     "change": "Parolayı değiştir",
     "system": "Box Office {{version}}, {{os}} üzerinde, {{go}}, {{db}} · veriler <code>{{dir}}</code> içinde · {{since}} tarihinden beri çalışıyor",
-    "languageHint": "Box Office'in size gösterildiği dil, giriş yaptığınız her cihazda. Otomatik, her tarayıcının dilini izler."
+    "languageHint": "Box Office'in size gösterildiği dil, giriş yaptığınız her cihazda. Otomatik, her tarayıcının dilini izler.",
+    "sections": {
+      "general": {
+        "label": "Genel",
+        "sub": "Diliniz ve parolanız ile Box Office'in başlıkları aradığı TMDB anahtarı."
+      },
+      "library": {
+        "label": "Kütüphane",
+        "sub": "Box Office'in hangi medya türleriyle ilgilendiği, her kitaplığın nerede olduğu ve nasıl toparladığı."
+      },
+      "downloads": {
+        "label": "İndirilenler",
+        "sub": "Box Office'in nasıl indirdiği: kendi Usenet indiricisi ve haber sunucularınızla ya da zaten sahip olduğunuz bir indirme uygulamasıyla."
+      },
+      "searching": {
+        "label": "Arama",
+        "sub": "Box Office'in sürümleri nerede aradığı, hangi kaliteleri istediği, ne sıklıkla ve ne kadar aradığı."
+      },
+      "apps": {
+        "label": "Uygulamalar ve cihazlar",
+        "sub": "Matinee'yi bağlayın, e-kitapları okuyuculara gönderin ve Radarr, Sonarr, Lidarr veya Readarr'dan taşının."
+      },
+      "elsewhere": {
+        "label": "Diğer sayfalarda"
+      }
+    },
+    "search": {
+      "placeholder": "Ayarlarda ara",
+      "hint": "Bir ayardan bir kelime yazın; örneğin bağlantı noktası, kalite veya parola. Bu kutuya dönmek için / tuşuna basın.",
+      "found": "“{{query}}” ile eşleşen ayarlar",
+      "none": "Ayarlarda “{{query}}” ile eşleşen bir şey yok.",
+      "noneHint": "Daha kısa veya farklı bir kelime deneyin; örneğin bir uygulamanın adı.",
+      "inside": "Formunda: {{fields}}"
+    },
+    "openPage": "{{page}} sayfasını aç",
+    "ereadersOff": "E-kitapları e-postayla Kindle, PocketBook veya başka bir okuyucuya gönderin. Kurmak için {{ebooks}} özelliğini açın.",
+    "turnOnType": "{{name}} özelliğini aç"
   },
   "mediaTypes": {
     "music": {

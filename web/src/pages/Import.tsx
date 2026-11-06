@@ -249,12 +249,12 @@ function Connect({ req, setReq, onPick, onStarted }: { req: MigrationRequest; se
         ))}
         {!typesOn.music && (
           <p className="text-xs text-muted">
-            <Trans i18nKey="move.connect.lidarrOff" components={{ link: <Link className="font-medium text-marquee" to="/settings" /> }} />
+            <Trans i18nKey="move.connect.lidarrOff" components={{ link: <Link className="font-medium text-marquee" to="/settings?tab=library#media-types" /> }} />
           </p>
         )}
         {!typesOn.books && (
           <p className="text-xs text-muted">
-            <Trans i18nKey="move.connect.readarrOff" components={{ link: <Link className="font-medium text-marquee" to="/settings" /> }} />
+            <Trans i18nKey="move.connect.readarrOff" components={{ link: <Link className="font-medium text-marquee" to="/settings?tab=library#media-types" /> }} />
           </p>
         )}
       </div>
@@ -672,7 +672,7 @@ function Finished({ app, matinee, onAgain }: { app: MigrationApp; matinee: Switc
         ) : (
           !noMatinee(app) && (
             <li>
-              <Trans i18nKey="move.done.stillUses" values={{ app: name }} components={{ link: <Link className="font-medium text-marquee" to="/settings" /> }} />
+              <Trans i18nKey="move.done.stillUses" values={{ app: name }} components={{ link: <Link className="font-medium text-marquee" to="/settings?tab=apps#matinee" /> }} />
             </li>
           )
         )}

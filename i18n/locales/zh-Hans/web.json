@@ -976,7 +976,43 @@
     "newHint": "至少 8 个字符。所有设备都需要重新登录。",
     "change": "更改密码",
     "system": "Box Office {{version}}，运行于 {{os}}，{{go}}，{{db}} · 数据位于 <code>{{dir}}</code> · 自 {{since}} 起运行",
-    "languageHint": "Box Office 显示的语言，适用于你登录的每台设备。“自动”会跟随各浏览器的语言。"
+    "languageHint": "Box Office 显示的语言，适用于你登录的每台设备。“自动”会跟随各浏览器的语言。",
+    "sections": {
+      "general": {
+        "label": "常规",
+        "sub": "你的语言和密码,以及 Box Office 用来查找影片的 TMDB 密钥。"
+      },
+      "library": {
+        "label": "媒体库",
+        "sub": "Box Office 管理哪些媒体类型、每个媒体库在哪里,以及如何整理。"
+      },
+      "downloads": {
+        "label": "下载",
+        "sub": "Box Office 如何下载:使用内置的 Usenet 下载器和你的新闻服务器,或使用你已有的下载应用。"
+      },
+      "searching": {
+        "label": "搜索",
+        "sub": "Box Office 在哪里查找发布、想要什么画质,以及搜索的频率和数量。"
+      },
+      "apps": {
+        "label": "应用和设备",
+        "sub": "连接 Matinee、把电子书发送到阅读器,以及从 Radarr、Sonarr、Lidarr 或 Readarr 迁移过来。"
+      },
+      "elsewhere": {
+        "label": "其他页面"
+      }
+    },
+    "search": {
+      "placeholder": "搜索设置",
+      "hint": "输入设置中的词,例如端口、画质或密码。按 / 可回到此搜索框。",
+      "found": "与“{{query}}”匹配的设置",
+      "none": "没有与“{{query}}”匹配的设置。",
+      "noneHint": "试试更短或换一个词,例如应用的名称。",
+      "inside": "表单中:{{fields}}"
+    },
+    "openPage": "打开{{page}}",
+    "ereadersOff": "通过电子邮件把电子书发送到 Kindle、PocketBook 或其他阅读器。打开{{ebooks}}即可设置。",
+    "turnOnType": "打开{{name}}"
   },
   "mediaTypes": {
     "music": {

@@ -1052,7 +1052,43 @@
     "newHint": "Minstens 8 tekens. Elk apparaat logt opnieuw in.",
     "change": "Wachtwoord wijzigen",
     "system": "Box Office {{version}} op {{os}}, {{go}}, {{db}} · gegevens in <code>{{dir}}</code> · actief sinds {{since}}",
-    "languageHint": "De taal waarin Box Office zich aan je toont, op elk apparaat waarop je inlogt. Automatisch volgt de taal van elke browser."
+    "languageHint": "De taal waarin Box Office zich aan je toont, op elk apparaat waarop je inlogt. Automatisch volgt de taal van elke browser.",
+    "sections": {
+      "general": {
+        "label": "Algemeen",
+        "sub": "Je taal en wachtwoord, en de TMDB-sleutel waarmee Box Office titels opzoekt."
+      },
+      "library": {
+        "label": "Bibliotheek",
+        "sub": "Welke soorten media Box Office beheert, waar elke bibliotheek staat en hoe het opruimt."
+      },
+      "downloads": {
+        "label": "Downloads",
+        "sub": "Hoe Box Office downloadt: met de eigen Usenet-downloader en je nieuwsservers, of met een download-app die je al hebt."
+      },
+      "searching": {
+        "label": "Zoeken",
+        "sub": "Waar Box Office naar releases zoekt, welke kwaliteiten het wil en hoe vaak en hoeveel het zoekt."
+      },
+      "apps": {
+        "label": "Apps en apparaten",
+        "sub": "Koppel Matinee, stuur e-books naar e-readers en verhuis vanuit Radarr, Sonarr, Lidarr of Readarr."
+      },
+      "elsewhere": {
+        "label": "Op andere pagina's"
+      }
+    },
+    "search": {
+      "placeholder": "Instellingen doorzoeken",
+      "hint": "Typ een woord uit een instelling, zoals poort, kwaliteit of wachtwoord. Druk op / om terug te gaan naar dit vak.",
+      "found": "Instellingen die passen bij ‘{{query}}’",
+      "none": "Niets in Instellingen past bij ‘{{query}}’.",
+      "noneHint": "Probeer een korter of ander woord, zoals de naam van een app.",
+      "inside": "In het formulier: {{fields}}"
+    },
+    "openPage": "{{page}} openen",
+    "ereadersOff": "Stuur e-books per e-mail naar een Kindle, PocketBook of andere e-reader. Zet {{ebooks}} aan om het in te stellen.",
+    "turnOnType": "{{name}} aanzetten"
   },
   "mediaTypes": {
     "music": {

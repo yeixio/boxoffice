@@ -1128,7 +1128,43 @@
     "newHint": "Cel puțin 8 caractere. Fiecare dispozitiv se conectează din nou.",
     "change": "Schimbă parola",
     "system": "Box Office {{version}} pe {{os}}, {{go}}, {{db}} · date în <code>{{dir}}</code> · rulează din {{since}}",
-    "languageHint": "Limba în care îți apare Box Office, pe fiecare dispozitiv pe care te conectezi. Automat urmează limba fiecărui browser."
+    "languageHint": "Limba în care îți apare Box Office, pe fiecare dispozitiv pe care te conectezi. Automat urmează limba fiecărui browser.",
+    "sections": {
+      "general": {
+        "label": "General",
+        "sub": "Limba și parola ta, și cheia TMDB cu care Box Office caută titlurile."
+      },
+      "library": {
+        "label": "Bibliotecă",
+        "sub": "Ce tipuri de media gestionează Box Office, unde se află fiecare bibliotecă și cum face ordine."
+      },
+      "downloads": {
+        "label": "Descărcări",
+        "sub": "Cum descarcă Box Office: cu propriul descărcător Usenet și serverele tale de știri sau cu o aplicație de descărcare pe care o ai deja."
+      },
+      "searching": {
+        "label": "Căutare",
+        "sub": "Unde caută Box Office lansări, ce calități vrea și cât de des și cât caută."
+      },
+      "apps": {
+        "label": "Aplicații și dispozitive",
+        "sub": "Conectează Matinee, trimite cărți electronice pe cititoare și mută-te din Radarr, Sonarr, Lidarr sau Readarr."
+      },
+      "elsewhere": {
+        "label": "Pe alte pagini"
+      }
+    },
+    "search": {
+      "placeholder": "Caută în setări",
+      "hint": "Scrie un cuvânt dintr-o setare, cum ar fi port, calitate sau parolă. Apasă / ca să revii în această casetă.",
+      "found": "Setări care se potrivesc cu „{{query}}”",
+      "none": "Nimic din setări nu se potrivește cu „{{query}}”.",
+      "noneHint": "Încearcă un cuvânt mai scurt sau altul, de exemplu numele unei aplicații.",
+      "inside": "În formular: {{fields}}"
+    },
+    "openPage": "Deschide {{page}}",
+    "ereadersOff": "Trimite cărți electronice prin e-mail pe un Kindle, PocketBook sau alt cititor. Activează {{ebooks}} ca să configurezi.",
+    "turnOnType": "Activează {{name}}"
   },
   "mediaTypes": {
     "music": {

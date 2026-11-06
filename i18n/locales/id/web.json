@@ -976,7 +976,43 @@
     "newHint": "Minimal 8 karakter. Setiap perangkat masuk lagi.",
     "change": "Ubah kata sandi",
     "system": "Box Office {{version}} di {{os}}, {{go}}, {{db}} · data di <code>{{dir}}</code> · berjalan sejak {{since}}",
-    "languageHint": "Bahasa yang digunakan Box Office untuk Anda, di setiap perangkat tempat Anda masuk. Otomatis mengikuti bahasa setiap browser."
+    "languageHint": "Bahasa yang digunakan Box Office untuk Anda, di setiap perangkat tempat Anda masuk. Otomatis mengikuti bahasa setiap browser.",
+    "sections": {
+      "general": {
+        "label": "Umum",
+        "sub": "Bahasa dan kata sandi Anda, serta kunci TMDB yang dipakai Box Office untuk mencari judul."
+      },
+      "library": {
+        "label": "Perpustakaan",
+        "sub": "Jenis media apa saja yang diurus Box Office, di mana tiap pustaka berada, dan cara ia merapikannya."
+      },
+      "downloads": {
+        "label": "Unduhan",
+        "sub": "Cara Box Office mengunduh: dengan pengunduh Usenet miliknya dan server news Anda, atau dengan aplikasi unduhan yang sudah Anda punya."
+      },
+      "searching": {
+        "label": "Pencarian",
+        "sub": "Di mana Box Office mencari rilis, kualitas apa yang diinginkan, serta seberapa sering dan seberapa banyak ia mencari."
+      },
+      "apps": {
+        "label": "Aplikasi dan perangkat",
+        "sub": "Hubungkan Matinee, kirim ebook ke e-reader, dan pindah dari Radarr, Sonarr, Lidarr, atau Readarr."
+      },
+      "elsewhere": {
+        "label": "Di halaman lain"
+      }
+    },
+    "search": {
+      "placeholder": "Cari pengaturan",
+      "hint": "Ketik kata dari sebuah pengaturan, seperti port, kualitas, atau kata sandi. Tekan / untuk kembali ke kotak ini.",
+      "found": "Pengaturan yang cocok dengan “{{query}}”",
+      "none": "Tidak ada pengaturan yang cocok dengan “{{query}}”.",
+      "noneHint": "Coba kata yang lebih pendek atau kata lain, seperti nama aplikasi.",
+      "inside": "Di formulirnya: {{fields}}"
+    },
+    "openPage": "Buka {{page}}",
+    "ereadersOff": "Kirim ebook lewat email ke Kindle, PocketBook, atau e-reader lain. Aktifkan {{ebooks}} untuk mengaturnya.",
+    "turnOnType": "Aktifkan {{name}}"
   },
   "mediaTypes": {
     "music": {

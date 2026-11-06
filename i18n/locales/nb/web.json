@@ -1052,7 +1052,43 @@
     "newHint": "Minst 8 tegn. Alle enheter logger inn på nytt.",
     "change": "Bytt passord",
     "system": "Box Office {{version}} på {{os}}, {{go}}, {{db}} · data i <code>{{dir}}</code> · kjørt siden {{since}}",
-    "languageHint": "Språket Box Office vises på for deg, på alle enheter du logger inn på. Automatisk følger språket i hver nettleser."
+    "languageHint": "Språket Box Office vises på for deg, på alle enheter du logger inn på. Automatisk følger språket i hver nettleser.",
+    "sections": {
+      "general": {
+        "label": "Generelt",
+        "sub": "Språket og passordet ditt, og TMDB-nøkkelen Box Office slår opp titler med."
+      },
+      "library": {
+        "label": "Bibliotek",
+        "sub": "Hvilke slags medier Box Office tar seg av, hvor hvert bibliotek ligger og hvordan det rydder."
+      },
+      "downloads": {
+        "label": "Nedlastinger",
+        "sub": "Hvordan Box Office laster ned: med sin egen Usenet-nedlaster og nyhetsserverne dine, eller med en nedlastingsapp du allerede har."
+      },
+      "searching": {
+        "label": "Søk",
+        "sub": "Hvor Box Office leter etter utgivelser, hvilke kvaliteter det vil ha, og hvor ofte og hvor mye det søker."
+      },
+      "apps": {
+        "label": "Apper og enheter",
+        "sub": "Koble til Matinee, send e-bøker til lesebrett og flytt inn fra Radarr, Sonarr, Lidarr eller Readarr."
+      },
+      "elsewhere": {
+        "label": "På andre sider"
+      }
+    },
+    "search": {
+      "placeholder": "Søk i innstillinger",
+      "hint": "Skriv et ord fra en innstilling, for eksempel port, kvalitet eller passord. Trykk / for å komme tilbake hit.",
+      "found": "Innstillinger som passer med «{{query}}»",
+      "none": "Ingenting i innstillingene passer med «{{query}}».",
+      "noneHint": "Prøv et kortere eller annet ord, for eksempel navnet på en app.",
+      "inside": "I skjemaet: {{fields}}"
+    },
+    "openPage": "Åpne {{page}}",
+    "ereadersOff": "Send e-bøker med e-post til en Kindle, PocketBook eller et annet lesebrett. Slå på {{ebooks}} for å sette det opp.",
+    "turnOnType": "Slå på {{name}}"
   },
   "mediaTypes": {
     "music": {

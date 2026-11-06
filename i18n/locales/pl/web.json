@@ -1204,7 +1204,43 @@
     "newHint": "Co najmniej 8 znaków. Każde urządzenie zaloguje się ponownie.",
     "change": "Zmień hasło",
     "system": "Box Office {{version}} na {{os}}, {{go}}, {{db}} · dane w <code>{{dir}}</code> · działa od {{since}}",
-    "languageHint": "Język, w którym Box Office się wyświetla, na każdym urządzeniu, na którym się logujesz. Automatyczny podąża za językiem każdej przeglądarki."
+    "languageHint": "Język, w którym Box Office się wyświetla, na każdym urządzeniu, na którym się logujesz. Automatyczny podąża za językiem każdej przeglądarki.",
+    "sections": {
+      "general": {
+        "label": "Ogólne",
+        "sub": "Twój język i hasło oraz klucz TMDB, za pomocą którego Box Office wyszukuje tytuły."
+      },
+      "library": {
+        "label": "Biblioteka",
+        "sub": "Jakimi rodzajami multimediów zajmuje się Box Office, gdzie jest każda biblioteka i jak ją porządkuje."
+      },
+      "downloads": {
+        "label": "Pobrane",
+        "sub": "Jak Box Office pobiera: własnym pobieraczem Usenet i Twoimi serwerami news albo aplikacją do pobierania, którą już masz."
+      },
+      "searching": {
+        "label": "Wyszukiwanie",
+        "sub": "Gdzie Box Office szuka wydań, jakich jakości chce oraz jak często i ile szuka."
+      },
+      "apps": {
+        "label": "Aplikacje i urządzenia",
+        "sub": "Połącz Matinee, wysyłaj e-booki na czytniki i przenieś się z Radarr, Sonarr, Lidarr lub Readarr."
+      },
+      "elsewhere": {
+        "label": "Na innych stronach"
+      }
+    },
+    "search": {
+      "placeholder": "Szukaj w ustawieniach",
+      "hint": "Wpisz słowo z ustawienia, np. port, jakość albo hasło. Naciśnij /, aby wrócić do tego pola.",
+      "found": "Ustawienia pasujące do „{{query}}”",
+      "none": "Nic w ustawieniach nie pasuje do „{{query}}”.",
+      "noneHint": "Spróbuj krótszego lub innego słowa, np. nazwy aplikacji.",
+      "inside": "W formularzu: {{fields}}"
+    },
+    "openPage": "Otwórz: {{page}}",
+    "ereadersOff": "Wysyłaj e-booki e-mailem na Kindle, PocketBook lub inny czytnik. Włącz {{ebooks}}, aby to skonfigurować.",
+    "turnOnType": "Włącz: {{name}}"
   },
   "mediaTypes": {
     "music": {

@@ -13,6 +13,8 @@ What changed in Box Office, newest first. The format follows [Keep a Changelog](
 
 ### Changed
 
+- **Settings is split into sections and can be searched.** The page now has five tabs, **General** (language, TMDB, password), **Library** (media types, root folders, new shows, problem files, recycle folders), **Downloads** (the downloader, news servers, download clients), **Searching** (indexers, quality profiles, automatic searches, data cap) and **Apps and devices** (Matinee, e-readers, Move in); on a phone they wrap as buttons so none hide. **Search settings** (or press `/`) shows every card with a match across all tabs, marks the words found, and names fields that only appear in a card's form, such as a news server's Port. It matches the page's language without minding case or accents, and English too, and also points to Alerts on Health and to Backups. Links to a setting, such as `/settings#news-servers` from Health, open the right tab and bring the card into view; Health's TMDB and root folder fixes now link straight to theirs. E-readers shows a **Turn on Ebooks** button while ebooks are off instead of being missing.
+
 - **The image is now Debian slim with FFmpeg,** in place of distroless, for Problem files' remuxing. It runs as the same user (65532), so volumes and the Helm chart's security settings stay as they are.
 - **New README screenshots.** They show the sidebar, Discover, Music, Books, the Requests page and the phone menu, with made-up titles and artwork.
 

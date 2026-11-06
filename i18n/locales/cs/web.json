@@ -1204,7 +1204,43 @@
     "newHint": "Alespoň 8 znaků. Každé zařízení se znovu přihlásí.",
     "change": "Změnit heslo",
     "system": "Box Office {{version}} na {{os}}, {{go}}, {{db}} · data v <code>{{dir}}</code> · běží od {{since}}",
-    "languageHint": "Jazyk, ve kterém se vám Box Office zobrazuje, na každém zařízení, kde se přihlásíte. Automaticky se řídí jazykem každého prohlížeče."
+    "languageHint": "Jazyk, ve kterém se vám Box Office zobrazuje, na každém zařízení, kde se přihlásíte. Automaticky se řídí jazykem každého prohlížeče.",
+    "sections": {
+      "general": {
+        "label": "Obecné",
+        "sub": "Váš jazyk a heslo a klíč TMDB, kterým Box Office vyhledává tituly."
+      },
+      "library": {
+        "label": "Knihovna",
+        "sub": "O jaké druhy médií se Box Office stará, kde je každá knihovna a jak ji uklízí."
+      },
+      "downloads": {
+        "label": "Stažené",
+        "sub": "Jak Box Office stahuje: vlastním stahovačem z Usenetu a vašimi news servery, nebo aplikací pro stahování, kterou už máte."
+      },
+      "searching": {
+        "label": "Hledání",
+        "sub": "Kde Box Office hledá vydání, jaké kvality chce a jak často a kolik hledá."
+      },
+      "apps": {
+        "label": "Aplikace a zařízení",
+        "sub": "Připojte Matinee, posílejte e-knihy do čteček a přestěhujte se z Radarru, Sonarru, Lidarru nebo Readarru."
+      },
+      "elsewhere": {
+        "label": "Na jiných stránkách"
+      }
+    },
+    "search": {
+      "placeholder": "Hledat v nastavení",
+      "hint": "Napište slovo z nastavení, třeba port, kvalita nebo heslo. Klávesou / se sem vrátíte.",
+      "found": "Nastavení odpovídající „{{query}}“",
+      "none": "Nic v nastavení neodpovídá „{{query}}“.",
+      "noneHint": "Zkuste kratší nebo jiné slovo, třeba název aplikace.",
+      "inside": "Ve formuláři: {{fields}}"
+    },
+    "openPage": "Otevřít: {{page}}",
+    "ereadersOff": "Posílejte e-knihy e-mailem do Kindlu, PocketBooku nebo jiné čtečky. Pro nastavení zapněte {{ebooks}}.",
+    "turnOnType": "Zapnout: {{name}}"
   },
   "mediaTypes": {
     "music": {

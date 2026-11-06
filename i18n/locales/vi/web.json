@@ -976,7 +976,43 @@
     "newHint": "Ít nhất 8 ký tự. Mọi thiết bị sẽ đăng nhập lại.",
     "change": "Đổi mật khẩu",
     "system": "Box Office {{version}} trên {{os}}, {{go}}, {{db}} · dữ liệu trong <code>{{dir}}</code> · chạy từ {{since}}",
-    "languageHint": "Ngôn ngữ Box Office hiển thị cho bạn, trên mọi thiết bị bạn đăng nhập. Tự động sẽ theo ngôn ngữ của từng trình duyệt."
+    "languageHint": "Ngôn ngữ Box Office hiển thị cho bạn, trên mọi thiết bị bạn đăng nhập. Tự động sẽ theo ngôn ngữ của từng trình duyệt.",
+    "sections": {
+      "general": {
+        "label": "Chung",
+        "sub": "Ngôn ngữ và mật khẩu của bạn, cùng khóa TMDB mà Box Office dùng để tra cứu tựa phim."
+      },
+      "library": {
+        "label": "Thư viện",
+        "sub": "Box Office quản lý những loại nội dung nào, mỗi thư viện nằm ở đâu và cách nó dọn dẹp."
+      },
+      "downloads": {
+        "label": "Tải xuống",
+        "sub": "Cách Box Office tải xuống: bằng trình tải Usenet riêng và các máy chủ news của bạn, hoặc bằng ứng dụng tải xuống bạn đã có."
+      },
+      "searching": {
+        "label": "Tìm kiếm",
+        "sub": "Box Office tìm bản phát hành ở đâu, muốn chất lượng nào, và tìm thường xuyên và nhiều đến mức nào."
+      },
+      "apps": {
+        "label": "Ứng dụng và thiết bị",
+        "sub": "Kết nối Matinee, gửi sách điện tử tới máy đọc sách và chuyển từ Radarr, Sonarr, Lidarr hoặc Readarr sang."
+      },
+      "elsewhere": {
+        "label": "Ở trang khác"
+      }
+    },
+    "search": {
+      "placeholder": "Tìm trong cài đặt",
+      "hint": "Nhập một từ trong cài đặt, như cổng, chất lượng hoặc mật khẩu. Nhấn / để quay lại ô này.",
+      "found": "Cài đặt khớp với “{{query}}”",
+      "none": "Không có cài đặt nào khớp với “{{query}}”.",
+      "noneHint": "Thử từ ngắn hơn hoặc từ khác, như tên một ứng dụng.",
+      "inside": "Trong biểu mẫu: {{fields}}"
+    },
+    "openPage": "Mở {{page}}",
+    "ereadersOff": "Gửi sách điện tử qua email tới Kindle, PocketBook hoặc máy đọc sách khác. Bật {{ebooks}} để thiết lập.",
+    "turnOnType": "Bật {{name}}"
   },
   "mediaTypes": {
     "music": {

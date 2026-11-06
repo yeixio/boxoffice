@@ -213,7 +213,7 @@ function AddOptions({ artist, onBack, onDone }: { artist: LookupArtist; onBack: 
   if (!folders.data?.length) {
     return (
       <p className="text-sm">
-        <Trans i18nKey="music.noRoot" components={{ link: <Link to="/settings" className="font-medium text-marquee" onClick={onDone} /> }} />
+        <Trans i18nKey="music.noRoot" components={{ link: <Link to="/settings#folders-music" className="font-medium text-marquee" onClick={onDone} /> }} />
       </p>
     )
   }
