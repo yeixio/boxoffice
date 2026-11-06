@@ -23,7 +23,7 @@ Already running Radarr, Sonarr, Lidarr, Readarr or NZBGet? **Move in** brings ev
 
 <p>
   <img src="docs/images/show.webp" width="49%" alt="A show with its seasons, episodes and the quality of each file">
-  <img src="docs/images/movies.webp" width="49%" alt="The movies list">
+  <img src="docs/images/movies.webp" width="49%" alt="The movies list: Big Buck Bunny, Detour, The General, His Girl Friday and more">
 </p>
 
 <p>
@@ -42,7 +42,7 @@ Already running Radarr, Sonarr, Lidarr, Readarr or NZBGet? **Move in** brings ev
   <img src="docs/images/phone-menu.webp" width="30%" alt="The menu on a phone, grouped into Library, Status and Setup">
 </p>
 
-<sub>Screenshots use made-up titles and artwork.</sub>
+<sub>The screenshots use public-domain and Creative Commons films, cartoons, sheet music and books. Artwork from Wikimedia Commons; see [the credits](docs/images/CREDITS.md).</sub>
 
 **Status:** early, and moving fast. Movies, TV, the built-in Usenet downloader and moving in from Radarr, Sonarr and NZBGet work end to end. There are no tagged releases yet: the `main` image is built from every change that passes CI. See the [roadmap](ROADMAP.md) for what's next.
 
