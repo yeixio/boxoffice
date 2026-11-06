@@ -47,6 +47,7 @@ const (
 	RuleDownloads = "downloads"
 	RuleRestart   = "restart"
 	RuleBackup    = "backup"
+	RuleProblems  = "problems"
 	RuleTest      = "test"
 )
 
@@ -105,6 +106,8 @@ type Rules struct {
 	Downloads RateRule `json:"downloads"`
 	Restart   Toggle   `json:"restart"`
 	Backup    Toggle   `json:"backup"`
+	// Problems is the daily look at the library finding problem files.
+	Problems Toggle `json:"problems"`
 }
 
 // Toggle is a rule that's on or off.
@@ -134,6 +137,7 @@ func DefaultRules() Rules {
 		Downloads: RateRule{On: true, Count: 3, Minutes: 60},
 		Restart:   Toggle{On: true},
 		Backup:    Toggle{On: true},
+		Problems:  Toggle{On: true},
 	}
 }
 
@@ -397,6 +401,16 @@ func (m *Manager) BackupFailed(ctx context.Context, err error) {
 	}
 	m.deliver(ctx, c, Alert{Rule: RuleBackup, Key: RuleBackup, Level: LevelWarning, Title: "Database backup failed",
 		Message: "Box Office couldn't back up its database: " + err.Error() + ". See Backups in Box Office."})
+}
+
+// ProblemFiles tells the admins the daily look at the library found new
+// problem files.
+func (m *Manager) ProblemFiles(ctx context.Context, title, message string) {
+	c, err := m.Config(ctx)
+	if err != nil || !c.Rules.Problems.On || m.channels(c) == 0 {
+		return
+	}
+	m.deliver(ctx, c, Alert{Rule: RuleProblems, Key: RuleProblems, Level: LevelInfo, Title: title, Message: message})
 }
 
 // Stopped notes a clean shutdown, so the next start isn't taken for a crash.

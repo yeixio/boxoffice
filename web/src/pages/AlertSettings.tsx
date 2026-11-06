@@ -127,6 +127,12 @@ export function AlertSettings() {
               onToggle={(on) => change((f) => (f.rules.restart.on = on))}
             />
             <RuleRow title={t('alerts.backup')} hint={t('alerts.backupHint')} on={form.rules.backup.on} onToggle={(on) => change((f) => (f.rules.backup.on = on))} />
+            <RuleRow
+              title={t('alerts.problems')}
+              hint={t('alerts.problemsHint')}
+              on={form.rules.problems.on}
+              onToggle={(on) => change((f) => (f.rules.problems.on = on))}
+            />
           </Card>
         </section>
 

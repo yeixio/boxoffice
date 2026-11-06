@@ -91,6 +91,7 @@ function Status({ state }: { state: ProblemsState }) {
           : st.lookedAt
             ? t('problems.lookedAt', { when: when(st.lookedAt) })
             : t('problems.never')}
+        {!st.looking && st.next && <> {t('problems.next', { when: when(st.next) })}</>}
       </p>
       {st.error && <p className="text-bad" role="alert">{st.error}</p>}
       {notes.map((n) => (

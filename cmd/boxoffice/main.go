@@ -147,8 +147,10 @@ func run() error {
 		ol.Base = cfg.OpenLibrary
 	}
 	shelf := &books.Service{Store: db, OpenLibrary: ol, Jobs: runner}
+	// The problem files look runs daily, and on Look again.
+	finds := &problems.Service{Store: db, Log: log}
 	srv := &api.Server{
-		Store: db, Catalog: cat, Music: tunes, LibScan: &libscan.Service{Store: db, Catalog: cat, Music: tunes, Books: shelf, Log: log}, Problems: &problems.Service{Store: db, Log: log}, Backups: backups, Migrator: &migrate.Migrator{Catalog: cat, Books: shelf, Backups: backups, Log: log, DataDir: cfg.DataDir}, Log: log,
+		Store: db, Catalog: cat, Music: tunes, LibScan: &libscan.Service{Store: db, Catalog: cat, Music: tunes, Books: shelf, Log: log}, Problems: finds, Backups: backups, Migrator: &migrate.Migrator{Catalog: cat, Books: shelf, Backups: backups, Log: log, DataDir: cfg.DataDir}, Log: log,
 		Books:     shelf,
 		Portal:    &portal.Service{Store: db, Catalog: cat, Notify: notes, Log: log},
 		Downloads: downloads, Search: finder,
@@ -170,6 +172,7 @@ func run() error {
 	}
 	// Admin alerts reach Matinee's admins too, with download news.
 	alerter.Forward = notes.Alert
+	finds.Alert = alerter.ProblemFiles
 	backups.Failed = alerter.BackupFailed
 	if err := srv.EnsureAPIKey(ctx); err != nil {
 		return err
@@ -179,7 +182,7 @@ func run() error {
 	var wg sync.WaitGroup
 	for _, loop := range []func(context.Context){runner.Run, backups.Run, downloads.Run, mon.Monitor.Run, alerter.Run,
 		func(ctx context.Context) { cat.RefreshEvery(ctx, cfg.Refresh) }, func(ctx context.Context) { finder.AutoSearchEvery(ctx, runner) },
-		finder.RSSEvery, finder.PruneEvery, func(ctx context.Context) { api.RecycleSweepEvery(ctx, db, log) }} {
+		finder.RSSEvery, finder.PruneEvery, finds.Run, func(ctx context.Context) { api.RecycleSweepEvery(ctx, db, log) }} {
 		wg.Add(1)
 		go func() { defer wg.Done(); loop(ctx) }()
 	}

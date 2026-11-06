@@ -329,7 +329,7 @@ export type Monitor = {
 export type WebhookKind = 'discord' | 'ntfy' | 'homeassistant' | 'json'
 export type Toggle = { on: boolean }
 export type RateRule = { on: boolean; count: number; minutes: number }
-export type AlertRules = { disk: { on: boolean; percent: number }; folder: Toggle; errors: RateRule; downloads: RateRule; restart: Toggle; backup: Toggle }
+export type AlertRules = { disk: { on: boolean; percent: number }; folder: Toggle; errors: RateRule; downloads: RateRule; restart: Toggle; backup: Toggle; problems: Toggle }
 export type AlertEmail = { on: boolean; host: string; port: number; security: 'starttls' | 'tls' | 'none'; username: string; password?: string; from: string; to: string; hasPassword?: boolean }
 export type AlertWebhook = { id: string; kind: WebhookKind; name?: string; url?: string; token?: string; hint?: string; hasToken?: boolean }
 export type AlertSettings = { email: AlertEmail; webhooks: AlertWebhook[]; rules: AlertRules; firing: Alert[]; history: Alert[]; links: boolean; forwarded: boolean }
@@ -640,6 +640,7 @@ export type ProblemsState = {
     done: number
     total: number
     lookedAt?: string
+    next?: string
     error?: string
     ffmpeg: boolean
     fixing?: { id: string; action: ProblemAction; progress: number }
