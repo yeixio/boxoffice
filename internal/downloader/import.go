@@ -82,6 +82,9 @@ func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir str
 	if store.IsBookKind(d.Kind) {
 		return li.importBook(ctx, d, dir, files)
 	}
+	if d.Kind == store.AlbumKind {
+		return li.importAlbum(ctx, d, dir, files)
+	}
 	vids := videos(dir, files)
 	if len(vids) == 0 {
 		return "", errors.New("there's no video file in it")
@@ -200,7 +203,7 @@ func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir str
 		}
 		return filepath.Dir(placed[0]), nil
 	}
-	return "", errors.New("it isn't for a movie, a show or a book")
+	return "", errors.New("it isn't for a movie, a show, a book or an album")
 }
 
 // ReadOnlyError means the library folder doesn't take writes, as when

@@ -625,7 +625,14 @@
     "which": "Mely albumokat töltse le",
     "whichHint": "Bármelyik albumot később be- vagy kikapcsolhatod az előadó oldalán.",
     "watch": "Ilyen típusú új albumok figyelése",
-    "lookup": "A Box Office a MusicBrainzen keresi meg az albumokat, ez sok albummal rendelkező előadóknál néhány másodpercig tart."
+    "lookup": "A Box Office a MusicBrainzen keresi meg az albumokat, ez sok albummal rendelkező előadóknál néhány másodpercig tart.",
+    "quality": "Albumminőség",
+    "qualityHint": "Milyen másolatokat keres a Box Office. A FLAC veszteségmentes, és nagyjából háromszor akkora, mint az MP3.",
+    "qualities": {
+      "flac-first": "FLAC, vagy MP3, ha nincs FLAC",
+      "flac": "Csak FLAC",
+      "mp3": "Csak MP3"
+    }
   },
   "albumTypes": {
     "Album": "Stúdióalbumok",
@@ -638,7 +645,7 @@
     "Other": "Minden más"
   },
   "artist": {
-    "filesGo": "A fájlok ide kerülnek: <code>{{path}}</code>. A zene keresése és letöltése a Box Office következő frissítésében érkezik.",
+    "filesAt": "Az albumok a <code>{{path}}</code> mappába kerülnek, mindegyik külön mappába. A már ott lévő albumokat az előadó hozzáadásakor vagy frissítésekor megtalálja, és nem tölti le újra.",
     "refresh": "Frissítés a MusicBrainzről",
     "watch": "Az előadó új albumainak figyelése",
     "kinds": "Letöltendő albumtípusok",
@@ -650,7 +657,12 @@
     "notWanted": "Nem keresett",
     "removeTitle": "Eltávolítod: {{name}}?",
     "removeBody": "A Box Office nem követi tovább: {{name}}, és elfelejti az albumait. A zenei mappában már meglévő fájlok ott maradnak, ahol vannak.",
-    "keep": "Megtartás"
+    "keep": "Megtartás",
+    "open": "{{title}} megnyitása",
+    "wantIt": "Kérem ezt az albumot",
+    "searching": "A Box Office keres az indexelőidben, és letölti a legjobb talált másolatot. A Tevékenységben látod, hogy sikerült.",
+    "alsoLooks": "A Box Office magától is keresi a kívánt albumokat, óránként néhányat.",
+    "notOut": "Még nem jelent meg. A Box Office megjelenéskor keresi."
   },
   "books": {
     "ebook": {
@@ -1640,6 +1652,7 @@
   },
   "kind": {
     "ebook": "E-könyv",
-    "audiobook": "Hangoskönyv"
+    "audiobook": "Hangoskönyv",
+    "album": "Album"
   }
 }

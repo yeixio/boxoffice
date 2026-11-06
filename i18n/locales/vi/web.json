@@ -590,7 +590,14 @@
     "which": "Lấy những album nào",
     "whichHint": "Bạn có thể bật hoặc tắt bất kỳ album nào sau này từ trang của nghệ sĩ.",
     "watch": "Theo dõi album mới thuộc các loại này",
-    "lookup": "Box Office tra cứu album trên MusicBrainz, việc này mất vài giây với nghệ sĩ có nhiều album."
+    "lookup": "Box Office tra cứu album trên MusicBrainz, việc này mất vài giây với nghệ sĩ có nhiều album.",
+    "quality": "Chất lượng album",
+    "qualityHint": "Những bản Box Office tìm. FLAC là không mất dữ liệu và nặng khoảng gấp ba MP3.",
+    "qualities": {
+      "flac-first": "FLAC, hoặc MP3 khi không có FLAC",
+      "flac": "Chỉ FLAC",
+      "mp3": "Chỉ MP3"
+    }
   },
   "albumTypes": {
     "Album": "Album phòng thu",
@@ -603,7 +610,7 @@
     "Other": "Mọi thứ khác"
   },
   "artist": {
-    "filesGo": "Tệp được đặt trong <code>{{path}}</code>. Tìm kiếm và tải nhạc sẽ có trong bản cập nhật Box Office tiếp theo.",
+    "filesAt": "Album được lưu trong <code>{{path}}</code>, mỗi album một thư mục. Album đã có sẵn ở đó sẽ được tìm thấy khi bạn thêm hoặc làm mới nghệ sĩ, và không bị tải lại.",
     "refresh": "Làm mới từ MusicBrainz",
     "watch": "Theo dõi album mới của nghệ sĩ này",
     "kinds": "Loại album cần lấy",
@@ -615,7 +622,12 @@
     "notWanted": "Không cần",
     "removeTitle": "Xóa {{name}}?",
     "removeBody": "Box Office ngừng theo dõi {{name}} và quên các album của họ. Các tệp đã có trong thư mục nhạc vẫn ở nguyên chỗ.",
-    "keep": "Giữ lại"
+    "keep": "Giữ lại",
+    "open": "Mở {{title}}",
+    "wantIt": "Muốn album này",
+    "searching": "Box Office đang tìm trên các indexer của bạn và sẽ lấy bản tốt nhất tìm được. Xem kết quả trong Hoạt động.",
+    "alsoLooks": "Box Office cũng tự tìm các album bạn muốn, vài album mỗi giờ.",
+    "notOut": "Album chưa phát hành. Box Office sẽ tìm khi album ra mắt."
   },
   "books": {
     "ebook": {
@@ -1546,6 +1558,7 @@
   },
   "kind": {
     "ebook": "Sách điện tử",
-    "audiobook": "Sách nói"
+    "audiobook": "Sách nói",
+    "album": "Album"
   }
 }

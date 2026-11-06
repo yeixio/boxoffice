@@ -59,6 +59,7 @@ const (
 	WantVideo   = "video" // a movie or an episode
 	WantEbook   = "ebook"
 	WantAudio   = "audio" // an audiobook
+	WantMusic   = "music" // an album
 )
 
 // Check looks over files (names in dir). wantVideo is set when the release
@@ -113,7 +114,7 @@ func CheckFor(dir string, files []string, want string) []Finding {
 				out = append(out, Finding{f, "it's named like an audio file but it's " + what})
 				continue
 			}
-			if want == WantAudio {
+			if want == WantAudio || want == WantMusic {
 				found++
 			}
 		case IsEbook(base):
@@ -139,6 +140,7 @@ func CheckFor(dir string, files []string, want string) []Finding {
 			WantVideo: "there's no video in it, so it isn't the release it said it was",
 			WantEbook: "there's no ebook in it (such as an EPUB, AZW3, MOBI or PDF), so it isn't the release it said it was",
 			WantAudio: "there's no audio in it (such as M4B or MP3 files), so it isn't the audiobook it said it was",
+			WantMusic: "there's no audio in it (such as FLAC or MP3 files), so it isn't the album it said it was",
 		}[want]})
 	}
 	return out
@@ -150,6 +152,8 @@ func releaseOf(want string) string {
 		return "book release"
 	case WantAudio:
 		return "audiobook release"
+	case WantMusic:
+		return "music release"
 	}
 	return "movie or TV release"
 }

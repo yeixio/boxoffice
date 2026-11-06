@@ -660,7 +660,14 @@
     "which": "Quali album scaricare",
     "whichHint": "Puoi attivare o disattivare qualsiasi album in seguito dalla pagina dell’artista.",
     "watch": "Sorveglia i nuovi album di questi tipi",
-    "lookup": "Box Office cerca gli album su MusicBrainz, il che richiede qualche secondo per gli artisti che ne hanno molti."
+    "lookup": "Box Office cerca gli album su MusicBrainz, il che richiede qualche secondo per gli artisti che ne hanno molti.",
+    "quality": "Qualità degli album",
+    "qualityHint": "Quali copie cerca Box Office. Il FLAC è senza perdita e pesa circa tre volte l'MP3.",
+    "qualities": {
+      "flac-first": "FLAC, oppure MP3 se non c'è FLAC",
+      "flac": "Solo FLAC",
+      "mp3": "Solo MP3"
+    }
   },
   "albumTypes": {
     "Album": "Album in studio",
@@ -673,7 +680,7 @@
     "Other": "Tutto il resto"
   },
   "artist": {
-    "filesGo": "I file vanno in <code>{{path}}</code>. La ricerca e il download della musica arrivano nel prossimo aggiornamento di Box Office.",
+    "filesAt": "Gli album vanno in <code>{{path}}</code>, ognuno nella sua cartella. Quelli già presenti vengono trovati quando aggiungi o aggiorni l'artista e non vengono riscaricati.",
     "refresh": "Aggiorna da MusicBrainz",
     "watch": "Sorveglia i nuovi album di questo artista",
     "kinds": "Tipi di album da scaricare",
@@ -685,7 +692,12 @@
     "notWanted": "Non voluto",
     "removeTitle": "Rimuovere {{name}}?",
     "removeBody": "Box Office smette di seguire {{name}} e dimentica i suoi album. I file già nella cartella della musica restano dove sono.",
-    "keep": "Tieni"
+    "keep": "Tieni",
+    "open": "Apri {{title}}",
+    "wantIt": "Voglio questo album",
+    "searching": "Box Office sta cercando nei tuoi indexer e scaricherà la copia migliore che trova. In Attività vedi com'è andata.",
+    "alsoLooks": "Box Office cerca anche da solo gli album desiderati, qualcuno ogni ora.",
+    "notOut": "Non è ancora uscito. Box Office lo cercherà appena esce."
   },
   "books": {
     "ebook": {
@@ -1734,6 +1746,7 @@
   },
   "kind": {
     "ebook": "Ebook",
-    "audiobook": "Audiolibro"
+    "audiobook": "Audiolibro",
+    "album": "Album"
   }
 }

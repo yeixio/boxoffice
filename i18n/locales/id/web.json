@@ -590,7 +590,14 @@
     "which": "Album mana yang diambil",
     "whichHint": "Anda dapat mengaktifkan atau menonaktifkan album mana pun nanti dari halaman artis.",
     "watch": "Pantau album baru jenis ini",
-    "lookup": "Box Office mencari album di MusicBrainz, yang memakan beberapa detik untuk artis dengan banyak album."
+    "lookup": "Box Office mencari album di MusicBrainz, yang memakan beberapa detik untuk artis dengan banyak album.",
+    "quality": "Kualitas album",
+    "qualityHint": "Salinan yang dicari Box Office. FLAC tanpa kehilangan kualitas dan ukurannya sekitar tiga kali MP3.",
+    "qualities": {
+      "flac-first": "FLAC, atau MP3 kalau tidak ada FLAC",
+      "flac": "Hanya FLAC",
+      "mp3": "Hanya MP3"
+    }
   },
   "albumTypes": {
     "Album": "Album studio",
@@ -603,7 +610,7 @@
     "Other": "Lainnya"
   },
   "artist": {
-    "filesGo": "File disimpan di <code>{{path}}</code>. Pencarian dan pengunduhan musik hadir di pembaruan Box Office berikutnya.",
+    "filesAt": "Album disimpan di <code>{{path}}</code>, masing-masing di foldernya sendiri. Album yang sudah ada di sana ditemukan saat Anda menambahkan atau menyegarkan artis, dan tidak diunduh lagi.",
     "refresh": "Segarkan dari MusicBrainz",
     "watch": "Pantau album baru dari artis ini",
     "kinds": "Jenis album yang diambil",
@@ -615,7 +622,12 @@
     "notWanted": "Tidak diinginkan",
     "removeTitle": "Hapus {{name}}?",
     "removeBody": "Box Office berhenti mengikuti {{name}} dan melupakan albumnya. File yang sudah ada di folder musik tetap berada di tempatnya.",
-    "keep": "Simpan"
+    "keep": "Simpan",
+    "open": "Buka {{title}}",
+    "wantIt": "Mau album ini",
+    "searching": "Box Office sedang mencari di indexer Anda dan akan mengambil salinan terbaik yang ditemukan. Lihat hasilnya di Aktivitas.",
+    "alsoLooks": "Box Office juga mencari sendiri album yang diinginkan, beberapa tiap jam.",
+    "notOut": "Belum dirilis. Box Office akan mencarinya setelah rilis."
   },
   "books": {
     "ebook": {
@@ -1546,6 +1558,7 @@
   },
   "kind": {
     "ebook": "Ebook",
-    "audiobook": "Buku audio"
+    "audiobook": "Buku audio",
+    "album": "Album"
   }
 }

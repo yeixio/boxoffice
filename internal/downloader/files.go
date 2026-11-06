@@ -474,8 +474,8 @@ func (e *Engine) ImportPath(ctx context.Context, p, kind string, titleID int64) 
 	if e.Importer == nil {
 		return errors.New("moving into the library isn't set up")
 	}
-	if kind != "movie" && kind != "series" && !store.IsBookKind(kind) {
-		return errors.New("choose the movie, show or book it's for")
+	if kind != "movie" && kind != "series" && !store.IsBookKind(kind) && kind != store.AlbumKind {
+		return errors.New("choose the movie, show, book or album it's for")
 	}
 	state, err := e.changeable(ctx, rel)
 	if err != nil {
@@ -499,10 +499,12 @@ func (e *Engine) ImportPath(ctx context.Context, p, kind string, titleID int64) 
 	switch {
 	case info.IsDir():
 		files = listFiles(dir)
-	case info.Mode().IsRegular() && (isVideo(info.Name()) || kind == store.Ebook && screen.IsEbook(info.Name()) || kind == store.Audiobook && screen.IsAudio(info.Name())):
+	case info.Mode().IsRegular() && (isVideo(info.Name()) || kind == store.Ebook && screen.IsEbook(info.Name()) || (kind == store.Audiobook || kind == store.AlbumKind) && screen.IsAudio(info.Name())):
 		dir, files = filepath.Dir(dir), []string{info.Name()}
 	case store.IsBookKind(kind):
 		return errors.New("only a folder, or an ebook or audio file, can go into the library as a book")
+	case kind == store.AlbumKind:
+		return errors.New("only a folder or an audio file can go into the library as an album")
 	default:
 		return errors.New("only a folder or a video file can go into the library")
 	}

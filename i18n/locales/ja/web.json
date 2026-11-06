@@ -590,7 +590,14 @@
     "which": "取得するアルバム",
     "whichHint": "各アルバムのオン・オフは後からアーティストのページで切り替えられます。",
     "watch": "これらの種類の新しいアルバムを監視",
-    "lookup": "Box Office は MusicBrainz でアルバムを調べます。アルバムの多いアーティストでは数秒かかります。"
+    "lookup": "Box Office は MusicBrainz でアルバムを調べます。アルバムの多いアーティストでは数秒かかります。",
+    "quality": "アルバムの品質",
+    "qualityHint": "Box Office が探すコピーの種類です。FLAC はロスレスで、MP3 の約 3 倍のサイズです。",
+    "qualities": {
+      "flac-first": "FLAC、なければ MP3",
+      "flac": "FLAC のみ",
+      "mp3": "MP3 のみ"
+    }
   },
   "albumTypes": {
     "Album": "スタジオアルバム",
@@ -603,7 +610,7 @@
     "Other": "その他すべて"
   },
   "artist": {
-    "filesGo": "ファイルは <code>{{path}}</code> に置かれます。音楽の検索とダウンロードは次の Box Office のアップデートで対応します。",
+    "filesAt": "アルバムは <code>{{path}}</code> に 1 枚ずつフォルダーを分けて入ります。すでにあるアルバムは、アーティストを追加または更新したときに見つかり、もう一度ダウンロードされることはありません。",
     "refresh": "MusicBrainz から更新",
     "watch": "このアーティストの新しいアルバムを監視",
     "kinds": "取得するアルバムの種類",
@@ -615,7 +622,12 @@
     "notWanted": "欲しいものではない",
     "removeTitle": "{{name}} を削除しますか？",
     "removeBody": "Box Office は {{name}} のフォローをやめ、アルバムの情報を消去します。音楽フォルダーにあるファイルはそのまま残ります。",
-    "keep": "残す"
+    "keep": "残す",
+    "open": "{{title}} を開く",
+    "wantIt": "このアルバムが欲しい",
+    "searching": "Box Office がインデクサーを検索し、見つかった中で一番良いコピーを取得します。結果はアクティビティで確認できます。",
+    "alsoLooks": "Box Office は欲しいアルバムを自動でも探します。1 時間に数枚ずつです。",
+    "notOut": "まだ発売されていません。発売されたら Box Office が探します。"
   },
   "books": {
     "ebook": {
@@ -1546,6 +1558,7 @@
   },
   "kind": {
     "ebook": "電子書籍",
-    "audiobook": "オーディオブック"
+    "audiobook": "オーディオブック",
+    "album": "アルバム"
   }
 }

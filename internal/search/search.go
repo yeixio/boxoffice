@@ -47,6 +47,7 @@ func (s *Service) Register(r *jobs.Runner) {
 	r.Handle(JobSearchWanted, s.jobWanted)
 	r.Handle(JobSearchAsked, s.jobAsked)
 	r.Handle(JobSearchBook, s.jobBook)
+	r.Handle(JobSearchAlbum, s.jobAlbum)
 }
 
 // Candidate is a release and what Box Office makes of it for a title.
@@ -64,7 +65,8 @@ type Candidate struct {
 	// say), or "".
 	Edition string `json:"edition,omitempty"`
 
-	// Format is a book release's format as its name gives it: EPUB, M4B.
+	// Format is a book or album release's format as its name gives it:
+	// EPUB, M4B, FLAC.
 	Format string `json:"format,omitempty"`
 
 	mode       string // how an edition asked for goes in: replace or alongside

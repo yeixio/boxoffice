@@ -590,7 +590,14 @@
     "which": "要獲取哪些專輯",
     "whichHint": "之後可以在藝人頁面開關任意專輯。",
     "watch": "關注這些型別的新專輯",
-    "lookup": "Box Office 在 MusicBrainz 上尋找專輯，專輯很多的藝人需要幾秒鐘。"
+    "lookup": "Box Office 在 MusicBrainz 上尋找專輯，專輯很多的藝人需要幾秒鐘。",
+    "quality": "專輯音質",
+    "qualityHint": "Box Office 要找的版本。FLAC 是無損格式，大小約為 MP3 的三倍。",
+    "qualities": {
+      "flac-first": "FLAC，沒有 FLAC 時用 MP3",
+      "flac": "僅 FLAC",
+      "mp3": "僅 MP3"
+    }
   },
   "albumTypes": {
     "Album": "錄音室專輯",
@@ -603,7 +610,7 @@
     "Other": "其他全部"
   },
   "artist": {
-    "filesGo": "檔案放在 <code>{{path}}</code>。搜尋和下載音樂將在 Box Office 的下一次更新中推出。",
+    "filesAt": "專輯放在 <code>{{path}}</code>，每張一個資料夾。新增或重新整理藝人時，會找到已在那裡的專輯，不會重新下載。",
     "refresh": "從 MusicBrainz 重新整理",
     "watch": "關注此藝人的新專輯",
     "kinds": "要獲取的專輯型別",
@@ -615,7 +622,12 @@
     "notWanted": "不想要",
     "removeTitle": "要移除 {{name}} 嗎？",
     "removeBody": "Box Office 會停止關注 {{name}} 並忘記其專輯。音樂資料夾中已有的檔案保持原處。",
-    "keep": "保留"
+    "keep": "保留",
+    "open": "開啟 {{title}}",
+    "wantIt": "想要這張專輯",
+    "searching": "Box Office 正在搜尋你的索引器，會抓取找到的最佳版本。可在「活動」中查看結果。",
+    "alsoLooks": "Box Office 也會自動尋找想要的專輯，每小時幾張。",
+    "notOut": "還沒發行。發行後 Box Office 會去找。"
   },
   "books": {
     "ebook": {
@@ -1546,6 +1558,7 @@
   },
   "kind": {
     "ebook": "電子書",
-    "audiobook": "有聲書"
+    "audiobook": "有聲書",
+    "album": "專輯"
   }
 }

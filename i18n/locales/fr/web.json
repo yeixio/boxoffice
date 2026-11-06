@@ -660,7 +660,14 @@
     "which": "Quels albums récupérer",
     "whichHint": "Vous pourrez activer ou désactiver n’importe quel album plus tard depuis la page de l’artiste.",
     "watch": "Surveiller les nouveaux albums de ces types",
-    "lookup": "Box Office cherche les albums sur MusicBrainz, ce qui prend quelques secondes pour les artistes qui en ont beaucoup."
+    "lookup": "Box Office cherche les albums sur MusicBrainz, ce qui prend quelques secondes pour les artistes qui en ont beaucoup.",
+    "quality": "Qualité des albums",
+    "qualityHint": "Les copies que Box Office recherche. Le FLAC est sans perte et environ trois fois plus lourd que le MP3.",
+    "qualities": {
+      "flac-first": "FLAC, ou MP3 s'il n'y a pas de FLAC",
+      "flac": "FLAC uniquement",
+      "mp3": "MP3 uniquement"
+    }
   },
   "albumTypes": {
     "Album": "Albums studio",
@@ -673,7 +680,7 @@
     "Other": "Tout le reste"
   },
   "artist": {
-    "filesGo": "Les fichiers vont dans <code>{{path}}</code>. La recherche et le téléchargement de musique arrivent dans la prochaine mise à jour de Box Office.",
+    "filesAt": "Les albums vont dans <code>{{path}}</code>, chacun dans son dossier. Ceux qui s'y trouvent déjà sont repérés quand vous ajoutez ou actualisez l'artiste, et ne sont pas retéléchargés.",
     "refresh": "Actualiser depuis MusicBrainz",
     "watch": "Surveiller les nouveaux albums de cet artiste",
     "kinds": "Types d’album à récupérer",
@@ -685,7 +692,12 @@
     "notWanted": "Non voulu",
     "removeTitle": "Retirer {{name}} ?",
     "removeBody": "Box Office cesse de suivre {{name}} et oublie ses albums. Les fichiers déjà dans le dossier de musique restent où ils sont.",
-    "keep": "Garder"
+    "keep": "Garder",
+    "open": "Ouvrir {{title}}",
+    "wantIt": "Je veux cet album",
+    "searching": "Box Office cherche sur vos indexeurs et récupérera la meilleure copie trouvée. L'Activité montre comment ça s'est passé.",
+    "alsoLooks": "Box Office cherche aussi tout seul les albums voulus, quelques-uns par heure.",
+    "notOut": "Il n'est pas encore sorti. Box Office le cherchera dès sa sortie."
   },
   "books": {
     "ebook": {
@@ -1734,6 +1746,7 @@
   },
   "kind": {
     "ebook": "Livre numérique",
-    "audiobook": "Livre audio"
+    "audiobook": "Livre audio",
+    "album": "Album"
   }
 }

@@ -356,6 +356,7 @@ func (s *Store) TitleLocked(ctx context.Context, kind string, id int64) (bool, e
 		"series":  "SELECT p.locked FROM series t JOIN quality_profiles p ON p.id = t.profile_id WHERE t.id = ?",
 		"episode": "SELECT p.locked FROM episodes e JOIN series t ON t.id = e.series_id JOIN quality_profiles p ON p.id = t.profile_id WHERE e.id = ?",
 		"author":  "SELECT locked FROM authors WHERE id = ?",
+		AlbumKind: "SELECT 0 FROM albums WHERE id = ?",
 		Ebook:     "SELECT a.locked FROM books b JOIN authors a ON a.id = b.author_id WHERE b.id = ?",
 		Audiobook: "SELECT a.locked FROM books b JOIN authors a ON a.id = b.author_id WHERE b.id = ?",
 	}[kind]

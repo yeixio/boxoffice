@@ -625,7 +625,14 @@
     "which": "Hangi albümler alınsın",
     "whichHint": "Herhangi bir albümü daha sonra sanatçının sayfasından açıp kapatabilirsiniz.",
     "watch": "Bu türlerdeki yeni albümleri izle",
-    "lookup": "Box Office albümleri MusicBrainz'de arar; çok albümü olan sanatçılar için bu birkaç saniye sürer."
+    "lookup": "Box Office albümleri MusicBrainz'de arar; çok albümü olan sanatçılar için bu birkaç saniye sürer.",
+    "quality": "Albüm kalitesi",
+    "qualityHint": "Box Office'in aradığı kopyalar. FLAC kayıpsızdır ve MP3'ün yaklaşık üç katı boyuttadır.",
+    "qualities": {
+      "flac-first": "FLAC, FLAC yoksa MP3",
+      "flac": "Yalnızca FLAC",
+      "mp3": "Yalnızca MP3"
+    }
   },
   "albumTypes": {
     "Album": "Stüdyo albümleri",
@@ -638,7 +645,7 @@
     "Other": "Diğer her şey"
   },
   "artist": {
-    "filesGo": "Dosyalar <code>{{path}}</code> içine gider. Müzik arama ve indirme bir sonraki Box Office güncellemesinde geliyor.",
+    "filesAt": "Albümler <code>{{path}}</code> içine, her biri ayrı bir klasöre gider. Orada zaten olan albümler, sanatçıyı eklediğinizde ya da yenilediğinizde bulunur ve yeniden indirilmez.",
     "refresh": "MusicBrainz'den yenile",
     "watch": "Bu sanatçının yeni albümlerini izle",
     "kinds": "Alınacak albüm türleri",
@@ -650,7 +657,12 @@
     "notWanted": "İstenmiyor",
     "removeTitle": "{{name}} kaldırılsın mı?",
     "removeBody": "Box Office {{name}} adlı sanatçıyı takip etmeyi bırakır ve albümlerini unutur. Müzik klasöründeki mevcut dosyalar oldukları yerde kalır.",
-    "keep": "Sakla"
+    "keep": "Sakla",
+    "open": "{{title}} aç",
+    "wantIt": "Bu albümü istiyorum",
+    "searching": "Box Office dizinleyicilerinizde arıyor ve bulduğu en iyi kopyayı alacak. Nasıl gittiğini Etkinlik'te görebilirsiniz.",
+    "alsoLooks": "Box Office istenen albümleri kendisi de arar, saatte birkaç tane.",
+    "notOut": "Henüz çıkmadı. Box Office çıkınca arar."
   },
   "books": {
     "ebook": {
@@ -1640,6 +1652,7 @@
   },
   "kind": {
     "ebook": "E-kitap",
-    "audiobook": "Sesli kitap"
+    "audiobook": "Sesli kitap",
+    "album": "Albüm"
   }
 }

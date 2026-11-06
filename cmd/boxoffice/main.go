@@ -129,6 +129,8 @@ func run() error {
 			cat.SearchMovies(ctx, d.TitleID)
 		case store.IsBookKind(d.Kind):
 			runner.Queue(ctx, search.JobSearchBook, d.Name, search.BookJob(d.TitleID, d.Kind))
+		case d.Kind == store.AlbumKind:
+			runner.Queue(ctx, search.JobSearchAlbum, d.Name, search.AlbumJob(d.TitleID))
 		case len(d.EpisodeIDs) > 0:
 			cat.SearchEpisodes(ctx, d.EpisodeIDs...)
 		}
@@ -136,7 +138,7 @@ func run() error {
 	// What happens to downloads is kept for Matinee to pass on to people.
 	notes := &notify.Recorder{Store: db, Log: log}
 	downloads.Notify = notes.Download
-	tunes := &music.Service{Store: db, MusicBrainz: mb}
+	tunes := &music.Service{Store: db, MusicBrainz: mb, Jobs: runner}
 	ol := openlibrary.New(version.Version)
 	if cfg.OpenLibrary != "" {
 		ol.Base = cfg.OpenLibrary

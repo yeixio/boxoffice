@@ -625,7 +625,14 @@
     "which": "Mitkä albumit haetaan",
     "whichHint": "Voit kytkeä minkä tahansa albumin päälle tai pois myöhemmin artistin sivulta.",
     "watch": "Seuraa näiden tyyppien uusia albumeita",
-    "lookup": "Box Office hakee albumit MusicBrainzista, mikä vie muutaman sekunnin artisteilla, joilla niitä on paljon."
+    "lookup": "Box Office hakee albumit MusicBrainzista, mikä vie muutaman sekunnin artisteilla, joilla niitä on paljon.",
+    "quality": "Albumien laatu",
+    "qualityHint": "Mitä kopioita Box Office etsii. FLAC on häviötön ja noin kolme kertaa MP3:n kokoinen.",
+    "qualities": {
+      "flac-first": "FLAC, tai MP3, jos FLACia ei ole",
+      "flac": "Vain FLAC",
+      "mp3": "Vain MP3"
+    }
   },
   "albumTypes": {
     "Album": "Studioalbumit",
@@ -638,7 +645,7 @@
     "Other": "Kaikki muu"
   },
   "artist": {
-    "filesGo": "Tiedostot menevät kansioon <code>{{path}}</code>. Musiikin haku ja lataus tulevat Box Officen seuraavassa päivityksessä.",
+    "filesAt": "Albumit menevät kansioon <code>{{path}}</code>, kukin omaan kansioonsa. Siellä jo olevat albumit löytyvät, kun lisäät tai päivität artistin, eikä niitä ladata uudelleen.",
     "refresh": "Päivitä MusicBrainzista",
     "watch": "Seuraa tämän artistin uusia albumeita",
     "kinds": "Haettavat albumityypit",
@@ -650,7 +657,12 @@
     "notWanted": "Ei toivottu",
     "removeTitle": "Poistetaanko {{name}}?",
     "removeBody": "Box Office lakkaa seuraamasta artistia {{name}} ja unohtaa hänen albuminsa. Musiikkikansiossa jo olevat tiedostot jäävät paikoilleen.",
-    "keep": "Säilytä"
+    "keep": "Säilytä",
+    "open": "Avaa {{title}}",
+    "wantIt": "Haluan tämän albumin",
+    "searching": "Box Office hakee indeksoijistasi ja nappaa parhaan löytämänsä kopion. Toiminnassa näet, miten kävi.",
+    "alsoLooks": "Box Office etsii haluttuja albumeita myös itse, muutaman tunnissa.",
+    "notOut": "Se ei ole vielä ilmestynyt. Box Office etsii sitä, kun se ilmestyy."
   },
   "books": {
     "ebook": {
@@ -1640,6 +1652,7 @@
   },
   "kind": {
     "ebook": "E-kirja",
-    "audiobook": "Äänikirja"
+    "audiobook": "Äänikirja",
+    "album": "Albumi"
   }
 }
