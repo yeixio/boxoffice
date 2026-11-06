@@ -418,6 +418,10 @@ func TestShareDropsOut(t *testing.T) {
 			if !strings.Contains(d.Message, "stopped answering") || !strings.Contains(d.Message, "host is down") || d.Missing {
 				t.Fatalf("missing %v: %s", d.Missing, d.Message)
 			}
+			// Its files never all came, so there's nothing to unpack again.
+			if d.Fetched || e.CanReprocess(d) {
+				t.Fatal("offered to unpack again a download that never finished fetching")
+			}
 			// Tried again each time, then gave up (several files can be
 			// closing at once, so each try can count more than one).
 			if got := n.Load(); got < shareTries+1 {
