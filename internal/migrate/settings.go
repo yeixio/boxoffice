@@ -131,6 +131,8 @@ var sections = map[string][]string{
 		"delayprofile", "notification", "importlist", "customformat", "remotepathmapping", "releaseprofile", "metadata", "autotagging", "indexer", "downloadclient"},
 	"lidarr": {"config/naming", "config/mediamanagement", "config/indexer", "config/downloadclient", "config/metadataprovider", "qualitydefinition", "tag",
 		"delayprofile", "notification", "importlist", "customformat", "remotepathmapping", "releaseprofile", "metadata", "metadataprofile", "indexer", "downloadclient"},
+	"readarr": {"config/naming", "config/mediamanagement", "config/indexer", "config/downloadclient", "config/metadataprovider", "config/development", "qualitydefinition", "tag",
+		"delayprofile", "notification", "importlist", "customformat", "remotepathmapping", "releaseprofile", "metadata", "metadataprofile", "indexer", "downloadclient"},
 }
 
 // tableFor names the table in the app's own database that holds a
@@ -148,6 +150,7 @@ type lBlocked struct {
 	MovieID     int       `json:"movieId"`
 	SeriesID    int       `json:"seriesId"`
 	AlbumIDs    []int     `json:"albumIds"` // Lidarr's
+	BookIDs     []int     `json:"bookIds"`  // Readarr's
 	SourceTitle string    `json:"sourceTitle"`
 	Quality     lQuality  `json:"quality"`
 	Date        time.Time `json:"date"`
@@ -423,6 +426,10 @@ func (m *Migrator) importSettings(ctx context.Context, p *pending, pr *Progress)
 	nBlock := 0
 	byLegacy := map[int]int64{} // the app's title id -> Box Office's
 	switch app {
+	case "readarr":
+		for legacy, id := range p.bookIDs {
+			byLegacy[legacy] = id
+		}
 	case "lidarr":
 		for _, al := range p.albums {
 			if id, ok := p.albumIDs[al.ID]; ok {
@@ -454,6 +461,14 @@ func (m *Migrator) importSettings(ctx context.Context, p *pending, pr *Progress)
 			kind, legacyID = store.AlbumKind, 0
 			if len(b.AlbumIDs) > 0 {
 				legacyID = b.AlbumIDs[0]
+			}
+		case "readarr":
+			// A blocked release is for a book, as an ebook or an
+			// audiobook by its root folder.
+			kind, legacyID = store.Ebook, 0
+			if len(b.BookIDs) > 0 {
+				legacyID = b.BookIDs[0]
+				kind = p.bookKind(legacyID)
 			}
 		}
 		id, ok := byLegacy[legacyID]

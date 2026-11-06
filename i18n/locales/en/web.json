@@ -1300,10 +1300,11 @@
       "radarr": "Movies, their files, quality profiles, indexers, download clients and every other setting.",
       "sonarr": "Shows, seasons, episodes and their files, profiles, indexers, download clients and settings.",
       "nzbget": "News servers with their sign-ins, categories and the rest of its settings.",
-      "lidarr": "Artists, their albums and where they are on disk, indexers, download clients and the blocklist."
+      "lidarr": "Artists, their albums and where they are on disk, indexers, download clients and the blocklist.",
+      "readarr": "Authors, the books it wants as ebooks or audiobooks and where they are on disk, indexers, download clients and the blocklist."
     },
     "title": "Move in",
-    "sub": "Bring everything over from Radarr, Sonarr, Lidarr or NZBGet, step by step. The old app is only read from, so nothing in it changes.",
+    "sub": "Bring everything over from Radarr, Sonarr, Lidarr, Readarr or NZBGet, step by step. The old app is only read from, so nothing in it changes.",
     "steps": "Steps",
     "background": "In the background",
     "look": {
@@ -1327,7 +1328,8 @@
       "key3": "Under <b>Security</b>, copy the <b>API Key</b> and paste it above.",
       "go": "Connect and look it over",
       "onlyReads": "This only reads. Nothing changes here or in {{app}} until you confirm on the next step.",
-      "lidarrOff": "Moving in from Lidarr? Turn on Music under <link>Settings</link> first."
+      "lidarrOff": "Moving in from Lidarr? Turn on Music under <link>Settings</link> first.",
+      "readarrOff": "Moving in from Readarr? Turn on Ebooks or Audiobooks under <link>Settings</link> first."
     },
     "maps": {
       "title": "Path maps (usually not needed)",
@@ -1351,7 +1353,8 @@
       "clients": "download clients",
       "blocklist": "blocked releases",
       "lists": "notifications and lists",
-      "newArtists": "new artists"
+      "newArtists": "new artists",
+      "newAuthors": "new authors"
     },
     "review": {
       "profiles": "Quality profiles",
@@ -1375,7 +1378,8 @@
       "hidden_other": "Needed for the {{count}} passwords and API keys {{app}} hides from other apps.",
       "confirm": "Confirm and move in",
       "nothing": "Nothing in {{app}} changes. Files stay where they are.",
-      "lidarrQuality": "Lidarr's quality profiles stay behind: Box Office's music has its own quality setting, under Music."
+      "lidarrQuality": "Lidarr's quality profiles stay behind: Box Office's music has its own quality setting, under Music.",
+      "readarrQuality": "Readarr's quality profiles stay behind: Box Office picks EPUB for ebooks and M4B for audiobooks first. Each root folder says whether it holds ebooks or audiobooks, worked out from its files."
     },
     "status": {
       "done": "done",

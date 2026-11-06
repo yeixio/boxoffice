@@ -1,4 +1,4 @@
-// Package migrate moves a Radarr, Sonarr, Lidarr or NZBGet into Box Office, step by step
+// Package migrate moves a Radarr, Sonarr, Lidarr, Readarr or NZBGet into Box Office, step by step
 // and without changing the old app: connect to it, look over what would
 // come across, confirm, optionally back both up, import, and optionally
 // point Matinee at Box Office. Then the old app can be shut down.
@@ -26,8 +26,8 @@ import (
 	"time"
 
 	"github.com/yeixio/boxoffice/internal/backup"
+	"github.com/yeixio/boxoffice/internal/books"
 	"github.com/yeixio/boxoffice/internal/catalog"
-	"github.com/yeixio/boxoffice/internal/mediatypes"
 	"github.com/yeixio/boxoffice/internal/quality"
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/tmdb"
@@ -75,7 +75,7 @@ func mapPath(maps []PathMap, p string) string {
 // Request is what an admin enters to start: which app, where it is, and
 // how its paths map.
 type Request struct {
-	App     string    `json:"app"` // radarr, sonarr, lidarr or nzbget
+	App     string    `json:"app"` // radarr, sonarr, lidarr, readarr or nzbget
 	URL     string    `json:"url"`
 	APIKey  string    `json:"apiKey"`
 	PathMap []PathMap `json:"pathMap"`
@@ -147,6 +147,8 @@ type FolderPlan struct {
 	Path       string `json:"path"`   // as Box Office sees it
 	Exists     bool   `json:"exists"` // Box Office can see it
 	Action     string `json:"action"` // add or have
+	// Kind is what a Readarr root folder holds: ebook or audiobook.
+	Kind string `json:"kind,omitempty"`
 }
 
 // Counts are titles by what happens to them.
@@ -208,6 +210,8 @@ type Progress struct {
 // Migrator runs migrations.
 type Migrator struct {
 	Catalog *catalog.Service
+	// Books adds Readarr's authors; Move in from Readarr needs it.
+	Books   *books.Service
 	Backups *backup.Manager
 	Log     *slog.Logger
 
@@ -236,7 +240,16 @@ type pending struct {
 	albums   []lAlbum
 	// albumIDs maps Lidarr's album ids to Box Office's, once imported.
 	albumIDs map[int]int64
-	settings settingsData
+	authors  []lAuthor
+	books    []lBook
+	// rootKinds says which of Readarr's root folders hold ebooks and
+	// which audiobooks; kindOn which of those are turned on.
+	rootKinds map[string]string
+	kindOn    map[string]bool
+	// bookIDs maps Readarr's book ids to Box Office's, once imported.
+	bookIDs   map[int]int64
+	bookKinds map[int]string
+	settings  settingsData
 	// backupZip is the old app's own backup, once the backup step has run;
 	// the secrets it hides over its API are read from it.
 	backupZip []byte
@@ -282,13 +295,11 @@ func (m *Migrator) preview(ctx context.Context, req Request, say report) (Plan, 
 		return Plan{}, err
 	}
 	p := &pending{req: req, l: l}
-	if req.App == "lidarr" {
-		// Box Office's music has quality settings of its own, so
-		// Lidarr's profiles stay behind.
-		if on, err := mediatypes.Enabled(ctx, m.Catalog.Store, mediatypes.Music); err != nil {
+	if noProfiles(req.App) {
+		// Box Office's music and books have quality settings of their
+		// own, so Lidarr's and Readarr's profiles stay behind.
+		if err := m.typesOn(ctx, req.App); err != nil {
 			return Plan{}, err
-		} else if !on {
-			return Plan{}, errMusicOff
 		}
 		say("Reading root folders", 0, 0)
 	} else {
@@ -300,10 +311,21 @@ func (m *Migrator) preview(ctx context.Context, req Request, say report) (Plan, 
 	if err := l.get(ctx, "/rootfolder", nil, &p.roots); err != nil {
 		return Plan{}, err
 	}
-	say(map[string]string{"radarr": "Reading the movies", "sonarr": "Reading the shows", "lidarr": "Reading the artists and albums"}[req.App], 0, 0)
+	say(map[string]string{"radarr": "Reading the movies", "sonarr": "Reading the shows", "lidarr": "Reading the artists and albums", "readarr": "Reading the authors and books"}[req.App], 0, 0)
 	switch req.App {
 	case "radarr":
 		if err := l.get(ctx, "/movie", nil, &p.movies); err != nil {
+			return Plan{}, err
+		}
+	case "readarr":
+		if err := l.get(ctx, "/author", nil, &p.authors); err != nil {
+			return Plan{}, err
+		}
+		if err := l.get(ctx, "/book", nil, &p.books); err != nil {
+			return Plan{}, err
+		}
+		say("Looking at which root folders hold ebooks and which audiobooks", 0, 0)
+		if err := m.bookKinds(ctx, p); err != nil {
 			return Plan{}, err
 		}
 	case "lidarr":
@@ -355,13 +377,16 @@ func (m *Migrator) preview(ctx context.Context, req Request, say report) (Plan, 
 		plan.Profiles = append(plan.Profiles, pp)
 	}
 
-	kind := rootKind[req.App]
-	have, err := m.Catalog.Store.RootFolders(ctx, kind)
-	if err != nil {
-		return Plan{}, err
-	}
 	for _, r := range p.roots {
+		kind := p.rootKind(r.Path)
+		have, err := m.Catalog.Store.RootFolders(ctx, kind)
+		if err != nil {
+			return Plan{}, err
+		}
 		fp := FolderPlan{LegacyPath: r.Path, Path: mapPath(req.PathMap, r.Path), Action: "add"}
+		if req.App == "readarr" {
+			fp.Kind = kind
+		}
 		fp.Exists = isDir(fp.Path)
 		if slices.ContainsFunc(have, func(f store.RootFolder) bool { return f.Path == fp.Path }) {
 			fp.Action = "have"
@@ -424,8 +449,11 @@ func (m *Migrator) preview(ctx context.Context, req Request, say report) (Plan, 
 		plan.Titles.New++
 		sample(Sample{Title: sr.Title, Year: sr.Year, Path: mapPath(req.PathMap, sr.Path)})
 	}
-	if req.App == "lidarr" {
+	switch req.App {
+	case "lidarr":
 		m.previewArtists(ctx, p, &plan, sample)
+	case "readarr":
+		m.previewAuthors(ctx, p, &plan, sample)
 	}
 	if noTMDB > 0 {
 		plan.Warnings = append(plan.Warnings, count(noTMDB, "movie has", "movies have")+" no TMDB id in Radarr and will be left out.")
@@ -433,7 +461,7 @@ func (m *Migrator) preview(ctx context.Context, req Request, say report) (Plan, 
 	if needTMDB > 0 && m.Catalog.TMDB(ctx).Key == "" {
 		plan.Warnings = append(plan.Warnings, count(needTMDB, "show has", "shows have")+" no TMDB id in Sonarr. Add a TMDB key under Settings so Box Office can look them up by their TVDB id; without one they're left out.")
 	}
-	if req.App == "sonarr" || req.App == "lidarr" {
+	if req.App == "sonarr" || noProfiles(req.App) {
 		plan.Files.Total = -1 // counted while importing; Sonarr and Lidarr list files per show or artist
 	}
 	if plan.Files.Missing > 0 {
@@ -466,6 +494,9 @@ func (m *Migrator) findPathMaps(p *pending) []PathMap {
 		paths = append(paths, sr.Path)
 	}
 	for _, a := range p.artists {
+		paths = append(paths, a.Path)
+	}
+	for _, a := range p.authors {
 		paths = append(paths, a.Path)
 	}
 	titles := map[string][]string{}
@@ -619,11 +650,11 @@ func (m *Migrator) Run(ctx context.Context, token string, o Options) (int64, err
 			{Name: "Back up Box Office", Status: "waiting"},
 			{Name: "Back up " + name, Status: "waiting"},
 			{Name: "Bring over quality profiles and root folders", Status: "waiting"},
-			{Name: "Bring over " + map[string]string{"radarr": "movies", "sonarr": "shows and episodes", "lidarr": "artists and albums"}[p.req.App], Status: "waiting"},
+			{Name: "Bring over " + map[string]string{"radarr": "movies", "sonarr": "shows and episodes", "lidarr": "artists and albums", "readarr": "authors and books"}[p.req.App], Status: "waiting"},
 			{Name: "Bring over indexers, download clients and settings", Status: "waiting"},
 		}
 	}
-	if p.req.App == "lidarr" {
+	if noProfiles(p.req.App) {
 		pr.Steps[2].Name = "Bring over root folders"
 	}
 	if !o.BackupBoxOffice {
@@ -715,7 +746,7 @@ func (m *Migrator) run(ctx context.Context, p *pending, pr *Progress, o Options)
 		fail(2, err)
 		return
 	}
-	if p.req.App == "lidarr" {
+	if noProfiles(p.req.App) {
 		step(2, "done", count(len(p.roots), "root folder", "root folders"))
 	} else {
 		step(2, "done", count(len(p.profiles), "quality profile", "quality profiles")+", "+count(len(p.roots), "root folder", "root folders"))
@@ -729,6 +760,8 @@ func (m *Migrator) run(ctx context.Context, p *pending, pr *Progress, o Options)
 		err = m.importMovies(ctx, p, profiles, pr, progress)
 	case "lidarr":
 		err = m.importArtists(ctx, p, pr, progress)
+	case "readarr":
+		err = m.importAuthors(ctx, p, pr, progress)
 	default:
 		err = m.importSeries(ctx, p, profiles, pr, progress)
 	}
@@ -801,8 +834,11 @@ func (m *Migrator) importProfiles(ctx context.Context, p *pending) (map[int]int,
 }
 
 func (m *Migrator) importFolders(ctx context.Context, p *pending) error {
-	kind := rootKind[p.req.App]
 	for _, r := range p.roots {
+		kind := p.rootKind(r.Path)
+		if p.req.App == "readarr" && !p.kindOn[kind] {
+			continue // that kind is off; a warning said so
+		}
 		if _, err := m.Catalog.Store.AddRootFolder(ctx, kind, mapPath(p.req.PathMap, r.Path)); err != nil && !errors.Is(err, store.ErrExists) {
 			return err
 		}

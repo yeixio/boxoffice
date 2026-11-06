@@ -17,7 +17,7 @@ import (
 )
 
 // defaultPorts are where each app listens unless it's been changed.
-var defaultPorts = map[string]int{"radarr": 7878, "sonarr": 8989, "lidarr": 8686, "nzbget": 6789}
+var defaultPorts = map[string]int{"radarr": 7878, "sonarr": 8989, "lidarr": 8686, "readarr": 8787, "nzbget": 6789}
 
 // candidateURLs are the addresses an app is usually at from Box Office: its
 // Kubernetes service or Compose service name, on its usual port, with no

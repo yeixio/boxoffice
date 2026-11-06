@@ -1213,10 +1213,11 @@
       "radarr": "电影、其文件、画质配置、索引器、下载客户端以及其他所有设置。",
       "sonarr": "剧集、季、单集及其文件、配置、索引器、下载客户端和设置。",
       "nzbget": "新闻服务器及其登录信息、分类以及其余设置。",
-      "lidarr": "艺人、他们的专辑及在磁盘上的位置、索引器、下载客户端和屏蔽列表。"
+      "lidarr": "艺人、他们的专辑及在磁盘上的位置、索引器、下载客户端和屏蔽列表。",
+      "readarr": "作者、想要的电子书或有声书及其在磁盘上的位置、索引器、下载客户端和屏蔽列表。"
     },
     "title": "迁入",
-    "sub": "从 Radarr、Sonarr、Lidarr 或 NZBGet 一步步把一切迁过来。旧应用只会被读取，因此其中什么都不会改变。",
+    "sub": "从 Radarr、Sonarr、Lidarr、Readarr 或 NZBGet 一步步把一切迁过来。旧应用只会被读取，因此其中什么都不会改变。",
     "steps": "步骤",
     "background": "后台",
     "look": {
@@ -1240,7 +1241,8 @@
       "key3": "在 <b>Security</b> 下复制 <b>API Key</b>，并粘贴到上方。",
       "go": "连接并查看",
       "onlyReads": "这只会读取。在你于下一步确认之前，这里和 {{app}} 中都不会有任何更改。",
-      "lidarrOff": "要从 Lidarr 迁入？请先在<link>设置</link>中打开音乐。"
+      "lidarrOff": "要从 Lidarr 迁入？请先在<link>设置</link>中打开音乐。",
+      "readarrOff": "要从 Readarr 迁入？请先在<link>设置</link>中打开电子书或有声书。"
     },
     "maps": {
       "title": "路径映射（通常不需要）",
@@ -1264,7 +1266,8 @@
       "clients": "下载客户端",
       "blocklist": "已屏蔽的发布",
       "lists": "通知和列表",
-      "newArtists": "新艺人"
+      "newArtists": "新艺人",
+      "newAuthors": "新作者"
     },
     "review": {
       "profiles": "画质配置",
@@ -1287,7 +1290,8 @@
       "hidden_other": "{{app}} 对其他应用隐藏的 {{count}} 个密码和 API 密钥需要用到。",
       "confirm": "确认并迁入",
       "nothing": "{{app}} 中什么都不会改变。文件保持原处。",
-      "lidarrQuality": "Lidarr 的质量配置不会迁入：Box Office 的音乐在“音乐”中有自己的音质设置。"
+      "lidarrQuality": "Lidarr 的质量配置不会迁入：Box Office 的音乐在“音乐”中有自己的音质设置。",
+      "readarrQuality": "Readarr 的质量配置不会迁入：Box Office 电子书优先选 EPUB，有声书优先选 M4B。每个根文件夹会标明它存放的是电子书还是有声书，依据其中的文件判断。"
     },
     "status": {
       "done": "完成",

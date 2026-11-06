@@ -1387,10 +1387,11 @@
       "radarr": "Filme, fișierele lor, profiluri de calitate, indexere, clienți de descărcare și orice altă setare.",
       "sonarr": "Seriale, sezoane, episoade și fișierele lor, profiluri, indexere, clienți de descărcare și setări.",
       "nzbget": "Servere de știri cu datele lor de conectare, categorii și restul setărilor sale.",
-      "lidarr": "Artiștii, albumele lor și locul lor pe disc, indexerii, clienții de descărcare și lista de blocare."
+      "lidarr": "Artiștii, albumele lor și locul lor pe disc, indexerii, clienții de descărcare și lista de blocare.",
+      "readarr": "Autorii, cărțile dorite ca ebook sau audiobook și locul lor pe disc, indexerii, clienții de descărcare și lista de blocare."
     },
     "title": "Mutare",
-    "sub": "Adu totul din Radarr, Sonarr, Lidarr sau NZBGet, pas cu pas. Din aplicația veche doar se citește, așa că nimic din ea nu se schimbă.",
+    "sub": "Adu totul din Radarr, Sonarr, Lidarr, Readarr sau NZBGet, pas cu pas. Din aplicația veche doar se citește, așa că nimic din ea nu se schimbă.",
     "steps": "Pași",
     "background": "În fundal",
     "look": {
@@ -1414,7 +1415,8 @@
       "key3": "La <b>Security</b>, copiază <b>API Key</b> și lipește-l mai sus.",
       "go": "Conectează și verifică",
       "onlyReads": "Asta doar citește. Nimic nu se schimbă aici sau în {{app}} până nu confirmi la pasul următor.",
-      "lidarrOff": "Te muți de pe Lidarr? Pornește mai întâi Muzica din <link>Setări</link>."
+      "lidarrOff": "Te muți de pe Lidarr? Pornește mai întâi Muzica din <link>Setări</link>.",
+      "readarrOff": "Te muți de pe Readarr? Pornește mai întâi Ebook-urile sau Audiobook-urile din <link>Setări</link>."
     },
     "maps": {
       "title": "Corespondențe de căi (de obicei nu sunt necesare)",
@@ -1438,7 +1440,8 @@
       "clients": "clienți de descărcare",
       "blocklist": "versiuni blocate",
       "lists": "notificări și liste",
-      "newArtists": "artiști noi"
+      "newArtists": "artiști noi",
+      "newAuthors": "autori noi"
     },
     "review": {
       "profiles": "Profiluri de calitate",
@@ -1463,7 +1466,8 @@
       "hidden_other": "Necesar pentru cele {{count}} de parole și chei API pe care {{app}} le ascunde de alte aplicații.",
       "confirm": "Confirmă și mută-te",
       "nothing": "Nimic din {{app}} nu se schimbă. Fișierele rămân unde sunt.",
-      "lidarrQuality": "Profilurile de calitate din Lidarr rămân acolo: muzica din Box Office are propria setare de calitate, la Muzică."
+      "lidarrQuality": "Profilurile de calitate din Lidarr rămân acolo: muzica din Box Office are propria setare de calitate, la Muzică.",
+      "readarrQuality": "Profilurile de calitate din Readarr rămân acolo: Box Office preferă EPUB pentru ebook-uri și M4B pentru audiobook-uri. Fiecare dosar rădăcină arată dacă are ebook-uri sau audiobook-uri, după fișierele lui."
     },
     "status": {
       "done": "gata",

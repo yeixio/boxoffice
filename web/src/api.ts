@@ -185,7 +185,7 @@ export type Backup = { name: string; reason: string; size: number; createdAt: st
 export type Backups = { settings: BackupSettings; backups: Backup[]; dir: string; remoteError?: string }
 
 export type PathMap = { from: string; to: string }
-export type MigrationApp = 'radarr' | 'sonarr' | 'lidarr' | 'nzbget'
+export type MigrationApp = 'radarr' | 'sonarr' | 'lidarr' | 'readarr' | 'nzbget'
 export type MigrationRequest = { app: MigrationApp; url: string; apiKey?: string; username?: string; password?: string; pathMap: PathMap[] }
 export type Plan = {
   token: string
@@ -193,7 +193,7 @@ export type Plan = {
   appVersion: string
   url: string
   profiles: { legacyId: number; name: string; action: 'create' | 'match'; localId?: number; qualities: string[] }[]
-  rootFolders: { legacyPath: string; path: string; exists: boolean; action: 'add' | 'have' }[]
+  rootFolders: { legacyPath: string; path: string; exists: boolean; action: 'add' | 'have'; kind?: 'ebook' | 'audiobook' }[]
   titles: { total: number; new: number; already: number; skipped: number }
   files: { total: number; missing: number }
   sample: { title: string; year?: number; path: string; hasFile: boolean }[]
