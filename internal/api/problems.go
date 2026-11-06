@@ -47,6 +47,8 @@ func (s *Server) fixProblems(w http.ResponseWriter, r *http.Request) error {
 	var req struct {
 		IDs  []string          `json:"ids"`
 		Keep map[string]string `json:"keep"`
+		// As picks another way to fix a problem: keep_one for parts.
+		As map[string]string `json:"as"`
 	}
 	if err := readJSON(r, &req); err != nil {
 		return err
@@ -54,11 +56,11 @@ func (s *Server) fixProblems(w http.ResponseWriter, r *http.Request) error {
 	if len(req.IDs) == 0 {
 		return errorf(http.StatusBadRequest, "pick at least one problem to fix")
 	}
-	if err := s.Problems.Fix(req.IDs, req.Keep); err != nil {
+	if err := s.Problems.Fix(req.IDs, req.Keep, req.As); err != nil {
 		if errors.Is(err, problems.ErrNotFound) {
 			return errorf(http.StatusConflict, err.Error())
 		}
-		return err
+		return errorf(http.StatusBadRequest, err.Error())
 	}
 	return s.problemFiles(w, r)
 }

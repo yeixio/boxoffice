@@ -1926,6 +1926,12 @@
     "keeps": "zostaw",
     "setsAside": "odłóż",
     "remuxNote": "(kopia strumieni, nic nie jest kodowane ponownie)",
+    "copiesNote": "Każdy z nich trwa tyle co cały film, więc wyglądają na kopie (inna wersja lub jakość), nie części. Wybierz, którą zostawić, albo połącz je, jeśli to naprawdę części.",
+    "instead": {
+      "keepOne": "Zamiast tego zostaw jedną",
+      "join": "Zamiast tego połącz"
+    },
+    "subtitles": "napisy: {{count}}",
     "recent": "Ostatnie poprawki",
     "blocked": {
       "readOnly": "Folder biblioteki jest dla Box Office tylko do odczytu.",

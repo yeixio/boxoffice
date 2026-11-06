@@ -1926,6 +1926,12 @@
     "keeps": "ponechat",
     "setsAside": "odložit",
     "remuxNote": "(kopie streamů, nic se nepřekódovává)",
+    "copiesNote": "Každý z nich trvá jako celý film, takže vypadají jako kopie (jiná verze nebo kvalita), ne části. Vyberte, kterou ponechat, nebo je spojte, pokud jde opravdu o části.",
+    "instead": {
+      "keepOne": "Místo toho ponechat jednu",
+      "join": "Místo toho spojit"
+    },
+    "subtitles": "titulky: {{count}}",
     "recent": "Nedávné opravy",
     "blocked": {
       "readOnly": "Složka knihovny je pro Box Office jen pro čtení.",

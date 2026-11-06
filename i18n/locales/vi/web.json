@@ -1644,6 +1644,12 @@
     "keeps": "giữ",
     "setsAside": "để riêng",
     "remuxNote": "(sao chép luồng, không mã hóa lại)",
+    "copiesNote": "Mỗi tệp dài bằng cả một bộ phim, nên có vẻ là các bản sao (bản dựng hoặc chất lượng khác), không phải các phần. Chọn bản muốn giữ, hoặc ghép lại nếu thật sự là các phần.",
+    "instead": {
+      "keepOne": "Thay vào đó giữ một bản",
+      "join": "Thay vào đó ghép lại"
+    },
+    "subtitles": "phụ đề: {{count}}",
     "recent": "Các bản sửa gần đây",
     "blocked": {
       "readOnly": "Thư mục thư viện chỉ đọc đối với Box Office.",

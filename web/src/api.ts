@@ -631,7 +631,8 @@ export type LookupAuthor = { key: string; name: string; born?: string; died?: st
 
 export type ProblemKind = 'duplicate' | 'parts' | 'disc_image' | 'untracked' | 'missing' | 'naming' | 'unknown' | 'not_listed' | 'leftover' | 'empty'
 export type ProblemAction = 'rename' | 'set_aside' | 'keep_one' | 'record' | 'forget' | 'convert' | 'join' | 'remove_dirs'
-export type ProblemFile = { path: string; size: number; dir?: boolean; recorded?: boolean; episode?: string }
+export type ProblemMedia = { duration: number; width?: number; height?: number; video?: string; hdr?: string; audio?: string[]; subtitles?: number; title?: string }
+export type ProblemFile = { path: string; size: number; dir?: boolean; recorded?: boolean; episode?: string; media?: ProblemMedia; edition?: string }
 export type ProblemMove = { from: string; to: string; folder?: boolean }
 export type LibProblem = {
   id: string
@@ -639,6 +640,7 @@ export type LibProblem = {
   root: string
   title?: { kind: 'movie' | 'series'; id: number; name: string; year?: number; locked?: boolean }
   detail?: string
+  copies?: boolean
   files: ProblemFile[]
   fix?: { action: ProblemAction; moves?: ProblemMove[]; paths?: string[]; keep?: string; output?: string; blocked?: 'read_only' | 'locked' | 'output_exists' }
 }

@@ -73,6 +73,9 @@ type Problem struct {
 	Title *TitleRef `json:"title,omitempty"`
 	// Detail says more, such as an episode's S01E02 or why a name is off.
 	Detail string `json:"detail,omitempty"`
+	// Copies says parts each run as long as the movie, so they're likely
+	// copies of it: the fix can keep one (Fix.Keep) instead of joining.
+	Copies bool   `json:"copies,omitempty"`
 	Files  []File `json:"files"`
 	Fix    *Fix   `json:"fix,omitempty"`
 }
@@ -96,6 +99,10 @@ type File struct {
 	Recorded bool `json:"recorded,omitempty"`
 	// Episode is a show's file's S01E02.
 	Episode string `json:"episode,omitempty"`
+	// Media is what's in a video, for copies and parts, when FFmpeg is
+	// there; Edition the cut its name or title says it is.
+	Media   *Media `json:"media,omitempty"`
+	Edition string `json:"edition,omitempty"`
 
 	mtime   int64
 	episode *store.Episode

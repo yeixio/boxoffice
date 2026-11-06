@@ -1738,6 +1738,12 @@
     "keeps": "behalten",
     "setsAside": "beiseitelegen",
     "remuxNote": "(eine Kopie der Streams, nichts neu kodiert)",
+    "copiesNote": "Jede dieser Dateien ist so lang wie ein ganzer Film, sie sehen also nach Kopien aus (eine andere Fassung oder Qualität), nicht nach Teilen. Wähle die, die bleibt, oder füge sie zusammen, wenn es wirklich Teile sind.",
+    "instead": {
+      "keepOne": "Stattdessen eine behalten",
+      "join": "Stattdessen zusammenfügen"
+    },
+    "subtitles": "Untertitel: {{count}}",
     "recent": "Letzte Korrekturen",
     "blocked": {
       "readOnly": "Der Mediathekordner ist für Box Office schreibgeschützt.",

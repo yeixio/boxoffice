@@ -1832,6 +1832,12 @@
     "keeps": "garder",
     "setsAside": "mettre de côté",
     "remuxNote": "(une copie des flux, rien de réencodé)",
+    "copiesNote": "Chacun dure autant qu'un film entier : ce sont sans doute des copies (une autre version ou une autre qualité), pas des parties. Choisissez celle à garder, ou assemblez-les si ce sont vraiment des parties.",
+    "instead": {
+      "keepOne": "Garder une copie à la place",
+      "join": "Les assembler à la place"
+    },
+    "subtitles": "sous-titres : {{count}}",
     "recent": "Corrections récentes",
     "blocked": {
       "readOnly": "Le dossier de la bibliothèque est en lecture seule pour Box Office.",

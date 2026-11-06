@@ -84,6 +84,10 @@ type job struct {
 	keep string
 }
 
+// Instead says, for parts that look like copies, to keep one instead of
+// joining them.
+const Instead = ActKeepOne
+
 func (s *Service) tools() (Tools, error) {
 	if s.Tools != nil {
 		return s.Tools()
@@ -141,6 +145,9 @@ func (s *Service) look(ctx context.Context, daily bool) {
 		s.status.Done, s.status.Total = done, total
 		s.mu.Unlock()
 	})
+	if err == nil {
+		s.inspect(ctx, &rep)
+	}
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.status.Looking = false
@@ -169,8 +176,9 @@ func (s *Service) look(ctx context.Context, daily bool) {
 var ErrNotFound = errors.New("there's no such problem now; look again")
 
 // Fix queues fixes for problems from the last look. keep says, for
-// problems with several copies, which to keep.
-func (s *Service) Fix(ids []string, keep map[string]string) error {
+// problems with several copies, which to keep; as, for parts, to keep one
+// (Instead) instead of joining them.
+func (s *Service) Fix(ids []string, keep, as map[string]string) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if s.report == nil {
@@ -188,6 +196,17 @@ func (s *Service) Fix(ids []string, keep map[string]string) error {
 		}
 		if slices.ContainsFunc(s.queue, func(j job) bool { return j.p.ID == id }) || s.status.Fixing != nil && s.status.Fixing.ID == id {
 			continue
+		}
+		if a := as[id]; a != "" && a != p.Fix.Action {
+			if a != Instead || p.Kind != Parts {
+				return fmt.Errorf("%s isn't a way to fix it", a)
+			}
+			f := *p.Fix
+			f.Action = ActKeepOne
+			if f.Keep == "" {
+				f.Keep = p.Files[0].Path
+			}
+			p.Fix = &f
 		}
 		jobs = append(jobs, job{p, keep[id]})
 	}

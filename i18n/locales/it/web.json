@@ -1832,6 +1832,12 @@
     "keeps": "tieni",
     "setsAside": "metti da parte",
     "remuxNote": "(una copia dei flussi, niente ricodificato)",
+    "copiesNote": "Ognuno dura quanto un film intero, quindi sembrano copie (un altro montaggio o un'altra qualità), non parti. Scegli quale tenere, oppure uniscili se sono davvero parti.",
+    "instead": {
+      "keepOne": "Tienine uno invece",
+      "join": "Uniscili invece"
+    },
+    "subtitles": "sottotitoli: {{count}}",
     "recent": "Correzioni recenti",
     "blocked": {
       "readOnly": "La cartella della libreria è di sola lettura per Box Office.",

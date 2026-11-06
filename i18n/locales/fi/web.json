@@ -1738,6 +1738,12 @@
     "keeps": "pidä",
     "setsAside": "siirrä sivuun",
     "remuxNote": "(kopio virroista, mitään ei koodata uudelleen)",
+    "copiesNote": "Jokainen näistä on kokonaisen elokuvan mittainen, joten ne näyttävät kopioilta (eri versio tai laatu), eivät osilta. Valitse säilytettävä tai yhdistä ne, jos ne todella ovat osia.",
+    "instead": {
+      "keepOne": "Säilytä yksi sen sijaan",
+      "join": "Yhdistä sen sijaan"
+    },
+    "subtitles": "tekstitykset: {{count}}",
     "recent": "Viimeisimmät korjaukset",
     "blocked": {
       "readOnly": "Kirjaston kansio on Box Officelle vain luku -tilassa.",
