@@ -2,9 +2,12 @@ package problems
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
+	"fmt"
 	"log/slog"
 	"slices"
+	"strings"
 	"sync"
 	"time"
 
@@ -19,13 +22,32 @@ type Service struct {
 	Log   *slog.Logger
 	// Tools finds FFmpeg; FindTools when nil.
 	Tools func() (Tools, error)
+	// Alert tells the admins what a daily look found that's new: the
+	// Problem files alert rule (internal/alerts). Nil sends nothing.
+	Alert func(ctx context.Context, title, message string)
 
 	mu      sync.Mutex
 	status  Status
 	report  *Report
 	queue   []job
 	working bool
+	next    time.Time
 }
+
+// Every is how often Box Office looks through the library by itself.
+const Every = 24 * time.Hour
+
+// firstWait is how long after starting the first look waits, so it
+// doesn't add to the work a start does.
+const firstWait = 10 * time.Minute
+
+// Settings: when the last look was, and which problems the admins have
+// been told about (or have seen, after a look of their own), so the daily
+// look only alerts about new ones, across restarts.
+const (
+	settingLookedAt = "problems:looked_at"
+	settingKnown    = "problems:known"
+)
 
 // Status is where the look and the fixes stand.
 type Status struct {
@@ -33,7 +55,9 @@ type Status struct {
 	Done     int        `json:"done"`
 	Total    int        `json:"total"`
 	LookedAt *time.Time `json:"lookedAt,omitempty"`
-	Error    string     `json:"error,omitempty"`
+	// Next is when Box Office looks again by itself.
+	Next  *time.Time `json:"next,omitempty"`
+	Error string     `json:"error,omitempty"`
 	// FFmpeg says whether disc images can be remuxed and parts joined.
 	FFmpeg bool `json:"ffmpeg"`
 	// Fixing is the fix being carried out, Queued the ones waiting.
@@ -78,6 +102,10 @@ func (s *Service) State() (Status, *Report) {
 	for _, j := range s.queue {
 		st.Queued = append(st.Queued, j.p.ID)
 	}
+	if !s.next.IsZero() {
+		n := s.next
+		st.Next = &n
+	}
 	st.Failed = slices.Clone(s.status.Failed)
 	if st.Failed == nil {
 		st.Failed = []Failure{}
@@ -92,6 +120,10 @@ func (s *Service) State() (Status, *Report) {
 // Look starts a look through the library, unless one is running. It
 // reports false when one already is.
 func (s *Service) Look(ctx context.Context) bool {
+	return s.start(ctx, false)
+}
+
+func (s *Service) start(ctx context.Context, daily bool) bool {
 	s.mu.Lock()
 	if s.status.Looking {
 		s.mu.Unlock()
@@ -99,11 +131,11 @@ func (s *Service) Look(ctx context.Context) bool {
 	}
 	s.status.Looking, s.status.Done, s.status.Total, s.status.Error = true, 0, 0, ""
 	s.mu.Unlock()
-	go s.look(context.WithoutCancel(ctx))
+	go s.look(context.WithoutCancel(ctx), daily)
 	return true
 }
 
-func (s *Service) look(ctx context.Context) {
+func (s *Service) look(ctx context.Context, daily bool) {
 	rep, err := Find(ctx, s.Store, func(done, total int) {
 		s.mu.Lock()
 		s.status.Done, s.status.Total = done, total
@@ -119,6 +151,12 @@ func (s *Service) look(ctx context.Context) {
 	}
 	now := time.Now().UTC()
 	s.status.LookedAt = &now
+	s.next = now.Add(Every)
+	news := s.remember(ctx, rep, now)
+	if daily && len(news) > 0 && s.Alert != nil {
+		title, msg := alertText(news, len(rep.Problems))
+		go s.Alert(context.WithoutCancel(ctx), title, msg)
+	}
 	// Fixes still to come keep their problems listed.
 	s.report = &rep
 	// Failures for problems no longer found are old news.
@@ -196,5 +234,114 @@ func (s *Service) work() {
 			}
 		}
 		s.mu.Unlock()
+	}
+}
+
+// remember saves when the look was and which problems it found, and
+// returns the ones no earlier look found.
+func (s *Service) remember(ctx context.Context, rep Report, at time.Time) []Problem {
+	var known []string
+	if v, _ := s.Store.Setting(ctx, settingKnown); v != "" {
+		json.Unmarshal([]byte(v), &known)
+	}
+	var news []Problem
+	ids := make([]string, 0, len(rep.Problems))
+	for _, p := range rep.Problems {
+		ids = append(ids, p.ID)
+		if !slices.Contains(known, p.ID) {
+			news = append(news, p)
+		}
+	}
+	b, _ := json.Marshal(ids)
+	if err := s.Store.SetSetting(ctx, settingKnown, string(b)); err != nil {
+		s.Log.Warn("problem files: couldn't save what the look found", "err", err)
+	}
+	if err := s.Store.SetSetting(ctx, settingLookedAt, at.Format(time.RFC3339)); err != nil {
+		s.Log.Warn("problem files: couldn't save when it looked", "err", err)
+	}
+	return news
+}
+
+// kindNames are the problem kinds as the alert says them.
+var kindNames = map[string][2]string{
+	Duplicate: {"title with more than one copy", "titles with more than one copy"},
+	Parts:     {"movie in parts", "movies in parts"},
+	DiscImage: {"disc image", "disc images"},
+	Untracked: {"copy Box Office doesn't know", "copies Box Office doesn't know"},
+	Missing:   {"missing file", "missing files"},
+	Naming:    {"name or folder to tidy", "names or folders to tidy"},
+	Unknown:   {"video that isn't an episode", "videos that aren't an episode"},
+	NotListed: {"folder or video not on the list", "folders or videos not on the list"},
+	Leftover:  {"leftover", "leftovers"},
+	EmptyDir:  {"empty folder", "empty folders"},
+}
+
+// alertText says what's new, by kind, in the order the page lists them.
+func alertText(news []Problem, all int) (string, string) {
+	count := map[string]int{}
+	var order []string
+	for _, p := range news {
+		if count[p.Kind] == 0 {
+			order = append(order, p.Kind)
+		}
+		count[p.Kind]++
+	}
+	var parts []string
+	for _, k := range order {
+		n := count[k]
+		name, ok := kindNames[k]
+		if !ok {
+			name = [2]string{k, k}
+		}
+		if n == 1 {
+			parts = append(parts, "1 "+name[0])
+		} else {
+			parts = append(parts, fmt.Sprintf("%d %s", n, name[1]))
+		}
+	}
+	title := "1 new problem file"
+	if len(news) != 1 {
+		title = fmt.Sprintf("%d new problem files", len(news))
+	}
+	msg := "Box Office's daily look through the library found " + strings.Join(parts, ", ") + "."
+	if all > len(news) {
+		msg += fmt.Sprintf(" %d in all.", all)
+	}
+	msg += " Nothing changes until you pick a fix under Settings → Problem files."
+	return title, msg
+}
+
+// Run looks through the library every day, the first time a while after
+// starting (or a day after the last look, if that's later), until ctx
+// ends. A look of the admin's own puts the next one a day after it.
+func (s *Service) Run(ctx context.Context) {
+	next := time.Now().Add(firstWait)
+	if v, _ := s.Store.Setting(ctx, settingLookedAt); v != "" {
+		if at, err := time.Parse(time.RFC3339, v); err == nil && at.Add(Every).After(next) {
+			next = at.Add(Every)
+		}
+	}
+	s.mu.Lock()
+	s.next = next
+	s.mu.Unlock()
+	t := time.NewTimer(time.Until(next))
+	defer t.Stop()
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		case <-t.C:
+		}
+		s.mu.Lock()
+		due := !s.next.After(time.Now())
+		if due {
+			s.next = time.Now().Add(Every)
+		}
+		wait := time.Until(s.next)
+		s.mu.Unlock()
+		if due {
+			s.start(ctx, true)
+		}
+		t.Reset(wait)
 	}
 }
