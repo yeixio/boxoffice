@@ -335,6 +335,21 @@ export type AlertWebhook = { id: string; kind: WebhookKind; name?: string; url?:
 export type AlertSettings = { email: AlertEmail; webhooks: AlertWebhook[]; rules: AlertRules; firing: Alert[]; history: Alert[]; links: boolean; forwarded: boolean }
 export type MetricsSettings = { on: boolean; token?: string; path: string }
 
+// ---- e-readers ----
+
+export type EreaderKind = 'kindle' | 'pocketbook' | 'other'
+export type Ereader = { id: string; name: string; kind: EreaderKind; address: string; auto: boolean }
+export type EreaderMail = { sameAsAlerts: boolean; host: string; port: number; security: 'starttls' | 'tls' | 'none'; username: string; password?: string; from: string; hasPassword?: boolean }
+export type EreaderSend = { id: number; deviceId: string; deviceName: string; bookId?: number; title: string; auto: boolean; error?: string; at: string }
+export type EreaderSettings = {
+  mail: EreaderMail
+  devices: Ereader[]
+  alertMail: { ready: boolean; host?: string; from?: string }
+  from: string
+  canConvert: boolean
+  history: EreaderSend[]
+}
+
 // ---- downloads ----
 
 export type DownloadStatus = 'queued' | 'downloading' | 'paused' | 'downloaded' | 'verifying' | 'repairing' | 'unpacking' | 'importing' | 'completed' | 'failed'
@@ -591,3 +606,46 @@ export type Book = {
 }
 export type AuthorDetail = Author & { bookList: Book[] }
 export type LookupAuthor = { key: string; name: string; born?: string; died?: string; topWork?: string; works?: number; photo?: string; id?: number }
+
+// ---- problem files ----
+
+export type ProblemKind = 'duplicate' | 'parts' | 'disc_image' | 'untracked' | 'missing' | 'naming' | 'unknown' | 'not_listed' | 'leftover' | 'empty'
+export type ProblemAction = 'rename' | 'set_aside' | 'keep_one' | 'record' | 'forget' | 'convert' | 'join' | 'remove_dirs'
+export type ProblemFile = { path: string; size: number; dir?: boolean; recorded?: boolean; episode?: string }
+export type ProblemMove = { from: string; to: string; folder?: boolean }
+export type LibProblem = {
+  id: string
+  kind: ProblemKind
+  root: string
+  title?: { kind: 'movie' | 'series'; id: number; name: string; year?: number; locked?: boolean }
+  detail?: string
+  files: ProblemFile[]
+  fix?: { action: ProblemAction; moves?: ProblemMove[]; paths?: string[]; keep?: string; output?: string; blocked?: 'read_only' | 'locked' | 'output_exists' }
+}
+export type ProblemRoot = { path: string; kind: 'movie' | 'series'; readable: boolean; writable: boolean; files: number }
+export type ProblemFixFile = { role: 'aside' | 'moved' | 'made' | 'record' | 'forgot' | 'removed_dir'; src: string; dest: string; size: number }
+export type ProblemFix = {
+  id: number
+  action: ProblemAction
+  title: string
+  root: string
+  state: 'waiting' | 'done' | 'undone'
+  createdAt: string
+  decidedAt?: string
+  files: ProblemFixFile[]
+}
+export type ProblemsState = {
+  status: {
+    looking: boolean
+    done: number
+    total: number
+    lookedAt?: string
+    error?: string
+    ffmpeg: boolean
+    fixing?: { id: string; action: ProblemAction; progress: number }
+    queued: string[]
+    failed: { id: string; error: string }[]
+  }
+  report: { roots: ProblemRoot[]; problems: LibProblem[] } | null
+  fixes: ProblemFix[]
+}

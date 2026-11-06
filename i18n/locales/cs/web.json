@@ -1860,5 +1860,179 @@
     "ebook": "E-kniha",
     "audiobook": "Audiokniha",
     "album": "Album"
+  },
+  "problems": {
+    "title": "Problémové soubory",
+    "sub": "Soubory ve složkách filmů a seriálů, které potřebují pozornost. Nic se nezmění, dokud nestisknete opravu, a originály čekají ve složce knihovny <code>.recycle/problem-files</code>, dokud je nesmažete nebo nevrátíte.",
+    "cardSub": "Najděte, co není na svém místě ve složkách filmů a seriálů: soubory, které nejsou na seznamu, nadbytečné kopie, obrazy disků, filmy po částech a nepořádné názvy, a opravte je, až si ověříte, co každá oprava udělá.",
+    "open": "Otevřít Problémové soubory",
+    "foundLast": "Nalezeno minule: {{count}}",
+    "waitingCount": "Čeká na vaše OK: {{count}}",
+    "look": "Hledat znovu",
+    "looking": "Procházení složek knihovny… {{done}}/{{total}}",
+    "lookedAt": "Prohledáno {{when}}.",
+    "never": "Box Office ještě nehledal.",
+    "none": "Není co dělat: vše je na svém místě.",
+    "unreadable": "Box Office nemůže číst {{path}}, nebo je prázdná (nepřipojená sdílená složka?), takže byla vynechána.",
+    "readOnly": "{{path}} je pro Box Office jen pro čtení, takže její obsah je vypsán, ale nedá se opravit.",
+    "noFFmpeg": "FFmpeg není nainstalován tam, kde běží Box Office, takže obrazy disků nelze remuxovat ani spojovat části.",
+    "fixAll": "Opravit všech {{count}}",
+    "fixSelected": "Opravit vybrané ({{count}})",
+    "pick": "Vybrat {{name}}",
+    "fixing": "Opravuje se…",
+    "queued": "Čeká, až přijde na řadu",
+    "failed": "Nepodařilo se opravit: {{error}}",
+    "recorded": "zapsáno",
+    "keepWhich": "Kterou kopii ponechat",
+    "keeps": "ponechat",
+    "setsAside": "odložit",
+    "remuxNote": "(kopie streamů, nic se nepřekódovává)",
+    "recent": "Nedávné opravy",
+    "blocked": {
+      "readOnly": "Složka knihovny je pro Box Office jen pro čtení.",
+      "locked": "Nesahat",
+      "outputExists": "Tam, kam by šel opravený soubor, už nějaký soubor je."
+    },
+    "detail": {
+      "outsideFolder": "mimo svou složku",
+      "folder": "jeho složka",
+      "show": "disk seriálu",
+      "notListed": "není na seznamu"
+    },
+    "act": {
+      "rename": "Přejmenovat",
+      "setAside": "Odložit",
+      "keepOne": "Ponechat jednu",
+      "record": "Zapsat jako kopii",
+      "forget": "Zapomenout",
+      "convert": "Remuxovat do MKV",
+      "join": "Spojit části",
+      "removeDirs": "Odstranit"
+    },
+    "did": {
+      "rename": "Přejmenováno",
+      "setAside": "Odloženo",
+      "keepOne": "Ponechána jedna kopie",
+      "record": "Zapsáno",
+      "forget": "Zapomenuto",
+      "convert": "Remuxováno",
+      "join": "Spojeno",
+      "removeDirs": "Odstraněno"
+    },
+    "state": {
+      "done": "Hotovo",
+      "undone": "Vráceno"
+    },
+    "kinds": {
+      "duplicate": {
+        "title": "Více než jedna kopie",
+        "hint": "Vyberte kopii, kterou chcete ponechat. Ostatní se odloží a ponechaná se zapíše jako kopie titulu."
+      },
+      "parts": {
+        "title": "Filmy po částech",
+        "hint": "Části pojmenované CD1, CD2, Part 1… se spojí do jednoho MKV bez překódování. Části se odloží, jakmile je nový soubor zkontrolován."
+      },
+      "discImage": {
+        "title": "Obrazy disků",
+        "hint": "Film z obrazu DVD nebo Blu-ray (jeho nejdelší titul) se zkopíruje do MKV bez překódování a obraz se odloží, jakmile je nový soubor zkontrolován. Disk seriálu nebo obraz, který nepatří žádnému titulu, lze jen odložit."
+      },
+      "untracked": {
+        "title": "Kopie, které Box Office nezná",
+        "hint": "Videa ve složce titulu, nebo volně a pojmenovaná podle titulu, která Box Office nezapsal. Oprava zapíše každé jako kopii titulu, přejmenovanou tak, jak Box Office věci pojmenovává."
+      },
+      "missing": {
+        "title": "Chybějící soubory",
+        "hint": "Box Office je má jako kopie titulů, ale z disku zmizely. Když je zapomenete, Box Office bude tituly znovu hledat."
+      },
+      "naming": {
+        "title": "Názvy a složky",
+        "hint": "Přejmenování na Název (Rok), epizody ve složkách sérií jako Název (Rok) - S01E02 - Epizoda. Titulky jdou s nimi. Názvy, které takto začínají a přidávají značky jako kvalitu, zůstanou, jak jsou."
+      },
+      "unknown": {
+        "title": "Videa, která nejsou epizodou",
+        "hint": "Videa ve složce seriálu, která nejsou pojmenovaná podle žádné z jeho epizod."
+      },
+      "notListed": {
+        "title": "Není na seznamu",
+        "hint": "Složky a videa, které nejsou žádným titulem ze seznamu. Přidejte je pomocí Skenovat u kořenové složky v Nastavení, nebo je odložte."
+      },
+      "leftover": {
+        "title": "Zbytky",
+        "hint": "Ukázky, programy, zástupci a to, co zbylo po stahování a archivech."
+      },
+      "empty": {
+        "title": "Prázdné složky",
+        "hint": "Složky, ve kterých nic není."
+      }
+    },
+    "waiting": {
+      "title": "Čeká na vaše OK",
+      "sub": "Originály, které oprava odložila, jsou ve složce knihovny <code>.recycle/problem-files</code>. Zůstanou tam, dokud je nadobro nesmažete nebo nevrátíte: vyprázdnění složek koše se jich netýká.",
+      "aside": "odloženo: {{count}} ({{size}})",
+      "asideOne": "odloženo: {{name}} ({{size}})",
+      "made": "nový soubor: {{name}}",
+      "moved": "přejmenováno: {{count}}",
+      "putBack": "Vrátit",
+      "deleteOriginals": "Smazat originály",
+      "ok": "Vypadá to dobře",
+      "confirmTitle": "Smazat originály nadobro?",
+      "confirmBody": "Tím se ze složky koše smažou odložené soubory ({{count}}, {{size}}). Nelze to vrátit.",
+      "cancel": "Zrušit",
+      "delete": "Smazat nadobro"
+    }
+  },
+  "ereaders": {
+    "title": "Posílat do čteček",
+    "intro": "Box Office může posílat e-knihy e-mailem do vašeho Kindlu, PocketBooku nebo jakékoli čtečky s vlastní e-mailovou adresou: samo, jakmile se každá stáhne, nebo ze stránky knihy.",
+    "guide": "Jak to nastavit",
+    "name": "Název",
+    "address": "E-mailová adresa čtečky",
+    "addressHint": "Její adresa Send to Kindle nebo Send-to-PocketBook. Níže je popsáno, kde ji najdete.",
+    "detected": "Adresa {{kind}}",
+    "otherKind": "Jiná čtečka",
+    "auto": "Posílat nové e-knihy samo",
+    "autoHint": "Každá e-kniha, kterou Box Office stáhne, se pošle do této čtečky, jakmile je v knihovně. Knihy, které už jsou na disku, se neposílají.",
+    "where": "Kde najdu adresu čtečky {{kind}}?",
+    "yourFrom": "adresa, ze které knihy chodí",
+    "kindleFormats": "Kindle přijímá e-mailem EPUB a PDF, ale ne AZW3 ani MOBI. Aby se před odesláním převedly na EPUB, přidejte do Box Office ebook-convert z Calibre (viz návod).",
+    "test": "Poslat testovací knihu",
+    "add": "Přidat čtečku",
+    "kobo": "Čtečky Kobo, Tolino a Boox nedokážou přijímat knihy e-mailem, takže do nich Box Office posílat nemůže.",
+    "sendFrom": "Jak se knihy posílají",
+    "sameAsAlerts": "Použít poštovní server z Stav → Upozornění",
+    "sameAsAlertsHint": "Knihy odcházejí přes {{host}}, stejně jako upozornění.",
+    "noAlertMail": "V Stav → Upozornění zatím není poštovní server. Nastavte ho tam, nebo ho zadejte níže.",
+    "setUpAlerts": "Nastavit e-mail v Stav → Upozornění",
+    "from": "Knihy chodí z",
+    "fromSameHint": "Nechte prázdné pro adresu, ze které chodí upozornění. Váš poštovní server vám musí dovolit z ní posílat.",
+    "fromHint": "Obvykle stejná jako uživatelské jméno. Váš poštovní server vám musí dovolit z ní posílat.",
+    "usernameHint": "U většiny poskytovatelů vaše e-mailová adresa. U Gmailu a iCloudu se server vyplní sám.",
+    "passwordHint": "U Gmailu a iCloudu heslo aplikace, ne vaše obvyklé. Viz kroky níže.",
+    "filledIn": "Vyplněno pro vašeho poskytovatele e-mailu.",
+    "mailWhere": "Kde to najdu?",
+    "approve": "Přidejte tuto adresu mezi schválené odesílatele čtečky, jinak knihy nepřijme:",
+    "recent": "Nedávno odesláno",
+    "sentTo": "{{title}} do {{reader}}",
+    "sentAuto": "{{title}} do {{reader}}, samo po stažení",
+    "failed": "Nepodařilo se odeslat",
+    "sent": "Odesláno do {{reader}}. Může trvat několik minut, než se objeví.",
+    "setUp": "Nastavit posílání e-knih do čtečky",
+    "sendTo": "Poslat do {{reader}}",
+    "help": {
+      "kindle1": "Na počítači otevřete stránku Amazonu Spravovat obsah a zařízení (amazon.com/myk nebo Amazon vaší země) a přihlaste se.",
+      "kindle2": "Otevřete Předvolby a pak Nastavení osobních dokumentů.",
+      "kindle3": "V části Nastavení e-mailu Send-to-Kindle zkopírujte adresu svého Kindlu (končí na @kindle.com) a vložte ji sem.",
+      "kindle4": "V části Seznam schválených e-mailů pro osobní dokumenty zvolte Přidat novou schválenou e-mailovou adresu a přidejte {{from}}.",
+      "kindle5": "Pošlete testovací knihu. Pokud Amazon napíše na {{from}} s žádostí o ověření, otevřete ten e-mail a zvolte Ověřit žádost.",
+      "pocketbook1": "Na PocketBooku otevřete Nastavení, pak Účty a synchronizace, pak Send-to-PocketBook.",
+      "pocketbook2": "Přihlaste se nebo si založte účet. Adresa čtečky končí na @pbsync.com: vložte ji sem.",
+      "pocketbook3": "Přidejte tam {{from}} mezi schválené odesílatele, nebo ho schvalte z e-mailu, který PocketBook pošle s první knihou.",
+      "other1": "V nastavení nebo nápovědě čtečky či čtecí aplikace najděte e-mailovou adresu, na kterou se posílají knihy.",
+      "other2": "Vložte ji sem a povolte {{from}} na ni posílat, pokud o to čtečka požádá.",
+      "mail1": "Gmail: jako uživatelské jméno zadejte adresu Gmailu a server se vyplní sám. V účtu Google zapněte dvoufázové ověření, pak na myaccount.google.com/apppasswords vytvořte heslo aplikace a vložte ho jako heslo.",
+      "mail2": "iCloud Mail: jako uživatelské jméno zadejte adresu iCloudu. Na account.apple.com v části Přihlášení a zabezpečení vytvořte heslo pro aplikaci a vložte ho jako heslo.",
+      "mail3": "Jiný poskytovatel: jeho nápověda uvádí server odchozí pošty (SMTP) a port. Obvykle 587 se STARTTLS, nebo 465 s TLS.",
+      "mail4": "Knihy chodí z adresy, ze které posíláte, takže tu schvalujete ve čtečce."
+    }
   }
 }

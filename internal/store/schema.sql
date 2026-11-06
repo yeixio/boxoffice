@@ -469,3 +469,45 @@ CREATE TABLE IF NOT EXISTS issues (
 	resolved_at BIGINT NOT NULL DEFAULT 0
 );
 CREATE INDEX IF NOT EXISTS issues_status ON issues (status, created_at);
+
+-- Ebooks sent to e-readers by email (Settings → Send to e-readers), so a
+-- book goes to each reader once and the admin can see what went where.
+CREATE TABLE IF NOT EXISTS ereader_sends (
+	id          INTEGER PRIMARY KEY AUTOINCREMENT,
+	device_id   TEXT NOT NULL,
+	device_name TEXT NOT NULL DEFAULT '',
+	book_id     BIGINT NOT NULL DEFAULT 0, -- 0 for a test
+	title       TEXT NOT NULL DEFAULT '',
+	auto        INTEGER NOT NULL DEFAULT 0, -- sent on its own after a download
+	error       TEXT NOT NULL DEFAULT '', -- why it couldn't go, if it didn't
+	sent_at     BIGINT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS ereader_sends_book ON ereader_sends (device_id, book_id);
+
+-- Problem files: what a fix on the Problem files page did, so it can be
+-- put back. A fix that sets originals aside waits for the admin to delete
+-- them for good or put them back; nothing it set aside is ever deleted
+-- without that.
+CREATE TABLE IF NOT EXISTS problem_fixes (
+	id         INTEGER PRIMARY KEY AUTOINCREMENT,
+	action     TEXT NOT NULL, -- rename, set_aside, keep_one, convert, join, record, forget
+	title      TEXT NOT NULL DEFAULT '', -- what it was about, for the list
+	root       TEXT NOT NULL,
+	state      TEXT NOT NULL DEFAULT 'waiting', -- waiting, done (originals deleted), undone (put back)
+	created_at BIGINT NOT NULL,
+	decided_at BIGINT NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS problem_fixes_state ON problem_fixes (state, created_at);
+
+CREATE TABLE IF NOT EXISTS problem_fix_files (
+	fix_id BIGINT NOT NULL REFERENCES problem_fixes(id) ON DELETE CASCADE,
+	role   TEXT NOT NULL, -- aside (an original, now in .recycle), moved (renamed or moved), made (a new file a fix wrote)
+	src    TEXT NOT NULL, -- where it was
+	dest   TEXT NOT NULL, -- where it is now
+	size   BIGINT NOT NULL DEFAULT 0,
+	-- The record it was, so putting it back restores it: media_files' kind and owner, or '' and 0.
+	file_kind  TEXT NOT NULL DEFAULT '',
+	file_owner BIGINT NOT NULL DEFAULT 0,
+	quality    INTEGER NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS problem_fix_files_fix ON problem_fix_files (fix_id);

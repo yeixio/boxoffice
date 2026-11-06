@@ -1672,5 +1672,179 @@
     "ebook": "E-kirja",
     "audiobook": "Äänikirja",
     "album": "Albumi"
+  },
+  "problems": {
+    "title": "Ongelmatiedostot",
+    "sub": "Elokuva- ja sarjakansioiden tiedostot, jotka kaipaavat huomiota. Mikään ei muutu ennen kuin painat korjausta, ja alkuperäiset odottavat kirjaston kansiossa <code>.recycle/problem-files</code>, kunnes poistat ne tai palautat ne.",
+    "cardSub": "Löydä, mikä on väärässä paikassa elokuva- ja sarjakansioissa: tiedostot, jotka eivät ole listalla, ylimääräiset kopiot, levykuvat, osiin jaetut elokuvat ja sekavat nimet, ja korjaa ne tarkistettuasi, mitä kukin korjaus tekee.",
+    "open": "Avaa Ongelmatiedostot",
+    "foundLast": "Löytyi viime kerralla: {{count}}",
+    "waitingCount": "Odottaa hyväksyntääsi: {{count}}",
+    "look": "Etsi uudelleen",
+    "looking": "Käydään läpi kirjaston kansioita… {{done}}/{{total}}",
+    "lookedAt": "Etsitty {{when}}.",
+    "never": "Box Office ei ole vielä etsinyt.",
+    "none": "Ei mitään tehtävää: kaikki on paikallaan.",
+    "unreadable": "Box Office ei pysty lukemaan kansiota {{path}}, tai se on tyhjä (liittämätön jako?), joten se jätettiin pois.",
+    "readOnly": "{{path}} on Box Officelle vain luku -tilassa, joten sen sisältö näytetään, mutta sitä ei voi korjata.",
+    "noFFmpeg": "FFmpegiä ei ole asennettu sinne, missä Box Office toimii, joten levykuvia ei voi remuxata eikä osia yhdistää.",
+    "fixAll": "Korjaa kaikki {{count}}",
+    "fixSelected": "Korjaa valitut {{count}}",
+    "pick": "Valitse {{name}}",
+    "fixing": "Korjataan…",
+    "queued": "Odottaa vuoroaan",
+    "failed": "Ei voitu korjata: {{error}}",
+    "recorded": "kirjattu",
+    "keepWhich": "Mikä kopio pidetään",
+    "keeps": "pidä",
+    "setsAside": "siirrä sivuun",
+    "remuxNote": "(kopio virroista, mitään ei koodata uudelleen)",
+    "recent": "Viimeisimmät korjaukset",
+    "blocked": {
+      "readOnly": "Kirjaston kansio on Box Officelle vain luku -tilassa.",
+      "locked": "Älä koske",
+      "outputExists": "Korjatun tiedoston paikalla on jo tiedosto."
+    },
+    "detail": {
+      "outsideFolder": "säilytetään kansionsa ulkopuolella",
+      "folder": "sen kansio",
+      "show": "sarjan levy",
+      "notListed": "ei listalla"
+    },
+    "act": {
+      "rename": "Nimeä uudelleen",
+      "setAside": "Siirrä sivuun",
+      "keepOne": "Pidä yksi",
+      "record": "Kirjaa sen kopioksi",
+      "forget": "Unohda se",
+      "convert": "Remuxaa MKV:ksi",
+      "join": "Yhdistä osat",
+      "removeDirs": "Poista"
+    },
+    "did": {
+      "rename": "Nimetty uudelleen",
+      "setAside": "Siirretty sivuun",
+      "keepOne": "Pidettiin yksi kopio",
+      "record": "Kirjattu",
+      "forget": "Unohdettu",
+      "convert": "Remuxattu",
+      "join": "Yhdistetty",
+      "removeDirs": "Poistettu"
+    },
+    "state": {
+      "done": "Valmis",
+      "undone": "Palautettu"
+    },
+    "kinds": {
+      "duplicate": {
+        "title": "Useampi kuin yksi kopio",
+        "hint": "Valitse pidettävä kopio. Muut siirretään sivuun, ja pidetty kirjataan nimikkeen kopioksi."
+      },
+      "parts": {
+        "title": "Osiin jaetut elokuvat",
+        "hint": "Osat, joiden nimi on CD1, CD2, Part 1…, yhdistetään yhdeksi MKV:ksi koodaamatta uudelleen. Osat siirretään sivuun, kun uusi tiedosto on tarkistettu."
+      },
+      "discImage": {
+        "title": "Levykuvat",
+        "hint": "DVD- tai Blu-ray-levykuvan elokuva (sen pisin nimike) kopioidaan MKV:hen koodaamatta uudelleen, ja levykuva siirretään sivuun, kun uusi tiedosto on tarkistettu. Sarjan levyn tai levykuvan, joka ei kuulu millekään nimikkeelle, voi vain siirtää sivuun."
+      },
+      "untracked": {
+        "title": "Kopiot, joita Box Office ei tunne",
+        "hint": "Videot nimikkeen kansiossa, tai irrallaan ja nimikkeen mukaan nimettyinä, joita Box Office ei ole kirjannut. Korjaus kirjaa kunkin nimikkeen kopioksi ja nimeää sen Box Officen tapaan."
+      },
+      "missing": {
+        "title": "Puuttuvat tiedostot",
+        "hint": "Box Officella nämä ovat nimikkeiden kopioina, mutta ne ovat kadonneet levyltä. Kun unohdat ne, Box Office etsii nimikkeitä uudelleen."
+      },
+      "naming": {
+        "title": "Nimet ja kansiot",
+        "hint": "Nimetään muotoon Nimi (Vuosi), jaksot kausikansioihin muodossa Nimi (Vuosi) - S01E02 - Jakso. Tekstitykset seuraavat mukana. Nimet, jotka alkavat näin ja lisäävät merkintöjä kuten laadun, jätetään ennalleen."
+      },
+      "unknown": {
+        "title": "Videot, jotka eivät ole jakso",
+        "hint": "Sarjan kansion videot, joita ei ole nimetty minkään sen jakson mukaan."
+      },
+      "notListed": {
+        "title": "Ei listalla",
+        "hint": "Kansiot ja videot, jotka eivät ole mikään listan nimike. Lisää ne Skannaa-toiminnolla juurikansion kohdalla Asetuksissa, tai siirrä ne sivuun."
+      },
+      "leftover": {
+        "title": "Jäänteet",
+        "hint": "Näytteet, ohjelmat, pikakuvakkeet ja latausten ja arkistojen jäänteet."
+      },
+      "empty": {
+        "title": "Tyhjät kansiot",
+        "hint": "Kansiot, joissa ei ole mitään."
+      }
+    },
+    "waiting": {
+      "title": "Odottaa hyväksyntääsi",
+      "sub": "Korjauksen sivuun siirtämät alkuperäiset ovat kirjaston kansiossa <code>.recycle/problem-files</code>. Ne pysyvät siellä, kunnes poistat ne lopullisesti tai palautat ne: roskakorikansioiden tyhjennys ei koske niihin.",
+      "aside": "sivuun siirretty: {{count}} ({{size}})",
+      "asideOne": "sivuun siirretty: {{name}} ({{size}})",
+      "made": "uusi tiedosto: {{name}}",
+      "moved": "nimetty uudelleen: {{count}}",
+      "putBack": "Palauta",
+      "deleteOriginals": "Poista alkuperäiset",
+      "ok": "Näyttää hyvältä",
+      "confirmTitle": "Poistetaanko alkuperäiset lopullisesti?",
+      "confirmBody": "Tämä poistaa {{count}} sivuun siirrettyä tiedostoa ({{size}}) roskakorikansiosta. Toimintoa ei voi perua.",
+      "cancel": "Peruuta",
+      "delete": "Poista lopullisesti"
+    }
+  },
+  "ereaders": {
+    "title": "Lähetä lukulaitteille",
+    "intro": "Box Office voi lähettää e-kirjoja sähköpostilla Kindleen, PocketBookiin tai mihin tahansa lukulaitteeseen, jolla on oma sähköpostiosoite: itsestään heti kun kirja on ladattu, tai kirjan sivulta.",
+    "guide": "Näin otat sen käyttöön",
+    "name": "Nimi",
+    "address": "Lukulaitteen sähköpostiosoite",
+    "addressHint": "Sen Send to Kindle- tai Send-to-PocketBook-osoite. Alla kerrotaan, mistä sen löytää.",
+    "detected": "{{kind}}-osoite",
+    "otherKind": "Muu lukulaite",
+    "auto": "Lähetä uudet e-kirjat itsestään",
+    "autoHint": "Jokainen Box Officen lataama e-kirja lähetetään tälle lukulaitteelle heti, kun se on kirjastossa. Levyllä jo olevia kirjoja ei lähetetä.",
+    "where": "Mistä löydän laitteen {{kind}} osoitteen?",
+    "yourFrom": "osoite, josta kirjat tulevat",
+    "kindleFormats": "Kindle ottaa sähköpostilla vastaan EPUB- ja PDF-tiedostoja, mutta ei AZW3- tai MOBI-tiedostoja. Lisää Box Officeen Calibren ebook-convert, niin ne muunnetaan EPUBiksi ennen lähetystä (katso ohje).",
+    "test": "Lähetä testikirja",
+    "add": "Lisää lukulaite",
+    "kobo": "Kobo-, Tolino- ja Boox-lukulaitteet eivät voi vastaanottaa kirjoja sähköpostilla, joten Box Office ei voi lähettää niille.",
+    "sendFrom": "Miten kirjat lähetetään",
+    "sameAsAlerts": "Käytä kohdan Kunto → Hälytykset postipalvelinta",
+    "sameAsAlertsHint": "Kirjat lähtevät palvelimen {{host}} kautta, kuten hälytykset.",
+    "noAlertMail": "Kohdassa Kunto → Hälytykset ei ole vielä postipalvelinta. Määritä se siellä tai kirjoita se alle.",
+    "setUpAlerts": "Määritä sähköposti kohdassa Kunto → Hälytykset",
+    "from": "Kirjat tulevat osoitteesta",
+    "fromSameHint": "Jätä tyhjäksi, niin käytetään hälytysten osoitetta. Postipalvelimesi täytyy sallia lähettäminen tällä osoitteella.",
+    "fromHint": "Yleensä sama kuin käyttäjänimi. Postipalvelimesi täytyy sallia lähettäminen tällä osoitteella.",
+    "usernameHint": "Useimmilla palveluntarjoajilla sähköpostiosoitteesi. Gmaililla ja iCloudilla palvelin täyttyy itsestään.",
+    "passwordHint": "Gmailissa ja iCloudissa sovellussalasana, ei tavallinen salasanasi. Katso ohjeet alta.",
+    "filledIn": "Täytetty sähköpostipalvelusi mukaan.",
+    "mailWhere": "Mistä löydän nämä?",
+    "approve": "Lisää tämä osoite lukulaitteesi hyväksyttyihin lähettäjiin, muuten se ei ota kirjoja vastaan:",
+    "recent": "Äskettäin lähetetyt",
+    "sentTo": "{{title}} → {{reader}}",
+    "sentAuto": "{{title}} → {{reader}}, itsestään latauksen jälkeen",
+    "failed": "Lähettäminen ei onnistunut",
+    "sent": "Lähetetty laitteelle {{reader}}. Sen näkymiseen voi mennä muutama minuutti.",
+    "setUp": "Määritä e-kirjojen lähettäminen lukulaitteellesi",
+    "sendTo": "Lähetä: {{reader}}",
+    "help": {
+      "kindle1": "Mene tietokoneella Amazonin Hallinnoi sisältöä ja laitteita -sivulle (amazon.com/myk tai maasi Amazon-sivusto) ja kirjaudu sisään.",
+      "kindle2": "Avaa Asetukset ja sitten Henkilökohtaisten asiakirjojen asetukset.",
+      "kindle3": "Kopioi kohdasta Send-to-Kindle-sähköpostiasetukset Kindlesi osoite (se päättyy @kindle.com) ja liitä se tähän.",
+      "kindle4": "Valitse kohdasta Hyväksyttyjen henkilökohtaisten asiakirjojen sähköpostiosoitteiden luettelo Lisää uusi hyväksytty sähköpostiosoite ja lisää {{from}}.",
+      "kindle5": "Lähetä testikirja. Jos Amazon pyytää osoitteeseen {{from}} lähettämässään viestissä vahvistusta, avaa viesti ja valitse Vahvista pyyntö.",
+      "pocketbook1": "Avaa PocketBookissa Asetukset, sitten Tilit ja synkronointi, sitten Send-to-PocketBook.",
+      "pocketbook2": "Kirjaudu sisään tai luo tili. Lukulaitteesi osoite päättyy @pbsync.com: liitä se tähän.",
+      "pocketbook3": "Lisää {{from}} siellä hyväksyttyihin lähettäjiin, tai hyväksy se viestistä, jonka PocketBook lähettää ensimmäisen kirjan saapuessa.",
+      "other1": "Etsi lukulaitteesi tai lukusovelluksesi asetuksista tai ohjeista sähköpostiosoite, johon kirjoja voi lähettää.",
+      "other2": "Liitä se tähän ja salli osoitteen {{from}} lähettää sinne, jos lukulaite pyytää.",
+      "mail1": "Gmail: kirjoita Gmail-osoitteesi käyttäjänimeksi, niin palvelin täyttyy itsestään. Ota kaksivaiheinen vahvistus käyttöön Google-tililläsi, luo sitten sovellussalasana osoitteessa myaccount.google.com/apppasswords ja liitä se salasanaksi.",
+      "mail2": "iCloud Mail: kirjoita iCloud-osoitteesi käyttäjänimeksi. Luo sovelluskohtainen salasana osoitteessa account.apple.com kohdassa Kirjautuminen ja suojaus ja liitä se salasanaksi.",
+      "mail3": "Muu palveluntarjoaja: sen ohjesivuilla kerrotaan lähtevän postin (SMTP) palvelin ja portti. Yleensä 587 ja STARTTLS tai 465 ja TLS.",
+      "mail4": "Kirjat tulevat osoitteesta, jolla lähetät, joten se on se, joka hyväksytään lukulaitteessa."
+    }
   }
 }

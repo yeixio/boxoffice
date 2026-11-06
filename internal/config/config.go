@@ -36,6 +36,10 @@ type Config struct {
 	// OpenLibrary is another Open Library to look books up on, in place
 	// of openlibrary.org; BOXOFFICE_OPENLIBRARY_URL.
 	OpenLibrary string
+	// EbookConvert is Calibre's ebook-convert, to turn ebooks an e-reader
+	// won't take by email into EPUB; BOXOFFICE_EBOOK_CONVERT. Empty looks
+	// for it on the PATH.
+	EbookConvert string
 	// Announce tells the home network Box Office is here, so Matinee can
 	// find it; BOXOFFICE_ANNOUNCE=false turns it off.
 	Announce bool
@@ -48,18 +52,19 @@ func Load(args []string) (Config, error) {
 
 func load(args []string, env func(string) string) (Config, error) {
 	c := Config{
-		Addr:        cmp.Or(env("BOXOFFICE_ADDR"), ":7272"),
-		DataDir:     cmp.Or(env("BOXOFFICE_DATA_DIR"), defaultDataDir()),
-		DatabaseURL: env("BOXOFFICE_DATABASE_URL"),
-		Downloads:   env("BOXOFFICE_DOWNLOADS_DIR"),
-		TMDBKey:     cmp.Or(env("BOXOFFICE_TMDB_KEY"), DefaultTMDBKey),
-		APIKey:      env("BOXOFFICE_API_KEY"),
-		LogFormat:   cmp.Or(env("BOXOFFICE_LOG_FORMAT"), "text"),
-		Debug:       env("BOXOFFICE_DEBUG") != "",
-		Announce:    !off(env("BOXOFFICE_ANNOUNCE")),
-		Refresh:     12 * time.Hour,
-		MusicBrainz: strings.TrimRight(env("BOXOFFICE_MUSICBRAINZ_URL"), "/"),
-		OpenLibrary: strings.TrimRight(env("BOXOFFICE_OPENLIBRARY_URL"), "/"),
+		Addr:         cmp.Or(env("BOXOFFICE_ADDR"), ":7272"),
+		DataDir:      cmp.Or(env("BOXOFFICE_DATA_DIR"), defaultDataDir()),
+		DatabaseURL:  env("BOXOFFICE_DATABASE_URL"),
+		Downloads:    env("BOXOFFICE_DOWNLOADS_DIR"),
+		TMDBKey:      cmp.Or(env("BOXOFFICE_TMDB_KEY"), DefaultTMDBKey),
+		APIKey:       env("BOXOFFICE_API_KEY"),
+		LogFormat:    cmp.Or(env("BOXOFFICE_LOG_FORMAT"), "text"),
+		Debug:        env("BOXOFFICE_DEBUG") != "",
+		Announce:     !off(env("BOXOFFICE_ANNOUNCE")),
+		Refresh:      12 * time.Hour,
+		MusicBrainz:  strings.TrimRight(env("BOXOFFICE_MUSICBRAINZ_URL"), "/"),
+		OpenLibrary:  strings.TrimRight(env("BOXOFFICE_OPENLIBRARY_URL"), "/"),
+		EbookConvert: env("BOXOFFICE_EBOOK_CONVERT"),
 	}
 	if v := env("BOXOFFICE_REFRESH_EVERY"); v != "" {
 		d, err := time.ParseDuration(v)

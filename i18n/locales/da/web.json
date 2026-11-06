@@ -1672,5 +1672,179 @@
     "ebook": "E-bog",
     "audiobook": "Lydbog",
     "album": "Album"
+  },
+  "problems": {
+    "title": "Problemfiler",
+    "sub": "Filer i film- og seriemapperne, der trænger til en hånd. Intet ændres, før du trykker på en rettelse, og originalerne venter i bibliotekets mappe <code>.recycle/problem-files</code>, til du sletter dem eller lægger dem tilbage.",
+    "cardSub": "Find det, der ikke er på sin plads i film- og seriemapperne: filer, der ikke er på listen, ekstra kopier, diskaftryk, film i dele og rodede navne, og ret dem, når du har set, hvad hver rettelse gør.",
+    "open": "Åbn Problemfiler",
+    "foundLast": "Fundet sidst: {{count}}",
+    "waitingCount": "Venter på dit OK: {{count}}",
+    "look": "Kig igen",
+    "looking": "Gennemgår biblioteksmapperne… {{done}}/{{total}}",
+    "lookedAt": "Kiggede {{when}}.",
+    "never": "Box Office har ikke kigget endnu.",
+    "none": "Intet at gøre: alt er, hvor det skal være.",
+    "unreadable": "Box Office kan ikke læse {{path}}, eller den er tom (en deling, der ikke er monteret?), så den blev udeladt.",
+    "readOnly": "{{path}} er skrivebeskyttet for Box Office, så indholdet vises, men kan ikke rettes.",
+    "noFFmpeg": "FFmpeg er ikke installeret, hvor Box Office kører, så diskaftryk kan ikke remuxes, og dele kan ikke samles.",
+    "fixAll": "Ret alle {{count}}",
+    "fixSelected": "Ret de {{count}} valgte",
+    "pick": "Vælg {{name}}",
+    "fixing": "Retter…",
+    "queued": "Venter på sin tur",
+    "failed": "Kunne ikke rette: {{error}}",
+    "recorded": "registreret",
+    "keepWhich": "Hvilken kopi der skal beholdes",
+    "keeps": "behold",
+    "setsAside": "læg til side",
+    "remuxNote": "(en kopi af strømmene, intet omkodet)",
+    "recent": "Seneste rettelser",
+    "blocked": {
+      "readOnly": "Biblioteksmappen er skrivebeskyttet for Box Office.",
+      "locked": "Rør ikke",
+      "outputExists": "Der ligger allerede en fil, hvor den rettede skulle hen."
+    },
+    "detail": {
+      "outsideFolder": "ligger uden for sin mappe",
+      "folder": "dens mappe",
+      "show": "en series disk",
+      "notListed": "ikke på listen"
+    },
+    "act": {
+      "rename": "Omdøb",
+      "setAside": "Læg til side",
+      "keepOne": "Behold én",
+      "record": "Registrér som dens kopi",
+      "forget": "Glem den",
+      "convert": "Remux til MKV",
+      "join": "Saml delene",
+      "removeDirs": "Fjern"
+    },
+    "did": {
+      "rename": "Omdøbt",
+      "setAside": "Lagt til side",
+      "keepOne": "Beholdt én kopi",
+      "record": "Registreret",
+      "forget": "Glemt",
+      "convert": "Remuxet",
+      "join": "Samlet",
+      "removeDirs": "Fjernet"
+    },
+    "state": {
+      "done": "Færdig",
+      "undone": "Lagt tilbage"
+    },
+    "kinds": {
+      "duplicate": {
+        "title": "Mere end én kopi",
+        "hint": "Vælg den kopi, du vil beholde. De andre lægges til side, og den beholdte registreres som titlens kopi."
+      },
+      "parts": {
+        "title": "Film i dele",
+        "hint": "Dele med navne som CD1, CD2, Part 1… samles til én MKV uden omkodning. Delene lægges til side, når den nye fil er tjekket."
+      },
+      "discImage": {
+        "title": "Diskaftryk",
+        "hint": "Filmen på et DVD- eller Blu-ray-aftryk (dens længste titel) kopieres til en MKV uden omkodning, og aftrykket lægges til side, når den nye fil er tjekket. En series disk eller et aftryk, der ikke hører til nogen titel, kan kun lægges til side."
+      },
+      "untracked": {
+        "title": "Kopier, Box Office ikke kender",
+        "hint": "Videoer i en titels mappe, eller løse og opkaldt efter en titel, som Box Office ikke har registreret. Rettelsen registrerer hver som titlens kopi, omdøbt på Box Office' måde."
+      },
+      "missing": {
+        "title": "Manglende filer",
+        "hint": "Box Office har disse som titlers kopier, men de er væk fra disken. Glemmer du dem, leder Box Office efter titlerne igen."
+      },
+      "naming": {
+        "title": "Navne og mapper",
+        "hint": "Omdøbes til Titel (År), med afsnit i sæsonmapper som Titel (År) - S01E02 - Afsnit. Undertekster følger med. Navne, der begynder sådan og tilføjer mærker som kvaliteten, forbliver som de er."
+      },
+      "unknown": {
+        "title": "Videoer, der ikke er et afsnit",
+        "hint": "Videoer i en series mappe, der ikke er opkaldt efter et af dens afsnit."
+      },
+      "notListed": {
+        "title": "Ikke på listen",
+        "hint": "Mapper og videoer, der ikke er nogen titel på listen. Tilføj dem med Scan ved rodmappen i Indstillinger, eller læg dem til side."
+      },
+      "leftover": {
+        "title": "Rester",
+        "hint": "Smagsprøver, programmer, genveje og det, der er tilbage af downloads og arkiver."
+      },
+      "empty": {
+        "title": "Tomme mapper",
+        "hint": "Mapper uden noget i."
+      }
+    },
+    "waiting": {
+      "title": "Venter på dit OK",
+      "sub": "Originaler, som en rettelse har lagt til side, ligger i bibliotekets mappe <code>.recycle/problem-files</code>. De bliver der, til du sletter dem for altid eller lægger dem tilbage: tømning af papirkurvsmapperne rører dem ikke.",
+      "aside": "lagt til side: {{count}} ({{size}})",
+      "asideOne": "lagt til side: {{name}} ({{size}})",
+      "made": "ny fil: {{name}}",
+      "moved": "omdøbt: {{count}}",
+      "putBack": "Læg tilbage",
+      "deleteOriginals": "Slet originaler",
+      "ok": "Ser godt ud",
+      "confirmTitle": "Slet originalerne for altid?",
+      "confirmBody": "Dette sletter {{count}} filer lagt til side ({{size}}) fra papirkurvsmappen. Det kan ikke fortrydes.",
+      "cancel": "Annullér",
+      "delete": "Slet for altid"
+    }
+  },
+  "ereaders": {
+    "title": "Send til e-bogslæsere",
+    "intro": "Box Office kan sende e-bøger med e-mail til din Kindle, din PocketBook eller enhver læser med sin egen e-mailadresse: af sig selv, så snart hver bog er hentet, eller fra en bogs side.",
+    "guide": "Sådan sætter du det op",
+    "name": "Navn",
+    "address": "Læserens e-mailadresse",
+    "addressHint": "Dens Send to Kindle- eller Send-to-PocketBook-adresse. Herunder står, hvor du finder den.",
+    "detected": "{{kind}}-adresse",
+    "otherKind": "Anden e-bogslæser",
+    "auto": "Send nye e-bøger af sig selv",
+    "autoHint": "Hver e-bog, Box Office henter, sendes til denne læser, så snart den er i biblioteket. Bøger, der allerede er på disken, sendes ikke.",
+    "where": "Hvor finder jeg adressen til en {{kind}}?",
+    "yourFrom": "adressen, bøgerne kommer fra",
+    "kindleFormats": "Kindle tager imod EPUB og PDF med e-mail, men ikke AZW3 eller MOBI. Tilføj Calibres ebook-convert til Box Office for at få dem lavet om til EPUB, før de sendes (se vejledningen).",
+    "test": "Send en testbog",
+    "add": "Tilføj en e-bogslæser",
+    "kobo": "Kobo-, Tolino- og Boox-læsere kan ikke modtage bøger med e-mail, så Box Office kan ikke sende til dem.",
+    "sendFrom": "Sådan sendes bøger",
+    "sameAsAlerts": "Brug mailserveren fra Tilstand → Advarsler",
+    "sameAsAlertsHint": "Bøger sendes via {{host}}, ligesom advarsler.",
+    "noAlertMail": "Der er ingen mailserver under Tilstand → Advarsler endnu. Sæt en op der, eller indtast en herunder.",
+    "setUpAlerts": "Sæt e-mail op under Tilstand → Advarsler",
+    "from": "Bøger kommer fra",
+    "fromSameHint": "Lad stå tomt for at bruge den adresse, advarslerne kommer fra. Din mailserver skal lade dig sende som den.",
+    "fromHint": "Normalt det samme som brugernavnet. Din mailserver skal lade dig sende som den.",
+    "usernameHint": "Din e-mailadresse hos de fleste udbydere. For Gmail og iCloud udfyldes serveren for dig.",
+    "passwordHint": "For Gmail og iCloud en app-adgangskode, ikke din sædvanlige. Se trinnene herunder.",
+    "filledIn": "Udfyldt for din e-mailudbyder.",
+    "mailWhere": "Hvor finder jeg det?",
+    "approve": "Tilføj denne adresse til læserens godkendte afsendere, ellers tager den ikke imod bøgerne:",
+    "recent": "Sendt for nylig",
+    "sentTo": "{{title}} til {{reader}}",
+    "sentAuto": "{{title}} til {{reader}}, af sig selv efter download",
+    "failed": "Kunne ikke sendes",
+    "sent": "Sendt til {{reader}}. Der kan gå et par minutter, før den dukker op.",
+    "setUp": "Sæt afsendelse af e-bøger til din e-bogslæser op",
+    "sendTo": "Send til {{reader}}",
+    "help": {
+      "kindle1": "Gå på en computer til Amazons side Administrer dit indhold og dine enheder (amazon.com/myk eller Amazon-siden for dit land), og log ind.",
+      "kindle2": "Åbn Indstillinger og derefter Indstillinger for personlige dokumenter.",
+      "kindle3": "Under E-mailindstillinger for Send-to-Kindle kopierer du din Kindles adresse (den ender på @kindle.com) og indsætter den her.",
+      "kindle4": "Under Liste over godkendte e-mailadresser til personlige dokumenter vælger du Tilføj en ny godkendt e-mailadresse og tilføjer {{from}}.",
+      "kindle5": "Send en testbog. Hvis Amazon skriver til {{from}} og beder dig bekræfte, så åbn den e-mail og vælg Bekræft anmodning.",
+      "pocketbook1": "Åbn Indstillinger på din PocketBook, så Konti og synkronisering, så Send-to-PocketBook.",
+      "pocketbook2": "Log ind, eller opret en konto. Læserens adresse ender på @pbsync.com: indsæt den her.",
+      "pocketbook3": "Tilføj {{from}} til de godkendte afsendere der, eller godkend den fra den e-mail, PocketBook sender, når den første bog kommer.",
+      "other1": "Find den e-mailadresse, der tager imod bøger, i indstillingerne eller hjælpen til din læser eller læseapp.",
+      "other2": "Indsæt den her, og lad {{from}} sende til den, hvis læseren beder om det.",
+      "mail1": "Gmail: skriv din Gmail-adresse som brugernavn, så udfyldes serveren af sig selv. Slå totrinsbekræftelse til på din Google-konto, opret så en app-adgangskode på myaccount.google.com/apppasswords, og indsæt den som adgangskode.",
+      "mail2": "iCloud Mail: skriv din iCloud-adresse som brugernavn. Opret en appspecifik adgangskode på account.apple.com under Log ind og sikkerhed, og indsæt den som adgangskode.",
+      "mail3": "Anden udbyder: hjælpesiderne nævner den udgående server (SMTP) og porten. Normalt 587 med STARTTLS eller 465 med TLS.",
+      "mail4": "Bøger kommer fra den adresse, du sender som, så det er den, du godkender på læseren."
+    }
   }
 }

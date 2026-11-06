@@ -1578,5 +1578,179 @@
     "ebook": "E-buku",
     "audiobook": "Buku audio",
     "album": "Album"
+  },
+  "problems": {
+    "title": "Fail bermasalah",
+    "sub": "Fail dalam folder pustaka filem dan rancangan TV yang perlu dibetulkan. Tiada apa yang berubah sehingga anda menekan pembetulan, dan fail asal menunggu dalam folder <code>.recycle/problem-files</code> pustaka sehingga anda memadamnya atau memulangkannya.",
+    "cardSub": "Cari yang tidak kena pada tempatnya dalam folder pustaka filem dan rancangan TV: fail yang tiada dalam senarai, salinan berlebihan, imej cakera, filem yang berbahagian dan nama yang bersepah, kemudian betulkan selepas anda menyemak apa yang dilakukan setiap pembetulan.",
+    "open": "Buka Fail bermasalah",
+    "foundLast": "Ditemui kali terakhir: {{count}}",
+    "waitingCount": "Menunggu kelulusan anda: {{count}}",
+    "look": "Semak semula",
+    "looking": "Menyemak folder pustaka… {{done}}/{{total}}",
+    "lookedAt": "Disemak {{when}}.",
+    "never": "Box Office belum menyemak.",
+    "none": "Tiada apa yang perlu dibetulkan: semuanya di tempat yang betul.",
+    "unreadable": "Box Office tidak dapat membaca {{path}}, atau ia kosong (share yang tidak dilekapkan?), jadi ia ditinggalkan.",
+    "readOnly": "{{path}} baca sahaja bagi Box Office, jadi kandungannya disenaraikan tetapi tidak boleh dibetulkan.",
+    "noFFmpeg": "FFmpeg tidak dipasang di tempat Box Office berjalan, jadi imej cakera tidak boleh di-remux dan bahagian tidak boleh dicantumkan.",
+    "fixAll": "Betulkan kesemua {{count}}",
+    "fixSelected": "Betulkan {{count}} yang dipilih",
+    "pick": "Pilih {{name}}",
+    "fixing": "Membetulkan…",
+    "queued": "Menunggu giliran",
+    "failed": "Tidak dapat dibetulkan: {{error}}",
+    "recorded": "direkodkan",
+    "keepWhich": "Salinan mana yang disimpan",
+    "keeps": "simpan",
+    "setsAside": "diketepikan",
+    "remuxNote": "(salinan strim, tiada pengekodan semula)",
+    "recent": "Pembetulan terkini",
+    "blocked": {
+      "readOnly": "Folder pustaka baca sahaja bagi Box Office.",
+      "locked": "Jangan sentuh",
+      "outputExists": "Sudah ada fail di tempat fail yang dibetulkan akan diletakkan."
+    },
+    "detail": {
+      "outsideFolder": "disimpan di luar foldernya",
+      "folder": "foldernya",
+      "show": "cakera sebuah rancangan",
+      "notListed": "tiada dalam senarai"
+    },
+    "act": {
+      "rename": "Namakan semula",
+      "setAside": "Ketepikan",
+      "keepOne": "Simpan satu",
+      "record": "Rekod sebagai salinannya",
+      "forget": "Lupakan",
+      "convert": "Remux ke MKV",
+      "join": "Cantumkan bahagian",
+      "removeDirs": "Buang"
+    },
+    "did": {
+      "rename": "Dinamakan semula",
+      "setAside": "Diketepikan",
+      "keepOne": "Satu salinan disimpan",
+      "record": "Direkodkan",
+      "forget": "Dilupakan",
+      "convert": "Di-remux",
+      "join": "Dicantumkan",
+      "removeDirs": "Dibuang"
+    },
+    "state": {
+      "done": "Selesai",
+      "undone": "Dipulangkan"
+    },
+    "kinds": {
+      "duplicate": {
+        "title": "Lebih daripada satu salinan",
+        "hint": "Pilih salinan untuk disimpan. Yang lain diketepikan, dan yang disimpan direkodkan sebagai salinan tajuk itu."
+      },
+      "parts": {
+        "title": "Filem berbahagian",
+        "hint": "Bahagian bernama CD1, CD2, Part 1… dicantumkan menjadi satu MKV tanpa pengekodan semula. Bahagian-bahagian diketepikan selepas fail baharu disemak."
+      },
+      "discImage": {
+        "title": "Imej cakera",
+        "hint": "Filem pada imej DVD atau Blu-ray (tajuk terpanjangnya) disalin ke MKV tanpa pengekodan semula, dan imej diketepikan selepas fail baharu disemak. Cakera rancangan atau imej yang bukan milik mana-mana tajuk hanya boleh diketepikan."
+      },
+      "untracked": {
+        "title": "Salinan yang Box Office tidak kenali",
+        "hint": "Video dalam folder sesuatu tajuk, atau terlepas dan dinamakan mengikut tajuk, yang belum direkodkan Box Office. Pembetulan merekod setiap satu sebagai salinan tajuk itu, dinamakan semula mengikut cara Box Office."
+      },
+      "missing": {
+        "title": "Fail hilang",
+        "hint": "Box Office merekodkan ini sebagai salinan tajuk, tetapi ia sudah tiada pada cakera. Melupakannya membolehkan Box Office mencari tajuk itu semula."
+      },
+      "naming": {
+        "title": "Nama dan folder",
+        "hint": "Dinamakan semula kepada Tajuk (Tahun), dengan episod dalam folder Season sebagai Tajuk (Tahun) - S01E02 - Episod. Sari kata ikut sekali. Nama yang bermula begitu dan menambah tag seperti kualiti dibiarkan."
+      },
+      "unknown": {
+        "title": "Video yang bukan episod",
+        "hint": "Video dalam folder sebuah rancangan yang tidak dinamakan mengikut mana-mana episodnya."
+      },
+      "notListed": {
+        "title": "Tiada dalam senarai",
+        "hint": "Folder dan video yang bukan mana-mana tajuk dalam senarai. Untuk menambahnya, gunakan Imbas pada folder akar dalam Tetapan; atau ketepikan."
+      },
+      "leftover": {
+        "title": "Sisa",
+        "hint": "Sampel, program, pintasan, dan sisa muat turun serta arkib."
+      },
+      "empty": {
+        "title": "Folder kosong",
+        "hint": "Folder yang tiada apa-apa di dalamnya."
+      }
+    },
+    "waiting": {
+      "title": "Menunggu kelulusan anda",
+      "sub": "Fail asal yang diketepikan oleh pembetulan berada dalam folder <code>.recycle/problem-files</code> pustaka. Ia kekal di situ sehingga anda memadamnya terus atau memulangkannya: mengosongkan folder kitar semula tidak menyentuhnya.",
+      "aside": "diketepikan: {{count}} ({{size}})",
+      "asideOne": "diketepikan: {{name}} ({{size}})",
+      "made": "fail baharu: {{name}}",
+      "moved": "dinamakan semula: {{count}}",
+      "putBack": "Pulangkan",
+      "deleteOriginals": "Padam fail asal",
+      "ok": "Nampak baik",
+      "confirmTitle": "Padam fail asal terus?",
+      "confirmBody": "Ini memadam {{count}} yang diketepikan ({{size}}) daripada folder kitar semula. Ia tidak boleh dibatalkan.",
+      "cancel": "Batal",
+      "delete": "Padam terus"
+    }
+  },
+  "ereaders": {
+    "title": "Hantar ke e-pembaca",
+    "intro": "Box Office boleh menghantar e-buku melalui e-mel ke Kindle, PocketBook atau mana-mana pembaca yang ada alamat e-mel sendiri: dengan sendiri sebaik setiap satu dimuat turun, atau dari halaman buku.",
+    "guide": "Cara menyediakannya",
+    "name": "Nama",
+    "address": "Alamat e-mel pembaca",
+    "addressHint": "Alamat Send to Kindle atau Send-to-PocketBook. Di bawah diterangkan di mana mencarinya.",
+    "detected": "Alamat {{kind}}",
+    "otherKind": "E-pembaca lain",
+    "auto": "Hantar e-buku baharu dengan sendiri",
+    "autoHint": "Setiap e-buku yang dimuat turun Box Office dihantar ke pembaca ini sebaik ia masuk ke perpustakaan. Buku yang sudah ada dalam cakera tidak dihantar.",
+    "where": "Di mana saya cari alamat {{kind}}?",
+    "yourFrom": "alamat asal buku",
+    "kindleFormats": "Kindle menerima EPUB dan PDF melalui e-mel, tetapi bukan AZW3 atau MOBI. Untuk menukarnya kepada EPUB sebelum dihantar, tambahkan ebook-convert daripada Calibre ke Box Office (lihat panduan).",
+    "test": "Hantar buku ujian",
+    "add": "Tambah e-pembaca",
+    "kobo": "Pembaca Kobo, Tolino dan Boox tidak boleh menerima buku melalui e-mel, jadi Box Office tidak boleh menghantar kepadanya.",
+    "sendFrom": "Cara buku dihantar",
+    "sameAsAlerts": "Guna pelayan mel daripada Kesihatan → Amaran",
+    "sameAsAlertsHint": "Buku keluar melalui {{host}}, sama seperti amaran.",
+    "noAlertMail": "Belum ada pelayan mel di Kesihatan → Amaran. Sediakan satu di sana, atau masukkan di bawah.",
+    "setUpAlerts": "Sediakan e-mel di Kesihatan → Amaran",
+    "from": "Buku datang daripada",
+    "fromSameHint": "Biarkan kosong untuk guna alamat amaran. Pelayan mel anda mesti membenarkan anda menghantar sebagai alamat ini.",
+    "fromHint": "Biasanya sama dengan nama pengguna. Pelayan mel anda mesti membenarkan anda menghantar sebagai alamat ini.",
+    "usernameHint": "Alamat e-mel anda, bagi kebanyakan penyedia. Untuk Gmail dan iCloud, pelayan diisi dengan sendiri.",
+    "passwordHint": "Untuk Gmail dan iCloud, kata laluan apl, bukan yang biasa. Lihat langkah di bawah.",
+    "filledIn": "Diisi untuk penyedia e-mel anda.",
+    "mailWhere": "Di mana saya cari ini?",
+    "approve": "Tambah alamat ini ke senarai penghantar yang diluluskan pada pembaca anda, jika tidak ia tidak akan menerima buku:",
+    "recent": "Dihantar baru-baru ini",
+    "sentTo": "{{title}} ke {{reader}}",
+    "sentAuto": "{{title}} ke {{reader}}, dengan sendiri selepas dimuat turun",
+    "failed": "Tidak dapat dihantar",
+    "sent": "Dihantar ke {{reader}}. Mungkin ambil beberapa minit untuk muncul.",
+    "setUp": "Sediakan penghantaran e-buku ke e-pembaca anda",
+    "sendTo": "Hantar ke {{reader}}",
+    "help": {
+      "kindle1": "Di komputer, pergi ke halaman Urus Kandungan dan Peranti Anda di Amazon (amazon.com/myk atau laman Amazon negara anda) dan log masuk.",
+      "kindle2": "Buka Keutamaan, kemudian Tetapan Dokumen Peribadi.",
+      "kindle3": "Di bawah Tetapan E-mel Send-to-Kindle, salin alamat Kindle anda (berakhir dengan @kindle.com) dan tampal di sini.",
+      "kindle4": "Di bawah Senarai E-mel Dokumen Peribadi yang Diluluskan, pilih Tambah alamat e-mel baharu yang diluluskan dan tambah {{from}}.",
+      "kindle5": "Hantar buku ujian. Jika Amazon menghantar e-mel ke {{from}} meminta pengesahan, buka e-mel itu dan pilih Sahkan Permintaan.",
+      "pocketbook1": "Pada PocketBook, buka Tetapan, kemudian Akaun dan Penyegerakan, kemudian Send-to-PocketBook.",
+      "pocketbook2": "Log masuk atau buat akaun. Alamat pembaca anda berakhir dengan @pbsync.com: tampal di sini.",
+      "pocketbook3": "Tambah {{from}} ke penghantar yang diluluskan di sana, atau luluskan daripada e-mel yang PocketBook hantar apabila buku pertama tiba.",
+      "other1": "Cari alamat e-mel yang menerima buku dalam tetapan atau halaman bantuan pembaca atau apl bacaan anda.",
+      "other2": "Tampal di sini, dan benarkan {{from}} menghantar kepadanya jika pembaca meminta.",
+      "mail1": "Gmail: taip alamat Gmail sebagai nama pengguna dan pelayan diisi dengan sendiri. Hidupkan Pengesahan 2 Langkah dalam Akaun Google, kemudian buat kata laluan apl di myaccount.google.com/apppasswords dan tampal sebagai kata laluan.",
+      "mail2": "iCloud Mail: taip alamat iCloud sebagai nama pengguna. Buat kata laluan khusus apl di account.apple.com, di bawah Daftar Masuk dan Keselamatan, dan tampal sebagai kata laluan.",
+      "mail3": "Penyedia lain: halaman bantuannya menyenaraikan pelayan keluar (SMTP) dan port. Biasanya 587 dengan STARTTLS, atau 465 dengan TLS.",
+      "mail4": "Buku datang daripada alamat yang anda guna untuk menghantar, jadi itulah alamat yang diluluskan pada pembaca."
+    }
   }
 }

@@ -1672,5 +1672,179 @@
     "ebook": "Ebook",
     "audiobook": "Audiobook",
     "album": "Album"
+  },
+  "problems": {
+    "title": "Problem files",
+    "sub": "Files in the movie and TV library folders that need a hand. Nothing changes until you press a fix, and the originals wait in the library's <code>.recycle/problem-files</code> folder until you delete them or put them back.",
+    "cardSub": "Find what's out of place in the movie and TV library folders: files that aren't on the list, extra copies, disc images, movies in parts and untidy names, and fix them once you've checked what each fix does.",
+    "open": "Open Problem files",
+    "foundLast": "Found last time: {{count}}",
+    "waitingCount": "Waiting for your OK: {{count}}",
+    "look": "Look again",
+    "looking": "Looking through the library folders… {{done}}/{{total}}",
+    "lookedAt": "Looked {{when}}.",
+    "never": "Box Office hasn't looked yet.",
+    "none": "Nothing needs a hand: everything is where it should be.",
+    "unreadable": "Box Office can't read {{path}}, or it's empty (a share that isn't mounted?), so it was left out.",
+    "readOnly": "{{path}} is read-only for Box Office, so what's in it is listed but can't be fixed.",
+    "noFFmpeg": "FFmpeg isn't installed where Box Office runs, so disc images can't be remuxed and parts can't be joined.",
+    "fixAll": "Fix all {{count}}",
+    "fixSelected": "Fix the {{count}} picked",
+    "pick": "Pick {{name}}",
+    "fixing": "Fixing…",
+    "queued": "Waiting its turn",
+    "failed": "Couldn't fix it: {{error}}",
+    "recorded": "recorded",
+    "keepWhich": "Which copy to keep",
+    "keeps": "keep",
+    "setsAside": "set aside",
+    "remuxNote": "(a copy of the streams, nothing re-encoded)",
+    "recent": "Recent fixes",
+    "blocked": {
+      "readOnly": "The library folder is read-only for Box Office.",
+      "locked": "Do not touch",
+      "outputExists": "There's a file where the fixed one would go already."
+    },
+    "detail": {
+      "outsideFolder": "kept outside its folder",
+      "folder": "its folder",
+      "show": "a show's disc",
+      "notListed": "not on the list"
+    },
+    "act": {
+      "rename": "Rename",
+      "setAside": "Set aside",
+      "keepOne": "Keep one",
+      "record": "Record as its copy",
+      "forget": "Forget it",
+      "convert": "Remux to MKV",
+      "join": "Join the parts",
+      "removeDirs": "Remove"
+    },
+    "did": {
+      "rename": "Renamed",
+      "setAside": "Set aside",
+      "keepOne": "Kept one copy",
+      "record": "Recorded",
+      "forget": "Forgot",
+      "convert": "Remuxed",
+      "join": "Joined",
+      "removeDirs": "Removed"
+    },
+    "state": {
+      "done": "Done",
+      "undone": "Put back"
+    },
+    "kinds": {
+      "duplicate": {
+        "title": "More than one copy",
+        "hint": "Pick the copy to keep. The others are set aside, and the one kept is recorded as the title's copy."
+      },
+      "parts": {
+        "title": "Movies in parts",
+        "hint": "Parts named CD1, CD2, Part 1… are joined into one MKV without re-encoding. The parts are set aside once the new file is checked."
+      },
+      "discImage": {
+        "title": "Disc images",
+        "hint": "The movie on a DVD or Blu-ray image (its longest title) is copied into an MKV without re-encoding, and the image is set aside once the new file is checked. A show's disc or an image that isn't any title's can only be set aside."
+      },
+      "untracked": {
+        "title": "Copies Box Office doesn't know",
+        "hint": "Videos in a title's folder, or loose and named for a title, that Box Office hasn't recorded. Fixing records each as the title's copy, renamed the way Box Office names things."
+      },
+      "missing": {
+        "title": "Missing files",
+        "hint": "Box Office has these as titles' copies, but they're gone from disk. Forgetting them lets Box Office look for the titles again."
+      },
+      "naming": {
+        "title": "Names and folders",
+        "hint": "Renamed to Title (Year), with episodes in Season folders as Title (Year) - S01E02 - Episode. Subtitles go along. Names that start like that and add tags such as the quality are left as they are."
+      },
+      "unknown": {
+        "title": "Videos that aren't an episode",
+        "hint": "Videos in a show's folder that aren't named for one of its episodes."
+      },
+      "notListed": {
+        "title": "Not on the list",
+        "hint": "Folders and videos that aren't any title on the list. To add them, use Scan on the root folder in Settings; or set them aside."
+      },
+      "leftover": {
+        "title": "Leftovers",
+        "hint": "Samples, programs, shortcuts, and what's left of downloads and archives."
+      },
+      "empty": {
+        "title": "Empty folders",
+        "hint": "Folders with nothing in them."
+      }
+    },
+    "waiting": {
+      "title": "Waiting for your OK",
+      "sub": "Originals a fix set aside are in the library's <code>.recycle/problem-files</code> folder. They stay there until you delete them for good or put them back: emptying the recycle folders leaves them alone.",
+      "aside": "set aside: {{count}} ({{size}})",
+      "asideOne": "set aside: {{name}} ({{size}})",
+      "made": "new file: {{name}}",
+      "moved": "renamed: {{count}}",
+      "putBack": "Put back",
+      "deleteOriginals": "Delete originals",
+      "ok": "Looks good",
+      "confirmTitle": "Delete the originals for good?",
+      "confirmBody": "This deletes {{count}} set aside ({{size}}) from the recycle folder. It can't be undone.",
+      "cancel": "Cancel",
+      "delete": "Delete for good"
+    }
+  },
+  "ereaders": {
+    "title": "Send to e-readers",
+    "intro": "Box Office can email ebooks to your Kindle, your PocketBook, or any reader with its own email address: by itself as each one downloads, or from a book's page.",
+    "guide": "How to set it up",
+    "name": "Name",
+    "address": "The reader's email address",
+    "addressHint": "Its Send to Kindle or Send-to-PocketBook address. Below says where to find it.",
+    "detected": "{{kind}} address",
+    "otherKind": "Other e-reader",
+    "auto": "Send new ebooks by itself",
+    "autoHint": "Each ebook Box Office downloads goes to this reader once it's in the library. Books already on disk aren't sent.",
+    "where": "Where do I find a {{kind}}'s address?",
+    "yourFrom": "the address books come from",
+    "kindleFormats": "Kindles take EPUB and PDF by email, but not AZW3 or MOBI. To have those turned into EPUB before they're sent, add Calibre's ebook-convert to Box Office (see the guide).",
+    "test": "Send a test book",
+    "add": "Add an e-reader",
+    "kobo": "Kobo, Tolino and Boox readers can't receive books by email, so Box Office can't send to them.",
+    "sendFrom": "How books are sent",
+    "sameAsAlerts": "Use the mail server from Health → Alerts",
+    "sameAsAlertsHint": "Books go out through {{host}}, like alerts do.",
+    "noAlertMail": "There's no mail server under Health → Alerts yet. Set one up there, or enter one below.",
+    "setUpAlerts": "Set up email in Health → Alerts",
+    "from": "Books come from",
+    "fromSameHint": "Leave it empty to use the address alerts come from. It must be one your mail server lets you send as.",
+    "fromHint": "Usually the same as the username. It must be one your mail server lets you send as.",
+    "usernameHint": "Your email address, for most providers. Gmail and iCloud fill in the server for you.",
+    "passwordHint": "For Gmail and iCloud, an app password, not your usual one. See the steps below.",
+    "filledIn": "Filled in for your email provider.",
+    "mailWhere": "Where do I find these?",
+    "approve": "Add this address to your reader's approved senders, or it won't take the books:",
+    "recent": "Recently sent",
+    "sentTo": "{{title}} to {{reader}}",
+    "sentAuto": "{{title}} to {{reader}}, by itself after it downloaded",
+    "failed": "It couldn't be sent",
+    "sent": "Sent to {{reader}}. It can take a few minutes to show up.",
+    "setUp": "Set up sending ebooks to your e-reader",
+    "sendTo": "Send to {{reader}}",
+    "help": {
+      "kindle1": "On a computer, go to Amazon's Manage Your Content and Devices page (amazon.com/myk, or your country's Amazon site) and sign in.",
+      "kindle2": "Open Preferences, then Personal Document Settings.",
+      "kindle3": "Under Send-to-Kindle E-Mail Settings, copy your Kindle's address (it ends in @kindle.com) and paste it here.",
+      "kindle4": "Under Approved Personal Document E-mail List, choose Add a new approved e-mail address and add {{from}}.",
+      "kindle5": "Send a test book. If Amazon emails {{from}} asking you to verify it, open that email and choose Verify Request.",
+      "pocketbook1": "On your PocketBook, open Settings, then Accounts and Synchronization, then Send-to-PocketBook.",
+      "pocketbook2": "Sign in or make an account. Your reader's address ends in @pbsync.com: paste it here.",
+      "pocketbook3": "Add {{from}} to the approved senders there, or approve it from the email PocketBook sends the first time a book arrives.",
+      "other1": "Find the email address your reader or reading app takes books at, in its settings or help pages.",
+      "other2": "Paste it here, and allow {{from}} to send to it if the reader asks you to.",
+      "mail1": "Gmail: type your Gmail address as the username and the server fills itself in. Turn on 2-Step Verification in your Google Account, then make an app password at myaccount.google.com/apppasswords and paste it as the password.",
+      "mail2": "iCloud Mail: type your iCloud address as the username. Make an app-specific password at account.apple.com, under Sign-In and Security, and paste it as the password.",
+      "mail3": "Another provider: its help pages list its outgoing (SMTP) server and port. Usually 587 with STARTTLS, or 465 with TLS.",
+      "mail4": "Books come from the address you send as, so that's the one to approve on your reader."
+    }
   }
 }

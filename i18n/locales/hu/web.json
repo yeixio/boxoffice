@@ -1672,5 +1672,179 @@
     "ebook": "E-könyv",
     "audiobook": "Hangoskönyv",
     "album": "Album"
+  },
+  "problems": {
+    "title": "Problémás fájlok",
+    "sub": "A film- és sorozatmappák fájljai, amelyek törődést igényelnek. Semmi sem változik, amíg meg nem nyomsz egy javítást, és az eredetik a könyvtár <code>.recycle/problem-files</code> mappájában várnak, amíg törlöd vagy visszateszed őket.",
+    "cardSub": "Keresd meg, mi nincs a helyén a film- és sorozatmappákban: a listán nem szereplő fájlokat, a fölösleges másolatokat, a lemezképeket, a részekre bontott filmeket és a rendezetlen neveket, és javítsd őket, miután megnézted, mit tesz egy-egy javítás.",
+    "open": "Problémás fájlok megnyitása",
+    "foundLast": "Legutóbb talált: {{count}}",
+    "waitingCount": "Jóváhagyásodra vár: {{count}}",
+    "look": "Keresés újra",
+    "looking": "A könyvtár mappáinak átnézése… {{done}}/{{total}}",
+    "lookedAt": "Átnézve {{when}}.",
+    "never": "A Box Office még nem nézett körül.",
+    "none": "Nincs teendő: minden a helyén van.",
+    "unreadable": "A Box Office nem tudja olvasni ezt: {{path}}, vagy üres (nem csatolt megosztás?), ezért kimaradt.",
+    "readOnly": "A(z) {{path}} a Box Office számára csak olvasható, ezért a tartalma látszik, de nem javítható.",
+    "noFFmpeg": "Az FFmpeg nincs telepítve ott, ahol a Box Office fut, így a lemezképek nem remuxolhatók, és a részek nem fűzhetők össze.",
+    "fixAll": "Mind a(z) {{count}} javítása",
+    "fixSelected": "A kiválasztott {{count}} javítása",
+    "pick": "{{name}} kiválasztása",
+    "fixing": "Javítás…",
+    "queued": "Sorára vár",
+    "failed": "Nem sikerült javítani: {{error}}",
+    "recorded": "nyilvántartva",
+    "keepWhich": "Melyik másolat maradjon",
+    "keeps": "megtart",
+    "setsAside": "félretesz",
+    "remuxNote": "(a sávok másolata, semmi sincs újrakódolva)",
+    "recent": "Legutóbbi javítások",
+    "blocked": {
+      "readOnly": "A könyvtár mappája a Box Office számára csak olvasható.",
+      "locked": "Ne nyúlj hozzá",
+      "outputExists": "Már van egy fájl ott, ahová a javított kerülne."
+    },
+    "detail": {
+      "outsideFolder": "a mappáján kívül van",
+      "folder": "a mappája",
+      "show": "sorozat lemeze",
+      "notListed": "nincs a listán"
+    },
+    "act": {
+      "rename": "Átnevezés",
+      "setAside": "Félretesz",
+      "keepOne": "Egy megtartása",
+      "record": "Nyilvántartás másolatként",
+      "forget": "Elfelejt",
+      "convert": "Remux MKV-ba",
+      "join": "Részek összefűzése",
+      "removeDirs": "Eltávolítás"
+    },
+    "did": {
+      "rename": "Átnevezve",
+      "setAside": "Félretéve",
+      "keepOne": "Egy másolat megtartva",
+      "record": "Nyilvántartva",
+      "forget": "Elfelejtve",
+      "convert": "Remuxolva",
+      "join": "Összefűzve",
+      "removeDirs": "Eltávolítva"
+    },
+    "state": {
+      "done": "Kész",
+      "undone": "Visszatéve"
+    },
+    "kinds": {
+      "duplicate": {
+        "title": "Több másolat",
+        "hint": "Válaszd ki a megtartandó másolatot. A többit félreteszi, a megtartottat pedig a cím másolataként tartja nyilván."
+      },
+      "parts": {
+        "title": "Részekre bontott filmek",
+        "hint": "A CD1, CD2, Part 1… nevű részeket újrakódolás nélkül egy MKV-ba fűzi össze. A részeket félreteszi, amint az új fájl ellenőrizve van."
+      },
+      "discImage": {
+        "title": "Lemezképek",
+        "hint": "A DVD- vagy Blu-ray-lemezkép filmjét (a leghosszabb címét) újrakódolás nélkül egy MKV-ba másolja, a lemezképet pedig félreteszi, amint az új fájl ellenőrizve van. Egy sorozat lemezét vagy egy egyik címhez sem tartozó lemezképet csak félre lehet tenni."
+      },
+      "untracked": {
+        "title": "Másolatok, amelyeket a Box Office nem ismer",
+        "hint": "Videók egy cím mappájában, vagy szabadon és egy cím után elnevezve, amelyeket a Box Office nem tart nyilván. A javítás mindegyiket a cím másolataként veszi nyilvántartásba, a Box Office elnevezése szerint átnevezve."
+      },
+      "missing": {
+        "title": "Hiányzó fájlok",
+        "hint": "A Box Office ezeket címek másolataiként tartja nyilván, de eltűntek a lemezről. Ha elfelejted őket, a Box Office újra keresi a címeket."
+      },
+      "naming": {
+        "title": "Nevek és mappák",
+        "hint": "Átnevezés Cím (Év) formára, az epizódok évadmappákba Cím (Év) - S01E02 - Epizód formában. A feliratok is mennek velük. Az így kezdődő, címkéket (például minőséget) hozzáadó nevek maradnak, ahogy vannak."
+      },
+      "unknown": {
+        "title": "Videók, amelyek nem epizódok",
+        "hint": "Egy sorozat mappájában lévő videók, amelyek nem egyik epizódja után vannak elnevezve."
+      },
+      "notListed": {
+        "title": "Nincs a listán",
+        "hint": "Mappák és videók, amelyek egyik címhez sem tartoznak a listán. Add hozzá őket a Beállításokban a gyökérmappánál a Beolvasással, vagy tedd félre őket."
+      },
+      "leftover": {
+        "title": "Maradékok",
+        "hint": "Minták, programok, parancsikonok, valamint letöltések és archívumok maradványai."
+      },
+      "empty": {
+        "title": "Üres mappák",
+        "hint": "Mappák, amelyekben nincs semmi."
+      }
+    },
+    "waiting": {
+      "title": "Jóváhagyásodra vár",
+      "sub": "A javítások által félretett eredetik a könyvtár <code>.recycle/problem-files</code> mappájában vannak. Ott maradnak, amíg végleg nem törlöd vagy vissza nem teszed őket: a lomtár mappák ürítése nem nyúl hozzájuk.",
+      "aside": "félretéve: {{count}} ({{size}})",
+      "asideOne": "félretéve: {{name}} ({{size}})",
+      "made": "új fájl: {{name}}",
+      "moved": "átnevezve: {{count}}",
+      "putBack": "Visszatesz",
+      "deleteOriginals": "Eredetik törlése",
+      "ok": "Rendben van",
+      "confirmTitle": "Végleg törlöd az eredetiket?",
+      "confirmBody": "Ez {{count}} félretett fájlt ({{size}}) töröl a lomtár mappából. Nem vonható vissza.",
+      "cancel": "Mégse",
+      "delete": "Végleges törlés"
+    }
+  },
+  "ereaders": {
+    "title": "Küldés e-olvasóra",
+    "intro": "A Box Office e-mailben el tudja küldeni az e-könyveket a Kindle-re, a PocketBookra vagy bármely saját e-mail-címmel rendelkező olvasóra: magától, amint mindegyik letöltődött, vagy egy könyv oldaláról.",
+    "guide": "Hogyan állítsd be",
+    "name": "Név",
+    "address": "Az olvasó e-mail-címe",
+    "addressHint": "A Send to Kindle vagy Send-to-PocketBook címe. Lent olvashatod, hol találod.",
+    "detected": "{{kind}}-cím",
+    "otherKind": "Más e-olvasó",
+    "auto": "Új e-könyvek küldése magától",
+    "autoHint": "Minden e-könyv, amit a Box Office letölt, erre az olvasóra kerül, amint a könyvtárban van. A lemezen már meglévő könyvek nem kerülnek elküldésre.",
+    "where": "Hol találom egy {{kind}} címét?",
+    "yourFrom": "a cím, ahonnan a könyvek érkeznek",
+    "kindleFormats": "A Kindle e-mailben EPUB-ot és PDF-et fogad, AZW3-at és MOBI-t nem. Hogy ezek küldés előtt EPUB-bá alakuljanak, add hozzá a Box Office-hoz a Calibre ebook-convert eszközét (lásd az útmutatót).",
+    "test": "Tesztkönyv küldése",
+    "add": "E-olvasó hozzáadása",
+    "kobo": "A Kobo, Tolino és Boox olvasók nem fogadnak könyvet e-mailben, ezért a Box Office nem tud nekik küldeni.",
+    "sendFrom": "Hogyan mennek ki a könyvek",
+    "sameAsAlerts": "A(z) Állapot → Riasztások levelezőszerverének használata",
+    "sameAsAlertsHint": "A könyvek a(z) {{host}} szerveren mennek ki, ahogy a riasztások is.",
+    "noAlertMail": "A(z) Állapot → Riasztások alatt még nincs levelezőszerver. Állíts be egyet ott, vagy add meg lent.",
+    "setUpAlerts": "E-mail beállítása itt: Állapot → Riasztások",
+    "from": "A könyvek feladója",
+    "fromSameHint": "Hagyd üresen a riasztások címének használatához. A levelezőszervernek engedélyeznie kell, hogy erről a címről küldj.",
+    "fromHint": "Általában ugyanaz, mint a felhasználónév. A levelezőszervernek engedélyeznie kell, hogy erről a címről küldj.",
+    "usernameHint": "A legtöbb szolgáltatónál az e-mail-címed. Gmail és iCloud esetén a szerver magától kitöltődik.",
+    "passwordHint": "Gmail és iCloud esetén alkalmazásjelszó, nem a szokásos. Lásd a lenti lépéseket.",
+    "filledIn": "Kitöltve az e-mail-szolgáltatódhoz.",
+    "mailWhere": "Hol találom ezeket?",
+    "approve": "Add hozzá ezt a címet az olvasó jóváhagyott feladóihoz, különben nem fogadja a könyveket:",
+    "recent": "Nemrég küldve",
+    "sentTo": "{{title}} → {{reader}}",
+    "sentAuto": "{{title}} → {{reader}}, magától a letöltés után",
+    "failed": "Nem sikerült elküldeni",
+    "sent": "Elküldve ide: {{reader}}. Pár percbe telhet, mire megjelenik.",
+    "setUp": "E-könyvek küldésének beállítása az e-olvasódra",
+    "sendTo": "Küldés ide: {{reader}}",
+    "help": {
+      "kindle1": "Számítógépen nyisd meg az Amazon Tartalmak és eszközök kezelése oldalát (amazon.com/myk vagy az országod Amazon oldala), és jelentkezz be.",
+      "kindle2": "Nyisd meg a Beállításokat, majd a Személyes dokumentumok beállításait.",
+      "kindle3": "A Send-to-Kindle e-mail-beállítások alatt másold ki a Kindle címét (@kindle.com-ra végződik), és illeszd be ide.",
+      "kindle4": "A Személyes dokumentumokhoz jóváhagyott e-mail-címek listája alatt válaszd az Új jóváhagyott e-mail-cím hozzáadása lehetőséget, és add hozzá: {{from}}.",
+      "kindle5": "Küldj egy tesztkönyvet. Ha az Amazon e-mailben megerősítést kér a(z) {{from}} címen, nyisd meg, és válaszd a Kérés ellenőrzése lehetőséget.",
+      "pocketbook1": "A PocketBookon nyisd meg a Beállításokat, majd a Fiókok és szinkronizálás, majd a Send-to-PocketBook menüt.",
+      "pocketbook2": "Jelentkezz be, vagy hozz létre fiókot. Az olvasó címe @pbsync.com-ra végződik: illeszd be ide.",
+      "pocketbook3": "Add hozzá ott a(z) {{from}} címet a jóváhagyott feladókhoz, vagy hagyd jóvá a PocketBook e-mailjéből, amelyet az első könyvnél küld.",
+      "other1": "Keresd meg az olvasód vagy olvasóalkalmazásod beállításaiban vagy súgójában azt az e-mail-címet, amelyre könyveket lehet küldeni.",
+      "other2": "Illeszd be ide, és engedd, hogy a(z) {{from}} küldhessen rá, ha az olvasó kéri.",
+      "mail1": "Gmail: írd be a Gmail-címed felhasználónévnek, és a szerver magától kitöltődik. Kapcsold be a kétlépcsős azonosítást a Google-fiókodban, majd hozz létre alkalmazásjelszót a myaccount.google.com/apppasswords oldalon, és illeszd be jelszóként.",
+      "mail2": "iCloud Mail: írd be az iCloud-címed felhasználónévnek. Hozz létre alkalmazásspecifikus jelszót az account.apple.com oldalon a Bejelentkezés és biztonság alatt, és illeszd be jelszóként.",
+      "mail3": "Más szolgáltató: a súgóoldalai megadják a kimenő (SMTP) szervert és a portot. Általában 587 STARTTLS-sel, vagy 465 TLS-sel.",
+      "mail4": "A könyvek arról a címről érkeznek, amelyről küldesz, így ezt kell jóváhagyni az olvasón."
+    }
   }
 }

@@ -1766,5 +1766,179 @@
     "ebook": "Ebook",
     "audiobook": "Audiolibro",
     "album": "Album"
+  },
+  "problems": {
+    "title": "File con problemi",
+    "sub": "File nelle cartelle di film e serie che hanno bisogno di una mano. Non cambia nulla finché non premi una correzione, e gli originali aspettano nella cartella <code>.recycle/problem-files</code> della libreria finché non li elimini o li rimetti a posto.",
+    "cardSub": "Trova ciò che è fuori posto nelle cartelle di film e serie: file che non sono nella lista, copie in più, immagini disco, film in più parti e nomi disordinati, e correggili dopo aver controllato cosa fa ogni correzione.",
+    "open": "Apri File con problemi",
+    "foundLast": "Trovati l'ultima volta: {{count}}",
+    "waitingCount": "In attesa del tuo OK: {{count}}",
+    "look": "Cerca di nuovo",
+    "looking": "Controllo delle cartelle della libreria… {{done}}/{{total}}",
+    "lookedAt": "Controllato {{when}}.",
+    "never": "Box Office non ha ancora controllato.",
+    "none": "Niente da fare: tutto è al suo posto.",
+    "unreadable": "Box Office non riesce a leggere {{path}}, oppure è vuota (una condivisione non montata?), quindi è stata esclusa.",
+    "readOnly": "{{path}} è di sola lettura per Box Office, quindi il suo contenuto è elencato ma non si può correggere.",
+    "noFFmpeg": "FFmpeg non è installato dove gira Box Office, quindi le immagini disco non si possono rimuxare né le parti unire.",
+    "fixAll": "Correggi tutti e {{count}}",
+    "fixSelected": "Correggi i {{count}} scelti",
+    "pick": "Scegli {{name}}",
+    "fixing": "Correzione…",
+    "queued": "In attesa del suo turno",
+    "failed": "Impossibile correggere: {{error}}",
+    "recorded": "registrato",
+    "keepWhich": "Quale copia tenere",
+    "keeps": "tieni",
+    "setsAside": "metti da parte",
+    "remuxNote": "(una copia dei flussi, niente ricodificato)",
+    "recent": "Correzioni recenti",
+    "blocked": {
+      "readOnly": "La cartella della libreria è di sola lettura per Box Office.",
+      "locked": "Non toccare",
+      "outputExists": "C'è già un file dove andrebbe quello corretto."
+    },
+    "detail": {
+      "outsideFolder": "tenuto fuori dalla sua cartella",
+      "folder": "la sua cartella",
+      "show": "un disco di una serie",
+      "notListed": "non è nella lista"
+    },
+    "act": {
+      "rename": "Rinomina",
+      "setAside": "Metti da parte",
+      "keepOne": "Tienine una",
+      "record": "Registra come sua copia",
+      "forget": "Dimenticalo",
+      "convert": "Rimuxa in MKV",
+      "join": "Unisci le parti",
+      "removeDirs": "Rimuovi"
+    },
+    "did": {
+      "rename": "Rinominato",
+      "setAside": "Messo da parte",
+      "keepOne": "Tenuta una copia",
+      "record": "Registrato",
+      "forget": "Dimenticato",
+      "convert": "Rimuxato",
+      "join": "Unito",
+      "removeDirs": "Rimosso"
+    },
+    "state": {
+      "done": "Fatto",
+      "undone": "Rimesso a posto"
+    },
+    "kinds": {
+      "duplicate": {
+        "title": "Più di una copia",
+        "hint": "Scegli la copia da tenere. Le altre vengono messe da parte, e quella tenuta è registrata come copia del titolo."
+      },
+      "parts": {
+        "title": "Film in più parti",
+        "hint": "Le parti chiamate CD1, CD2, Part 1… vengono unite in un solo MKV senza ricodifica. Le parti vengono messe da parte quando il nuovo file è stato controllato."
+      },
+      "discImage": {
+        "title": "Immagini disco",
+        "hint": "Il film di un'immagine DVD o Blu-ray (il suo titolo più lungo) viene copiato in un MKV senza ricodifica, e l'immagine viene messa da parte quando il nuovo file è stato controllato. Il disco di una serie o un'immagine che non è di nessun titolo può solo essere messo da parte."
+      },
+      "untracked": {
+        "title": "Copie che Box Office non conosce",
+        "hint": "Video nella cartella di un titolo, o sciolti e con il nome di un titolo, che Box Office non ha registrato. La correzione registra ciascuno come copia del titolo, rinominato come Box Office nomina le cose."
+      },
+      "missing": {
+        "title": "File mancanti",
+        "hint": "Box Office li ha come copie di titoli, ma non sono più sul disco. Dimenticarli permette a Box Office di cercare di nuovo quei titoli."
+      },
+      "naming": {
+        "title": "Nomi e cartelle",
+        "hint": "Rinominati in Titolo (Anno), con gli episodi in cartelle di stagione come Titolo (Anno) - S01E02 - Episodio. I sottotitoli li seguono. I nomi che iniziano così e aggiungono etichette come la qualità restano come sono."
+      },
+      "unknown": {
+        "title": "Video che non sono un episodio",
+        "hint": "Video nella cartella di una serie che non portano il nome di nessuno dei suoi episodi."
+      },
+      "notListed": {
+        "title": "Non nella lista",
+        "hint": "Cartelle e video che non sono nessun titolo della lista. Per aggiungerli, usa Scansiona sulla cartella principale nelle Impostazioni; oppure mettili da parte."
+      },
+      "leftover": {
+        "title": "Avanzi",
+        "hint": "Campioni, programmi, collegamenti e quello che resta di download e archivi."
+      },
+      "empty": {
+        "title": "Cartelle vuote",
+        "hint": "Cartelle senza niente dentro."
+      }
+    },
+    "waiting": {
+      "title": "In attesa del tuo OK",
+      "sub": "Gli originali messi da parte da una correzione sono nella cartella <code>.recycle/problem-files</code> della libreria. Restano lì finché non li elimini per sempre o li rimetti a posto: svuotare le cartelle del cestino non li tocca.",
+      "aside": "messi da parte: {{count}} ({{size}})",
+      "asideOne": "messo da parte: {{name}} ({{size}})",
+      "made": "nuovo file: {{name}}",
+      "moved": "rinominati: {{count}}",
+      "putBack": "Rimetti a posto",
+      "deleteOriginals": "Elimina gli originali",
+      "ok": "Va bene",
+      "confirmTitle": "Eliminare gli originali per sempre?",
+      "confirmBody": "Vengono eliminati {{count}} file messi da parte ({{size}}) dalla cartella del cestino. Non si può annullare.",
+      "cancel": "Annulla",
+      "delete": "Elimina per sempre"
+    }
+  },
+  "ereaders": {
+    "title": "Invia agli e-reader",
+    "intro": "Box Office può inviare ebook per email al tuo Kindle, al tuo PocketBook o a qualsiasi lettore con un proprio indirizzo email: da solo appena ognuno viene scaricato, o dalla pagina di un libro.",
+    "guide": "Come configurarlo",
+    "name": "Nome",
+    "address": "Indirizzo email del lettore",
+    "addressHint": "Il suo indirizzo Send to Kindle o Send-to-PocketBook. Sotto trovi dove cercarlo.",
+    "detected": "Indirizzo {{kind}}",
+    "otherKind": "Altro e-reader",
+    "auto": "Invia da solo i nuovi ebook",
+    "autoHint": "Ogni ebook che Box Office scarica va a questo lettore appena è nella libreria. I libri già sul disco non vengono inviati.",
+    "where": "Dove trovo l'indirizzo di un {{kind}}?",
+    "yourFrom": "l'indirizzo da cui arrivano i libri",
+    "kindleFormats": "I Kindle accettano EPUB e PDF per email, ma non AZW3 o MOBI. Per convertirli in EPUB prima dell'invio, aggiungi ebook-convert di Calibre a Box Office (vedi la guida).",
+    "test": "Invia un libro di prova",
+    "add": "Aggiungi un e-reader",
+    "kobo": "I lettori Kobo, Tolino e Boox non ricevono libri per email, quindi Box Office non può inviarglieli.",
+    "sendFrom": "Come vengono inviati i libri",
+    "sameAsAlerts": "Usa il server di posta di Stato → Avvisi",
+    "sameAsAlertsHint": "I libri partono da {{host}}, come gli avvisi.",
+    "noAlertMail": "Non c'è ancora un server di posta in Stato → Avvisi. Configurane uno lì o inseriscine uno qui sotto.",
+    "setUpAlerts": "Configura l'email in Stato → Avvisi",
+    "from": "I libri arrivano da",
+    "fromSameHint": "Lascia vuoto per usare l'indirizzo degli avvisi. Il tuo server di posta deve permetterti di inviare con quell'indirizzo.",
+    "fromHint": "Di solito lo stesso del nome utente. Il tuo server di posta deve permetterti di inviare con quell'indirizzo.",
+    "usernameHint": "Il tuo indirizzo email, per la maggior parte dei provider. Con Gmail e iCloud il server si compila da solo.",
+    "passwordHint": "Per Gmail e iCloud, una password per le app, non quella solita. Vedi i passaggi qui sotto.",
+    "filledIn": "Compilato per il tuo provider di posta.",
+    "mailWhere": "Dove li trovo?",
+    "approve": "Aggiungi questo indirizzo ai mittenti approvati del tuo lettore, altrimenti non accetterà i libri:",
+    "recent": "Inviati di recente",
+    "sentTo": "{{title}} a {{reader}}",
+    "sentAuto": "{{title}} a {{reader}}, da solo dopo il download",
+    "failed": "Non è stato possibile inviarlo",
+    "sent": "Inviato a {{reader}}. Può volerci qualche minuto perché compaia.",
+    "setUp": "Configura l'invio degli ebook al tuo e-reader",
+    "sendTo": "Invia a {{reader}}",
+    "help": {
+      "kindle1": "Su un computer, vai alla pagina Gestisci contenuti e dispositivi di Amazon (amazon.it/myk o il sito Amazon del tuo paese) e accedi.",
+      "kindle2": "Apri Preferenze, poi Impostazioni documenti personali.",
+      "kindle3": "In Impostazioni e-mail Invia a Kindle, copia l'indirizzo del tuo Kindle (finisce con @kindle.com) e incollalo qui.",
+      "kindle4": "In Elenco degli indirizzi e-mail approvati per i documenti personali, scegli Aggiungi un nuovo indirizzo e-mail approvato e aggiungi {{from}}.",
+      "kindle5": "Invia un libro di prova. Se Amazon scrive a {{from}} chiedendo di verificarlo, apri quell'email e scegli Verifica richiesta.",
+      "pocketbook1": "Sul tuo PocketBook, apri Impostazioni, poi Account e sincronizzazione, poi Send-to-PocketBook.",
+      "pocketbook2": "Accedi o crea un account. L'indirizzo del tuo lettore finisce con @pbsync.com: incollalo qui.",
+      "pocketbook3": "Aggiungi {{from}} ai mittenti approvati, o approvalo dall'email che PocketBook invia al primo libro ricevuto.",
+      "other1": "Cerca nelle impostazioni o nella guida del tuo lettore o della tua app di lettura l'indirizzo email che riceve i libri.",
+      "other2": "Incollalo qui e consenti a {{from}} di inviarvi libri se il lettore lo chiede.",
+      "mail1": "Gmail: inserisci il tuo indirizzo Gmail come nome utente e il server si compila da solo. Attiva la verifica in due passaggi nel tuo account Google, poi crea una password per le app su myaccount.google.com/apppasswords e incollala come password.",
+      "mail2": "iCloud Mail: inserisci il tuo indirizzo iCloud come nome utente. Crea una password specifica per le app su account.apple.com, in Accesso e sicurezza, e incollala come password.",
+      "mail3": "Altro provider: la sua guida indica il server in uscita (SMTP) e la porta. Di solito 587 con STARTTLS o 465 con TLS.",
+      "mail4": "I libri arrivano dall'indirizzo con cui invii: è quello da approvare sul tuo lettore."
+    }
   }
 }

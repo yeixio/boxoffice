@@ -17,6 +17,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/yeixio/boxoffice/internal/alerts"
 	"github.com/yeixio/boxoffice/internal/announce"
 	"github.com/yeixio/boxoffice/internal/api"
 	"github.com/yeixio/boxoffice/internal/backup"
@@ -24,6 +25,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/catalog"
 	"github.com/yeixio/boxoffice/internal/config"
 	"github.com/yeixio/boxoffice/internal/downloader"
+	"github.com/yeixio/boxoffice/internal/ereader"
 	"github.com/yeixio/boxoffice/internal/jobs"
 	"github.com/yeixio/boxoffice/internal/kube"
 	"github.com/yeixio/boxoffice/internal/libscan"
@@ -34,6 +36,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/notify"
 	"github.com/yeixio/boxoffice/internal/openlibrary"
 	"github.com/yeixio/boxoffice/internal/portal"
+	"github.com/yeixio/boxoffice/internal/problems"
 	"github.com/yeixio/boxoffice/internal/search"
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/version"
@@ -145,7 +148,7 @@ func run() error {
 	}
 	shelf := &books.Service{Store: db, OpenLibrary: ol, Jobs: runner}
 	srv := &api.Server{
-		Store: db, Catalog: cat, Music: tunes, LibScan: &libscan.Service{Store: db, Catalog: cat, Music: tunes, Books: shelf, Log: log}, Backups: backups, Migrator: &migrate.Migrator{Catalog: cat, Books: shelf, Backups: backups, Log: log, DataDir: cfg.DataDir}, Log: log,
+		Store: db, Catalog: cat, Music: tunes, LibScan: &libscan.Service{Store: db, Catalog: cat, Music: tunes, Books: shelf, Log: log}, Problems: &problems.Service{Store: db, Log: log}, Backups: backups, Migrator: &migrate.Migrator{Catalog: cat, Books: shelf, Backups: backups, Log: log, DataDir: cfg.DataDir}, Log: log,
 		Books:     shelf,
 		Portal:    &portal.Service{Store: db, Catalog: cat, Notify: notes, Log: log},
 		Downloads: downloads, Search: finder,
@@ -153,6 +156,18 @@ func run() error {
 		Monitoring: mon,
 	}
 	alerter := srv.Alerts()
+	// Ebooks go to the e-readers set to get them as they download.
+	readers := &ereader.Service{Store: db, Log: log, Convert: cfg.EbookConvert,
+		AlertMail: func(ctx context.Context) (alerts.Email, error) {
+			c, err := alerter.Config(ctx)
+			return c.Email, err
+		}}
+	srv.Ereaders = readers
+	downloads.Imported = func(ctx context.Context, d store.Download) {
+		if d.Kind == store.Ebook {
+			go readers.Imported(ctx, d)
+		}
+	}
 	// Admin alerts reach Matinee's admins too, with download news.
 	alerter.Forward = notes.Alert
 	backups.Failed = alerter.BackupFailed

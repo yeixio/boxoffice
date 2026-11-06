@@ -1672,5 +1672,179 @@
     "ebook": "E-book",
     "audiobook": "Luisterboek",
     "album": "Album"
+  },
+  "problems": {
+    "title": "Probleembestanden",
+    "sub": "Bestanden in de film- en seriemappen die aandacht nodig hebben. Er verandert niets tot je op een oplossing drukt, en de originelen wachten in de map <code>.recycle/problem-files</code> van de bibliotheek tot je ze verwijdert of terugzet.",
+    "cardSub": "Vind wat niet op zijn plek staat in de film- en seriemappen: bestanden die niet op de lijst staan, extra kopieën, schijfkopieën, films in delen en rommelige namen, en los ze op nadat je hebt gecontroleerd wat elke oplossing doet.",
+    "open": "Probleembestanden openen",
+    "foundLast": "Vorige keer gevonden: {{count}}",
+    "waitingCount": "Wacht op je OK: {{count}}",
+    "look": "Opnieuw zoeken",
+    "looking": "De bibliotheekmappen doorzoeken… {{done}}/{{total}}",
+    "lookedAt": "Gezocht {{when}}.",
+    "never": "Box Office heeft nog niet gezocht.",
+    "none": "Niets te doen: alles staat waar het hoort.",
+    "unreadable": "Box Office kan {{path}} niet lezen, of de map is leeg (een share die niet gekoppeld is?), dus die is overgeslagen.",
+    "readOnly": "{{path}} is alleen-lezen voor Box Office, dus wat erin staat wordt getoond maar kan niet worden opgelost.",
+    "noFFmpeg": "FFmpeg is niet geïnstalleerd waar Box Office draait, dus schijfkopieën kunnen niet worden geremuxt en delen niet samengevoegd.",
+    "fixAll": "Alle {{count}} oplossen",
+    "fixSelected": "De {{count}} gekozen oplossen",
+    "pick": "{{name}} kiezen",
+    "fixing": "Bezig met oplossen…",
+    "queued": "Wacht op zijn beurt",
+    "failed": "Kon het niet oplossen: {{error}}",
+    "recorded": "geregistreerd",
+    "keepWhich": "Welke kopie houden",
+    "keeps": "houden",
+    "setsAside": "apart zetten",
+    "remuxNote": "(een kopie van de streams, niets opnieuw gecodeerd)",
+    "recent": "Recente oplossingen",
+    "blocked": {
+      "readOnly": "De bibliotheekmap is alleen-lezen voor Box Office.",
+      "locked": "Niet aanraken",
+      "outputExists": "Er staat al een bestand waar het opgeloste zou komen."
+    },
+    "detail": {
+      "outsideFolder": "buiten zijn map bewaard",
+      "folder": "zijn map",
+      "show": "een schijf van een serie",
+      "notListed": "niet op de lijst"
+    },
+    "act": {
+      "rename": "Hernoemen",
+      "setAside": "Apart zetten",
+      "keepOne": "Eén houden",
+      "record": "Als kopie registreren",
+      "forget": "Vergeten",
+      "convert": "Remuxen naar MKV",
+      "join": "Delen samenvoegen",
+      "removeDirs": "Verwijderen"
+    },
+    "did": {
+      "rename": "Hernoemd",
+      "setAside": "Apart gezet",
+      "keepOne": "Eén kopie gehouden",
+      "record": "Geregistreerd",
+      "forget": "Vergeten",
+      "convert": "Geremuxt",
+      "join": "Samengevoegd",
+      "removeDirs": "Verwijderd"
+    },
+    "state": {
+      "done": "Klaar",
+      "undone": "Teruggezet"
+    },
+    "kinds": {
+      "duplicate": {
+        "title": "Meer dan één kopie",
+        "hint": "Kies de kopie die je wilt houden. De andere worden apart gezet, en de gehouden kopie wordt geregistreerd als de kopie van de titel."
+      },
+      "parts": {
+        "title": "Films in delen",
+        "hint": "Delen met namen als CD1, CD2, Part 1… worden zonder opnieuw coderen samengevoegd tot één MKV. De delen worden apart gezet zodra het nieuwe bestand is gecontroleerd."
+      },
+      "discImage": {
+        "title": "Schijfkopieën",
+        "hint": "De film op een dvd- of Blu-ray-kopie (de langste titel) wordt zonder opnieuw coderen naar een MKV gekopieerd, en de kopie wordt apart gezet zodra het nieuwe bestand is gecontroleerd. Een schijf van een serie of een kopie die bij geen titel hoort, kan alleen apart worden gezet."
+      },
+      "untracked": {
+        "title": "Kopieën die Box Office niet kent",
+        "hint": "Video's in de map van een titel, of los en vernoemd naar een titel, die Box Office niet heeft geregistreerd. De oplossing registreert elk als de kopie van de titel, hernoemd zoals Box Office dingen noemt."
+      },
+      "missing": {
+        "title": "Ontbrekende bestanden",
+        "hint": "Box Office heeft deze als kopieën van titels, maar ze zijn van de schijf verdwenen. Als je ze vergeet, zoekt Box Office weer naar die titels."
+      },
+      "naming": {
+        "title": "Namen en mappen",
+        "hint": "Hernoemd naar Titel (Jaar), met afleveringen in seizoensmappen als Titel (Jaar) - S01E02 - Aflevering. Ondertitels gaan mee. Namen die zo beginnen en labels zoals de kwaliteit toevoegen, blijven zoals ze zijn."
+      },
+      "unknown": {
+        "title": "Video's die geen aflevering zijn",
+        "hint": "Video's in de map van een serie die niet naar een van haar afleveringen zijn genoemd."
+      },
+      "notListed": {
+        "title": "Niet op de lijst",
+        "hint": "Mappen en video's die geen titel op de lijst zijn. Voeg ze toe met Scannen bij de hoofdmap in Instellingen, of zet ze apart."
+      },
+      "leftover": {
+        "title": "Restjes",
+        "hint": "Samples, programma's, snelkoppelingen en wat er over is van downloads en archieven."
+      },
+      "empty": {
+        "title": "Lege mappen",
+        "hint": "Mappen waar niets in staat."
+      }
+    },
+    "waiting": {
+      "title": "Wacht op je OK",
+      "sub": "Originelen die een oplossing apart heeft gezet, staan in de map <code>.recycle/problem-files</code> van de bibliotheek. Ze blijven daar tot je ze definitief verwijdert of terugzet: het legen van de prullenbakmappen laat ze met rust.",
+      "aside": "apart gezet: {{count}} ({{size}})",
+      "asideOne": "apart gezet: {{name}} ({{size}})",
+      "made": "nieuw bestand: {{name}}",
+      "moved": "hernoemd: {{count}}",
+      "putBack": "Terugzetten",
+      "deleteOriginals": "Originelen verwijderen",
+      "ok": "Ziet er goed uit",
+      "confirmTitle": "De originelen definitief verwijderen?",
+      "confirmBody": "Dit verwijdert {{count}} apart gezette bestanden ({{size}}) uit de prullenbakmap. Dit kan niet ongedaan worden gemaakt.",
+      "cancel": "Annuleren",
+      "delete": "Definitief verwijderen"
+    }
+  },
+  "ereaders": {
+    "title": "Naar e-readers sturen",
+    "intro": "Box Office kan ebooks mailen naar je Kindle, je PocketBook of elke e-reader met een eigen e-mailadres: vanzelf zodra er een gedownload is, of vanaf de pagina van een boek.",
+    "guide": "Zo stel je het in",
+    "name": "Naam",
+    "address": "E-mailadres van de e-reader",
+    "addressHint": "Het Send to Kindle- of Send-to-PocketBook-adres. Hieronder staat waar je het vindt.",
+    "detected": "{{kind}}-adres",
+    "otherKind": "Andere e-reader",
+    "auto": "Nieuwe ebooks vanzelf sturen",
+    "autoHint": "Elk ebook dat Box Office downloadt, gaat naar deze e-reader zodra het in de bibliotheek staat. Boeken die al op schijf staan, worden niet gestuurd.",
+    "where": "Waar vind ik het adres van een {{kind}}?",
+    "yourFrom": "het adres waar de boeken vandaan komen",
+    "kindleFormats": "Kindles nemen per e-mail EPUB en PDF aan, maar geen AZW3 of MOBI. Voeg ebook-convert van Calibre toe aan Box Office om die eerst naar EPUB om te zetten (zie de handleiding).",
+    "test": "Testboek sturen",
+    "add": "E-reader toevoegen",
+    "kobo": "Kobo-, Tolino- en Boox-e-readers kunnen geen boeken per e-mail ontvangen, dus Box Office kan er niet naar sturen.",
+    "sendFrom": "Hoe boeken verstuurd worden",
+    "sameAsAlerts": "De mailserver van Gezondheid → Meldingen gebruiken",
+    "sameAsAlertsHint": "Boeken gaan via {{host}}, net als meldingen.",
+    "noAlertMail": "Er is nog geen mailserver bij Gezondheid → Meldingen. Stel er daar een in, of vul hieronder een in.",
+    "setUpAlerts": "E-mail instellen bij Gezondheid → Meldingen",
+    "from": "Boeken komen van",
+    "fromSameHint": "Laat leeg om het adres van de meldingen te gebruiken. Je mailserver moet je als dit adres laten versturen.",
+    "fromHint": "Meestal hetzelfde als de gebruikersnaam. Je mailserver moet je als dit adres laten versturen.",
+    "usernameHint": "Bij de meeste providers je e-mailadres. Bij Gmail en iCloud wordt de server voor je ingevuld.",
+    "passwordHint": "Bij Gmail en iCloud een app-wachtwoord, niet je gewone. Zie de stappen hieronder.",
+    "filledIn": "Ingevuld voor je e-mailprovider.",
+    "mailWhere": "Waar vind ik dit?",
+    "approve": "Zet dit adres bij de goedgekeurde afzenders van je e-reader, anders neemt hij de boeken niet aan:",
+    "recent": "Onlangs gestuurd",
+    "sentTo": "{{title}} naar {{reader}}",
+    "sentAuto": "{{title}} naar {{reader}}, vanzelf na het downloaden",
+    "failed": "Kon niet worden gestuurd",
+    "sent": "Naar {{reader}} gestuurd. Het kan een paar minuten duren voor het verschijnt.",
+    "setUp": "Ebooks naar je e-reader sturen instellen",
+    "sendTo": "Naar {{reader}} sturen",
+    "help": {
+      "kindle1": "Ga op een computer naar Amazons pagina Je content en apparaten beheren (amazon.nl/myk of de Amazon-site van je land) en log in.",
+      "kindle2": "Open Voorkeuren en daarna Instellingen voor persoonlijke documenten.",
+      "kindle3": "Kopieer onder E-mailinstellingen voor Send-to-Kindle het adres van je Kindle (het eindigt op @kindle.com) en plak het hier.",
+      "kindle4": "Kies onder Lijst met goedgekeurde e-mailadressen voor persoonlijke documenten de optie Een nieuw goedgekeurd e-mailadres toevoegen en voeg {{from}} toe.",
+      "kindle5": "Stuur een testboek. Als Amazon {{from}} mailt met de vraag het te bevestigen, open die e-mail en kies Verzoek verifiëren.",
+      "pocketbook1": "Open op je PocketBook Instellingen, dan Accounts en synchronisatie, dan Send-to-PocketBook.",
+      "pocketbook2": "Log in of maak een account. Het adres van je e-reader eindigt op @pbsync.com: plak het hier.",
+      "pocketbook3": "Voeg {{from}} daar toe aan de goedgekeurde afzenders, of keur het goed vanuit de e-mail die PocketBook stuurt als het eerste boek binnenkomt.",
+      "other1": "Zoek in de instellingen of hulp van je e-reader of lees-app het e-mailadres waar boeken naartoe kunnen.",
+      "other2": "Plak het hier, en sta {{from}} toe ernaar te sturen als de e-reader daarom vraagt.",
+      "mail1": "Gmail: typ je Gmail-adres als gebruikersnaam en de server vult zichzelf in. Zet verificatie in twee stappen aan in je Google-account, maak dan een app-wachtwoord op myaccount.google.com/apppasswords en plak het als wachtwoord.",
+      "mail2": "iCloud Mail: typ je iCloud-adres als gebruikersnaam. Maak een app-specifiek wachtwoord op account.apple.com, onder Inloggen en beveiliging, en plak het als wachtwoord.",
+      "mail3": "Andere provider: de hulppagina's noemen de uitgaande (SMTP-)server en poort. Meestal 587 met STARTTLS, of 465 met TLS.",
+      "mail4": "Boeken komen van het adres waarmee je verstuurt, dus dat is het adres dat je op je e-reader goedkeurt."
+    }
   }
 }

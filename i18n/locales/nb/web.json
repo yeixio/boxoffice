@@ -1672,5 +1672,179 @@
     "ebook": "E-bok",
     "audiobook": "Lydbok",
     "album": "Album"
+  },
+  "problems": {
+    "title": "Problemfiler",
+    "sub": "Filer i film- og seriemappene som trenger tilsyn. Ingenting endres før du trykker på en retting, og originalene venter i bibliotekets mappe <code>.recycle/problem-files</code> til du sletter dem eller legger dem tilbake.",
+    "cardSub": "Finn det som ikke er på plass i film- og seriemappene: filer som ikke står på listen, ekstra kopier, platebilder, filmer i deler og rotete navn, og rett dem når du har sett hva hver retting gjør.",
+    "open": "Åpne Problemfiler",
+    "foundLast": "Funnet sist: {{count}}",
+    "waitingCount": "Venter på ditt OK: {{count}}",
+    "look": "Let igjen",
+    "looking": "Går gjennom bibliotekmappene… {{done}}/{{total}}",
+    "lookedAt": "Lette {{when}}.",
+    "never": "Box Office har ikke lett ennå.",
+    "none": "Ingenting trenger tilsyn: alt er der det skal være.",
+    "unreadable": "Box Office kan ikke lese {{path}}, eller den er tom (en deling som ikke er montert?), så den ble utelatt.",
+    "readOnly": "{{path}} er skrivebeskyttet for Box Office, så innholdet vises, men kan ikke rettes.",
+    "noFFmpeg": "FFmpeg er ikke installert der Box Office kjører, så platebilder kan ikke remuxes og deler kan ikke slås sammen.",
+    "fixAll": "Rett alle {{count}}",
+    "fixSelected": "Rett de {{count}} valgte",
+    "pick": "Velg {{name}}",
+    "fixing": "Retter…",
+    "queued": "Venter på tur",
+    "failed": "Kunne ikke rette: {{error}}",
+    "recorded": "registrert",
+    "keepWhich": "Hvilken kopi som skal beholdes",
+    "keeps": "behold",
+    "setsAside": "legg til side",
+    "remuxNote": "(en kopi av strømmene, ingenting kodet om)",
+    "recent": "Siste rettinger",
+    "blocked": {
+      "readOnly": "Bibliotekmappen er skrivebeskyttet for Box Office.",
+      "locked": "Ikke rør",
+      "outputExists": "Det ligger allerede en fil der den rettede skulle."
+    },
+    "detail": {
+      "outsideFolder": "ligger utenfor mappen sin",
+      "folder": "mappen sin",
+      "show": "en series plate",
+      "notListed": "ikke på listen"
+    },
+    "act": {
+      "rename": "Gi nytt navn",
+      "setAside": "Legg til side",
+      "keepOne": "Behold én",
+      "record": "Registrer som kopien",
+      "forget": "Glem den",
+      "convert": "Remux til MKV",
+      "join": "Slå sammen delene",
+      "removeDirs": "Fjern"
+    },
+    "did": {
+      "rename": "Nytt navn",
+      "setAside": "Lagt til side",
+      "keepOne": "Beholdt én kopi",
+      "record": "Registrert",
+      "forget": "Glemt",
+      "convert": "Remuxet",
+      "join": "Slått sammen",
+      "removeDirs": "Fjernet"
+    },
+    "state": {
+      "done": "Ferdig",
+      "undone": "Lagt tilbake"
+    },
+    "kinds": {
+      "duplicate": {
+        "title": "Mer enn én kopi",
+        "hint": "Velg kopien du vil beholde. De andre legges til side, og den du beholder registreres som tittelens kopi."
+      },
+      "parts": {
+        "title": "Filmer i deler",
+        "hint": "Deler med navn som CD1, CD2, Part 1… slås sammen til én MKV uten omkoding. Delene legges til side når den nye filen er sjekket."
+      },
+      "discImage": {
+        "title": "Platebilder",
+        "hint": "Filmen på et DVD- eller Blu-ray-bilde (den lengste tittelen) kopieres til en MKV uten omkoding, og bildet legges til side når den nye filen er sjekket. En series plate eller et bilde som ikke hører til noen tittel, kan bare legges til side."
+      },
+      "untracked": {
+        "title": "Kopier Box Office ikke kjenner til",
+        "hint": "Videoer i en tittels mappe, eller løse og oppkalt etter en tittel, som Box Office ikke har registrert. Rettingen registrerer hver som tittelens kopi, med navn slik Box Office navngir ting."
+      },
+      "missing": {
+        "title": "Manglende filer",
+        "hint": "Box Office har disse som titlers kopier, men de er borte fra disken. Glemmer du dem, ser Box Office etter titlene igjen."
+      },
+      "naming": {
+        "title": "Navn og mapper",
+        "hint": "Gis nytt navn til Tittel (År), med episoder i sesongmapper som Tittel (År) - S01E02 - Episode. Undertekster følger med. Navn som begynner slik og legger til merker som kvaliteten, blir som de er."
+      },
+      "unknown": {
+        "title": "Videoer som ikke er en episode",
+        "hint": "Videoer i en series mappe som ikke er oppkalt etter noen av episodene."
+      },
+      "notListed": {
+        "title": "Ikke på listen",
+        "hint": "Mapper og videoer som ikke er noen tittel på listen. Legg dem til med Skann ved rotmappen i Innstillinger, eller legg dem til side."
+      },
+      "leftover": {
+        "title": "Rester",
+        "hint": "Smakebiter, programmer, snarveier og det som er igjen av nedlastinger og arkiver."
+      },
+      "empty": {
+        "title": "Tomme mapper",
+        "hint": "Mapper uten noe i."
+      }
+    },
+    "waiting": {
+      "title": "Venter på ditt OK",
+      "sub": "Originaler en retting har lagt til side, ligger i bibliotekets mappe <code>.recycle/problem-files</code>. De blir der til du sletter dem for godt eller legger dem tilbake: tømming av papirkurvmappene rører dem ikke.",
+      "aside": "lagt til side: {{count}} ({{size}})",
+      "asideOne": "lagt til side: {{name}} ({{size}})",
+      "made": "ny fil: {{name}}",
+      "moved": "nytt navn: {{count}}",
+      "putBack": "Legg tilbake",
+      "deleteOriginals": "Slett originalene",
+      "ok": "Ser bra ut",
+      "confirmTitle": "Slette originalene for godt?",
+      "confirmBody": "Dette sletter {{count}} filer lagt til side ({{size}}) fra papirkurvmappen. Det kan ikke angres.",
+      "cancel": "Avbryt",
+      "delete": "Slett for godt"
+    }
+  },
+  "ereaders": {
+    "title": "Send til lesebrett",
+    "intro": "Box Office kan sende e-bøker på e-post til Kindle, PocketBook eller et hvilket som helst lesebrett med egen e-postadresse: av seg selv når hver bok er lastet ned, eller fra en boks side.",
+    "guide": "Slik setter du det opp",
+    "name": "Navn",
+    "address": "Lesebrettets e-postadresse",
+    "addressHint": "Send to Kindle- eller Send-to-PocketBook-adressen. Nedenfor står det hvor du finner den.",
+    "detected": "{{kind}}-adresse",
+    "otherKind": "Annet lesebrett",
+    "auto": "Send nye e-bøker av seg selv",
+    "autoHint": "Hver e-bok Box Office laster ned, sendes til dette lesebrettet så snart den er i biblioteket. Bøker som allerede er på disken, sendes ikke.",
+    "where": "Hvor finner jeg adressen til en {{kind}}?",
+    "yourFrom": "adressen bøkene kommer fra",
+    "kindleFormats": "Kindle tar imot EPUB og PDF på e-post, men ikke AZW3 eller MOBI. Legg til Calibres ebook-convert i Box Office for å gjøre dem om til EPUB før de sendes (se veiledningen).",
+    "test": "Send en testbok",
+    "add": "Legg til et lesebrett",
+    "kobo": "Kobo-, Tolino- og Boox-lesebrett kan ikke ta imot bøker på e-post, så Box Office kan ikke sende til dem.",
+    "sendFrom": "Hvordan bøker sendes",
+    "sameAsAlerts": "Bruk e-postserveren fra Helse → Varsler",
+    "sameAsAlertsHint": "Bøker sendes via {{host}}, slik som varsler.",
+    "noAlertMail": "Det er ingen e-postserver under Helse → Varsler ennå. Sett opp en der, eller skriv inn en nedenfor.",
+    "setUpAlerts": "Sett opp e-post under Helse → Varsler",
+    "from": "Bøker kommer fra",
+    "fromSameHint": "La stå tomt for å bruke adressen varslene kommer fra. E-postserveren må la deg sende som den.",
+    "fromHint": "Vanligvis det samme som brukernavnet. E-postserveren må la deg sende som den.",
+    "usernameHint": "E-postadressen din, hos de fleste leverandører. For Gmail og iCloud fylles serveren inn for deg.",
+    "passwordHint": "For Gmail og iCloud et app-passord, ikke det vanlige. Se trinnene nedenfor.",
+    "filledIn": "Fylt inn for e-postleverandøren din.",
+    "mailWhere": "Hvor finner jeg dette?",
+    "approve": "Legg denne adressen til lesebrettets godkjente avsendere, ellers tar det ikke imot bøkene:",
+    "recent": "Nylig sendt",
+    "sentTo": "{{title}} til {{reader}}",
+    "sentAuto": "{{title}} til {{reader}}, av seg selv etter nedlastingen",
+    "failed": "Kunne ikke sendes",
+    "sent": "Sendt til {{reader}}. Det kan ta noen minutter før den dukker opp.",
+    "setUp": "Sett opp sending av e-bøker til lesebrettet ditt",
+    "sendTo": "Send til {{reader}}",
+    "help": {
+      "kindle1": "Gå på en datamaskin til Amazons side Administrer innhold og enheter (amazon.com/myk eller Amazon-siden for landet ditt) og logg inn.",
+      "kindle2": "Åpne Innstillinger og deretter Innstillinger for personlige dokumenter.",
+      "kindle3": "Under E-postinnstillinger for Send-to-Kindle kopierer du adressen til Kindle-en din (den slutter på @kindle.com) og limer den inn her.",
+      "kindle4": "Under Liste over godkjente e-postadresser for personlige dokumenter velger du Legg til en ny godkjent e-postadresse og legger til {{from}}.",
+      "kindle5": "Send en testbok. Hvis Amazon sender e-post til {{from}} og ber deg bekrefte, åpner du den og velger Bekreft forespørsel.",
+      "pocketbook1": "Åpne Innstillinger på PocketBook, deretter Kontoer og synkronisering, deretter Send-to-PocketBook.",
+      "pocketbook2": "Logg inn eller opprett en konto. Lesebrettets adresse slutter på @pbsync.com: lim den inn her.",
+      "pocketbook3": "Legg til {{from}} blant de godkjente avsenderne der, eller godkjenn den fra e-posten PocketBook sender når den første boken kommer.",
+      "other1": "Finn e-postadressen som tar imot bøker, i innstillingene eller hjelpesidene til lesebrettet eller leseappen din.",
+      "other2": "Lim den inn her, og la {{from}} sende til den hvis lesebrettet ber om det.",
+      "mail1": "Gmail: skriv Gmail-adressen din som brukernavn, så fylles serveren inn av seg selv. Slå på totrinnsbekreftelse i Google-kontoen din, lag så et app-passord på myaccount.google.com/apppasswords og lim det inn som passord.",
+      "mail2": "iCloud Mail: skriv iCloud-adressen din som brukernavn. Lag et appspesifikt passord på account.apple.com under Pålogging og sikkerhet, og lim det inn som passord.",
+      "mail3": "Annen leverandør: hjelpesidene viser utgående server (SMTP) og port. Vanligvis 587 med STARTTLS eller 465 med TLS.",
+      "mail4": "Bøker kommer fra adressen du sender som, så det er den du godkjenner på lesebrettet."
+    }
   }
 }

@@ -1672,5 +1672,179 @@
     "ebook": "E-kitap",
     "audiobook": "Sesli kitap",
     "album": "Albüm"
+  },
+  "problems": {
+    "title": "Sorunlu dosyalar",
+    "sub": "Film ve dizi kitaplık klasörlerinde ilgilenilmesi gereken dosyalar. Bir düzeltmeye basana kadar hiçbir şey değişmez, ve asılları siz silene ya da geri koyana kadar kitaplığın <code>.recycle/problem-files</code> klasöründe bekler.",
+    "cardSub": "Film ve dizi klasörlerinde yerinde olmayanları bulun: listede olmayan dosyalar, fazla kopyalar, disk görüntüleri, parçalara bölünmüş filmler ve dağınık adlar; her düzeltmenin ne yaptığına baktıktan sonra düzeltin.",
+    "open": "Sorunlu dosyaları aç",
+    "foundLast": "Geçen sefer bulunan: {{count}}",
+    "waitingCount": "Onayınızı bekleyen: {{count}}",
+    "look": "Yeniden bak",
+    "looking": "Kitaplık klasörlerine bakılıyor… {{done}}/{{total}}",
+    "lookedAt": "Bakıldı: {{when}}.",
+    "never": "Box Office henüz bakmadı.",
+    "none": "Yapılacak bir şey yok: her şey olması gereken yerde.",
+    "unreadable": "Box Office {{path}} klasörünü okuyamıyor ya da klasör boş (bağlanmamış bir paylaşım mı?), bu yüzden atlandı.",
+    "readOnly": "{{path}} Box Office için salt okunur, bu yüzden içindekiler listelenir ama düzeltilemez.",
+    "noFFmpeg": "Box Office'in çalıştığı yerde FFmpeg kurulu değil, bu yüzden disk görüntüleri remux edilemez ve parçalar birleştirilemez.",
+    "fixAll": "{{count}} sorunun hepsini düzelt",
+    "fixSelected": "Seçilen {{count}} sorunu düzelt",
+    "pick": "{{name}} seç",
+    "fixing": "Düzeltiliyor…",
+    "queued": "Sırasını bekliyor",
+    "failed": "Düzeltilemedi: {{error}}",
+    "recorded": "kayıtlı",
+    "keepWhich": "Hangi kopya kalsın",
+    "keeps": "tut",
+    "setsAside": "kenara koy",
+    "remuxNote": "(akışların kopyası, hiçbir şey yeniden kodlanmaz)",
+    "recent": "Son düzeltmeler",
+    "blocked": {
+      "readOnly": "Kitaplık klasörü Box Office için salt okunur.",
+      "locked": "Dokunma",
+      "outputExists": "Düzeltilen dosyanın gideceği yerde zaten bir dosya var."
+    },
+    "detail": {
+      "outsideFolder": "klasörünün dışında duruyor",
+      "folder": "klasörü",
+      "show": "bir dizi diski",
+      "notListed": "listede değil"
+    },
+    "act": {
+      "rename": "Yeniden adlandır",
+      "setAside": "Kenara koy",
+      "keepOne": "Birini tut",
+      "record": "Kopyası olarak kaydet",
+      "forget": "Unut",
+      "convert": "MKV'ye remux et",
+      "join": "Parçaları birleştir",
+      "removeDirs": "Kaldır"
+    },
+    "did": {
+      "rename": "Yeniden adlandırıldı",
+      "setAside": "Kenara kondu",
+      "keepOne": "Bir kopya tutuldu",
+      "record": "Kaydedildi",
+      "forget": "Unutuldu",
+      "convert": "Remux edildi",
+      "join": "Birleştirildi",
+      "removeDirs": "Kaldırıldı"
+    },
+    "state": {
+      "done": "Tamam",
+      "undone": "Geri kondu"
+    },
+    "kinds": {
+      "duplicate": {
+        "title": "Birden fazla kopya",
+        "hint": "Tutulacak kopyayı seçin. Diğerleri kenara konur, tutulan da başlığın kopyası olarak kaydedilir."
+      },
+      "parts": {
+        "title": "Parçalı filmler",
+        "hint": "CD1, CD2, Part 1… adlı parçalar yeniden kodlanmadan tek bir MKV'de birleştirilir. Yeni dosya kontrol edilince parçalar kenara konur."
+      },
+      "discImage": {
+        "title": "Disk görüntüleri",
+        "hint": "Bir DVD ya da Blu-ray görüntüsündeki film (en uzun başlığı) yeniden kodlanmadan bir MKV'ye kopyalanır, yeni dosya kontrol edilince görüntü kenara konur. Bir dizinin diski ya da hiçbir başlığa ait olmayan bir görüntü yalnızca kenara konabilir."
+      },
+      "untracked": {
+        "title": "Box Office'in bilmediği kopyalar",
+        "hint": "Bir başlığın klasöründe olan ya da dışarıda duran ve bir başlığın adını taşıyan, Box Office'in kaydetmediği videolar. Düzeltme her birini başlığın kopyası olarak kaydeder ve Box Office'in adlandırdığı gibi yeniden adlandırır."
+      },
+      "missing": {
+        "title": "Eksik dosyalar",
+        "hint": "Box Office bunları başlıkların kopyaları olarak biliyor ama diskte yoklar. Onları unutmak Box Office'in bu başlıkları yeniden aramasını sağlar."
+      },
+      "naming": {
+        "title": "Adlar ve klasörler",
+        "hint": "Başlık (Yıl) olarak yeniden adlandırılır, bölümler sezon klasörlerinde Başlık (Yıl) - S01E02 - Bölüm olarak. Altyazılar da taşınır. Böyle başlayıp kalite gibi etiketler ekleyen adlar olduğu gibi kalır."
+      },
+      "unknown": {
+        "title": "Bölüm olmayan videolar",
+        "hint": "Bir dizinin klasöründe olup bölümlerinden hiçbirinin adını taşımayan videolar."
+      },
+      "notListed": {
+        "title": "Listede değil",
+        "hint": "Listedeki hiçbir başlığa ait olmayan klasörler ve videolar. Eklemek için Ayarlar'da kök klasördeki Tara'yı kullanın ya da kenara koyun."
+      },
+      "leftover": {
+        "title": "Artıklar",
+        "hint": "Örnekler, programlar, kısayollar ve indirmelerle arşivlerden kalanlar."
+      },
+      "empty": {
+        "title": "Boş klasörler",
+        "hint": "İçinde hiçbir şey olmayan klasörler."
+      }
+    },
+    "waiting": {
+      "title": "Onayınızı bekleyenler",
+      "sub": "Bir düzeltmenin kenara koyduğu asıllar kitaplığın <code>.recycle/problem-files</code> klasöründedir. Siz kalıcı olarak silene ya da geri koyana kadar orada kalırlar: geri dönüşüm klasörlerini boşaltmak onlara dokunmaz.",
+      "aside": "kenara konan: {{count}} ({{size}})",
+      "asideOne": "kenara konan: {{name}} ({{size}})",
+      "made": "yeni dosya: {{name}}",
+      "moved": "yeniden adlandırılan: {{count}}",
+      "putBack": "Geri koy",
+      "deleteOriginals": "Asılları sil",
+      "ok": "İyi görünüyor",
+      "confirmTitle": "Asıllar kalıcı olarak silinsin mi?",
+      "confirmBody": "Bu, geri dönüşüm klasöründen kenara konan {{count}} dosyayı ({{size}}) siler. Geri alınamaz.",
+      "cancel": "Vazgeç",
+      "delete": "Kalıcı olarak sil"
+    }
+  },
+  "ereaders": {
+    "title": "E-okuyuculara gönder",
+    "intro": "Box Office e-kitapları e-postayla Kindle'ınıza, PocketBook'unuza veya kendi e-posta adresi olan her okuyucuya gönderebilir: her biri iner inmez kendiliğinden ya da bir kitabın sayfasından.",
+    "guide": "Nasıl kurulur",
+    "name": "Ad",
+    "address": "Okuyucunun e-posta adresi",
+    "addressHint": "Send to Kindle veya Send-to-PocketBook adresi. Nerede bulacağınız aşağıda yazıyor.",
+    "detected": "{{kind}} adresi",
+    "otherKind": "Başka bir okuyucu",
+    "auto": "Yeni e-kitapları kendiliğinden gönder",
+    "autoHint": "Box Office'in indirdiği her e-kitap, kitaplığa girer girmez bu okuyucuya gider. Diskte zaten olan kitaplar gönderilmez.",
+    "where": "{{kind}} adresini nerede bulurum?",
+    "yourFrom": "kitapların geldiği adres",
+    "kindleFormats": "Kindle e-postayla EPUB ve PDF alır, AZW3 veya MOBI almaz. Bunların gönderilmeden önce EPUB'a çevrilmesi için Box Office'e Calibre'nin ebook-convert aracını ekleyin (rehbere bakın).",
+    "test": "Deneme kitabı gönder",
+    "add": "Okuyucu ekle",
+    "kobo": "Kobo, Tolino ve Boox okuyucular e-postayla kitap alamaz, bu yüzden Box Office onlara gönderemez.",
+    "sendFrom": "Kitaplar nasıl gönderilir",
+    "sameAsAlerts": "Durum → Uyarılar bölümündeki posta sunucusunu kullan",
+    "sameAsAlertsHint": "Kitaplar, uyarılar gibi {{host}} üzerinden gider.",
+    "noAlertMail": "Durum → Uyarılar bölümünde henüz posta sunucusu yok. Orada bir tane kurun ya da aşağıya girin.",
+    "setUpAlerts": "E-postayı Durum → Uyarılar bölümünde kur",
+    "from": "Kitapların geldiği adres",
+    "fromSameHint": "Uyarıların adresini kullanmak için boş bırakın. Posta sunucunuz bu adresle göndermenize izin vermeli.",
+    "fromHint": "Genellikle kullanıcı adıyla aynı. Posta sunucunuz bu adresle göndermenize izin vermeli.",
+    "usernameHint": "Çoğu sağlayıcıda e-posta adresiniz. Gmail ve iCloud için sunucu kendiliğinden doldurulur.",
+    "passwordHint": "Gmail ve iCloud için olağan şifreniz değil, bir uygulama şifresi. Aşağıdaki adımlara bakın.",
+    "filledIn": "E-posta sağlayıcınız için dolduruldu.",
+    "mailWhere": "Bunları nerede bulurum?",
+    "approve": "Bu adresi okuyucunuzun onaylı gönderenlerine ekleyin, yoksa kitapları kabul etmez:",
+    "recent": "Son gönderilenler",
+    "sentTo": "{{title}} → {{reader}}",
+    "sentAuto": "{{title}} → {{reader}}, indirildikten sonra kendiliğinden",
+    "failed": "Gönderilemedi",
+    "sent": "{{reader}} cihazına gönderildi. Görünmesi birkaç dakika sürebilir.",
+    "setUp": "E-kitapları okuyucunuza göndermeyi kurun",
+    "sendTo": "{{reader}} cihazına gönder",
+    "help": {
+      "kindle1": "Bir bilgisayarda Amazon'un İçeriğinizi ve Cihazlarınızı Yönetin sayfasına (amazon.com.tr/myk veya ülkenizin Amazon sitesi) gidip oturum açın.",
+      "kindle2": "Tercihler'i, ardından Kişisel Belge Ayarları'nı açın.",
+      "kindle3": "Send-to-Kindle E-posta Ayarları altında Kindle'ınızın adresini (@kindle.com ile biter) kopyalayıp buraya yapıştırın.",
+      "kindle4": "Onaylı Kişisel Belge E-posta Listesi altında Yeni bir onaylı e-posta adresi ekle'yi seçin ve {{from}} adresini ekleyin.",
+      "kindle5": "Bir deneme kitabı gönderin. Amazon {{from}} adresine doğrulama isteyen bir e-posta gönderirse, açıp İsteği Doğrula'yı seçin.",
+      "pocketbook1": "PocketBook'unuzda Ayarlar'ı, sonra Hesaplar ve Eşitleme'yi, sonra Send-to-PocketBook'u açın.",
+      "pocketbook2": "Oturum açın veya hesap oluşturun. Okuyucunuzun adresi @pbsync.com ile biter: buraya yapıştırın.",
+      "pocketbook3": "{{from}} adresini oradaki onaylı gönderenlere ekleyin ya da ilk kitap geldiğinde PocketBook'un gönderdiği e-postadan onaylayın.",
+      "other1": "Okuyucunuzun veya okuma uygulamanızın ayarlarında ya da yardım sayfalarında kitap alan e-posta adresini bulun.",
+      "other2": "Buraya yapıştırın ve okuyucu isterse {{from}} adresinin ona göndermesine izin verin.",
+      "mail1": "Gmail: Gmail adresinizi kullanıcı adı olarak yazın, sunucu kendiliğinden dolar. Google Hesabınızda 2 Adımlı Doğrulama'yı açın, sonra myaccount.google.com/apppasswords adresinde bir uygulama şifresi oluşturup şifre olarak yapıştırın.",
+      "mail2": "iCloud Mail: iCloud adresinizi kullanıcı adı olarak yazın. account.apple.com'da Giriş ve Güvenlik altında uygulamaya özel bir parola oluşturup şifre olarak yapıştırın.",
+      "mail3": "Başka sağlayıcı: yardım sayfaları giden posta (SMTP) sunucusunu ve bağlantı noktasını listeler. Genellikle STARTTLS ile 587 veya TLS ile 465.",
+      "mail4": "Kitaplar gönderdiğiniz adresten gelir, yani okuyucuda onaylamanız gereken adres budur."
+    }
   }
 }

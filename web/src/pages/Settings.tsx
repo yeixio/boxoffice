@@ -1,8 +1,8 @@
 import { LanguagePicker } from '../LanguagePicker'
 import i18n from '../i18n'
 import { Trans, useTranslation } from 'react-i18next'
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Copy, Lock, Folder, FolderUp, KeyRound, Plus, Trash2 } from 'lucide-react'
 import { del, get, post, put, type Status, type MediaType, type MediaTypeKey, type Profile, type Recycle, type RootFolder, type RootKind, type Settings as SettingsData, type ShowDefaults, type SystemInfo } from '../api'
@@ -10,6 +10,8 @@ import { bytes, day } from '../format'
 import { monitorOptions, useProfiles, useQualities, useRootFolders, useShowDefaults } from '../hooks'
 import { AutoSearchSettings, Connections, DataCapSettingsCard, DownloadSettings, NumberField } from './Connections'
 import { ScanButton, scannable } from './LibraryScan'
+import { EreaderSettingsCard } from './Ereaders'
+import { ProblemsCard } from './Problems'
 import { Badge, Button, Card, ErrorNote, Field, Heading, Input, Modal, Select, Spinner, Toggle } from '../ui'
 
 export function Settings() {
@@ -22,6 +24,7 @@ export function Settings() {
           <Language />
           <General />
           <MediaTypes />
+          <Ereaders />
           <ConnectMatinee />
           <MoveIn />
           <Account />
@@ -32,6 +35,7 @@ export function Settings() {
           <MediaTypeFolders />
           <NewShows />
           <RecycleFolders />
+          <ProblemsCard />
           <Profiles />
         </div>
       </div>
@@ -232,6 +236,23 @@ function MediaTypes() {
       )}
       <ErrorNote error={save.error} />
     </Card>
+  )
+}
+
+// Ereaders sets up sending ebooks to e-readers, once ebooks are on.
+function Ereaders() {
+  const s = useSettings()
+  const on = !!s.data?.mediaTypes.find((m) => m.key === 'ebook')?.enabled
+  // A book's "set up e-readers" link lands here.
+  const { hash } = useLocation()
+  useEffect(() => {
+    if (on && hash === '#ereaders') document.getElementById('ereaders')?.scrollIntoView()
+  }, [on, hash])
+  if (!on) return null
+  return (
+    <div id="ereaders" className="scroll-mt-20">
+      <EreaderSettingsCard />
+    </div>
   )
 }
 

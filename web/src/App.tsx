@@ -23,6 +23,7 @@ import { Downloads } from './pages/Downloads'
 import { Import } from './pages/Import'
 import { Backups } from './pages/Backups'
 import { Settings } from './pages/Settings'
+import { Problems } from './pages/Problems'
 import { Health } from './pages/Health'
 import { Requests } from './pages/Requests'
 
@@ -107,6 +108,7 @@ function Shell({ status }: { status: Status }) {
           <Route path="/import" element={<Import />} />
           <Route path="/backups" element={<Backups />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/problems" element={<Problems />} />
           <Route path="*" element={<Navigate to="/discover" replace />} />
         </Routes>
       </main>

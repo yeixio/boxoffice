@@ -1672,5 +1672,179 @@
     "ebook": "E-bok",
     "audiobook": "Ljudbok",
     "album": "Album"
+  },
+  "problems": {
+    "title": "Problemfiler",
+    "sub": "Filer i film- och seriemapparna som behöver ses över. Inget ändras förrän du trycker på en åtgärd, och originalen väntar i bibliotekets mapp <code>.recycle/problem-files</code> tills du raderar dem eller lägger tillbaka dem.",
+    "cardSub": "Hitta det som inte är på sin plats i film- och seriemapparna: filer som inte finns på listan, extra kopior, skivavbilder, filmer i delar och röriga namn, och åtgärda dem när du har sett vad varje åtgärd gör.",
+    "open": "Öppna Problemfiler",
+    "foundLast": "Hittade förra gången: {{count}}",
+    "waitingCount": "Väntar på ditt OK: {{count}}",
+    "look": "Leta igen",
+    "looking": "Går igenom biblioteksmapparna… {{done}}/{{total}}",
+    "lookedAt": "Letade {{when}}.",
+    "never": "Box Office har inte letat än.",
+    "none": "Inget behöver göras: allt är där det ska vara.",
+    "unreadable": "Box Office kan inte läsa {{path}}, eller så är den tom (en utdelning som inte är monterad?), så den hoppades över.",
+    "readOnly": "{{path}} är skrivskyddad för Box Office, så innehållet visas men kan inte åtgärdas.",
+    "noFFmpeg": "FFmpeg är inte installerat där Box Office körs, så skivavbilder kan inte remuxas och delar kan inte slås ihop.",
+    "fixAll": "Åtgärda alla {{count}}",
+    "fixSelected": "Åtgärda de {{count}} valda",
+    "pick": "Välj {{name}}",
+    "fixing": "Åtgärdar…",
+    "queued": "Väntar på sin tur",
+    "failed": "Kunde inte åtgärda: {{error}}",
+    "recorded": "registrerad",
+    "keepWhich": "Vilken kopia som ska behållas",
+    "keeps": "behåll",
+    "setsAside": "lägg undan",
+    "remuxNote": "(en kopia av strömmarna, inget kodas om)",
+    "recent": "Senaste åtgärder",
+    "blocked": {
+      "readOnly": "Biblioteksmappen är skrivskyddad för Box Office.",
+      "locked": "Rör inte",
+      "outputExists": "Det finns redan en fil där den åtgärdade skulle hamna."
+    },
+    "detail": {
+      "outsideFolder": "ligger utanför sin mapp",
+      "folder": "dess mapp",
+      "show": "en seriens skiva",
+      "notListed": "inte på listan"
+    },
+    "act": {
+      "rename": "Byt namn",
+      "setAside": "Lägg undan",
+      "keepOne": "Behåll en",
+      "record": "Registrera som dess kopia",
+      "forget": "Glöm den",
+      "convert": "Remuxa till MKV",
+      "join": "Slå ihop delarna",
+      "removeDirs": "Ta bort"
+    },
+    "did": {
+      "rename": "Namnbytt",
+      "setAside": "Undanlagd",
+      "keepOne": "Behöll en kopia",
+      "record": "Registrerad",
+      "forget": "Glömd",
+      "convert": "Remuxad",
+      "join": "Ihopslagen",
+      "removeDirs": "Borttagen"
+    },
+    "state": {
+      "done": "Klar",
+      "undone": "Tillbakalagd"
+    },
+    "kinds": {
+      "duplicate": {
+        "title": "Mer än en kopia",
+        "hint": "Välj kopian du vill behålla. De andra läggs undan, och den du behåller registreras som titelns kopia."
+      },
+      "parts": {
+        "title": "Filmer i delar",
+        "hint": "Delar med namn som CD1, CD2, Part 1… slås ihop till en MKV utan omkodning. Delarna läggs undan när den nya filen har kontrollerats."
+      },
+      "discImage": {
+        "title": "Skivavbilder",
+        "hint": "Filmen på en DVD- eller Blu-ray-avbild (dess längsta titel) kopieras till en MKV utan omkodning, och avbilden läggs undan när den nya filen har kontrollerats. En series skiva eller en avbild som inte hör till någon titel kan bara läggas undan."
+      },
+      "untracked": {
+        "title": "Kopior Box Office inte känner till",
+        "hint": "Videor i en titels mapp, eller lösa och namngivna efter en titel, som Box Office inte har registrerat. Åtgärden registrerar var och en som titelns kopia, omdöpt så som Box Office namnger saker."
+      },
+      "missing": {
+        "title": "Saknade filer",
+        "hint": "Box Office har dessa som titlars kopior, men de är borta från disken. Om du glömmer dem letar Box Office efter titlarna igen."
+      },
+      "naming": {
+        "title": "Namn och mappar",
+        "hint": "Döps om till Titel (År), med avsnitt i säsongsmappar som Titel (År) - S01E02 - Avsnitt. Undertexter följer med. Namn som börjar så och lägger till taggar som kvaliteten lämnas som de är."
+      },
+      "unknown": {
+        "title": "Videor som inte är ett avsnitt",
+        "hint": "Videor i en series mapp som inte är namngivna efter något av dess avsnitt."
+      },
+      "notListed": {
+        "title": "Inte på listan",
+        "hint": "Mappar och videor som inte är någon titel på listan. Lägg till dem med Skanna vid rotmappen i Inställningar, eller lägg undan dem."
+      },
+      "leftover": {
+        "title": "Rester",
+        "hint": "Samples, program, genvägar och det som blivit kvar av nedladdningar och arkiv."
+      },
+      "empty": {
+        "title": "Tomma mappar",
+        "hint": "Mappar utan något i."
+      }
+    },
+    "waiting": {
+      "title": "Väntar på ditt OK",
+      "sub": "Original som en åtgärd lagt undan finns i bibliotekets mapp <code>.recycle/problem-files</code>. De ligger kvar tills du raderar dem för gott eller lägger tillbaka dem: att tömma papperskorgsmapparna rör dem inte.",
+      "aside": "undanlagda: {{count}} ({{size}})",
+      "asideOne": "undanlagd: {{name}} ({{size}})",
+      "made": "ny fil: {{name}}",
+      "moved": "namnbytta: {{count}}",
+      "putBack": "Lägg tillbaka",
+      "deleteOriginals": "Radera original",
+      "ok": "Ser bra ut",
+      "confirmTitle": "Radera originalen för gott?",
+      "confirmBody": "Detta raderar {{count}} undanlagda filer ({{size}}) från papperskorgsmappen. Det går inte att ångra.",
+      "cancel": "Avbryt",
+      "delete": "Radera för gott"
+    }
+  },
+  "ereaders": {
+    "title": "Skicka till läsplattor",
+    "intro": "Box Office kan mejla e-böcker till din Kindle, din PocketBook eller vilken läsplatta som helst med en egen e-postadress: av sig självt när varje bok har laddats ner, eller från en boks sida.",
+    "guide": "Så ställer du in det",
+    "name": "Namn",
+    "address": "Läsplattans e-postadress",
+    "addressHint": "Dess Send to Kindle- eller Send-to-PocketBook-adress. Nedan står var du hittar den.",
+    "detected": "{{kind}}-adress",
+    "otherKind": "Annan läsplatta",
+    "auto": "Skicka nya e-böcker av sig självt",
+    "autoHint": "Varje e-bok Box Office laddar ner skickas till läsplattan så fort den finns i biblioteket. Böcker som redan finns på disken skickas inte.",
+    "where": "Var hittar jag adressen till en {{kind}}?",
+    "yourFrom": "adressen böckerna kommer från",
+    "kindleFormats": "Kindle tar emot EPUB och PDF via e-post, men inte AZW3 eller MOBI. Lägg till Calibres ebook-convert i Box Office för att göra om dem till EPUB innan de skickas (se guiden).",
+    "test": "Skicka en testbok",
+    "add": "Lägg till en läsplatta",
+    "kobo": "Kobo-, Tolino- och Boox-läsplattor kan inte ta emot böcker via e-post, så Box Office kan inte skicka till dem.",
+    "sendFrom": "Hur böcker skickas",
+    "sameAsAlerts": "Använd e-postservern från Hälsa → Aviseringar",
+    "sameAsAlertsHint": "Böcker skickas via {{host}}, precis som aviseringar.",
+    "noAlertMail": "Det finns ingen e-postserver under Hälsa → Aviseringar än. Ställ in en där, eller skriv in en nedan.",
+    "setUpAlerts": "Ställ in e-post under Hälsa → Aviseringar",
+    "from": "Böcker kommer från",
+    "fromSameHint": "Lämna tomt för att använda aviseringarnas adress. Din e-postserver måste låta dig skicka som den.",
+    "fromHint": "Oftast samma som användarnamnet. Din e-postserver måste låta dig skicka som den.",
+    "usernameHint": "Din e-postadress, hos de flesta leverantörer. För Gmail och iCloud fylls servern i åt dig.",
+    "passwordHint": "För Gmail och iCloud ett applösenord, inte ditt vanliga. Se stegen nedan.",
+    "filledIn": "Ifyllt för din e-postleverantör.",
+    "mailWhere": "Var hittar jag det här?",
+    "approve": "Lägg till den här adressen bland läsplattans godkända avsändare, annars tar den inte emot böckerna:",
+    "recent": "Nyligen skickade",
+    "sentTo": "{{title}} till {{reader}}",
+    "sentAuto": "{{title}} till {{reader}}, av sig självt efter nedladdningen",
+    "failed": "Det gick inte att skicka",
+    "sent": "Skickad till {{reader}}. Det kan ta några minuter innan den syns.",
+    "setUp": "Ställ in att skicka e-böcker till din läsplatta",
+    "sendTo": "Skicka till {{reader}}",
+    "help": {
+      "kindle1": "Gå på en dator till Amazons sida Hantera ditt innehåll och dina enheter (amazon.se/myk eller Amazons webbplats för ditt land) och logga in.",
+      "kindle2": "Öppna Inställningar och sedan Inställningar för personliga dokument.",
+      "kindle3": "Under E-postinställningar för Send-to-Kindle kopierar du din Kindles adress (den slutar på @kindle.com) och klistrar in den här.",
+      "kindle4": "Under Lista över godkända e-postadresser för personliga dokument väljer du Lägg till en ny godkänd e-postadress och lägger till {{from}}.",
+      "kindle5": "Skicka en testbok. Om Amazon mejlar {{from}} och ber dig verifiera, öppna mejlet och välj Verifiera begäran.",
+      "pocketbook1": "Öppna Inställningar på din PocketBook, sedan Konton och synkronisering, sedan Send-to-PocketBook.",
+      "pocketbook2": "Logga in eller skapa ett konto. Läsplattans adress slutar på @pbsync.com: klistra in den här.",
+      "pocketbook3": "Lägg till {{from}} bland de godkända avsändarna där, eller godkänn den från mejlet PocketBook skickar när den första boken kommer.",
+      "other1": "Leta i inställningarna eller hjälpen för din läsplatta eller läsapp efter e-postadressen som tar emot böcker.",
+      "other2": "Klistra in den här, och låt {{from}} skicka till den om läsplattan ber om det.",
+      "mail1": "Gmail: skriv din Gmail-adress som användarnamn så fylls servern i av sig själv. Slå på tvåstegsverifiering i ditt Google-konto, skapa sedan ett applösenord på myaccount.google.com/apppasswords och klistra in det som lösenord.",
+      "mail2": "iCloud Mail: skriv din iCloud-adress som användarnamn. Skapa ett appspecifikt lösenord på account.apple.com under Inloggning och säkerhet och klistra in det som lösenord.",
+      "mail3": "Annan leverantör: dess hjälpsidor anger utgående server (SMTP) och port. Oftast 587 med STARTTLS eller 465 med TLS.",
+      "mail4": "Böcker kommer från adressen du skickar som, så det är den du godkänner på läsplattan."
+    }
   }
 }
