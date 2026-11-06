@@ -37,6 +37,9 @@ type Engine struct {
 	// Notify hears what happened to a download (store.EventGrabbed and the
 	// rest), to tell people about it; why is what went wrong, if anything.
 	Notify func(ctx context.Context, d store.Download, event, why string)
+	// Imported hears of a download, or a file picked in the downloads
+	// folder, that went into the library: on its own or by hand.
+	Imported func(ctx context.Context, d store.Download)
 
 	meter meter
 	limit limiter
@@ -360,6 +363,7 @@ func (e *Engine) importInto(ctx context.Context, d *store.Download, dir, lead st
 	e.Store.SetDownloadImported(ctx, d.ID, to)
 	d.ImportedTo = to
 	e.removeFolder(*d)
+	e.imported(ctx, *d)
 	return lead + "Moved into the library at " + to
 }
 
@@ -836,6 +840,12 @@ func (e *Engine) dropHopeless(ctx context.Context, d store.Download, err error) 
 	}
 	e.Log.Info("deleted a failed download's files", "name", d.Name, "folder", d.Folder)
 	return true
+}
+
+func (e *Engine) imported(ctx context.Context, d store.Download) {
+	if e.Imported != nil {
+		e.Imported(context.WithoutCancel(ctx), d)
+	}
 }
 
 func (e *Engine) notify(ctx context.Context, d store.Download, event, why string) {

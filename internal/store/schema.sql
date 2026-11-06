@@ -469,3 +469,17 @@ CREATE TABLE IF NOT EXISTS issues (
 	resolved_at BIGINT NOT NULL DEFAULT 0
 );
 CREATE INDEX IF NOT EXISTS issues_status ON issues (status, created_at);
+
+-- Ebooks sent to e-readers by email (Settings → Send to e-readers), so a
+-- book goes to each reader once and the admin can see what went where.
+CREATE TABLE IF NOT EXISTS ereader_sends (
+	id          INTEGER PRIMARY KEY AUTOINCREMENT,
+	device_id   TEXT NOT NULL,
+	device_name TEXT NOT NULL DEFAULT '',
+	book_id     BIGINT NOT NULL DEFAULT 0, -- 0 for a test
+	title       TEXT NOT NULL DEFAULT '',
+	auto        INTEGER NOT NULL DEFAULT 0, -- sent on its own after a download
+	error       TEXT NOT NULL DEFAULT '', -- why it couldn't go, if it didn't
+	sent_at     BIGINT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS ereader_sends_book ON ereader_sends (device_id, book_id);
