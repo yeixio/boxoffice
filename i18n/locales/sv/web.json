@@ -1738,6 +1738,12 @@
     "keeps": "behåll",
     "setsAside": "lägg undan",
     "remuxNote": "(en kopia av strömmarna, inget kodas om)",
+    "copiesNote": "Var och en är lika lång som en hel film, så de ser ut som kopior (en annan version eller kvalitet), inte delar. Välj vilken som ska behållas, eller slå ihop dem om de verkligen är delar.",
+    "instead": {
+      "keepOne": "Behåll en i stället",
+      "join": "Slå ihop i stället"
+    },
+    "subtitles": "undertexter: {{count}}",
     "recent": "Senaste åtgärder",
     "blocked": {
       "readOnly": "Biblioteksmappen är skrivskyddad för Box Office.",

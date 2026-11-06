@@ -1738,6 +1738,12 @@
     "keeps": "houden",
     "setsAside": "apart zetten",
     "remuxNote": "(een kopie van de streams, niets opnieuw gecodeerd)",
+    "copiesNote": "Elk hiervan duurt zo lang als een hele film, dus het lijken kopieën (een andere versie of kwaliteit), geen delen. Kies welke je houdt, of voeg ze samen als het echt delen zijn.",
+    "instead": {
+      "keepOne": "Liever één houden",
+      "join": "Liever samenvoegen"
+    },
+    "subtitles": "ondertitels: {{count}}",
     "recent": "Recente oplossingen",
     "blocked": {
       "readOnly": "De bibliotheekmap is alleen-lezen voor Box Office.",

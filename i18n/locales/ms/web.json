@@ -1644,6 +1644,12 @@
     "keeps": "simpan",
     "setsAside": "diketepikan",
     "remuxNote": "(salinan strim, tiada pengekodan semula)",
+    "copiesNote": "Setiap satu berdurasi seperti sebuah filem penuh, jadi ia kelihatan seperti salinan (versi atau kualiti lain), bukan bahagian. Pilih yang hendak disimpan, atau cantumkan jika ia benar-benar bahagian.",
+    "instead": {
+      "keepOne": "Simpan satu sahaja",
+      "join": "Cantumkan sahaja"
+    },
+    "subtitles": "sari kata: {{count}}",
     "recent": "Pembetulan terkini",
     "blocked": {
       "readOnly": "Folder pustaka baca sahaja bagi Box Office.",

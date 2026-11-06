@@ -1644,6 +1644,12 @@
     "keeps": "simpan",
     "setsAside": "disisihkan",
     "remuxNote": "(salinan stream, tanpa encode ulang)",
+    "copiesNote": "Masing-masing berdurasi seperti satu film utuh, jadi tampaknya ini salinan (versi atau kualitas lain), bukan bagian. Pilih yang disimpan, atau gabungkan jika memang bagian.",
+    "instead": {
+      "keepOne": "Simpan satu saja",
+      "join": "Gabungkan saja"
+    },
+    "subtitles": "subtitle: {{count}}",
     "recent": "Perbaikan terbaru",
     "blocked": {
       "readOnly": "Folder pustaka hanya-baca bagi Box Office.",

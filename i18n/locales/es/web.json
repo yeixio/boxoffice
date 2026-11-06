@@ -1832,6 +1832,12 @@
     "keeps": "conservar",
     "setsAside": "apartar",
     "remuxNote": "(una copia de las pistas, nada recodificado)",
+    "copiesNote": "Cada uno dura lo que una película entera, así que parecen copias (otro montaje u otra calidad), no partes. Elige cuál conservar, o únelos si de verdad son partes.",
+    "instead": {
+      "keepOne": "Conservar uno en su lugar",
+      "join": "Unirlos en su lugar"
+    },
+    "subtitles": "subtítulos: {{count}}",
     "recent": "Correcciones recientes",
     "blocked": {
       "readOnly": "La carpeta de la biblioteca es de solo lectura para Box Office.",

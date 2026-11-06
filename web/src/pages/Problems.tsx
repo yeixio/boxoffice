@@ -1,9 +1,9 @@
 import { Trans, useTranslation } from 'react-i18next'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { ArrowRight, CircleAlert, RefreshCw, Undo2, Trash2, Wrench } from 'lucide-react'
-import { get, post, type LibProblem, type ProblemFix, type ProblemKind, type ProblemsState } from '../api'
+import { get, post, type LibProblem, type ProblemAction, type ProblemFix, type ProblemKind, type ProblemMedia, type ProblemsState } from '../api'
 import { bytes, when } from '../format'
 import { Badge, Button, Card, ErrorNote, Heading, Modal, Spinner } from '../ui'
 
@@ -109,15 +109,22 @@ function Found({ state }: { state: ProblemsState }) {
   const problems = state.report!.problems
   const [picked, setPicked] = useState<Record<string, boolean>>({})
   const [keep, setKeep] = useState<Record<string, string>>({})
+  const [choice, setChoice] = useState<Record<string, ProblemAction>>({})
+  // Parts that look like copies are kept one by default; joining is a pick.
+  const as = (p: LibProblem): ProblemAction | undefined => choice[p.id] ?? (p.copies ? 'keep_one' : p.fix?.action)
   const fix = useMutation({
-    mutationFn: (ids: string[]) => post<ProblemsState>('/problems/fix', { ids, keep }),
+    mutationFn: (ids: string[]) => {
+      const pick: Record<string, ProblemAction> = {}
+      for (const p of problems) if (ids.includes(p.id) && as(p) && as(p) !== p.fix?.action) pick[p.id] = as(p)!
+      return post<ProblemsState>('/problems/fix', { ids, keep, as: pick })
+    },
     onSuccess: (s) => {
       qc.setQueryData(['problems'], s)
       setPicked({})
     },
   })
   const groups = useMemo(() => kinds.map((k) => ({ kind: k, list: problems.filter((p) => p.kind === k) })).filter((g) => g.list.length > 0), [problems])
-  const fixable = (p: LibProblem) => !!p.fix && !p.fix.blocked && (state.status.ffmpeg || (p.fix.action !== 'convert' && p.fix.action !== 'join'))
+  const fixable = (p: LibProblem) => !!p.fix && !p.fix.blocked && (state.status.ffmpeg || (as(p) !== 'convert' && as(p) !== 'join'))
   const pending = (p: LibProblem) => state.status.fixing?.id === p.id || state.status.queued.includes(p.id)
   const selected = problems.filter((p) => picked[p.id] && fixable(p) && !pending(p))
   if (problems.length === 0) {
@@ -157,6 +164,8 @@ function Found({ state }: { state: ProblemsState }) {
                   onPick={(v) => setPicked((x) => ({ ...x, [p.id]: v }))}
                   keep={keep[p.id] ?? p.fix?.keep ?? ''}
                   onKeep={(path) => setKeep((x) => ({ ...x, [p.id]: path }))}
+                  action={as(p)}
+                  onAction={(a) => setChoice((x) => ({ ...x, [p.id]: a }))}
                   onFix={() => fix.mutate([p.id])}
                   busy={fix.isPending}
                 />
@@ -185,6 +194,8 @@ function Row(props: {
   onPick: (v: boolean) => void
   keep: string
   onKeep: (path: string) => void
+  action?: ProblemAction
+  onAction: (a: ProblemAction) => void
   onFix: () => void
   busy: boolean
 }) {
@@ -193,7 +204,9 @@ function Row(props: {
   const fixing = state.status.fixing?.id === p.id ? state.status.fixing : undefined
   const queued = state.status.queued.includes(p.id)
   const failed = state.status.failed.find((f) => f.id === p.id)
-  const action = p.fix?.action
+  const action = props.action
+  // The other way to fix parts that look like copies.
+  const other: ProblemAction | undefined = p.copies ? (action === 'join' ? 'keep_one' : 'join') : undefined
   const link = p.title && (p.title.kind === 'movie' ? `/movies/${p.title.id}` : `/shows/${p.title.id}`)
   const name = p.title ? (p.title.year ? `${p.title.name} (${p.title.year})` : p.title.name) : base(p.files[0]?.path ?? '')
   const detail = p.detail && !/^\d+$/.test(p.detail) ? (/^S\d/.test(p.detail) ? p.detail : t(`problems.detail.${key(p.detail)}`)) : ''
@@ -235,6 +248,18 @@ function Row(props: {
           ) : null}
         </div>
       </div>
+      {p.copies && (
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+          <p className="flex items-start gap-1.5 text-gold">
+            <CircleAlert className="mt-0.5 size-3.5 shrink-0" aria-hidden /> {t('problems.copiesNote')}
+          </p>
+          {other && !fixing && !queued && props.fixable && (
+            <button type="button" className="font-medium text-marquee hover:underline" onClick={() => props.onAction(other)}>
+              {t(`problems.instead.${key(other)}`)}
+            </button>
+          )}
+        </div>
+      )}
       <Change {...props} />
       {p.fix?.blocked && p.fix.blocked !== 'locked' && <p className="text-xs text-gold">{t(`problems.blocked.${key(p.fix.blocked)}`)}</p>}
       {failed && (
@@ -247,10 +272,10 @@ function Row(props: {
 }
 
 // Change shows the files and what fixing does to them, before anything is done.
-function Change({ p, keep, onKeep, fixable }: { p: LibProblem; keep: string; onKeep: (path: string) => void; fixable: boolean }) {
+function Change({ p, keep, onKeep, fixable, action }: { p: LibProblem; keep: string; onKeep: (path: string) => void; fixable: boolean; action?: ProblemAction }) {
   const { t } = useTranslation()
   const fix = p.fix
-  const file = (f: LibProblem['files'][number]) => (
+  const file = (f: LibProblem['files'][number], extra?: ReactNode) => (
     <>
       <code className="break-all">{rel(p.root, f.path)}</code>
       <span className="text-muted">
@@ -259,9 +284,11 @@ function Change({ p, keep, onKeep, fixable }: { p: LibProblem; keep: string; onK
         {f.episode && ` · ${f.episode}`}
         {f.recorded && ` · ${t('problems.recorded')}`}
       </span>
+      {extra}
+      {(f.media || f.edition) && <MediaLine media={f.media} edition={f.edition} />}
     </>
   )
-  if (fix?.action === 'keep_one') {
+  if (action === 'keep_one') {
     return (
       <fieldset className="flex flex-col gap-1 ps-1">
         <legend className="sr-only">{t('problems.keepWhich')}</legend>
@@ -269,7 +296,7 @@ function Change({ p, keep, onKeep, fixable }: { p: LibProblem; keep: string; onK
           <label key={f.path} className="flex items-start gap-2">
             <input type="radio" className="mt-1" name={`keep-${p.id}`} checked={keep === f.path} disabled={!fixable} onChange={() => onKeep(f.path)} />
             <span className="min-w-0">
-              {file(f)} <span className={keep === f.path ? 'text-ok' : 'text-muted'}>· {keep === f.path ? t('problems.keeps') : t('problems.setsAside')}</span>
+              {file(f, <span className={keep === f.path ? 'text-ok' : 'text-muted'}> · {keep === f.path ? t('problems.keeps') : t('problems.setsAside')}</span>)}
             </span>
           </label>
         ))}
@@ -288,7 +315,7 @@ function Change({ p, keep, onKeep, fixable }: { p: LibProblem; keep: string; onK
             </li>
           ))
         : p.files.map((f) => <li key={f.path}>{file(f)}</li>)}
-      {(fix?.action === 'convert' || fix?.action === 'join') && fix.output && (
+      {(action === 'convert' || action === 'join') && fix?.output && (
         <li className="flex flex-wrap items-center gap-x-2">
           <ArrowRight className="size-3.5 shrink-0 rtl:rotate-180" aria-hidden />
           <code className="break-all">{rel(p.root, fix.output)}</code>
@@ -297,6 +324,36 @@ function Change({ p, keep, onKeep, fixable }: { p: LibProblem; keep: string; onK
       )}
     </ul>
   )
+}
+
+// MediaLine says what's in a video, to tell copies and parts apart: how
+// long it runs, its picture, its sound and its cut.
+function MediaLine({ media, edition }: { media?: ProblemMedia; edition?: string }) {
+  const { t } = useTranslation()
+  const bits: string[] = []
+  if (media) {
+    if (media.duration > 0) bits.push(runtime(media.duration))
+    const pic = [resolution(media.width, media.height), media.video, media.hdr].filter(Boolean).join(' ')
+    if (pic) bits.push(pic)
+    if (media.audio?.length) bits.push(media.audio.join(', '))
+    if (media.subtitles) bits.push(t('problems.subtitles', { count: media.subtitles }))
+  }
+  if (edition) bits.push(edition)
+  else if (media?.title) bits.push(`“${media.title}”`)
+  return <span className="block text-xs text-muted">{bits.join(' · ')}</span>
+}
+
+function runtime(sec: number) {
+  const s = Math.round(sec)
+  return `${Math.floor(s / 3600)}:${String(Math.floor(s / 60) % 60).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`
+}
+
+function resolution(w?: number, h?: number) {
+  if (!w || !h) return ''
+  if (w >= 3800 || h >= 2100) return '4K'
+  if (w >= 1900 || h >= 1060) return '1080p'
+  if (w >= 1260 || h >= 700) return '720p'
+  return `${h}p`
 }
 
 // Waiting lists fixes whose originals are in the recycle folder, for the

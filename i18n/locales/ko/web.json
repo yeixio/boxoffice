@@ -1644,6 +1644,12 @@
     "keeps": "남김",
     "setsAside": "따로 둠",
     "remuxNote": "(스트림 복사, 다시 인코딩하지 않음)",
+    "copiesNote": "각각 영화 한 편 길이라서 부분이 아니라 사본(다른 판이나 화질)으로 보입니다. 남길 것을 고르거나, 정말 부분이라면 합치세요.",
+    "instead": {
+      "keepOne": "대신 하나만 남기기",
+      "join": "대신 합치기"
+    },
+    "subtitles": "자막: {{count}}",
     "recent": "최근 수정",
     "blocked": {
       "readOnly": "라이브러리 폴더가 Box Office에 읽기 전용입니다.",

@@ -1644,6 +1644,12 @@
     "keeps": "保留",
     "setsAside": "移到一边",
     "remuxNote": "（复制流，不重新编码）",
+    "copiesNote": "每个都和整部电影一样长，所以它们看起来是副本（其他版本或画质），而不是分段。选择要保留的一个，如果确实是分段就合并它们。",
+    "instead": {
+      "keepOne": "改为保留一个",
+      "join": "改为合并"
+    },
+    "subtitles": "字幕：{{count}}",
     "recent": "最近的修复",
     "blocked": {
       "readOnly": "媒体库文件夹对 Box Office 是只读的。",

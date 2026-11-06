@@ -1832,6 +1832,12 @@
     "keeps": "manter",
     "setsAside": "deixar de lado",
     "remuxNote": "(uma cópia das faixas, nada recodificado)",
+    "copiesNote": "Cada um dura o mesmo que um filme inteiro, então parecem cópias (outra versão ou qualidade), não partes. Escolha qual manter ou junte-os se forem mesmo partes.",
+    "instead": {
+      "keepOne": "Manter um em vez disso",
+      "join": "Juntar em vez disso"
+    },
+    "subtitles": "legendas: {{count}}",
     "recent": "Correções recentes",
     "blocked": {
       "readOnly": "A pasta da biblioteca é somente leitura para o Box Office.",

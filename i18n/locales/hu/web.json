@@ -1738,6 +1738,12 @@
     "keeps": "megtart",
     "setsAside": "félretesz",
     "remuxNote": "(a sávok másolata, semmi sincs újrakódolva)",
+    "copiesNote": "Mindegyik olyan hosszú, mint egy egész film, így inkább másolatoknak tűnnek (más változat vagy minőség), nem részeknek. Válaszd ki, melyik maradjon, vagy fűzd össze őket, ha tényleg részek.",
+    "instead": {
+      "keepOne": "Inkább egy marad",
+      "join": "Inkább összefűzés"
+    },
+    "subtitles": "feliratok: {{count}}",
     "recent": "Legutóbbi javítások",
     "blocked": {
       "readOnly": "A könyvtár mappája a Box Office számára csak olvasható.",

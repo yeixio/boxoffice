@@ -1738,6 +1738,12 @@
     "keeps": "keep",
     "setsAside": "set aside",
     "remuxNote": "(a copy of the streams, nothing re-encoded)",
+    "copiesNote": "Each of these runs as long as a whole movie, so they look like copies (another cut or quality), not parts. Pick the one to keep, or join them if they really are parts.",
+    "instead": {
+      "keepOne": "Keep one instead",
+      "join": "Join them instead"
+    },
+    "subtitles": "subtitles: {{count}}",
     "recent": "Recent fixes",
     "blocked": {
       "readOnly": "The library folder is read-only for Box Office.",

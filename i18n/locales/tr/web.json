@@ -1738,6 +1738,12 @@
     "keeps": "tut",
     "setsAside": "kenara koy",
     "remuxNote": "(akışların kopyası, hiçbir şey yeniden kodlanmaz)",
+    "copiesNote": "Her biri bütün bir film kadar sürüyor, bu yüzden parça değil kopya gibi görünüyorlar (başka bir kurgu ya da kalite). Saklanacak olanı seçin ya da gerçekten parçaysalar birleştirin.",
+    "instead": {
+      "keepOne": "Bunun yerine birini sakla",
+      "join": "Bunun yerine birleştir"
+    },
+    "subtitles": "altyazılar: {{count}}",
     "recent": "Son düzeltmeler",
     "blocked": {
       "readOnly": "Kitaplık klasörü Box Office için salt okunur.",

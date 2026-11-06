@@ -1832,6 +1832,12 @@
     "keeps": "păstrează",
     "setsAside": "pune deoparte",
     "remuxNote": "(o copie a fluxurilor, nimic recodat)",
+    "copiesNote": "Fiecare durează cât un film întreg, deci par copii (altă versiune sau calitate), nu părți. Alege pe care o păstrezi sau unește-le dacă sunt cu adevărat părți.",
+    "instead": {
+      "keepOne": "Păstrează una în schimb",
+      "join": "Unește-le în schimb"
+    },
+    "subtitles": "subtitrări: {{count}}",
     "recent": "Corectări recente",
     "blocked": {
       "readOnly": "Dosarul bibliotecii este doar în citire pentru Box Office.",

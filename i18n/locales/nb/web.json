@@ -1738,6 +1738,12 @@
     "keeps": "behold",
     "setsAside": "legg til side",
     "remuxNote": "(en kopi av strømmene, ingenting kodet om)",
+    "copiesNote": "Hver av dem er like lang som en hel film, så de ser ut som kopier (en annen versjon eller kvalitet), ikke deler. Velg hvilken som skal beholdes, eller slå dem sammen hvis de virkelig er deler.",
+    "instead": {
+      "keepOne": "Behold én i stedet",
+      "join": "Slå sammen i stedet"
+    },
+    "subtitles": "undertekster: {{count}}",
     "recent": "Siste rettinger",
     "blocked": {
       "readOnly": "Bibliotekmappen er skrivebeskyttet for Box Office.",
