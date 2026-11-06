@@ -45,13 +45,14 @@ Box Office is a library manager. It doesn't come with any content, indexers or n
 - [What it does](#what-it-does)
 - [The request site](#the-request-site)
 - [Works with Matinee](#works-with-matinee)
-- [Run it](#run-it): [Docker](#docker), [Docker Compose](#docker-compose), [Kubernetes](#kubernetes), [from source](#from-source)
+- [Run it](#run-it): [Versions](#versions), [Docker](#docker), [Docker Compose](#docker-compose), [Kubernetes](#kubernetes), [from source](#from-source)
 - [Moving in from Radarr, Sonarr and NZBGet](#moving-in-from-radarr-sonarr-and-nzbget)
 - [Configuration](#configuration)
 - [FAQ](#faq)
 - [How it's built](#how-its-built)
 - [Ecosystem](#ecosystem)
 - [Contributing](#contributing)
+- [Releasing](#releasing)
 
 ## Try it in one line
 
@@ -109,6 +110,18 @@ Box Office answers on Radarr's and Sonarr's APIs at `/radarr` and `/sonarr`, so 
 Box Office is one small binary with its web UI built in. The image has no shell and no FFmpeg: Box Office only talks HTTP and moves files. It listens on port **7272**.
 
 Box Office needs to **write** to your library folders, because it files new downloads there. Mount them at the same paths Matinee (or Plex, or Jellyfin) sees them at if you can; then every app agrees on where a file is.
+
+### Versions
+
+Each release is a GitHub release with its notes, tagged `vX.Y.Z`, and publishes these images (amd64 and arm64):
+
+| Tag | What it is |
+|-----|------------|
+| `ghcr.io/yeixio/boxoffice:latest` | The newest stable release. |
+| `ghcr.io/yeixio/boxoffice:0.2.0`, `:0.2` | One release, or the newest in a minor version. |
+| `ghcr.io/yeixio/boxoffice:main` | What just merged to `main`. Newer, but less tried; for testing. |
+
+Pre-releases (`v0.2.0-beta.1`) get their own tag and leave `latest` alone. The Helm chart is published with each release as `oci://ghcr.io/yeixio/charts/boxoffice`, and defaults to that release's image. Until the first release is out, use `main`.
 
 ### Docker
 
@@ -354,6 +367,13 @@ Box Office is young, which makes it a good time to get involved: small fixes lan
 - **No code needed.** Moving in from an unusual Radarr or Sonarr setup, a news server or indexer that behaves oddly, or a release Box Office got wrong: a [move-in report](https://github.com/yeixio/boxoffice/issues/new?template=move_in_report.yml) or [bug report](https://github.com/yeixio/boxoffice/issues/new?template=bug_report.yml) helps a lot.
 
 [CONTRIBUTING.md](CONTRIBUTING.md) gets you from clone to a running server. Contributions are covered by a short [CLA](CLA.md), and everyone follows the [Code of Conduct](CODE_OF_CONDUCT.md). What changed is in the [changelog](CHANGELOG.md).
+
+## Releasing
+
+1. In a pull request, rename **Unreleased** in [CHANGELOG.md](CHANGELOG.md) to the new version, such as `## [0.2.0] - 2026-11-06`, add a new empty **Unreleased** above it, and merge it. That section opens the GitHub release.
+2. Under **Actions → Release**, press **Run workflow** on `main` and pick **patch**, **minor** or **major** (or type an exact version, such as `v0.3.0-beta.1`).
+
+The workflow picks the next version after the last release, and stops without tagging if CHANGELOG.md has no section for it, if CI hasn't passed on `main` (it waits while CI is still running), or if `main` hasn't changed since the last release. Pushing a tag by hand (`git tag v0.2.0 && git push origin v0.2.0`) releases too. It then tests, publishes the images above, pushes the chart, and writes the GitHub release with the changelog section, how to install, and the merged pull requests. A pre-release needs no changelog section; it uses what's under Unreleased.
 
 ## License
 

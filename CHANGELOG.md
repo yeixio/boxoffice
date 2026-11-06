@@ -1,10 +1,12 @@
 # Changelog
 
-What changed in Box Office, newest first. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions will follow [Semantic Versioning](https://semver.org/) once releases are tagged. Until then, everything is in **Unreleased** and ships in the `main` image as it merges.
+What changed in Box Office, newest first. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow [Semantic Versioning](https://semver.org/). What's under **Unreleased** ships in the `main` image as it merges; releasing renames it to the version, such as `## [0.1.0] - 2026-11-06`, and that section becomes the GitHub release's notes (see [Releasing](README.md#releasing)).
 
 ## Unreleased
 
 ### Added
+
+- **Versioned releases.** Pressing Run workflow under Actions → Release tags the next version, publishes `ghcr.io/yeixio/boxoffice:<version>`, `:<major>.<minor>` and `:latest`, pushes the Helm chart to `oci://ghcr.io/yeixio/charts/boxoffice`, and opens a GitHub release with this changelog's notes. `:main` stays the image of what just merged.
 
 - **Box Office speaks Matinee's 32 languages,** in the admin pages and on the request site, right to left for Arabic, Hebrew, Persian and Urdu. Each admin and each member picks theirs from their account menu, or follows the browser. Dates, numbers and sizes follow the language too. The translations are machine-made for now and say so under the picker; messages written by the server, like error details and logs, stay in English.
 - **A request site for family and friends,** in place of Overseerr: at `/request` or on its own host name, with your name, colour and logo. People sign in with their Matinee account or one made here, ask for movies and shows, follow them to ready to watch, and report problems. Admins approve or decline on the new **Requests** page, which also has problem reports, the people who can sign in, automatic approval and weekly limits.
