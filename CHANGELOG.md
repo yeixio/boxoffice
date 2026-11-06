@@ -4,13 +4,16 @@ What changed in Box Office, newest first. The format follows [Keep a Changelog](
 
 ## Unreleased
 
+## [0.1.0] - 2026-11-06
+
+The first tagged release of Box Office: a library manager for movies, shows, music and books that replaces Radarr, Sonarr, Lidarr, Readarr, NZBGet and Overseerr, plugs into Matinee, and moves you over from the old apps without changing them.
+
 ### Added
 
 - **Move in from Readarr,** once Ebooks or Audiobooks are on: its authors come across, looked up on Open Library by name, with the books Readarr wants wanted as ebooks or audiobooks, and the copies it has recorded where they are (an audiobook's folder, an ebook's EPUB first). Box Office tells Readarr's root folders of ebooks from those of audiobooks by their files. Its indexers, download clients and blocklist come across too; nothing on disk is moved, renamed or deleted. Like every app in Move in, it can be skipped.
 - **Move in from Lidarr,** once Music is on: its artists come across with the albums they want, and each album Lidarr has is counted as on disk where it is, from Lidarr's own track list (with CD folders), or by its folder name. Its indexers, download clients and blocklist come across too; its quality profiles stay behind, since music has its own quality setting. Nothing on disk is moved, renamed or deleted.
 - **Every app in Move in can be skipped.** Each one has Skip on the Overview and under its Connect form, and Undo to take it back; a skipped app isn't offered again, and nothing about it changes.
 - **Versioned releases.** Pressing Run workflow under Actions → Release tags the next version, publishes `ghcr.io/yeixio/boxoffice:<version>`, `:<major>.<minor>` and `:latest`, pushes the Helm chart to `oci://ghcr.io/yeixio/charts/boxoffice`, and opens a GitHub release with this changelog's notes. `:main` stays the image of what just merged.
-
 - **Box Office speaks Matinee's 32 languages,** in the admin pages and on the request site, right to left for Arabic, Hebrew, Persian and Urdu. Each admin and each member picks theirs from their account menu, or follows the browser. Dates, numbers and sizes follow the language too. The translations are machine-made for now and say so under the picker; messages written by the server, like error details and logs, stay in English.
 - **A request site for family and friends,** in place of Overseerr: at `/request` or on its own host name, with your name, colour and logo. People sign in with their Matinee account or one made here, ask for movies and shows, follow them to ready to watch, and report problems. Admins approve or decline on the new **Requests** page, which also has problem reports, the people who can sign in, automatic approval and weekly limits.
 - **More for Matinee when it's paired with Box Office** ([matinee#297](https://github.com/yeixio/matinee/issues/297)): live download progress with an ETA for titles on the way (`GET /{radarr,sonarr}/api/v3/boxoffice/activity`), **another edition of a movie** (Director's Cut, Extended…) to replace its copy or to keep next to it, named `{edition-…}` (`/radarr/api/v3/boxoffice/editions`), and **a better copy** or **a replacement for a bad one**, which blocklists the bad release (`POST /{radarr,sonarr}/api/v3/boxoffice/upgrade`). A movie replaced by an edition stays that edition in later upgrades. Each is advertised in `boxOfficeFeatures` (`progress`, `editions`, `upgrades`), so Matinee only shows what Box Office offers.
@@ -48,7 +51,6 @@ What changed in Box Office, newest first. The format follows [Keep a Changelog](
 ### Changed
 
 - **Replaced copies are kept in the recycle folders for 7 days** unless Settings says otherwise; before, they stayed until someone emptied them. Choose **Never (empty them yourself)** in Settings → Recycle folders to keep the old behaviour.
-
 - **The sections moved to a sidebar on the left** on a computer, grouped into Library, Status and Setup, so they no longer crowd the top. It narrows to icons on a smaller screen, or with Icons only, which it remembers. On a phone the menu stays as it was, now with the same groups. Sections for media types that are off stay hidden.
 - **Automatic upgrades are off by default.** RSS sync and the library patrol still look for missing titles by themselves; turn on Settings → Missing titles and upgrades → Automatic upgrades to have them go after better copies too. Looking for an upgrade from a title's page works either way. Each movie and show can turn automatic upgrades on or off for itself from its page, and **Most automatic upgrades a month** caps how many Box Office grabs by itself.
 
@@ -61,3 +63,5 @@ What changed in Box Office, newest first. The format follows [Keep a Changelog](
 - RAR 3 and 4 volume numbers are read from the right flag ([#12](https://github.com/yeixio/boxoffice/pull/12)), and old-style `.r00` naming is followed ([#11](https://github.com/yeixio/boxoffice/pull/11)).
 - Path maps are found for every library, even with one typed in ([#8](https://github.com/yeixio/boxoffice/pull/8)).
 - Move in: separate forms per app, NZBGet detection, Matinee's root folder, and a menu on phones ([#5](https://github.com/yeixio/boxoffice/pull/5)).
+
+[0.1.0]: https://github.com/yeixio/boxoffice/releases/tag/v0.1.0
