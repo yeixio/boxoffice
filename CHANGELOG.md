@@ -4,6 +4,10 @@ What changed in Box Office, newest first. The format follows [Keep a Changelog](
 
 ## Unreleased
 
+### Added
+
+- **Requests made in Matinee land on the Requests page.** When Matinee is connected to Box Office, what people ask for in its web, phone and TV apps is filed under their Matinee account, the same one they'd use to sign in to the request site, and follows its rules: automatic approval, per-person settings and weekly limits. Matinee admins' own requests are added straight away. Admins can approve or decline in either place. Matinee does this through `/{radarr,sonarr}/api/v3/boxoffice/requests`, advertised as `requests` in `boxOfficeFeatures`; the request site doesn't need to be turned on for it.
+
 ## [0.1.0] - 2026-11-06
 
 The first tagged release of Box Office: a library manager for movies, shows, music and books that replaces Radarr, Sonarr, Lidarr, Readarr, NZBGet and Overseerr, plugs into Matinee, and moves you over from the old apps without changing them.

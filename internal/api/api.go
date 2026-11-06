@@ -261,8 +261,11 @@ func (s *Server) Handler() http.Handler {
 	})
 	key := s.APIKey
 	pair := s.pairing()
-	mux.Handle("/radarr/", http.StripPrefix("/radarr", arrapi.NewPaired(arrapi.Radarr, s.Catalog, key, s.Version, s.Log, pair)))
-	mux.Handle("/sonarr/", http.StripPrefix("/sonarr", arrapi.NewPaired(arrapi.Sonarr, s.Catalog, key, s.Version, s.Log, pair)))
+	for _, app := range []arrapi.App{arrapi.Radarr, arrapi.Sonarr} {
+		h := arrapi.NewPaired(app, s.Catalog, key, s.Version, s.Log, pair)
+		h.Requests = s.Portal
+		mux.Handle("/"+string(app)+"/", http.StripPrefix("/"+string(app), h))
+	}
 	// Prometheus, with the token from Health → Prometheus (see alerts.go).
 	mux.HandleFunc("GET /metrics", s.metrics)
 	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte("ok\n")) })

@@ -23,6 +23,7 @@ import (
 	"time"
 
 	"github.com/yeixio/boxoffice/internal/catalog"
+	"github.com/yeixio/boxoffice/internal/portal"
 	"github.com/yeixio/boxoffice/internal/quality"
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/tmdb"
@@ -54,7 +55,10 @@ type Handler struct {
 	// Pairing is what Box Office offers Matinee beyond the arr API; nil
 	// offers none of it.
 	Pairing *Pairing
-	mux     *http.ServeMux
+	// Requests takes the requests people make in Matinee, for the
+	// Requests page; nil takes none, and Matinee adds titles itself.
+	Requests *portal.Service
+	mux      *http.ServeMux
 }
 
 // New makes the handler for an app.
@@ -75,6 +79,7 @@ func NewPaired(app App, c *catalog.Service, key func(context.Context) string, ve
 	h.route("GET /api/v3/boxoffice/notifications", h.notifications)
 	h.pairingRoutes()
 	h.discoverRoutes()
+	h.requestRoutes()
 	h.route("GET /api/v3/tag", func(w http.ResponseWriter, r *http.Request) error { return write(w, http.StatusOK, []any{}) })
 	if app == Radarr {
 		h.route("GET /api/v3/movie", h.movies)
@@ -129,6 +134,7 @@ func (h *Handler) route(pattern string, fn func(http.ResponseWriter, *http.Reque
 		}
 		var ae *apiError
 		var ce *catalog.Error
+		var pe *portal.Error
 		switch {
 		case errors.As(err, &ae):
 			write(w, ae.status, ae.body)
@@ -136,6 +142,9 @@ func (h *Handler) route(pattern string, fn func(http.ResponseWriter, *http.Reque
 			write(w, http.StatusNotFound, map[string]string{"message": "NotFound"})
 		case errors.As(err, &ce):
 			write(w, http.StatusBadRequest, []map[string]string{{"errorMessage": ce.Message}})
+		case errors.As(err, &pe):
+			// Something the person who asked should read, such as a weekly limit.
+			write(w, http.StatusUnprocessableEntity, map[string]string{"message": pe.Message})
 		case errors.Is(err, tmdb.ErrNoKey):
 			write(w, http.StatusServiceUnavailable, map[string]string{"message": err.Error()})
 		default:
