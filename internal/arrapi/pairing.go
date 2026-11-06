@@ -51,6 +51,9 @@ type LiveStep struct {
 // system/status's boxOfficeFeatures.
 func (h *Handler) features() []string {
 	f := []string{"notifications", "discover"}
+	if h.Requests != nil {
+		f = append(f, "requests")
+	}
 	if h.Pairing != nil {
 		f = append(f, "progress", "upgrades")
 		if h.App == Radarr {

@@ -328,6 +328,23 @@ func (s *Service) Ask(ctx context.Context, m store.Member, kind string, tmdbID i
 	if !st.Enabled {
 		return View{}, ErrOff
 	}
+	return s.ask(ctx, st, m, kind, tmdbID, note, asking{})
+}
+
+// asking is how a request came, beyond who asked.
+type asking struct {
+	// approved means whoever passed the request on may add titles
+	// themselves (a Matinee admin, say): it's added straight away, with
+	// no weekly limit.
+	approved bool
+	// profileID is the quality profile they picked, or 0.
+	profileID int
+	// again answers a second request for the same title with the first,
+	// rather than as a mistake.
+	again bool
+}
+
+func (s *Service) ask(ctx context.Context, st Settings, m store.Member, kind string, tmdbID int64, note string, how asking) (View, error) {
 	note = strings.TrimSpace(note)
 	if utf8.RuneCountInString(note) > 500 {
 		return View{}, badf("keep the note to 500 characters")
@@ -335,12 +352,22 @@ func (s *Service) Ask(ctx context.Context, m store.Member, kind string, tmdbID i
 	if kind != "movie" && kind != "series" {
 		return View{}, badf("ask for a movie or a show")
 	}
+	if tmdbID <= 0 {
+		return View{}, badf("say which title")
+	}
 	mine, err := s.Store.TitleRequests(ctx, kind, tmdbID)
 	if err != nil {
 		return View{}, err
 	}
 	for _, r := range mine {
 		if r.MemberID == m.ID && r.Status != store.RequestDeclined {
+			if how.again {
+				vs, err := s.Views(ctx, []store.Request{r})
+				if err != nil {
+					return View{}, err
+				}
+				return vs[0], nil
+			}
 			return View{}, badf("you've asked for this already")
 		}
 	}
@@ -352,7 +379,7 @@ func (s *Service) Ask(ctx context.Context, m store.Member, kind string, tmdbID i
 	if onList && catalog.Status(o) == catalog.StatusAvailable {
 		return View{}, badf("it's in the library already")
 	}
-	if !onList {
+	if !onList && !how.approved {
 		if err := s.checkQuota(ctx, st, m, kind); err != nil {
 			return View{}, err
 		}
@@ -362,13 +389,13 @@ func (s *Service) Ask(ctx context.Context, m store.Member, kind string, tmdbID i
 		return View{}, err
 	}
 	r := store.Request{MemberID: m.ID, Kind: kind, TMDBID: tmdbID, Title: t.Title, Year: t.Year, Poster: t.Poster, Note: note}
-	auto := m.AutoApprove == "on" || (m.AutoApprove == "" && st.Approval == ApprovalAuto)
+	auto := how.approved || m.AutoApprove == "on" || (m.AutoApprove == "" && st.Approval == ApprovalAuto)
 	switch {
 	case onList:
 		// On its way already: nothing for an admin to decide.
 		r.Status = store.RequestApproved
 	case auto:
-		if err := s.add(ctx, st, kind, tmdbID, catalog.AddOptions{}); err != nil {
+		if err := s.add(ctx, st, kind, tmdbID, catalog.AddOptions{ProfileID: how.profileID}); err != nil {
 			// Something an admin has to sort out, such as a root folder.
 			s.Log.Warn("couldn't add a request on its own; it waits for an admin", "title", t.Title, "err", err)
 		} else {

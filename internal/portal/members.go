@@ -185,23 +185,34 @@ func (s *Service) matineeSignIn(ctx context.Context, base, username, password st
 	if out.User.Guest {
 		return store.Member{}, badf("sign in with your own Matinee account, not the home one")
 	}
-	name := store.MemberName(out.User.Username)
-	m, err := s.Store.MemberByName(ctx, name)
+	m, err := s.matineeMember(ctx, out.User.Username)
 	switch {
-	case errors.Is(err, store.ErrNotFound):
-		m, err = s.Store.CreateMember(ctx, store.Member{Username: name, DisplayName: out.User.Username, Source: "matinee", QuotaMovies: -1, QuotaShows: -1}, "")
-		if errors.Is(err, store.ErrExists) {
-			return s.Store.MemberByName(ctx, name)
-		}
-		return m, err
 	case err != nil:
 		return m, err
 	case m.Source != "matinee":
-		return m, badf("there's an account named %s here already; sign in with its password", name)
+		return m, badf("there's an account named %s here already; sign in with its password", m.Username)
 	case m.Disabled:
 		return m, badf("this account is turned off; ask an admin")
 	}
 	return m, nil
+}
+
+// matineeMember is the member for a Matinee account, by its username,
+// made the first time it's needed. A local account of the same name is
+// returned as it is, for the caller to decide about.
+func (s *Service) matineeMember(ctx context.Context, username string) (store.Member, error) {
+	name := store.MemberName(username)
+	if name == "" {
+		return store.Member{}, badf("say who asked")
+	}
+	m, err := s.Store.MemberByName(ctx, name)
+	if errors.Is(err, store.ErrNotFound) {
+		m, err = s.Store.CreateMember(ctx, store.Member{Username: name, DisplayName: strings.TrimSpace(username), Source: "matinee", QuotaMovies: -1, QuotaShows: -1}, "")
+		if errors.Is(err, store.ErrExists) {
+			return s.Store.MemberByName(ctx, name)
+		}
+	}
+	return m, err
 }
 
 // matineeSignOut ends the session the check made, so it doesn't linger in
