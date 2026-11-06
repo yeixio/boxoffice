@@ -85,6 +85,16 @@ type Results struct {
 	Searched int         `json:"searched"` // indexers asked
 }
 
+// MarshalJSON sends no releases as an empty list, never null, so the web
+// page can count them.
+func (r Results) MarshalJSON() ([]byte, error) {
+	type plain Results
+	if r.Releases == nil {
+		r.Releases = []Candidate{}
+	}
+	return json.Marshal(plain(r))
+}
+
 // ErrNoIndexers means there's nowhere to search.
 var ErrNoIndexers = errors.New("there are no Usenet indexers to search; add one in Settings")
 

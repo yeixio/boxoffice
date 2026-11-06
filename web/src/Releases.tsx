@@ -30,9 +30,11 @@ export function Releases({ path, title, onClose }: { path: string; title: string
   const qc = useQueryClient()
   const res = useQuery({ queryKey: ['releases', path], queryFn: () => get<ReleaseResults>(path), staleTime: 60_000, retry: false })
   const qualities = useQualities()
-  const sorts = useMemo(() => releaseSorts(res.data?.releases ?? [], qualities.data), [res.data, qualities.data])
+  // An older server sends null when nothing was found.
+  const found = useMemo(() => res.data?.releases ?? [], [res.data])
+  const sorts = useMemo(() => releaseSorts(found, qualities.data), [found, qualities.data])
   const sort = useSort('releases', sorts)
-  const releases = useMemo(() => sortList(res.data?.releases ?? [], sort.option, sort.dir), [res.data, sort.option, sort.dir])
+  const releases = useMemo(() => sortList(found, sort.option, sort.dir), [found, sort.option, sort.dir])
   const grab = useMutation({
     mutationFn: (key: string) => post(`/releases/${key}/grab`),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['downloads'] }),
@@ -48,11 +50,11 @@ export function Releases({ path, title, onClose }: { path: string; title: string
               {e}
             </p>
           ))}
-          {res.data.releases.length === 0 ? (
+          {found.length === 0 ? (
             <p className="py-6 text-center text-sm text-muted">{res.data.searched === 1 ? t('releases.nothingOne') : t('releases.nothing', { count: res.data.searched })}</p>
           ) : (
             <>
-              {res.data.releases.length > 1 && <SortControl sort={sort} className="mb-2 sm:justify-end" />}
+              {found.length > 1 && <SortControl sort={sort} className="mb-2 sm:justify-end" />}
               <ul className="divide-y divide-line">
                 {releases.map((r) => {
                   const q = qualities.data?.find((x) => x.id === r.quality)
