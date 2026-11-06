@@ -1386,10 +1386,11 @@
     "blurb": {
       "radarr": "Film, i loro file, profili di qualità, indexer, client di download e ogni altra impostazione.",
       "sonarr": "Serie, stagioni, episodi e i loro file, profili, indexer, client di download e impostazioni.",
-      "nzbget": "Server di news con le loro credenziali, categorie e il resto delle impostazioni."
+      "nzbget": "Server di news con le loro credenziali, categorie e il resto delle impostazioni.",
+      "lidarr": "Artisti, i loro album e dove sono sul disco, indexer, client di download e la lista dei blocchi."
     },
     "title": "Trasloca",
-    "sub": "Porta qui tutto da Radarr, Sonarr o NZBGet, passo dopo passo. La vecchia app viene solo letta, quindi niente cambia lì.",
+    "sub": "Porta qui tutto da Radarr, Sonarr, Lidarr o NZBGet, passo dopo passo. La vecchia app viene solo letta, quindi niente cambia lì.",
     "steps": "Passaggi",
     "background": "In background",
     "look": {
@@ -1412,7 +1413,8 @@
       "key2": "Vai in <b>Settings</b>, poi <b>General</b>.",
       "key3": "Sotto <b>Security</b>, copia la <b>API Key</b> e incollala qui sopra.",
       "go": "Collega ed esamina",
-      "onlyReads": "Questo legge soltanto. Niente cambia qui o in {{app}} finché non confermi al passaggio successivo."
+      "onlyReads": "Questo legge soltanto. Niente cambia qui o in {{app}} finché non confermi al passaggio successivo.",
+      "lidarrOff": "Trasloco da Lidarr? Attiva prima la Musica in <link>Impostazioni</link>."
     },
     "maps": {
       "title": "Mappature dei percorsi (di solito non servono)",
@@ -1435,7 +1437,8 @@
       "indexers": "indexer",
       "clients": "client di download",
       "blocklist": "release bloccate",
-      "lists": "notifiche ed elenchi"
+      "lists": "notifiche ed elenchi",
+      "newArtists": "nuovi artisti"
     },
     "review": {
       "profiles": "Profili di qualità",
@@ -1459,7 +1462,8 @@
       "hidden_many": "Serve per le {{count}} di password e chiavi API che {{app}} nasconde alle altre app.",
       "hidden_other": "Serve per le {{count}} password e chiavi API che {{app}} nasconde alle altre app.",
       "confirm": "Conferma e trasloca",
-      "nothing": "Niente cambia in {{app}}. I file restano dove sono."
+      "nothing": "Niente cambia in {{app}}. I file restano dove sono.",
+      "lidarrQuality": "I profili di qualità di Lidarr restano lì: la musica di Box Office ha una sua impostazione di qualità, in Musica."
     },
     "status": {
       "done": "fatto",
@@ -1523,6 +1527,14 @@
       "files_one": "{{count}} file",
       "files_many": "{{count}} di file",
       "files_other": "{{count}} file"
+    },
+    "skip": {
+      "badge": "Saltata",
+      "skip": "Salta",
+      "undo": "Annulla",
+      "skipped": "Saltata. Non viene portato niente e non viene più chiesta.",
+      "offer": "Non usi {{app}}? <button>Saltala</button> e il trasloco non la chiederà più. Puoi annullare.",
+      "isSkipped": "Hai saltato {{app}}. Puoi comunque traslocare da lì, o <button>annullare</button>."
     }
   },
   "dl": {

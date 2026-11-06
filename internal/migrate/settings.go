@@ -3,6 +3,7 @@ package migrate
 import (
 	"archive/zip"
 	"bytes"
+	"cmp"
 	"context"
 	"database/sql"
 	"encoding/json"
@@ -128,6 +129,8 @@ var sections = map[string][]string{
 		"delayprofile", "notification", "importlist", "customformat", "remotepathmapping", "metadata", "autotagging", "indexer", "downloadclient"},
 	"sonarr": {"config/naming", "config/mediamanagement", "config/indexer", "config/downloadclient", "qualitydefinition", "tag",
 		"delayprofile", "notification", "importlist", "customformat", "remotepathmapping", "releaseprofile", "metadata", "autotagging", "indexer", "downloadclient"},
+	"lidarr": {"config/naming", "config/mediamanagement", "config/indexer", "config/downloadclient", "config/metadataprovider", "qualitydefinition", "tag",
+		"delayprofile", "notification", "importlist", "customformat", "remotepathmapping", "releaseprofile", "metadata", "metadataprofile", "indexer", "downloadclient"},
 }
 
 // tableFor names the table in the app's own database that holds a
@@ -144,6 +147,7 @@ type settingsData struct {
 type lBlocked struct {
 	MovieID     int       `json:"movieId"`
 	SeriesID    int       `json:"seriesId"`
+	AlbumIDs    []int     `json:"albumIds"` // Lidarr's
 	SourceTitle string    `json:"sourceTitle"`
 	Quality     lQuality  `json:"quality"`
 	Date        time.Time `json:"date"`
@@ -377,10 +381,7 @@ func (m *Migrator) importSettings(ctx context.Context, p *pending, pr *Progress)
 		if password == masked {
 			password = ""
 		}
-		category := dc.str("movieCategory")
-		if category == "" {
-			category = dc.str("tvCategory")
-		}
+		category := cmp.Or(dc.str("movieCategory"), dc.str("tvCategory"), dc.str("musicCategory"))
 		kind := strings.ToLower(dc.Implementation)
 		missing := len(dc.maskedFields()) > 0
 		settings := dc.settingsJSON()
@@ -421,13 +422,20 @@ func (m *Migrator) importSettings(ctx context.Context, p *pending, pr *Progress)
 	}
 	nBlock := 0
 	byLegacy := map[int]int64{} // the app's title id -> Box Office's
-	if app == "radarr" {
+	switch app {
+	case "lidarr":
+		for _, al := range p.albums {
+			if id, ok := p.albumIDs[al.ID]; ok {
+				byLegacy[al.ID] = id
+			}
+		}
+	case "radarr":
 		for _, mv := range p.movies {
 			if have, err := st.MovieByTMDB(ctx, mv.TMDBID); err == nil {
 				byLegacy[mv.ID] = have.ID
 			}
 		}
-	} else {
+	default:
 		for _, sr := range p.series {
 			if have, err := st.SeriesByTMDB(ctx, sr.TMDBID); err == nil && sr.TMDBID > 0 {
 				byLegacy[sr.ID] = have.ID
@@ -438,8 +446,15 @@ func (m *Migrator) importSettings(ctx context.Context, p *pending, pr *Progress)
 	}
 	for _, b := range d.blocklist {
 		kind, legacyID := "movie", b.MovieID
-		if app == "sonarr" {
+		switch app {
+		case "sonarr":
 			kind, legacyID = "series", b.SeriesID
+		case "lidarr":
+			// A blocked release is for an album: the first it names.
+			kind, legacyID = store.AlbumKind, 0
+			if len(b.AlbumIDs) > 0 {
+				legacyID = b.AlbumIDs[0]
+			}
 		}
 		id, ok := byLegacy[legacyID]
 		if !ok {

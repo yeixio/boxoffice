@@ -1299,10 +1299,11 @@
     "blurb": {
       "radarr": "Filmler, dosyaları, kalite profilleri, dizinleyiciler, indirme istemcileri ve diğer tüm ayarlar.",
       "sonarr": "Diziler, sezonlar, bölümler ve dosyaları, profiller, dizinleyiciler, indirme istemcileri ve ayarlar.",
-      "nzbget": "Giriş bilgileriyle haber sunucuları, kategoriler ve diğer ayarları."
+      "nzbget": "Giriş bilgileriyle haber sunucuları, kategoriler ve diğer ayarları.",
+      "lidarr": "Sanatçılar, albümleri ve diskteki yerleri, dizinleyiciler, indirme istemcileri ve engel listesi."
     },
     "title": "Taşınma",
-    "sub": "Radarr, Sonarr veya NZBGet'ten her şeyi adım adım getirin. Eski uygulamadan yalnızca okunur, bu yüzden içinde hiçbir şey değişmez.",
+    "sub": "Radarr, Sonarr, Lidarr veya NZBGet'ten her şeyi adım adım getirin. Eski uygulamadan yalnızca okunur, bu yüzden içinde hiçbir şey değişmez.",
     "steps": "Adımlar",
     "background": "Arka planda",
     "look": {
@@ -1325,7 +1326,8 @@
       "key2": "<b>Settings</b>, ardından <b>General</b> bölümüne gidin.",
       "key3": "<b>Security</b> altında <b>API Key</b> değerini kopyalayın ve yukarıya yapıştırın.",
       "go": "Bağlan ve incele",
-      "onlyReads": "Bu yalnızca okur. Bir sonraki adımda onaylayana kadar burada veya {{app}} içinde hiçbir şey değişmez."
+      "onlyReads": "Bu yalnızca okur. Bir sonraki adımda onaylayana kadar burada veya {{app}} içinde hiçbir şey değişmez.",
+      "lidarrOff": "Lidarr'dan mı taşınıyorsunuz? Önce <link>Ayarlar</link> altında Müzik'i açın."
     },
     "maps": {
       "title": "Yol eşlemeleri (genellikle gerekmez)",
@@ -1348,7 +1350,8 @@
       "indexers": "dizinleyiciler",
       "clients": "indirme istemcileri",
       "blocklist": "engellenen sürümler",
-      "lists": "bildirimler ve listeler"
+      "lists": "bildirimler ve listeler",
+      "newArtists": "yeni sanatçı"
     },
     "review": {
       "profiles": "Kalite profilleri",
@@ -1371,7 +1374,8 @@
       "hidden_one": "{{app}} uygulamasının diğer uygulamalardan gizlediği {{count}} parola veya API anahtarı için gerekli.",
       "hidden_other": "{{app}} uygulamasının diğer uygulamalardan gizlediği {{count}} parola ve API anahtarı için gerekli.",
       "confirm": "Onayla ve taşın",
-      "nothing": "{{app}} içinde hiçbir şey değişmez. Dosyalar oldukları yerde kalır."
+      "nothing": "{{app}} içinde hiçbir şey değişmez. Dosyalar oldukları yerde kalır.",
+      "lidarrQuality": "Lidarr'ın kalite profilleri geride kalır: Box Office'te müziğin kendi kalite ayarı vardır, Müzik altında."
     },
     "status": {
       "done": "bitti",
@@ -1433,6 +1437,14 @@
       "summary": "{{added}} eklendi, {{already}} zaten burada, {{files}}",
       "files_one": "{{count}} dosya",
       "files_other": "{{count}} dosya"
+    },
+    "skip": {
+      "badge": "Atlandı",
+      "skip": "Atla",
+      "undo": "Geri al",
+      "skipped": "Atlandı. Ondan hiçbir şey alınmaz ve bir daha sorulmaz.",
+      "offer": "{{app}} kullanmıyor musunuz? <button>Atlayın</button>, Taşın bir daha sormasın. Geri alınabilir.",
+      "isSkipped": "{{app}} uygulamasını atladınız. Yine de ondan taşınabilir ya da <button>atlamayı geri alabilirsiniz</button>."
     }
   },
   "dl": {

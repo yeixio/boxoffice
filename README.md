@@ -17,7 +17,7 @@
 
 Box Office keeps track of the movies and shows in your library and the ones you're waiting for. It fetches files from the Usenet services you connect it to, checks them for malware and damage, and files them into tidy folders that any media server can play. When a better-quality copy turns up, it swaps it in and keeps the old one in a recycle folder.
 
-Already running Radarr, Sonarr or NZBGet? **Move in** brings everything over step by step, and only ever reads from the old apps, so nothing in them changes until you decide to turn them off.
+Already running Radarr, Sonarr, Lidarr or NZBGet? **Move in** brings everything over step by step, and only ever reads from the old apps, so nothing in them changes until you decide to turn them off.
 
 ![A show in Box Office, with its seasons, episodes and the quality of each file](docs/images/show.webp)
 
@@ -46,7 +46,7 @@ Box Office is a library manager. It doesn't come with any content, indexers or n
 - [The request site](#the-request-site)
 - [Works with Matinee](#works-with-matinee)
 - [Run it](#run-it): [Versions](#versions), [Docker](#docker), [Docker Compose](#docker-compose), [Kubernetes](#kubernetes), [from source](#from-source)
-- [Moving in from Radarr, Sonarr and NZBGet](#moving-in-from-radarr-sonarr-and-nzbget)
+- [Moving in from Radarr, Sonarr, Lidarr and NZBGet](#moving-in-from-radarr-sonarr-lidarr-and-nzbget)
 - [Configuration](#configuration)
 - [FAQ](#faq)
 - [How it's built](#how-its-built)
@@ -143,7 +143,7 @@ Open http://localhost:7272, make the admin account, then in **Settings**:
 2. Official images come with a TMDB key for posters and details. If you built Box Office yourself, paste a free [TMDB key](#faq).
 3. Under **Downloads**, add a news server and an indexer, then turn on **Download releases**.
 
-Or skip those and [move in](#moving-in-from-radarr-sonarr-and-nzbget) from Radarr, Sonarr and NZBGet, which brings all of it over.
+Or skip those and [move in](#moving-in-from-radarr-sonarr-lidarr-and-nzbget) from Radarr, Sonarr, Lidarr and NZBGet, which brings all of it over.
 
 `--user` makes Box Office run as you, so the files it writes are yours and it can write to folders you own. Without it, the container runs as user 65532. Make `./data` yourself first (`mkdir -p data`), or Docker makes it owned by root.
 
@@ -207,17 +207,19 @@ cd boxoffice
 make run    # builds the web UI and server, then serves http://localhost:7272 with data in ./data
 ```
 
-## Moving in from Radarr, Sonarr and NZBGet
+## Moving in from Radarr, Sonarr, Lidarr and NZBGet
 
 **Move in** (in the top bar) brings over everything an old app knows, one app at a time, without changing it:
 
-1. **Connect.** Box Office looks for Radarr, Sonarr and NZBGet on their usual addresses and on this machine, and says what it found. Pick one, or type the address. For Radarr and Sonarr, paste the API key from the app's **Settings → General**; NZBGet uses its own username and password.
+1. **Connect.** Box Office looks for Radarr, Sonarr, Lidarr and NZBGet on their usual addresses and on this machine, and says what it found. Pick one, or type the address. Lidarr shows once Music is on in Settings. For Radarr, Sonarr and Lidarr, paste the API key from the app's **Settings → General**; NZBGet uses its own username and password.
 2. **Look it over.** Box Office reads the app and shows what would come across: how many titles are new, how many it already has, any it can't bring and why, and whether it can see the files at the paths the app uses. If the old app sees your library at another path (`/movies` there, `/media/movies` here), it works out the mapping from your mounts, or you can set it.
-3. **Move in.** Box Office can back itself up first, so you can undo with a restore, and can ask the old app to back itself up and keep that copy. Then it brings over titles and their files, quality profiles, root folders, indexers, download clients, news servers, the blocklist, and the app's other settings. Radarr and Sonarr hide passwords and API keys from other apps; Box Office reads them from that backup, so keep it on.
+3. **Move in.** Box Office can back itself up first, so you can undo with a restore, and can ask the old app to back itself up and keep that copy. Then it brings over titles and their files, quality profiles, root folders, indexers, download clients, news servers, the blocklist, and the app's other settings. Radarr, Sonarr and Lidarr hide passwords and API keys from other apps; Box Office reads them from that backup, so keep it on. From Lidarr come its artists, the albums they want, and each album it has, recorded where it is; Lidarr's quality profiles stay behind, since music has its own quality setting.
 4. **Matinee** (optional). Point Matinee at Box Office in place of Radarr and Sonarr, with an admin sign-in to Matinee that's used once and not kept. Skip this if you use Plex or Jellyfin.
 5. **Done.** Your files stay exactly where they were: Box Office records them, it doesn't move them. Run both side by side for as long as you like, then turn the old app off.
 
 Moving in again later is safe: titles already here are left as they are, and their ratings and details are filled in.
+
+Don't use one of the apps? Press **Skip** next to it, on the overview or under its Connect form, and Move in stops asking for it. **Undo** brings it back.
 
 ## Configuration
 
@@ -316,7 +318,7 @@ Yes. The image is built for `linux/amd64` and `linux/arm64` and uses little memo
 <details>
 <summary><b>Is there music, books or a request page of its own?</b></summary>
 
-Yes. Music (in place of Lidarr), ebooks and audiobooks (in place of Readarr) each turn on in Settings, and the request site at `/request` is for people who don't use Matinee. Moving in from Lidarr and Readarr is on the [roadmap](ROADMAP.md).
+Yes. Music (in place of Lidarr), ebooks and audiobooks (in place of Readarr) each turn on in Settings, and the request site at `/request` is for people who don't use Matinee. Lidarr's artists and albums come across with Move in; moving in from Readarr is on the [roadmap](ROADMAP.md).
 </details>
 
 <details>
@@ -333,7 +335,7 @@ One Go binary with the React web UI embedded. It stores everything in SQLite or 
 cmd/boxoffice          entry point
 internal/api           HTTP API for the web UI, auth, serves the UI
 internal/arrapi        Radarr- and Sonarr-compatible API at /radarr and /sonarr
-internal/migrate       Move in: reading Radarr, Sonarr and NZBGet, previews, path maps
+internal/migrate       Move in: reading Radarr, Sonarr, Lidarr and NZBGet, previews, path maps
 internal/search        Newznab searches, RSS sync, library patrol and indexer pacing
 internal/downloader    the download queue, data cap, checks and moving into the library
 internal/usenet        NNTP, yEnc, NZB, par2 repair, RAR unpacking and release screening

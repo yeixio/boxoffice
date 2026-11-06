@@ -1299,10 +1299,11 @@
     "blurb": {
       "radarr": "Filmer, filene deres, kvalitetsprofiler, indeksere, nedlastingsklienter og alle andre innstillinger.",
       "sonarr": "Serier, sesonger, episoder og filene deres, profiler, indeksere, nedlastingsklienter og innstillinger.",
-      "nzbget": "Nyhetsservere med innlogging, kategorier og resten av innstillingene."
+      "nzbget": "Nyhetsservere med innlogging, kategorier og resten av innstillingene.",
+      "lidarr": "Artister, albumene deres og hvor de ligger på disken, indeksere, nedlastingsklienter og blokkeringslisten."
     },
     "title": "Flytt inn",
-    "sub": "Hent alt over fra Radarr, Sonarr eller NZBGet, trinn for trinn. Den gamle appen bare leses fra, så ingenting i den endres.",
+    "sub": "Hent alt over fra Radarr, Sonarr, Lidarr eller NZBGet, trinn for trinn. Den gamle appen bare leses fra, så ingenting i den endres.",
     "steps": "Trinn",
     "background": "I bakgrunnen",
     "look": {
@@ -1325,7 +1326,8 @@
       "key2": "Gå til <b>Settings</b>, så <b>General</b>.",
       "key3": "Under <b>Security</b>, kopier <b>API Key</b> og lim den inn ovenfor.",
       "go": "Koble til og gå gjennom",
-      "onlyReads": "Dette bare leser. Ingenting endres her eller i {{app}} før du bekrefter i neste trinn."
+      "onlyReads": "Dette bare leser. Ingenting endres her eller i {{app}} før du bekrefter i neste trinn.",
+      "lidarrOff": "Flytter du fra Lidarr? Slå på Musikk under <link>Innstillinger</link> først."
     },
     "maps": {
       "title": "Stitilordninger (trengs vanligvis ikke)",
@@ -1348,7 +1350,8 @@
       "indexers": "indeksere",
       "clients": "nedlastingsklienter",
       "blocklist": "blokkerte utgivelser",
-      "lists": "varsler og lister"
+      "lists": "varsler og lister",
+      "newArtists": "nye artister"
     },
     "review": {
       "profiles": "Kvalitetsprofiler",
@@ -1371,7 +1374,8 @@
       "hidden_one": "Trengs for det {{count}} passordet eller den API-nøkkelen {{app}} skjuler for andre apper.",
       "hidden_other": "Trengs for de {{count}} passordene og API-nøklene {{app}} skjuler for andre apper.",
       "confirm": "Bekreft og flytt inn",
-      "nothing": "Ingenting i {{app}} endres. Filene blir liggende der de er."
+      "nothing": "Ingenting i {{app}} endres. Filene blir liggende der de er.",
+      "lidarrQuality": "Kvalitetsprofilene i Lidarr blir igjen: musikk i Box Office har sin egen kvalitetsinnstilling, under Musikk."
     },
     "status": {
       "done": "ferdig",
@@ -1433,6 +1437,14 @@
       "summary": "{{added}} lagt til, {{already}} allerede her, {{files}}",
       "files_one": "{{count}} fil",
       "files_other": "{{count}} filer"
+    },
+    "skip": {
+      "badge": "Hoppet over",
+      "skip": "Hopp over",
+      "undo": "Angre",
+      "skipped": "Hoppet over. Ingenting hentes fra den, og den spørres ikke etter igjen.",
+      "offer": "Bruker du ikke {{app}}? <button>Hopp over den</button>, så slutter Flytt inn å spørre etter den. Det kan angres.",
+      "isSkipped": "Du hoppet over {{app}}. Du kan fortsatt flytte inn fra den, eller <button>angre</button>."
     }
   },
   "dl": {

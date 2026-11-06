@@ -1299,10 +1299,11 @@
     "blurb": {
       "radarr": "Films, hun bestanden, kwaliteitsprofielen, indexers, downloadclients en alle andere instellingen.",
       "sonarr": "Series, seizoenen, afleveringen en hun bestanden, profielen, indexers, downloadclients en instellingen.",
-      "nzbget": "Nieuwsservers met hun inloggegevens, categorieën en de rest van de instellingen."
+      "nzbget": "Nieuwsservers met hun inloggegevens, categorieën en de rest van de instellingen.",
+      "lidarr": "Artiesten, hun albums en waar ze op schijf staan, indexers, downloadclients en de blokkeerlijst."
     },
     "title": "Verhuizen",
-    "sub": "Haal alles over uit Radarr, Sonarr of NZBGet, stap voor stap. De oude app wordt alleen gelezen, dus daar verandert niets.",
+    "sub": "Haal alles over uit Radarr, Sonarr, Lidarr of NZBGet, stap voor stap. De oude app wordt alleen gelezen, dus daar verandert niets.",
     "steps": "Stappen",
     "background": "Op de achtergrond",
     "look": {
@@ -1325,7 +1326,8 @@
       "key2": "Ga naar <b>Settings</b>, dan <b>General</b>.",
       "key3": "Kopieer onder <b>Security</b> de <b>API Key</b> en plak hem hierboven.",
       "go": "Verbinden en bekijken",
-      "onlyReads": "Dit leest alleen. Hier en in {{app}} verandert niets tot je bevestigt bij de volgende stap."
+      "onlyReads": "Dit leest alleen. Hier en in {{app}} verandert niets tot je bevestigt bij de volgende stap.",
+      "lidarrOff": "Verhuis je vanuit Lidarr? Zet eerst Muziek aan onder <link>Instellingen</link>."
     },
     "maps": {
       "title": "Padkoppelingen (meestal niet nodig)",
@@ -1348,7 +1350,8 @@
       "indexers": "indexers",
       "clients": "downloadclients",
       "blocklist": "geblokkeerde releases",
-      "lists": "meldingen en lijsten"
+      "lists": "meldingen en lijsten",
+      "newArtists": "nieuwe artiesten"
     },
     "review": {
       "profiles": "Kwaliteitsprofielen",
@@ -1371,7 +1374,8 @@
       "hidden_one": "Nodig voor het {{count}} wachtwoord of de API-sleutel die {{app}} voor andere apps verbergt.",
       "hidden_other": "Nodig voor de {{count}} wachtwoorden en API-sleutels die {{app}} voor andere apps verbergt.",
       "confirm": "Bevestigen en verhuizen",
-      "nothing": "Er verandert niets in {{app}}. Bestanden blijven waar ze zijn."
+      "nothing": "Er verandert niets in {{app}}. Bestanden blijven waar ze zijn.",
+      "lidarrQuality": "De kwaliteitsprofielen van Lidarr blijven achter: muziek in Box Office heeft een eigen kwaliteitsinstelling, onder Muziek."
     },
     "status": {
       "done": "klaar",
@@ -1433,6 +1437,14 @@
       "summary": "{{added}} toegevoegd, {{already}} al hier, {{files}}",
       "files_one": "{{count}} bestand",
       "files_other": "{{count}} bestanden"
+    },
+    "skip": {
+      "badge": "Overgeslagen",
+      "skip": "Overslaan",
+      "undo": "Ongedaan maken",
+      "skipped": "Overgeslagen. Er komt niets van over, en er wordt niet meer om gevraagd.",
+      "offer": "Gebruik je {{app}} niet? <button>Sla het over</button>, dan vraagt Verhuizen er niet meer om. Je kunt het terugdraaien.",
+      "isSkipped": "Je hebt {{app}} overgeslagen. Je kunt er nog steeds uit verhuizen, of <button>het overslaan terugdraaien</button>."
     }
   },
   "dl": {

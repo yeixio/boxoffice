@@ -16,7 +16,7 @@ Box Office already replaces Radarr, Sonarr and NZBGet for one household. The wor
 
 - **Torrents:** downloading through a torrent client, alongside Usenet. Torznab indexers and torrent clients already come across in Move in and are kept for this.
 - **Requests without Matinee:** a simple, brandable page where everyone in the house asks for movies and shows and reports problems, separate from the admin pages. People using Matinee already do this in Matinee.
-- **Moving in from Lidarr and Readarr:** artists, authors and what they want, the way Radarr and Sonarr come across. Music, ebooks and audiobooks themselves are in.
+- **Moving in from Readarr:** authors and the books they want, the way Radarr, Sonarr and Lidarr come across. Ebooks and audiobooks themselves are in.
 - **Native Matinee integration,** beyond the Radarr- and Sonarr-compatible API.
 
 ## Later

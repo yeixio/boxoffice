@@ -1299,10 +1299,11 @@
     "blurb": {
       "radarr": "Filmek, a fájljaik, minőségi profilok, indexerek, letöltőkliensek és minden más beállítás.",
       "sonarr": "Sorozatok, évadok, epizódok és a fájljaik, profilok, indexerek, letöltőkliensek és beállítások.",
-      "nzbget": "Hírszerverek a bejelentkezési adataikkal, kategóriák és a többi beállítása."
+      "nzbget": "Hírszerverek a bejelentkezési adataikkal, kategóriák és a többi beállítása.",
+      "lidarr": "Előadók, albumaik és hogy hol vannak a lemezen, indexelők, letöltőkliensek és a tiltólista."
     },
     "title": "Költözés",
-    "sub": "Hozz át mindent a Radarrból, a Sonarrból vagy az NZBGetből, lépésről lépésre. A régi alkalmazásból csak olvas, így abban semmi sem változik.",
+    "sub": "Hozz át mindent a Radarrból, a Sonarr, Lidarrból vagy az NZBGetből, lépésről lépésre. A régi alkalmazásból csak olvas, így abban semmi sem változik.",
     "steps": "Lépések",
     "background": "A háttérben",
     "look": {
@@ -1325,7 +1326,8 @@
       "key2": "Menj a <b>Settings</b>, majd a <b>General</b> menübe.",
       "key3": "A <b>Security</b> alatt másold ki az <b>API Key</b> értékét, és illeszd be fent.",
       "go": "Csatlakozás és átnézés",
-      "onlyReads": "Ez csak olvas. Sem itt, sem a(z) {{app}} alkalmazásban nem változik semmi, amíg a következő lépésben meg nem erősíted."
+      "onlyReads": "Ez csak olvas. Sem itt, sem a(z) {{app}} alkalmazásban nem változik semmi, amíg a következő lépésben meg nem erősíted.",
+      "lidarrOff": "Lidarrból költözöl? Előbb kapcsold be a Zenét a <link>Beállításokban</link>."
     },
     "maps": {
       "title": "Útvonal-megfeleltetések (általában nem kellenek)",
@@ -1348,7 +1350,8 @@
       "indexers": "indexerek",
       "clients": "letöltőkliensek",
       "blocklist": "letiltott kiadások",
-      "lists": "értesítések és listák"
+      "lists": "értesítések és listák",
+      "newArtists": "új előadó"
     },
     "review": {
       "profiles": "Minőségi profilok",
@@ -1371,7 +1374,8 @@
       "hidden_one": "Szükséges a(z) {{count}} jelszóhoz vagy API-kulcshoz, amelyet a(z) {{app}} elrejt más alkalmazások elől.",
       "hidden_other": "Szükséges a(z) {{count}} jelszóhoz és API-kulcshoz, amelyet a(z) {{app}} elrejt más alkalmazások elől.",
       "confirm": "Megerősítés és költözés",
-      "nothing": "A(z) {{app}} alkalmazásban semmi sem változik. A fájlok ott maradnak, ahol vannak."
+      "nothing": "A(z) {{app}} alkalmazásban semmi sem változik. A fájlok ott maradnak, ahol vannak.",
+      "lidarrQuality": "A Lidarr minőségi profiljai maradnak: a Box Office zenéjének saját minőségi beállítása van a Zene alatt."
     },
     "status": {
       "done": "kész",
@@ -1433,6 +1437,14 @@
       "summary": "{{added}} hozzáadva, {{already}} már itt volt, {{files}}",
       "files_one": "{{count}} fájl",
       "files_other": "{{count}} fájl"
+    },
+    "skip": {
+      "badge": "Kihagyva",
+      "skip": "Kihagyás",
+      "undo": "Visszavonás",
+      "skipped": "Kihagyva. Semmi sem jön át belőle, és többé nem kéri.",
+      "offer": "Nem használod a(z) {{app}} alkalmazást? <button>Hagyd ki</button>, és a Költözés nem kéri többé. Visszavonható.",
+      "isSkipped": "Kihagytad a(z) {{app}} alkalmazást. Még költözhetsz belőle, vagy <button>visszavonhatod a kihagyást</button>."
     }
   },
   "dl": {

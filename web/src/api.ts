@@ -185,7 +185,7 @@ export type Backup = { name: string; reason: string; size: number; createdAt: st
 export type Backups = { settings: BackupSettings; backups: Backup[]; dir: string; remoteError?: string }
 
 export type PathMap = { from: string; to: string }
-export type MigrationApp = 'radarr' | 'sonarr' | 'nzbget'
+export type MigrationApp = 'radarr' | 'sonarr' | 'lidarr' | 'nzbget'
 export type MigrationRequest = { app: MigrationApp; url: string; apiKey?: string; username?: string; password?: string; pathMap: PathMap[] }
 export type Plan = {
   token: string

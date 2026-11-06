@@ -1386,10 +1386,11 @@
     "blurb": {
       "radarr": "Filmes, os arquivos deles, perfis de qualidade, indexadores, clientes de download e todas as outras configurações.",
       "sonarr": "Séries, temporadas, episódios e seus arquivos, perfis, indexadores, clientes de download e configurações.",
-      "nzbget": "Servidores de news com seus logins, categorias e o resto das configurações."
+      "nzbget": "Servidores de news com seus logins, categorias e o resto das configurações.",
+      "lidarr": "Artistas, seus álbuns e onde estão no disco, indexadores, clientes de download e a lista de bloqueio."
     },
     "title": "Mudar",
-    "sub": "Traga tudo do Radarr, Sonarr ou NZBGet, passo a passo. O app antigo só é lido, então nada nele muda.",
+    "sub": "Traga tudo do Radarr, Sonarr, Lidarr ou NZBGet, passo a passo. O app antigo só é lido, então nada nele muda.",
     "steps": "Etapas",
     "background": "Em segundo plano",
     "look": {
@@ -1412,7 +1413,8 @@
       "key2": "Vá em <b>Settings</b>, depois <b>General</b>.",
       "key3": "Em <b>Security</b>, copie a <b>API Key</b> e cole acima.",
       "go": "Conectar e revisar",
-      "onlyReads": "Isto só lê. Nada muda aqui nem no {{app}} até você confirmar na próxima etapa."
+      "onlyReads": "Isto só lê. Nada muda aqui nem no {{app}} até você confirmar na próxima etapa.",
+      "lidarrOff": "Vai se mudar do Lidarr? Ative primeiro a Música em <link>Configurações</link>."
     },
     "maps": {
       "title": "Mapeamentos de caminho (geralmente não necessários)",
@@ -1435,7 +1437,8 @@
       "indexers": "indexadores",
       "clients": "clientes de download",
       "blocklist": "releases bloqueados",
-      "lists": "notificações e listas"
+      "lists": "notificações e listas",
+      "newArtists": "artistas novos"
     },
     "review": {
       "profiles": "Perfis de qualidade",
@@ -1459,7 +1462,8 @@
       "hidden_many": "Necessário para as {{count}} de senhas e chaves de API que o {{app}} esconde de outros apps.",
       "hidden_other": "Necessário para as {{count}} senhas e chaves de API que o {{app}} esconde de outros apps.",
       "confirm": "Confirmar e mudar",
-      "nothing": "Nada muda no {{app}}. Os arquivos ficam onde estão."
+      "nothing": "Nada muda no {{app}}. Os arquivos ficam onde estão.",
+      "lidarrQuality": "Os perfis de qualidade do Lidarr ficam para trás: a música do Box Office tem sua própria configuração de qualidade, em Música."
     },
     "status": {
       "done": "concluído",
@@ -1523,6 +1527,14 @@
       "files_one": "{{count}} arquivo",
       "files_many": "{{count}} de arquivos",
       "files_other": "{{count}} arquivos"
+    },
+    "skip": {
+      "badge": "Pulado",
+      "skip": "Pular",
+      "undo": "Desfazer",
+      "skipped": "Pulado. Nada vem dele, e ele não é mais pedido.",
+      "offer": "Não usa o {{app}}? <button>Pule</button>, e a mudança para de pedi-lo. Dá para desfazer.",
+      "isSkipped": "Você pulou o {{app}}. Ainda pode se mudar dele ou <button>desfazer</button>."
     }
   },
   "dl": {

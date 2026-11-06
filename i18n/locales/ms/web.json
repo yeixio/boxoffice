@@ -1212,10 +1212,11 @@
     "blurb": {
       "radarr": "Filem, failnya, profil kualiti, pengindeks, klien muat turun dan setiap tetapan lain.",
       "sonarr": "Rancangan, musim, episod dan failnya, profil, pengindeks, klien muat turun dan tetapan.",
-      "nzbget": "Pelayan berita dengan maklumat log masuknya, kategori dan tetapan lainnya."
+      "nzbget": "Pelayan berita dengan maklumat log masuknya, kategori dan tetapan lainnya.",
+      "lidarr": "Artis, album mereka dan lokasinya dalam cakera, pengindeks, klien muat turun dan senarai sekatan."
     },
     "title": "Pindah masuk",
-    "sub": "Bawa semuanya dari Radarr, Sonarr atau NZBGet, langkah demi langkah. Aplikasi lama hanya dibaca, jadi tiada apa di dalamnya berubah.",
+    "sub": "Bawa semuanya dari Radarr, Sonarr, Lidarr atau NZBGet, langkah demi langkah. Aplikasi lama hanya dibaca, jadi tiada apa di dalamnya berubah.",
     "steps": "Langkah",
     "background": "Di latar belakang",
     "look": {
@@ -1238,7 +1239,8 @@
       "key2": "Pergi ke <b>Settings</b>, kemudian <b>General</b>.",
       "key3": "Di bawah <b>Security</b>, salin <b>API Key</b> dan tampalkannya di atas.",
       "go": "Sambung dan semak",
-      "onlyReads": "Ini hanya membaca. Tiada apa berubah di sini atau dalam {{app}} sehingga anda mengesahkan pada langkah seterusnya."
+      "onlyReads": "Ini hanya membaca. Tiada apa berubah di sini atau dalam {{app}} sehingga anda mengesahkan pada langkah seterusnya.",
+      "lidarrOff": "Berpindah dari Lidarr? Hidupkan Muzik di <link>Tetapan</link> dahulu."
     },
     "maps": {
       "title": "Pemetaan laluan (biasanya tidak diperlukan)",
@@ -1261,7 +1263,8 @@
       "indexers": "pengindeks",
       "clients": "klien muat turun",
       "blocklist": "keluaran disekat",
-      "lists": "pemberitahuan dan senarai"
+      "lists": "pemberitahuan dan senarai",
+      "newArtists": "artis baharu"
     },
     "review": {
       "profiles": "Profil kualiti",
@@ -1283,7 +1286,8 @@
       "backupApp": "Minta {{app}} membuat sandaran dirinya, dan simpan di sini",
       "hidden_other": "Diperlukan untuk {{count}} kata laluan dan kunci API yang disembunyikan {{app}} daripada aplikasi lain.",
       "confirm": "Sahkan dan pindah masuk",
-      "nothing": "Tiada apa dalam {{app}} berubah. Fail kekal di tempatnya."
+      "nothing": "Tiada apa dalam {{app}} berubah. Fail kekal di tempatnya.",
+      "lidarrQuality": "Profil kualiti Lidarr ditinggalkan: muzik Box Office ada tetapan kualitinya sendiri, di bawah Muzik."
     },
     "status": {
       "done": "selesai",
@@ -1343,6 +1347,14 @@
       },
       "summary": "{{added}} ditambah, {{already}} sudah ada, {{files}}",
       "files_other": "{{count}} fail"
+    },
+    "skip": {
+      "badge": "Dilangkau",
+      "skip": "Langkau",
+      "undo": "Buat asal",
+      "skipped": "Dilangkau. Tiada apa-apa dibawa daripadanya, dan ia tidak ditanya lagi.",
+      "offer": "Tidak guna {{app}}? <button>Langkaunya</button>, dan Pindah Masuk berhenti bertanya. Boleh dibuat asal.",
+      "isSkipped": "Anda melangkau {{app}}. Anda masih boleh berpindah daripadanya, atau <button>buat asal</button>."
     }
   },
   "dl": {

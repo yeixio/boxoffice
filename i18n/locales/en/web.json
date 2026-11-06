@@ -1299,10 +1299,11 @@
     "blurb": {
       "radarr": "Movies, their files, quality profiles, indexers, download clients and every other setting.",
       "sonarr": "Shows, seasons, episodes and their files, profiles, indexers, download clients and settings.",
-      "nzbget": "News servers with their sign-ins, categories and the rest of its settings."
+      "nzbget": "News servers with their sign-ins, categories and the rest of its settings.",
+      "lidarr": "Artists, their albums and where they are on disk, indexers, download clients and the blocklist."
     },
     "title": "Move in",
-    "sub": "Bring everything over from Radarr, Sonarr or NZBGet, step by step. The old app is only read from, so nothing in it changes.",
+    "sub": "Bring everything over from Radarr, Sonarr, Lidarr or NZBGet, step by step. The old app is only read from, so nothing in it changes.",
     "steps": "Steps",
     "background": "In the background",
     "look": {
@@ -1325,7 +1326,8 @@
       "key2": "Go to <b>Settings</b>, then <b>General</b>.",
       "key3": "Under <b>Security</b>, copy the <b>API Key</b> and paste it above.",
       "go": "Connect and look it over",
-      "onlyReads": "This only reads. Nothing changes here or in {{app}} until you confirm on the next step."
+      "onlyReads": "This only reads. Nothing changes here or in {{app}} until you confirm on the next step.",
+      "lidarrOff": "Moving in from Lidarr? Turn on Music under <link>Settings</link> first."
     },
     "maps": {
       "title": "Path maps (usually not needed)",
@@ -1348,7 +1350,8 @@
       "indexers": "indexers",
       "clients": "download clients",
       "blocklist": "blocked releases",
-      "lists": "notifications and lists"
+      "lists": "notifications and lists",
+      "newArtists": "new artists"
     },
     "review": {
       "profiles": "Quality profiles",
@@ -1371,7 +1374,8 @@
       "hidden_one": "Needed for the {{count}} password or API key {{app}} hides from other apps.",
       "hidden_other": "Needed for the {{count}} passwords and API keys {{app}} hides from other apps.",
       "confirm": "Confirm and move in",
-      "nothing": "Nothing in {{app}} changes. Files stay where they are."
+      "nothing": "Nothing in {{app}} changes. Files stay where they are.",
+      "lidarrQuality": "Lidarr's quality profiles stay behind: Box Office's music has its own quality setting, under Music."
     },
     "status": {
       "done": "done",
@@ -1433,6 +1437,14 @@
       "summary": "{{added}} added, {{already}} already here, {{files}}",
       "files_one": "{{count}} file",
       "files_other": "{{count}} files"
+    },
+    "skip": {
+      "badge": "Skipped",
+      "skip": "Skip",
+      "undo": "Undo",
+      "skipped": "Skipped. Nothing comes over from it, and it's not asked for again.",
+      "offer": "Don't use {{app}}? <button>Skip it</button>, and Move in stops asking for it. You can undo that.",
+      "isSkipped": "You skipped {{app}}. You can still move in from it, or <button>undo the skip</button>."
     }
   },
   "dl": {

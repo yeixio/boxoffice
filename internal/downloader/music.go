@@ -260,3 +260,9 @@ func audioSize(dir string) int64 {
 	})
 	return total
 }
+
+// AlbumDir is the album folder its tracks are in (CD1 and CD2 folders
+// counted as part of the album), or "" when they're not all in one.
+func AlbumDir(tracks []string) string {
+	return strings.TrimSuffix(filepath.FromSlash(commonDir(tracks)), string(filepath.Separator))
+}

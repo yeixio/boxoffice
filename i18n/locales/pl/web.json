@@ -1473,10 +1473,11 @@
     "blurb": {
       "radarr": "Filmy, ich pliki, profile jakości, indeksery, klienty pobierania i wszystkie inne ustawienia.",
       "sonarr": "Seriale, sezony, odcinki i ich pliki, profile, indeksery, klienty pobierania i ustawienia.",
-      "nzbget": "Serwery news z danymi logowania, kategorie i reszta ustawień."
+      "nzbget": "Serwery news z danymi logowania, kategorie i reszta ustawień.",
+      "lidarr": "Wykonawcy, ich albumy i miejsce na dysku, indeksery, klienty pobierania i lista blokad."
     },
     "title": "Przeprowadź się",
-    "sub": "Przenieś wszystko z Radarr, Sonarr lub NZBGet, krok po kroku. Stara aplikacja jest tylko odczytywana, więc nic się w niej nie zmienia.",
+    "sub": "Przenieś wszystko z Radarr, Sonarr, Lidarr lub NZBGet, krok po kroku. Stara aplikacja jest tylko odczytywana, więc nic się w niej nie zmienia.",
     "steps": "Kroki",
     "background": "W tle",
     "look": {
@@ -1499,7 +1500,8 @@
       "key2": "Przejdź do <b>Settings</b>, potem <b>General</b>.",
       "key3": "W sekcji <b>Security</b> skopiuj <b>API Key</b> i wklej go powyżej.",
       "go": "Połącz i przejrzyj",
-      "onlyReads": "To tylko odczyt. Nic nie zmienia się tutaj ani w {{app}}, dopóki nie potwierdzisz w następnym kroku."
+      "onlyReads": "To tylko odczyt. Nic nie zmienia się tutaj ani w {{app}}, dopóki nie potwierdzisz w następnym kroku.",
+      "lidarrOff": "Przeprowadzka z Lidarr? Najpierw włącz Muzykę w <link>Ustawieniach</link>."
     },
     "maps": {
       "title": "Mapowania ścieżek (zwykle niepotrzebne)",
@@ -1522,7 +1524,8 @@
       "indexers": "indeksery",
       "clients": "klienty pobierania",
       "blocklist": "zablokowane wydania",
-      "lists": "powiadomienia i listy"
+      "lists": "powiadomienia i listy",
+      "newArtists": "nowi wykonawcy"
     },
     "review": {
       "profiles": "Profile jakości",
@@ -1547,7 +1550,8 @@
       "hidden_many": "Potrzebne dla {{count}} haseł i kluczy API, które {{app}} ukrywa przed innymi aplikacjami.",
       "hidden_other": "Potrzebne dla {{count}} hasła i klucza API, które {{app}} ukrywa przed innymi aplikacjami.",
       "confirm": "Potwierdź i przeprowadź się",
-      "nothing": "Nic się nie zmienia w {{app}}. Pliki zostają tam, gdzie są."
+      "nothing": "Nic się nie zmienia w {{app}}. Pliki zostają tam, gdzie są.",
+      "lidarrQuality": "Profile jakości z Lidarr zostają: muzyka w Box Office ma własne ustawienie jakości, w sekcji Muzyka."
     },
     "status": {
       "done": "gotowe",
@@ -1613,6 +1617,14 @@
       "files_few": "{{count}} pliki",
       "files_many": "{{count}} plików",
       "files_other": "{{count}} pliku"
+    },
+    "skip": {
+      "badge": "Pominięto",
+      "skip": "Pomiń",
+      "undo": "Cofnij",
+      "skipped": "Pominięto. Nic z niej nie zostanie przeniesione i nie będzie już proponowana.",
+      "offer": "Nie używasz {{app}}? <button>Pomiń</button>, a przeprowadzka przestanie o nią pytać. Można to cofnąć.",
+      "isSkipped": "Pominięto {{app}}. Nadal możesz się z niej przenieść albo <button>cofnąć pominięcie</button>."
     }
   },
   "dl": {

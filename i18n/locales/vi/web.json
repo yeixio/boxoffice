@@ -1212,10 +1212,11 @@
     "blurb": {
       "radarr": "Phim, tệp của chúng, hồ sơ chất lượng, trình lập chỉ mục, trình tải xuống và mọi cài đặt khác.",
       "sonarr": "Chương trình, mùa, tập và tệp của chúng, hồ sơ, trình lập chỉ mục, trình tải xuống và cài đặt.",
-      "nzbget": "Máy chủ tin cùng thông tin đăng nhập, danh mục và các cài đặt còn lại của nó."
+      "nzbget": "Máy chủ tin cùng thông tin đăng nhập, danh mục và các cài đặt còn lại của nó.",
+      "lidarr": "Nghệ sĩ, album của họ và vị trí trên đĩa, indexer, trình tải và danh sách chặn."
     },
     "title": "Chuyển sang",
-    "sub": "Mang mọi thứ từ Radarr, Sonarr hoặc NZBGet sang, từng bước một. Ứng dụng cũ chỉ được đọc, nên không có gì trong đó thay đổi.",
+    "sub": "Mang mọi thứ từ Radarr, Sonarr, Lidarr hoặc NZBGet sang, từng bước một. Ứng dụng cũ chỉ được đọc, nên không có gì trong đó thay đổi.",
     "steps": "Các bước",
     "background": "Ở chế độ nền",
     "look": {
@@ -1238,7 +1239,8 @@
       "key2": "Vào <b>Settings</b>, rồi <b>General</b>.",
       "key3": "Trong <b>Security</b>, sao chép <b>API Key</b> và dán vào ô ở trên.",
       "go": "Kết nối và xem lại",
-      "onlyReads": "Việc này chỉ đọc. Không có gì thay đổi ở đây hay trong {{app}} cho đến khi bạn xác nhận ở bước tiếp theo."
+      "onlyReads": "Việc này chỉ đọc. Không có gì thay đổi ở đây hay trong {{app}} cho đến khi bạn xác nhận ở bước tiếp theo.",
+      "lidarrOff": "Chuyển từ Lidarr? Hãy bật Âm nhạc trong <link>Cài đặt</link> trước."
     },
     "maps": {
       "title": "Ánh xạ đường dẫn (thường không cần)",
@@ -1261,7 +1263,8 @@
       "indexers": "trình lập chỉ mục",
       "clients": "trình tải xuống",
       "blocklist": "bản phát hành bị chặn",
-      "lists": "thông báo và danh sách"
+      "lists": "thông báo và danh sách",
+      "newArtists": "nghệ sĩ mới"
     },
     "review": {
       "profiles": "Hồ sơ chất lượng",
@@ -1283,7 +1286,8 @@
       "backupApp": "Để {{app}} tự sao lưu, và giữ bản sao lưu ở đây",
       "hidden_other": "Cần cho {{count}} mật khẩu và khóa API mà {{app}} ẩn khỏi các ứng dụng khác.",
       "confirm": "Xác nhận và chuyển sang",
-      "nothing": "Không có gì trong {{app}} thay đổi. Các tệp vẫn ở nguyên chỗ."
+      "nothing": "Không có gì trong {{app}} thay đổi. Các tệp vẫn ở nguyên chỗ.",
+      "lidarrQuality": "Hồ sơ chất lượng của Lidarr được giữ lại: âm nhạc trong Box Office có cài đặt chất lượng riêng, ở mục Âm nhạc."
     },
     "status": {
       "done": "xong",
@@ -1343,6 +1347,14 @@
       },
       "summary": "đã thêm {{added}}, đã có {{already}}, {{files}}",
       "files_other": "{{count}} tệp"
+    },
+    "skip": {
+      "badge": "Đã bỏ qua",
+      "skip": "Bỏ qua",
+      "undo": "Hoàn tác",
+      "skipped": "Đã bỏ qua. Không mang gì sang từ ứng dụng này và sẽ không hỏi lại.",
+      "offer": "Không dùng {{app}}? <button>Bỏ qua</button> và Chuyển vào sẽ không hỏi nữa. Có thể hoàn tác.",
+      "isSkipped": "Bạn đã bỏ qua {{app}}. Bạn vẫn có thể chuyển từ đó, hoặc <button>hoàn tác</button>."
     }
   },
   "dl": {

@@ -3,6 +3,7 @@ package api
 import (
 	"cmp"
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -964,6 +965,58 @@ func (s *Server) setMovedIn(done bool) func(w http.ResponseWriter, r *http.Reque
 		}
 		w.WriteHeader(http.StatusNoContent)
 		return nil
+	}
+}
+
+// settingSkipped lists the apps an admin chose not to move in from, so
+// Move in stops offering them.
+const settingSkipped = "move_in_skipped"
+
+var moveInApps = []string{"radarr", "sonarr", "lidarr", "nzbget"}
+
+func (s *Server) skipped(ctx context.Context) ([]string, error) {
+	v, err := s.Store.Setting(ctx, settingSkipped)
+	if err != nil {
+		return nil, err
+	}
+	out := []string{}
+	if v != "" {
+		if err := json.Unmarshal([]byte(v), &out); err != nil {
+			return []string{}, nil
+		}
+	}
+	return out, nil
+}
+
+func (s *Server) skippedApps(w http.ResponseWriter, r *http.Request) error {
+	list, err := s.skipped(r.Context())
+	if err != nil {
+		return err
+	}
+	return writeJSON(w, http.StatusOK, list)
+}
+
+// skipApp skips an app in Move in, or offers it again. Nothing is changed
+// in the app or the library: it's only taken off the list of apps to do.
+func (s *Server) skipApp(skip bool) func(w http.ResponseWriter, r *http.Request) error {
+	return func(w http.ResponseWriter, r *http.Request) error {
+		app := r.PathValue("app")
+		if !slices.Contains(moveInApps, app) {
+			return errorf(http.StatusNotFound, "there's no app called "+app+" to move in from")
+		}
+		list, err := s.skipped(r.Context())
+		if err != nil {
+			return err
+		}
+		list = slices.DeleteFunc(list, func(a string) bool { return a == app })
+		if skip {
+			list = append(list, app)
+		}
+		b, _ := json.Marshal(list)
+		if err := s.Store.SetSetting(r.Context(), settingSkipped, string(b)); err != nil {
+			return err
+		}
+		return writeJSON(w, http.StatusOK, list)
 	}
 }
 

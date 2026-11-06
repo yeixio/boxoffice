@@ -1299,10 +1299,11 @@
     "blurb": {
       "radarr": "Elokuvat, niiden tiedostot, laatuprofiilit, indeksoijat, latausohjelmat ja kaikki muut asetukset.",
       "sonarr": "Sarjat, kaudet, jaksot ja niiden tiedostot, profiilit, indeksoijat, latausohjelmat ja asetukset.",
-      "nzbget": "Uutispalvelimet kirjautumistietoineen, kategoriat ja muut asetukset."
+      "nzbget": "Uutispalvelimet kirjautumistietoineen, kategoriat ja muut asetukset.",
+      "lidarr": "Artistit, heidän albuminsa ja niiden paikka levyllä, indeksoijat, latausohjelmat ja estolista."
     },
     "title": "Muuta",
-    "sub": "Tuo kaikki Radarrista, Sonarrista tai NZBGetistä vaihe vaiheelta. Vanhaa sovellusta vain luetaan, joten siinä ei muutu mitään.",
+    "sub": "Tuo kaikki Radarrista, Sonarr, Lidarrista tai NZBGetistä vaihe vaiheelta. Vanhaa sovellusta vain luetaan, joten siinä ei muutu mitään.",
     "steps": "Vaiheet",
     "background": "Taustalla",
     "look": {
@@ -1325,7 +1326,8 @@
       "key2": "Mene kohtaan <b>Settings</b>, sitten <b>General</b>.",
       "key3": "Kopioi kohdasta <b>Security</b> <b>API Key</b> ja liitä se yllä olevaan kenttään.",
       "go": "Yhdistä ja tarkista",
-      "onlyReads": "Tämä vain lukee. Mikään ei muutu täällä eikä sovelluksessa {{app}} ennen kuin vahvistat seuraavassa vaiheessa."
+      "onlyReads": "Tämä vain lukee. Mikään ei muutu täällä eikä sovelluksessa {{app}} ennen kuin vahvistat seuraavassa vaiheessa.",
+      "lidarrOff": "Muutatko Lidarrista? Ota ensin Musiikki käyttöön kohdassa <link>Asetukset</link>."
     },
     "maps": {
       "title": "Polkuvastaavuudet (yleensä ei tarvita)",
@@ -1348,7 +1350,8 @@
       "indexers": "indeksoijat",
       "clients": "latausohjelmat",
       "blocklist": "estetyt julkaisut",
-      "lists": "ilmoitukset ja listat"
+      "lists": "ilmoitukset ja listat",
+      "newArtists": "uutta artistia"
     },
     "review": {
       "profiles": "Laatuprofiilit",
@@ -1371,7 +1374,8 @@
       "hidden_one": "Tarvitaan {{count}} salasanaa tai API-avainta varten, jonka {{app}} piilottaa muilta sovelluksilta.",
       "hidden_other": "Tarvitaan {{count}} salasanaa ja API-avainta varten, jotka {{app}} piilottaa muilta sovelluksilta.",
       "confirm": "Vahvista ja muuta",
-      "nothing": "Mikään ei muutu sovelluksessa {{app}}. Tiedostot jäävät paikoilleen."
+      "nothing": "Mikään ei muutu sovelluksessa {{app}}. Tiedostot jäävät paikoilleen.",
+      "lidarrQuality": "Lidarrin laatuprofiilit jäävät: Box Officen musiikilla on oma laatuasetuksensa Musiikki-kohdassa."
     },
     "status": {
       "done": "valmis",
@@ -1433,6 +1437,14 @@
       "summary": "{{added}} lisätty, {{already}} jo täällä, {{files}}",
       "files_one": "{{count}} tiedosto",
       "files_other": "{{count}} tiedostoa"
+    },
+    "skip": {
+      "badge": "Ohitettu",
+      "skip": "Ohita",
+      "undo": "Kumoa",
+      "skipped": "Ohitettu. Siitä ei tuoda mitään, eikä sitä kysytä enää.",
+      "offer": "Etkö käytä {{app}}ia? <button>Ohita se</button>, niin muutto ei enää kysy sitä. Voit kumota tämän.",
+      "isSkipped": "Ohitit sovelluksen {{app}}. Voit silti muuttaa siitä tai <button>kumota ohituksen</button>."
     }
   },
   "dl": {

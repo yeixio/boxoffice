@@ -1,4 +1,4 @@
-// Package migrate moves a Radarr or Sonarr into Box Office, step by step
+// Package migrate moves a Radarr, Sonarr, Lidarr or NZBGet into Box Office, step by step
 // and without changing the old app: connect to it, look over what would
 // come across, confirm, optionally back both up, import, and optionally
 // point Matinee at Box Office. Then the old app can be shut down.
@@ -27,6 +27,7 @@ import (
 
 	"github.com/yeixio/boxoffice/internal/backup"
 	"github.com/yeixio/boxoffice/internal/catalog"
+	"github.com/yeixio/boxoffice/internal/mediatypes"
 	"github.com/yeixio/boxoffice/internal/quality"
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/tmdb"
@@ -74,7 +75,7 @@ func mapPath(maps []PathMap, p string) string {
 // Request is what an admin enters to start: which app, where it is, and
 // how its paths map.
 type Request struct {
-	App     string    `json:"app"` // radarr, sonarr or nzbget
+	App     string    `json:"app"` // radarr, sonarr, lidarr or nzbget
 	URL     string    `json:"url"`
 	APIKey  string    `json:"apiKey"`
 	PathMap []PathMap `json:"pathMap"`
@@ -231,6 +232,10 @@ type pending struct {
 	roots    []lRoot
 	movies   []lMovie
 	series   []lSeries
+	artists  []lArtist
+	albums   []lAlbum
+	// albumIDs maps Lidarr's album ids to Box Office's, once imported.
+	albumIDs map[int]int64
 	settings settingsData
 	// backupZip is the old app's own backup, once the backup step has run;
 	// the secrets it hides over its API are read from it.
@@ -277,20 +282,41 @@ func (m *Migrator) preview(ctx context.Context, req Request, say report) (Plan, 
 		return Plan{}, err
 	}
 	p := &pending{req: req, l: l}
-	say("Reading quality profiles and root folders", 0, 0)
-	if err := l.get(ctx, "/qualityprofile", nil, &p.profiles); err != nil {
-		return Plan{}, err
+	if req.App == "lidarr" {
+		// Box Office's music has quality settings of its own, so
+		// Lidarr's profiles stay behind.
+		if on, err := mediatypes.Enabled(ctx, m.Catalog.Store, mediatypes.Music); err != nil {
+			return Plan{}, err
+		} else if !on {
+			return Plan{}, errMusicOff
+		}
+		say("Reading root folders", 0, 0)
+	} else {
+		say("Reading quality profiles and root folders", 0, 0)
+		if err := l.get(ctx, "/qualityprofile", nil, &p.profiles); err != nil {
+			return Plan{}, err
+		}
 	}
 	if err := l.get(ctx, "/rootfolder", nil, &p.roots); err != nil {
 		return Plan{}, err
 	}
-	say(map[string]string{"radarr": "Reading the movies", "sonarr": "Reading the shows"}[req.App], 0, 0)
-	if req.App == "radarr" {
+	say(map[string]string{"radarr": "Reading the movies", "sonarr": "Reading the shows", "lidarr": "Reading the artists and albums"}[req.App], 0, 0)
+	switch req.App {
+	case "radarr":
 		if err := l.get(ctx, "/movie", nil, &p.movies); err != nil {
 			return Plan{}, err
 		}
-	} else if err := l.get(ctx, "/series", nil, &p.series); err != nil {
-		return Plan{}, err
+	case "lidarr":
+		if err := l.get(ctx, "/artist", nil, &p.artists); err != nil {
+			return Plan{}, err
+		}
+		if err := l.get(ctx, "/album", nil, &p.albums); err != nil {
+			return Plan{}, err
+		}
+	default:
+		if err := l.get(ctx, "/series", nil, &p.series); err != nil {
+			return Plan{}, err
+		}
 	}
 	say("Reading indexers, download clients and settings", 0, 0)
 	if p.settings, err = l.readSettings(ctx); err != nil {
@@ -329,7 +355,7 @@ func (m *Migrator) preview(ctx context.Context, req Request, say report) (Plan, 
 		plan.Profiles = append(plan.Profiles, pp)
 	}
 
-	kind := map[string]string{"radarr": "movie", "sonarr": "series"}[req.App]
+	kind := rootKind[req.App]
 	have, err := m.Catalog.Store.RootFolders(ctx, kind)
 	if err != nil {
 		return Plan{}, err
@@ -398,14 +424,17 @@ func (m *Migrator) preview(ctx context.Context, req Request, say report) (Plan, 
 		plan.Titles.New++
 		sample(Sample{Title: sr.Title, Year: sr.Year, Path: mapPath(req.PathMap, sr.Path)})
 	}
+	if req.App == "lidarr" {
+		m.previewArtists(ctx, p, &plan, sample)
+	}
 	if noTMDB > 0 {
 		plan.Warnings = append(plan.Warnings, count(noTMDB, "movie has", "movies have")+" no TMDB id in Radarr and will be left out.")
 	}
 	if needTMDB > 0 && m.Catalog.TMDB(ctx).Key == "" {
 		plan.Warnings = append(plan.Warnings, count(needTMDB, "show has", "shows have")+" no TMDB id in Sonarr. Add a TMDB key under Settings so Box Office can look them up by their TVDB id; without one they're left out.")
 	}
-	if req.App == "sonarr" {
-		plan.Files.Total = -1 // counted while importing; Sonarr lists files per show
+	if req.App == "sonarr" || req.App == "lidarr" {
+		plan.Files.Total = -1 // counted while importing; Sonarr and Lidarr list files per show or artist
 	}
 	if plan.Files.Missing > 0 {
 		plan.Warnings = append(plan.Warnings, fmt.Sprintf("Box Office can't see %d of the %d files at their paths. They're imported anyway, but check the path maps first.", plan.Files.Missing, plan.Files.Total))
@@ -435,6 +464,9 @@ func (m *Migrator) findPathMaps(p *pending) []PathMap {
 	}
 	for _, sr := range p.series {
 		paths = append(paths, sr.Path)
+	}
+	for _, a := range p.artists {
+		paths = append(paths, a.Path)
 	}
 	titles := map[string][]string{}
 	for _, t := range paths {
@@ -587,9 +619,12 @@ func (m *Migrator) Run(ctx context.Context, token string, o Options) (int64, err
 			{Name: "Back up Box Office", Status: "waiting"},
 			{Name: "Back up " + name, Status: "waiting"},
 			{Name: "Bring over quality profiles and root folders", Status: "waiting"},
-			{Name: "Bring over " + map[string]string{"radarr": "movies", "sonarr": "shows and episodes"}[p.req.App], Status: "waiting"},
+			{Name: "Bring over " + map[string]string{"radarr": "movies", "sonarr": "shows and episodes", "lidarr": "artists and albums"}[p.req.App], Status: "waiting"},
 			{Name: "Bring over indexers, download clients and settings", Status: "waiting"},
 		}
+	}
+	if p.req.App == "lidarr" {
+		pr.Steps[2].Name = "Bring over root folders"
 	}
 	if !o.BackupBoxOffice {
 		pr.Steps[0].Status, pr.Steps[0].Message = "skipped", "not asked for"
@@ -680,14 +715,21 @@ func (m *Migrator) run(ctx context.Context, p *pending, pr *Progress, o Options)
 		fail(2, err)
 		return
 	}
-	step(2, "done", count(len(p.profiles), "quality profile", "quality profiles")+", "+count(len(p.roots), "root folder", "root folders"))
+	if p.req.App == "lidarr" {
+		step(2, "done", count(len(p.roots), "root folder", "root folders"))
+	} else {
+		step(2, "done", count(len(p.profiles), "quality profile", "quality profiles")+", "+count(len(p.roots), "root folder", "root folders"))
+	}
 	step(3, "running", "")
 	progress := func(done, total int) {
 		step(3, "running", fmt.Sprintf("%d of %d", done, total))
 	}
-	if p.req.App == "radarr" {
+	switch p.req.App {
+	case "radarr":
 		err = m.importMovies(ctx, p, profiles, pr, progress)
-	} else {
+	case "lidarr":
+		err = m.importArtists(ctx, p, pr, progress)
+	default:
 		err = m.importSeries(ctx, p, profiles, pr, progress)
 	}
 	if err != nil {
@@ -759,7 +801,7 @@ func (m *Migrator) importProfiles(ctx context.Context, p *pending) (map[int]int,
 }
 
 func (m *Migrator) importFolders(ctx context.Context, p *pending) error {
-	kind := map[string]string{"radarr": "movie", "sonarr": "series"}[p.req.App]
+	kind := rootKind[p.req.App]
 	for _, r := range p.roots {
 		if _, err := m.Catalog.Store.AddRootFolder(ctx, kind, mapPath(p.req.PathMap, r.Path)); err != nil && !errors.Is(err, store.ErrExists) {
 			return err
