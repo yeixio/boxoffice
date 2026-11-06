@@ -1212,10 +1212,11 @@
     "blurb": {
       "radarr": "電影、其檔案、畫質配置、索引器、下載客戶端以及其他所有設定。",
       "sonarr": "劇集、季、單集及其檔案、配置、索引器、下載客戶端和設定。",
-      "nzbget": "新聞伺服器及其登入資訊、分類以及其餘設定。"
+      "nzbget": "新聞伺服器及其登入資訊、分類以及其餘設定。",
+      "lidarr": "藝人、他們的專輯及在磁碟上的位置、索引器、下載用戶端和封鎖清單。"
     },
     "title": "遷入",
-    "sub": "從 Radarr、Sonarr 或 NZBGet 一步步把一切遷過來。舊應用只會被讀取，因此其中什麼都不會改變。",
+    "sub": "從 Radarr、Sonarr、Lidarr 或 NZBGet 一步步把一切遷過來。舊應用只會被讀取，因此其中什麼都不會改變。",
     "steps": "步驟",
     "background": "後臺",
     "look": {
@@ -1238,7 +1239,8 @@
       "key2": "前往 <b>Settings</b>，然後 <b>General</b>。",
       "key3": "在 <b>Security</b> 下複製 <b>API Key</b>，並貼上到上方。",
       "go": "連線並檢視",
-      "onlyReads": "這隻會讀取。在你於下一步確認之前，這裡和 {{app}} 中都不會有任何更改。"
+      "onlyReads": "這隻會讀取。在你於下一步確認之前，這裡和 {{app}} 中都不會有任何更改。",
+      "lidarrOff": "要從 Lidarr 搬入？請先在<link>設定</link>中開啟音樂。"
     },
     "maps": {
       "title": "路徑對映（通常不需要）",
@@ -1261,7 +1263,8 @@
       "indexers": "索引器",
       "clients": "下載客戶端",
       "blocklist": "已遮蔽的釋出",
-      "lists": "通知和列表"
+      "lists": "通知和列表",
+      "newArtists": "新藝人"
     },
     "review": {
       "profiles": "畫質配置",
@@ -1283,7 +1286,8 @@
       "backupApp": "讓 {{app}} 為自己做一次備份，並儲存在這裡",
       "hidden_other": "{{app}} 對其他應用隱藏的 {{count}} 個密碼和 API 金鑰需要用到。",
       "confirm": "確認並遷入",
-      "nothing": "{{app}} 中什麼都不會改變。檔案保持原處。"
+      "nothing": "{{app}} 中什麼都不會改變。檔案保持原處。",
+      "lidarrQuality": "Lidarr 的品質設定檔不會搬入：Box Office 的音樂在「音樂」中有自己的音質設定。"
     },
     "status": {
       "done": "完成",
@@ -1343,6 +1347,14 @@
       },
       "summary": "已新增 {{added}}，已存在 {{already}}，{{files}}",
       "files_other": "{{count}} 個檔案"
+    },
+    "skip": {
+      "badge": "已略過",
+      "skip": "略過",
+      "undo": "復原",
+      "skipped": "已略過。不會從中搬入任何內容，也不會再提示。",
+      "offer": "不用 {{app}}？<button>略過它</button>，搬入就不會再提示。可以復原。",
+      "isSkipped": "你已略過 {{app}}。仍可從它搬入，或<button>取消略過</button>。"
     }
   },
   "dl": {

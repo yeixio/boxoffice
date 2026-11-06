@@ -1386,10 +1386,11 @@
     "blurb": {
       "radarr": "Les films, leurs fichiers, les profils de qualité, les indexeurs, les clients de téléchargement et tous les autres réglages.",
       "sonarr": "Les séries, saisons, épisodes et leurs fichiers, les profils, indexeurs, clients de téléchargement et réglages.",
-      "nzbget": "Les serveurs de news avec leurs identifiants, les catégories et le reste de ses réglages."
+      "nzbget": "Les serveurs de news avec leurs identifiants, les catégories et le reste de ses réglages.",
+      "lidarr": "Les artistes, leurs albums et leur emplacement sur le disque, les indexeurs, les clients de téléchargement et la liste de blocage."
     },
     "title": "Emménager",
-    "sub": "Tout récupérer depuis Radarr, Sonarr ou NZBGet, étape par étape. L’ancienne application est seulement lue, rien n’y change.",
+    "sub": "Tout récupérer depuis Radarr, Sonarr, Lidarr ou NZBGet, étape par étape. L’ancienne application est seulement lue, rien n’y change.",
     "steps": "Étapes",
     "background": "En arrière-plan",
     "look": {
@@ -1412,7 +1413,8 @@
       "key2": "Allez dans <b>Settings</b>, puis <b>General</b>.",
       "key3": "Sous <b>Security</b>, copiez l’<b>API Key</b> et collez-la ci-dessus.",
       "go": "Se connecter et vérifier",
-      "onlyReads": "Ceci ne fait que lire. Rien ne change ici ni dans {{app}} tant que vous n’avez pas confirmé à l’étape suivante."
+      "onlyReads": "Ceci ne fait que lire. Rien ne change ici ni dans {{app}} tant que vous n’avez pas confirmé à l’étape suivante.",
+      "lidarrOff": "Vous emménagez depuis Lidarr ? Activez d'abord la Musique dans les <link>Réglages</link>."
     },
     "maps": {
       "title": "Correspondances de chemins (généralement inutiles)",
@@ -1435,7 +1437,8 @@
       "indexers": "indexeurs",
       "clients": "clients de téléchargement",
       "blocklist": "releases bloquées",
-      "lists": "notifications et listes"
+      "lists": "notifications et listes",
+      "newArtists": "nouveaux artistes"
     },
     "review": {
       "profiles": "Profils de qualité",
@@ -1459,7 +1462,8 @@
       "hidden_many": "Nécessaire pour les {{count}} de mots de passe et clés d’API que {{app}} cache aux autres applications.",
       "hidden_other": "Nécessaire pour les {{count}} mots de passe et clés d’API que {{app}} cache aux autres applications.",
       "confirm": "Confirmer et emménager",
-      "nothing": "Rien ne change dans {{app}}. Les fichiers restent où ils sont."
+      "nothing": "Rien ne change dans {{app}}. Les fichiers restent où ils sont.",
+      "lidarrQuality": "Les profils de qualité de Lidarr restent en place : la musique de Box Office a son propre réglage de qualité, dans Musique."
     },
     "status": {
       "done": "terminé",
@@ -1523,6 +1527,14 @@
       "files_one": "{{count}} fichier",
       "files_many": "{{count}} de fichiers",
       "files_other": "{{count}} fichiers"
+    },
+    "skip": {
+      "badge": "Ignorée",
+      "skip": "Ignorer",
+      "undo": "Annuler",
+      "skipped": "Ignorée. Rien n'en est repris, et elle n'est plus proposée.",
+      "offer": "Vous n'utilisez pas {{app}} ? <button>Ignorez-la</button> et l'emménagement ne la proposera plus. Vous pourrez annuler.",
+      "isSkipped": "Vous avez ignoré {{app}}. Vous pouvez encore emménager depuis elle, ou <button>annuler</button>."
     }
   },
   "dl": {

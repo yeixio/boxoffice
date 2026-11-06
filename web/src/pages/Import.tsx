@@ -2,8 +2,8 @@ import { Trans, useTranslation } from 'react-i18next'
 import { useEffect, useState, type ReactNode } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, useSearchParams } from 'react-router-dom'
-import { AlertTriangle, ArrowRight, Check, CircleDashed, Film, LoaderCircle, Minus, Plus, Server, Tv, X } from 'lucide-react'
-import { del, get, post, put, type MigrationApp, type MigrationRequest, type PathMap, type Plan, type Progress, type Scan, type Status, type Step, type SwitchResult } from '../api'
+import { AlertTriangle, ArrowRight, Check, CircleDashed, Film, LoaderCircle, Minus, Music, Plus, Server, SkipForward, Tv, X } from 'lucide-react'
+import { del, get, post, put, type MigrationApp, type Settings as SettingsData, type MigrationRequest, type PathMap, type Plan, type Progress, type Scan, type Status, type Step, type SwitchResult } from '../api'
 import { ItemRow, useBackground } from '../Tray'
 import { appName, when } from '../format'
 import { Badge, Button, Card, ErrorNote, Field, Heading, Input, Toggle } from '../ui'
@@ -13,11 +13,45 @@ const stages = ['Connect', 'Look it over', 'Move in', 'Matinee', 'Done'] as cons
 type Stage = (typeof stages)[number]
 const stageKey: Record<Stage, string> = { Connect: 'connect', 'Look it over': 'look', 'Move in': 'move', Matinee: 'matinee', Done: 'done' }
 
-const apps: { app: MigrationApp; icon: ReactNode }[] = [
+const allApps: { app: MigrationApp; icon: ReactNode }[] = [
   { app: 'radarr', icon: <Film className="size-6" /> },
   { app: 'sonarr', icon: <Tv className="size-6" /> },
+  { app: 'lidarr', icon: <Music className="size-6" /> },
   { app: 'nzbget', icon: <Server className="size-6" /> },
 ]
+
+// noMatinee are apps Matinee doesn't talk to, so there's nothing to switch
+// over once they've moved in.
+const noMatinee = (a: MigrationApp) => a === 'nzbget' || a === 'lidarr'
+
+function useMusicOn() {
+  const settings = useQuery({ queryKey: ['settings'], queryFn: () => get<SettingsData>('/settings') })
+  return !!settings.data?.mediaTypes.find((m) => m.key === 'music')?.enabled
+}
+
+// useApps are the apps to move in from: Lidarr only while music is on.
+function useApps() {
+  const musicOn = useMusicOn()
+  return allApps.filter((a) => a.app !== 'lidarr' || musicOn)
+}
+
+// useSkipped are the apps the admin chose not to move in from, and a way
+// to skip one or take it back.
+function useSkipped() {
+  const qc = useQueryClient()
+  const list = useQuery({ queryKey: ['skipped'], queryFn: () => get<MigrationApp[]>('/migrations/skipped') })
+  const [error, setError] = useState<unknown>(null)
+  const set = async (app: MigrationApp, skip: boolean) => {
+    setError(null)
+    try {
+      await (skip ? put(`/migrations/skipped/${app}`, {}) : del(`/migrations/skipped/${app}`))
+      await qc.invalidateQueries({ queryKey: ['skipped'] })
+    } catch (e) {
+      setError(e)
+    }
+  }
+  return { skipped: list.data ?? [], loaded: !!list.data, set, error }
+}
 
 export function Import() {
   const { t } = useTranslation()
@@ -26,7 +60,9 @@ export function Import() {
   const migrationId = Number(params.get('migration') ?? 0)
   // Each app keeps its own form, so connecting another while one is being
   // looked over starts from that app's own details.
-  const [forms, setForms] = useState<Record<MigrationApp, MigrationRequest>>(() => ({ radarr: blank('radarr'), sonarr: blank('sonarr'), nzbget: blank('nzbget') }))
+  const [forms, setForms] = useState<Record<MigrationApp, MigrationRequest>>(() => ({ radarr: blank('radarr'), sonarr: blank('sonarr'), lidarr: blank('lidarr'), nzbget: blank('nzbget') }))
+  const apps = useApps()
+  const { skipped } = useSkipped()
   const [current, setCurrent] = useState<MigrationApp>('radarr')
   const req = forms[current]
   const setReq = (r: MigrationRequest) => setForms((f) => ({ ...f, [r.app]: r }))
@@ -44,7 +80,7 @@ export function Import() {
       <Heading title={t('move.title')} sub={t('move.sub')} />
       <ol className="mb-8 flex flex-wrap gap-2" aria-label={t('move.steps')}>
         {stages
-          .filter((s) => s !== 'Matinee' || app !== 'nzbget')
+          .filter((s) => s !== 'Matinee' || !noMatinee(app))
           .map((s, i) => {
             const at = stages.indexOf(stage)
             const me = stages.indexOf(s)
@@ -66,8 +102,9 @@ export function Import() {
             setReq={setReq}
             onPick={setCurrent}
             onStarted={(sc) => {
-              // The next app is the likely one to connect meanwhile.
-              const order = apps.map((a) => a.app)
+              // The next app is the likely one to connect meanwhile;
+              // skipped ones aren't.
+              const order = apps.map((a) => a.app).filter((a) => a === sc.app || !skipped.includes(a))
               setCurrent(order[(order.indexOf(sc.app) + 1) % order.length])
               go({ scan: sc.id })
             }}
@@ -76,7 +113,7 @@ export function Import() {
         </>
       )}
       {stage === 'Look it over' && <Looking id={scanId} onBack={restart} onStarted={(id) => go({ migration: String(id) })} />}
-      {stage === 'Move in' && <Moving id={migrationId} onDone={(a) => setAfter({ stage: a === 'nzbget' ? 'Done' : 'Matinee', app: a, matinee: null })} onRestart={restart} />}
+      {stage === 'Move in' && <Moving id={migrationId} onDone={(a) => setAfter({ stage: noMatinee(a) ? 'Done' : 'Matinee', app: a, matinee: null })} onRestart={restart} />}
       {stage === 'Matinee' && after && <SwitchMatinee app={after.app} migrationId={migrationId} onDone={(r) => setAfter({ ...after, stage: 'Done', matinee: r })} />}
       {stage === 'Done' && after && <Finished app={after.app} matinee={after.matinee} onAgain={restart} />}
       <History />
@@ -152,6 +189,10 @@ function Connect({ req, setReq, onPick, onStarted }: { req: MigrationRequest; se
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<unknown>(null)
   const nzb = req.app === 'nzbget'
+  const apps = useApps()
+  const musicOn = useMusicOn()
+  const skips = useSkipped()
+  const skipped = skips.skipped.includes(req.app)
   const set = (patch: Partial<MigrationRequest>) => setReq({ ...req, ...patch })
   const setMap = (i: number, m: Partial<PathMap>) => set({ pathMap: req.pathMap.map((x, j) => (i === j ? { ...x, ...m } : x)) })
   const preview = async () => {
@@ -167,8 +208,8 @@ function Connect({ req, setReq, onPick, onStarted }: { req: MigrationRequest; se
       setBusy(false)
     }
   }
-  const placeholder = { radarr: 'http://radarr:7878', sonarr: 'http://sonarr:8989', nzbget: 'http://nzbget:6789' }[req.app]
-  const folder = req.app === 'sonarr' ? 'tv' : 'movies'
+  const placeholder = { radarr: 'http://radarr:7878', sonarr: 'http://sonarr:8989', lidarr: 'http://lidarr:8686', nzbget: 'http://nzbget:6789' }[req.app]
+  const folder = { radarr: 'movies', sonarr: 'tv', lidarr: 'music', nzbget: 'movies' }[req.app]
   // Look for the app at its usual addresses, and fill in the one that
   // answers unless an address has been typed in.
   const found = useQuery({ queryKey: ['find', req.app], queryFn: () => get<{ url: string }>(`/migrations/find?app=${req.app}`), staleTime: 60_000 })
@@ -195,11 +236,18 @@ function Connect({ req, setReq, onPick, onStarted }: { req: MigrationRequest; se
           >
             <span className={req.app === a.app ? 'text-marquee' : 'text-muted'}>{a.icon}</span>
             <span>
-              <span className="block font-display font-semibold">{appName[a.app]}</span>
+              <span className="flex items-center gap-2 font-display font-semibold">
+                {appName[a.app]} {skips.skipped.includes(a.app) && <Badge>{t('move.skip.badge')}</Badge>}
+              </span>
               <span className="text-sm text-muted">{t(`move.blurb.${a.app}`)}</span>
             </span>
           </button>
         ))}
+        {!musicOn && (
+          <p className="text-xs text-muted">
+            <Trans i18nKey="move.connect.lidarrOff" components={{ link: <Link className="font-medium text-marquee" to="/settings" /> }} />
+          </p>
+        )}
       </div>
       <Card>
         <h2 className="mb-4 font-display text-lg font-semibold">{t('move.connect.to', { app: appName[req.app] })}</h2>
@@ -259,6 +307,17 @@ function Connect({ req, setReq, onPick, onStarted }: { req: MigrationRequest; se
             {t('move.connect.go')}
           </Button>
           <p className="text-xs text-muted">{t('move.connect.onlyReads', { app: appName[req.app] })}</p>
+          {skips.loaded && (
+            <p className="flex flex-wrap items-center gap-2 border-t border-line pt-3 text-xs text-muted">
+              <SkipForward className="size-3.5 shrink-0" aria-hidden />
+              {skipped ? (
+                <Trans i18nKey="move.skip.isSkipped" values={{ app: appName[req.app] }} components={{ button: <button className="font-medium text-marquee" onClick={() => skips.set(req.app, false)} /> }} />
+              ) : (
+                <Trans i18nKey="move.skip.offer" values={{ app: appName[req.app] }} components={{ button: <button className="font-medium text-marquee" onClick={() => skips.set(req.app, true)} /> }} />
+              )}
+            </p>
+          )}
+          <ErrorNote error={skips.error} />
         </div>
       </Card>
     </div>
@@ -324,7 +383,7 @@ function Review({ plan, onBack, onStarted }: { plan: Plan; onBack: () => void; o
             </>
           ) : (
             <>
-              <Stat n={plan.titles.new} label={plan.app === 'radarr' ? t('move.stat.newMovies') : t('move.stat.newShows')} tone="text-marquee" />
+              <Stat n={plan.titles.new} label={t({ radarr: 'move.stat.newMovies', sonarr: 'move.stat.newShows', lidarr: 'move.stat.newArtists', nzbget: 'move.stat.newShows' }[plan.app])} tone="text-marquee" />
               <Stat n={plan.titles.already} label={t('move.stat.already')} />
               <Stat n={plan.titles.skipped} label={t('move.stat.skipped')} tone={plan.titles.skipped ? 'text-bad' : ''} />
               <Stat n={plan.files.total} label={plan.files.total < 0 ? t('move.stat.filesLater') : t('move.stat.files')} />
@@ -351,16 +410,21 @@ function Review({ plan, onBack, onStarted }: { plan: Plan; onBack: () => void; o
       <div className="grid gap-6 lg:grid-cols-2">
         {!nzb && (
           <Card>
-            <h3 className="mb-3 font-display font-semibold">{t('move.review.profiles')}</h3>
-            <ul className="flex flex-col gap-2 text-sm">
-              {plan.profiles.map((p) => (
-                <li key={p.legacyId}>
-                  <span className="font-medium">{p.name}</span> {p.action === 'match' ? <Badge tone="ok">{t('move.review.matches')}</Badge> : <Badge tone="marquee">{t('move.review.new')}</Badge>}
-                  <div className="text-xs text-muted">{p.qualities.join(', ')}</div>
-                </li>
-              ))}
-            </ul>
-            <h3 className="mb-3 mt-5 font-display font-semibold">{t('move.review.roots')}</h3>
+            {plan.profiles.length > 0 && (
+              <>
+                <h3 className="mb-3 font-display font-semibold">{t('move.review.profiles')}</h3>
+                <ul className="mb-5 flex flex-col gap-2 text-sm">
+                  {plan.profiles.map((p) => (
+                    <li key={p.legacyId}>
+                      <span className="font-medium">{p.name}</span> {p.action === 'match' ? <Badge tone="ok">{t('move.review.matches')}</Badge> : <Badge tone="marquee">{t('move.review.new')}</Badge>}
+                      <div className="text-xs text-muted">{p.qualities.join(', ')}</div>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+            {plan.app === 'lidarr' && <p className="mb-5 text-xs text-muted">{t('move.review.lidarrQuality')}</p>}
+            <h3 className="mb-3 font-display font-semibold">{t('move.review.roots')}</h3>
             {plan.pathMapFound && <p className="mb-2 text-xs text-muted">{t('move.review.found', { app: name })}</p>}
             <ul className="flex flex-col gap-2 text-sm">
               {plan.rootFolders.map((f) => (
@@ -592,7 +656,7 @@ function Finished({ app, matinee, onAgain }: { app: MigrationApp; matinee: Switc
             <Trans i18nKey="move.done.switched" values={{ app: name, after: matinee.after, before: matinee.before || t('move.done.notSet') }} components={{ code: <code /> }} />
           </li>
         ) : (
-          app !== 'nzbget' && (
+          !noMatinee(app) && (
             <li>
               <Trans i18nKey="move.done.stillUses" values={{ app: name }} components={{ link: <Link className="font-medium text-marquee" to="/settings" /> }} />
             </li>
@@ -605,7 +669,7 @@ function Finished({ app, matinee, onAgain }: { app: MigrationApp; matinee: Switc
       </ul>
       <div className="mt-6 flex flex-wrap gap-2">
         <Button onClick={onAgain}>{t('move.done.another')}</Button>
-        <Link to={app === 'sonarr' ? '/shows' : '/movies'}>
+        <Link to={{ radarr: '/movies', sonarr: '/shows', lidarr: '/music', nzbget: '/movies' }[app]}>
           <Button variant="primary">{t('move.done.see')}</Button>
         </Link>
       </div>
@@ -620,13 +684,15 @@ function Overview() {
   const qc = useQueryClient()
   const status = useQuery({ queryKey: ['status'], queryFn: () => get<Status>('/status') })
   const list = useQuery({ queryKey: ['migrations'], queryFn: () => get<Progress[]>('/migrations') })
+  const apps = useApps()
+  const skips = useSkipped()
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<unknown>(null)
   const movedIn = !!status.data?.movedIn
   const moves = list.data ?? []
   const moved = (a: MigrationApp) => moves.find((m) => m.app === a && m.status === 'done')
   const matinee = moves.find((m) => m.status === 'done' && m.matinee)
-  const any = apps.some((a) => moved(a.app))
+  const any = apps.some((a) => moved(a.app) || skips.skipped.includes(a.app))
   const finish = async (done: boolean) => {
     setBusy(true)
     setError(null)
@@ -648,13 +714,20 @@ function Overview() {
       </p>
     )
   }
-  const row = (key: string, ok: boolean, title: string, detail: string) => (
+  const row = (key: string, ok: boolean | 'skipped', title: string, detail: string, action?: ReactNode) => (
     <li key={key} className="flex items-start gap-3 py-2">
-      {ok ? <Check className="mt-0.5 size-4 shrink-0 text-ok" aria-label={t('move.status.done')} /> : <CircleDashed className="mt-0.5 size-4 shrink-0 text-muted" aria-label={t('move.status.notYet')} />}
-      <div>
+      {ok === 'skipped' ? (
+        <SkipForward className="mt-0.5 size-4 shrink-0 text-muted" aria-label={t('move.skip.badge')} />
+      ) : ok ? (
+        <Check className="mt-0.5 size-4 shrink-0 text-ok" aria-label={t('move.status.done')} />
+      ) : (
+        <CircleDashed className="mt-0.5 size-4 shrink-0 text-muted" aria-label={t('move.status.notYet')} />
+      )}
+      <div className="flex-1">
         <div className="text-sm font-medium">{title}</div>
         <div className="text-xs text-muted">{detail}</div>
       </div>
+      {action}
     </li>
   )
   return (
@@ -663,11 +736,22 @@ function Overview() {
       <ul className="mt-2 divide-y divide-line">
         {apps.map(({ app }) => {
           const m = moved(app)
-          return row(app, !!m, appName[app], m ? t('move.overview.movedIn', { when: when(m.finished ?? m.started) }) : t('move.overview.notMoved'))
+          if (m) return row(app, true, appName[app], t('move.overview.movedIn', { when: when(m.finished ?? m.started) }))
+          const skipped = skips.skipped.includes(app)
+          return row(
+            app,
+            skipped ? 'skipped' : false,
+            appName[app],
+            skipped ? t('move.skip.skipped') : t('move.overview.notMoved'),
+            <Button variant="ghost" onClick={() => skips.set(app, !skipped)}>
+              {skipped ? t('move.skip.undo') : t('move.skip.skip')}
+            </Button>,
+          )
         })}
         {row('matinee', !!matinee, t('move.stages.matinee'), matinee ? matinee.matinee! : t('move.overview.notSwitched'))}
       </ul>
       {error ? <ErrorNote error={error} /> : null}
+      {skips.error ? <ErrorNote error={skips.error} /> : null}
       {movedIn ? (
         <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-muted">
           <span>{t('move.overview.lives')}</span>

@@ -1386,10 +1386,11 @@
     "blurb": {
       "radarr": "Filme, fișierele lor, profiluri de calitate, indexere, clienți de descărcare și orice altă setare.",
       "sonarr": "Seriale, sezoane, episoade și fișierele lor, profiluri, indexere, clienți de descărcare și setări.",
-      "nzbget": "Servere de știri cu datele lor de conectare, categorii și restul setărilor sale."
+      "nzbget": "Servere de știri cu datele lor de conectare, categorii și restul setărilor sale.",
+      "lidarr": "Artiștii, albumele lor și locul lor pe disc, indexerii, clienții de descărcare și lista de blocare."
     },
     "title": "Mutare",
-    "sub": "Adu totul din Radarr, Sonarr sau NZBGet, pas cu pas. Din aplicația veche doar se citește, așa că nimic din ea nu se schimbă.",
+    "sub": "Adu totul din Radarr, Sonarr, Lidarr sau NZBGet, pas cu pas. Din aplicația veche doar se citește, așa că nimic din ea nu se schimbă.",
     "steps": "Pași",
     "background": "În fundal",
     "look": {
@@ -1412,7 +1413,8 @@
       "key2": "Mergi la <b>Settings</b>, apoi <b>General</b>.",
       "key3": "La <b>Security</b>, copiază <b>API Key</b> și lipește-l mai sus.",
       "go": "Conectează și verifică",
-      "onlyReads": "Asta doar citește. Nimic nu se schimbă aici sau în {{app}} până nu confirmi la pasul următor."
+      "onlyReads": "Asta doar citește. Nimic nu se schimbă aici sau în {{app}} până nu confirmi la pasul următor.",
+      "lidarrOff": "Te muți de pe Lidarr? Pornește mai întâi Muzica din <link>Setări</link>."
     },
     "maps": {
       "title": "Corespondențe de căi (de obicei nu sunt necesare)",
@@ -1435,7 +1437,8 @@
       "indexers": "indexere",
       "clients": "clienți de descărcare",
       "blocklist": "versiuni blocate",
-      "lists": "notificări și liste"
+      "lists": "notificări și liste",
+      "newArtists": "artiști noi"
     },
     "review": {
       "profiles": "Profiluri de calitate",
@@ -1459,7 +1462,8 @@
       "hidden_few": "Necesar pentru cele {{count}} parole și chei API pe care {{app}} le ascunde de alte aplicații.",
       "hidden_other": "Necesar pentru cele {{count}} de parole și chei API pe care {{app}} le ascunde de alte aplicații.",
       "confirm": "Confirmă și mută-te",
-      "nothing": "Nimic din {{app}} nu se schimbă. Fișierele rămân unde sunt."
+      "nothing": "Nimic din {{app}} nu se schimbă. Fișierele rămân unde sunt.",
+      "lidarrQuality": "Profilurile de calitate din Lidarr rămân acolo: muzica din Box Office are propria setare de calitate, la Muzică."
     },
     "status": {
       "done": "gata",
@@ -1523,6 +1527,14 @@
       "files_one": "{{count}} fișier",
       "files_few": "{{count}} fișiere",
       "files_other": "{{count}} de fișiere"
+    },
+    "skip": {
+      "badge": "Sărit",
+      "skip": "Sari peste",
+      "undo": "Anulează",
+      "skipped": "Sărit. Nu se aduce nimic din el și nu mai este cerut.",
+      "offer": "Nu folosești {{app}}? <button>Sari peste</button>, iar mutarea nu-l mai cere. Se poate anula.",
+      "isSkipped": "Ai sărit peste {{app}}. Te poți muta totuși din el sau poți <button>anula</button>."
     }
   },
   "dl": {

@@ -14,10 +14,10 @@ import (
 	"time"
 )
 
-// legacy reads from a Radarr or Sonarr. It only ever reads, apart from
-// asking the app to make a backup of itself.
+// legacy reads from a Radarr, Sonarr or Lidarr. It only ever reads, apart
+// from asking the app to make a backup of itself.
 type legacy struct {
-	app  string // radarr or sonarr
+	app  string // radarr, sonarr or lidarr
 	base *url.URL
 	key  string
 	http *http.Client
@@ -41,7 +41,7 @@ func normalizeURL(raw string) (*url.URL, error) {
 }
 
 func newLegacy(app, rawURL, key string) (*legacy, error) {
-	if app != "radarr" && app != "sonarr" {
+	if app != "radarr" && app != "sonarr" && app != "lidarr" {
 		return nil, fmt.Errorf("Box Office can't migrate from %q yet", app)
 	}
 	u, err := normalizeURL(rawURL)
@@ -59,10 +59,21 @@ func newLegacy(app, rawURL, key string) (*legacy, error) {
 }
 
 func (l *legacy) name() string {
-	if l.app == "radarr" {
+	switch l.app {
+	case "radarr":
 		return "Radarr"
+	case "lidarr":
+		return "Lidarr"
 	}
 	return "Sonarr"
+}
+
+// api is where the app's API is: Lidarr is still on version 1.
+func (l *legacy) api() string {
+	if l.app == "lidarr" {
+		return "/api/v1"
+	}
+	return "/api/v3"
 }
 
 func (l *legacy) do(ctx context.Context, method, path string, q url.Values, body, out any) error {
@@ -154,7 +165,7 @@ func (l *legacy) try(ctx context.Context, method, path string, q url.Values, bod
 }
 
 func (l *legacy) get(ctx context.Context, path string, q url.Values, out any) error {
-	return l.do(ctx, "GET", "/api/v3"+path, q, nil, out)
+	return l.do(ctx, "GET", l.api()+path, q, nil, out)
 }
 
 type status struct {
@@ -319,7 +330,7 @@ func (l *legacy) backup(ctx context.Context) (name string, data []byte, err erro
 	var cmd struct {
 		ID int `json:"id"`
 	}
-	if err := l.do(ctx, "POST", "/api/v3/command", nil, map[string]string{"name": "Backup"}, &cmd); err != nil {
+	if err := l.do(ctx, "POST", l.api()+"/command", nil, map[string]string{"name": "Backup"}, &cmd); err != nil {
 		return "", nil, fmt.Errorf("asking %s for a backup: %w", l.name(), err)
 	}
 	deadline := time.Now().Add(5 * time.Minute)

@@ -1299,10 +1299,11 @@
     "blurb": {
       "radarr": "Filme, ihre Dateien, Qualitätsprofile, Indexer, Download-Clients und alle anderen Einstellungen.",
       "sonarr": "Serien, Staffeln, Folgen und ihre Dateien, Profile, Indexer, Download-Clients und Einstellungen.",
-      "nzbget": "Newsserver mit ihren Anmeldungen, Kategorien und den übrigen Einstellungen."
+      "nzbget": "Newsserver mit ihren Anmeldungen, Kategorien und den übrigen Einstellungen.",
+      "lidarr": "Künstler, ihre Alben und wo sie auf der Platte liegen, Indexer, Download-Clients und die Sperrliste."
     },
     "title": "Einziehen",
-    "sub": "Hol alles aus Radarr, Sonarr oder NZBGet herüber, Schritt für Schritt. Aus der alten App wird nur gelesen, darin ändert sich also nichts.",
+    "sub": "Hol alles aus Radarr, Sonarr, Lidarr oder NZBGet herüber, Schritt für Schritt. Aus der alten App wird nur gelesen, darin ändert sich also nichts.",
     "steps": "Schritte",
     "background": "Im Hintergrund",
     "look": {
@@ -1325,7 +1326,8 @@
       "key2": "Gehe zu <b>Settings</b>, dann <b>General</b>.",
       "key3": "Kopiere unter <b>Security</b> den <b>API Key</b> und füge ihn oben ein.",
       "go": "Verbinden und durchsehen",
-      "onlyReads": "Das liest nur. Hier oder in {{app}} ändert sich nichts, bis du im nächsten Schritt bestätigst."
+      "onlyReads": "Das liest nur. Hier oder in {{app}} ändert sich nichts, bis du im nächsten Schritt bestätigst.",
+      "lidarrOff": "Willst du von Lidarr einziehen? Schalte zuerst Musik unter <link>Einstellungen</link> ein."
     },
     "maps": {
       "title": "Pfadzuordnungen (meist nicht nötig)",
@@ -1348,7 +1350,8 @@
       "indexers": "Indexer",
       "clients": "Download-Clients",
       "blocklist": "gesperrte Releases",
-      "lists": "Benachrichtigungen und Listen"
+      "lists": "Benachrichtigungen und Listen",
+      "newArtists": "neue Künstler"
     },
     "review": {
       "profiles": "Qualitätsprofile",
@@ -1371,7 +1374,8 @@
       "hidden_one": "Nötig für das {{count}} Passwort oder den API-Schlüssel, den {{app}} vor anderen Apps verbirgt.",
       "hidden_other": "Nötig für die {{count}} Passwörter und API-Schlüssel, die {{app}} vor anderen Apps verbirgt.",
       "confirm": "Bestätigen und einziehen",
-      "nothing": "In {{app}} ändert sich nichts. Dateien bleiben, wo sie sind."
+      "nothing": "In {{app}} ändert sich nichts. Dateien bleiben, wo sie sind.",
+      "lidarrQuality": "Die Qualitätsprofile von Lidarr bleiben zurück: Musik in Box Office hat eine eigene Qualitätseinstellung, unter Musik."
     },
     "status": {
       "done": "fertig",
@@ -1433,6 +1437,14 @@
       "summary": "{{added}} hinzugefügt, {{already}} schon hier, {{files}}",
       "files_one": "{{count}} Datei",
       "files_other": "{{count}} Dateien"
+    },
+    "skip": {
+      "badge": "Übersprungen",
+      "skip": "Überspringen",
+      "undo": "Rückgängig",
+      "skipped": "Übersprungen. Nichts wird daraus übernommen, und es wird nicht mehr danach gefragt.",
+      "offer": "Du nutzt {{app}} nicht? <button>Überspring es</button>, dann fragt Einziehen nicht mehr danach. Das lässt sich rückgängig machen.",
+      "isSkipped": "Du hast {{app}} übersprungen. Du kannst trotzdem daraus einziehen oder <button>das Überspringen rückgängig machen</button>."
     }
   },
   "dl": {

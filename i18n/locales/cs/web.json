@@ -1473,10 +1473,11 @@
     "blurb": {
       "radarr": "Filmy, jejich soubory, profily kvality, indexery, klienti pro stahování a všechna ostatní nastavení.",
       "sonarr": "Seriály, řady, díly a jejich soubory, profily, indexery, klienti pro stahování a nastavení.",
-      "nzbget": "News servery s přihlašovacími údaji, kategorie a zbytek nastavení."
+      "nzbget": "News servery s přihlašovacími údaji, kategorie a zbytek nastavení.",
+      "lidarr": "Interpreti, jejich alba a kde jsou na disku, indexery, klienti stahování a seznam blokovaných."
     },
     "title": "Přestěhovat",
-    "sub": "Přeneste vše z Radarru, Sonarru nebo NZBGetu, krok za krokem. Ze staré aplikace se jen čte, takže se v ní nic nezmění.",
+    "sub": "Přeneste vše z Radarru, Sonarru, Lidarru nebo NZBGetu, krok za krokem. Ze staré aplikace se jen čte, takže se v ní nic nezmění.",
     "steps": "Kroky",
     "background": "Na pozadí",
     "look": {
@@ -1499,7 +1500,8 @@
       "key2": "Přejděte do <b>Settings</b>, pak <b>General</b>.",
       "key3": "V sekci <b>Security</b> zkopírujte <b>API Key</b> a vložte ho výše.",
       "go": "Připojit a zkontrolovat",
-      "onlyReads": "Toto jen čte. Tady ani v {{app}} se nic nezmění, dokud to nepotvrdíte v dalším kroku."
+      "onlyReads": "Toto jen čte. Tady ani v {{app}} se nic nezmění, dokud to nepotvrdíte v dalším kroku.",
+      "lidarrOff": "Stěhujete se z Lidarru? Nejdřív zapněte Hudbu v <link>Nastavení</link>."
     },
     "maps": {
       "title": "Mapování cest (obvykle není potřeba)",
@@ -1522,7 +1524,8 @@
       "indexers": "indexery",
       "clients": "klienti pro stahování",
       "blocklist": "blokovaná vydání",
-      "lists": "oznámení a seznamy"
+      "lists": "oznámení a seznamy",
+      "newArtists": "noví interpreti"
     },
     "review": {
       "profiles": "Profily kvality",
@@ -1547,7 +1550,8 @@
       "hidden_many": "Potřeba pro {{count}} hesla a API klíče, které {{app}} skrývá před jinými aplikacemi.",
       "hidden_other": "Potřeba pro {{count}} hesel a API klíčů, které {{app}} skrývá před jinými aplikacemi.",
       "confirm": "Potvrdit a přestěhovat",
-      "nothing": "V {{app}} se nic nezmění. Soubory zůstanou, kde jsou."
+      "nothing": "V {{app}} se nic nezmění. Soubory zůstanou, kde jsou.",
+      "lidarrQuality": "Profily kvality z Lidarru zůstanou: hudba v Box Office má vlastní nastavení kvality, v sekci Hudba."
     },
     "status": {
       "done": "hotovo",
@@ -1613,6 +1617,14 @@
       "files_few": "{{count}} soubory",
       "files_many": "{{count}} souboru",
       "files_other": "{{count}} souborů"
+    },
+    "skip": {
+      "badge": "Přeskočeno",
+      "skip": "Přeskočit",
+      "undo": "Zpět",
+      "skipped": "Přeskočeno. Nic se z něj nepřenese a už se na něj nebude ptát.",
+      "offer": "Nepoužíváte {{app}}? <button>Přeskočte ho</button> a stěhování se na něj přestane ptát. Dá se to vrátit.",
+      "isSkipped": "{{app}} jste přeskočili. Stále se z něj můžete přestěhovat, nebo <button>přeskočení zrušit</button>."
     }
   },
   "dl": {

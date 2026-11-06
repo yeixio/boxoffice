@@ -1299,10 +1299,11 @@
     "blurb": {
       "radarr": "Film, deres filer, kvalitetsprofiler, indeksere, downloadklienter og alle andre indstillinger.",
       "sonarr": "Serier, sæsoner, afsnit og deres filer, profiler, indeksere, downloadklienter og indstillinger.",
-      "nzbget": "Nyhedsservere med deres logins, kategorier og resten af indstillingerne."
+      "nzbget": "Nyhedsservere med deres logins, kategorier og resten af indstillingerne.",
+      "lidarr": "Kunstnere, deres albums og hvor de ligger på disken, indeksere, downloadklienter og blokeringslisten."
     },
     "title": "Flyt ind",
-    "sub": "Tag alt med fra Radarr, Sonarr eller NZBGet, trin for trin. Den gamle app læses kun, så intet i den ændres.",
+    "sub": "Tag alt med fra Radarr, Sonarr, Lidarr eller NZBGet, trin for trin. Den gamle app læses kun, så intet i den ændres.",
     "steps": "Trin",
     "background": "I baggrunden",
     "look": {
@@ -1325,7 +1326,8 @@
       "key2": "Gå til <b>Settings</b>, så <b>General</b>.",
       "key3": "Under <b>Security</b> skal du kopiere <b>API Key</b> og indsætte den ovenfor.",
       "go": "Forbind og gennemgå",
-      "onlyReads": "Dette læser kun. Intet ændres her eller i {{app}}, før du bekræfter i næste trin."
+      "onlyReads": "Dette læser kun. Intet ændres her eller i {{app}}, før du bekræfter i næste trin.",
+      "lidarrOff": "Flytter du fra Lidarr? Slå først Musik til under <link>Indstillinger</link>."
     },
     "maps": {
       "title": "Stitilknytninger (som regel ikke nødvendige)",
@@ -1348,7 +1350,8 @@
       "indexers": "indeksere",
       "clients": "downloadklienter",
       "blocklist": "blokerede udgivelser",
-      "lists": "notifikationer og lister"
+      "lists": "notifikationer og lister",
+      "newArtists": "nye kunstnere"
     },
     "review": {
       "profiles": "Kvalitetsprofiler",
@@ -1371,7 +1374,8 @@
       "hidden_one": "Kræves til den {{count}} adgangskode eller API-nøgle, {{app}} skjuler for andre apps.",
       "hidden_other": "Kræves til de {{count}} adgangskoder og API-nøgler, {{app}} skjuler for andre apps.",
       "confirm": "Bekræft og flyt ind",
-      "nothing": "Intet i {{app}} ændres. Filerne bliver, hvor de er."
+      "nothing": "Intet i {{app}} ændres. Filerne bliver, hvor de er.",
+      "lidarrQuality": "Lidarrs kvalitetsprofiler bliver tilbage: musik i Box Office har sin egen kvalitetsindstilling under Musik."
     },
     "status": {
       "done": "færdig",
@@ -1433,6 +1437,14 @@
       "summary": "{{added}} tilføjet, {{already}} allerede her, {{files}}",
       "files_one": "{{count}} fil",
       "files_other": "{{count}} filer"
+    },
+    "skip": {
+      "badge": "Sprunget over",
+      "skip": "Spring over",
+      "undo": "Fortryd",
+      "skipped": "Sprunget over. Intet hentes derfra, og der spørges ikke efter den igen.",
+      "offer": "Bruger du ikke {{app}}? <button>Spring den over</button>, så holder Flyt ind op med at spørge efter den. Det kan fortrydes.",
+      "isSkipped": "Du sprang {{app}} over. Du kan stadig flytte ind fra den eller <button>fortryde</button>."
     }
   },
   "dl": {
