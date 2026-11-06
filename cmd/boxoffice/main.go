@@ -145,7 +145,7 @@ func run() error {
 	}
 	shelf := &books.Service{Store: db, OpenLibrary: ol, Jobs: runner}
 	srv := &api.Server{
-		Store: db, Catalog: cat, Music: tunes, LibScan: &libscan.Service{Store: db, Catalog: cat, Music: tunes, Books: shelf, Log: log}, Backups: backups, Migrator: &migrate.Migrator{Catalog: cat, Backups: backups, Log: log, DataDir: cfg.DataDir}, Log: log,
+		Store: db, Catalog: cat, Music: tunes, LibScan: &libscan.Service{Store: db, Catalog: cat, Music: tunes, Books: shelf, Log: log}, Backups: backups, Migrator: &migrate.Migrator{Catalog: cat, Books: shelf, Backups: backups, Log: log, DataDir: cfg.DataDir}, Log: log,
 		Books:     shelf,
 		Portal:    &portal.Service{Store: db, Catalog: cat, Notify: notes, Log: log},
 		Downloads: downloads, Search: finder,

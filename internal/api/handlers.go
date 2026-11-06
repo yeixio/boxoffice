@@ -972,7 +972,7 @@ func (s *Server) setMovedIn(done bool) func(w http.ResponseWriter, r *http.Reque
 // Move in stops offering them.
 const settingSkipped = "move_in_skipped"
 
-var moveInApps = []string{"radarr", "sonarr", "lidarr", "nzbget"}
+var moveInApps = []string{"radarr", "sonarr", "lidarr", "readarr", "nzbget"}
 
 func (s *Server) skipped(ctx context.Context) ([]string, error) {
 	v, err := s.Store.Setting(ctx, settingSkipped)

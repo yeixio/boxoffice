@@ -1300,10 +1300,11 @@
       "radarr": "Films, hun bestanden, kwaliteitsprofielen, indexers, downloadclients en alle andere instellingen.",
       "sonarr": "Series, seizoenen, afleveringen en hun bestanden, profielen, indexers, downloadclients en instellingen.",
       "nzbget": "Nieuwsservers met hun inloggegevens, categorieën en de rest van de instellingen.",
-      "lidarr": "Artiesten, hun albums en waar ze op schijf staan, indexers, downloadclients en de blokkeerlijst."
+      "lidarr": "Artiesten, hun albums en waar ze op schijf staan, indexers, downloadclients en de blokkeerlijst.",
+      "readarr": "Auteurs, de boeken die het als e-book of luisterboek wil en waar ze op schijf staan, indexers, downloadclients en de blokkeerlijst."
     },
     "title": "Verhuizen",
-    "sub": "Haal alles over uit Radarr, Sonarr, Lidarr of NZBGet, stap voor stap. De oude app wordt alleen gelezen, dus daar verandert niets.",
+    "sub": "Haal alles over uit Radarr, Sonarr, Lidarr, Readarr of NZBGet, stap voor stap. De oude app wordt alleen gelezen, dus daar verandert niets.",
     "steps": "Stappen",
     "background": "Op de achtergrond",
     "look": {
@@ -1327,7 +1328,8 @@
       "key3": "Kopieer onder <b>Security</b> de <b>API Key</b> en plak hem hierboven.",
       "go": "Verbinden en bekijken",
       "onlyReads": "Dit leest alleen. Hier en in {{app}} verandert niets tot je bevestigt bij de volgende stap.",
-      "lidarrOff": "Verhuis je vanuit Lidarr? Zet eerst Muziek aan onder <link>Instellingen</link>."
+      "lidarrOff": "Verhuis je vanuit Lidarr? Zet eerst Muziek aan onder <link>Instellingen</link>.",
+      "readarrOff": "Verhuis je vanuit Readarr? Zet eerst E-books of Luisterboeken aan onder <link>Instellingen</link>."
     },
     "maps": {
       "title": "Padkoppelingen (meestal niet nodig)",
@@ -1351,7 +1353,8 @@
       "clients": "downloadclients",
       "blocklist": "geblokkeerde releases",
       "lists": "meldingen en lijsten",
-      "newArtists": "nieuwe artiesten"
+      "newArtists": "nieuwe artiesten",
+      "newAuthors": "nieuwe auteurs"
     },
     "review": {
       "profiles": "Kwaliteitsprofielen",
@@ -1375,7 +1378,8 @@
       "hidden_other": "Nodig voor de {{count}} wachtwoorden en API-sleutels die {{app}} voor andere apps verbergt.",
       "confirm": "Bevestigen en verhuizen",
       "nothing": "Er verandert niets in {{app}}. Bestanden blijven waar ze zijn.",
-      "lidarrQuality": "De kwaliteitsprofielen van Lidarr blijven achter: muziek in Box Office heeft een eigen kwaliteitsinstelling, onder Muziek."
+      "lidarrQuality": "De kwaliteitsprofielen van Lidarr blijven achter: muziek in Box Office heeft een eigen kwaliteitsinstelling, onder Muziek.",
+      "readarrQuality": "De kwaliteitsprofielen van Readarr blijven achter: Box Office kiest eerst EPUB voor e-books en M4B voor luisterboeken. Bij elke hoofdmap staat of er e-books of luisterboeken in staan, afgeleid uit de bestanden."
     },
     "status": {
       "done": "klaar",

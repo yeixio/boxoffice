@@ -35,6 +35,15 @@ func authorNames(name string) []string {
 	return out
 }
 
+// TitleKey is what a book's title is matched on elsewhere, as by Move in.
+func TitleKey(title string) string { return bookKey(title) }
+
+// SameAuthor says whether two names are the same author's, "Ursula K. Le
+// Guin" and "Le Guin, Ursula K." alike.
+func SameAuthor(a, b string) bool {
+	return slices.ContainsFunc(authorNames(a), func(n string) bool { return slices.Contains(authorNames(b), n) || n == norm(b) })
+}
+
 // bookKey is what a book's file or folder name is matched on: its title
 // without a subtitle, a year or an extension.
 func bookKey(name string) string {

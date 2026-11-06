@@ -1387,10 +1387,11 @@
       "radarr": "Películas, sus archivos, perfiles de calidad, indexadores, clientes de descarga y todos los demás ajustes.",
       "sonarr": "Series, temporadas, episodios y sus archivos, perfiles, indexadores, clientes de descarga y ajustes.",
       "nzbget": "Servidores de noticias con sus credenciales, categorías y el resto de sus ajustes.",
-      "lidarr": "Artistas, sus álbumes y dónde están en el disco, indexadores, clientes de descarga y la lista de bloqueo."
+      "lidarr": "Artistas, sus álbumes y dónde están en el disco, indexadores, clientes de descarga y la lista de bloqueo.",
+      "readarr": "Autores, los libros que quiere como ebook o audiolibro y dónde están en el disco, indexadores, clientes de descarga y la lista de bloqueo."
     },
     "title": "Mudanza",
-    "sub": "Trae todo desde Radarr, Sonarr, Lidarr o NZBGet, paso a paso. De la app antigua solo se lee, así que nada en ella cambia.",
+    "sub": "Trae todo desde Radarr, Sonarr, Lidarr, Readarr o NZBGet, paso a paso. De la app antigua solo se lee, así que nada en ella cambia.",
     "steps": "Pasos",
     "background": "En segundo plano",
     "look": {
@@ -1414,7 +1415,8 @@
       "key3": "En <b>Security</b>, copia la <b>API Key</b> y pégala arriba.",
       "go": "Conectar y revisarlo",
       "onlyReads": "Esto solo lee. Nada cambia aquí ni en {{app}} hasta que lo confirmes en el paso siguiente.",
-      "lidarrOff": "¿Te mudas desde Lidarr? Activa primero Música en <link>Ajustes</link>."
+      "lidarrOff": "¿Te mudas desde Lidarr? Activa primero Música en <link>Ajustes</link>.",
+      "readarrOff": "¿Te mudas desde Readarr? Activa primero Ebooks o Audiolibros en <link>Ajustes</link>."
     },
     "maps": {
       "title": "Mapeos de rutas (normalmente no hacen falta)",
@@ -1438,7 +1440,8 @@
       "clients": "clientes de descarga",
       "blocklist": "releases bloqueados",
       "lists": "notificaciones y listas",
-      "newArtists": "artistas nuevos"
+      "newArtists": "artistas nuevos",
+      "newAuthors": "autores nuevos"
     },
     "review": {
       "profiles": "Perfiles de calidad",
@@ -1463,7 +1466,8 @@
       "hidden_other": "Necesario para las {{count}} contraseñas y claves API que {{app}} oculta a otras apps.",
       "confirm": "Confirmar y mudarse",
       "nothing": "Nada cambia en {{app}}. Los archivos se quedan donde están.",
-      "lidarrQuality": "Los perfiles de calidad de Lidarr se quedan atrás: la música de Box Office tiene su propio ajuste de calidad, en Música."
+      "lidarrQuality": "Los perfiles de calidad de Lidarr se quedan atrás: la música de Box Office tiene su propio ajuste de calidad, en Música.",
+      "readarrQuality": "Los perfiles de calidad de Readarr se quedan atrás: Box Office prefiere EPUB para ebooks y M4B para audiolibros. Cada carpeta raíz indica si tiene ebooks o audiolibros, según sus archivos."
     },
     "status": {
       "done": "hecho",

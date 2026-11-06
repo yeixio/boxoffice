@@ -1300,10 +1300,11 @@
       "radarr": "Elokuvat, niiden tiedostot, laatuprofiilit, indeksoijat, latausohjelmat ja kaikki muut asetukset.",
       "sonarr": "Sarjat, kaudet, jaksot ja niiden tiedostot, profiilit, indeksoijat, latausohjelmat ja asetukset.",
       "nzbget": "Uutispalvelimet kirjautumistietoineen, kategoriat ja muut asetukset.",
-      "lidarr": "Artistit, heidän albuminsa ja niiden paikka levyllä, indeksoijat, latausohjelmat ja estolista."
+      "lidarr": "Artistit, heidän albuminsa ja niiden paikka levyllä, indeksoijat, latausohjelmat ja estolista.",
+      "readarr": "Kirjailijat, kirjat, jotka se haluaa e-kirjoina tai äänikirjoina, ja niiden paikka levyllä, indeksoijat, latausohjelmat ja estolista."
     },
     "title": "Muuta",
-    "sub": "Tuo kaikki Radarrista, Sonarr, Lidarrista tai NZBGetistä vaihe vaiheelta. Vanhaa sovellusta vain luetaan, joten siinä ei muutu mitään.",
+    "sub": "Tuo kaikki Radarrista, Sonarr, Lidarr, Readarrista tai NZBGetistä vaihe vaiheelta. Vanhaa sovellusta vain luetaan, joten siinä ei muutu mitään.",
     "steps": "Vaiheet",
     "background": "Taustalla",
     "look": {
@@ -1327,7 +1328,8 @@
       "key3": "Kopioi kohdasta <b>Security</b> <b>API Key</b> ja liitä se yllä olevaan kenttään.",
       "go": "Yhdistä ja tarkista",
       "onlyReads": "Tämä vain lukee. Mikään ei muutu täällä eikä sovelluksessa {{app}} ennen kuin vahvistat seuraavassa vaiheessa.",
-      "lidarrOff": "Muutatko Lidarrista? Ota ensin Musiikki käyttöön kohdassa <link>Asetukset</link>."
+      "lidarrOff": "Muutatko Lidarrista? Ota ensin Musiikki käyttöön kohdassa <link>Asetukset</link>.",
+      "readarrOff": "Muutatko Readarrista? Ota ensin E-kirjat tai Äänikirjat käyttöön kohdassa <link>Asetukset</link>."
     },
     "maps": {
       "title": "Polkuvastaavuudet (yleensä ei tarvita)",
@@ -1351,7 +1353,8 @@
       "clients": "latausohjelmat",
       "blocklist": "estetyt julkaisut",
       "lists": "ilmoitukset ja listat",
-      "newArtists": "uutta artistia"
+      "newArtists": "uutta artistia",
+      "newAuthors": "uutta kirjailijaa"
     },
     "review": {
       "profiles": "Laatuprofiilit",
@@ -1375,7 +1378,8 @@
       "hidden_other": "Tarvitaan {{count}} salasanaa ja API-avainta varten, jotka {{app}} piilottaa muilta sovelluksilta.",
       "confirm": "Vahvista ja muuta",
       "nothing": "Mikään ei muutu sovelluksessa {{app}}. Tiedostot jäävät paikoilleen.",
-      "lidarrQuality": "Lidarrin laatuprofiilit jäävät: Box Officen musiikilla on oma laatuasetuksensa Musiikki-kohdassa."
+      "lidarrQuality": "Lidarrin laatuprofiilit jäävät: Box Officen musiikilla on oma laatuasetuksensa Musiikki-kohdassa.",
+      "readarrQuality": "Readarrin laatuprofiilit jäävät: Box Office suosii e-kirjoissa EPUBia ja äänikirjoissa M4B:tä. Jokaisesta juurikansiosta näkyy, onko siinä e-kirjoja vai äänikirjoja, tiedostojen perusteella."
     },
     "status": {
       "done": "valmis",

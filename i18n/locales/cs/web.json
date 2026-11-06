@@ -1474,10 +1474,11 @@
       "radarr": "Filmy, jejich soubory, profily kvality, indexery, klienti pro stahování a všechna ostatní nastavení.",
       "sonarr": "Seriály, řady, díly a jejich soubory, profily, indexery, klienti pro stahování a nastavení.",
       "nzbget": "News servery s přihlašovacími údaji, kategorie a zbytek nastavení.",
-      "lidarr": "Interpreti, jejich alba a kde jsou na disku, indexery, klienti stahování a seznam blokovaných."
+      "lidarr": "Interpreti, jejich alba a kde jsou na disku, indexery, klienti stahování a seznam blokovaných.",
+      "readarr": "Autoři, knihy, které chce jako e-knihy nebo audioknihy, a kde jsou na disku, indexery, klienti stahování a seznam blokovaných."
     },
     "title": "Přestěhovat",
-    "sub": "Přeneste vše z Radarru, Sonarru, Lidarru nebo NZBGetu, krok za krokem. Ze staré aplikace se jen čte, takže se v ní nic nezmění.",
+    "sub": "Přeneste vše z Radarru, Sonarru, Lidarru, Readarru nebo NZBGetu, krok za krokem. Ze staré aplikace se jen čte, takže se v ní nic nezmění.",
     "steps": "Kroky",
     "background": "Na pozadí",
     "look": {
@@ -1501,7 +1502,8 @@
       "key3": "V sekci <b>Security</b> zkopírujte <b>API Key</b> a vložte ho výše.",
       "go": "Připojit a zkontrolovat",
       "onlyReads": "Toto jen čte. Tady ani v {{app}} se nic nezmění, dokud to nepotvrdíte v dalším kroku.",
-      "lidarrOff": "Stěhujete se z Lidarru? Nejdřív zapněte Hudbu v <link>Nastavení</link>."
+      "lidarrOff": "Stěhujete se z Lidarru? Nejdřív zapněte Hudbu v <link>Nastavení</link>.",
+      "readarrOff": "Stěhujete se z Readarru? Nejdřív zapněte E-knihy nebo Audioknihy v <link>Nastavení</link>."
     },
     "maps": {
       "title": "Mapování cest (obvykle není potřeba)",
@@ -1525,7 +1527,8 @@
       "clients": "klienti pro stahování",
       "blocklist": "blokovaná vydání",
       "lists": "oznámení a seznamy",
-      "newArtists": "noví interpreti"
+      "newArtists": "noví interpreti",
+      "newAuthors": "noví autoři"
     },
     "review": {
       "profiles": "Profily kvality",
@@ -1551,7 +1554,8 @@
       "hidden_other": "Potřeba pro {{count}} hesel a API klíčů, které {{app}} skrývá před jinými aplikacemi.",
       "confirm": "Potvrdit a přestěhovat",
       "nothing": "V {{app}} se nic nezmění. Soubory zůstanou, kde jsou.",
-      "lidarrQuality": "Profily kvality z Lidarru zůstanou: hudba v Box Office má vlastní nastavení kvality, v sekci Hudba."
+      "lidarrQuality": "Profily kvality z Lidarru zůstanou: hudba v Box Office má vlastní nastavení kvality, v sekci Hudba.",
+      "readarrQuality": "Profily kvality z Readarru zůstanou: Box Office dává přednost EPUB u e-knih a M4B u audioknih. U každé kořenové složky je vidět, zda obsahuje e-knihy, nebo audioknihy, podle jejích souborů."
     },
     "status": {
       "done": "hotovo",

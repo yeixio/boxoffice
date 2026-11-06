@@ -44,7 +44,7 @@ export function relativeDay(iso: string, now = new Date()): string {
   return d.toLocaleDateString(formatLocale(), { weekday: 'short', month: 'short', day: 'numeric' })
 }
 
-export const appName: Record<string, string> = { radarr: 'Radarr', sonarr: 'Sonarr', lidarr: 'Lidarr', nzbget: 'NZBGet' }
+export const appName: Record<string, string> = { radarr: 'Radarr', sonarr: 'Sonarr', lidarr: 'Lidarr', readarr: 'Readarr', nzbget: 'NZBGet' }
 
 // runtime says "48 min" or "2 h 16 min".
 export function runtime(minutes?: number): string {

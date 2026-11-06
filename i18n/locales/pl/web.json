@@ -1474,10 +1474,11 @@
       "radarr": "Filmy, ich pliki, profile jakości, indeksery, klienty pobierania i wszystkie inne ustawienia.",
       "sonarr": "Seriale, sezony, odcinki i ich pliki, profile, indeksery, klienty pobierania i ustawienia.",
       "nzbget": "Serwery news z danymi logowania, kategorie i reszta ustawień.",
-      "lidarr": "Wykonawcy, ich albumy i miejsce na dysku, indeksery, klienty pobierania i lista blokad."
+      "lidarr": "Wykonawcy, ich albumy i miejsce na dysku, indeksery, klienty pobierania i lista blokad.",
+      "readarr": "Autorzy, książki chciane jako e-booki lub audiobooki i miejsce na dysku, indeksery, klienty pobierania i lista blokad."
     },
     "title": "Przeprowadź się",
-    "sub": "Przenieś wszystko z Radarr, Sonarr, Lidarr lub NZBGet, krok po kroku. Stara aplikacja jest tylko odczytywana, więc nic się w niej nie zmienia.",
+    "sub": "Przenieś wszystko z Radarr, Sonarr, Lidarr, Readarr lub NZBGet, krok po kroku. Stara aplikacja jest tylko odczytywana, więc nic się w niej nie zmienia.",
     "steps": "Kroki",
     "background": "W tle",
     "look": {
@@ -1501,7 +1502,8 @@
       "key3": "W sekcji <b>Security</b> skopiuj <b>API Key</b> i wklej go powyżej.",
       "go": "Połącz i przejrzyj",
       "onlyReads": "To tylko odczyt. Nic nie zmienia się tutaj ani w {{app}}, dopóki nie potwierdzisz w następnym kroku.",
-      "lidarrOff": "Przeprowadzka z Lidarr? Najpierw włącz Muzykę w <link>Ustawieniach</link>."
+      "lidarrOff": "Przeprowadzka z Lidarr? Najpierw włącz Muzykę w <link>Ustawieniach</link>.",
+      "readarrOff": "Przeprowadzka z Readarr? Najpierw włącz E-booki lub Audiobooki w <link>Ustawieniach</link>."
     },
     "maps": {
       "title": "Mapowania ścieżek (zwykle niepotrzebne)",
@@ -1525,7 +1527,8 @@
       "clients": "klienty pobierania",
       "blocklist": "zablokowane wydania",
       "lists": "powiadomienia i listy",
-      "newArtists": "nowi wykonawcy"
+      "newArtists": "nowi wykonawcy",
+      "newAuthors": "nowi autorzy"
     },
     "review": {
       "profiles": "Profile jakości",
@@ -1551,7 +1554,8 @@
       "hidden_other": "Potrzebne dla {{count}} hasła i klucza API, które {{app}} ukrywa przed innymi aplikacjami.",
       "confirm": "Potwierdź i przeprowadź się",
       "nothing": "Nic się nie zmienia w {{app}}. Pliki zostają tam, gdzie są.",
-      "lidarrQuality": "Profile jakości z Lidarr zostają: muzyka w Box Office ma własne ustawienie jakości, w sekcji Muzyka."
+      "lidarrQuality": "Profile jakości z Lidarr zostają: muzyka w Box Office ma własne ustawienie jakości, w sekcji Muzyka.",
+      "readarrQuality": "Profile jakości z Readarr zostają: Box Office woli EPUB dla e-booków i M4B dla audiobooków. Przy każdym folderze głównym widać, czy zawiera e-booki, czy audiobooki, rozpoznane po plikach."
     },
     "status": {
       "done": "gotowe",
