@@ -74,6 +74,10 @@ Open http://localhost:7272 and make the admin account. To have it file things in
 - **Upgrades without losing anything.** When a copy is below its profile's good-enough quality, Box Office keeps looking. A better copy replaces the old one, which goes to the library's `.recycle` folder. Empty those folders from Settings, or have them emptied after a number of days.
 - **Choose a copy yourself.** Every movie, episode and season has **Choose a release**: the results from every connected indexer, with their quality, size and age, and why any were turned down.
 - **Removes titles cleanly.** Removing a movie, show, season or episode can also delete its files from disk. You see the folder, the number of files and their size first, and Box Office deletes only what it showed you.
+- **Problem files.** **Settings → Problem files** looks through the movie and TV library folders for what's out of place: folders and videos that aren't any title on the list, copies Box Office hasn't recorded, more than one copy of a movie or episode, recorded files that are gone, DVD and Blu-ray images (`.iso`, `.img`), movies split into parts (CD1, CD2…), names and folders that don't say what's in them, leftovers such as samples, programs and partial downloads, and empty folders. Each one shows what its fix does before you press it: a rename to `Title (Year)` (episodes into `Season 01` as `Title (Year) - S01E02 - Episode`, subtitles along), recording a copy, keeping the copy you pick, or remuxing a disc image or the parts into one MKV with FFmpeg, copying the streams as they are. A new file is checked (it opens, it's as long as what it came from, it has its sound) before anything else moves. Nothing is deleted: originals go to the library's `.recycle/problem-files` folder and wait there, untouched by the recycle folders' emptying, until you press **Delete originals** or **Put back**, which also undoes renames and records. Titles on Do not touch, and library folders mounted read-only, are listed but not changed.
+
+  <img src="docs/images/problem-files.webp" width="70%" alt="Problem files, with fixes waiting for an OK, movies in parts, a disc image and names to tidy">
+
 - **Sorts and filters** movies and shows by title, rating, size on disk, date added, and for shows by the next or last episode, remembered per list.
 - **Ebooks straight to your e-reader.** Each ebook Box Office downloads can be emailed to your Kindle, PocketBook or any reader with an email address, as soon as it's in the library. See [Sending ebooks to e-readers](docs/ereaders.md).
 - **Health.** A check-up of the things that stop Box Office working (disks, folders it can't write to, indexers, news servers), live charts of the processor, memory, requests and download speed, the log with a debug switch, and alerts. Prometheus metrics are at `/metrics` once you make a token.
@@ -108,7 +112,7 @@ Box Office answers on Radarr's and Sonarr's APIs at `/radarr` and `/sonarr`, so 
 
 ## Run it
 
-Box Office is one small binary with its web UI built in. The image has no shell and no FFmpeg: Box Office only talks HTTP and moves files. It listens on port **7272**.
+Box Office is one small binary with its web UI built in. The image is Debian slim with FFmpeg, which Problem files uses to remux disc images and join movies in parts; nothing is ever re-encoded. It listens on port **7272**.
 
 Box Office needs to **write** to your library folders, because it files new downloads there. Mount them at the same paths Matinee (or Plex, or Jellyfin) sees them at if you can; then every app agrees on where a file is.
 

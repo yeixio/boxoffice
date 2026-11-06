@@ -1673,6 +1673,126 @@
     "audiobook": "Sesli kitap",
     "album": "Albüm"
   },
+  "problems": {
+    "title": "Sorunlu dosyalar",
+    "sub": "Film ve dizi kitaplık klasörlerinde ilgilenilmesi gereken dosyalar. Bir düzeltmeye basana kadar hiçbir şey değişmez, ve asılları siz silene ya da geri koyana kadar kitaplığın <code>.recycle/problem-files</code> klasöründe bekler.",
+    "cardSub": "Film ve dizi klasörlerinde yerinde olmayanları bulun: listede olmayan dosyalar, fazla kopyalar, disk görüntüleri, parçalara bölünmüş filmler ve dağınık adlar; her düzeltmenin ne yaptığına baktıktan sonra düzeltin.",
+    "open": "Sorunlu dosyaları aç",
+    "foundLast": "Geçen sefer bulunan: {{count}}",
+    "waitingCount": "Onayınızı bekleyen: {{count}}",
+    "look": "Yeniden bak",
+    "looking": "Kitaplık klasörlerine bakılıyor… {{done}}/{{total}}",
+    "lookedAt": "Bakıldı: {{when}}.",
+    "never": "Box Office henüz bakmadı.",
+    "none": "Yapılacak bir şey yok: her şey olması gereken yerde.",
+    "unreadable": "Box Office {{path}} klasörünü okuyamıyor ya da klasör boş (bağlanmamış bir paylaşım mı?), bu yüzden atlandı.",
+    "readOnly": "{{path}} Box Office için salt okunur, bu yüzden içindekiler listelenir ama düzeltilemez.",
+    "noFFmpeg": "Box Office'in çalıştığı yerde FFmpeg kurulu değil, bu yüzden disk görüntüleri remux edilemez ve parçalar birleştirilemez.",
+    "fixAll": "{{count}} sorunun hepsini düzelt",
+    "fixSelected": "Seçilen {{count}} sorunu düzelt",
+    "pick": "{{name}} seç",
+    "fixing": "Düzeltiliyor…",
+    "queued": "Sırasını bekliyor",
+    "failed": "Düzeltilemedi: {{error}}",
+    "recorded": "kayıtlı",
+    "keepWhich": "Hangi kopya kalsın",
+    "keeps": "tut",
+    "setsAside": "kenara koy",
+    "remuxNote": "(akışların kopyası, hiçbir şey yeniden kodlanmaz)",
+    "recent": "Son düzeltmeler",
+    "blocked": {
+      "readOnly": "Kitaplık klasörü Box Office için salt okunur.",
+      "locked": "Dokunma",
+      "outputExists": "Düzeltilen dosyanın gideceği yerde zaten bir dosya var."
+    },
+    "detail": {
+      "outsideFolder": "klasörünün dışında duruyor",
+      "folder": "klasörü",
+      "show": "bir dizi diski",
+      "notListed": "listede değil"
+    },
+    "act": {
+      "rename": "Yeniden adlandır",
+      "setAside": "Kenara koy",
+      "keepOne": "Birini tut",
+      "record": "Kopyası olarak kaydet",
+      "forget": "Unut",
+      "convert": "MKV'ye remux et",
+      "join": "Parçaları birleştir",
+      "removeDirs": "Kaldır"
+    },
+    "did": {
+      "rename": "Yeniden adlandırıldı",
+      "setAside": "Kenara kondu",
+      "keepOne": "Bir kopya tutuldu",
+      "record": "Kaydedildi",
+      "forget": "Unutuldu",
+      "convert": "Remux edildi",
+      "join": "Birleştirildi",
+      "removeDirs": "Kaldırıldı"
+    },
+    "state": {
+      "done": "Tamam",
+      "undone": "Geri kondu"
+    },
+    "kinds": {
+      "duplicate": {
+        "title": "Birden fazla kopya",
+        "hint": "Tutulacak kopyayı seçin. Diğerleri kenara konur, tutulan da başlığın kopyası olarak kaydedilir."
+      },
+      "parts": {
+        "title": "Parçalı filmler",
+        "hint": "CD1, CD2, Part 1… adlı parçalar yeniden kodlanmadan tek bir MKV'de birleştirilir. Yeni dosya kontrol edilince parçalar kenara konur."
+      },
+      "discImage": {
+        "title": "Disk görüntüleri",
+        "hint": "Bir DVD ya da Blu-ray görüntüsündeki film (en uzun başlığı) yeniden kodlanmadan bir MKV'ye kopyalanır, yeni dosya kontrol edilince görüntü kenara konur. Bir dizinin diski ya da hiçbir başlığa ait olmayan bir görüntü yalnızca kenara konabilir."
+      },
+      "untracked": {
+        "title": "Box Office'in bilmediği kopyalar",
+        "hint": "Bir başlığın klasöründe olan ya da dışarıda duran ve bir başlığın adını taşıyan, Box Office'in kaydetmediği videolar. Düzeltme her birini başlığın kopyası olarak kaydeder ve Box Office'in adlandırdığı gibi yeniden adlandırır."
+      },
+      "missing": {
+        "title": "Eksik dosyalar",
+        "hint": "Box Office bunları başlıkların kopyaları olarak biliyor ama diskte yoklar. Onları unutmak Box Office'in bu başlıkları yeniden aramasını sağlar."
+      },
+      "naming": {
+        "title": "Adlar ve klasörler",
+        "hint": "Başlık (Yıl) olarak yeniden adlandırılır, bölümler sezon klasörlerinde Başlık (Yıl) - S01E02 - Bölüm olarak. Altyazılar da taşınır. Böyle başlayıp kalite gibi etiketler ekleyen adlar olduğu gibi kalır."
+      },
+      "unknown": {
+        "title": "Bölüm olmayan videolar",
+        "hint": "Bir dizinin klasöründe olup bölümlerinden hiçbirinin adını taşımayan videolar."
+      },
+      "notListed": {
+        "title": "Listede değil",
+        "hint": "Listedeki hiçbir başlığa ait olmayan klasörler ve videolar. Eklemek için Ayarlar'da kök klasördeki Tara'yı kullanın ya da kenara koyun."
+      },
+      "leftover": {
+        "title": "Artıklar",
+        "hint": "Örnekler, programlar, kısayollar ve indirmelerle arşivlerden kalanlar."
+      },
+      "empty": {
+        "title": "Boş klasörler",
+        "hint": "İçinde hiçbir şey olmayan klasörler."
+      }
+    },
+    "waiting": {
+      "title": "Onayınızı bekleyenler",
+      "sub": "Bir düzeltmenin kenara koyduğu asıllar kitaplığın <code>.recycle/problem-files</code> klasöründedir. Siz kalıcı olarak silene ya da geri koyana kadar orada kalırlar: geri dönüşüm klasörlerini boşaltmak onlara dokunmaz.",
+      "aside": "kenara konan: {{count}} ({{size}})",
+      "asideOne": "kenara konan: {{name}} ({{size}})",
+      "made": "yeni dosya: {{name}}",
+      "moved": "yeniden adlandırılan: {{count}}",
+      "putBack": "Geri koy",
+      "deleteOriginals": "Asılları sil",
+      "ok": "İyi görünüyor",
+      "confirmTitle": "Asıllar kalıcı olarak silinsin mi?",
+      "confirmBody": "Bu, geri dönüşüm klasöründen kenara konan {{count}} dosyayı ({{size}}) siler. Geri alınamaz.",
+      "cancel": "Vazgeç",
+      "delete": "Kalıcı olarak sil"
+    }
+  },
   "ereaders": {
     "title": "E-okuyuculara gönder",
     "intro": "Box Office e-kitapları e-postayla Kindle'ınıza, PocketBook'unuza veya kendi e-posta adresi olan her okuyucuya gönderebilir: her biri iner inmez kendiliğinden ya da bir kitabın sayfasından.",

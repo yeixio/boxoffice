@@ -1579,6 +1579,126 @@
     "audiobook": "오디오북",
     "album": "앨범"
   },
+  "problems": {
+    "title": "문제 파일",
+    "sub": "영화와 TV 라이브러리 폴더에서 손봐야 할 파일입니다. 수정을 누르기 전에는 아무것도 바뀌지 않으며, 원본은 삭제하거나 되돌릴 때까지 라이브러리의 <code>.recycle/problem-files</code> 폴더에서 기다립니다.",
+    "cardSub": "영화와 TV 라이브러리 폴더에서 제자리에 있지 않은 것을 찾아냅니다: 목록에 없는 파일, 여분의 사본, 디스크 이미지, 여러 부분으로 나뉜 영화, 지저분한 이름. 각 수정이 무엇을 하는지 확인한 뒤 고칠 수 있습니다.",
+    "open": "문제 파일 열기",
+    "foundLast": "지난번에 찾은 수: {{count}}",
+    "waitingCount": "확인 대기: {{count}}",
+    "look": "다시 살펴보기",
+    "looking": "라이브러리 폴더를 살펴보는 중… {{done}}/{{total}}",
+    "lookedAt": "{{when}} 살펴봄.",
+    "never": "Box Office가 아직 살펴보지 않았습니다.",
+    "none": "손볼 것이 없습니다: 모든 것이 제자리에 있습니다.",
+    "unreadable": "Box Office가 {{path}}을(를) 읽을 수 없거나 비어 있어서(공유가 마운트되지 않았나요?) 제외했습니다.",
+    "readOnly": "{{path}}은(는) Box Office에 읽기 전용이라 내용은 목록에 나오지만 고칠 수 없습니다.",
+    "noFFmpeg": "Box Office가 실행되는 곳에 FFmpeg가 설치되어 있지 않아 디스크 이미지를 리먹스하거나 부분을 합칠 수 없습니다.",
+    "fixAll": "{{count}}개 모두 수정",
+    "fixSelected": "선택한 {{count}}개 수정",
+    "pick": "{{name}} 선택",
+    "fixing": "수정 중…",
+    "queued": "차례를 기다리는 중",
+    "failed": "수정할 수 없음: {{error}}",
+    "recorded": "기록됨",
+    "keepWhich": "남길 사본",
+    "keeps": "남김",
+    "setsAside": "따로 둠",
+    "remuxNote": "(스트림 복사, 다시 인코딩하지 않음)",
+    "recent": "최근 수정",
+    "blocked": {
+      "readOnly": "라이브러리 폴더가 Box Office에 읽기 전용입니다.",
+      "locked": "건드리지 않음",
+      "outputExists": "수정된 파일이 들어갈 자리에 이미 파일이 있습니다."
+    },
+    "detail": {
+      "outsideFolder": "폴더 밖에 있음",
+      "folder": "해당 폴더",
+      "show": "프로그램의 디스크",
+      "notListed": "목록에 없음"
+    },
+    "act": {
+      "rename": "이름 바꾸기",
+      "setAside": "따로 두기",
+      "keepOne": "하나만 남기기",
+      "record": "이 작품의 사본으로 기록",
+      "forget": "잊기",
+      "convert": "MKV로 리먹스",
+      "join": "부분 합치기",
+      "removeDirs": "제거"
+    },
+    "did": {
+      "rename": "이름 바꿈",
+      "setAside": "따로 둠",
+      "keepOne": "사본 하나 남김",
+      "record": "기록함",
+      "forget": "잊음",
+      "convert": "리먹스함",
+      "join": "합침",
+      "removeDirs": "제거함"
+    },
+    "state": {
+      "done": "완료",
+      "undone": "되돌림"
+    },
+    "kinds": {
+      "duplicate": {
+        "title": "사본이 둘 이상",
+        "hint": "남길 사본을 고르세요. 나머지는 따로 두고, 남긴 사본은 그 작품의 사본으로 기록됩니다."
+      },
+      "parts": {
+        "title": "여러 부분으로 나뉜 영화",
+        "hint": "CD1, CD2, Part 1… 같은 이름의 부분을 다시 인코딩하지 않고 하나의 MKV로 합칩니다. 새 파일을 확인한 뒤 부분 파일은 따로 둡니다."
+      },
+      "discImage": {
+        "title": "디스크 이미지",
+        "hint": "DVD나 Blu-ray 이미지의 영화(가장 긴 타이틀)를 다시 인코딩하지 않고 MKV로 복사하며, 새 파일을 확인한 뒤 이미지는 따로 둡니다. 프로그램의 디스크나 어느 작품에도 속하지 않는 이미지는 따로 두기만 할 수 있습니다."
+      },
+      "untracked": {
+        "title": "Box Office가 모르는 사본",
+        "hint": "작품 폴더에 있거나, 따로 떨어져 작품 이름이 붙은 동영상 중 Box Office가 기록하지 않은 것. 수정하면 각각을 그 작품의 사본으로 기록하고 Box Office 방식대로 이름을 바꿉니다."
+      },
+      "missing": {
+        "title": "없어진 파일",
+        "hint": "Box Office에는 작품의 사본으로 기록되어 있지만 디스크에서 사라졌습니다. 잊으면 Box Office가 그 작품을 다시 찾습니다."
+      },
+      "naming": {
+        "title": "이름과 폴더",
+        "hint": "제목 (연도)로 이름을 바꾸고, 에피소드는 Season 폴더에 제목 (연도) - S01E02 - 에피소드로 둡니다. 자막도 함께 옮깁니다. 그렇게 시작하면서 화질 같은 태그를 덧붙인 이름은 그대로 둡니다."
+      },
+      "unknown": {
+        "title": "에피소드가 아닌 동영상",
+        "hint": "프로그램 폴더에 있지만 어느 에피소드 이름도 아닌 동영상."
+      },
+      "notListed": {
+        "title": "목록에 없음",
+        "hint": "목록의 어떤 작품도 아닌 폴더와 동영상. 추가하려면 설정에서 루트 폴더의 스캔을 사용하세요. 아니면 따로 두세요."
+      },
+      "leftover": {
+        "title": "남은 것들",
+        "hint": "샘플, 프로그램, 바로가기, 다운로드와 압축 파일의 잔여물."
+      },
+      "empty": {
+        "title": "빈 폴더",
+        "hint": "아무것도 없는 폴더."
+      }
+    },
+    "waiting": {
+      "title": "확인 대기",
+      "sub": "수정으로 따로 둔 원본은 라이브러리의 <code>.recycle/problem-files</code> 폴더에 있습니다. 영구 삭제하거나 되돌릴 때까지 그대로 남으며, 휴지통 폴더를 비워도 건드리지 않습니다.",
+      "aside": "따로 둠: {{count}} ({{size}})",
+      "asideOne": "따로 둠: {{name}} ({{size}})",
+      "made": "새 파일: {{name}}",
+      "moved": "이름 바꿈: {{count}}",
+      "putBack": "되돌리기",
+      "deleteOriginals": "원본 삭제",
+      "ok": "괜찮아요",
+      "confirmTitle": "원본을 영구 삭제할까요?",
+      "confirmBody": "따로 둔 {{count}}({{size}})을(를) 휴지통 폴더에서 삭제합니다. 되돌릴 수 없습니다.",
+      "cancel": "취소",
+      "delete": "영구 삭제"
+    }
+  },
   "ereaders": {
     "title": "전자책 리더로 보내기",
     "intro": "Box Office는 전자책을 이메일로 Kindle, PocketBook 또는 자체 이메일 주소가 있는 모든 리더에 보낼 수 있습니다. 다운로드가 끝날 때마다 알아서, 또는 책 페이지에서 보냅니다.",

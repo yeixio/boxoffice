@@ -34,6 +34,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/migrate"
 	"github.com/yeixio/boxoffice/internal/music"
 	"github.com/yeixio/boxoffice/internal/portal"
+	"github.com/yeixio/boxoffice/internal/problems"
 	"github.com/yeixio/boxoffice/internal/search"
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/tmdb"
@@ -62,6 +63,8 @@ type Server struct {
 	Search    *search.Service
 	// LibScan scans root folders for what's on disk but not on the list.
 	LibScan *libscan.Service
+	// Problems finds and fixes problem files in the library folders.
+	Problems *problems.Service
 	// Portal is the request site, for the people who ask for titles.
 	Portal   *portal.Service
 	Log      *slog.Logger
@@ -260,6 +263,7 @@ func (s *Server) Handler() http.Handler {
 	routes = append(routes, s.quarantineRoutes()...)
 	routes = append(routes, s.connectionRoutes()...)
 	routes = append(routes, s.libScanRoutes()...)
+	routes = append(routes, s.problemRoutes()...)
 	routes = append(routes, s.portalRoutes()...)
 	for _, r := range routes {
 		mux.Handle(r.pattern, s.wrap(r))

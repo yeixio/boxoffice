@@ -1673,6 +1673,126 @@
     "audiobook": "Hörbuch",
     "album": "Album"
   },
+  "problems": {
+    "title": "Problemdateien",
+    "sub": "Dateien in den Film- und Serien-Mediathekordnern, um die man sich kümmern sollte. Nichts ändert sich, bis du eine Korrektur drückst, und die Originale warten im Ordner <code>.recycle/problem-files</code> der Mediathek, bis du sie löschst oder zurücklegst.",
+    "cardSub": "Finde, was in den Film- und Serien-Mediathekordnern fehl am Platz ist: Dateien, die nicht auf der Liste stehen, zusätzliche Kopien, Disc-Images, Filme in Teilen und unordentliche Namen, und korrigiere sie, nachdem du geprüft hast, was jede Korrektur tut.",
+    "open": "Problemdateien öffnen",
+    "foundLast": "Beim letzten Mal gefunden: {{count}}",
+    "waitingCount": "Warten auf dein OK: {{count}}",
+    "look": "Erneut suchen",
+    "looking": "Durchsuche die Mediathekordner… {{done}}/{{total}}",
+    "lookedAt": "Gesucht {{when}}.",
+    "never": "Box Office hat noch nicht gesucht.",
+    "none": "Nichts zu tun: Alles ist dort, wo es sein soll.",
+    "unreadable": "Box Office kann {{path}} nicht lesen, oder der Ordner ist leer (eine nicht eingebundene Freigabe?), daher wurde er ausgelassen.",
+    "readOnly": "{{path}} ist für Box Office schreibgeschützt, daher wird sein Inhalt aufgelistet, kann aber nicht korrigiert werden.",
+    "noFFmpeg": "FFmpeg ist dort, wo Box Office läuft, nicht installiert, daher können Disc-Images nicht umgepackt und Teile nicht zusammengefügt werden.",
+    "fixAll": "Alle {{count}} korrigieren",
+    "fixSelected": "Die {{count}} ausgewählten korrigieren",
+    "pick": "{{name}} auswählen",
+    "fixing": "Wird korrigiert…",
+    "queued": "Wartet, bis es dran ist",
+    "failed": "Konnte nicht korrigiert werden: {{error}}",
+    "recorded": "erfasst",
+    "keepWhich": "Welche Kopie behalten",
+    "keeps": "behalten",
+    "setsAside": "beiseitelegen",
+    "remuxNote": "(eine Kopie der Streams, nichts neu kodiert)",
+    "recent": "Letzte Korrekturen",
+    "blocked": {
+      "readOnly": "Der Mediathekordner ist für Box Office schreibgeschützt.",
+      "locked": "Nicht anfassen",
+      "outputExists": "Dort, wo die korrigierte Datei hin soll, liegt schon eine Datei."
+    },
+    "detail": {
+      "outsideFolder": "außerhalb seines Ordners",
+      "folder": "sein Ordner",
+      "show": "eine Serien-Disc",
+      "notListed": "nicht auf der Liste"
+    },
+    "act": {
+      "rename": "Umbenennen",
+      "setAside": "Beiseitelegen",
+      "keepOne": "Eine behalten",
+      "record": "Als seine Kopie erfassen",
+      "forget": "Vergessen",
+      "convert": "In MKV umpacken",
+      "join": "Teile zusammenfügen",
+      "removeDirs": "Entfernen"
+    },
+    "did": {
+      "rename": "Umbenannt",
+      "setAside": "Beiseitegelegt",
+      "keepOne": "Eine Kopie behalten",
+      "record": "Erfasst",
+      "forget": "Vergessen",
+      "convert": "Umgepackt",
+      "join": "Zusammengefügt",
+      "removeDirs": "Entfernt"
+    },
+    "state": {
+      "done": "Erledigt",
+      "undone": "Zurückgelegt"
+    },
+    "kinds": {
+      "duplicate": {
+        "title": "Mehr als eine Kopie",
+        "hint": "Wähle die Kopie, die du behalten willst. Die anderen werden beiseitegelegt, und die behaltene wird als Kopie des Titels erfasst."
+      },
+      "parts": {
+        "title": "Filme in Teilen",
+        "hint": "Teile mit Namen wie CD1, CD2, Part 1… werden ohne Neukodierung zu einer MKV zusammengefügt. Die Teile werden beiseitegelegt, sobald die neue Datei geprüft ist."
+      },
+      "discImage": {
+        "title": "Disc-Images",
+        "hint": "Der Film auf einem DVD- oder Blu-ray-Image (sein längster Titel) wird ohne Neukodierung in eine MKV kopiert, und das Image wird beiseitegelegt, sobald die neue Datei geprüft ist. Eine Serien-Disc oder ein Image, das zu keinem Titel gehört, kann nur beiseitegelegt werden."
+      },
+      "untracked": {
+        "title": "Kopien, die Box Office nicht kennt",
+        "hint": "Videos im Ordner eines Titels, oder lose und nach einem Titel benannt, die Box Office nicht erfasst hat. Die Korrektur erfasst jedes als Kopie des Titels, umbenannt so, wie Box Office Dinge benennt."
+      },
+      "missing": {
+        "title": "Fehlende Dateien",
+        "hint": "Box Office führt diese als Kopien von Titeln, aber sie sind nicht mehr auf der Festplatte. Wenn du sie vergisst, sucht Box Office wieder nach den Titeln."
+      },
+      "naming": {
+        "title": "Namen und Ordner",
+        "hint": "Umbenannt in Titel (Jahr), Folgen in Staffelordnern als Titel (Jahr) - S01E02 - Folge. Untertitel wandern mit. Namen, die so beginnen und Zusätze wie die Qualität anhängen, bleiben, wie sie sind."
+      },
+      "unknown": {
+        "title": "Videos, die keine Folge sind",
+        "hint": "Videos im Ordner einer Serie, die nicht nach einer ihrer Folgen benannt sind."
+      },
+      "notListed": {
+        "title": "Nicht auf der Liste",
+        "hint": "Ordner und Videos, die zu keinem Titel auf der Liste gehören. Füge sie mit „Scannen“ beim Stammordner in den Einstellungen hinzu, oder lege sie beiseite."
+      },
+      "leftover": {
+        "title": "Überbleibsel",
+        "hint": "Samples, Programme, Verknüpfungen und Reste von Downloads und Archiven."
+      },
+      "empty": {
+        "title": "Leere Ordner",
+        "hint": "Ordner, in denen nichts ist."
+      }
+    },
+    "waiting": {
+      "title": "Warten auf dein OK",
+      "sub": "Originale, die eine Korrektur beiseitegelegt hat, liegen im Ordner <code>.recycle/problem-files</code> der Mediathek. Sie bleiben dort, bis du sie endgültig löschst oder zurücklegst: Das Leeren der Papierkorbordner lässt sie in Ruhe.",
+      "aside": "beiseitegelegt: {{count}} ({{size}})",
+      "asideOne": "beiseitegelegt: {{name}} ({{size}})",
+      "made": "neue Datei: {{name}}",
+      "moved": "umbenannt: {{count}}",
+      "putBack": "Zurücklegen",
+      "deleteOriginals": "Originale löschen",
+      "ok": "Sieht gut aus",
+      "confirmTitle": "Die Originale endgültig löschen?",
+      "confirmBody": "Dadurch werden {{count}} beiseitegelegte Dateien ({{size}}) aus dem Papierkorbordner gelöscht. Das lässt sich nicht rückgängig machen.",
+      "cancel": "Abbrechen",
+      "delete": "Endgültig löschen"
+    }
+  },
   "ereaders": {
     "title": "An E-Reader senden",
     "intro": "Box Office kann E-Books per E-Mail an deinen Kindle, deinen PocketBook oder jeden Reader mit eigener E-Mail-Adresse schicken: von selbst, sobald eines heruntergeladen ist, oder von der Seite eines Buchs aus.",

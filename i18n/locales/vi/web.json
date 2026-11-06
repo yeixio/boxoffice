@@ -1579,6 +1579,126 @@
     "audiobook": "Sách nói",
     "album": "Album"
   },
+  "problems": {
+    "title": "Tệp có vấn đề",
+    "sub": "Các tệp trong thư mục thư viện phim và chương trình TV cần được xử lý. Không có gì thay đổi cho đến khi bạn bấm sửa, và bản gốc được giữ trong thư mục <code>.recycle/problem-files</code> của thư viện cho đến khi bạn xóa hoặc đặt lại chúng.",
+    "cardSub": "Tìm những gì không đúng chỗ trong thư mục thư viện phim và chương trình TV: tệp không có trong danh sách, bản sao thừa, ảnh đĩa, phim chia nhiều phần và tên lộn xộn, rồi sửa sau khi bạn đã xem mỗi bản sửa sẽ làm gì.",
+    "open": "Mở Tệp có vấn đề",
+    "foundLast": "Lần trước tìm thấy: {{count}}",
+    "waitingCount": "Đang chờ bạn đồng ý: {{count}}",
+    "look": "Kiểm tra lại",
+    "looking": "Đang xem qua thư mục thư viện… {{done}}/{{total}}",
+    "lookedAt": "Đã kiểm tra {{when}}.",
+    "never": "Box Office chưa kiểm tra.",
+    "none": "Không có gì cần xử lý: mọi thứ đều đúng chỗ.",
+    "unreadable": "Box Office không đọc được {{path}}, hoặc thư mục trống (thư mục chia sẻ chưa được gắn?), nên đã bỏ qua.",
+    "readOnly": "{{path}} chỉ đọc đối với Box Office, nên nội dung được liệt kê nhưng không thể sửa.",
+    "noFFmpeg": "FFmpeg chưa được cài nơi Box Office chạy, nên không thể remux ảnh đĩa hoặc ghép các phần.",
+    "fixAll": "Sửa tất cả {{count}}",
+    "fixSelected": "Sửa {{count}} mục đã chọn",
+    "pick": "Chọn {{name}}",
+    "fixing": "Đang sửa…",
+    "queued": "Đang chờ đến lượt",
+    "failed": "Không sửa được: {{error}}",
+    "recorded": "đã ghi nhận",
+    "keepWhich": "Giữ bản nào",
+    "keeps": "giữ",
+    "setsAside": "để riêng",
+    "remuxNote": "(sao chép luồng, không mã hóa lại)",
+    "recent": "Các bản sửa gần đây",
+    "blocked": {
+      "readOnly": "Thư mục thư viện chỉ đọc đối với Box Office.",
+      "locked": "Không động vào",
+      "outputExists": "Đã có tệp ở chỗ tệp sau khi sửa sẽ được đặt."
+    },
+    "detail": {
+      "outsideFolder": "nằm ngoài thư mục của nó",
+      "folder": "thư mục của nó",
+      "show": "đĩa của một chương trình",
+      "notListed": "không có trong danh sách"
+    },
+    "act": {
+      "rename": "Đổi tên",
+      "setAside": "Để riêng",
+      "keepOne": "Giữ một bản",
+      "record": "Ghi nhận là bản của nó",
+      "forget": "Bỏ qua",
+      "convert": "Remux sang MKV",
+      "join": "Ghép các phần",
+      "removeDirs": "Xóa"
+    },
+    "did": {
+      "rename": "Đã đổi tên",
+      "setAside": "Đã để riêng",
+      "keepOne": "Đã giữ một bản",
+      "record": "Đã ghi nhận",
+      "forget": "Đã bỏ qua",
+      "convert": "Đã remux",
+      "join": "Đã ghép",
+      "removeDirs": "Đã xóa"
+    },
+    "state": {
+      "done": "Xong",
+      "undone": "Đã đặt lại"
+    },
+    "kinds": {
+      "duplicate": {
+        "title": "Nhiều hơn một bản",
+        "hint": "Chọn bản muốn giữ. Các bản khác được để riêng, và bản được giữ được ghi nhận là bản của tựa đó."
+      },
+      "parts": {
+        "title": "Phim chia nhiều phần",
+        "hint": "Các phần tên CD1, CD2, Part 1… được ghép thành một MKV mà không mã hóa lại. Các phần được để riêng sau khi tệp mới đã được kiểm tra."
+      },
+      "discImage": {
+        "title": "Ảnh đĩa",
+        "hint": "Phim trên ảnh DVD hoặc Blu-ray (tựa dài nhất) được chép sang MKV mà không mã hóa lại, và ảnh đĩa được để riêng sau khi tệp mới đã được kiểm tra. Đĩa của một chương trình hoặc ảnh không thuộc tựa nào chỉ có thể để riêng."
+      },
+      "untracked": {
+        "title": "Bản Box Office không biết",
+        "hint": "Video trong thư mục của một tựa, hoặc nằm rời và được đặt tên theo một tựa, mà Box Office chưa ghi nhận. Khi sửa, mỗi video được ghi nhận là bản của tựa đó và đổi tên theo cách Box Office đặt tên."
+      },
+      "missing": {
+        "title": "Tệp bị mất",
+        "hint": "Box Office ghi nhận các tệp này là bản của các tựa, nhưng chúng không còn trên ổ đĩa. Bỏ qua chúng để Box Office tìm lại các tựa đó."
+      },
+      "naming": {
+        "title": "Tên và thư mục",
+        "hint": "Đổi tên thành Tựa (Năm), với các tập trong thư mục Season dạng Tựa (Năm) - S01E02 - Tập. Phụ đề đi kèm. Tên bắt đầu như vậy và thêm thẻ như chất lượng được giữ nguyên."
+      },
+      "unknown": {
+        "title": "Video không phải là tập",
+        "hint": "Video trong thư mục của một chương trình không được đặt tên theo tập nào của nó."
+      },
+      "notListed": {
+        "title": "Không có trong danh sách",
+        "hint": "Thư mục và video không thuộc tựa nào trong danh sách. Để thêm chúng, dùng Quét trên thư mục gốc trong Cài đặt; hoặc để riêng."
+      },
+      "leftover": {
+        "title": "Đồ thừa",
+        "hint": "Bản mẫu, chương trình, lối tắt, và phần còn lại của tải xuống và tệp nén."
+      },
+      "empty": {
+        "title": "Thư mục trống",
+        "hint": "Thư mục không có gì bên trong."
+      }
+    },
+    "waiting": {
+      "title": "Đang chờ bạn đồng ý",
+      "sub": "Bản gốc mà bản sửa để riêng nằm trong thư mục <code>.recycle/problem-files</code> của thư viện. Chúng ở đó cho đến khi bạn xóa vĩnh viễn hoặc đặt lại: dọn thư mục thùng rác không động đến chúng.",
+      "aside": "để riêng: {{count}} ({{size}})",
+      "asideOne": "để riêng: {{name}} ({{size}})",
+      "made": "tệp mới: {{name}}",
+      "moved": "đã đổi tên: {{count}}",
+      "putBack": "Đặt lại",
+      "deleteOriginals": "Xóa bản gốc",
+      "ok": "Ổn rồi",
+      "confirmTitle": "Xóa vĩnh viễn bản gốc?",
+      "confirmBody": "Thao tác này xóa {{count}} mục đã để riêng ({{size}}) khỏi thư mục thùng rác. Không thể hoàn tác.",
+      "cancel": "Hủy",
+      "delete": "Xóa vĩnh viễn"
+    }
+  },
   "ereaders": {
     "title": "Gửi đến máy đọc sách",
     "intro": "Box Office có thể gửi sách điện tử qua email đến Kindle, PocketBook hoặc bất kỳ máy đọc nào có địa chỉ email riêng: tự động ngay khi mỗi cuốn tải xong, hoặc từ trang của một cuốn sách.",
