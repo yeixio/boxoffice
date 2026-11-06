@@ -19,18 +19,30 @@ Box Office keeps track of the movies and shows in your library and the ones you'
 
 Already running Radarr, Sonarr, Lidarr, Readarr or NZBGet? **Move in** brings everything over step by step, and only ever reads from the old apps, so nothing in them changes until you decide to turn them off.
 
-![A show in Box Office, with its seasons, episodes and the quality of each file](docs/images/show.webp)
+![The Discover home page, with recommendations and what's trending, and which titles are already on disk](docs/images/discover.webp)
 
 <p>
-  <img src="docs/images/movies.webp" width="49%" alt="The movies list, sorted by rating">
-  <img src="docs/images/move-in.webp" width="49%" alt="Moving in from Radarr, step by step">
+  <img src="docs/images/show.webp" width="49%" alt="A show with its seasons, episodes and the quality of each file">
+  <img src="docs/images/movies.webp" width="49%" alt="The movies list">
+</p>
+
+<p>
+  <img src="docs/images/music.webp" width="49%" alt="An artist's albums in Music">
+  <img src="docs/images/books.webp" width="49%" alt="An author's books in Books">
+</p>
+
+<p>
+  <img src="docs/images/move-in.webp" width="49%" alt="Moving in from Radarr, Sonarr, Lidarr, Readarr or NZBGet, step by step">
+  <img src="docs/images/requests.webp" width="49%" alt="Requests from the request site waiting for approval">
 </p>
 
 <p align="center">
-  <img src="docs/images/phone-movies.webp" width="30%" alt="Movies on a phone">
-  <img src="docs/images/phone-shows.webp" width="30%" alt="Shows on a phone, sorted by the next episode">
-  <img src="docs/images/phone-menu.webp" width="30%" alt="The menu on a phone">
+  <img src="docs/images/phone-discover.webp" width="30%" alt="Discover on a phone">
+  <img src="docs/images/phone-shows.webp" width="30%" alt="Shows on a phone">
+  <img src="docs/images/phone-menu.webp" width="30%" alt="The menu on a phone, grouped into Library, Status and Setup">
 </p>
+
+<sub>Screenshots use made-up titles and artwork.</sub>
 
 **Status:** early, and moving fast. Movies, TV, the built-in Usenet downloader and moving in from Radarr, Sonarr and NZBGet work end to end. There are no tagged releases yet: the `main` image is built from every change that passes CI. See the [roadmap](ROADMAP.md) for what's next.
 

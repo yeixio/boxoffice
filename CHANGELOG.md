@@ -8,6 +8,10 @@ What changed in Box Office, newest first. The format follows [Keep a Changelog](
 
 - **Requests made in Matinee land on the Requests page.** When Matinee is connected to Box Office, what people ask for in its web, phone and TV apps is filed under their Matinee account, the same one they'd use to sign in to the request site, and follows its rules: automatic approval, per-person settings and weekly limits. Matinee admins' own requests are added straight away. Admins can approve or decline in either place. Matinee does this through `/{radarr,sonarr}/api/v3/boxoffice/requests`, advertised as `requests` in `boxOfficeFeatures`; the request site doesn't need to be turned on for it.
 
+### Changed
+
+- **New README screenshots.** They show the sidebar, Discover, Music, Books, the Requests page and the phone menu, with made-up titles and artwork.
+
 ### Fixed
 
 - **Choose a release no longer goes to a blank screen when nothing is found.** A search with no releases came back as `null` instead of an empty list, and the releases window crashed the page. It hit audiobooks first, since indexers often have none, but albums, ebooks, movies and episodes did the same when a search came up empty. Now it says nothing was found.
