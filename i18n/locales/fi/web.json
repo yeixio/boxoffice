@@ -1050,7 +1050,43 @@
     "newHint": "Vähintään 8 merkkiä. Jokainen laite kirjautuu uudelleen.",
     "change": "Vaihda salasana",
     "system": "Box Office {{version}}, {{os}}, {{go}}, {{db}} · tiedot kansiossa <code>{{dir}}</code> · käynnissä {{since}} alkaen",
-    "languageHint": "Kieli, jolla Box Office näytetään sinulle kaikilla laitteilla, joilla kirjaudut sisään. Automaattinen seuraa kunkin selaimen kieltä."
+    "languageHint": "Kieli, jolla Box Office näytetään sinulle kaikilla laitteilla, joilla kirjaudut sisään. Automaattinen seuraa kunkin selaimen kieltä.",
+    "sections": {
+      "general": {
+        "label": "Yleiset",
+        "sub": "Kielesi ja salasanasi sekä TMDB-avain, jolla Box Office hakee nimikkeiden tiedot."
+      },
+      "library": {
+        "label": "Kirjasto",
+        "sub": "Mitä medialajeja Box Office hoitaa, missä kukin kirjasto on ja miten se siivoaa."
+      },
+      "downloads": {
+        "label": "Lataukset",
+        "sub": "Miten Box Office lataa: omalla Usenet-lataajallaan ja uutispalvelimillasi tai latausohjelmalla, joka sinulla jo on."
+      },
+      "searching": {
+        "label": "Haku",
+        "sub": "Mistä Box Office etsii julkaisuja, mitä laatuja se haluaa ja kuinka usein ja paljon se hakee."
+      },
+      "apps": {
+        "label": "Sovellukset ja laitteet",
+        "sub": "Yhdistä Matinee, lähetä e-kirjoja lukulaitteisiin ja muuta Radarrista, Sonarrista, Lidarrista tai Readarrista."
+      },
+      "elsewhere": {
+        "label": "Muilla sivuilla"
+      }
+    },
+    "search": {
+      "placeholder": "Hae asetuksista",
+      "hint": "Kirjoita sana asetuksesta, esimerkiksi portti, laatu tai salasana. Paina / palataksesi tähän kenttään.",
+      "found": "Asetukset, jotka vastaavat hakua ”{{query}}”",
+      "none": "Mikään asetus ei vastaa hakua ”{{query}}”.",
+      "noneHint": "Kokeile lyhyempää tai eri sanaa, esimerkiksi sovelluksen nimeä.",
+      "inside": "Lomakkeessa: {{fields}}"
+    },
+    "openPage": "Avaa: {{page}}",
+    "ereadersOff": "Lähetä e-kirjoja sähköpostilla Kindleen, PocketBookiin tai muuhun lukulaitteeseen. Ota {{ebooks}} käyttöön asettaaksesi sen.",
+    "turnOnType": "Ota käyttöön: {{name}}"
   },
   "mediaTypes": {
     "music": {

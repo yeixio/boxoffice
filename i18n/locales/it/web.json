@@ -1126,7 +1126,43 @@
     "newHint": "Almeno 8 caratteri. Ogni dispositivo deve accedere di nuovo.",
     "change": "Cambia password",
     "system": "Box Office {{version}} su {{os}}, {{go}}, {{db}} · dati in <code>{{dir}}</code> · attivo dal {{since}}",
-    "languageHint": "La lingua in cui Box Office ti viene mostrato, su ogni dispositivo con cui accedi. Automatica segue la lingua di ogni browser."
+    "languageHint": "La lingua in cui Box Office ti viene mostrato, su ogni dispositivo con cui accedi. Automatica segue la lingua di ogni browser.",
+    "sections": {
+      "general": {
+        "label": "Generale",
+        "sub": "La tua lingua e password, e la chiave TMDB con cui Box Office cerca i titoli."
+      },
+      "library": {
+        "label": "Libreria",
+        "sub": "Quali tipi di media gestisce Box Office, dove si trova ogni libreria e come la tiene in ordine."
+      },
+      "downloads": {
+        "label": "Download",
+        "sub": "Come scarica Box Office: con il proprio downloader Usenet e i tuoi server di news, oppure con un'app di download che hai già."
+      },
+      "searching": {
+        "label": "Ricerca",
+        "sub": "Dove Box Office cerca le release, quali qualità vuole e quanto spesso e quanto cerca."
+      },
+      "apps": {
+        "label": "App e dispositivi",
+        "sub": "Collega Matinee, invia ebook agli e-reader e trasferisciti da Radarr, Sonarr, Lidarr o Readarr."
+      },
+      "elsewhere": {
+        "label": "In altre pagine"
+      }
+    },
+    "search": {
+      "placeholder": "Cerca nelle impostazioni",
+      "hint": "Scrivi una parola di un'impostazione, come porta, qualità o password. Premi / per tornare a questa casella.",
+      "found": "Impostazioni che corrispondono a «{{query}}»",
+      "none": "Nessuna impostazione corrisponde a «{{query}}».",
+      "noneHint": "Prova una parola più corta o diversa, come il nome di un'app.",
+      "inside": "Nel modulo: {{fields}}"
+    },
+    "openPage": "Apri {{page}}",
+    "ereadersOff": "Invia ebook via email a un Kindle, PocketBook o altro e-reader. Attiva {{ebooks}} per configurarlo.",
+    "turnOnType": "Attiva {{name}}"
   },
   "mediaTypes": {
     "music": {

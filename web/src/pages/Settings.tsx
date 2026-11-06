@@ -1,10 +1,10 @@
 import { LanguagePicker } from '../LanguagePicker'
 import i18n from '../i18n'
 import { Trans, useTranslation } from 'react-i18next'
-import { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Copy, Lock, Folder, FolderUp, KeyRound, Plus, Trash2 } from 'lucide-react'
+import { ArrowRight, Copy, Lock, Search, Folder, FolderUp, KeyRound, Plus, Trash2 } from 'lucide-react'
 import { del, get, post, put, type Status, type MediaType, type MediaTypeKey, type Profile, type Recycle, type RootFolder, type RootKind, type Settings as SettingsData, type ShowDefaults, type SystemInfo } from '../api'
 import { bytes, day } from '../format'
 import { monitorOptions, useProfiles, useQualities, useRootFolders, useShowDefaults } from '../hooks'
@@ -12,47 +12,325 @@ import { AutoSearchSettings, Connections, DataCapSettingsCard, DownloadSettings,
 import { ScanButton, scannable } from './LibraryScan'
 import { EreaderSettingsCard } from './Ereaders'
 import { ProblemsCard } from './Problems'
-import { Badge, Button, Card, ErrorNote, Field, Heading, Input, Modal, Select, Spinner, Toggle } from '../ui'
+import { matches, spans, words } from './settingsSearch'
+import { Badge, Button, Card, ErrorNote, Field, Input, Modal, Select, Spinner, Toggle } from '../ui'
+
+// The sections Settings is split into, in tab order. "elsewhere" is never a
+// tab: it only lists, while searching, settings that live on other pages.
+const sectionIds = ['general', 'library', 'downloads', 'searching', 'apps'] as const
+type SectionId = (typeof sectionIds)[number]
+const isSection = (s: string | null | undefined): s is SectionId => sectionIds.includes(s as SectionId)
+
+// A card on the page. keys are catalog keys for words people may search
+// for that aren't on the card until it's opened, like a form's fields, and
+// terms are names that read the same in every language. A card with inner
+// is already given its id inside, so its wrapper doesn't take it.
+type CardDef = { id: string; el: ReactNode; keys?: string[]; terms?: string[]; inner?: boolean }
+type SectionDef = { id: SectionId | 'elsewhere'; cards: CardDef[] }
+
+const mediaKinds: MediaTypeKey[] = ['music', 'audiobook', 'ebook', 'comic']
+
+const sections: SectionDef[] = [
+  {
+    id: 'general',
+    cards: [
+      { id: 'language', el: <Language /> },
+      { id: 'tmdb', el: <General />, keys: ['settings.tmdbKey'], terms: ['API'] },
+      { id: 'password', el: <Account /> },
+    ],
+  },
+  {
+    id: 'library',
+    cards: [
+      { id: 'media-types', el: <MediaTypes /> },
+      { id: 'folders-movie', el: <RootFolders kind="movie" />, keys: ['settings.addFolder', 'files.folder'] },
+      { id: 'folders-series', el: <RootFolders kind="series" />, keys: ['settings.addFolder', 'files.folder'] },
+      ...mediaKinds.map((k) => ({ id: `folders-${k}`, el: <TypeFolders kind={k} />, keys: ['settings.addFolder', 'files.folder'] })),
+      { id: 'new-shows', el: <NewShows /> },
+      { id: 'problems', el: <ProblemsCard /> },
+      { id: 'recycle', el: <RecycleFolders /> },
+    ],
+  },
+  {
+    id: 'downloads',
+    cards: [
+      { id: 'downloads', el: <DownloadSettings />, inner: true, terms: ['Usenet', 'NZB'] },
+      {
+        id: 'news-servers',
+        el: <Connections section="news-servers" />,
+        inner: true,
+        keys: ['conn.server.host', 'conn.port', 'conn.username', 'conn.password', 'conn.server.tls', 'conn.server.connections', 'conn.server.useAs', 'conn.server.block', 'conn.server.left', 'conn.server.expires'],
+        terms: ['Usenet', 'TLS', 'SSL'],
+      },
+      {
+        id: 'download-clients',
+        el: <Connections section="download-clients" />,
+        inner: true,
+        keys: ['conn.client.app', 'conn.address', 'conn.port', 'conn.client.https', 'conn.client.urlBase', 'conn.username', 'conn.password', 'conn.client.apiKey', 'conn.client.category'],
+        terms: ['SABnzbd', 'NZBGet', 'qBittorrent', 'Transmission', 'Deluge', 'torrent'],
+      },
+    ],
+  },
+  {
+    id: 'searching',
+    cards: [
+      {
+        id: 'indexers',
+        el: <Connections section="indexers" />,
+        inner: true,
+        keys: ['conn.address', 'conn.indexer.apiKey', 'conn.indexer.kind', 'conn.indexer.categories', 'conn.indexer.apiPath', 'conn.indexer.priority', 'conn.auto.perDay', 'conn.indexer.grabs', 'conn.indexer.forSearch', 'conn.indexer.forRss'],
+        terms: ['Prowlarr', 'Newznab', 'Torznab', 'NZB', 'API'],
+      },
+      { id: 'profiles', el: <Profiles />, keys: ['settings.newProfileTitle', 'settings.qualities', 'settings.goodEnough', 'settings.upgradeUntil'] },
+      { id: 'automatic-searches', el: <AutoSearchSettings />, inner: true, terms: ['RSS'] },
+      { id: 'data-cap', el: <DataCapSettingsCard />, inner: true },
+    ],
+  },
+  {
+    id: 'apps',
+    cards: [
+      { id: 'matinee', el: <ConnectMatinee />, terms: ['API'] },
+      { id: 'ereaders', el: <Ereaders />, terms: ['Kindle', 'PocketBook', 'SMTP'] },
+      { id: 'move-in', el: <MoveIn />, terms: ['Radarr', 'Sonarr', 'Lidarr', 'Readarr'] },
+    ],
+  },
+  {
+    id: 'elsewhere',
+    cards: [
+      { id: 'alerts', el: <Elsewhere to="/health?tab=alerts" title="health.tabs.alerts" sub="health.subs.alerts" />, terms: ['webhook', 'Discord', 'ntfy', 'Home Assistant', 'Prometheus', 'email'] },
+      { id: 'backups', el: <Elsewhere to="/backups" title="nav.backups" sub="backups.sub" />, keys: ['backups.schedule', 'backups.passphrase', 'backups.alsoSend'], terms: ['S3', 'MinIO'] },
+    ],
+  },
+]
 
 export function Settings() {
-  const { t } = useTranslation()
+  const { t, i18n: { language } } = useTranslation()
+  const [params] = useSearchParams()
+  const { hash, key: locationKey } = useLocation()
+  const navigate = useNavigate()
+  const tab: SectionId = isSection(params.get('tab')) ? (params.get('tab') as SectionId) : 'general'
+  const [query, setQuery] = useState('')
+  const q = useMemo(() => words(query), [query])
+  const searching = q.length > 0
+  const root = useRef<HTMLDivElement>(null)
+  const box = useRef<HTMLInputElement>(null)
+  const [found, setFound] = useState<ReadonlyMap<string, string[]>>(() => new Map())
+  // tick moves on whenever the words on the cards change, as their data
+  // loads, so searching and jumping to a card see the cards as they are.
+  const [tick, setTick] = useState(0)
+  useEffect(() => {
+    const el = root.current
+    if (!el) return
+    let frame = 0
+    const o = new MutationObserver(() => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(() => setTick((n) => n + 1))
+    })
+    o.observe(el, { childList: true, subtree: true, characterData: true })
+    return () => {
+      o.disconnect()
+      cancelAnimationFrame(frame)
+    }
+  }, [])
+
+  // The extra words each card can be found by, in this language and in
+  // English, since guides and forums mostly name settings in English.
+  const extras = useMemo(() => {
+    const en = i18n.getFixedT('en')
+    return new Map(
+      sections.flatMap((s) =>
+        s.cards.map((c) => [
+          c.id,
+          {
+            text: [t(`settings.sections.${s.id}.label`), ...(c.keys ?? []).flatMap((k) => [t(k), en(k)]), ...(c.terms ?? [])].join(' '),
+            fields: (c.keys ?? []).map((k) => ({ label: t(k), en: en(k) })),
+          },
+        ] as const),
+      ),
+    )
+  }, [t, language])
+
+  useLayoutEffect(() => {
+    if (!searching || !root.current) return
+    const next = new Map<string, string[]>()
+    root.current.querySelectorAll<HTMLElement>('[data-card]').forEach((el) => {
+      const id = el.dataset.card!
+      const text = cardText(el)
+      const extra = extras.get(id)
+      if (!text.trim() || !matches(`${text} ${extra?.text ?? ''}`, q)) return
+      // Fields in the card's forms that the search found, but that aren't
+      // on the card itself, are named under it.
+      const inside = matches(text, q) ? [] : (extra?.fields ?? []).filter((f) => q.some((w) => matches(`${f.label} ${f.en}`, [w]))).map((f) => f.label)
+      next.set(id, [...new Set(inside)])
+    })
+    setFound((prev) => (prev.size === next.size && [...next].every(([id, v]) => prev.get(id)?.join() === v.join()) ? prev : next))
+  }, [searching, q, tick, extras])
+
+  // Mark the words found on the cards showing.
+  useEffect(() => {
+    if (typeof CSS === 'undefined' || !('highlights' in CSS)) return
+    CSS.highlights.delete('settings-search')
+    if (!searching || !root.current) return
+    const ranges: Range[] = []
+    root.current.querySelectorAll<HTMLElement>('[data-card]').forEach((el) => {
+      if (!found.has(el.dataset.card!)) return
+      for (const n of textNodes(el)) {
+        for (const [start, end] of spans(n.textContent ?? '', q)) {
+          const r = new Range()
+          r.setStart(n, start)
+          r.setEnd(n, end)
+          ranges.push(r)
+        }
+      }
+    })
+    CSS.highlights.set('settings-search', new Highlight(...ranges))
+    return () => {
+      CSS.highlights.delete('settings-search')
+    }
+  }, [searching, q, found, tick])
+
+  // A link to a setting, such as /settings#news-servers, opens its
+  // section and brings its card into view.
+  const shown = useRef('')
+  useEffect(() => {
+    if (!hash || shown.current === locationKey) return
+    const target = document.getElementById(decodeURIComponent(hash.slice(1)))
+    if (!target || !root.current?.contains(target)) return
+    const section = target.closest<HTMLElement>('[data-section]')?.dataset.section
+    if (isSection(section) && section !== tab) {
+      navigate({ search: section === 'general' ? '' : `?tab=${section}`, hash }, { replace: true })
+      return
+    }
+    if (!target.textContent?.trim()) return
+    shown.current = locationKey
+    setQuery('')
+    const card = target.closest<HTMLElement>('[data-card]')?.parentElement ?? target
+    card.scrollIntoView({ block: 'start' })
+    const glow = ['rounded-xl', 'ring-2', 'ring-marquee', 'transition-shadow']
+    card.classList.add(...glow)
+    setTimeout(() => card.classList.remove(...glow), 2000)
+  }, [hash, locationKey, tab, tick, navigate])
+
+  // "/" jumps to the search box, as on many sites.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const el = e.target as HTMLElement
+      if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey || el.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(el.tagName)) return
+      e.preventDefault()
+      box.current?.focus()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
+  const go = (to: SectionId) => {
+    setQuery('')
+    navigate({ search: to === 'general' ? '' : `?tab=${to}` }, { replace: true })
+  }
   return (
     <>
-      <Heading title={t('nav.settings')} />
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div className="flex flex-col gap-6">
-          <Language />
-          <General />
-          <MediaTypes />
-          <Ereaders />
-          <ConnectMatinee />
-          <MoveIn />
-          <Account />
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div className="min-w-0 flex-1">
+          <h1 className="font-display text-3xl font-bold tracking-tight">{t('nav.settings')}</h1>
+          <p className="mt-1 text-muted">{searching ? t('settings.search.found', { query: query.trim() }) : t(`settings.sections.${tab}.sub`)}</p>
         </div>
-        <div className="flex flex-col gap-6">
-          <RootFolders kind="movie" />
-          <RootFolders kind="series" />
-          <MediaTypeFolders />
-          <NewShows />
-          <RecycleFolders />
-          <ProblemsCard />
-          <Profiles />
-        </div>
-      </div>
-      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <div className="flex flex-col gap-6">
-          <DownloadSettings />
-          <AutoSearchSettings />
-          <DataCapSettingsCard />
-        </div>
-        <div className="flex flex-col gap-6">
-          <Connections section="indexers" />
-          <Connections section="news-servers" />
-          <Connections section="download-clients" />
+        <div className="relative w-full shrink-0 sm:w-72">
+          <Search className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted" aria-hidden />
+          <input
+            ref={box}
+            type="search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e) => e.key === 'Escape' && setQuery('')}
+            placeholder={t('settings.search.placeholder')}
+            aria-label={t('settings.search.placeholder')}
+            aria-describedby="settings-search-hint"
+            className="w-full rounded-md border border-line bg-paper py-2 pe-3 ps-9 text-sm placeholder:text-muted/70"
+          />
+          <span id="settings-search-hint" className="sr-only">
+            {t('settings.search.hint')}
+          </span>
         </div>
       </div>
-      <System />
+      {!searching && (
+        <div className="mb-6 flex flex-wrap gap-2 sm:flex-nowrap sm:gap-1 sm:overflow-x-auto sm:border-b sm:border-line" role="tablist" aria-label={t('nav.settings')}>
+          {sectionIds.map((id) => (
+            <button
+              key={id}
+              role="tab"
+              aria-selected={tab === id}
+              onClick={() => go(id)}
+              className={`shrink-0 rounded-full border px-3.5 py-1.5 text-sm font-medium transition sm:-mb-px sm:rounded-none sm:border-0 sm:border-b-2 sm:px-3 sm:py-2 ${
+                tab === id ? 'border-ink bg-ink text-paper sm:border-marquee sm:bg-transparent sm:text-ink' : 'border-line text-muted hover:text-ink sm:border-transparent'
+              }`}
+            >
+              {t(`settings.sections.${id}.label`)}
+            </button>
+          ))}
+        </div>
+      )}
+      <p className="sr-only" aria-live="polite">
+        {searching ? t('settings.search.found', { query: query.trim() }) : ''}
+      </p>
+      {searching && found.size === 0 && (
+        <Card>
+          <p className="font-medium">{t('settings.search.none', { query: query.trim() })}</p>
+          <p className="mt-1 text-sm text-muted">{t('settings.search.noneHint')}</p>
+        </Card>
+      )}
+      <div ref={root} role={searching ? undefined : 'tabpanel'}>
+        {sections.map((s) => {
+          const open = searching ? s.cards.some((c) => found.has(c.id)) : s.id === tab
+          return (
+            <div key={s.id} data-section={s.id} hidden={!open}>
+              {searching && <h2 className="mb-3 mt-2 text-xs font-semibold uppercase tracking-wider text-muted">{t(`settings.sections.${s.id}.label`)}</h2>}
+              <div className="gap-6 lg:columns-2">
+                {s.cards.map((c) => (
+                  <div key={c.id} id={c.inner ? undefined : c.id} hidden={searching && !found.has(c.id)} className="mb-6 scroll-mt-20 break-inside-avoid has-[>[data-card]:empty]:hidden">
+                    <div data-card={c.id}>{c.el}</div>
+                    {searching && !!found.get(c.id)?.length && <p className="mt-2 px-1 text-xs text-muted">{t('settings.search.inside', { fields: found.get(c.id)!.join(', ') })}</p>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+      {!searching && tab === 'general' && <System />}
     </>
+  )
+}
+
+// textNodes are the words on a card people can read, leaving out the
+// choices folded away in drop-down lists, such as every language's name.
+function textNodes(el: HTMLElement) {
+  const out: Text[] = []
+  const walk = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
+    acceptNode: (n) => {
+      const at = n.parentElement
+      // The card itself may be hidden by an earlier search; only what's
+      // hidden inside it doesn't count.
+      const hidden = at?.closest('[hidden]')
+      return at?.closest('option, select') || (hidden && el.contains(hidden)) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
+    },
+  })
+  for (let n = walk.nextNode(); n; n = walk.nextNode()) out.push(n as Text)
+  return out
+}
+
+const cardText = (el: HTMLElement) => textNodes(el).map((n) => n.data).join(' ')
+
+// Elsewhere points, while searching, to settings kept on another page.
+function Elsewhere({ to, title, sub }: { to: string; title: string; sub: string }) {
+  const { t } = useTranslation()
+  return (
+    <Card>
+      <h2 className="mb-1 font-display text-lg font-semibold">{t(title)}</h2>
+      <p className="mb-4 text-sm text-muted">{t(sub)}</p>
+      <Link to={to} className="inline-flex items-center gap-2 rounded-md border border-line bg-card px-3.5 py-2 text-sm font-medium hover:border-ink/40">
+        {t('settings.openPage', { page: t(title) })} <ArrowRight className="size-4 rtl:-scale-x-100" aria-hidden />
+      </Link>
+    </Card>
   )
 }
 
@@ -239,35 +517,39 @@ function MediaTypes() {
   )
 }
 
-// Ereaders sets up sending ebooks to e-readers, once ebooks are on.
+// Ereaders sets up sending ebooks to e-readers, once ebooks are on. Until
+// then it says how to turn them on, so the setting can still be found.
 function Ereaders() {
+  const { t } = useTranslation()
+  const qc = useQueryClient()
   const s = useSettings()
-  const on = !!s.data?.mediaTypes.find((m) => m.key === 'ebook')?.enabled
-  // A book's "set up e-readers" link lands here.
-  const { hash } = useLocation()
-  useEffect(() => {
-    if (on && hash === '#ereaders') document.getElementById('ereaders')?.scrollIntoView()
-  }, [on, hash])
-  if (!on) return null
+  const turnOn = useMutation({
+    mutationFn: () => put<SettingsData>('/settings', { mediaTypes: { ebook: true } }),
+    onSuccess: (d) => {
+      qc.setQueryData(['settings'], d)
+      qc.invalidateQueries({ queryKey: ['rootfolders'] })
+    },
+  })
+  const ebooks = s.data?.mediaTypes.find((m) => m.key === 'ebook')
+  if (!ebooks) return null
+  if (ebooks.enabled) return <EreaderSettingsCard />
   return (
-    <div id="ereaders" className="scroll-mt-20">
-      <EreaderSettingsCard />
-    </div>
+    <Card>
+      <h2 className="mb-1 font-display text-lg font-semibold">{t('ereaders.title')}</h2>
+      <p className="mb-4 text-sm text-muted">{t('settings.ereadersOff', { ebooks: typeName(ebooks) })}</p>
+      <Button busy={turnOn.isPending} onClick={() => turnOn.mutate()}>
+        {t('settings.turnOnType', { name: typeName(ebooks) })}
+      </Button>
+      <ErrorNote error={turnOn.error} />
+    </Card>
   )
 }
 
-// MediaTypeFolders shows a root folder card for each media type that's on.
-function MediaTypeFolders() {
+// TypeFolders shows a media type's root folders once the type is on.
+function TypeFolders({ kind }: { kind: MediaTypeKey }) {
   const s = useSettings()
-  return (
-    <>
-      {s.data?.mediaTypes
-        .filter((m) => m.enabled)
-        .map((m) => (
-          <RootFolders key={m.key} kind={m.key} type={m} />
-        ))}
-    </>
-  )
+  const type = s.data?.mediaTypes.find((m) => m.key === kind && m.enabled)
+  return type ? <RootFolders kind={kind} type={type} /> : null
 }
 
 // typeName is a media type's name in the page's language.

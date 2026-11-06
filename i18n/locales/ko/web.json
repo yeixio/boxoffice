@@ -974,7 +974,43 @@
     "newHint": "8자 이상. 모든 기기에서 다시 로그인해요.",
     "change": "비밀번호 변경",
     "system": "Box Office {{version}}, {{os}}, {{go}}, {{db}} · 데이터 위치 <code>{{dir}}</code> · {{since}}부터 실행 중",
-    "languageHint": "Box Office가 표시하는 언어로, 로그인하는 모든 기기에 적용돼요. 자동은 각 브라우저의 언어를 따라요."
+    "languageHint": "Box Office가 표시하는 언어로, 로그인하는 모든 기기에 적용돼요. 자동은 각 브라우저의 언어를 따라요.",
+    "sections": {
+      "general": {
+        "label": "일반",
+        "sub": "내 언어와 비밀번호, 그리고 Box Office가 작품을 찾을 때 쓰는 TMDB 키."
+      },
+      "library": {
+        "label": "라이브러리",
+        "sub": "Box Office가 관리하는 미디어 종류, 각 라이브러리 위치, 정리 방법."
+      },
+      "downloads": {
+        "label": "다운로드",
+        "sub": "Box Office의 다운로드 방식: 자체 Usenet 다운로더와 뉴스 서버, 또는 이미 쓰는 다운로드 앱."
+      },
+      "searching": {
+        "label": "검색",
+        "sub": "Box Office가 릴리스를 찾는 곳, 원하는 화질, 검색 빈도와 양."
+      },
+      "apps": {
+        "label": "앱 및 기기",
+        "sub": "Matinee 연결, 전자책 리더로 보내기, Radarr·Sonarr·Lidarr·Readarr에서 이사하기."
+      },
+      "elsewhere": {
+        "label": "다른 페이지"
+      }
+    },
+    "search": {
+      "placeholder": "설정 검색",
+      "hint": "설정에 있는 단어를 입력하세요. 예: 포트, 화질, 비밀번호. /를 누르면 이 칸으로 돌아옵니다.",
+      "found": "“{{query}}”와 일치하는 설정",
+      "none": "“{{query}}”와 일치하는 설정이 없습니다.",
+      "noneHint": "더 짧거나 다른 단어로 해 보세요. 예: 앱 이름.",
+      "inside": "양식 안: {{fields}}"
+    },
+    "openPage": "{{page}} 열기",
+    "ereadersOff": "전자책을 이메일로 Kindle, PocketBook 등 전자책 리더에 보낼 수 있습니다. 설정하려면 {{ebooks}}을(를) 켜세요.",
+    "turnOnType": "{{name}} 켜기"
   },
   "mediaTypes": {
     "music": {

@@ -185,7 +185,7 @@ function AddOptions({ format, author, onBack, onDone }: { format: BookFormat; au
   if (!folders.data?.length) {
     return (
       <p className="text-sm">
-        <Trans i18nKey={`books.${format}.noRoot`} components={{ link: <Link to="/settings" className="font-medium text-marquee" onClick={onDone} /> }} />
+        <Trans i18nKey={`books.${format}.noRoot`} components={{ link: <Link to={`/settings#folders-${format}`} className="font-medium text-marquee" onClick={onDone} /> }} />
       </p>
     )
   }

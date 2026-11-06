@@ -112,7 +112,7 @@ export function AddOptions({
   if (!folders.data?.length) {
     return (
       <p className="text-sm">
-        <Trans i18nKey={kind === 'movie' ? 'add.noMovieRoot' : 'add.noShowRoot'} components={{ link: <Link to="/settings" className="font-medium text-marquee" onClick={onDone} /> }} />
+        <Trans i18nKey={kind === 'movie' ? 'add.noMovieRoot' : 'add.noShowRoot'} components={{ link: <Link to={`/settings#folders-${kind}`} className="font-medium text-marquee" onClick={onDone} /> }} />
       </p>
     )
   }

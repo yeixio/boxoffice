@@ -1050,7 +1050,43 @@
     "newHint": "Legalább 8 karakter. Minden eszköz újra bejelentkezik.",
     "change": "Jelszó módosítása",
     "system": "Box Office {{version}} · {{os}}, {{go}}, {{db}} · adatok itt: <code>{{dir}}</code> · fut {{since}} óta",
-    "languageHint": "Az a nyelv, amelyen a Box Office megjelenik neked minden eszközön, ahol bejelentkezel. Az Automatikus mindig a böngésző nyelvét követi."
+    "languageHint": "Az a nyelv, amelyen a Box Office megjelenik neked minden eszközön, ahol bejelentkezel. Az Automatikus mindig a böngésző nyelvét követi.",
+    "sections": {
+      "general": {
+        "label": "Általános",
+        "sub": "A nyelved és jelszavad, valamint a TMDB-kulcs, amellyel a Box Office a címeket keresi."
+      },
+      "library": {
+        "label": "Könyvtár",
+        "sub": "Milyen médiatípusokat kezel a Box Office, hol van az egyes könyvtárak helye, és hogyan rendet rak."
+      },
+      "downloads": {
+        "label": "Letöltések",
+        "sub": "Hogyan tölt le a Box Office: saját Usenet-letöltőjével és a hírszervereiddel, vagy egy letöltőalkalmazással, ami már megvan."
+      },
+      "searching": {
+        "label": "Keresés",
+        "sub": "Hol keres a Box Office kiadásokat, milyen minőséget szeretne, és milyen gyakran és mennyit keres."
+      },
+      "apps": {
+        "label": "Alkalmazások és eszközök",
+        "sub": "Kapcsold össze a Matinee-t, küldj e-könyveket olvasókra, és költözz át a Radarrból, Sonarrból, Lidarrból vagy Readarrból."
+      },
+      "elsewhere": {
+        "label": "Más oldalakon"
+      }
+    },
+    "search": {
+      "placeholder": "Keresés a beállításokban",
+      "hint": "Írj be egy szót egy beállításból, például port, minőség vagy jelszó. A / gombbal ide térhetsz vissza.",
+      "found": "A(z) „{{query}}” keresésnek megfelelő beállítások",
+      "none": "Egyik beállítás sem felel meg ennek: „{{query}}”.",
+      "noneHint": "Próbálj rövidebb vagy más szót, például egy alkalmazás nevét.",
+      "inside": "Az űrlapon: {{fields}}"
+    },
+    "openPage": "Megnyitás: {{page}}",
+    "ereadersOff": "Küldj e-könyveket e-mailben Kindle-re, PocketBookra vagy más olvasóra. A beállításhoz kapcsold be ezt: {{ebooks}}.",
+    "turnOnType": "Bekapcsolás: {{name}}"
   },
   "mediaTypes": {
     "music": {

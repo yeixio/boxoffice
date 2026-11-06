@@ -1126,7 +1126,43 @@
     "newHint": "Pelo menos 8 caracteres. Todos os dispositivos entram de novo.",
     "change": "Alterar senha",
     "system": "Box Office {{version}} em {{os}}, {{go}}, {{db}} · dados em <code>{{dir}}</code> · rodando desde {{since}}",
-    "languageHint": "O idioma em que o Box Office aparece para você, em todos os dispositivos em que você entrar. Automático segue o idioma de cada navegador."
+    "languageHint": "O idioma em que o Box Office aparece para você, em todos os dispositivos em que você entrar. Automático segue o idioma de cada navegador.",
+    "sections": {
+      "general": {
+        "label": "Geral",
+        "sub": "Seu idioma e senha, e a chave do TMDB com que o Box Office busca os títulos."
+      },
+      "library": {
+        "label": "Biblioteca",
+        "sub": "Quais tipos de mídia o Box Office cuida, onde fica cada biblioteca e como ele a organiza."
+      },
+      "downloads": {
+        "label": "Downloads",
+        "sub": "Como o Box Office baixa: com o próprio downloader de Usenet e seus servidores de news, ou com um app de download que você já tem."
+      },
+      "searching": {
+        "label": "Busca",
+        "sub": "Onde o Box Office procura lançamentos, quais qualidades ele quer e com que frequência e quanto ele busca."
+      },
+      "apps": {
+        "label": "Apps e dispositivos",
+        "sub": "Conecte o Matinee, envie e-books para leitores digitais e faça a mudança do Radarr, Sonarr, Lidarr ou Readarr."
+      },
+      "elsewhere": {
+        "label": "Em outras páginas"
+      }
+    },
+    "search": {
+      "placeholder": "Buscar nas configurações",
+      "hint": "Digite uma palavra de uma configuração, como porta, qualidade ou senha. Pressione / para voltar a esta caixa.",
+      "found": "Configurações que correspondem a “{{query}}”",
+      "none": "Nada nas configurações corresponde a “{{query}}”.",
+      "noneHint": "Tente uma palavra mais curta ou outra, como o nome de um app.",
+      "inside": "No formulário: {{fields}}"
+    },
+    "openPage": "Abrir {{page}}",
+    "ereadersOff": "Envie e-books por e-mail para um Kindle, PocketBook ou outro leitor digital. Ative {{ebooks}} para configurar.",
+    "turnOnType": "Ativar {{name}}"
   },
   "mediaTypes": {
     "music": {

@@ -974,7 +974,43 @@
     "newHint": "Sekurang-kurangnya 8 aksara. Setiap peranti log masuk semula.",
     "change": "Tukar kata laluan",
     "system": "Box Office {{version}} pada {{os}}, {{go}}, {{db}} · data dalam <code>{{dir}}</code> · berjalan sejak {{since}}",
-    "languageHint": "Bahasa yang digunakan Box Office untuk anda, pada setiap peranti tempat anda log masuk. Automatik mengikut bahasa setiap pelayar."
+    "languageHint": "Bahasa yang digunakan Box Office untuk anda, pada setiap peranti tempat anda log masuk. Automatik mengikut bahasa setiap pelayar.",
+    "sections": {
+      "general": {
+        "label": "Umum",
+        "sub": "Bahasa dan kata laluan anda, serta kunci TMDB yang digunakan Box Office untuk mencari tajuk."
+      },
+      "library": {
+        "label": "Pustaka",
+        "sub": "Jenis media yang diuruskan Box Office, di mana setiap pustaka berada dan cara ia mengemaskannya."
+      },
+      "downloads": {
+        "label": "Muat turun",
+        "sub": "Cara Box Office memuat turun: dengan pemuat turun Usenet sendiri dan pelayan news anda, atau dengan aplikasi muat turun yang sudah anda ada."
+      },
+      "searching": {
+        "label": "Carian",
+        "sub": "Di mana Box Office mencari keluaran, kualiti yang dikehendaki, dan berapa kerap serta berapa banyak ia mencari."
+      },
+      "apps": {
+        "label": "Aplikasi dan peranti",
+        "sub": "Sambungkan Matinee, hantar e-buku ke e-pembaca dan berpindah dari Radarr, Sonarr, Lidarr atau Readarr."
+      },
+      "elsewhere": {
+        "label": "Di halaman lain"
+      }
+    },
+    "search": {
+      "placeholder": "Cari tetapan",
+      "hint": "Taip perkataan daripada sesuatu tetapan, seperti port, kualiti atau kata laluan. Tekan / untuk kembali ke kotak ini.",
+      "found": "Tetapan yang sepadan dengan “{{query}}”",
+      "none": "Tiada tetapan yang sepadan dengan “{{query}}”.",
+      "noneHint": "Cuba perkataan yang lebih pendek atau lain, seperti nama aplikasi.",
+      "inside": "Dalam borangnya: {{fields}}"
+    },
+    "openPage": "Buka {{page}}",
+    "ereadersOff": "Hantar e-buku melalui e-mel ke Kindle, PocketBook atau e-pembaca lain. Hidupkan {{ebooks}} untuk menyediakannya.",
+    "turnOnType": "Hidupkan {{name}}"
   },
   "mediaTypes": {
     "music": {

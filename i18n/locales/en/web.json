@@ -1050,7 +1050,43 @@
     "newHint": "At least 8 characters. Every device signs in again.",
     "change": "Change password",
     "system": "Box Office {{version}} on {{os}}, {{go}}, {{db}} · data in <code>{{dir}}</code> · running since {{since}}",
-    "languageHint": "The language Box Office shows you, on every device you sign in on. Automatic follows each browser's language."
+    "languageHint": "The language Box Office shows you, on every device you sign in on. Automatic follows each browser's language.",
+    "sections": {
+      "general": {
+        "label": "General",
+        "sub": "Your language and password, and the TMDB key Box Office looks titles up with."
+      },
+      "library": {
+        "label": "Library",
+        "sub": "Which kinds of media Box Office looks after, where each library lives, and how it tidies up."
+      },
+      "downloads": {
+        "label": "Downloads",
+        "sub": "How Box Office downloads: with its own Usenet downloader and your news servers, or with a download app you already have."
+      },
+      "searching": {
+        "label": "Searching",
+        "sub": "Where Box Office looks for releases, which qualities it wants, and how often and how much it searches."
+      },
+      "apps": {
+        "label": "Apps and devices",
+        "sub": "Connect Matinee, send ebooks to e-readers, and move in from Radarr, Sonarr, Lidarr or Readarr."
+      },
+      "elsewhere": {
+        "label": "On other pages"
+      }
+    },
+    "search": {
+      "placeholder": "Search settings",
+      "hint": "Type a word from a setting, such as port, quality or password. Press / to come back to this box.",
+      "found": "Settings that match “{{query}}”",
+      "none": "Nothing in Settings matches “{{query}}”.",
+      "noneHint": "Try a shorter word, or another word for it, such as the name of an app.",
+      "inside": "In its form: {{fields}}"
+    },
+    "openPage": "Open {{page}}",
+    "ereadersOff": "Send ebooks to a Kindle, PocketBook or other e-reader by email. Turn on {{ebooks}} to set it up.",
+    "turnOnType": "Turn on {{name}}"
   },
   "mediaTypes": {
     "music": {

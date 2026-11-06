@@ -1126,7 +1126,43 @@
     "newHint": "Au moins 8 caractères. Chaque appareil se reconnecte.",
     "change": "Changer le mot de passe",
     "system": "Box Office {{version}} sur {{os}}, {{go}}, {{db}} · données dans <code>{{dir}}</code> · en marche depuis {{since}}",
-    "languageHint": "La langue dans laquelle Box Office s’affiche, sur chaque appareil où vous vous connectez. Automatique suit la langue de chaque navigateur."
+    "languageHint": "La langue dans laquelle Box Office s’affiche, sur chaque appareil où vous vous connectez. Automatique suit la langue de chaque navigateur.",
+    "sections": {
+      "general": {
+        "label": "Général",
+        "sub": "Votre langue et votre mot de passe, et la clé TMDB avec laquelle Box Office recherche les titres."
+      },
+      "library": {
+        "label": "Bibliothèque",
+        "sub": "Les types de médias que Box Office gère, où se trouve chaque bibliothèque et comment elle est rangée."
+      },
+      "downloads": {
+        "label": "Téléchargements",
+        "sub": "Comment Box Office télécharge : avec son propre téléchargeur Usenet et vos serveurs de news, ou avec une appli de téléchargement que vous avez déjà."
+      },
+      "searching": {
+        "label": "Recherche",
+        "sub": "Où Box Office cherche les sorties, quelles qualités il veut, et à quelle fréquence et combien il cherche."
+      },
+      "apps": {
+        "label": "Applis et appareils",
+        "sub": "Connectez Matinee, envoyez des livres numériques aux liseuses et emménagez depuis Radarr, Sonarr, Lidarr ou Readarr."
+      },
+      "elsewhere": {
+        "label": "Sur d’autres pages"
+      }
+    },
+    "search": {
+      "placeholder": "Rechercher un réglage",
+      "hint": "Tapez un mot d’un réglage, comme port, qualité ou mot de passe. Appuyez sur / pour revenir à ce champ.",
+      "found": "Réglages correspondant à « {{query}} »",
+      "none": "Aucun réglage ne correspond à « {{query}} ».",
+      "noneHint": "Essayez un mot plus court ou un autre mot, comme le nom d’une appli.",
+      "inside": "Dans son formulaire : {{fields}}"
+    },
+    "openPage": "Ouvrir {{page}}",
+    "ereadersOff": "Envoyez des livres numériques par e-mail à une Kindle, une PocketBook ou une autre liseuse. Activez {{ebooks}} pour le configurer.",
+    "turnOnType": "Activer {{name}}"
   },
   "mediaTypes": {
     "music": {
