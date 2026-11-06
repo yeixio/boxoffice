@@ -1,11 +1,17 @@
 import { Trans, useTranslation } from 'react-i18next'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useNavigate, useParams } from 'react-router-dom'
-import { RefreshCw, Trash2 } from 'lucide-react'
+import { Navigate, useNavigate, useParams } from 'react-router-dom'
+import { CircleCheck, ListFilter, RefreshCw, Search, Trash2 } from 'lucide-react'
 import { del, get, patch, post, type Album, type ArtistDetail as Detail } from '../api'
+import { bytes } from '../format'
+import { Releases } from '../Releases'
 import { Badge, Button, Card, ErrorNote, Modal, Spinner, Toggle } from '../ui'
 import { AlbumTypePicker, albumTypeLabels } from './Music'
+
+// out says whether an album is out by today, as Box Office only looks for
+// albums that are.
+const out = (b: Album) => !!b.released && b.released <= new Date().toISOString().slice(0, 10)
 
 // kindOf is the heading an album is listed under.
 function kindOf(a: Album): string {
@@ -22,6 +28,8 @@ export function ArtistDetail() {
   const nav = useNavigate()
   const artist = useQuery({ queryKey: ['artist', id], queryFn: () => get<Detail>(`/artists/${id}`) })
   const [removing, setRemoving] = useState(false)
+  const [open, setOpen] = useState<number>()
+  const [releasesFor, setReleasesFor] = useState<Album>()
   const set = (a: Detail) => {
     qc.setQueryData(['artist', id], a)
     qc.invalidateQueries({ queryKey: ['artists'] })
@@ -50,21 +58,28 @@ export function ArtistDetail() {
     }
     return [...by.entries()].sort(([a], [b]) => (order.indexOf(a) + 1 || 99) - (order.indexOf(b) + 1 || 99))
   }, [artist.data])
+  // A link to one album (from Downloads, say) opens it.
+  useEffect(() => {
+    const m = /^#album-(\d+)$/.exec(window.location.hash)
+    if (m && artist.data?.albumList.some((b) => b.id === Number(m[1]))) setOpen(Number(m[1]))
+  }, [artist.data])
 
   if (artist.isPending) return <Spinner />
   if (artist.isError) return <ErrorNote error={artist.error} />
   const a = artist.data
+  const opened = a.albumList.find((b) => b.id === open)
   return (
     <div>
       <h1 className="font-display text-4xl font-bold tracking-tight">{a.name}</h1>
       <div className="mt-2 flex flex-wrap gap-2">
         {a.monitored ? <Badge tone="gold">{t('music.wanted', { count: a.wantedAlbums })}</Badge> : <Badge>{t('common.paused')}</Badge>}
+        {a.haveAlbums > 0 && <Badge tone="ok">{t('books.onDiskCount', { count: a.haveAlbums })}</Badge>}
         {a.type && <Badge>{a.type}</Badge>}
         {a.country && <Badge>{a.country}</Badge>}
         {a.disambiguation && <Badge>{a.disambiguation}</Badge>}
       </div>
       <p className="mt-3 text-sm text-muted">
-        <Trans i18nKey="artist.filesGo" values={{ path: a.path }} components={{ code: <code className="break-all" /> }} />
+        <Trans i18nKey="artist.filesAt" values={{ path: a.path }} components={{ code: <code className="break-all" /> }} />
       </p>
       <div className="mt-5 flex flex-wrap gap-2">
         <Button busy={refresh.isPending} onClick={() => refresh.mutate()}>
@@ -95,8 +110,15 @@ export function ArtistDetail() {
           </h2>
           <ul className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
             {albums.map((b) => (
-              <li key={b.id}>
-                <Cover src={b.cover} title={b.title} />
+              <li key={b.id} id={`album-${b.id}`}>
+                <button type="button" className="relative block w-full text-start" onClick={() => setOpen(b.id)} aria-label={t('artist.open', { title: b.title })}>
+                  <Cover src={b.cover} title={b.title} />
+                  {b.file && (
+                    <span className="absolute top-2 end-2 rounded-full bg-ok p-1 text-white shadow" title={t('common.onDisk')}>
+                      <CircleCheck className="size-4" aria-label={t('common.onDisk')} />
+                    </span>
+                  )}
+                </button>
                 <div className="mt-2 truncate font-medium" title={b.title}>
                   {b.title}
                 </div>
@@ -119,6 +141,20 @@ export function ArtistDetail() {
         </section>
       ))}
 
+      {opened && (
+        <AlbumDialog
+          album={opened}
+          busy={album.isPending}
+          onWant={(monitored) => album.mutate({ id: opened.id, monitored })}
+          onReleases={() => {
+            setOpen(undefined)
+            setReleasesFor(opened)
+          }}
+          onClose={() => setOpen(undefined)}
+        />
+      )}
+      {releasesFor && <Releases path={`/albums/${releasesFor.id}/releases`} title={releasesFor.title} onClose={() => setReleasesFor(undefined)} />}
+
       {removing && (
         <Modal title={t('artist.removeTitle', { name: a.name })} onClose={() => setRemoving(false)}>
           <p className="text-sm">{t('artist.removeBody', { name: a.name })}</p>
@@ -135,6 +171,73 @@ export function ArtistDetail() {
       )}
     </div>
   )
+}
+
+// AlbumDialog is one album: whether it's in the library, and looking for
+// it.
+function AlbumDialog({
+  album: b,
+  busy,
+  onWant,
+  onReleases,
+  onClose,
+}: {
+  album: Album
+  busy: boolean
+  onWant: (wanted: boolean) => void
+  onReleases: () => void
+  onClose: () => void
+}) {
+  const { t } = useTranslation()
+  const qc = useQueryClient()
+  const search = useMutation({
+    mutationFn: () => post(`/albums/${b.id}/search`),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['jobs'] }),
+  })
+  return (
+    <Modal title={b.title} onClose={onClose}>
+      <div className="flex gap-4">
+        <div className="w-24 shrink-0 sm:w-28">
+          <Cover src={b.cover} title={b.title} />
+        </div>
+        <div className="min-w-0 flex-1 text-sm">
+          <p className="text-muted">{[b.released?.slice(0, 4), albumTypeLabels[kindOf(b)] ? t(albumTypeLabels[kindOf(b)]) : b.type].filter(Boolean).join(' · ')}</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {b.file ? <Badge tone="ok">{t('common.onDisk')}</Badge> : b.monitored ? <Badge tone="gold">{t('common.wanted')}</Badge> : <Badge>{t('artist.notWanted')}</Badge>}
+          </div>
+          {b.file && (
+            <p className="mt-2 break-all text-xs text-muted">
+              {b.file.path} · {bytes(b.file.size)}
+            </p>
+          )}
+        </div>
+      </div>
+      <div className="mt-5 flex flex-col gap-4">
+        <Toggle checked={b.monitored} disabled={busy} onChange={onWant} label={t('artist.wantIt')} />
+        <div className="flex flex-wrap gap-2">
+          <Button variant="primary" busy={search.isPending} disabled={search.isSuccess} onClick={() => search.mutate()}>
+            <Search className="size-4" aria-hidden /> {search.isSuccess ? t('books.lookingFor') : t('books.lookFor')}
+          </Button>
+          <Button onClick={onReleases}>
+            <ListFilter className="size-4" aria-hidden /> {t('title.choose')}
+          </Button>
+        </div>
+        {search.isSuccess && <p className="text-sm text-muted">{t('artist.searching')}</p>}
+        {!b.file && b.monitored && !search.isSuccess && <p className="text-sm text-muted">{out(b) ? t('artist.alsoLooks') : t('artist.notOut')}</p>}
+        <ErrorNote error={search.error} />
+      </div>
+    </Modal>
+  )
+}
+
+// AlbumLink opens an album's artist page at the album, from a link that
+// only knows the album (a download's, say).
+export function AlbumLink() {
+  const id = Number(useParams().id)
+  const album = useQuery({ queryKey: ['album', id], queryFn: () => get<Album>(`/albums/${id}`) })
+  if (album.isPending) return <Spinner />
+  if (album.isError) return <ErrorNote error={album.error} />
+  return <Navigate to={`/music/${album.data.artistId}#album-${id}`} replace />
 }
 
 // Cover is an album's square front cover, or its title when there's none.

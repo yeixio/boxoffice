@@ -1,9 +1,9 @@
 import { Trans, useTranslation } from 'react-i18next'
 import { useEffect, useMemo, useState } from 'react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate } from 'react-router-dom'
 import { Music as MusicIcon, Plus, Search } from 'lucide-react'
-import { get, post, type AlbumTypes, type Artist, type ArtistDetail, type LookupArtist } from '../api'
+import { get, post, put, type AlbumTypes, type Artist, type ArtistDetail, type LookupArtist, type MusicSettings } from '../api'
 import { day } from '../format'
 import { useRootFolders } from '../hooks'
 import { SortControl, sortList, useSort, words, type SortOption } from '../sort'
@@ -41,6 +41,7 @@ export function Music() {
         }
       />
       {adding && <AddArtist onClose={() => setAdding(false)} />}
+      <QualityPicker />
       <ErrorNote error={artists.error} />
       {artists.isPending && <Spinner />}
       {artists.data?.length === 0 && (
@@ -77,6 +78,28 @@ export function Music() {
         </>
       )}
     </>
+  )
+}
+
+// QualityPicker says which of FLAC and MP3 Box Office looks for.
+function QualityPicker() {
+  const { t } = useTranslation()
+  const qc = useQueryClient()
+  const set = useQuery({ queryKey: ['music-settings'], queryFn: () => get<MusicSettings>('/music/settings') })
+  const save = useMutation({
+    mutationFn: (quality: string) => put<MusicSettings>('/music/settings', { quality }),
+    onSuccess: (v) => qc.setQueryData(['music-settings'], v),
+  })
+  if (!set.data) return null
+  return (
+    <div className="mb-6 max-w-md">
+      <Field label={t('music.quality')} hint={t('music.qualityHint')}>
+        {(id) => (
+          <Select id={id} value={set.data.quality} onChange={(q) => save.mutate(q)} options={set.data.qualities.map((q) => ({ value: q, label: t(`music.qualities.${q}`) }))} />
+        )}
+      </Field>
+      <ErrorNote error={save.error} />
+    </div>
   )
 }
 

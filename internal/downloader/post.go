@@ -77,6 +77,8 @@ func wants(kind string) string {
 		return screen.WantEbook
 	case store.Audiobook:
 		return screen.WantAudio
+	case store.AlbumKind:
+		return screen.WantMusic
 	}
 	return screen.WantVideo
 }

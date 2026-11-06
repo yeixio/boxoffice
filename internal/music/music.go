@@ -1,6 +1,8 @@
 // Package music is Box Office's music list: artists from MusicBrainz, the
 // albums they've made, and which of those are wanted. It works only while
-// music is turned on in Settings, and it never touches files.
+// music is turned on in Settings. It looks in the artists' folders for
+// albums there already, but never changes them: the downloader moves new
+// albums in.
 package music
 
 import (
@@ -10,10 +12,14 @@ import (
 	"path/filepath"
 	"slices"
 	"strings"
+	"time"
 
 	"github.com/yeixio/boxoffice/internal/catalog"
+	"github.com/yeixio/boxoffice/internal/downloader"
+	"github.com/yeixio/boxoffice/internal/jobs"
 	"github.com/yeixio/boxoffice/internal/mediatypes"
 	"github.com/yeixio/boxoffice/internal/musicbrainz"
+	"github.com/yeixio/boxoffice/internal/search"
 	"github.com/yeixio/boxoffice/internal/store"
 )
 
@@ -49,6 +55,8 @@ func Wanted(types []string, a musicbrainz.Album) bool {
 type Service struct {
 	Store       *store.Store
 	MusicBrainz *musicbrainz.Client
+	// Jobs runs a search for an album as soon as it's wanted, when set.
+	Jobs *jobs.Runner
 }
 
 func (s *Service) on(ctx context.Context) error {
@@ -159,6 +167,10 @@ func (s *Service) Add(ctx context.Context, o AddOptions) (store.Artist, error) {
 	if err := s.refreshAlbums(ctx, added); err != nil {
 		return added, err
 	}
+	// Albums already in the artist's folder count as there, not missing.
+	if _, err := downloader.FindAlbums(ctx, s.Store, added); err != nil {
+		return added, err
+	}
 	return s.Store.Artist(ctx, added.ID)
 }
 
@@ -202,6 +214,9 @@ func (s *Service) Refresh(ctx context.Context, id int64) (store.Artist, error) {
 		return store.Artist{}, err
 	}
 	if err := s.refreshAlbums(ctx, have); err != nil {
+		return store.Artist{}, err
+	}
+	if _, err := downloader.FindAlbums(ctx, s.Store, have); err != nil {
 		return store.Artist{}, err
 	}
 	return s.Store.Artist(ctx, id)
@@ -272,4 +287,77 @@ func (s *Service) Update(ctx context.Context, id int64, e Edit) (store.Artist, e
 		return store.Artist{}, err
 	}
 	return s.Store.Artist(ctx, id)
+}
+
+// Want says whether an album is wanted. One just wanted is searched for
+// right away when Box Office can download it.
+func (s *Service) Want(ctx context.Context, id int64, on bool) (store.Album, error) {
+	if err := s.on(ctx); err != nil {
+		return store.Album{}, err
+	}
+	if err := s.Store.SetAlbumMonitored(ctx, id, on); err != nil {
+		return store.Album{}, err
+	}
+	b, err := s.Store.Album(ctx, id)
+	if err == nil && on {
+		s.searchSoon(ctx, b)
+	}
+	return b, err
+}
+
+// searchSoon queues a search for an album just wanted, when it's out, it
+// isn't in the library and downloading is on. Otherwise the hourly search
+// gets to it in turn.
+func (s *Service) searchSoon(ctx context.Context, b store.Album) {
+	if s.Jobs == nil || b.File != nil || b.Released == "" || b.Released > time.Now().UTC().Format(time.DateOnly) {
+		return
+	}
+	if set, err := downloader.LoadSettings(ctx, s.Store); err != nil || !set.Enabled {
+		return
+	}
+	a, err := s.Store.Artist(ctx, b.ArtistID)
+	if err != nil {
+		return
+	}
+	// It might be in the artist's folder already.
+	if n, err := downloader.FindAlbums(ctx, s.Store, a); err != nil || n > 0 {
+		if b, err = s.Store.Album(ctx, b.ID); err != nil || b.File != nil {
+			return
+		}
+	}
+	s.Jobs.Queue(ctx, search.JobSearchAlbum, search.AlbumSubject(a, b), search.AlbumJob(b.ID))
+}
+
+// Search queues a search for an album now, whether or not it's wanted,
+// and grabs the best release it finds.
+func (s *Service) Search(ctx context.Context, id int64) error {
+	if err := s.on(ctx); err != nil {
+		return err
+	}
+	b, err := s.Store.Album(ctx, id)
+	if err != nil {
+		return err
+	}
+	a, err := s.Store.Artist(ctx, b.ArtistID)
+	if err != nil {
+		return err
+	}
+	if s.Jobs == nil {
+		return errors.New("searching isn't set up")
+	}
+	_, err = s.Jobs.Queue(ctx, search.JobSearchAlbum, search.AlbumSubject(a, b), search.AlbumJob(b.ID))
+	return err
+}
+
+// Quality is which of FLAC and MP3 albums are wanted in.
+func (s *Service) Quality(ctx context.Context) (string, error) {
+	return search.MusicQuality(ctx, s.Store)
+}
+
+// SetQuality changes which of FLAC and MP3 albums are wanted in.
+func (s *Service) SetQuality(ctx context.Context, q string) error {
+	if !slices.Contains(search.MusicQualities, q) {
+		return &catalog.Error{Message: "pick FLAC first, FLAC only or MP3 only"}
+	}
+	return search.SetMusicQuality(ctx, s.Store, q)
 }

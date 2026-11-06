@@ -625,7 +625,14 @@
     "which": "Hvilke album som skal hentes",
     "whichHint": "Du kan slå hvert album av eller på senere fra artistens side.",
     "watch": "Overvåk nye album av disse typene",
-    "lookup": "Box Office slår opp albumene på MusicBrainz, noe som tar noen sekunder for artister med mange."
+    "lookup": "Box Office slår opp albumene på MusicBrainz, noe som tar noen sekunder for artister med mange.",
+    "quality": "Albumkvalitet",
+    "qualityHint": "Hvilke kopier Box Office ser etter. FLAC er tapsfritt og omtrent tre ganger så stort som MP3.",
+    "qualities": {
+      "flac-first": "FLAC, eller MP3 når det ikke finnes FLAC",
+      "flac": "Bare FLAC",
+      "mp3": "Bare MP3"
+    }
   },
   "albumTypes": {
     "Album": "Studioalbum",
@@ -638,7 +645,7 @@
     "Other": "Alt annet"
   },
   "artist": {
-    "filesGo": "Filer havner i <code>{{path}}</code>. Søk etter og nedlasting av musikk kommer i neste Box Office-oppdatering.",
+    "filesAt": "Album havner i <code>{{path}}</code>, i hver sin mappe. Album som allerede ligger der, blir funnet når du legger til eller oppdaterer artisten, og lastes ikke ned på nytt.",
     "refresh": "Oppdater fra MusicBrainz",
     "watch": "Overvåk nye album fra denne artisten",
     "kinds": "Albumtyper som skal hentes",
@@ -650,7 +657,12 @@
     "notWanted": "Ikke ønsket",
     "removeTitle": "Fjerne {{name}}?",
     "removeBody": "Box Office slutter å følge {{name}} og glemmer albumene. Filer som allerede er i musikkmappen, blir liggende.",
-    "keep": "Behold"
+    "keep": "Behold",
+    "open": "Åpne {{title}}",
+    "wantIt": "Vil ha dette albumet",
+    "searching": "Box Office søker i indekserne dine og henter den beste kopien den finner. Under Aktivitet ser du hvordan det gikk.",
+    "alsoLooks": "Box Office ser også selv etter ønskede album, noen i timen.",
+    "notOut": "Det er ikke ute ennå. Box Office ser etter det når det kommer."
   },
   "books": {
     "ebook": {
@@ -1642,6 +1654,7 @@
   },
   "kind": {
     "ebook": "E-bok",
-    "audiobook": "Lydbok"
+    "audiobook": "Lydbok",
+    "album": "Album"
   }
 }

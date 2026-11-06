@@ -695,7 +695,14 @@
     "which": "Která alba stáhnout",
     "whichHint": "Kterékoli album můžete později zapnout nebo vypnout na stránce interpreta.",
     "watch": "Sledovat nová alba těchto druhů",
-    "lookup": "Box Office vyhledá alba na MusicBrainz, což u interpretů s mnoha alby trvá pár sekund."
+    "lookup": "Box Office vyhledá alba na MusicBrainz, což u interpretů s mnoha alby trvá pár sekund.",
+    "quality": "Kvalita alb",
+    "qualityHint": "Jaké kopie Box Office hledá. FLAC je bezztrátový a zhruba třikrát větší než MP3.",
+    "qualities": {
+      "flac-first": "FLAC, a když není, tak MP3",
+      "flac": "Jen FLAC",
+      "mp3": "Jen MP3"
+    }
   },
   "albumTypes": {
     "Album": "Studiová alba",
@@ -708,7 +715,7 @@
     "Other": "Vše ostatní"
   },
   "artist": {
-    "filesGo": "Soubory jdou do <code>{{path}}</code>. Hledání a stahování hudby přijde v příští aktualizaci Box Office.",
+    "filesAt": "Alba se ukládají do <code>{{path}}</code>, každé do vlastní složky. Alba, která tam už jsou, se najdou při přidání nebo obnovení interpreta a znovu se nestahují.",
     "refresh": "Obnovit z MusicBrainz",
     "watch": "Sledovat nová alba tohoto interpreta",
     "kinds": "Druhy alb ke stažení",
@@ -720,7 +727,12 @@
     "notWanted": "Nechtěné",
     "removeTitle": "Odebrat {{name}}?",
     "removeBody": "Box Office přestane sledovat {{name}} a zapomene jeho alba. Soubory, které už jsou ve složce s hudbou, zůstanou, kde jsou.",
-    "keep": "Ponechat"
+    "keep": "Ponechat",
+    "open": "Otevřít {{title}}",
+    "wantIt": "Chci toto album",
+    "searching": "Box Office prohledává vaše indexery a stáhne nejlepší kopii, kterou najde. V Aktivitě uvidíte, jak to dopadlo.",
+    "alsoLooks": "Box Office hledá chtěná alba i sám, pár za hodinu.",
+    "notOut": "Ještě nevyšlo. Box Office ho začne hledat, jakmile vyjde."
   },
   "books": {
     "ebook": {
@@ -1830,6 +1842,7 @@
   },
   "kind": {
     "ebook": "E-kniha",
-    "audiobook": "Audiokniha"
+    "audiobook": "Audiokniha",
+    "album": "Album"
   }
 }

@@ -625,7 +625,14 @@
     "which": "Welche Alben geholt werden",
     "whichHint": "Du kannst jedes Album später auf der Seite des Künstlers an- oder ausschalten.",
     "watch": "Nach neuen Alben dieser Arten Ausschau halten",
-    "lookup": "Box Office schlägt die Alben bei MusicBrainz nach, was bei Künstlern mit vielen davon ein paar Sekunden dauert."
+    "lookup": "Box Office schlägt die Alben bei MusicBrainz nach, was bei Künstlern mit vielen davon ein paar Sekunden dauert.",
+    "quality": "Albumqualität",
+    "qualityHint": "Welche Kopien Box Office sucht. FLAC ist verlustfrei und etwa dreimal so groß wie MP3.",
+    "qualities": {
+      "flac-first": "FLAC, oder MP3, wenn es kein FLAC gibt",
+      "flac": "Nur FLAC",
+      "mp3": "Nur MP3"
+    }
   },
   "albumTypes": {
     "Album": "Studioalben",
@@ -638,7 +645,7 @@
     "Other": "Alles andere"
   },
   "artist": {
-    "filesGo": "Dateien kommen nach <code>{{path}}</code>. Das Suchen und Herunterladen von Musik kommt mit dem nächsten Update von Box Office.",
+    "filesAt": "Alben kommen nach <code>{{path}}</code>, jedes in einen eigenen Ordner. Alben, die schon dort liegen, werden beim Hinzufügen oder Aktualisieren des Künstlers gefunden und nicht noch einmal heruntergeladen.",
     "refresh": "Von MusicBrainz aktualisieren",
     "watch": "Nach neuen Alben dieses Künstlers Ausschau halten",
     "kinds": "Zu holende Albumarten",
@@ -650,7 +657,12 @@
     "notWanted": "Nicht gesucht",
     "removeTitle": "{{name}} entfernen?",
     "removeBody": "Box Office folgt {{name}} nicht mehr und vergisst die Alben. Dateien, die schon im Musikordner liegen, bleiben, wo sie sind.",
-    "keep": "Behalten"
+    "keep": "Behalten",
+    "open": "{{title}} öffnen",
+    "wantIt": "Dieses Album gewünscht",
+    "searching": "Box Office durchsucht deine Indexer und holt die beste Kopie, die es findet. Unter Aktivität siehst du, wie es gelaufen ist.",
+    "alsoLooks": "Box Office sucht gewünschte Alben auch von selbst, ein paar pro Stunde.",
+    "notOut": "Es ist noch nicht erschienen. Box Office sucht danach, sobald es da ist."
   },
   "books": {
     "ebook": {
@@ -1642,6 +1654,7 @@
   },
   "kind": {
     "ebook": "E-Book",
-    "audiobook": "Hörbuch"
+    "audiobook": "Hörbuch",
+    "album": "Album"
   }
 }

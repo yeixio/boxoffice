@@ -590,7 +590,14 @@
     "which": "要获取哪些专辑",
     "whichHint": "之后可以在艺人页面开关任意专辑。",
     "watch": "关注这些类型的新专辑",
-    "lookup": "Box Office 在 MusicBrainz 上查找专辑，专辑很多的艺人需要几秒钟。"
+    "lookup": "Box Office 在 MusicBrainz 上查找专辑，专辑很多的艺人需要几秒钟。",
+    "quality": "专辑音质",
+    "qualityHint": "Box Office 要找的版本。FLAC 是无损格式，大小约为 MP3 的三倍。",
+    "qualities": {
+      "flac-first": "FLAC，没有 FLAC 时用 MP3",
+      "flac": "仅 FLAC",
+      "mp3": "仅 MP3"
+    }
   },
   "albumTypes": {
     "Album": "录音室专辑",
@@ -603,7 +610,7 @@
     "Other": "其他全部"
   },
   "artist": {
-    "filesGo": "文件放在 <code>{{path}}</code>。搜索和下载音乐将在 Box Office 的下一次更新中推出。",
+    "filesAt": "专辑放在 <code>{{path}}</code>，每张一个文件夹。添加或刷新艺人时，会找到已在那里的专辑，不会重新下载。",
     "refresh": "从 MusicBrainz 刷新",
     "watch": "关注此艺人的新专辑",
     "kinds": "要获取的专辑类型",
@@ -615,7 +622,12 @@
     "notWanted": "不想要",
     "removeTitle": "移除 {{name}}？",
     "removeBody": "Box Office 会停止关注 {{name}} 并忘记其专辑。音乐文件夹中已有的文件保持原处。",
-    "keep": "保留"
+    "keep": "保留",
+    "open": "打开 {{title}}",
+    "wantIt": "想要这张专辑",
+    "searching": "Box Office 正在搜索你的索引器，会抓取找到的最佳版本。可在“活动”中查看结果。",
+    "alsoLooks": "Box Office 也会自动寻找想要的专辑，每小时几张。",
+    "notOut": "还没发行。发行后 Box Office 会去找。"
   },
   "books": {
     "ebook": {
@@ -1548,6 +1560,7 @@
   },
   "kind": {
     "ebook": "电子书",
-    "audiobook": "有声书"
+    "audiobook": "有声书",
+    "album": "专辑"
   }
 }

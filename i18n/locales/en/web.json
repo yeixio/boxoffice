@@ -625,7 +625,14 @@
     "which": "Which albums to get",
     "whichHint": "You can switch any album on or off later from the artist's page.",
     "watch": "Watch for new albums of these kinds",
-    "lookup": "Box Office looks the albums up on MusicBrainz, which takes a few seconds for artists with a lot of them."
+    "lookup": "Box Office looks the albums up on MusicBrainz, which takes a few seconds for artists with a lot of them.",
+    "quality": "Album quality",
+    "qualityHint": "Which copies Box Office looks for. FLAC is lossless and about three times the size of MP3.",
+    "qualities": {
+      "flac-first": "FLAC, or MP3 when there's no FLAC",
+      "flac": "FLAC only",
+      "mp3": "MP3 only"
+    }
   },
   "albumTypes": {
     "Album": "Studio albums",
@@ -638,7 +645,7 @@
     "Other": "Everything else"
   },
   "artist": {
-    "filesGo": "Files go in <code>{{path}}</code>. Searching and downloading music comes in the next Box Office update.",
+    "filesAt": "Albums go in <code>{{path}}</code>, a folder each. Albums already there are found when you add or refresh the artist, and aren't downloaded again.",
     "refresh": "Refresh from MusicBrainz",
     "watch": "Watch for new albums from this artist",
     "kinds": "Kinds of album to get",
@@ -650,7 +657,12 @@
     "notWanted": "Not wanted",
     "removeTitle": "Remove {{name}}?",
     "removeBody": "Box Office stops following {{name}} and forgets their albums. Files already in the music folder stay where they are.",
-    "keep": "Keep"
+    "keep": "Keep",
+    "open": "Open {{title}}",
+    "wantIt": "Want this album",
+    "searching": "Box Office is searching your indexers and will grab the best copy it finds. Activity shows how it went.",
+    "alsoLooks": "Box Office also looks for wanted albums by itself, a few each hour.",
+    "notOut": "It isn't out yet. Box Office looks for it once it is."
   },
   "books": {
     "ebook": {
@@ -1642,6 +1654,7 @@
   },
   "kind": {
     "ebook": "Ebook",
-    "audiobook": "Audiobook"
+    "audiobook": "Audiobook",
+    "album": "Album"
   }
 }

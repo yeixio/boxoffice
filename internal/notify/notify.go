@@ -105,6 +105,9 @@ func (r *Recorder) Download(ctx context.Context, d store.Download, event, why st
 // (audiobook)". Books go to admins only, as Matinee has nobody's requests
 // for them.
 func (r *Recorder) bookName(ctx context.Context, d store.Download) string {
+	if d.Kind == store.AlbumKind {
+		return r.albumName(ctx, d)
+	}
 	if !store.IsBookKind(d.Kind) {
 		return ""
 	}
@@ -190,4 +193,18 @@ func join(a, b string) string {
 		return b
 	}
 	return a + " " + b
+}
+
+// albumName names the album a download is for: "OK Computer by Radiohead".
+// Albums go to admins only, like books.
+func (r *Recorder) albumName(ctx context.Context, d store.Download) string {
+	b, err := r.Store.Album(ctx, d.TitleID)
+	if err != nil {
+		return ""
+	}
+	a, err := r.Store.Artist(ctx, b.ArtistID)
+	if err != nil {
+		return ""
+	}
+	return fmt.Sprintf("%s by %s", b.Title, a.Name)
 }

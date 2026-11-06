@@ -475,8 +475,15 @@ export type Artist = {
   refreshedAt?: string
   albums: number
   wantedAlbums: number
+  // How many of its albums are in the library.
+  haveAlbums: number
 }
-export type Album = { id: number; artistId: number; mbid: string; title: string; type: string; secondaryTypes: string[]; released?: string; monitored: boolean; cover: string }
+// An album's copy in the library is its folder, with the size of its tracks.
+export type AlbumFile = { id: number; path: string; size: number; addedAt: string }
+export type Album = { id: number; artistId: number; mbid: string; title: string; type: string; secondaryTypes: string[]; released?: string; monitored: boolean; cover: string; file?: AlbumFile }
+// Which of FLAC and MP3 albums are wanted in.
+export type MusicQuality = 'flac-first' | 'flac' | 'mp3'
+export type MusicSettings = { quality: MusicQuality; qualities: MusicQuality[] }
 export type ArtistDetail = Artist & { albumList: Album[] }
 export type LookupArtist = { mbid: string; name: string; sortName: string; type?: string; country?: string; disambiguation?: string; began?: string; ended?: string; id?: number }
 export type AlbumTypes = { types: string[]; defaults: string[] }

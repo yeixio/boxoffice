@@ -27,7 +27,12 @@ type Artist struct {
 	// Counted from its albums when listed.
 	Albums       int `json:"albums"`
 	WantedAlbums int `json:"wantedAlbums"`
+	// HaveAlbums is how many of its albums are in the library.
+	HaveAlbums int `json:"haveAlbums"`
 }
+
+// AlbumKind is the kind of an album's downloads and files.
+const AlbumKind = "album"
 
 // Album is one of an artist's albums, EPs or singles.
 type Album struct {
@@ -39,12 +44,19 @@ type Album struct {
 	SecondaryTypes []string `json:"secondaryTypes"`
 	Released       string   `json:"released,omitempty"`
 	Monitored      bool     `json:"monitored"`
+	// File is the album in the library: its folder, and the size of its
+	// tracks.
+	File *File `json:"file,omitempty"`
+	// ArtistName is filled in where albums of several artists are listed.
+	ArtistName string `json:"artistName,omitempty"`
 }
 
 const artistCols = `a.id, a.mbid, a.name, a.sort_name, a.type, a.country, a.disambiguation, a.monitored, a.album_types,
 	a.root_folder, a.path, a.added_at, a.refreshed_at,
 	(SELECT COUNT(*) FROM albums b WHERE b.artist_id = a.id),
-	(SELECT COUNT(*) FROM albums b WHERE b.artist_id = a.id AND b.monitored = 1)`
+	(SELECT COUNT(*) FROM albums b WHERE b.artist_id = a.id AND b.monitored = 1),
+	(SELECT COUNT(*) FROM albums b WHERE b.artist_id = a.id
+		AND EXISTS (SELECT 1 FROM media_files f WHERE f.kind = 'album' AND f.owner_id = b.id))`
 
 func scanArtist(r interface{ Scan(...any) error }) (Artist, error) {
 	var a Artist
@@ -52,7 +64,7 @@ func scanArtist(r interface{ Scan(...any) error }) (Artist, error) {
 	var types string
 	var added, refreshed int64
 	err := r.Scan(&a.ID, &a.MBID, &a.Name, &a.SortName, &a.Type, &a.Country, &a.Disambiguation, &mon, &types,
-		&a.RootFolder, &a.Path, &added, &refreshed, &a.Albums, &a.WantedAlbums)
+		&a.RootFolder, &a.Path, &added, &refreshed, &a.Albums, &a.WantedAlbums, &a.HaveAlbums)
 	if errors.Is(err, sql.ErrNoRows) {
 		return a, ErrNotFound
 	}
@@ -137,8 +149,11 @@ func (s *Store) ArtistRefreshed(ctx context.Context, id int64) error {
 }
 
 // DeleteArtist takes an artist and its albums off the list. It doesn't
-// touch any files.
+// touch any files: Box Office just forgets them.
 func (s *Store) DeleteArtist(ctx context.Context, id int64) error {
+	if _, err := s.exec(ctx, "DELETE FROM media_files WHERE kind = 'album' AND owner_id IN (SELECT id FROM albums WHERE artist_id = ?)", id); err != nil {
+		return err
+	}
 	if _, err := s.exec(ctx, "DELETE FROM albums WHERE artist_id = ?", id); err != nil {
 		return err
 	}
@@ -174,25 +189,91 @@ func scanAlbum(r interface{ Scan(...any) error }) (Album, error) {
 
 // Albums lists an artist's albums, newest first.
 func (s *Store) Albums(ctx context.Context, artistID int64) ([]Album, error) {
-	rows, err := s.query(ctx, "SELECT "+albumCols+" FROM albums WHERE artist_id = ? ORDER BY released DESC, title", artistID)
+	return s.albumList(ctx, "SELECT "+albumCols+" FROM albums WHERE artist_id = ? ORDER BY released DESC, title", artistID)
+}
+
+func (s *Store) albumList(ctx context.Context, q string, args ...any) ([]Album, error) {
+	rows, err := s.query(ctx, q, args...)
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
 	out := []Album{}
 	for rows.Next() {
 		b, err := scanAlbum(rows)
 		if err != nil {
+			rows.Close()
 			return nil, err
 		}
 		out = append(out, b)
 	}
-	return out, rows.Err()
+	err = rows.Err()
+	rows.Close()
+	if err != nil {
+		return nil, err
+	}
+	return out, s.albumFiles(ctx, out)
+}
+
+// albumFiles fills in the albums' copies in the library.
+func (s *Store) albumFiles(ctx context.Context, list []Album) error {
+	if len(list) == 0 {
+		return nil
+	}
+	at := map[int64]int{}
+	for i, b := range list {
+		at[b.ID] = i
+	}
+	rows, err := s.query(ctx, "SELECT id, kind, owner_id, path, size, quality, added_at FROM media_files WHERE kind = 'album'")
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var f File
+		var added int64
+		if err := rows.Scan(&f.ID, &f.Kind, &f.OwnerID, &f.Path, &f.Size, &f.Quality, &added); err != nil {
+			return err
+		}
+		f.AddedAt = time.Unix(added, 0).UTC()
+		if i, ok := at[f.OwnerID]; ok {
+			list[i].File = &f
+		}
+	}
+	return rows.Err()
 }
 
 // Album finds one album.
 func (s *Store) Album(ctx context.Context, id int64) (Album, error) {
-	return scanAlbum(s.row(ctx, "SELECT "+albumCols+" FROM albums WHERE id = ?", id))
+	b, err := scanAlbum(s.row(ctx, "SELECT "+albumCols+" FROM albums WHERE id = ?", id))
+	if err != nil {
+		return b, err
+	}
+	var f File
+	var added int64
+	err = s.row(ctx, "SELECT id, kind, owner_id, path, size, quality, added_at FROM media_files WHERE kind = 'album' AND owner_id = ?", id).
+		Scan(&f.ID, &f.Kind, &f.OwnerID, &f.Path, &f.Size, &f.Quality, &added)
+	if errors.Is(err, sql.ErrNoRows) {
+		return b, nil
+	}
+	if err != nil {
+		return b, err
+	}
+	f.AddedAt = time.Unix(added, 0).UTC()
+	b.File = &f
+	return b, nil
+}
+
+// WantedAlbums lists the albums wanted that have no copy in the library
+// yet and are out by today (a "YYYY-MM-DD" date; an album out in a year or
+// month only counts once that's begun). Albums with no date are left out.
+func (s *Store) WantedAlbums(ctx context.Context, today string) ([]Album, error) {
+	list, err := s.albumList(ctx, `SELECT `+albumCols+` FROM albums b WHERE b.monitored = 1 AND b.released <> '' AND b.released <= ?
+		AND NOT EXISTS (SELECT 1 FROM media_files f WHERE f.kind = 'album' AND f.owner_id = b.id)
+		ORDER BY b.id`, today)
+	if err != nil {
+		return nil, err
+	}
+	return list, nil
 }
 
 // UpsertAlbum adds an album, or brings its details up to date. An album

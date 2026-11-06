@@ -316,7 +316,7 @@ Yes. The image is built for `linux/amd64` and `linux/arm64` and uses little memo
 <details>
 <summary><b>Is there music, books or a request page of its own?</b></summary>
 
-Not yet. Music (in place of Lidarr), books and audiobooks, and a simple request page for people who don't use Matinee are all on the [roadmap](ROADMAP.md).
+Yes. Music (in place of Lidarr), ebooks and audiobooks (in place of Readarr) each turn on in Settings, and the request site at `/request` is for people who don't use Matinee. Moving in from Lidarr and Readarr is on the [roadmap](ROADMAP.md).
 </details>
 
 <details>

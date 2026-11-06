@@ -6,14 +6,17 @@ import (
 
 	"github.com/yeixio/boxoffice/internal/music"
 	"github.com/yeixio/boxoffice/internal/musicbrainz"
+	"github.com/yeixio/boxoffice/internal/search"
 	"github.com/yeixio/boxoffice/internal/store"
 )
 
 // musicErr turns the music list's own errors into answers.
 func musicErr(err error) error {
 	switch {
-	case errors.Is(err, music.ErrOff):
+	case errors.Is(err, music.ErrOff), errors.Is(err, search.ErrMusicOff):
 		return errorf(http.StatusConflict, err.Error())
+	case errors.Is(err, search.ErrNoIndexers):
+		return errorf(http.StatusBadRequest, err.Error())
 	case errors.Is(err, musicbrainz.ErrNotFound):
 		return errorf(http.StatusNotFound, err.Error())
 	}
@@ -144,7 +147,16 @@ func (s *Server) editAlbum(w http.ResponseWriter, r *http.Request) error {
 	if in.Monitored == nil {
 		return errorf(http.StatusBadRequest, "say whether to watch for it")
 	}
-	if err := s.Store.SetAlbumMonitored(r.Context(), id, *in.Monitored); err != nil {
+	b, err := s.Music.Want(r.Context(), id, *in.Monitored)
+	if err != nil {
+		return musicErr(err)
+	}
+	return writeJSON(w, http.StatusOK, albumView{b, musicbrainz.CoverURL(b.MBID)})
+}
+
+func (s *Server) album(w http.ResponseWriter, r *http.Request) error {
+	id, err := pathID(r, "id")
+	if err != nil {
 		return err
 	}
 	b, err := s.Store.Album(r.Context(), id)
@@ -152,6 +164,58 @@ func (s *Server) editAlbum(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 	return writeJSON(w, http.StatusOK, albumView{b, musicbrainz.CoverURL(b.MBID)})
+}
+
+// albumReleases searches the indexers for an album, for picking a release
+// by hand.
+func (s *Server) albumReleases(w http.ResponseWriter, r *http.Request) error {
+	id, err := pathID(r, "id")
+	if err != nil {
+		return err
+	}
+	res, err := s.Search.Album(r.Context(), id)
+	if err != nil {
+		return musicErr(err)
+	}
+	return writeJSON(w, http.StatusOK, res)
+}
+
+// searchAlbum searches for an album in the background, and grabs the best
+// release.
+func (s *Server) searchAlbum(w http.ResponseWriter, r *http.Request) error {
+	id, err := pathID(r, "id")
+	if err != nil {
+		return err
+	}
+	if err := s.Music.Search(r.Context(), id); err != nil {
+		return musicErr(err)
+	}
+	w.WriteHeader(http.StatusAccepted)
+	return nil
+}
+
+type musicSettings struct {
+	Quality   string   `json:"quality"`
+	Qualities []string `json:"qualities"`
+}
+
+func (s *Server) musicSettings(w http.ResponseWriter, r *http.Request) error {
+	q, err := s.Music.Quality(r.Context())
+	if err != nil {
+		return err
+	}
+	return writeJSON(w, http.StatusOK, musicSettings{q, search.MusicQualities})
+}
+
+func (s *Server) saveMusicSettings(w http.ResponseWriter, r *http.Request) error {
+	var in musicSettings
+	if err := readJSON(r, &in); err != nil {
+		return err
+	}
+	if err := s.Music.SetQuality(r.Context(), in.Quality); err != nil {
+		return err
+	}
+	return s.musicSettings(w, r)
 }
 
 func (s *Server) albumTypes(w http.ResponseWriter, r *http.Request) error {
