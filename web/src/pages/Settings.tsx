@@ -11,6 +11,7 @@ import { monitorOptions, useProfiles, useQualities, useRootFolders, useShowDefau
 import { AutoSearchSettings, Connections, DataCapSettingsCard, DownloadSettings, NumberField } from './Connections'
 import { ScanButton, scannable } from './LibraryScan'
 import { EreaderSettingsCard } from './Ereaders'
+import { ProblemsCard } from './Problems'
 import { Badge, Button, Card, ErrorNote, Field, Heading, Input, Modal, Select, Spinner, Toggle } from '../ui'
 
 export function Settings() {
@@ -34,6 +35,7 @@ export function Settings() {
           <MediaTypeFolders />
           <NewShows />
           <RecycleFolders />
+          <ProblemsCard />
           <Profiles />
         </div>
       </div>

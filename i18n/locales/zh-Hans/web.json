@@ -1579,6 +1579,126 @@
     "audiobook": "有声书",
     "album": "专辑"
   },
+  "problems": {
+    "title": "问题文件",
+    "sub": "电影和电视节目库文件夹中需要处理的文件。在你点击修复之前不会有任何改动，原始文件会留在媒体库的 <code>.recycle/problem-files</code> 文件夹中，直到你删除或放回它们。",
+    "cardSub": "找出电影和电视节目库文件夹中不在正确位置的内容：不在列表中的文件、多余的副本、光盘镜像、分段的电影和杂乱的名称，在确认每个修复会做什么之后再修复它们。",
+    "open": "打开问题文件",
+    "foundLast": "上次发现：{{count}}",
+    "waitingCount": "等待你确认：{{count}}",
+    "look": "重新检查",
+    "looking": "正在检查媒体库文件夹… {{done}}/{{total}}",
+    "lookedAt": "检查于{{when}}。",
+    "never": "Box Office 尚未检查。",
+    "none": "没有需要处理的：一切都在该在的位置。",
+    "unreadable": "Box Office 无法读取 {{path}}，或它是空的（共享未挂载？），因此已跳过。",
+    "readOnly": "{{path}} 对 Box Office 是只读的，因此其中内容会列出但无法修复。",
+    "noFFmpeg": "Box Office 运行的地方没有安装 FFmpeg，因此无法重新封装光盘镜像，也无法合并分段。",
+    "fixAll": "全部修复 {{count}} 项",
+    "fixSelected": "修复选中的 {{count}} 项",
+    "pick": "选择 {{name}}",
+    "fixing": "正在修复…",
+    "queued": "排队中",
+    "failed": "无法修复：{{error}}",
+    "recorded": "已记录",
+    "keepWhich": "保留哪个副本",
+    "keeps": "保留",
+    "setsAside": "移到一边",
+    "remuxNote": "（复制流，不重新编码）",
+    "recent": "最近的修复",
+    "blocked": {
+      "readOnly": "媒体库文件夹对 Box Office 是只读的。",
+      "locked": "不要动",
+      "outputExists": "修复后文件要放的位置已经有文件了。"
+    },
+    "detail": {
+      "outsideFolder": "放在其文件夹之外",
+      "folder": "其文件夹",
+      "show": "剧集的光盘",
+      "notListed": "不在列表中"
+    },
+    "act": {
+      "rename": "重命名",
+      "setAside": "移到一边",
+      "keepOne": "保留一个",
+      "record": "记录为其副本",
+      "forget": "忘记它",
+      "convert": "重新封装为 MKV",
+      "join": "合并分段",
+      "removeDirs": "移除"
+    },
+    "did": {
+      "rename": "已重命名",
+      "setAside": "已移到一边",
+      "keepOne": "已保留一个副本",
+      "record": "已记录",
+      "forget": "已忘记",
+      "convert": "已重新封装",
+      "join": "已合并",
+      "removeDirs": "已移除"
+    },
+    "state": {
+      "done": "完成",
+      "undone": "已放回"
+    },
+    "kinds": {
+      "duplicate": {
+        "title": "多于一个副本",
+        "hint": "选择要保留的副本。其他副本会被移到一边，保留的副本会记录为该作品的副本。"
+      },
+      "parts": {
+        "title": "分段的电影",
+        "hint": "名为 CD1、CD2、Part 1… 的分段会在不重新编码的情况下合并为一个 MKV。新文件检查通过后，分段会被移到一边。"
+      },
+      "discImage": {
+        "title": "光盘镜像",
+        "hint": "DVD 或蓝光镜像上的电影（其最长的标题）会在不重新编码的情况下复制为 MKV，新文件检查通过后镜像会被移到一边。剧集的光盘或不属于任何作品的镜像只能移到一边。"
+      },
+      "untracked": {
+        "title": "Box Office 不知道的副本",
+        "hint": "作品文件夹中的视频，或散放在外但以作品命名的视频，Box Office 尚未记录。修复会把每个视频记录为该作品的副本，并按 Box Office 的命名方式重命名。"
+      },
+      "missing": {
+        "title": "丢失的文件",
+        "hint": "Box Office 将这些记录为作品的副本，但它们已不在磁盘上。忘记它们后，Box Office 会重新查找这些作品。"
+      },
+      "naming": {
+        "title": "名称和文件夹",
+        "hint": "重命名为 标题 (年份)，剧集放在 Season 文件夹中，命名为 标题 (年份) - S01E02 - 剧集名。字幕会一起移动。以这种方式开头并添加画质等标签的名称保持不变。"
+      },
+      "unknown": {
+        "title": "不是剧集的视频",
+        "hint": "剧集文件夹中未按其任何一集命名的视频。"
+      },
+      "notListed": {
+        "title": "不在列表中",
+        "hint": "不属于列表中任何作品的文件夹和视频。要添加它们，请在设置中对根文件夹使用扫描；或将它们移到一边。"
+      },
+      "leftover": {
+        "title": "残留物",
+        "hint": "样片、程序、快捷方式，以及下载和压缩包的残留。"
+      },
+      "empty": {
+        "title": "空文件夹",
+        "hint": "里面什么都没有的文件夹。"
+      }
+    },
+    "waiting": {
+      "title": "等待你确认",
+      "sub": "修复移到一边的原始文件位于媒体库的 <code>.recycle/problem-files</code> 文件夹中。它们会一直留在那里，直到你永久删除或放回：清空回收文件夹不会动它们。",
+      "aside": "已移到一边：{{count}}（{{size}}）",
+      "asideOne": "已移到一边：{{name}}（{{size}}）",
+      "made": "新文件：{{name}}",
+      "moved": "已重命名：{{count}}",
+      "putBack": "放回",
+      "deleteOriginals": "删除原始文件",
+      "ok": "没问题",
+      "confirmTitle": "永久删除原始文件？",
+      "confirmBody": "这会从回收文件夹中删除移到一边的 {{count}} 项（{{size}}）。此操作无法撤销。",
+      "cancel": "取消",
+      "delete": "永久删除"
+    }
+  },
   "ereaders": {
     "title": "发送到电子阅读器",
     "intro": "Box Office 可以通过邮件把电子书发到你的 Kindle、PocketBook 或任何有自己邮箱地址的阅读器：每本下载完成后自动发送，或从书的页面发送。",

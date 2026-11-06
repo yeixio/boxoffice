@@ -606,3 +606,46 @@ export type Book = {
 }
 export type AuthorDetail = Author & { bookList: Book[] }
 export type LookupAuthor = { key: string; name: string; born?: string; died?: string; topWork?: string; works?: number; photo?: string; id?: number }
+
+// ---- problem files ----
+
+export type ProblemKind = 'duplicate' | 'parts' | 'disc_image' | 'untracked' | 'missing' | 'naming' | 'unknown' | 'not_listed' | 'leftover' | 'empty'
+export type ProblemAction = 'rename' | 'set_aside' | 'keep_one' | 'record' | 'forget' | 'convert' | 'join' | 'remove_dirs'
+export type ProblemFile = { path: string; size: number; dir?: boolean; recorded?: boolean; episode?: string }
+export type ProblemMove = { from: string; to: string; folder?: boolean }
+export type LibProblem = {
+  id: string
+  kind: ProblemKind
+  root: string
+  title?: { kind: 'movie' | 'series'; id: number; name: string; year?: number; locked?: boolean }
+  detail?: string
+  files: ProblemFile[]
+  fix?: { action: ProblemAction; moves?: ProblemMove[]; paths?: string[]; keep?: string; output?: string; blocked?: 'read_only' | 'locked' | 'output_exists' }
+}
+export type ProblemRoot = { path: string; kind: 'movie' | 'series'; readable: boolean; writable: boolean; files: number }
+export type ProblemFixFile = { role: 'aside' | 'moved' | 'made' | 'record' | 'forgot' | 'removed_dir'; src: string; dest: string; size: number }
+export type ProblemFix = {
+  id: number
+  action: ProblemAction
+  title: string
+  root: string
+  state: 'waiting' | 'done' | 'undone'
+  createdAt: string
+  decidedAt?: string
+  files: ProblemFixFile[]
+}
+export type ProblemsState = {
+  status: {
+    looking: boolean
+    done: number
+    total: number
+    lookedAt?: string
+    error?: string
+    ffmpeg: boolean
+    fixing?: { id: string; action: ProblemAction; progress: number }
+    queued: string[]
+    failed: { id: string; error: string }[]
+  }
+  report: { roots: ProblemRoot[]; problems: LibProblem[] } | null
+  fixes: ProblemFix[]
+}

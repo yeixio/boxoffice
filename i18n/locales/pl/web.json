@@ -1861,6 +1861,126 @@
     "audiobook": "Audiobook",
     "album": "Album"
   },
+  "problems": {
+    "title": "Problematyczne pliki",
+    "sub": "Pliki w folderach filmów i seriali, którymi trzeba się zająć. Nic się nie zmienia, dopóki nie naciśniesz poprawki, a oryginały czekają w folderze <code>.recycle/problem-files</code> biblioteki, aż je usuniesz albo przywrócisz.",
+    "cardSub": "Znajdź to, co jest nie na miejscu w folderach filmów i seriali: pliki spoza listy, dodatkowe kopie, obrazy płyt, filmy w częściach i nieuporządkowane nazwy, i popraw je, gdy sprawdzisz, co robi każda poprawka.",
+    "open": "Otwórz Problematyczne pliki",
+    "foundLast": "Znalezione ostatnio: {{count}}",
+    "waitingCount": "Czeka na Twoje OK: {{count}}",
+    "look": "Szukaj ponownie",
+    "looking": "Przeglądanie folderów biblioteki… {{done}}/{{total}}",
+    "lookedAt": "Sprawdzono {{when}}.",
+    "never": "Box Office jeszcze nie szukał.",
+    "none": "Nie ma nic do zrobienia: wszystko jest na swoim miejscu.",
+    "unreadable": "Box Office nie może odczytać {{path}} albo folder jest pusty (niezamontowany udział?), więc go pominięto.",
+    "readOnly": "{{path}} jest dla Box Office tylko do odczytu, więc jego zawartość jest pokazana, ale nie da się jej poprawić.",
+    "noFFmpeg": "FFmpeg nie jest zainstalowany tam, gdzie działa Box Office, więc nie można remuksować obrazów płyt ani łączyć części.",
+    "fixAll": "Popraw wszystkie: {{count}}",
+    "fixSelected": "Popraw wybrane: {{count}}",
+    "pick": "Wybierz {{name}}",
+    "fixing": "Poprawianie…",
+    "queued": "Czeka na swoją kolej",
+    "failed": "Nie udało się poprawić: {{error}}",
+    "recorded": "zapisany",
+    "keepWhich": "Którą kopię zostawić",
+    "keeps": "zostaw",
+    "setsAside": "odłóż",
+    "remuxNote": "(kopia strumieni, nic nie jest kodowane ponownie)",
+    "recent": "Ostatnie poprawki",
+    "blocked": {
+      "readOnly": "Folder biblioteki jest dla Box Office tylko do odczytu.",
+      "locked": "Nie ruszaj",
+      "outputExists": "W miejscu poprawionego pliku jest już inny plik."
+    },
+    "detail": {
+      "outsideFolder": "trzymany poza swoim folderem",
+      "folder": "jego folder",
+      "show": "płyta serialu",
+      "notListed": "spoza listy"
+    },
+    "act": {
+      "rename": "Zmień nazwę",
+      "setAside": "Odłóż",
+      "keepOne": "Zostaw jedną",
+      "record": "Zapisz jako kopię",
+      "forget": "Zapomnij",
+      "convert": "Remuksuj do MKV",
+      "join": "Połącz części",
+      "removeDirs": "Usuń"
+    },
+    "did": {
+      "rename": "Zmieniono nazwę",
+      "setAside": "Odłożono",
+      "keepOne": "Zostawiono jedną kopię",
+      "record": "Zapisano",
+      "forget": "Zapomniano",
+      "convert": "Zremuksowano",
+      "join": "Połączono",
+      "removeDirs": "Usunięto"
+    },
+    "state": {
+      "done": "Gotowe",
+      "undone": "Przywrócono"
+    },
+    "kinds": {
+      "duplicate": {
+        "title": "Więcej niż jedna kopia",
+        "hint": "Wybierz kopię do zostawienia. Pozostałe zostaną odłożone, a zostawiona zapisana jako kopia tytułu."
+      },
+      "parts": {
+        "title": "Filmy w częściach",
+        "hint": "Części nazwane CD1, CD2, Part 1… są łączone w jeden plik MKV bez ponownego kodowania. Części są odkładane, gdy nowy plik zostanie sprawdzony."
+      },
+      "discImage": {
+        "title": "Obrazy płyt",
+        "hint": "Film z obrazu DVD lub Blu-ray (jego najdłuższy tytuł) jest kopiowany do MKV bez ponownego kodowania, a obraz jest odkładany, gdy nowy plik zostanie sprawdzony. Płytę serialu albo obraz, który nie należy do żadnego tytułu, można tylko odłożyć."
+      },
+      "untracked": {
+        "title": "Kopie, których Box Office nie zna",
+        "hint": "Filmy w folderze tytułu albo luzem i nazwane jak tytuł, których Box Office nie zapisał. Poprawka zapisuje każdy jako kopię tytułu, z nazwą zmienioną tak, jak nazywa rzeczy Box Office."
+      },
+      "missing": {
+        "title": "Brakujące pliki",
+        "hint": "Box Office ma je zapisane jako kopie tytułów, ale zniknęły z dysku. Zapomnienie ich pozwala Box Office znowu szukać tych tytułów."
+      },
+      "naming": {
+        "title": "Nazwy i foldery",
+        "hint": "Zmiana nazwy na Tytuł (Rok), z odcinkami w folderach sezonów jako Tytuł (Rok) - S01E02 - Odcinek. Napisy idą razem z nimi. Nazwy, które tak się zaczynają i dodają znaczniki, np. jakość, zostają bez zmian."
+      },
+      "unknown": {
+        "title": "Filmy, które nie są odcinkiem",
+        "hint": "Filmy w folderze serialu, których nazwa nie wskazuje żadnego z jego odcinków."
+      },
+      "notListed": {
+        "title": "Spoza listy",
+        "hint": "Foldery i filmy, które nie są żadnym tytułem z listy. Aby je dodać, użyj Skanuj przy folderze głównym w Ustawieniach; albo je odłóż."
+      },
+      "leftover": {
+        "title": "Resztki",
+        "hint": "Próbki, programy, skróty i to, co zostało po pobraniach i archiwach."
+      },
+      "empty": {
+        "title": "Puste foldery",
+        "hint": "Foldery, w których nic nie ma."
+      }
+    },
+    "waiting": {
+      "title": "Czeka na Twoje OK",
+      "sub": "Oryginały odłożone przez poprawkę są w folderze <code>.recycle/problem-files</code> biblioteki. Zostają tam, dopóki nie usuniesz ich na dobre albo nie przywrócisz: opróżnianie folderów kosza ich nie rusza.",
+      "aside": "odłożone: {{count}} ({{size}})",
+      "asideOne": "odłożony: {{name}} ({{size}})",
+      "made": "nowy plik: {{name}}",
+      "moved": "zmienione nazwy: {{count}}",
+      "putBack": "Przywróć",
+      "deleteOriginals": "Usuń oryginały",
+      "ok": "Wygląda dobrze",
+      "confirmTitle": "Usunąć oryginały na dobre?",
+      "confirmBody": "To usunie odłożone pliki ({{count}}, {{size}}) z folderu kosza. Nie da się tego cofnąć.",
+      "cancel": "Anuluj",
+      "delete": "Usuń na dobre"
+    }
+  },
   "ereaders": {
     "title": "Wysyłanie na czytniki",
     "intro": "Box Office może wysyłać e-booki e-mailem na Twojego Kindle'a, PocketBooka lub dowolny czytnik z własnym adresem e-mail: sam, gdy tylko każdy się pobierze, albo ze strony książki.",

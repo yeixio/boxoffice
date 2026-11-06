@@ -1673,6 +1673,126 @@
     "audiobook": "Luisterboek",
     "album": "Album"
   },
+  "problems": {
+    "title": "Probleembestanden",
+    "sub": "Bestanden in de film- en seriemappen die aandacht nodig hebben. Er verandert niets tot je op een oplossing drukt, en de originelen wachten in de map <code>.recycle/problem-files</code> van de bibliotheek tot je ze verwijdert of terugzet.",
+    "cardSub": "Vind wat niet op zijn plek staat in de film- en seriemappen: bestanden die niet op de lijst staan, extra kopieën, schijfkopieën, films in delen en rommelige namen, en los ze op nadat je hebt gecontroleerd wat elke oplossing doet.",
+    "open": "Probleembestanden openen",
+    "foundLast": "Vorige keer gevonden: {{count}}",
+    "waitingCount": "Wacht op je OK: {{count}}",
+    "look": "Opnieuw zoeken",
+    "looking": "De bibliotheekmappen doorzoeken… {{done}}/{{total}}",
+    "lookedAt": "Gezocht {{when}}.",
+    "never": "Box Office heeft nog niet gezocht.",
+    "none": "Niets te doen: alles staat waar het hoort.",
+    "unreadable": "Box Office kan {{path}} niet lezen, of de map is leeg (een share die niet gekoppeld is?), dus die is overgeslagen.",
+    "readOnly": "{{path}} is alleen-lezen voor Box Office, dus wat erin staat wordt getoond maar kan niet worden opgelost.",
+    "noFFmpeg": "FFmpeg is niet geïnstalleerd waar Box Office draait, dus schijfkopieën kunnen niet worden geremuxt en delen niet samengevoegd.",
+    "fixAll": "Alle {{count}} oplossen",
+    "fixSelected": "De {{count}} gekozen oplossen",
+    "pick": "{{name}} kiezen",
+    "fixing": "Bezig met oplossen…",
+    "queued": "Wacht op zijn beurt",
+    "failed": "Kon het niet oplossen: {{error}}",
+    "recorded": "geregistreerd",
+    "keepWhich": "Welke kopie houden",
+    "keeps": "houden",
+    "setsAside": "apart zetten",
+    "remuxNote": "(een kopie van de streams, niets opnieuw gecodeerd)",
+    "recent": "Recente oplossingen",
+    "blocked": {
+      "readOnly": "De bibliotheekmap is alleen-lezen voor Box Office.",
+      "locked": "Niet aanraken",
+      "outputExists": "Er staat al een bestand waar het opgeloste zou komen."
+    },
+    "detail": {
+      "outsideFolder": "buiten zijn map bewaard",
+      "folder": "zijn map",
+      "show": "een schijf van een serie",
+      "notListed": "niet op de lijst"
+    },
+    "act": {
+      "rename": "Hernoemen",
+      "setAside": "Apart zetten",
+      "keepOne": "Eén houden",
+      "record": "Als kopie registreren",
+      "forget": "Vergeten",
+      "convert": "Remuxen naar MKV",
+      "join": "Delen samenvoegen",
+      "removeDirs": "Verwijderen"
+    },
+    "did": {
+      "rename": "Hernoemd",
+      "setAside": "Apart gezet",
+      "keepOne": "Eén kopie gehouden",
+      "record": "Geregistreerd",
+      "forget": "Vergeten",
+      "convert": "Geremuxt",
+      "join": "Samengevoegd",
+      "removeDirs": "Verwijderd"
+    },
+    "state": {
+      "done": "Klaar",
+      "undone": "Teruggezet"
+    },
+    "kinds": {
+      "duplicate": {
+        "title": "Meer dan één kopie",
+        "hint": "Kies de kopie die je wilt houden. De andere worden apart gezet, en de gehouden kopie wordt geregistreerd als de kopie van de titel."
+      },
+      "parts": {
+        "title": "Films in delen",
+        "hint": "Delen met namen als CD1, CD2, Part 1… worden zonder opnieuw coderen samengevoegd tot één MKV. De delen worden apart gezet zodra het nieuwe bestand is gecontroleerd."
+      },
+      "discImage": {
+        "title": "Schijfkopieën",
+        "hint": "De film op een dvd- of Blu-ray-kopie (de langste titel) wordt zonder opnieuw coderen naar een MKV gekopieerd, en de kopie wordt apart gezet zodra het nieuwe bestand is gecontroleerd. Een schijf van een serie of een kopie die bij geen titel hoort, kan alleen apart worden gezet."
+      },
+      "untracked": {
+        "title": "Kopieën die Box Office niet kent",
+        "hint": "Video's in de map van een titel, of los en vernoemd naar een titel, die Box Office niet heeft geregistreerd. De oplossing registreert elk als de kopie van de titel, hernoemd zoals Box Office dingen noemt."
+      },
+      "missing": {
+        "title": "Ontbrekende bestanden",
+        "hint": "Box Office heeft deze als kopieën van titels, maar ze zijn van de schijf verdwenen. Als je ze vergeet, zoekt Box Office weer naar die titels."
+      },
+      "naming": {
+        "title": "Namen en mappen",
+        "hint": "Hernoemd naar Titel (Jaar), met afleveringen in seizoensmappen als Titel (Jaar) - S01E02 - Aflevering. Ondertitels gaan mee. Namen die zo beginnen en labels zoals de kwaliteit toevoegen, blijven zoals ze zijn."
+      },
+      "unknown": {
+        "title": "Video's die geen aflevering zijn",
+        "hint": "Video's in de map van een serie die niet naar een van haar afleveringen zijn genoemd."
+      },
+      "notListed": {
+        "title": "Niet op de lijst",
+        "hint": "Mappen en video's die geen titel op de lijst zijn. Voeg ze toe met Scannen bij de hoofdmap in Instellingen, of zet ze apart."
+      },
+      "leftover": {
+        "title": "Restjes",
+        "hint": "Samples, programma's, snelkoppelingen en wat er over is van downloads en archieven."
+      },
+      "empty": {
+        "title": "Lege mappen",
+        "hint": "Mappen waar niets in staat."
+      }
+    },
+    "waiting": {
+      "title": "Wacht op je OK",
+      "sub": "Originelen die een oplossing apart heeft gezet, staan in de map <code>.recycle/problem-files</code> van de bibliotheek. Ze blijven daar tot je ze definitief verwijdert of terugzet: het legen van de prullenbakmappen laat ze met rust.",
+      "aside": "apart gezet: {{count}} ({{size}})",
+      "asideOne": "apart gezet: {{name}} ({{size}})",
+      "made": "nieuw bestand: {{name}}",
+      "moved": "hernoemd: {{count}}",
+      "putBack": "Terugzetten",
+      "deleteOriginals": "Originelen verwijderen",
+      "ok": "Ziet er goed uit",
+      "confirmTitle": "De originelen definitief verwijderen?",
+      "confirmBody": "Dit verwijdert {{count}} apart gezette bestanden ({{size}}) uit de prullenbakmap. Dit kan niet ongedaan worden gemaakt.",
+      "cancel": "Annuleren",
+      "delete": "Definitief verwijderen"
+    }
+  },
   "ereaders": {
     "title": "Naar e-readers sturen",
     "intro": "Box Office kan ebooks mailen naar je Kindle, je PocketBook of elke e-reader met een eigen e-mailadres: vanzelf zodra er een gedownload is, of vanaf de pagina van een boek.",

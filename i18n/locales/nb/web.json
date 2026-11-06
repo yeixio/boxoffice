@@ -1673,6 +1673,126 @@
     "audiobook": "Lydbok",
     "album": "Album"
   },
+  "problems": {
+    "title": "Problemfiler",
+    "sub": "Filer i film- og seriemappene som trenger tilsyn. Ingenting endres før du trykker på en retting, og originalene venter i bibliotekets mappe <code>.recycle/problem-files</code> til du sletter dem eller legger dem tilbake.",
+    "cardSub": "Finn det som ikke er på plass i film- og seriemappene: filer som ikke står på listen, ekstra kopier, platebilder, filmer i deler og rotete navn, og rett dem når du har sett hva hver retting gjør.",
+    "open": "Åpne Problemfiler",
+    "foundLast": "Funnet sist: {{count}}",
+    "waitingCount": "Venter på ditt OK: {{count}}",
+    "look": "Let igjen",
+    "looking": "Går gjennom bibliotekmappene… {{done}}/{{total}}",
+    "lookedAt": "Lette {{when}}.",
+    "never": "Box Office har ikke lett ennå.",
+    "none": "Ingenting trenger tilsyn: alt er der det skal være.",
+    "unreadable": "Box Office kan ikke lese {{path}}, eller den er tom (en deling som ikke er montert?), så den ble utelatt.",
+    "readOnly": "{{path}} er skrivebeskyttet for Box Office, så innholdet vises, men kan ikke rettes.",
+    "noFFmpeg": "FFmpeg er ikke installert der Box Office kjører, så platebilder kan ikke remuxes og deler kan ikke slås sammen.",
+    "fixAll": "Rett alle {{count}}",
+    "fixSelected": "Rett de {{count}} valgte",
+    "pick": "Velg {{name}}",
+    "fixing": "Retter…",
+    "queued": "Venter på tur",
+    "failed": "Kunne ikke rette: {{error}}",
+    "recorded": "registrert",
+    "keepWhich": "Hvilken kopi som skal beholdes",
+    "keeps": "behold",
+    "setsAside": "legg til side",
+    "remuxNote": "(en kopi av strømmene, ingenting kodet om)",
+    "recent": "Siste rettinger",
+    "blocked": {
+      "readOnly": "Bibliotekmappen er skrivebeskyttet for Box Office.",
+      "locked": "Ikke rør",
+      "outputExists": "Det ligger allerede en fil der den rettede skulle."
+    },
+    "detail": {
+      "outsideFolder": "ligger utenfor mappen sin",
+      "folder": "mappen sin",
+      "show": "en series plate",
+      "notListed": "ikke på listen"
+    },
+    "act": {
+      "rename": "Gi nytt navn",
+      "setAside": "Legg til side",
+      "keepOne": "Behold én",
+      "record": "Registrer som kopien",
+      "forget": "Glem den",
+      "convert": "Remux til MKV",
+      "join": "Slå sammen delene",
+      "removeDirs": "Fjern"
+    },
+    "did": {
+      "rename": "Nytt navn",
+      "setAside": "Lagt til side",
+      "keepOne": "Beholdt én kopi",
+      "record": "Registrert",
+      "forget": "Glemt",
+      "convert": "Remuxet",
+      "join": "Slått sammen",
+      "removeDirs": "Fjernet"
+    },
+    "state": {
+      "done": "Ferdig",
+      "undone": "Lagt tilbake"
+    },
+    "kinds": {
+      "duplicate": {
+        "title": "Mer enn én kopi",
+        "hint": "Velg kopien du vil beholde. De andre legges til side, og den du beholder registreres som tittelens kopi."
+      },
+      "parts": {
+        "title": "Filmer i deler",
+        "hint": "Deler med navn som CD1, CD2, Part 1… slås sammen til én MKV uten omkoding. Delene legges til side når den nye filen er sjekket."
+      },
+      "discImage": {
+        "title": "Platebilder",
+        "hint": "Filmen på et DVD- eller Blu-ray-bilde (den lengste tittelen) kopieres til en MKV uten omkoding, og bildet legges til side når den nye filen er sjekket. En series plate eller et bilde som ikke hører til noen tittel, kan bare legges til side."
+      },
+      "untracked": {
+        "title": "Kopier Box Office ikke kjenner til",
+        "hint": "Videoer i en tittels mappe, eller løse og oppkalt etter en tittel, som Box Office ikke har registrert. Rettingen registrerer hver som tittelens kopi, med navn slik Box Office navngir ting."
+      },
+      "missing": {
+        "title": "Manglende filer",
+        "hint": "Box Office har disse som titlers kopier, men de er borte fra disken. Glemmer du dem, ser Box Office etter titlene igjen."
+      },
+      "naming": {
+        "title": "Navn og mapper",
+        "hint": "Gis nytt navn til Tittel (År), med episoder i sesongmapper som Tittel (År) - S01E02 - Episode. Undertekster følger med. Navn som begynner slik og legger til merker som kvaliteten, blir som de er."
+      },
+      "unknown": {
+        "title": "Videoer som ikke er en episode",
+        "hint": "Videoer i en series mappe som ikke er oppkalt etter noen av episodene."
+      },
+      "notListed": {
+        "title": "Ikke på listen",
+        "hint": "Mapper og videoer som ikke er noen tittel på listen. Legg dem til med Skann ved rotmappen i Innstillinger, eller legg dem til side."
+      },
+      "leftover": {
+        "title": "Rester",
+        "hint": "Smakebiter, programmer, snarveier og det som er igjen av nedlastinger og arkiver."
+      },
+      "empty": {
+        "title": "Tomme mapper",
+        "hint": "Mapper uten noe i."
+      }
+    },
+    "waiting": {
+      "title": "Venter på ditt OK",
+      "sub": "Originaler en retting har lagt til side, ligger i bibliotekets mappe <code>.recycle/problem-files</code>. De blir der til du sletter dem for godt eller legger dem tilbake: tømming av papirkurvmappene rører dem ikke.",
+      "aside": "lagt til side: {{count}} ({{size}})",
+      "asideOne": "lagt til side: {{name}} ({{size}})",
+      "made": "ny fil: {{name}}",
+      "moved": "nytt navn: {{count}}",
+      "putBack": "Legg tilbake",
+      "deleteOriginals": "Slett originalene",
+      "ok": "Ser bra ut",
+      "confirmTitle": "Slette originalene for godt?",
+      "confirmBody": "Dette sletter {{count}} filer lagt til side ({{size}}) fra papirkurvmappen. Det kan ikke angres.",
+      "cancel": "Avbryt",
+      "delete": "Slett for godt"
+    }
+  },
   "ereaders": {
     "title": "Send til lesebrett",
     "intro": "Box Office kan sende e-bøker på e-post til Kindle, PocketBook eller et hvilket som helst lesebrett med egen e-postadresse: av seg selv når hver bok er lastet ned, eller fra en boks side.",

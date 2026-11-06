@@ -1767,6 +1767,126 @@
     "audiobook": "Audiolibro",
     "album": "Álbum"
   },
+  "problems": {
+    "title": "Archivos con problemas",
+    "sub": "Archivos de las carpetas de películas y series que necesitan atención. Nada cambia hasta que pulsas una corrección, y los originales esperan en la carpeta <code>.recycle/problem-files</code> de la biblioteca hasta que los borres o los devuelvas.",
+    "cardSub": "Encuentra lo que está fuera de lugar en las carpetas de películas y series: archivos que no están en la lista, copias de más, imágenes de disco, películas en partes y nombres desordenados, y corrígelos después de revisar qué hace cada corrección.",
+    "open": "Abrir Archivos con problemas",
+    "foundLast": "Encontrados la última vez: {{count}}",
+    "waitingCount": "Esperando tu OK: {{count}}",
+    "look": "Buscar de nuevo",
+    "looking": "Revisando las carpetas de la biblioteca… {{done}}/{{total}}",
+    "lookedAt": "Revisado {{when}}.",
+    "never": "Box Office aún no ha revisado.",
+    "none": "No hay nada que hacer: todo está donde debe estar.",
+    "unreadable": "Box Office no puede leer {{path}}, o está vacía (¿un recurso compartido sin montar?), así que se dejó fuera.",
+    "readOnly": "{{path}} es de solo lectura para Box Office, así que su contenido aparece pero no se puede corregir.",
+    "noFFmpeg": "FFmpeg no está instalado donde se ejecuta Box Office, así que no se pueden remuxar imágenes de disco ni unir partes.",
+    "fixAll": "Corregir los {{count}}",
+    "fixSelected": "Corregir los {{count}} elegidos",
+    "pick": "Elegir {{name}}",
+    "fixing": "Corrigiendo…",
+    "queued": "Esperando su turno",
+    "failed": "No se pudo corregir: {{error}}",
+    "recorded": "registrado",
+    "keepWhich": "Qué copia conservar",
+    "keeps": "conservar",
+    "setsAside": "apartar",
+    "remuxNote": "(una copia de las pistas, nada recodificado)",
+    "recent": "Correcciones recientes",
+    "blocked": {
+      "readOnly": "La carpeta de la biblioteca es de solo lectura para Box Office.",
+      "locked": "No tocar",
+      "outputExists": "Ya hay un archivo donde iría el corregido."
+    },
+    "detail": {
+      "outsideFolder": "guardado fuera de su carpeta",
+      "folder": "su carpeta",
+      "show": "un disco de serie",
+      "notListed": "no está en la lista"
+    },
+    "act": {
+      "rename": "Renombrar",
+      "setAside": "Apartar",
+      "keepOne": "Conservar una",
+      "record": "Registrar como su copia",
+      "forget": "Olvidarlo",
+      "convert": "Remuxar a MKV",
+      "join": "Unir las partes",
+      "removeDirs": "Quitar"
+    },
+    "did": {
+      "rename": "Renombrado",
+      "setAside": "Apartado",
+      "keepOne": "Se conservó una copia",
+      "record": "Registrado",
+      "forget": "Olvidado",
+      "convert": "Remuxado",
+      "join": "Unido",
+      "removeDirs": "Quitado"
+    },
+    "state": {
+      "done": "Hecho",
+      "undone": "Devuelto"
+    },
+    "kinds": {
+      "duplicate": {
+        "title": "Más de una copia",
+        "hint": "Elige la copia que quieres conservar. Las demás se apartan, y la conservada queda registrada como la copia del título."
+      },
+      "parts": {
+        "title": "Películas en partes",
+        "hint": "Las partes llamadas CD1, CD2, Part 1… se unen en un MKV sin recodificar. Las partes se apartan cuando el archivo nuevo está comprobado."
+      },
+      "discImage": {
+        "title": "Imágenes de disco",
+        "hint": "La película de una imagen de DVD o Blu-ray (su título más largo) se copia a un MKV sin recodificar, y la imagen se aparta cuando el archivo nuevo está comprobado. Un disco de serie o una imagen que no es de ningún título solo se puede apartar."
+      },
+      "untracked": {
+        "title": "Copias que Box Office no conoce",
+        "hint": "Vídeos en la carpeta de un título, o sueltos y con el nombre de un título, que Box Office no ha registrado. La corrección registra cada uno como la copia del título, renombrado como Box Office nombra las cosas."
+      },
+      "missing": {
+        "title": "Archivos que faltan",
+        "hint": "Box Office los tiene como copias de títulos, pero ya no están en el disco. Olvidarlos permite que Box Office vuelva a buscar esos títulos."
+      },
+      "naming": {
+        "title": "Nombres y carpetas",
+        "hint": "Se renombran a Título (Año), con los episodios en carpetas de temporada como Título (Año) - S01E02 - Episodio. Los subtítulos van con ellos. Los nombres que empiezan así y añaden etiquetas como la calidad se quedan como están."
+      },
+      "unknown": {
+        "title": "Vídeos que no son un episodio",
+        "hint": "Vídeos en la carpeta de una serie que no llevan el nombre de ninguno de sus episodios."
+      },
+      "notListed": {
+        "title": "No están en la lista",
+        "hint": "Carpetas y vídeos que no son de ningún título de la lista. Para añadirlos, usa Escanear en la carpeta raíz en Ajustes; o apártalos."
+      },
+      "leftover": {
+        "title": "Restos",
+        "hint": "Muestras, programas, accesos directos y lo que queda de descargas y archivos comprimidos."
+      },
+      "empty": {
+        "title": "Carpetas vacías",
+        "hint": "Carpetas sin nada dentro."
+      }
+    },
+    "waiting": {
+      "title": "Esperando tu OK",
+      "sub": "Los originales que apartó una corrección están en la carpeta <code>.recycle/problem-files</code> de la biblioteca. Se quedan ahí hasta que los borres para siempre o los devuelvas: vaciar las carpetas de reciclaje no los toca.",
+      "aside": "apartados: {{count}} ({{size}})",
+      "asideOne": "apartado: {{name}} ({{size}})",
+      "made": "archivo nuevo: {{name}}",
+      "moved": "renombrados: {{count}}",
+      "putBack": "Devolver",
+      "deleteOriginals": "Borrar originales",
+      "ok": "Está bien",
+      "confirmTitle": "¿Borrar los originales para siempre?",
+      "confirmBody": "Esto borra {{count}} archivos apartados ({{size}}) de la carpeta de reciclaje. No se puede deshacer.",
+      "cancel": "Cancelar",
+      "delete": "Borrar para siempre"
+    }
+  },
   "ereaders": {
     "title": "Enviar a lectores electrónicos",
     "intro": "Box Office puede enviar ebooks por correo a tu Kindle, tu PocketBook o cualquier lector con su propia dirección de correo: solo, en cuanto se descarga cada uno, o desde la página de un libro.",

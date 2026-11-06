@@ -1673,6 +1673,126 @@
     "audiobook": "Audiobook",
     "album": "Album"
   },
+  "problems": {
+    "title": "Problem files",
+    "sub": "Files in the movie and TV library folders that need a hand. Nothing changes until you press a fix, and the originals wait in the library's <code>.recycle/problem-files</code> folder until you delete them or put them back.",
+    "cardSub": "Find what's out of place in the movie and TV library folders: files that aren't on the list, extra copies, disc images, movies in parts and untidy names, and fix them once you've checked what each fix does.",
+    "open": "Open Problem files",
+    "foundLast": "Found last time: {{count}}",
+    "waitingCount": "Waiting for your OK: {{count}}",
+    "look": "Look again",
+    "looking": "Looking through the library folders… {{done}}/{{total}}",
+    "lookedAt": "Looked {{when}}.",
+    "never": "Box Office hasn't looked yet.",
+    "none": "Nothing needs a hand: everything is where it should be.",
+    "unreadable": "Box Office can't read {{path}}, or it's empty (a share that isn't mounted?), so it was left out.",
+    "readOnly": "{{path}} is read-only for Box Office, so what's in it is listed but can't be fixed.",
+    "noFFmpeg": "FFmpeg isn't installed where Box Office runs, so disc images can't be remuxed and parts can't be joined.",
+    "fixAll": "Fix all {{count}}",
+    "fixSelected": "Fix the {{count}} picked",
+    "pick": "Pick {{name}}",
+    "fixing": "Fixing…",
+    "queued": "Waiting its turn",
+    "failed": "Couldn't fix it: {{error}}",
+    "recorded": "recorded",
+    "keepWhich": "Which copy to keep",
+    "keeps": "keep",
+    "setsAside": "set aside",
+    "remuxNote": "(a copy of the streams, nothing re-encoded)",
+    "recent": "Recent fixes",
+    "blocked": {
+      "readOnly": "The library folder is read-only for Box Office.",
+      "locked": "Do not touch",
+      "outputExists": "There's a file where the fixed one would go already."
+    },
+    "detail": {
+      "outsideFolder": "kept outside its folder",
+      "folder": "its folder",
+      "show": "a show's disc",
+      "notListed": "not on the list"
+    },
+    "act": {
+      "rename": "Rename",
+      "setAside": "Set aside",
+      "keepOne": "Keep one",
+      "record": "Record as its copy",
+      "forget": "Forget it",
+      "convert": "Remux to MKV",
+      "join": "Join the parts",
+      "removeDirs": "Remove"
+    },
+    "did": {
+      "rename": "Renamed",
+      "setAside": "Set aside",
+      "keepOne": "Kept one copy",
+      "record": "Recorded",
+      "forget": "Forgot",
+      "convert": "Remuxed",
+      "join": "Joined",
+      "removeDirs": "Removed"
+    },
+    "state": {
+      "done": "Done",
+      "undone": "Put back"
+    },
+    "kinds": {
+      "duplicate": {
+        "title": "More than one copy",
+        "hint": "Pick the copy to keep. The others are set aside, and the one kept is recorded as the title's copy."
+      },
+      "parts": {
+        "title": "Movies in parts",
+        "hint": "Parts named CD1, CD2, Part 1… are joined into one MKV without re-encoding. The parts are set aside once the new file is checked."
+      },
+      "discImage": {
+        "title": "Disc images",
+        "hint": "The movie on a DVD or Blu-ray image (its longest title) is copied into an MKV without re-encoding, and the image is set aside once the new file is checked. A show's disc or an image that isn't any title's can only be set aside."
+      },
+      "untracked": {
+        "title": "Copies Box Office doesn't know",
+        "hint": "Videos in a title's folder, or loose and named for a title, that Box Office hasn't recorded. Fixing records each as the title's copy, renamed the way Box Office names things."
+      },
+      "missing": {
+        "title": "Missing files",
+        "hint": "Box Office has these as titles' copies, but they're gone from disk. Forgetting them lets Box Office look for the titles again."
+      },
+      "naming": {
+        "title": "Names and folders",
+        "hint": "Renamed to Title (Year), with episodes in Season folders as Title (Year) - S01E02 - Episode. Subtitles go along. Names that start like that and add tags such as the quality are left as they are."
+      },
+      "unknown": {
+        "title": "Videos that aren't an episode",
+        "hint": "Videos in a show's folder that aren't named for one of its episodes."
+      },
+      "notListed": {
+        "title": "Not on the list",
+        "hint": "Folders and videos that aren't any title on the list. To add them, use Scan on the root folder in Settings; or set them aside."
+      },
+      "leftover": {
+        "title": "Leftovers",
+        "hint": "Samples, programs, shortcuts, and what's left of downloads and archives."
+      },
+      "empty": {
+        "title": "Empty folders",
+        "hint": "Folders with nothing in them."
+      }
+    },
+    "waiting": {
+      "title": "Waiting for your OK",
+      "sub": "Originals a fix set aside are in the library's <code>.recycle/problem-files</code> folder. They stay there until you delete them for good or put them back: emptying the recycle folders leaves them alone.",
+      "aside": "set aside: {{count}} ({{size}})",
+      "asideOne": "set aside: {{name}} ({{size}})",
+      "made": "new file: {{name}}",
+      "moved": "renamed: {{count}}",
+      "putBack": "Put back",
+      "deleteOriginals": "Delete originals",
+      "ok": "Looks good",
+      "confirmTitle": "Delete the originals for good?",
+      "confirmBody": "This deletes {{count}} set aside ({{size}}) from the recycle folder. It can't be undone.",
+      "cancel": "Cancel",
+      "delete": "Delete for good"
+    }
+  },
   "ereaders": {
     "title": "Send to e-readers",
     "intro": "Box Office can email ebooks to your Kindle, your PocketBook, or any reader with its own email address: by itself as each one downloads, or from a book's page.",

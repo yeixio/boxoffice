@@ -1767,6 +1767,126 @@
     "audiobook": "Audiobook",
     "album": "Album"
   },
+  "problems": {
+    "title": "Fișiere cu probleme",
+    "sub": "Fișiere din dosarele de filme și seriale care au nevoie de atenție. Nimic nu se schimbă până nu apeși o corectare, iar originalele așteaptă în dosarul <code>.recycle/problem-files</code> al bibliotecii până le ștergi sau le pui la loc.",
+    "cardSub": "Găsește ce nu e la locul lui în dosarele de filme și seriale: fișiere care nu sunt pe listă, copii în plus, imagini de disc, filme în părți și nume dezordonate, și corectează-le după ce vezi ce face fiecare corectare.",
+    "open": "Deschide Fișiere cu probleme",
+    "foundLast": "Găsite data trecută: {{count}}",
+    "waitingCount": "Așteaptă OK-ul tău: {{count}}",
+    "look": "Caută din nou",
+    "looking": "Se parcurg dosarele bibliotecii… {{done}}/{{total}}",
+    "lookedAt": "Verificat {{when}}.",
+    "never": "Box Office nu a căutat încă.",
+    "none": "Nimic de făcut: totul e la locul lui.",
+    "unreadable": "Box Office nu poate citi {{path}}, sau e gol (o partajare nemontată?), așa că a fost omis.",
+    "readOnly": "{{path}} este doar în citire pentru Box Office, așa că ce conține e afișat, dar nu poate fi corectat.",
+    "noFFmpeg": "FFmpeg nu este instalat unde rulează Box Office, așa că imaginile de disc nu pot fi remuxate și părțile nu pot fi unite.",
+    "fixAll": "Corectează toate cele {{count}}",
+    "fixSelected": "Corectează cele {{count}} alese",
+    "pick": "Alege {{name}}",
+    "fixing": "Se corectează…",
+    "queued": "Își așteaptă rândul",
+    "failed": "Nu s-a putut corecta: {{error}}",
+    "recorded": "înregistrat",
+    "keepWhich": "Ce copie păstrezi",
+    "keeps": "păstrează",
+    "setsAside": "pune deoparte",
+    "remuxNote": "(o copie a fluxurilor, nimic recodat)",
+    "recent": "Corectări recente",
+    "blocked": {
+      "readOnly": "Dosarul bibliotecii este doar în citire pentru Box Office.",
+      "locked": "Nu atinge",
+      "outputExists": "Există deja un fișier unde ar merge cel corectat."
+    },
+    "detail": {
+      "outsideFolder": "ținut în afara dosarului său",
+      "folder": "dosarul său",
+      "show": "un disc de serial",
+      "notListed": "nu e pe listă"
+    },
+    "act": {
+      "rename": "Redenumește",
+      "setAside": "Pune deoparte",
+      "keepOne": "Păstrează una",
+      "record": "Înregistrează ca a sa copie",
+      "forget": "Uită-l",
+      "convert": "Remuxează în MKV",
+      "join": "Unește părțile",
+      "removeDirs": "Elimină"
+    },
+    "did": {
+      "rename": "Redenumit",
+      "setAside": "Pus deoparte",
+      "keepOne": "Păstrată o copie",
+      "record": "Înregistrat",
+      "forget": "Uitat",
+      "convert": "Remuxat",
+      "join": "Unit",
+      "removeDirs": "Eliminat"
+    },
+    "state": {
+      "done": "Gata",
+      "undone": "Pus la loc"
+    },
+    "kinds": {
+      "duplicate": {
+        "title": "Mai multe copii",
+        "hint": "Alege copia pe care o păstrezi. Celelalte sunt puse deoparte, iar cea păstrată e înregistrată ca fiind copia titlului."
+      },
+      "parts": {
+        "title": "Filme în părți",
+        "hint": "Părțile numite CD1, CD2, Part 1… sunt unite într-un singur MKV fără recodare. Părțile sunt puse deoparte după ce noul fișier e verificat."
+      },
+      "discImage": {
+        "title": "Imagini de disc",
+        "hint": "Filmul de pe o imagine DVD sau Blu-ray (cel mai lung titlu) e copiat într-un MKV fără recodare, iar imaginea e pusă deoparte după ce noul fișier e verificat. Discul unui serial sau o imagine care nu aparține niciunui titlu poate fi doar pusă deoparte."
+      },
+      "untracked": {
+        "title": "Copii pe care Box Office nu le știe",
+        "hint": "Videoclipuri din dosarul unui titlu, sau libere și numite după un titlu, pe care Box Office nu le-a înregistrat. Corectarea înregistrează fiecare ca fiind copia titlului, redenumită cum numește Box Office lucrurile."
+      },
+      "missing": {
+        "title": "Fișiere lipsă",
+        "hint": "Box Office le are drept copii ale unor titluri, dar au dispărut de pe disc. Dacă le uiți, Box Office va căuta din nou titlurile."
+      },
+      "naming": {
+        "title": "Nume și dosare",
+        "hint": "Redenumite în Titlu (An), cu episoadele în dosare de sezon ca Titlu (An) - S01E02 - Episod. Subtitrările merg cu ele. Numele care încep așa și adaugă etichete precum calitatea rămân cum sunt."
+      },
+      "unknown": {
+        "title": "Videoclipuri care nu sunt un episod",
+        "hint": "Videoclipuri din dosarul unui serial care nu poartă numele niciunui episod al lui."
+      },
+      "notListed": {
+        "title": "Nu sunt pe listă",
+        "hint": "Dosare și videoclipuri care nu sunt niciun titlu de pe listă. Ca să le adaugi, folosește Scanează la dosarul rădăcină în Setări; sau pune-le deoparte."
+      },
+      "leftover": {
+        "title": "Resturi",
+        "hint": "Mostre, programe, scurtături și ce a rămas din descărcări și arhive."
+      },
+      "empty": {
+        "title": "Dosare goale",
+        "hint": "Dosare fără nimic în ele."
+      }
+    },
+    "waiting": {
+      "title": "Așteaptă OK-ul tău",
+      "sub": "Originalele puse deoparte de o corectare sunt în dosarul <code>.recycle/problem-files</code> al bibliotecii. Rămân acolo până le ștergi definitiv sau le pui la loc: golirea dosarelor de reciclare nu le atinge.",
+      "aside": "puse deoparte: {{count}} ({{size}})",
+      "asideOne": "pus deoparte: {{name}} ({{size}})",
+      "made": "fișier nou: {{name}}",
+      "moved": "redenumite: {{count}}",
+      "putBack": "Pune la loc",
+      "deleteOriginals": "Șterge originalele",
+      "ok": "Arată bine",
+      "confirmTitle": "Ștergi originalele definitiv?",
+      "confirmBody": "Se șterg {{count}} fișiere puse deoparte ({{size}}) din dosarul de reciclare. Nu se poate anula.",
+      "cancel": "Anulează",
+      "delete": "Șterge definitiv"
+    }
+  },
   "ereaders": {
     "title": "Trimite pe cititoare",
     "intro": "Box Office poate trimite cărți electronice prin e-mail pe Kindle, pe PocketBook sau pe orice cititor cu adresă de e-mail proprie: singur, imediat ce se descarcă fiecare, sau din pagina unei cărți.",

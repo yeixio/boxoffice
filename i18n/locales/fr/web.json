@@ -1767,6 +1767,126 @@
     "audiobook": "Livre audio",
     "album": "Album"
   },
+  "problems": {
+    "title": "Fichiers à problème",
+    "sub": "Les fichiers des dossiers de films et de séries qui demandent un coup de main. Rien ne change tant que vous n'appuyez pas sur une correction, et les originaux attendent dans le dossier <code>.recycle/problem-files</code> de la bibliothèque jusqu'à ce que vous les supprimiez ou les remettiez en place.",
+    "cardSub": "Trouvez ce qui n'est pas à sa place dans les dossiers de films et de séries : fichiers absents de la liste, copies en trop, images disque, films en plusieurs parties et noms en désordre, puis corrigez-les après avoir vérifié ce que fait chaque correction.",
+    "open": "Ouvrir Fichiers à problème",
+    "foundLast": "Trouvés la dernière fois : {{count}}",
+    "waitingCount": "En attente de votre accord : {{count}}",
+    "look": "Chercher à nouveau",
+    "looking": "Parcours des dossiers de la bibliothèque… {{done}}/{{total}}",
+    "lookedAt": "Parcouru {{when}}.",
+    "never": "Box Office n'a pas encore cherché.",
+    "none": "Rien à faire : tout est à sa place.",
+    "unreadable": "Box Office ne peut pas lire {{path}}, ou il est vide (un partage non monté ?), il a donc été laissé de côté.",
+    "readOnly": "{{path}} est en lecture seule pour Box Office : son contenu est listé mais ne peut pas être corrigé.",
+    "noFFmpeg": "FFmpeg n'est pas installé là où tourne Box Office : les images disque ne peuvent pas être remuxées ni les parties assemblées.",
+    "fixAll": "Tout corriger ({{count}})",
+    "fixSelected": "Corriger les {{count}} choisis",
+    "pick": "Choisir {{name}}",
+    "fixing": "Correction…",
+    "queued": "En attente de son tour",
+    "failed": "Correction impossible : {{error}}",
+    "recorded": "enregistré",
+    "keepWhich": "Quelle copie garder",
+    "keeps": "garder",
+    "setsAside": "mettre de côté",
+    "remuxNote": "(une copie des flux, rien de réencodé)",
+    "recent": "Corrections récentes",
+    "blocked": {
+      "readOnly": "Le dossier de la bibliothèque est en lecture seule pour Box Office.",
+      "locked": "Ne pas toucher",
+      "outputExists": "Un fichier se trouve déjà là où irait le fichier corrigé."
+    },
+    "detail": {
+      "outsideFolder": "rangé hors de son dossier",
+      "folder": "son dossier",
+      "show": "un disque de série",
+      "notListed": "absent de la liste"
+    },
+    "act": {
+      "rename": "Renommer",
+      "setAside": "Mettre de côté",
+      "keepOne": "En garder une",
+      "record": "Enregistrer comme sa copie",
+      "forget": "L'oublier",
+      "convert": "Remuxer en MKV",
+      "join": "Assembler les parties",
+      "removeDirs": "Supprimer"
+    },
+    "did": {
+      "rename": "Renommé",
+      "setAside": "Mis de côté",
+      "keepOne": "Une copie gardée",
+      "record": "Enregistré",
+      "forget": "Oublié",
+      "convert": "Remuxé",
+      "join": "Assemblé",
+      "removeDirs": "Supprimé"
+    },
+    "state": {
+      "done": "Fait",
+      "undone": "Remis en place"
+    },
+    "kinds": {
+      "duplicate": {
+        "title": "Plus d'une copie",
+        "hint": "Choisissez la copie à garder. Les autres sont mises de côté, et celle gardée est enregistrée comme la copie du titre."
+      },
+      "parts": {
+        "title": "Films en plusieurs parties",
+        "hint": "Les parties nommées CD1, CD2, Part 1… sont assemblées en un seul MKV sans réencodage. Elles sont mises de côté une fois le nouveau fichier vérifié."
+      },
+      "discImage": {
+        "title": "Images disque",
+        "hint": "Le film d'une image DVD ou Blu-ray (son titre le plus long) est copié dans un MKV sans réencodage, et l'image est mise de côté une fois le nouveau fichier vérifié. Le disque d'une série ou une image qui n'est à aucun titre peut seulement être mis de côté."
+      },
+      "untracked": {
+        "title": "Copies que Box Office ne connaît pas",
+        "hint": "Des vidéos dans le dossier d'un titre, ou en vrac et nommées d'après un titre, que Box Office n'a pas enregistrées. La correction enregistre chacune comme la copie du titre, renommée à la manière de Box Office."
+      },
+      "missing": {
+        "title": "Fichiers manquants",
+        "hint": "Box Office les a comme copies de titres, mais ils ne sont plus sur le disque. Les oublier permet à Box Office de chercher à nouveau ces titres."
+      },
+      "naming": {
+        "title": "Noms et dossiers",
+        "hint": "Renommés en Titre (Année), les épisodes dans des dossiers de saison sous la forme Titre (Année) - S01E02 - Épisode. Les sous-titres suivent. Les noms qui commencent ainsi et ajoutent des étiquettes comme la qualité restent tels quels."
+      },
+      "unknown": {
+        "title": "Vidéos qui ne sont pas un épisode",
+        "hint": "Des vidéos dans le dossier d'une série qui ne portent le nom d'aucun de ses épisodes."
+      },
+      "notListed": {
+        "title": "Absents de la liste",
+        "hint": "Des dossiers et des vidéos qui ne sont aucun titre de la liste. Pour les ajouter, utilisez Analyser sur le dossier racine dans les Réglages ; ou mettez-les de côté."
+      },
+      "leftover": {
+        "title": "Restes",
+        "hint": "Échantillons, programmes, raccourcis, et ce qui reste des téléchargements et des archives."
+      },
+      "empty": {
+        "title": "Dossiers vides",
+        "hint": "Des dossiers sans rien dedans."
+      }
+    },
+    "waiting": {
+      "title": "En attente de votre accord",
+      "sub": "Les originaux mis de côté par une correction sont dans le dossier <code>.recycle/problem-files</code> de la bibliothèque. Ils y restent jusqu'à ce que vous les supprimiez définitivement ou les remettiez en place : vider les dossiers de recyclage ne les touche pas.",
+      "aside": "mis de côté : {{count}} ({{size}})",
+      "asideOne": "mis de côté : {{name}} ({{size}})",
+      "made": "nouveau fichier : {{name}}",
+      "moved": "renommés : {{count}}",
+      "putBack": "Remettre en place",
+      "deleteOriginals": "Supprimer les originaux",
+      "ok": "C'est bon",
+      "confirmTitle": "Supprimer définitivement les originaux ?",
+      "confirmBody": "Cela supprime {{count}} fichiers mis de côté ({{size}}) du dossier de recyclage. C'est irréversible.",
+      "cancel": "Annuler",
+      "delete": "Supprimer définitivement"
+    }
+  },
   "ereaders": {
     "title": "Envoyer aux liseuses",
     "intro": "Box Office peut envoyer des ebooks par e-mail à votre Kindle, votre PocketBook ou toute liseuse qui a sa propre adresse : tout seul dès que chacun est téléchargé, ou depuis la page d'un livre.",

@@ -27,10 +27,20 @@ RUN --mount=type=secret,id=tmdb_key \
     -o /out/boxoffice ./cmd/boxoffice \
     && mkdir -p /out/data
 
-# No FFmpeg or shell needed: Box Office only talks HTTP and moves files.
-FROM gcr.io/distroless/static-debian12:nonroot
+# Debian with FFmpeg, for Problem files: remuxing disc images into MKVs
+# (DVDs through FFmpeg's dvdvideo demuxer, Blu-rays through libbluray) and
+# joining movies split into parts. The build stops if this FFmpeg can't
+# read either. Box Office runs as the same user (65532) as before.
+FROM debian:trixie-slim
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ffmpeg ca-certificates tzdata \
+    && rm -rf /var/lib/apt/lists/* \
+    && ffmpeg -hide_banner -demuxers | grep -q dvdvideo \
+    && ffmpeg -hide_banner -protocols | grep -q bluray \
+    && groupadd -g 65532 nonroot && useradd -u 65532 -g 65532 -M -d /data -s /usr/sbin/nologin nonroot
 COPY --from=server /out/boxoffice /boxoffice
 COPY --from=server --chown=65532:65532 /out/data /data
+USER 65532:65532
 ENV BOXOFFICE_DATA_DIR=/data BOXOFFICE_ADDR=:7272
 VOLUME /data
 EXPOSE 7272

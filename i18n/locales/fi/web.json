@@ -1673,6 +1673,126 @@
     "audiobook": "Äänikirja",
     "album": "Albumi"
   },
+  "problems": {
+    "title": "Ongelmatiedostot",
+    "sub": "Elokuva- ja sarjakansioiden tiedostot, jotka kaipaavat huomiota. Mikään ei muutu ennen kuin painat korjausta, ja alkuperäiset odottavat kirjaston kansiossa <code>.recycle/problem-files</code>, kunnes poistat ne tai palautat ne.",
+    "cardSub": "Löydä, mikä on väärässä paikassa elokuva- ja sarjakansioissa: tiedostot, jotka eivät ole listalla, ylimääräiset kopiot, levykuvat, osiin jaetut elokuvat ja sekavat nimet, ja korjaa ne tarkistettuasi, mitä kukin korjaus tekee.",
+    "open": "Avaa Ongelmatiedostot",
+    "foundLast": "Löytyi viime kerralla: {{count}}",
+    "waitingCount": "Odottaa hyväksyntääsi: {{count}}",
+    "look": "Etsi uudelleen",
+    "looking": "Käydään läpi kirjaston kansioita… {{done}}/{{total}}",
+    "lookedAt": "Etsitty {{when}}.",
+    "never": "Box Office ei ole vielä etsinyt.",
+    "none": "Ei mitään tehtävää: kaikki on paikallaan.",
+    "unreadable": "Box Office ei pysty lukemaan kansiota {{path}}, tai se on tyhjä (liittämätön jako?), joten se jätettiin pois.",
+    "readOnly": "{{path}} on Box Officelle vain luku -tilassa, joten sen sisältö näytetään, mutta sitä ei voi korjata.",
+    "noFFmpeg": "FFmpegiä ei ole asennettu sinne, missä Box Office toimii, joten levykuvia ei voi remuxata eikä osia yhdistää.",
+    "fixAll": "Korjaa kaikki {{count}}",
+    "fixSelected": "Korjaa valitut {{count}}",
+    "pick": "Valitse {{name}}",
+    "fixing": "Korjataan…",
+    "queued": "Odottaa vuoroaan",
+    "failed": "Ei voitu korjata: {{error}}",
+    "recorded": "kirjattu",
+    "keepWhich": "Mikä kopio pidetään",
+    "keeps": "pidä",
+    "setsAside": "siirrä sivuun",
+    "remuxNote": "(kopio virroista, mitään ei koodata uudelleen)",
+    "recent": "Viimeisimmät korjaukset",
+    "blocked": {
+      "readOnly": "Kirjaston kansio on Box Officelle vain luku -tilassa.",
+      "locked": "Älä koske",
+      "outputExists": "Korjatun tiedoston paikalla on jo tiedosto."
+    },
+    "detail": {
+      "outsideFolder": "säilytetään kansionsa ulkopuolella",
+      "folder": "sen kansio",
+      "show": "sarjan levy",
+      "notListed": "ei listalla"
+    },
+    "act": {
+      "rename": "Nimeä uudelleen",
+      "setAside": "Siirrä sivuun",
+      "keepOne": "Pidä yksi",
+      "record": "Kirjaa sen kopioksi",
+      "forget": "Unohda se",
+      "convert": "Remuxaa MKV:ksi",
+      "join": "Yhdistä osat",
+      "removeDirs": "Poista"
+    },
+    "did": {
+      "rename": "Nimetty uudelleen",
+      "setAside": "Siirretty sivuun",
+      "keepOne": "Pidettiin yksi kopio",
+      "record": "Kirjattu",
+      "forget": "Unohdettu",
+      "convert": "Remuxattu",
+      "join": "Yhdistetty",
+      "removeDirs": "Poistettu"
+    },
+    "state": {
+      "done": "Valmis",
+      "undone": "Palautettu"
+    },
+    "kinds": {
+      "duplicate": {
+        "title": "Useampi kuin yksi kopio",
+        "hint": "Valitse pidettävä kopio. Muut siirretään sivuun, ja pidetty kirjataan nimikkeen kopioksi."
+      },
+      "parts": {
+        "title": "Osiin jaetut elokuvat",
+        "hint": "Osat, joiden nimi on CD1, CD2, Part 1…, yhdistetään yhdeksi MKV:ksi koodaamatta uudelleen. Osat siirretään sivuun, kun uusi tiedosto on tarkistettu."
+      },
+      "discImage": {
+        "title": "Levykuvat",
+        "hint": "DVD- tai Blu-ray-levykuvan elokuva (sen pisin nimike) kopioidaan MKV:hen koodaamatta uudelleen, ja levykuva siirretään sivuun, kun uusi tiedosto on tarkistettu. Sarjan levyn tai levykuvan, joka ei kuulu millekään nimikkeelle, voi vain siirtää sivuun."
+      },
+      "untracked": {
+        "title": "Kopiot, joita Box Office ei tunne",
+        "hint": "Videot nimikkeen kansiossa, tai irrallaan ja nimikkeen mukaan nimettyinä, joita Box Office ei ole kirjannut. Korjaus kirjaa kunkin nimikkeen kopioksi ja nimeää sen Box Officen tapaan."
+      },
+      "missing": {
+        "title": "Puuttuvat tiedostot",
+        "hint": "Box Officella nämä ovat nimikkeiden kopioina, mutta ne ovat kadonneet levyltä. Kun unohdat ne, Box Office etsii nimikkeitä uudelleen."
+      },
+      "naming": {
+        "title": "Nimet ja kansiot",
+        "hint": "Nimetään muotoon Nimi (Vuosi), jaksot kausikansioihin muodossa Nimi (Vuosi) - S01E02 - Jakso. Tekstitykset seuraavat mukana. Nimet, jotka alkavat näin ja lisäävät merkintöjä kuten laadun, jätetään ennalleen."
+      },
+      "unknown": {
+        "title": "Videot, jotka eivät ole jakso",
+        "hint": "Sarjan kansion videot, joita ei ole nimetty minkään sen jakson mukaan."
+      },
+      "notListed": {
+        "title": "Ei listalla",
+        "hint": "Kansiot ja videot, jotka eivät ole mikään listan nimike. Lisää ne Skannaa-toiminnolla juurikansion kohdalla Asetuksissa, tai siirrä ne sivuun."
+      },
+      "leftover": {
+        "title": "Jäänteet",
+        "hint": "Näytteet, ohjelmat, pikakuvakkeet ja latausten ja arkistojen jäänteet."
+      },
+      "empty": {
+        "title": "Tyhjät kansiot",
+        "hint": "Kansiot, joissa ei ole mitään."
+      }
+    },
+    "waiting": {
+      "title": "Odottaa hyväksyntääsi",
+      "sub": "Korjauksen sivuun siirtämät alkuperäiset ovat kirjaston kansiossa <code>.recycle/problem-files</code>. Ne pysyvät siellä, kunnes poistat ne lopullisesti tai palautat ne: roskakorikansioiden tyhjennys ei koske niihin.",
+      "aside": "sivuun siirretty: {{count}} ({{size}})",
+      "asideOne": "sivuun siirretty: {{name}} ({{size}})",
+      "made": "uusi tiedosto: {{name}}",
+      "moved": "nimetty uudelleen: {{count}}",
+      "putBack": "Palauta",
+      "deleteOriginals": "Poista alkuperäiset",
+      "ok": "Näyttää hyvältä",
+      "confirmTitle": "Poistetaanko alkuperäiset lopullisesti?",
+      "confirmBody": "Tämä poistaa {{count}} sivuun siirrettyä tiedostoa ({{size}}) roskakorikansiosta. Toimintoa ei voi perua.",
+      "cancel": "Peruuta",
+      "delete": "Poista lopullisesti"
+    }
+  },
   "ereaders": {
     "title": "Lähetä lukulaitteille",
     "intro": "Box Office voi lähettää e-kirjoja sähköpostilla Kindleen, PocketBookiin tai mihin tahansa lukulaitteeseen, jolla on oma sähköpostiosoite: itsestään heti kun kirja on ladattu, tai kirjan sivulta.",

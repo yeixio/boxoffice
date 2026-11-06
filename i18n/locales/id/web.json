@@ -1579,6 +1579,126 @@
     "audiobook": "Buku audio",
     "album": "Album"
   },
+  "problems": {
+    "title": "File bermasalah",
+    "sub": "File di folder pustaka film dan acara TV yang perlu dibenahi. Tidak ada yang berubah sampai Anda menekan perbaikan, dan file asli menunggu di folder <code>.recycle/problem-files</code> pustaka sampai Anda menghapusnya atau mengembalikannya.",
+    "cardSub": "Temukan yang tidak pada tempatnya di folder pustaka film dan acara TV: file yang tidak ada di daftar, salinan ganda, image disk, film yang terpecah dan nama yang berantakan, lalu perbaiki setelah Anda memeriksa apa yang dilakukan tiap perbaikan.",
+    "open": "Buka File bermasalah",
+    "foundLast": "Ditemukan terakhir kali: {{count}}",
+    "waitingCount": "Menunggu persetujuan Anda: {{count}}",
+    "look": "Periksa lagi",
+    "looking": "Memeriksa folder pustaka… {{done}}/{{total}}",
+    "lookedAt": "Diperiksa {{when}}.",
+    "never": "Box Office belum memeriksa.",
+    "none": "Tidak ada yang perlu dibenahi: semuanya ada di tempatnya.",
+    "unreadable": "Box Office tidak bisa membaca {{path}}, atau folder itu kosong (share yang tidak terpasang?), jadi dilewati.",
+    "readOnly": "{{path}} hanya-baca bagi Box Office, jadi isinya ditampilkan tetapi tidak bisa diperbaiki.",
+    "noFFmpeg": "FFmpeg tidak terpasang di tempat Box Office berjalan, jadi image disk tidak bisa di-remux dan bagian film tidak bisa digabung.",
+    "fixAll": "Perbaiki semua {{count}}",
+    "fixSelected": "Perbaiki {{count}} yang dipilih",
+    "pick": "Pilih {{name}}",
+    "fixing": "Memperbaiki…",
+    "queued": "Menunggu giliran",
+    "failed": "Tidak bisa diperbaiki: {{error}}",
+    "recorded": "tercatat",
+    "keepWhich": "Salinan mana yang disimpan",
+    "keeps": "simpan",
+    "setsAside": "disisihkan",
+    "remuxNote": "(salinan stream, tanpa encode ulang)",
+    "recent": "Perbaikan terbaru",
+    "blocked": {
+      "readOnly": "Folder pustaka hanya-baca bagi Box Office.",
+      "locked": "Jangan sentuh",
+      "outputExists": "Sudah ada file di tempat file hasil perbaikan akan diletakkan."
+    },
+    "detail": {
+      "outsideFolder": "disimpan di luar foldernya",
+      "folder": "foldernya",
+      "show": "disk sebuah acara",
+      "notListed": "tidak ada di daftar"
+    },
+    "act": {
+      "rename": "Ganti nama",
+      "setAside": "Sisihkan",
+      "keepOne": "Simpan satu",
+      "record": "Catat sebagai salinannya",
+      "forget": "Lupakan",
+      "convert": "Remux ke MKV",
+      "join": "Gabungkan bagian",
+      "removeDirs": "Hapus"
+    },
+    "did": {
+      "rename": "Diganti nama",
+      "setAside": "Disisihkan",
+      "keepOne": "Satu salinan disimpan",
+      "record": "Dicatat",
+      "forget": "Dilupakan",
+      "convert": "Di-remux",
+      "join": "Digabung",
+      "removeDirs": "Dihapus"
+    },
+    "state": {
+      "done": "Selesai",
+      "undone": "Dikembalikan"
+    },
+    "kinds": {
+      "duplicate": {
+        "title": "Lebih dari satu salinan",
+        "hint": "Pilih salinan yang disimpan. Yang lain disisihkan, dan yang disimpan dicatat sebagai salinan judul itu."
+      },
+      "parts": {
+        "title": "Film terpecah",
+        "hint": "Bagian bernama CD1, CD2, Part 1… digabung menjadi satu MKV tanpa encode ulang. Bagian-bagiannya disisihkan setelah file baru diperiksa."
+      },
+      "discImage": {
+        "title": "Image disk",
+        "hint": "Film di image DVD atau Blu-ray (judul terpanjangnya) disalin ke MKV tanpa encode ulang, dan image disisihkan setelah file baru diperiksa. Disk sebuah acara atau image yang bukan milik judul mana pun hanya bisa disisihkan."
+      },
+      "untracked": {
+        "title": "Salinan yang tidak dikenal Box Office",
+        "hint": "Video di folder sebuah judul, atau lepas dan dinamai sesuai judul, yang belum dicatat Box Office. Perbaikan mencatat masing-masing sebagai salinan judul itu, dengan nama sesuai cara Box Office."
+      },
+      "missing": {
+        "title": "File hilang",
+        "hint": "Box Office mencatat ini sebagai salinan judul, tetapi sudah tidak ada di disk. Melupakannya membuat Box Office mencari judul itu lagi."
+      },
+      "naming": {
+        "title": "Nama dan folder",
+        "hint": "Diganti nama menjadi Judul (Tahun), dengan episode di folder Season sebagai Judul (Tahun) - S01E02 - Episode. Subtitle ikut dipindah. Nama yang diawali seperti itu dan menambahkan tag seperti kualitas dibiarkan."
+      },
+      "unknown": {
+        "title": "Video yang bukan episode",
+        "hint": "Video di folder sebuah acara yang tidak dinamai sesuai salah satu episodenya."
+      },
+      "notListed": {
+        "title": "Tidak ada di daftar",
+        "hint": "Folder dan video yang bukan judul mana pun di daftar. Untuk menambahkannya, gunakan Pindai pada folder root di Pengaturan; atau sisihkan."
+      },
+      "leftover": {
+        "title": "Sisa-sisa",
+        "hint": "Sampel, program, pintasan, dan sisa unduhan serta arsip."
+      },
+      "empty": {
+        "title": "Folder kosong",
+        "hint": "Folder yang tidak berisi apa pun."
+      }
+    },
+    "waiting": {
+      "title": "Menunggu persetujuan Anda",
+      "sub": "File asli yang disisihkan perbaikan ada di folder <code>.recycle/problem-files</code> pustaka. File itu tetap di sana sampai Anda menghapusnya selamanya atau mengembalikannya: mengosongkan folder daur ulang tidak menyentuhnya.",
+      "aside": "disisihkan: {{count}} ({{size}})",
+      "asideOne": "disisihkan: {{name}} ({{size}})",
+      "made": "file baru: {{name}}",
+      "moved": "diganti nama: {{count}}",
+      "putBack": "Kembalikan",
+      "deleteOriginals": "Hapus file asli",
+      "ok": "Sudah benar",
+      "confirmTitle": "Hapus file asli selamanya?",
+      "confirmBody": "Ini menghapus {{count}} yang disisihkan ({{size}}) dari folder daur ulang. Tidak bisa dibatalkan.",
+      "cancel": "Batal",
+      "delete": "Hapus selamanya"
+    }
+  },
   "ereaders": {
     "title": "Kirim ke e-reader",
     "intro": "Box Office bisa mengirim ebook lewat email ke Kindle, PocketBook, atau e-reader apa pun yang punya alamat email sendiri: otomatis begitu tiap ebook selesai diunduh, atau dari halaman buku.",
