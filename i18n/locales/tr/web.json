@@ -1885,5 +1885,22 @@
       "mail3": "Başka sağlayıcı: yardım sayfaları giden posta (SMTP) sunucusunu ve bağlantı noktasını listeler. Genellikle STARTTLS ile 587 veya TLS ile 465.",
       "mail4": "Kitaplar gönderdiğiniz adresten gelir, yani okuyucuda onaylamanız gereken adres budur."
     }
+  },
+  "qualityCheck": {
+    "title": "Kalite denetimi",
+    "sub": "Box Office her film ve bölüm dosyasının içine bakarak görüntünün gerçekte ne kadar büyük olduğunu görür ve bir addan yanlış tahmin edilen kaliteleri düzeltir. Kalitesi olmayan dosyalar, profillerinin kabul ettiği en yakın kaliteyi alır. Dosyalar yalnızca okunur, asla değiştirilmez. Bir kopyanın nereden geldiği dosyanın içinden görülemez, bu yüzden bir tahmin asla yükseltme başlatmaz: bir kopyayı yalnızca gerçekten daha küçük bir görüntü daha alt sıraya düşürür.",
+    "checked": "İçine bakılan: {{checked}} / {{files}} dosya",
+    "running": "Şimdi bakılıyor: {{done}} tamam",
+    "unknown": "Hâlâ bilinmeyen: {{count}}",
+    "unreadable": "Okunamayan: {{count}}",
+    "noFFprobe": "Box Office'in çalıştığı yerde ffprobe kurulu değil, bu yüzden dosyaların içine bakılamıyor.",
+    "again": "Tüm dosyalara yeniden bak",
+    "corrections": "Düzeltilen kaliteler",
+    "none": "Henüz hiçbir şey düzeltilmedi.",
+    "wasNow": "Önce {{was}}, şimdi {{now}}",
+    "more": "Burada listelenmeyen: {{count}} tane daha",
+    "correctedFrom": "Dosyanın içine bakıldıktan sonra {{was}} değerinden düzeltildi",
+    "picture": "Görüntü ve ses",
+    "bits": "{{bits}} bit"
   }
 }

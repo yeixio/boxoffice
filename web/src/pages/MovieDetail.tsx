@@ -10,6 +10,7 @@ import { LockedNote } from '../Bulk'
 import { get, patch, post, type Movie } from '../api'
 import { bytes, day, runtime } from '../format'
 import { qualityName, useProfiles, useQualities } from '../hooks'
+import { pictureText } from './QualityCheck'
 import { Badge, Button, Card, ErrorNote, Field, Poster, Select, Spinner, Toggle } from '../ui'
 
 export function MovieDetail() {
@@ -130,7 +131,16 @@ export function MovieDetail() {
               <dt className="text-muted">{t('title.path')}</dt>
               <dd className="break-all font-mono text-xs">{m.file.path}</dd>
               <dt className="text-muted">{t('title.quality')}</dt>
-              <dd>{qualityName(qualities.data, m.file.quality)}</dd>
+              <dd>
+                {qualityName(qualities.data, m.file.quality)}
+                {m.file.guessed !== undefined && <div className="text-xs text-muted">{t('qualityCheck.correctedFrom', { was: qualityName(qualities.data, m.file.guessed) })}</div>}
+              </dd>
+              {m.file.media && !m.file.media.error && (
+                <>
+                  <dt className="text-muted">{t('qualityCheck.picture')}</dt>
+                  <dd>{pictureText(m.file.media, (n) => t('qualityCheck.bits', { bits: n }))}</dd>
+                </>
+              )}
               <dt className="text-muted">{t('title.size')}</dt>
               <dd>{bytes(m.file.size)}</dd>
               <dt className="text-muted">{t('title.added')}</dt>

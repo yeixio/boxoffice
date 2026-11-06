@@ -3,8 +3,11 @@ package store
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 	"errors"
 	"time"
+
+	"github.com/yeixio/boxoffice/internal/quality"
 )
 
 // Movie is a movie on the wanted list.
@@ -45,11 +48,30 @@ type File struct {
 	Size    int64     `json:"size"`
 	Quality int       `json:"quality"`
 	AddedAt time.Time `json:"addedAt"`
+	// Media is what the quality check found inside the file, once it has
+	// looked; Guessed the quality it had before the check corrected it.
+	Media   *quality.Media `json:"media,omitempty"`
+	Guessed *int           `json:"guessed,omitempty"`
+}
+
+// checked fills in what the quality check found, from the media and
+// guessed columns.
+func (f *File) checked(media sql.NullString, guessed sql.NullInt64) {
+	if media.Valid && media.String != "" {
+		var m quality.Media
+		if json.Unmarshal([]byte(media.String), &m) == nil {
+			f.Media = &m
+		}
+	}
+	if guessed.Valid && guessed.Int64 >= 0 {
+		g := int(guessed.Int64)
+		f.Guessed = &g
+	}
 }
 
 const movieCols = `m.id, m.tmdb_id, m.imdb_id, m.title, m.sort_title, m.year, m.overview, m.poster, m.backdrop, m.runtime, m.status,
 	m.in_cinemas, m.digital_release, m.physical_release, m.rating, m.monitored, m.profile_id, m.root_folder, m.path, m.added_at, m.refreshed_at, m.auto_upgrade,
-	f.id, f.path, f.size, f.quality, f.added_at`
+	f.id, f.path, f.size, f.quality, f.added_at, f.media, f.guessed`
 
 const movieFrom = ` FROM movies m LEFT JOIN media_files f ON f.kind = 'movie' AND f.owner_id = m.id`
 
@@ -60,10 +82,11 @@ func scanMovie(r interface{ Scan(...any) error }) (Movie, error) {
 	var added, refreshed int64
 	var fid, fsize, fadded sql.NullInt64
 	var fpath sql.NullString
-	var fq sql.NullInt64
+	var fq, fguessed sql.NullInt64
+	var fmedia sql.NullString
 	err := r.Scan(&m.ID, &m.TMDBID, &m.IMDBID, &m.Title, &m.SortTitle, &m.Year, &m.Overview, &m.Poster, &m.Backdrop, &m.Runtime, &m.Status,
 		&cin, &dig, &phy, &m.Rating, &mon, &m.ProfileID, &m.RootFolder, &m.Path, &added, &refreshed, &m.AutoUpgrade,
-		&fid, &fpath, &fsize, &fq, &fadded)
+		&fid, &fpath, &fsize, &fq, &fadded, &fmedia, &fguessed)
 	if errors.Is(err, sql.ErrNoRows) {
 		return m, ErrNotFound
 	}
@@ -75,6 +98,7 @@ func scanMovie(r interface{ Scan(...any) error }) (Movie, error) {
 	m.AddedAt, m.RefreshedAt = time.Unix(added, 0).UTC(), time.Unix(refreshed, 0).UTC()
 	if fid.Valid {
 		m.File = &File{ID: fid.Int64, Kind: "movie", OwnerID: m.ID, Path: fpath.String, Size: fsize.Int64, Quality: int(fq.Int64), AddedAt: time.Unix(fadded.Int64, 0).UTC()}
+		m.File.checked(fmedia, fguessed)
 	}
 	return m, nil
 }
@@ -416,7 +440,7 @@ func (s *Store) DeleteSeries(ctx context.Context, id int64) error {
 // ---- episodes ----
 
 const episodeCols = `e.id, e.series_id, e.season, e.number, e.title, e.overview, e.air_date, e.monitored,
-	f.id, f.path, f.size, f.quality, f.added_at`
+	f.id, f.path, f.size, f.quality, f.added_at, f.media, f.guessed`
 
 const episodeFrom = ` FROM episodes e LEFT JOIN media_files f ON f.kind = 'episode' AND f.owner_id = e.id`
 
@@ -424,9 +448,9 @@ func scanEpisode(r interface{ Scan(...any) error }) (Episode, error) {
 	var e Episode
 	var air sql.NullInt64
 	var mon int
-	var fid, fsize, fq, fadded sql.NullInt64
-	var fpath sql.NullString
-	err := r.Scan(&e.ID, &e.SeriesID, &e.Season, &e.Number, &e.Title, &e.Overview, &air, &mon, &fid, &fpath, &fsize, &fq, &fadded)
+	var fid, fsize, fq, fadded, fguessed sql.NullInt64
+	var fpath, fmedia sql.NullString
+	err := r.Scan(&e.ID, &e.SeriesID, &e.Season, &e.Number, &e.Title, &e.Overview, &air, &mon, &fid, &fpath, &fsize, &fq, &fadded, &fmedia, &fguessed)
 	if errors.Is(err, sql.ErrNoRows) {
 		return e, ErrNotFound
 	}
@@ -436,6 +460,7 @@ func scanEpisode(r interface{ Scan(...any) error }) (Episode, error) {
 	e.AirDate, e.Monitored = unix(air), mon == 1
 	if fid.Valid {
 		e.File = &File{ID: fid.Int64, Kind: "episode", OwnerID: e.ID, Path: fpath.String, Size: fsize.Int64, Quality: int(fq.Int64), AddedAt: time.Unix(fadded.Int64, 0).UTC()}
+		e.File.checked(fmedia, fguessed)
 	}
 	return e, nil
 }
@@ -508,11 +533,14 @@ func (s *Store) AddFile(ctx context.Context, f File) (File, error) {
 func (s *Store) FileByID(ctx context.Context, id int64) (File, error) {
 	var f File
 	var added int64
-	err := s.row(ctx, "SELECT id, kind, owner_id, path, size, quality, added_at FROM media_files WHERE id = ?", id).
-		Scan(&f.ID, &f.Kind, &f.OwnerID, &f.Path, &f.Size, &f.Quality, &added)
+	var media sql.NullString
+	var guessed sql.NullInt64
+	err := s.row(ctx, "SELECT id, kind, owner_id, path, size, quality, added_at, media, guessed FROM media_files WHERE id = ?", id).
+		Scan(&f.ID, &f.Kind, &f.OwnerID, &f.Path, &f.Size, &f.Quality, &added, &media, &guessed)
 	if errors.Is(err, sql.ErrNoRows) {
 		return f, ErrNotFound
 	}
+	f.checked(media, guessed)
 	f.AddedAt = time.Unix(added, 0).UTC()
 	return f, err
 }

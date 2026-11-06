@@ -1791,5 +1791,22 @@
       "mail3": "Penyedia lain: halaman bantuannya mencantumkan server keluar (SMTP) dan port. Biasanya 587 dengan STARTTLS, atau 465 dengan TLS.",
       "mail4": "Buku dikirim dari alamat yang Anda pakai untuk mengirim, jadi alamat itulah yang disetujui di e-reader."
     }
+  },
+  "qualityCheck": {
+    "title": "Pemeriksaan kualitas",
+    "sub": "Box Office melihat ke dalam setiap file film dan episode untuk mengetahui seberapa besar gambarnya sebenarnya, dan memperbaiki kualitas yang salah ditebak dari nama. File tanpa kualitas mendapat kualitas terdekat yang diterima profilnya. File hanya dibaca, tidak pernah diubah. Asal sebuah salinan tidak terlihat di dalam file, jadi tebakan tidak pernah memicu peningkatan: hanya gambar yang benar-benar lebih kecil yang menurunkan peringkat salinan.",
+    "checked": "Sudah diperiksa: {{checked}} dari {{files}} file",
+    "running": "Sedang memeriksa: {{done}} selesai",
+    "unknown": "Masih tidak diketahui: {{count}}",
+    "unreadable": "Tidak bisa dibaca: {{count}}",
+    "noFFprobe": "ffprobe tidak terpasang di tempat Box Office berjalan, jadi isi file tidak bisa dilihat.",
+    "again": "Periksa ulang semua file",
+    "corrections": "Kualitas yang diperbaiki",
+    "none": "Belum ada yang diperbaiki.",
+    "wasNow": "Dulu {{was}}, sekarang {{now}}",
+    "more": "Tidak ditampilkan di sini: {{count}} lagi",
+    "correctedFrom": "Diperbaiki dari {{was}} setelah melihat isi file",
+    "picture": "Gambar dan suara",
+    "bits": "{{bits}}-bit"
   }
 }

@@ -48,7 +48,27 @@ export type Quality = { id: number; name: string; source: string; resolution: nu
 export type Profile = { id: number; name: string; allowed: number[]; cutoff: number; upgrade: boolean; locked?: boolean }
 export type RootFolder = { id: number; kind: RootKind; path: string; freeSpace: number; accessible: boolean }
 
-export type MediaFile = { id: number; path: string; size: number; quality: number; addedAt: string }
+// FileMedia is what the quality check found inside a file.
+export type FileMedia = {
+  width: number
+  height: number
+  videoCodec?: string
+  bitDepth?: number
+  hdr?: string
+  audioCodec?: string
+  channels?: number
+  bitrate?: number
+  duration?: number
+  error?: string
+}
+// guessed is the quality a file had before the quality check corrected it.
+export type MediaFile = { id: number; path: string; size: number; quality: number; addedAt: string; media?: FileMedia; guessed?: number }
+
+export type QualityCheckState = {
+  status: { running: boolean; done: number; ffprobe: boolean; error?: string; files: number; checked: number; unreadable: number; unknown: number }
+  corrections: { fileId: number; kind: 'movie' | 'series'; titleId: number; title: string; path: string; was: number; now: number; media: FileMedia; at: string }[]
+  more: number
+}
 
 export type Movie = {
   id: number

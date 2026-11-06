@@ -1885,5 +1885,22 @@
       "mail3": "Muu palveluntarjoaja: sen ohjesivuilla kerrotaan lähtevän postin (SMTP) palvelin ja portti. Yleensä 587 ja STARTTLS tai 465 ja TLS.",
       "mail4": "Kirjat tulevat osoitteesta, jolla lähetät, joten se on se, joka hyväksytään lukulaitteessa."
     }
+  },
+  "qualityCheck": {
+    "title": "Laadun tarkistus",
+    "sub": "Box Office katsoo jokaisen elokuva- ja jaksotiedoston sisään nähdäkseen, kuinka suuri sen kuva todella on, ja korjaa laadut, jotka on arvattu väärin nimestä. Tiedostot ilman laatua saavat lähimmän, jonka niiden profiili hyväksyy. Tiedostoja vain luetaan, niitä ei koskaan muuteta. Kopion alkuperä ei näy tiedoston sisältä, joten arvaus ei koskaan käynnistä päivitystä: vain todella pienempi kuva laskee kopion tasoa.",
+    "checked": "Tarkistettu: {{checked}}/{{files}} tiedostoa",
+    "running": "Tarkistetaan: {{done}} valmiina",
+    "unknown": "Yhä tuntemattomia: {{count}}",
+    "unreadable": "Ei voitu lukea: {{count}}",
+    "noFFprobe": "ffprobe ei ole asennettuna siellä, missä Box Office toimii, joten tiedostojen sisään ei voi katsoa.",
+    "again": "Tarkista kaikki tiedostot uudelleen",
+    "corrections": "Korjatut laadut",
+    "none": "Mitään ei ole vielä korjattu.",
+    "wasNow": "Oli {{was}}, nyt {{now}}",
+    "more": "Ei näytetä tässä: {{count}} lisää",
+    "correctedFrom": "Korjattu laadusta {{was}} tiedoston tarkistuksen jälkeen",
+    "picture": "Kuva ja ääni",
+    "bits": "{{bits}}-bittinen"
   }
 }
