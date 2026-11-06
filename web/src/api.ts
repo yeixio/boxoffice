@@ -335,6 +335,21 @@ export type AlertWebhook = { id: string; kind: WebhookKind; name?: string; url?:
 export type AlertSettings = { email: AlertEmail; webhooks: AlertWebhook[]; rules: AlertRules; firing: Alert[]; history: Alert[]; links: boolean; forwarded: boolean }
 export type MetricsSettings = { on: boolean; token?: string; path: string }
 
+// ---- e-readers ----
+
+export type EreaderKind = 'kindle' | 'pocketbook' | 'other'
+export type Ereader = { id: string; name: string; kind: EreaderKind; address: string; auto: boolean }
+export type EreaderMail = { sameAsAlerts: boolean; host: string; port: number; security: 'starttls' | 'tls' | 'none'; username: string; password?: string; from: string; hasPassword?: boolean }
+export type EreaderSend = { id: number; deviceId: string; deviceName: string; bookId?: number; title: string; auto: boolean; error?: string; at: string }
+export type EreaderSettings = {
+  mail: EreaderMail
+  devices: Ereader[]
+  alertMail: { ready: boolean; host?: string; from?: string }
+  from: string
+  canConvert: boolean
+  history: EreaderSend[]
+}
+
 // ---- downloads ----
 
 export type DownloadStatus = 'queued' | 'downloading' | 'paused' | 'downloaded' | 'verifying' | 'repairing' | 'unpacking' | 'importing' | 'completed' | 'failed'

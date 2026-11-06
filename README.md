@@ -75,6 +75,7 @@ Open http://localhost:7272 and make the admin account. To have it file things in
 - **Choose a copy yourself.** Every movie, episode and season has **Choose a release**: the results from every connected indexer, with their quality, size and age, and why any were turned down.
 - **Removes titles cleanly.** Removing a movie, show, season or episode can also delete its files from disk. You see the folder, the number of files and their size first, and Box Office deletes only what it showed you.
 - **Sorts and filters** movies and shows by title, rating, size on disk, date added, and for shows by the next or last episode, remembered per list.
+- **Ebooks straight to your e-reader.** Each ebook Box Office downloads can be emailed to your Kindle, PocketBook or any reader with an email address, as soon as it's in the library. See [Sending ebooks to e-readers](docs/ereaders.md).
 - **Health.** A check-up of the things that stop Box Office working (disks, folders it can't write to, indexers, news servers), live charts of the processor, memory, requests and download speed, the log with a debug switch, and alerts. Prometheus metrics are at `/metrics` once you make a token.
 - **Backups** of its database on a schedule, to its own disk and optionally to another folder (such as a NAS share) or S3-compatible storage (AWS S3, Backblaze B2, Cloudflare R2, MinIO). A passphrase encrypts them. Restore from the Backups page.
 - **Works on a phone.** Every page is built to work at phone width, in light and dark.
@@ -237,6 +238,7 @@ Most settings live in the web UI under **Settings**. The server itself takes a f
 | `BOXOFFICE_REFRESH_EVERY` | `-refresh-every` | `12h` | How often titles are refreshed from TMDB (at least `1h`) |
 | `BOXOFFICE_MUSICBRAINZ_URL` | | `https://musicbrainz.org/ws/2` | A MusicBrainz mirror to look music up on, if you run one |
 | `BOXOFFICE_OPENLIBRARY_URL` | | `https://openlibrary.org` | Another Open Library to look books up on, if you run one |
+| `BOXOFFICE_EBOOK_CONVERT` | | `ebook-convert` on the `PATH`, if there | Calibre's `ebook-convert`, so ebooks a Kindle won't take by email (AZW3, MOBI) are turned into EPUB before they're sent. See [Sending ebooks to e-readers](docs/ereaders.md) |
 | `BOXOFFICE_LOG_FORMAT` | `-log-format` | `text` | `text` or `json` |
 | `BOXOFFICE_DEBUG` | `-debug` | off | Log more. The Health page can also switch debug logging on and off while it runs |
 
@@ -320,6 +322,12 @@ Yes. The image is built for `linux/amd64` and `linux/arm64` and uses little memo
 <summary><b>Is there music, books or a request page of its own?</b></summary>
 
 Yes. Music (in place of Lidarr), ebooks and audiobooks (in place of Readarr) each turn on in Settings, and the request site at `/request` is for people who don't use Matinee. Lidarr's artists and Readarr's authors come across with Move in.
+</details>
+
+<details>
+<summary><b>Can it send ebooks to my Kindle or PocketBook?</b></summary>
+
+Yes. In **Settings → Send to e-readers**, paste your reader's Send to Kindle or Send-to-PocketBook address and approve Box Office as a sender. Each ebook it downloads is then emailed to the reader, and any book can be sent from its page. Kobo readers can't receive books by email. [Sending ebooks to e-readers](docs/ereaders.md) walks through it step by step.
 </details>
 
 <details>

@@ -540,6 +540,8 @@ func (e *Engine) ImportPath(ctx context.Context, p, kind string, titleID int64) 
 			e.Log.Warn("couldn't move a folder into the library", "path", rel, "err", err)
 		} else {
 			e.Log.Info("moved into the library by hand", "path", rel, "to", to)
+			d.ImportedTo = to
+			e.imported(bg, d)
 			if info.IsDir() {
 				// What's left (extras, samples, .nfo files) goes, as it
 				// does after a download is moved in.

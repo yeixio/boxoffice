@@ -9,6 +9,7 @@ import { bytes, day } from '../format'
 import { Releases } from '../Releases'
 import { useRootFolders } from '../hooks'
 import { SortControl, sortList, useSort, words, type SortOption } from '../sort'
+import { SendToReader } from './Ereaders'
 import { Badge, Button, Card, Empty, ErrorNote, Heading, Input, Modal, Spinner, Toggle } from '../ui'
 
 // Ebooks and audiobooks share one list of authors and books; each page
@@ -471,6 +472,7 @@ function BookDialog({
             </Button>
           </div>
         )}
+        {format === 'ebook' && <SendToReader book={b} />}
         {search.isSuccess && <p className="text-sm text-muted">{t(`books.${format}.searching`)}</p>}
         {!file && on && !locked && !search.isSuccess && <p className="text-sm text-muted">{t('books.alsoLooks')}</p>}
         <ErrorNote error={search.error} />

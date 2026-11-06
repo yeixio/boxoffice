@@ -29,6 +29,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/books"
 	"github.com/yeixio/boxoffice/internal/catalog"
 	"github.com/yeixio/boxoffice/internal/downloader"
+	"github.com/yeixio/boxoffice/internal/ereader"
 	"github.com/yeixio/boxoffice/internal/libscan"
 	"github.com/yeixio/boxoffice/internal/migrate"
 	"github.com/yeixio/boxoffice/internal/music"
@@ -75,7 +76,10 @@ type Server struct {
 	// Monitoring is the Health page's server section and the alerts (see
 	// monitor.go); nil makes one with no log lines.
 	Monitoring *Monitoring
+	// Ereaders sends ebooks to e-readers; nil makes one.
+	Ereaders *ereader.Service
 
+	ereaderOnce sync.Once
 	started     time.Time
 	failures    sync.Map // username -> *failure
 	healthCount healthCount
@@ -164,6 +168,10 @@ func (s *Server) Handler() http.Handler {
 		{"GET /api/v1/books/{id}", true, s.book},
 		{"GET /api/v1/books/{id}/releases", true, s.bookReleases},
 		{"POST /api/v1/books/{id}/search", true, s.searchBook},
+		{"POST /api/v1/books/{id}/send", true, s.sendBook},
+		{"GET /api/v1/ereaders", true, s.getEreaders},
+		{"PUT /api/v1/ereaders", true, s.putEreaders},
+		{"POST /api/v1/ereaders/{id}/test", true, s.testEreader},
 
 		{"GET /api/v1/lookup/movies", true, s.lookupMovies},
 		{"GET /api/v1/lookup/series", true, s.lookupSeries},

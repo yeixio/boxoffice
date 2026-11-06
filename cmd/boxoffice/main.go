@@ -17,6 +17,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/yeixio/boxoffice/internal/alerts"
 	"github.com/yeixio/boxoffice/internal/announce"
 	"github.com/yeixio/boxoffice/internal/api"
 	"github.com/yeixio/boxoffice/internal/backup"
@@ -24,6 +25,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/catalog"
 	"github.com/yeixio/boxoffice/internal/config"
 	"github.com/yeixio/boxoffice/internal/downloader"
+	"github.com/yeixio/boxoffice/internal/ereader"
 	"github.com/yeixio/boxoffice/internal/jobs"
 	"github.com/yeixio/boxoffice/internal/kube"
 	"github.com/yeixio/boxoffice/internal/libscan"
@@ -153,6 +155,18 @@ func run() error {
 		Monitoring: mon,
 	}
 	alerter := srv.Alerts()
+	// Ebooks go to the e-readers set to get them as they download.
+	readers := &ereader.Service{Store: db, Log: log, Convert: cfg.EbookConvert,
+		AlertMail: func(ctx context.Context) (alerts.Email, error) {
+			c, err := alerter.Config(ctx)
+			return c.Email, err
+		}}
+	srv.Ereaders = readers
+	downloads.Imported = func(ctx context.Context, d store.Download) {
+		if d.Kind == store.Ebook {
+			go readers.Imported(ctx, d)
+		}
+	}
 	// Admin alerts reach Matinee's admins too, with download news.
 	alerter.Forward = notes.Alert
 	backups.Failed = alerter.BackupFailed

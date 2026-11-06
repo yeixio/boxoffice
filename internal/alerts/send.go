@@ -244,6 +244,17 @@ func (m *Manager) email(ctx context.Context, e Email, a Alert) error {
 func sendMail(ctx context.Context, e Email, subject, body string) error {
 	from, _ := mail.ParseAddress(e.From)
 	to, _ := mail.ParseAddressList(e.To)
+	var rcpt []string
+	for _, t := range to {
+		rcpt = append(rcpt, t.Address)
+	}
+	return Deliver(ctx, e, from.Address, rcpt, message(from, to, subject, body))
+}
+
+// Deliver sends a ready-made message through e's mail server, from one
+// address to others. Only the server settings of e are used: its From and
+// To are not.
+func Deliver(ctx context.Context, e Email, from string, to []string, msg []byte) error {
 	addr := net.JoinHostPort(e.Host, strconv.Itoa(e.Port))
 	tlsConfig := &tls.Config{ServerName: e.Host}
 
@@ -286,11 +297,11 @@ func sendMail(ctx context.Context, e Email, subject, body string) error {
 			return err
 		}
 	}
-	if err := c.Mail(from.Address); err != nil {
+	if err := c.Mail(from); err != nil {
 		return err
 	}
 	for _, t := range to {
-		if err := c.Rcpt(t.Address); err != nil {
+		if err := c.Rcpt(t); err != nil {
 			return err
 		}
 	}
@@ -298,7 +309,7 @@ func sendMail(ctx context.Context, e Email, subject, body string) error {
 	if err != nil {
 		return err
 	}
-	if _, err := w.Write(message(from, to, subject, body)); err != nil {
+	if _, err := w.Write(msg); err != nil {
 		return err
 	}
 	if err := w.Close(); err != nil {
