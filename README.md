@@ -57,7 +57,7 @@ Box Office is a library manager. It doesn't come with any content, indexers or n
 ## Try it in one line
 
 ```sh
-mkdir -p data && docker run -d --name boxoffice -p 7272:7272 --user "$(id -u):$(id -g)" -v ./data:/data ghcr.io/yeixio/boxoffice:main
+mkdir -p data && docker run -d --name boxoffice -p 7272:7272 --user "$(id -u):$(id -g)" -v ./data:/data ghcr.io/yeixio/boxoffice:latest
 ```
 
 Open http://localhost:7272 and make the admin account. To have it file things into your library, mount your folders too: see [Docker](#docker).
@@ -121,7 +121,7 @@ Each release is a GitHub release with its notes, tagged `vX.Y.Z`, and publishes 
 | `ghcr.io/yeixio/boxoffice:0.2.0`, `:0.2` | One release, or the newest in a minor version. |
 | `ghcr.io/yeixio/boxoffice:main` | What just merged to `main`. Newer, but less tried; for testing. |
 
-Pre-releases (`v0.2.0-beta.1`) get their own tag and leave `latest` alone. The Helm chart is published with each release as `oci://ghcr.io/yeixio/charts/boxoffice`, and defaults to that release's image. Until the first release is out, use `main`.
+Pre-releases (`v0.2.0-beta.1`) get their own tag and leave `latest` alone. The Helm chart is published with each release as `oci://ghcr.io/yeixio/charts/boxoffice`, and defaults to that release's image.
 
 ### Docker
 
@@ -134,7 +134,7 @@ docker run -d --name boxoffice \
   -v /path/to/tv:/media/tv \
   -v /path/to/downloads:/downloads \
   -e BOXOFFICE_DOWNLOADS_DIR=/downloads \
-  ghcr.io/yeixio/boxoffice:main
+  ghcr.io/yeixio/boxoffice:latest
 ```
 
 Open http://localhost:7272, make the admin account, then in **Settings**:
@@ -162,12 +162,13 @@ Box Office is at http://localhost:7272 and Matinee at http://localhost:7171. In 
 
 ### Kubernetes
 
-The Helm chart is in [`deploy/helm/boxoffice`](deploy/helm/boxoffice):
+Each release publishes the Helm chart (its source is in [`deploy/helm/boxoffice`](deploy/helm/boxoffice)):
 
 ```sh
-git clone https://github.com/yeixio/boxoffice.git
-helm install boxoffice boxoffice/deploy/helm/boxoffice --set image.tag=main -f my-values.yaml
+helm install boxoffice oci://ghcr.io/yeixio/charts/boxoffice -f my-values.yaml
 ```
+
+Add `--version 0.1.0` to pin a release; the chart runs the image of the same version.
 
 A small `my-values.yaml`:
 
@@ -195,7 +196,7 @@ ingress:
 
 The chart runs one pod with SQLite on its own volume by default. Set `postgresql.enabled=true` for a bundled PostgreSQL (its password is made into a Secret on first install, so it works the same under Argo CD or Flux), or `database.url` for your own. Set `apiKey.existingSecret` and `tmdb.existingSecret` to manage keys with the cluster. Mount the same volumes Matinee reads, at the same paths. Everything else is in [`values.yaml`](deploy/helm/boxoffice/values.yaml).
 
-`image.tag=main` is needed until the first release is tagged; the chart otherwise defaults to its `appVersion`. A reverse proxy or ingress in front of Box Office should allow long requests (an hour is plenty), because a big Move in preview takes a while.
+Set `image.tag=main` to follow `main` instead. A reverse proxy or ingress in front of Box Office should allow long requests (an hour is plenty), because a big Move in preview takes a while.
 
 ### From source
 
