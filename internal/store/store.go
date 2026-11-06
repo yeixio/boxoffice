@@ -74,6 +74,11 @@ func (s *Store) Ping(ctx context.Context) error { return s.db.PingContext(ctx) }
 var backfill = map[string]string{
 	// Downloads that failed for articles gone from the news servers, from
 	// before they were marked, by what they said.
+	// Downloads fetched whole, from before that was recorded: all but
+	// those that failed while still fetching, by what they said.
+	"downloads.fetched": `UPDATE downloads SET fetched = 1 WHERE status = 'completed' OR (status = 'failed' AND missing = 0
+		AND message NOT LIKE 'Close %' AND message NOT LIKE 'Write %' AND message NOT LIKE 'Open %'
+		AND message NOT LIKE '%couldn''t make a file%' AND message NOT LIKE '%stopped answering%' AND message NOT LIKE '%NZB for this download is gone%')`,
 	"downloads.missing": "UPDATE downloads SET missing = 1 WHERE status = 'failed' AND quarantined = '' AND (message LIKE '%gone from your news servers%' OR message LIKE '%missing from your news servers%' OR message LIKE '%blocks are damaged%')",
 }
 
@@ -111,6 +116,7 @@ func (s *Store) migrate(ctx context.Context) error {
 		{"downloads", "mode", "TEXT NOT NULL DEFAULT ''"},
 		{"authors", "locked", "INTEGER NOT NULL DEFAULT 0"},
 		{"downloads", "missing", "INTEGER NOT NULL DEFAULT 0"},
+		{"downloads", "fetched", "INTEGER NOT NULL DEFAULT 0"},
 	} {
 		if _, err := s.db.ExecContext(ctx, "SELECT "+c.column+" FROM "+c.table+" WHERE 1 = 0"); err != nil {
 			if _, err := s.db.ExecContext(ctx, "ALTER TABLE "+c.table+" ADD COLUMN "+c.column+" "+c.def); err != nil {

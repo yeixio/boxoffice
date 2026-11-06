@@ -51,6 +51,9 @@ type Download struct {
 	// Missing says it failed because too much of it is gone from the news
 	// servers to repair: nothing to fix, so it's kept out of sight.
 	Missing bool `json:"missing,omitempty"`
+	// Fetched says every file it needed was downloaded, so it can be
+	// checked and unpacked again without downloading.
+	Fetched bool `json:"-"`
 	// CanReprocess says its files are still there to check and unpack
 	// again, without downloading them again. It's worked out, not stored.
 	CanReprocess bool `json:"canReprocess,omitempty"`
@@ -74,14 +77,14 @@ type Download struct {
 func (d Download) Finished() bool { return d.Status == DownloadCompleted || d.Status == DownloadFailed }
 
 const downloadCols = `id, name, status, kind, title_id, episode_ids, quality, indexer, source, password, size, done_bytes, failed_bytes,
-	done_files, position, folder, message, imported_to, quarantined, added_at, started_at, finished_at, edition, mode, missing`
+	done_files, position, folder, message, imported_to, quarantined, added_at, started_at, finished_at, edition, mode, missing, fetched`
 
 func scanDownload(r interface{ Scan(...any) error }) (Download, error) {
 	var d Download
 	var eps, files string
 	var added, started, finished int64
 	err := r.Scan(&d.ID, &d.Name, &d.Status, &d.Kind, &d.TitleID, &eps, &d.Quality, &d.Indexer, &d.Source, &d.Password, &d.Size,
-		&d.DoneBytes, &d.FailedBytes, &files, &d.Position, &d.Folder, &d.Message, &d.ImportedTo, &d.Quarantined, &added, &started, &finished, &d.Edition, &d.Mode, &d.Missing)
+		&d.DoneBytes, &d.FailedBytes, &files, &d.Position, &d.Folder, &d.Message, &d.ImportedTo, &d.Quarantined, &added, &started, &finished, &d.Edition, &d.Mode, &d.Missing, &d.Fetched)
 	if errors.Is(err, sql.ErrNoRows) {
 		return d, ErrNotFound
 	}
@@ -226,6 +229,12 @@ func nameWords(q string) []string {
 	})
 }
 
+// SetDownloadFetched records that a download has all the files it needs.
+func (s *Store) SetDownloadFetched(ctx context.Context, id int64) error {
+	_, err := s.exec(ctx, "UPDATE downloads SET fetched = 1 WHERE id = ?", id)
+	return err
+}
+
 // SetDownloadMissing marks a download as failed for articles gone from the
 // news servers.
 func (s *Store) SetDownloadMissing(ctx context.Context, id int64) error {
@@ -284,7 +293,7 @@ func (s *Store) ResetDownload(ctx context.Context, id int64) error {
 	if err := s.row(ctx, "SELECT COALESCE(MAX(position), 0) FROM downloads").Scan(&pos); err != nil {
 		return err
 	}
-	res, err := s.exec(ctx, `UPDATE downloads SET status = 'queued', message = '', done_bytes = 0, failed_bytes = 0, done_files = '[]', quarantined = '', missing = 0,
+	res, err := s.exec(ctx, `UPDATE downloads SET status = 'queued', message = '', done_bytes = 0, failed_bytes = 0, done_files = '[]', quarantined = '', missing = 0, fetched = 0,
 		started_at = 0, finished_at = 0, position = ? WHERE id = ?`, pos+1, id)
 	if err != nil {
 		return err

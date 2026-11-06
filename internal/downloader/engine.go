@@ -255,7 +255,10 @@ func (e *Engine) Retry(ctx context.Context, id int64) error {
 // folder, so it can be checked, repaired and unpacked again without
 // downloading it again.
 func (e *Engine) CanReprocess(d store.Download) bool {
-	if d.Status != store.DownloadFailed || d.Quarantined != "" || len(d.DoneFiles) == 0 || d.Folder == "" {
+	// One that failed before all its files came, or for articles gone
+	// from the news servers, has nothing whole to unpack: only
+	// downloading it again can help.
+	if d.Status != store.DownloadFailed || d.Quarantined != "" || !d.Fetched || d.Missing || len(d.DoneFiles) == 0 || d.Folder == "" {
 		return false
 	}
 	if _, err := os.Stat(e.nzbPath(d.ID)); err != nil {
@@ -679,6 +682,8 @@ func (e *Engine) process(ctx context.Context, r *running, d store.Download, srv 
 	defer finish()
 	job, err := e.fetch(ctx, r, &d, srv)
 	if err == nil {
+		d.Fetched = true
+		e.Store.SetDownloadFetched(context.WithoutCancel(ctx), d.ID)
 		// The next download starts while this one is checked and unpacked.
 		e.mu.Lock()
 		if e.current == r {
