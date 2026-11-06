@@ -2,6 +2,7 @@ package search
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log/slog"
@@ -152,5 +153,31 @@ func TestParsing(t *testing.T) {
 	}
 	if !titleMatches("The.Office.US.S01E01", "The Office") || titleMatches("The.Officer.S01E01", "The Office") {
 		t.Error("title matching")
+	}
+}
+
+// A search that finds nothing sends an empty list, not null: the web page
+// counts the releases, and null left it blank.
+func TestResultsNoReleasesIsEmptyList(t *testing.T) {
+	b, err := json.Marshal(Results{Searched: 2})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got, want := string(b), `{"releases":[],"searched":2}`; got != want {
+		t.Fatalf("got %s, want %s", got, want)
+	}
+	b, err = json.Marshal(Results{Releases: []Candidate{{Key: "k", Accepted: true}}, Errors: []string{"x"}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	var back struct {
+		Releases []map[string]any `json:"releases"`
+		Errors   []string         `json:"errors"`
+	}
+	if err := json.Unmarshal(b, &back); err != nil {
+		t.Fatal(err)
+	}
+	if len(back.Releases) != 1 || back.Releases[0]["key"] != "k" || len(back.Errors) != 1 {
+		t.Fatalf("got %s", b)
 	}
 }
