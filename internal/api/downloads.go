@@ -178,8 +178,10 @@ func (s *Server) downloads(w http.ResponseWriter, r *http.Request) error {
 	offset, _ := strconv.Atoi(q.Get("historyOffset"))
 	// Failures for missing articles are hidden unless asked for, as NZBGet
 	// does: there's nothing to do about them.
-	history, historyTotal, historyHidden, err := s.Store.DownloadHistoryPage(ctx, q.Get("historySort"), q.Get("historyDir") == "asc",
-		q.Get("historyMissing") == "true", offset, limit)
+	history, historyTotal, historyHidden, err := s.Store.DownloadHistoryPage(ctx, store.HistoryPage{
+		Sort: q.Get("historySort"), Asc: q.Get("historyDir") == "asc", Missing: q.Get("historyMissing") == "true",
+		Query: q.Get("historyQuery"), Offset: offset, Limit: limit,
+	})
 	if err != nil {
 		return err
 	}

@@ -1558,6 +1558,8 @@
     "history": "Historia",
     "clear": "Borrar historial",
     "noHistory": "Las descargas terminadas aparecen aquí.",
+    "search": "Buscar descargas",
+    "noMatch": "Nada coincide con «{{query}}».",
     "showMissing": "Mostrar incompletas ({{count}})",
     "hideMissing": "Ocultar incompletas",
     "missingHint": "Versiones demasiado incompletas en los servidores de noticias para repararlas. Box Office bloqueó cada una y buscó otra, así que no hay nada que hacer.",

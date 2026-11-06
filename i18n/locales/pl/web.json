@@ -1649,6 +1649,8 @@
     "history": "Historyczny",
     "clear": "Wyczyść historię",
     "noHistory": "Tutaj pojawiają się ukończone pobrania.",
+    "search": "Szukaj pobrań",
+    "noMatch": "Nic nie pasuje do „{{query}}”.",
     "showMissing": "Pokaż niekompletne ({{count}})",
     "hideMissing": "Ukryj niekompletne",
     "missingHint": "Wydania, którym na serwerach news brakuje zbyt wiele, by je naprawić. Box Office zablokował każde i poszukał innego, więc nie trzeba nic robić.",

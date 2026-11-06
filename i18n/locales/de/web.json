@@ -1467,6 +1467,8 @@
     "history": "Historie",
     "clear": "Verlauf leeren",
     "noHistory": "Fertige Downloads erscheinen hier.",
+    "search": "Downloads durchsuchen",
+    "noMatch": "Nichts passt zu „{{query}}“.",
     "showMissing": "Unvollständige zeigen ({{count}})",
     "hideMissing": "Unvollständige ausblenden",
     "missingHint": "Releases, denen auf den Newsservern zu viel fehlt, um sie zu reparieren. Box Office hat jedes gesperrt und nach einem anderen gesucht, es gibt also nichts zu tun.",

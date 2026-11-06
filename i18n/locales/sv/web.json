@@ -1467,6 +1467,8 @@
     "history": "Historia",
     "clear": "Rensa historiken",
     "noHistory": "Färdiga nedladdningar visas här.",
+    "search": "Sök nedladdningar",
+    "noMatch": "Inget matchar ”{{query}}”.",
     "showMissing": "Visa ofullständiga ({{count}})",
     "hideMissing": "Dölj ofullständiga",
     "missingHint": "Utgåvor som saknar för mycket på nyhetsservrarna för att kunna repareras. Box Office blockerade var och en och letade efter en annan, så det finns inget att göra.",

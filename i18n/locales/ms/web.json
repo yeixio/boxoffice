@@ -1376,6 +1376,8 @@
     "history": "Sejarah",
     "clear": "Kosongkan sejarah",
     "noHistory": "Muat turun yang selesai dipaparkan di sini.",
+    "search": "Cari muat turun",
+    "noMatch": "Tiada yang sepadan dengan “{{query}}”.",
     "showMissing": "Tunjukkan yang tidak lengkap ({{count}})",
     "hideMissing": "Sembunyikan yang tidak lengkap",
     "missingHint": "Keluaran yang terlalu tidak lengkap pada pelayan berita untuk dibaiki. Box Office menyekat setiap satu dan mencari yang lain, jadi tiada apa yang perlu dibuat.",

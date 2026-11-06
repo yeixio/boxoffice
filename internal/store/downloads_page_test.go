@@ -30,24 +30,24 @@ func TestDownloadHistoryPage(t *testing.T) {
 		}
 		return fmt.Sprint(out)
 	}
-	list, total, _, err := st.DownloadHistoryPage(ctx, "name", true, false, 0, 2)
+	list, total, _, err := st.DownloadHistoryPage(ctx, store.HistoryPage{Sort: "name", Asc: true, Missing: false, Offset: 0, Limit: 2})
 	if err != nil || total != 5 || names(list) != "[Alpha bravo]" {
 		t.Fatalf("%s %d %v", names(list), total, err)
 	}
-	list, _, _, _ = st.DownloadHistoryPage(ctx, "name", true, false, 4, 2)
+	list, _, _, _ = st.DownloadHistoryPage(ctx, store.HistoryPage{Sort: "name", Asc: true, Missing: false, Offset: 4, Limit: 2})
 	if names(list) != "[echo]" {
 		t.Fatal(names(list))
 	}
-	list, _, _, _ = st.DownloadHistoryPage(ctx, "size", false, false, 0, 2)
+	list, _, _, _ = st.DownloadHistoryPage(ctx, store.HistoryPage{Sort: "size", Asc: false, Missing: false, Offset: 0, Limit: 2})
 	if names(list) != "[echo delta]" {
 		t.Fatal(names(list))
 	}
-	list, _, _, _ = st.DownloadHistoryPage(ctx, "status", true, false, 0, 1)
+	list, _, _, _ = st.DownloadHistoryPage(ctx, store.HistoryPage{Sort: "status", Asc: true, Missing: false, Offset: 0, Limit: 1})
 	if names(list) != "[delta]" {
 		t.Fatal(names(list))
 	}
 	// An unknown sort is newest first, never SQL.
-	if _, _, _, err := st.DownloadHistoryPage(ctx, "id; DROP TABLE downloads", true, false, 0, 2); err != nil {
+	if _, _, _, err := st.DownloadHistoryPage(ctx, store.HistoryPage{Sort: "id; DROP TABLE downloads", Asc: true, Missing: false, Offset: 0, Limit: 2}); err != nil {
 		t.Fatal(err)
 	}
 	// Failures for missing articles are hidden unless asked for.
@@ -57,12 +57,32 @@ func TestDownloadHistoryPage(t *testing.T) {
 			st.SetDownloadMissing(ctx, d.ID)
 		}
 	}
-	list, total, hidden, err := st.DownloadHistoryPage(ctx, "name", true, false, 0, 10)
+	list, total, hidden, err := st.DownloadHistoryPage(ctx, store.HistoryPage{Sort: "name", Asc: true, Missing: false, Offset: 0, Limit: 10})
 	if err != nil || total != 4 || hidden != 1 || names(list) != "[Alpha bravo charlie echo]" {
 		t.Fatalf("%s %d %d %v", names(list), total, hidden, err)
 	}
-	list, total, hidden, _ = st.DownloadHistoryPage(ctx, "name", true, true, 0, 10)
+	list, total, hidden, _ = st.DownloadHistoryPage(ctx, store.HistoryPage{Sort: "name", Asc: true, Missing: true, Offset: 0, Limit: 10})
 	if total != 5 || hidden != 0 || !list[3].Missing {
 		t.Fatalf("%s %d %d", names(list), total, hidden)
+	}
+	// A search keeps those with every word, however the name spells
+	// its spaces; % and _ are just characters.
+	for _, name := range []string{"Bobs.Burgers.S01E08.DVDRip", "Bobs_Burgers_S02E01", "Other.Show.S01E08", "100%_Pure"} {
+		d, _ := st.AddDownload(ctx, store.Download{Name: name})
+		st.SetDownloadStatus(ctx, d.ID, store.DownloadCompleted, "")
+	}
+	for q, want := range map[string]string{
+		"bobs burgers":   "[Bobs.Burgers.S01E08.DVDRip Bobs_Burgers_S02E01]",
+		"Burgers s01e08": "[Bobs.Burgers.S01E08.DVDRip]",
+		"s01e08":         "[Bobs.Burgers.S01E08.DVDRip Other.Show.S01E08]",
+		"100%":           "[100%_Pure]",
+		"0%":             "[100%_Pure]",
+		"%":              "[100%_Pure]",
+	} {
+		list, _, _, err := st.DownloadHistoryPage(ctx, store.HistoryPage{Sort: "name", Asc: true, Query: q, Limit: 20})
+		got := names(list)
+		if err != nil || got != want {
+			t.Errorf("%q: %s %v", q, got, err)
+		}
 	}
 }
