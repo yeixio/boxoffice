@@ -1213,10 +1213,11 @@
       "radarr": "Film, file-nya, profil kualitas, pengindeks, klien unduhan, dan setiap pengaturan lainnya.",
       "sonarr": "Acara, musim, episode dan file-nya, profil, pengindeks, klien unduhan, dan pengaturan.",
       "nzbget": "Server berita beserta info masuknya, kategori, dan pengaturan lainnya.",
-      "lidarr": "Artis, album mereka dan letaknya di disk, indexer, klien unduhan, dan daftar blokir."
+      "lidarr": "Artis, album mereka dan letaknya di disk, indexer, klien unduhan, dan daftar blokir.",
+      "readarr": "Penulis, buku yang diinginkan sebagai ebook atau buku audio dan letaknya di disk, indexer, klien unduhan, dan daftar blokir."
     },
     "title": "Pindahan",
-    "sub": "Bawa semuanya dari Radarr, Sonarr, Lidarr, atau NZBGet, langkah demi langkah. Aplikasi lama hanya dibaca, jadi tidak ada yang berubah di dalamnya.",
+    "sub": "Bawa semuanya dari Radarr, Sonarr, Lidarr, Readarr, atau NZBGet, langkah demi langkah. Aplikasi lama hanya dibaca, jadi tidak ada yang berubah di dalamnya.",
     "steps": "Langkah",
     "background": "Di latar belakang",
     "look": {
@@ -1240,7 +1241,8 @@
       "key3": "Di bawah <b>Security</b>, salin <b>API Key</b> dan tempel di atas.",
       "go": "Hubungkan dan tinjau",
       "onlyReads": "Ini hanya membaca. Tidak ada yang berubah di sini atau di {{app}} sampai Anda mengonfirmasi di langkah berikutnya.",
-      "lidarrOff": "Pindah dari Lidarr? Aktifkan Musik di <link>Pengaturan</link> dulu."
+      "lidarrOff": "Pindah dari Lidarr? Aktifkan Musik di <link>Pengaturan</link> dulu.",
+      "readarrOff": "Pindah dari Readarr? Aktifkan Ebook atau Buku audio di <link>Pengaturan</link> dulu."
     },
     "maps": {
       "title": "Pemetaan jalur (biasanya tidak perlu)",
@@ -1264,7 +1266,8 @@
       "clients": "klien unduhan",
       "blocklist": "rilis yang diblokir",
       "lists": "notifikasi dan daftar",
-      "newArtists": "artis baru"
+      "newArtists": "artis baru",
+      "newAuthors": "penulis baru"
     },
     "review": {
       "profiles": "Profil kualitas",
@@ -1287,7 +1290,8 @@
       "hidden_other": "Diperlukan untuk {{count}} kata sandi dan kunci API yang disembunyikan {{app}} dari aplikasi lain.",
       "confirm": "Konfirmasi dan pindah",
       "nothing": "Tidak ada yang berubah di {{app}}. File tetap berada di tempatnya.",
-      "lidarrQuality": "Profil kualitas Lidarr tidak ikut: musik di Box Office punya pengaturan kualitas sendiri, di Musik."
+      "lidarrQuality": "Profil kualitas Lidarr tidak ikut: musik di Box Office punya pengaturan kualitas sendiri, di Musik.",
+      "readarrQuality": "Profil kualitas Readarr tidak ikut: Box Office mengutamakan EPUB untuk ebook dan M4B untuk buku audio. Setiap folder root menunjukkan apakah isinya ebook atau buku audio, dilihat dari berkasnya."
     },
     "status": {
       "done": "selesai",

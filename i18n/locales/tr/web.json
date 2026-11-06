@@ -1300,10 +1300,11 @@
       "radarr": "Filmler, dosyaları, kalite profilleri, dizinleyiciler, indirme istemcileri ve diğer tüm ayarlar.",
       "sonarr": "Diziler, sezonlar, bölümler ve dosyaları, profiller, dizinleyiciler, indirme istemcileri ve ayarlar.",
       "nzbget": "Giriş bilgileriyle haber sunucuları, kategoriler ve diğer ayarları.",
-      "lidarr": "Sanatçılar, albümleri ve diskteki yerleri, dizinleyiciler, indirme istemcileri ve engel listesi."
+      "lidarr": "Sanatçılar, albümleri ve diskteki yerleri, dizinleyiciler, indirme istemcileri ve engel listesi.",
+      "readarr": "Yazarlar, e-kitap ya da sesli kitap olarak istediği kitaplar ve diskteki yerleri, dizinleyiciler, indirme istemcileri ve engel listesi."
     },
     "title": "Taşınma",
-    "sub": "Radarr, Sonarr, Lidarr veya NZBGet'ten her şeyi adım adım getirin. Eski uygulamadan yalnızca okunur, bu yüzden içinde hiçbir şey değişmez.",
+    "sub": "Radarr, Sonarr, Lidarr, Readarr veya NZBGet'ten her şeyi adım adım getirin. Eski uygulamadan yalnızca okunur, bu yüzden içinde hiçbir şey değişmez.",
     "steps": "Adımlar",
     "background": "Arka planda",
     "look": {
@@ -1327,7 +1328,8 @@
       "key3": "<b>Security</b> altında <b>API Key</b> değerini kopyalayın ve yukarıya yapıştırın.",
       "go": "Bağlan ve incele",
       "onlyReads": "Bu yalnızca okur. Bir sonraki adımda onaylayana kadar burada veya {{app}} içinde hiçbir şey değişmez.",
-      "lidarrOff": "Lidarr'dan mı taşınıyorsunuz? Önce <link>Ayarlar</link> altında Müzik'i açın."
+      "lidarrOff": "Lidarr'dan mı taşınıyorsunuz? Önce <link>Ayarlar</link> altında Müzik'i açın.",
+      "readarrOff": "Readarr'dan mı taşınıyorsunuz? Önce <link>Ayarlar</link> altında E-kitaplar'ı ya da Sesli kitaplar'ı açın."
     },
     "maps": {
       "title": "Yol eşlemeleri (genellikle gerekmez)",
@@ -1351,7 +1353,8 @@
       "clients": "indirme istemcileri",
       "blocklist": "engellenen sürümler",
       "lists": "bildirimler ve listeler",
-      "newArtists": "yeni sanatçı"
+      "newArtists": "yeni sanatçı",
+      "newAuthors": "yeni yazar"
     },
     "review": {
       "profiles": "Kalite profilleri",
@@ -1375,7 +1378,8 @@
       "hidden_other": "{{app}} uygulamasının diğer uygulamalardan gizlediği {{count}} parola ve API anahtarı için gerekli.",
       "confirm": "Onayla ve taşın",
       "nothing": "{{app}} içinde hiçbir şey değişmez. Dosyalar oldukları yerde kalır.",
-      "lidarrQuality": "Lidarr'ın kalite profilleri geride kalır: Box Office'te müziğin kendi kalite ayarı vardır, Müzik altında."
+      "lidarrQuality": "Lidarr'ın kalite profilleri geride kalır: Box Office'te müziğin kendi kalite ayarı vardır, Müzik altında.",
+      "readarrQuality": "Readarr'ın kalite profilleri geride kalır: Box Office e-kitaplarda EPUB'u, sesli kitaplarda M4B'yi önce seçer. Her kök klasör, dosyalarına bakılarak e-kitap mı sesli kitap mı tuttuğunu gösterir."
     },
     "status": {
       "done": "bitti",

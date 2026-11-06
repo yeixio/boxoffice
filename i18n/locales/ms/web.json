@@ -1213,10 +1213,11 @@
       "radarr": "Filem, failnya, profil kualiti, pengindeks, klien muat turun dan setiap tetapan lain.",
       "sonarr": "Rancangan, musim, episod dan failnya, profil, pengindeks, klien muat turun dan tetapan.",
       "nzbget": "Pelayan berita dengan maklumat log masuknya, kategori dan tetapan lainnya.",
-      "lidarr": "Artis, album mereka dan lokasinya dalam cakera, pengindeks, klien muat turun dan senarai sekatan."
+      "lidarr": "Artis, album mereka dan lokasinya dalam cakera, pengindeks, klien muat turun dan senarai sekatan.",
+      "readarr": "Pengarang, buku yang dikehendaki sebagai e-buku atau buku audio dan lokasinya dalam cakera, pengindeks, klien muat turun dan senarai sekatan."
     },
     "title": "Pindah masuk",
-    "sub": "Bawa semuanya dari Radarr, Sonarr, Lidarr atau NZBGet, langkah demi langkah. Aplikasi lama hanya dibaca, jadi tiada apa di dalamnya berubah.",
+    "sub": "Bawa semuanya dari Radarr, Sonarr, Lidarr, Readarr atau NZBGet, langkah demi langkah. Aplikasi lama hanya dibaca, jadi tiada apa di dalamnya berubah.",
     "steps": "Langkah",
     "background": "Di latar belakang",
     "look": {
@@ -1240,7 +1241,8 @@
       "key3": "Di bawah <b>Security</b>, salin <b>API Key</b> dan tampalkannya di atas.",
       "go": "Sambung dan semak",
       "onlyReads": "Ini hanya membaca. Tiada apa berubah di sini atau dalam {{app}} sehingga anda mengesahkan pada langkah seterusnya.",
-      "lidarrOff": "Berpindah dari Lidarr? Hidupkan Muzik di <link>Tetapan</link> dahulu."
+      "lidarrOff": "Berpindah dari Lidarr? Hidupkan Muzik di <link>Tetapan</link> dahulu.",
+      "readarrOff": "Berpindah dari Readarr? Hidupkan E-buku atau Buku audio di <link>Tetapan</link> dahulu."
     },
     "maps": {
       "title": "Pemetaan laluan (biasanya tidak diperlukan)",
@@ -1264,7 +1266,8 @@
       "clients": "klien muat turun",
       "blocklist": "keluaran disekat",
       "lists": "pemberitahuan dan senarai",
-      "newArtists": "artis baharu"
+      "newArtists": "artis baharu",
+      "newAuthors": "pengarang baharu"
     },
     "review": {
       "profiles": "Profil kualiti",
@@ -1287,7 +1290,8 @@
       "hidden_other": "Diperlukan untuk {{count}} kata laluan dan kunci API yang disembunyikan {{app}} daripada aplikasi lain.",
       "confirm": "Sahkan dan pindah masuk",
       "nothing": "Tiada apa dalam {{app}} berubah. Fail kekal di tempatnya.",
-      "lidarrQuality": "Profil kualiti Lidarr ditinggalkan: muzik Box Office ada tetapan kualitinya sendiri, di bawah Muzik."
+      "lidarrQuality": "Profil kualiti Lidarr ditinggalkan: muzik Box Office ada tetapan kualitinya sendiri, di bawah Muzik.",
+      "readarrQuality": "Profil kualiti Readarr ditinggalkan: Box Office mengutamakan EPUB untuk e-buku dan M4B untuk buku audio. Setiap folder akar menunjukkan sama ada ia mengandungi e-buku atau buku audio, berdasarkan failnya."
     },
     "status": {
       "done": "selesai",

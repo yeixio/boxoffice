@@ -16,7 +16,7 @@ import (
 )
 
 // rootKind is the kind of root folder each app's titles go in.
-var rootKind = map[string]string{"radarr": "movie", "sonarr": "series", "lidarr": mediatypes.Music}
+var rootKind = map[string]string{"radarr": "movie", "sonarr": "series", "lidarr": mediatypes.Music, "readarr": store.Ebook}
 
 var errMusicOff = errors.New("turn on Music under Settings first: Lidarr's artists come across into it")
 

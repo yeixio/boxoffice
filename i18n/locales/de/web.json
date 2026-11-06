@@ -1300,10 +1300,11 @@
       "radarr": "Filme, ihre Dateien, Qualitätsprofile, Indexer, Download-Clients und alle anderen Einstellungen.",
       "sonarr": "Serien, Staffeln, Folgen und ihre Dateien, Profile, Indexer, Download-Clients und Einstellungen.",
       "nzbget": "Newsserver mit ihren Anmeldungen, Kategorien und den übrigen Einstellungen.",
-      "lidarr": "Künstler, ihre Alben und wo sie auf der Platte liegen, Indexer, Download-Clients und die Sperrliste."
+      "lidarr": "Künstler, ihre Alben und wo sie auf der Platte liegen, Indexer, Download-Clients und die Sperrliste.",
+      "readarr": "Autoren, die Bücher, die es als E-Book oder Hörbuch haben will, und wo sie auf der Platte liegen, Indexer, Download-Clients und die Sperrliste."
     },
     "title": "Einziehen",
-    "sub": "Hol alles aus Radarr, Sonarr, Lidarr oder NZBGet herüber, Schritt für Schritt. Aus der alten App wird nur gelesen, darin ändert sich also nichts.",
+    "sub": "Hol alles aus Radarr, Sonarr, Lidarr, Readarr oder NZBGet herüber, Schritt für Schritt. Aus der alten App wird nur gelesen, darin ändert sich also nichts.",
     "steps": "Schritte",
     "background": "Im Hintergrund",
     "look": {
@@ -1327,7 +1328,8 @@
       "key3": "Kopiere unter <b>Security</b> den <b>API Key</b> und füge ihn oben ein.",
       "go": "Verbinden und durchsehen",
       "onlyReads": "Das liest nur. Hier oder in {{app}} ändert sich nichts, bis du im nächsten Schritt bestätigst.",
-      "lidarrOff": "Willst du von Lidarr einziehen? Schalte zuerst Musik unter <link>Einstellungen</link> ein."
+      "lidarrOff": "Willst du von Lidarr einziehen? Schalte zuerst Musik unter <link>Einstellungen</link> ein.",
+      "readarrOff": "Willst du von Readarr einziehen? Schalte zuerst E-Books oder Hörbücher unter <link>Einstellungen</link> ein."
     },
     "maps": {
       "title": "Pfadzuordnungen (meist nicht nötig)",
@@ -1351,7 +1353,8 @@
       "clients": "Download-Clients",
       "blocklist": "gesperrte Releases",
       "lists": "Benachrichtigungen und Listen",
-      "newArtists": "neue Künstler"
+      "newArtists": "neue Künstler",
+      "newAuthors": "neue Autoren"
     },
     "review": {
       "profiles": "Qualitätsprofile",
@@ -1375,7 +1378,8 @@
       "hidden_other": "Nötig für die {{count}} Passwörter und API-Schlüssel, die {{app}} vor anderen Apps verbirgt.",
       "confirm": "Bestätigen und einziehen",
       "nothing": "In {{app}} ändert sich nichts. Dateien bleiben, wo sie sind.",
-      "lidarrQuality": "Die Qualitätsprofile von Lidarr bleiben zurück: Musik in Box Office hat eine eigene Qualitätseinstellung, unter Musik."
+      "lidarrQuality": "Die Qualitätsprofile von Lidarr bleiben zurück: Musik in Box Office hat eine eigene Qualitätseinstellung, unter Musik.",
+      "readarrQuality": "Die Qualitätsprofile von Readarr bleiben zurück: Box Office nimmt bei E-Books zuerst EPUB und bei Hörbüchern M4B. Bei jedem Stammordner steht, ob er E-Books oder Hörbücher enthält, erkannt an seinen Dateien."
     },
     "status": {
       "done": "fertig",

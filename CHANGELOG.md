@@ -6,6 +6,7 @@ What changed in Box Office, newest first. The format follows [Keep a Changelog](
 
 ### Added
 
+- **Move in from Readarr,** once Ebooks or Audiobooks are on: its authors come across, looked up on Open Library by name, with the books Readarr wants wanted as ebooks or audiobooks, and the copies it has recorded where they are (an audiobook's folder, an ebook's EPUB first). Box Office tells Readarr's root folders of ebooks from those of audiobooks by their files. Its indexers, download clients and blocklist come across too; nothing on disk is moved, renamed or deleted. Like every app in Move in, it can be skipped.
 - **Move in from Lidarr,** once Music is on: its artists come across with the albums they want, and each album Lidarr has is counted as on disk where it is, from Lidarr's own track list (with CD folders), or by its folder name. Its indexers, download clients and blocklist come across too; its quality profiles stay behind, since music has its own quality setting. Nothing on disk is moved, renamed or deleted.
 - **Every app in Move in can be skipped.** Each one has Skip on the Overview and under its Connect form, and Undo to take it back; a skipped app isn't offered again, and nothing about it changes.
 - **Versioned releases.** Pressing Run workflow under Actions → Release tags the next version, publishes `ghcr.io/yeixio/boxoffice:<version>`, `:<major>.<minor>` and `:latest`, pushes the Helm chart to `oci://ghcr.io/yeixio/charts/boxoffice`, and opens a GitHub release with this changelog's notes. `:main` stays the image of what just merged.

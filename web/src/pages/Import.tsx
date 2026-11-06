@@ -2,7 +2,7 @@ import { Trans, useTranslation } from 'react-i18next'
 import { useEffect, useState, type ReactNode } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, useSearchParams } from 'react-router-dom'
-import { AlertTriangle, ArrowRight, Check, CircleDashed, Film, LoaderCircle, Minus, Music, Plus, Server, SkipForward, Tv, X } from 'lucide-react'
+import { AlertTriangle, ArrowRight, Check, CircleDashed, BookOpen, Film, LoaderCircle, Minus, Music, Plus, Server, SkipForward, Tv, X } from 'lucide-react'
 import { del, get, post, put, type MigrationApp, type Settings as SettingsData, type MigrationRequest, type PathMap, type Plan, type Progress, type Scan, type Status, type Step, type SwitchResult } from '../api'
 import { ItemRow, useBackground } from '../Tray'
 import { appName, when } from '../format'
@@ -17,22 +17,26 @@ const allApps: { app: MigrationApp; icon: ReactNode }[] = [
   { app: 'radarr', icon: <Film className="size-6" /> },
   { app: 'sonarr', icon: <Tv className="size-6" /> },
   { app: 'lidarr', icon: <Music className="size-6" /> },
+  { app: 'readarr', icon: <BookOpen className="size-6" /> },
   { app: 'nzbget', icon: <Server className="size-6" /> },
 ]
 
 // noMatinee are apps Matinee doesn't talk to, so there's nothing to switch
 // over once they've moved in.
-const noMatinee = (a: MigrationApp) => a === 'nzbget' || a === 'lidarr'
+const noMatinee = (a: MigrationApp) => a === 'nzbget' || a === 'lidarr' || a === 'readarr'
 
-function useMusicOn() {
+// useTypesOn says whether music, and ebooks or audiobooks, are on.
+function useTypesOn() {
   const settings = useQuery({ queryKey: ['settings'], queryFn: () => get<SettingsData>('/settings') })
-  return !!settings.data?.mediaTypes.find((m) => m.key === 'music')?.enabled
+  const on = (key: string) => !!settings.data?.mediaTypes.find((m) => m.key === key)?.enabled
+  return { music: on('music'), books: on('ebook') || on('audiobook'), audiobooksOnly: on('audiobook') && !on('ebook') }
 }
 
-// useApps are the apps to move in from: Lidarr only while music is on.
+// useApps are the apps to move in from: Lidarr only while music is on,
+// Readarr only while ebooks or audiobooks are.
 function useApps() {
-  const musicOn = useMusicOn()
-  return allApps.filter((a) => a.app !== 'lidarr' || musicOn)
+  const on = useTypesOn()
+  return allApps.filter((a) => (a.app !== 'lidarr' || on.music) && (a.app !== 'readarr' || on.books))
 }
 
 // useSkipped are the apps the admin chose not to move in from, and a way
@@ -60,7 +64,7 @@ export function Import() {
   const migrationId = Number(params.get('migration') ?? 0)
   // Each app keeps its own form, so connecting another while one is being
   // looked over starts from that app's own details.
-  const [forms, setForms] = useState<Record<MigrationApp, MigrationRequest>>(() => ({ radarr: blank('radarr'), sonarr: blank('sonarr'), lidarr: blank('lidarr'), nzbget: blank('nzbget') }))
+  const [forms, setForms] = useState<Record<MigrationApp, MigrationRequest>>(() => ({ radarr: blank('radarr'), sonarr: blank('sonarr'), lidarr: blank('lidarr'), readarr: blank('readarr'), nzbget: blank('nzbget') }))
   const apps = useApps()
   const { skipped } = useSkipped()
   const [current, setCurrent] = useState<MigrationApp>('radarr')
@@ -190,7 +194,7 @@ function Connect({ req, setReq, onPick, onStarted }: { req: MigrationRequest; se
   const [error, setError] = useState<unknown>(null)
   const nzb = req.app === 'nzbget'
   const apps = useApps()
-  const musicOn = useMusicOn()
+  const typesOn = useTypesOn()
   const skips = useSkipped()
   const skipped = skips.skipped.includes(req.app)
   const set = (patch: Partial<MigrationRequest>) => setReq({ ...req, ...patch })
@@ -208,8 +212,8 @@ function Connect({ req, setReq, onPick, onStarted }: { req: MigrationRequest; se
       setBusy(false)
     }
   }
-  const placeholder = { radarr: 'http://radarr:7878', sonarr: 'http://sonarr:8989', lidarr: 'http://lidarr:8686', nzbget: 'http://nzbget:6789' }[req.app]
-  const folder = { radarr: 'movies', sonarr: 'tv', lidarr: 'music', nzbget: 'movies' }[req.app]
+  const placeholder = { radarr: 'http://radarr:7878', sonarr: 'http://sonarr:8989', lidarr: 'http://lidarr:8686', readarr: 'http://readarr:8787', nzbget: 'http://nzbget:6789' }[req.app]
+  const folder = { radarr: 'movies', sonarr: 'tv', lidarr: 'music', readarr: 'books', nzbget: 'movies' }[req.app]
   // Look for the app at its usual addresses, and fill in the one that
   // answers unless an address has been typed in.
   const found = useQuery({ queryKey: ['find', req.app], queryFn: () => get<{ url: string }>(`/migrations/find?app=${req.app}`), staleTime: 60_000 })
@@ -243,9 +247,14 @@ function Connect({ req, setReq, onPick, onStarted }: { req: MigrationRequest; se
             </span>
           </button>
         ))}
-        {!musicOn && (
+        {!typesOn.music && (
           <p className="text-xs text-muted">
             <Trans i18nKey="move.connect.lidarrOff" components={{ link: <Link className="font-medium text-marquee" to="/settings" /> }} />
+          </p>
+        )}
+        {!typesOn.books && (
+          <p className="text-xs text-muted">
+            <Trans i18nKey="move.connect.readarrOff" components={{ link: <Link className="font-medium text-marquee" to="/settings" /> }} />
           </p>
         )}
       </div>
@@ -308,13 +317,15 @@ function Connect({ req, setReq, onPick, onStarted }: { req: MigrationRequest; se
           </Button>
           <p className="text-xs text-muted">{t('move.connect.onlyReads', { app: appName[req.app] })}</p>
           {skips.loaded && (
-            <p className="flex flex-wrap items-center gap-2 border-t border-line pt-3 text-xs text-muted">
-              <SkipForward className="size-3.5 shrink-0" aria-hidden />
-              {skipped ? (
-                <Trans i18nKey="move.skip.isSkipped" values={{ app: appName[req.app] }} components={{ button: <button className="font-medium text-marquee" onClick={() => skips.set(req.app, false)} /> }} />
-              ) : (
-                <Trans i18nKey="move.skip.offer" values={{ app: appName[req.app] }} components={{ button: <button className="font-medium text-marquee" onClick={() => skips.set(req.app, true)} /> }} />
-              )}
+            <p className="flex items-start gap-2 border-t border-line pt-3 text-xs text-muted">
+              <SkipForward className="mt-0.5 size-3.5 shrink-0" aria-hidden />
+              <span className="flex-1">
+                {skipped ? (
+                  <Trans i18nKey="move.skip.isSkipped" values={{ app: appName[req.app] }} components={{ button: <button className="font-medium text-marquee" onClick={() => skips.set(req.app, false)} /> }} />
+                ) : (
+                  <Trans i18nKey="move.skip.offer" values={{ app: appName[req.app] }} components={{ button: <button className="font-medium text-marquee" onClick={() => skips.set(req.app, true)} /> }} />
+                )}
+              </span>
             </p>
           )}
           <ErrorNote error={skips.error} />
@@ -383,7 +394,7 @@ function Review({ plan, onBack, onStarted }: { plan: Plan; onBack: () => void; o
             </>
           ) : (
             <>
-              <Stat n={plan.titles.new} label={t({ radarr: 'move.stat.newMovies', sonarr: 'move.stat.newShows', lidarr: 'move.stat.newArtists', nzbget: 'move.stat.newShows' }[plan.app])} tone="text-marquee" />
+              <Stat n={plan.titles.new} label={t({ radarr: 'move.stat.newMovies', sonarr: 'move.stat.newShows', lidarr: 'move.stat.newArtists', readarr: 'move.stat.newAuthors', nzbget: 'move.stat.newShows' }[plan.app])} tone="text-marquee" />
               <Stat n={plan.titles.already} label={t('move.stat.already')} />
               <Stat n={plan.titles.skipped} label={t('move.stat.skipped')} tone={plan.titles.skipped ? 'text-bad' : ''} />
               <Stat n={plan.files.total} label={plan.files.total < 0 ? t('move.stat.filesLater') : t('move.stat.files')} />
@@ -424,6 +435,7 @@ function Review({ plan, onBack, onStarted }: { plan: Plan; onBack: () => void; o
               </>
             )}
             {plan.app === 'lidarr' && <p className="mb-5 text-xs text-muted">{t('move.review.lidarrQuality')}</p>}
+            {plan.app === 'readarr' && <p className="mb-5 text-xs text-muted">{t('move.review.readarrQuality')}</p>}
             <h3 className="mb-3 font-display font-semibold">{t('move.review.roots')}</h3>
             {plan.pathMapFound && <p className="mb-2 text-xs text-muted">{t('move.review.found', { app: name })}</p>}
             <ul className="flex flex-col gap-2 text-sm">
@@ -437,6 +449,7 @@ function Review({ plan, onBack, onStarted }: { plan: Plan; onBack: () => void; o
                     </>
                   )}
                   {f.exists ? <Badge tone="ok">{t('move.review.sees')}</Badge> : <Badge tone="bad">{t('move.review.cantSee')}</Badge>}
+                  {f.kind && <Badge>{t(`mediaTypes.${f.kind}.name`)}</Badge>}
                 </li>
               ))}
             </ul>
@@ -641,6 +654,7 @@ function SwitchMatinee({ app, migrationId, onDone }: { app: MigrationApp; migrat
 
 function Finished({ app, matinee, onAgain }: { app: MigrationApp; matinee: SwitchResult | null; onAgain: () => void }) {
   const { t } = useTranslation()
+  const typesOn = useTypesOn()
   const name = appName[app]
   return (
     <Card>
@@ -669,7 +683,7 @@ function Finished({ app, matinee, onAgain }: { app: MigrationApp; matinee: Switc
       </ul>
       <div className="mt-6 flex flex-wrap gap-2">
         <Button onClick={onAgain}>{t('move.done.another')}</Button>
-        <Link to={{ radarr: '/movies', sonarr: '/shows', lidarr: '/music', nzbget: '/movies' }[app]}>
+        <Link to={{ radarr: '/movies', sonarr: '/shows', lidarr: '/music', readarr: typesOn.audiobooksOnly ? '/audiobooks' : '/books', nzbget: '/movies' }[app]}>
           <Button variant="primary">{t('move.done.see')}</Button>
         </Link>
       </div>

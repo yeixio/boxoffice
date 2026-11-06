@@ -1300,10 +1300,11 @@
       "radarr": "Filmer, deras filer, kvalitetsprofiler, indexerare, nedladdningsklienter och alla andra inställningar.",
       "sonarr": "Serier, säsonger, avsnitt och deras filer, profiler, indexerare, nedladdningsklienter och inställningar.",
       "nzbget": "Nyhetsservrar med sina inloggningar, kategorier och resten av inställningarna.",
-      "lidarr": "Artister, deras album och var de ligger på disken, indexerare, nedladdningsklienter och blockeringslistan."
+      "lidarr": "Artister, deras album och var de ligger på disken, indexerare, nedladdningsklienter och blockeringslistan.",
+      "readarr": "Författare, böckerna den vill ha som e-bok eller ljudbok och var de ligger på disken, indexerare, nedladdningsklienter och blockeringslistan."
     },
     "title": "Flytta in",
-    "sub": "Ta över allt från Radarr, Sonarr, Lidarr eller NZBGet, steg för steg. Den gamla appen läses bara, så inget i den ändras.",
+    "sub": "Ta över allt från Radarr, Sonarr, Lidarr, Readarr eller NZBGet, steg för steg. Den gamla appen läses bara, så inget i den ändras.",
     "steps": "Steg",
     "background": "I bakgrunden",
     "look": {
@@ -1327,7 +1328,8 @@
       "key3": "Under <b>Security</b>, kopiera <b>API Key</b> och klistra in den ovan.",
       "go": "Anslut och granska",
       "onlyReads": "Detta läser bara. Inget ändras här eller i {{app}} förrän du bekräftar i nästa steg.",
-      "lidarrOff": "Flyttar du från Lidarr? Slå först på Musik under <link>Inställningar</link>."
+      "lidarrOff": "Flyttar du från Lidarr? Slå först på Musik under <link>Inställningar</link>.",
+      "readarrOff": "Flyttar du från Readarr? Slå först på E-böcker eller Ljudböcker under <link>Inställningar</link>."
     },
     "maps": {
       "title": "Sökvägsmappningar (behövs oftast inte)",
@@ -1351,7 +1353,8 @@
       "clients": "nedladdningsklienter",
       "blocklist": "blockerade releaser",
       "lists": "aviseringar och listor",
-      "newArtists": "nya artister"
+      "newArtists": "nya artister",
+      "newAuthors": "nya författare"
     },
     "review": {
       "profiles": "Kvalitetsprofiler",
@@ -1375,7 +1378,8 @@
       "hidden_other": "Behövs för de {{count}} lösenord och API-nycklar som {{app}} döljer för andra appar.",
       "confirm": "Bekräfta och flytta in",
       "nothing": "Inget i {{app}} ändras. Filerna ligger kvar där de är.",
-      "lidarrQuality": "Lidarrs kvalitetsprofiler stannar kvar: musiken i Box Office har en egen kvalitetsinställning, under Musik."
+      "lidarrQuality": "Lidarrs kvalitetsprofiler stannar kvar: musiken i Box Office har en egen kvalitetsinställning, under Musik.",
+      "readarrQuality": "Readarrs kvalitetsprofiler stannar kvar: Box Office väljer helst EPUB för e-böcker och M4B för ljudböcker. Varje rotmapp visar om den har e-böcker eller ljudböcker, utifrån filerna."
     },
     "status": {
       "done": "klar",

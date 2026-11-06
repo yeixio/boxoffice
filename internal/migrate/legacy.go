@@ -17,7 +17,7 @@ import (
 // legacy reads from a Radarr, Sonarr or Lidarr. It only ever reads, apart
 // from asking the app to make a backup of itself.
 type legacy struct {
-	app  string // radarr, sonarr or lidarr
+	app  string // radarr, sonarr, lidarr or readarr
 	base *url.URL
 	key  string
 	http *http.Client
@@ -41,7 +41,7 @@ func normalizeURL(raw string) (*url.URL, error) {
 }
 
 func newLegacy(app, rawURL, key string) (*legacy, error) {
-	if app != "radarr" && app != "sonarr" && app != "lidarr" {
+	if app != "radarr" && app != "sonarr" && app != "lidarr" && app != "readarr" {
 		return nil, fmt.Errorf("Box Office can't migrate from %q yet", app)
 	}
 	u, err := normalizeURL(rawURL)
@@ -64,13 +64,15 @@ func (l *legacy) name() string {
 		return "Radarr"
 	case "lidarr":
 		return "Lidarr"
+	case "readarr":
+		return "Readarr"
 	}
 	return "Sonarr"
 }
 
-// api is where the app's API is: Lidarr is still on version 1.
+// api is where the app's API is: Lidarr and Readarr are still on version 1.
 func (l *legacy) api() string {
-	if l.app == "lidarr" {
+	if l.app == "lidarr" || l.app == "readarr" {
 		return "/api/v1"
 	}
 	return "/api/v3"

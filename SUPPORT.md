@@ -2,7 +2,7 @@
 
 ## Setting it up
 
-The [README](README.md#run-it) walks through running Box Office with Docker, Docker Compose, Kubernetes or from source, and [moving in](README.md#moving-in-from-radarr-sonarr-lidarr-and-nzbget) from Radarr, Sonarr, Lidarr and NZBGet. The [FAQ](README.md#faq) answers the common questions.
+The [README](README.md#run-it) walks through running Box Office with Docker, Docker Compose, Kubernetes or from source, and [moving in](README.md#moving-in-from-radarr-sonarr-lidarr-readarr-and-nzbget) from Radarr, Sonarr, Lidarr, Readarr and NZBGet. The [FAQ](README.md#faq) answers the common questions.
 
 ## Connecting Matinee
 
