@@ -1891,5 +1891,22 @@
       "mail3": "Más szolgáltató: a súgóoldalai megadják a kimenő (SMTP) szervert és a portot. Általában 587 STARTTLS-sel, vagy 465 TLS-sel.",
       "mail4": "A könyvek arról a címről érkeznek, amelyről küldesz, így ezt kell jóváhagyni az olvasón."
     }
+  },
+  "qualityCheck": {
+    "title": "Minőség-ellenőrzés",
+    "sub": "A Box Office belenéz minden film- és epizódfájlba, hogy lássa, valójában mekkora a képe, és kijavítja a név alapján rosszul kitalált minőségeket. A minőség nélküli fájlok a profiljuk által elfogadott legközelebbit kapják. A fájlokat csak olvassa, sosem módosítja. Hogy egy példány honnan származik, a fájlban nem látszik, ezért egy találgatás sosem indít frissítést: csak egy valóban kisebb kép sorolja lejjebb a példányt.",
+    "checked": "Átnézve: {{checked}} / {{files}} fájl",
+    "running": "Ellenőrzés folyamatban: {{done}} kész",
+    "unknown": "Még ismeretlen: {{count}}",
+    "unreadable": "Nem olvasható: {{count}}",
+    "noFFprobe": "Az ffprobe nincs telepítve ott, ahol a Box Office fut, így nem lehet belenézni a fájlokba.",
+    "again": "Minden fájl újbóli átnézése",
+    "corrections": "Javított minőségek",
+    "none": "Még semmi sincs javítva.",
+    "wasNow": "Korábban {{was}}, most {{now}}",
+    "more": "Itt nem szerepel: még {{count}}",
+    "correctedFrom": "Javítva erről: {{was}}, a fájl átnézése után",
+    "picture": "Kép és hang",
+    "bits": "{{bits}} bites"
   }
 }

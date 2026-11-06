@@ -2079,5 +2079,22 @@
       "mail3": "Jiný poskytovatel: jeho nápověda uvádí server odchozí pošty (SMTP) a port. Obvykle 587 se STARTTLS, nebo 465 s TLS.",
       "mail4": "Knihy chodí z adresy, ze které posíláte, takže tu schvalujete ve čtečce."
     }
+  },
+  "qualityCheck": {
+    "title": "Kontrola kvality",
+    "sub": "Box Office se podívá do každého souboru filmu a epizody, aby zjistil, jak velký je jeho obraz doopravdy, a opraví kvality, které byly podle názvu odhadnuty špatně. Soubory bez kvality dostanou nejbližší, kterou jejich profil přijímá. Soubory se jen čtou, nikdy se nemění. Odkud kopie pochází, v souboru vidět není, takže odhad nikdy nespustí vylepšení: kopii sníží jen obraz, který je opravdu menší.",
+    "checked": "Zkontrolováno: {{checked}} z {{files}} souborů",
+    "running": "Probíhá kontrola: hotovo {{done}}",
+    "unknown": "Stále neznámé: {{count}}",
+    "unreadable": "Nešlo přečíst: {{count}}",
+    "noFFprobe": "ffprobe není nainstalován tam, kde běží Box Office, takže do souborů nelze nahlédnout.",
+    "again": "Znovu zkontrolovat všechny soubory",
+    "corrections": "Opravené kvality",
+    "none": "Zatím nic opraveno.",
+    "wasNow": "Bylo {{was}}, nyní {{now}}",
+    "more": "Zde neuvedeno: dalších {{count}}",
+    "correctedFrom": "Opraveno z {{was}} po nahlédnutí do souboru",
+    "picture": "Obraz a zvuk",
+    "bits": "{{bits}} bitů"
   }
 }

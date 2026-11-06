@@ -1797,5 +1797,22 @@
       "mail3": "Nhà cung cấp khác: trang trợ giúp của họ ghi máy chủ thư đi (SMTP) và cổng. Thường là 587 với STARTTLS, hoặc 465 với TLS.",
       "mail4": "Sách được gửi từ địa chỉ bạn dùng để gửi, nên đó là địa chỉ cần duyệt trên máy đọc."
     }
+  },
+  "qualityCheck": {
+    "title": "Kiểm tra chất lượng",
+    "sub": "Box Office xem bên trong từng tệp phim và tập phim để biết hình ảnh thực sự lớn đến đâu, và sửa các chất lượng bị đoán sai từ tên. Tệp chưa có chất lượng sẽ nhận mức gần nhất mà hồ sơ của nó chấp nhận. Tệp chỉ được đọc, không bao giờ bị thay đổi. Nguồn gốc của bản sao không thể thấy bên trong tệp, nên một phỏng đoán không bao giờ kích hoạt nâng cấp: chỉ hình ảnh thực sự nhỏ hơn mới làm bản sao bị xếp hạng thấp hơn.",
+    "checked": "Đã xem bên trong: {{checked}} / {{files}} tệp",
+    "running": "Đang xem: xong {{done}}",
+    "unknown": "Vẫn chưa rõ: {{count}}",
+    "unreadable": "Không đọc được: {{count}}",
+    "noFFprobe": "ffprobe chưa được cài ở nơi Box Office chạy, nên không thể xem bên trong tệp.",
+    "again": "Xem lại bên trong mọi tệp",
+    "corrections": "Chất lượng đã sửa",
+    "none": "Chưa sửa gì.",
+    "wasNow": "Trước {{was}}, nay {{now}}",
+    "more": "Không liệt kê ở đây: thêm {{count}}",
+    "correctedFrom": "Đã sửa từ {{was}} sau khi xem bên trong tệp",
+    "picture": "Hình ảnh và âm thanh",
+    "bits": "{{bits}}-bit"
   }
 }

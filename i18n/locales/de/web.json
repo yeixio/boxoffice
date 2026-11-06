@@ -1891,5 +1891,22 @@
       "mail3": "Anderer Anbieter: Seine Hilfeseiten nennen den Postausgangsserver (SMTP) und den Port. Meist 587 mit STARTTLS oder 465 mit TLS.",
       "mail4": "Bücher kommen von der Adresse, als die du sendest. Diese musst du auf deinem Reader zulassen."
     }
+  },
+  "qualityCheck": {
+    "title": "Qualitätsprüfung",
+    "sub": "Box Office schaut in jede Film- und Episodendatei, um zu sehen, wie groß ihr Bild wirklich ist, und korrigiert Qualitäten, die anhand eines Namens falsch geraten wurden. Dateien ohne Qualität bekommen die nächstliegende, die ihr Profil annimmt. Dateien werden nur gelesen, nie geändert. Woher eine Kopie stammt, sieht man der Datei nicht an, daher löst eine Vermutung nie ein Upgrade aus: Nur ein wirklich kleineres Bild stuft eine Kopie niedriger ein.",
+    "checked": "Hineingeschaut: {{checked}} von {{files}} Dateien",
+    "running": "Läuft gerade: {{done}} fertig",
+    "unknown": "Noch unbekannt: {{count}}",
+    "unreadable": "Nicht lesbar: {{count}}",
+    "noFFprobe": "ffprobe ist dort, wo Box Office läuft, nicht installiert, daher kann nicht in Dateien geschaut werden.",
+    "again": "Erneut in jede Datei schauen",
+    "corrections": "Korrigierte Qualitäten",
+    "none": "Noch nichts korrigiert.",
+    "wasNow": "Vorher {{was}}, jetzt {{now}}",
+    "more": "Hier nicht aufgeführt: {{count}} weitere",
+    "correctedFrom": "Korrigiert von {{was}}, nachdem in die Datei geschaut wurde",
+    "picture": "Bild und Ton",
+    "bits": "{{bits}} Bit"
   }
 }

@@ -1891,5 +1891,22 @@
       "mail3": "Annan leverantör: dess hjälpsidor anger utgående server (SMTP) och port. Oftast 587 med STARTTLS eller 465 med TLS.",
       "mail4": "Böcker kommer från adressen du skickar som, så det är den du godkänner på läsplattan."
     }
+  },
+  "qualityCheck": {
+    "title": "Kvalitetskontroll",
+    "sub": "Box Office tittar in i varje film- och avsnittsfil för att se hur stor bilden verkligen är, och rättar kvaliteter som gissats fel utifrån ett namn. Filer utan kvalitet får den närmaste som deras profil tar. Filer läses bara, ändras aldrig. Var en kopia kommer ifrån syns inte i filen, så en gissning startar aldrig en uppgradering: bara en bild som verkligen är mindre gör att en kopia rankas lägre.",
+    "checked": "Granskade: {{checked}} av {{files}} filer",
+    "running": "Granskar nu: {{done}} klara",
+    "unknown": "Fortfarande okända: {{count}}",
+    "unreadable": "Kunde inte läsas: {{count}}",
+    "noFFprobe": "ffprobe är inte installerat där Box Office körs, så det går inte att titta in i filer.",
+    "again": "Granska alla filer igen",
+    "corrections": "Rättade kvaliteter",
+    "none": "Inget rättat än.",
+    "wasNow": "Var {{was}}, nu {{now}}",
+    "more": "Visas inte här: {{count}} till",
+    "correctedFrom": "Rättad från {{was}} efter att ha tittat in i filen",
+    "picture": "Bild och ljud",
+    "bits": "{{bits}} bitar"
   }
 }

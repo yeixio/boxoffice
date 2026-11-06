@@ -1891,5 +1891,22 @@
       "mail3": "Another provider: its help pages list its outgoing (SMTP) server and port. Usually 587 with STARTTLS, or 465 with TLS.",
       "mail4": "Books come from the address you send as, so that's the one to approve on your reader."
     }
+  },
+  "qualityCheck": {
+    "title": "Quality check",
+    "sub": "Box Office looks inside each movie and episode file to see how big its picture really is, and corrects qualities that were guessed wrong from a name. Files with no quality get the closest one their profile takes. Files are only read, never changed. Where a copy came from can't be seen inside a file, so a guess never sets off an upgrade: only a picture that's really smaller makes a copy rank lower.",
+    "checked": "Looked inside: {{checked}} of {{files}} files",
+    "running": "Looking now: {{done}} done",
+    "unknown": "Still unknown: {{count}}",
+    "unreadable": "Couldn't be read: {{count}}",
+    "noFFprobe": "ffprobe isn't installed where Box Office runs, so files can't be looked inside.",
+    "again": "Look inside every file again",
+    "corrections": "Corrected qualities",
+    "none": "Nothing corrected yet.",
+    "wasNow": "Was {{was}}, now {{now}}",
+    "more": "Not listed here: {{count}} more",
+    "correctedFrom": "Corrected from {{was}} after looking inside the file",
+    "picture": "Picture and sound",
+    "bits": "{{bits}}-bit"
   }
 }

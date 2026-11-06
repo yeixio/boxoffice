@@ -12,6 +12,7 @@ import { AutoSearchSettings, Connections, DataCapSettingsCard, DownloadSettings,
 import { ScanButton, scannable } from './LibraryScan'
 import { EreaderSettingsCard } from './Ereaders'
 import { ProblemsCard } from './Problems'
+import { QualityCheckCard } from './QualityCheck'
 import { matches, spans, words } from './settingsSearch'
 import { Badge, Button, Card, ErrorNote, Field, Input, Modal, Select, Spinner, Toggle } from '../ui'
 
@@ -48,6 +49,7 @@ const sections: SectionDef[] = [
       ...mediaKinds.map((k) => ({ id: `folders-${k}`, el: <TypeFolders kind={k} />, keys: ['settings.addFolder', 'files.folder'] })),
       { id: 'new-shows', el: <NewShows /> },
       { id: 'problems', el: <ProblemsCard /> },
+      { id: 'quality-check', el: <QualityCheckCard />, keys: ['title.quality', 'qualityCheck.corrections'], terms: ['ffprobe', 'FFmpeg', 'HDR', 'Dolby Vision', 'MediaInfo', '4K', '1080p'] },
       { id: 'recycle', el: <RecycleFolders /> },
     ],
   },

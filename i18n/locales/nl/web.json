@@ -1891,5 +1891,22 @@
       "mail3": "Andere provider: de hulppagina's noemen de uitgaande (SMTP-)server en poort. Meestal 587 met STARTTLS, of 465 met TLS.",
       "mail4": "Boeken komen van het adres waarmee je verstuurt, dus dat is het adres dat je op je e-reader goedkeurt."
     }
+  },
+  "qualityCheck": {
+    "title": "Kwaliteitscontrole",
+    "sub": "Box Office kijkt in elk film- en afleveringsbestand hoe groot het beeld echt is, en corrigeert kwaliteiten die verkeerd uit een naam zijn geraden. Bestanden zonder kwaliteit krijgen de dichtstbijzijnde die hun profiel accepteert. Bestanden worden alleen gelezen, nooit gewijzigd. Waar een kopie vandaan komt is niet in het bestand te zien, dus een gok leidt nooit tot een upgrade: alleen een echt kleiner beeld maakt een kopie lager.",
+    "checked": "Bekeken: {{checked}} van {{files}} bestanden",
+    "running": "Nu bezig: {{done}} klaar",
+    "unknown": "Nog onbekend: {{count}}",
+    "unreadable": "Niet leesbaar: {{count}}",
+    "noFFprobe": "ffprobe is niet geïnstalleerd waar Box Office draait, dus er kan niet in bestanden worden gekeken.",
+    "again": "Alle bestanden opnieuw bekijken",
+    "corrections": "Gecorrigeerde kwaliteiten",
+    "none": "Nog niets gecorrigeerd.",
+    "wasNow": "Was {{was}}, nu {{now}}",
+    "more": "Hier niet getoond: nog {{count}}",
+    "correctedFrom": "Gecorrigeerd van {{was}} na in het bestand te kijken",
+    "picture": "Beeld en geluid",
+    "bits": "{{bits}}-bit"
   }
 }

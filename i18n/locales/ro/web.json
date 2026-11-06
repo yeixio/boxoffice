@@ -1985,5 +1985,22 @@
       "mail3": "Alt furnizor: paginile lui de ajutor arată serverul de ieșire (SMTP) și portul. De obicei 587 cu STARTTLS sau 465 cu TLS.",
       "mail4": "Cărțile vin de la adresa de pe care trimiți, deci pe aceasta o aprobi pe cititor."
     }
+  },
+  "qualityCheck": {
+    "title": "Verificarea calității",
+    "sub": "Box Office se uită în fiecare fișier de film și episod ca să vadă cât de mare este cu adevărat imaginea și corectează calitățile ghicite greșit după nume. Fișierele fără calitate primesc cea mai apropiată pe care o acceptă profilul lor. Fișierele sunt doar citite, niciodată modificate. De unde provine o copie nu se vede în fișier, așa că o presupunere nu pornește niciodată o îmbunătățire: doar o imagine cu adevărat mai mică scade rangul unei copii.",
+    "checked": "Verificate: {{checked}} din {{files}} fișiere",
+    "running": "Se verifică acum: {{done}} gata",
+    "unknown": "Încă necunoscute: {{count}}",
+    "unreadable": "Nu au putut fi citite: {{count}}",
+    "noFFprobe": "ffprobe nu este instalat acolo unde rulează Box Office, deci nu se poate privi în fișiere.",
+    "again": "Verifică din nou toate fișierele",
+    "corrections": "Calități corectate",
+    "none": "Nimic corectat încă.",
+    "wasNow": "Era {{was}}, acum {{now}}",
+    "more": "Nu sunt listate aici: încă {{count}}",
+    "correctedFrom": "Corectată din {{was}} după verificarea fișierului",
+    "picture": "Imagine și sunet",
+    "bits": "{{bits}} biți"
   }
 }

@@ -1985,5 +1985,22 @@
       "mail3": "Autre fournisseur : son aide indique son serveur sortant (SMTP) et le port. En général 587 avec STARTTLS, ou 465 avec TLS.",
       "mail4": "Les livres viennent de l'adresse avec laquelle vous envoyez : c'est elle qu'il faut approuver sur votre liseuse."
     }
+  },
+  "qualityCheck": {
+    "title": "Vérification de la qualité",
+    "sub": "Box Office regarde dans chaque fichier de film et d'épisode pour voir la taille réelle de son image, et corrige les qualités devinées à tort d'après un nom. Les fichiers sans qualité reçoivent la plus proche que leur profil accepte. Les fichiers sont seulement lus, jamais modifiés. La provenance d'une copie ne se voit pas dans le fichier, donc une supposition ne déclenche jamais d'amélioration : seule une image vraiment plus petite fait baisser le rang d'une copie.",
+    "checked": "Examinés : {{checked}} fichiers sur {{files}}",
+    "running": "Examen en cours : {{done}} terminés",
+    "unknown": "Toujours inconnus : {{count}}",
+    "unreadable": "Illisibles : {{count}}",
+    "noFFprobe": "ffprobe n'est pas installé là où tourne Box Office, donc il est impossible de regarder dans les fichiers.",
+    "again": "Réexaminer tous les fichiers",
+    "corrections": "Qualités corrigées",
+    "none": "Rien n'a encore été corrigé.",
+    "wasNow": "Avant {{was}}, maintenant {{now}}",
+    "more": "Non affichés ici : {{count}} de plus",
+    "correctedFrom": "Corrigée depuis {{was}} après examen du fichier",
+    "picture": "Image et son",
+    "bits": "{{bits}} bits"
   }
 }

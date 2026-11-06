@@ -10,6 +10,7 @@ import { DeleteFiles, RemoveTitle } from '../RemoveFiles'
 import { get, patch, post, type Episode, type Profile, type Series } from '../api'
 import { bytes, day, episodeCode } from '../format'
 import { qualityName, useProfiles, useQualities } from '../hooks'
+import { pictureText } from './QualityCheck'
 import { Badge, Button, Card, ErrorNote, Field, Poster, Select, Spinner, Toggle } from '../ui'
 
 type Detail = { series: Series; episodes: Episode[] }
@@ -159,6 +160,14 @@ function SeasonBlock({
   const seasonName = number === 0 ? t('show.specials') : t('show.season', { number })
   const now = Date.now()
   const rank = (q: number) => qualities.data?.findIndex((x) => x.id === q) ?? -1
+  // What the quality check found inside an episode's file, on hover.
+  const fileTitle = (f: NonNullable<Episode['file']>) =>
+    [
+      f.media && !f.media.error ? pictureText(f.media, (n) => t('qualityCheck.bits', { bits: n })) : '',
+      f.guessed !== undefined ? t('qualityCheck.correctedFrom', { was: qualityName(qualities.data, f.guessed) }) : '',
+    ]
+      .filter(Boolean)
+      .join('\n') || undefined
   // Below the profile's good-enough quality, with upgrades on.
   const wantsUpgrade = (e: Episode) => !!(e.file && profile?.upgrade && rank(e.file.quality) < rank(profile.cutoff))
   const anyAired = episodes.some((e) => e.airDate && new Date(e.airDate).getTime() <= now)
@@ -203,10 +212,12 @@ function SeasonBlock({
                   <span className="w-28 text-muted">{day(e.airDate)}</span>
                   <span className="ms-auto flex flex-wrap items-center justify-end gap-2">
                     {e.file ? (
-                      <Badge tone={upgrade ? 'gold' : 'ok'}>
-                        {upgrade && <ArrowUpCircle className="size-3" aria-label={t('show.upgradeWanted')} />}
-                        {qualityName(qualities.data, e.file.quality)} · {bytes(e.file.size)}
-                      </Badge>
+                      <span title={fileTitle(e.file)}>
+                        <Badge tone={upgrade ? 'gold' : 'ok'}>
+                          {upgrade && <ArrowUpCircle className="size-3" aria-label={t('show.upgradeWanted')} />}
+                          {qualityName(qualities.data, e.file.quality)} · {bytes(e.file.size)}
+                        </Badge>
+                      </span>
                     ) : aired ? (
                       !e.monitored && <Badge>{t('show.skipped')}</Badge>
                     ) : (

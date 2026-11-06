@@ -115,7 +115,14 @@ CREATE TABLE IF NOT EXISTS media_files (
 	path       TEXT NOT NULL UNIQUE,
 	size       BIGINT NOT NULL DEFAULT 0,
 	quality    INTEGER NOT NULL DEFAULT 0,
-	added_at   BIGINT NOT NULL
+	added_at   BIGINT NOT NULL,
+	-- What the quality check found inside a movie or episode (JSON
+	-- quality.Media), when, and the file's size then; guessed is the
+	-- quality it had before the check corrected it, -1 when it didn't.
+	media       TEXT NOT NULL DEFAULT '',
+	probed_at   BIGINT NOT NULL DEFAULT 0,
+	probed_size BIGINT NOT NULL DEFAULT 0,
+	guessed     INTEGER NOT NULL DEFAULT -1
 );
 CREATE INDEX IF NOT EXISTS media_files_owner ON media_files (kind, owner_id);
 
