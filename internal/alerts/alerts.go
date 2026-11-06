@@ -27,6 +27,16 @@ const (
 	settingConfig  = "alerts"
 	settingHistory = "alerts_history"
 	settingRun     = "alerts_run"
+	settingFiring  = "alerts_firing"
+)
+
+// A disk alert is sent once when the disk reaches the rule's percent, and
+// again only when it's diskStep points fuller (90%, then 95%), not every
+// day. It's all clear once the disk is diskSlack points under the percent,
+// so a disk that hovers around it doesn't come and go.
+const (
+	diskStep  = 5
+	diskSlack = 2
 )
 
 // Rule names, as alerts and the settings call them.
@@ -269,6 +279,18 @@ type firing struct {
 	sent     time.Time // when it was last sent; zero while it's held
 	alert    Alert
 	resolves bool // send an all-clear when it ends
+	step     int  // how far past the rule it was when last sent (disks)
+}
+
+// firingState is a sent alert as kept in settings, so starting again (after
+// an update, say) doesn't send it again.
+type firingState struct {
+	Since int64 `json:"since"` // milliseconds
+	Sent  int64 `json:"sent"`
+	Step  int   `json:"step,omitempty"`
+	Alert Alert `json:"alert"`
+	// Resolves says to send an all-clear when it ends.
+	Resolves bool `json:"resolves,omitempty"`
 }
 
 type sample struct {
@@ -392,6 +414,10 @@ type condition struct {
 	// often it's sent again while it stays true.
 	hold, repeat time.Duration
 	resolves     bool
+	// step is sent again when it goes up; near is true for one that's
+	// only kept while it's already firing (a disk just under the percent).
+	step int
+	near bool
 }
 
 // Check takes readings, and sends alerts for rules that became true (and
@@ -413,23 +439,38 @@ func (m *Manager) Check(ctx context.Context) {
 
 	m.mu.Lock()
 	if m.firing == nil {
-		m.firing = map[string]*firing{}
+		m.firing = m.loadFiring(ctx)
 	}
 	var send []Alert
+	changed := false
 	for key, cond := range conds {
 		f, ok := m.firing[key]
+		if cond.near && (!ok || f.sent.IsZero()) {
+			delete(conds, key)
+			if ok {
+				delete(m.firing, key)
+			}
+			continue
+		}
 		if !ok {
 			f = &firing{since: now}
 			m.firing[key] = f
+		}
+		if cond.near {
+			continue // keep what was sent, with its wording then
 		}
 		f.alert, f.resolves = cond.alert, cond.resolves
 		switch {
 		case !canSend:
 		case f.sent.IsZero() && now.Sub(f.since) >= cond.hold:
-			f.sent = now
+			f.sent, f.step, changed = now, cond.step, true
+			send = append(send, f.alert)
+		case !f.sent.IsZero() && cond.step > f.step:
+			// Fuller by another step: tell them again.
+			f.sent, f.step, changed = now, cond.step, true
 			send = append(send, f.alert)
 		case !f.sent.IsZero() && cond.repeat > 0 && now.Sub(f.sent) >= cond.repeat:
-			f.sent = now
+			f.sent, changed = now, true
 			a := f.alert
 			a.Title += " (still)"
 			send = append(send, a)
@@ -440,6 +481,9 @@ func (m *Manager) Check(ctx context.Context) {
 			continue
 		}
 		delete(m.firing, key)
+		if !f.sent.IsZero() {
+			changed = true
+		}
 		if !f.sent.IsZero() && f.resolves {
 			a := f.alert
 			a.Level, a.Resolved = LevelInfo, true
@@ -447,10 +491,49 @@ func (m *Manager) Check(ctx context.Context) {
 			send = append(send, a)
 		}
 	}
+	if changed {
+		m.saveFiring(ctx)
+	}
 	m.mu.Unlock()
 
 	for _, a := range send {
 		m.deliver(ctx, c, a)
+	}
+}
+
+// loadFiring reads the alerts that were sent and hadn't ended when the
+// server last stopped.
+func (m *Manager) loadFiring(ctx context.Context) map[string]*firing {
+	out := map[string]*firing{}
+	v, err := m.Store.Setting(ctx, settingFiring)
+	if err != nil || v == "" {
+		return out
+	}
+	var saved map[string]firingState
+	if json.Unmarshal([]byte(v), &saved) != nil {
+		return out
+	}
+	for key, st := range saved {
+		if st.Sent == 0 {
+			continue
+		}
+		out[key] = &firing{since: time.UnixMilli(st.Since), sent: time.UnixMilli(st.Sent), step: st.Step, alert: st.Alert, resolves: st.Resolves}
+	}
+	return out
+}
+
+// saveFiring keeps the alerts that were sent and haven't ended. m.mu is held.
+func (m *Manager) saveFiring(ctx context.Context) {
+	saved := map[string]firingState{}
+	for key, f := range m.firing {
+		if f.sent.IsZero() {
+			continue
+		}
+		saved[key] = firingState{Since: f.since.UnixMilli(), Sent: f.sent.UnixMilli(), Step: f.step, Alert: f.alert, Resolves: f.resolves}
+	}
+	b, _ := json.Marshal(saved)
+	if err := m.Store.SetSetting(ctx, settingFiring, string(b)); err != nil {
+		m.logWarn("save firing alerts", err)
 	}
 }
 
@@ -474,17 +557,22 @@ func (m *Manager) evaluate(rules Rules, r Readings, now time.Time) map[string]co
 				continue
 			}
 			used := float64(d.Total-min(d.Free, d.Total)) / float64(d.Total) * 100
-			if used < float64(rules.Disk.Percent) {
+			if used < float64(rules.Disk.Percent-diskSlack) {
 				continue
 			}
 			level := LevelWarning
 			if used >= 98 {
 				level = LevelCritical
 			}
+			step := int(used-float64(rules.Disk.Percent)) / diskStep
+			if level == LevelCritical {
+				step = max(step, 100) // critical is always worth telling
+			}
 			out["disk:"+d.Path] = condition{
+				near: used < float64(rules.Disk.Percent), step: step,
 				alert: Alert{Rule: RuleDisk, Key: "disk:" + d.Path, Level: level, Title: "Disk almost full",
 					Message: fmt.Sprintf("The disk with %s (%s) is %d%% full: %s free of %s.", d.Name, d.Path, int(used), size(d.Free), size(d.Total))},
-				repeat: 24 * time.Hour, resolves: true,
+				resolves: true,
 			}
 		}
 	}

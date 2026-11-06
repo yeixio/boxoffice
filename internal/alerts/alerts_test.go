@@ -90,7 +90,7 @@ func setup(t *testing.T, kind string, r *Readings) (*Manager, *hook, *fakeClock)
 }
 
 func TestDiskAlertAndAllClear(t *testing.T) {
-	r := &Readings{Disks: []Disk{{Name: "data", Path: "/data", Total: 100 << 30, Free: 5 << 30, Reachable: true}}}
+	r := &Readings{Disks: []Disk{{Name: "data", Path: "/data", Total: 100 << 30, Free: 10 << 30, Reachable: true}}}
 	m, h, clock := setup(t, KindJSON, r)
 	ctx := context.Background()
 	m.Check(ctx)
@@ -102,18 +102,42 @@ func TestDiskAlertAndAllClear(t *testing.T) {
 		t.Fatalf("firing %v", m.Firing())
 	}
 	clock.t = clock.t.Add(25 * time.Hour)
-	m.Check(ctx) // a day later, a reminder
+	m.Check(ctx) // a day later, still 90%: nothing new to say
+	// Starting again (after an update) doesn't send it again either.
+	m = &Manager{Store: m.Store, Server: m.Server, Version: m.Version, now: m.now, Read: m.Read}
+	m.Check(ctx)
+	// Hovering just under the percent and back isn't all clear and full again.
+	r.Disks[0].Free = 11 << 30
+	m.Check(ctx)
+	r.Disks[0].Free = 10 << 30
+	m.Check(ctx)
+	if got := h.titles(); len(got) != 1 {
+		t.Fatalf("sent again %v", got)
+	}
+	// Five points fuller, and critical, are news.
+	r.Disks[0].Free = 5 << 30
+	m.Check(ctx)
+	r.Disks[0].Free = 4 << 30
+	m.Check(ctx)
+	r.Disks[0].Free = 1 << 30
+	m.Check(ctx)
 	r.Disks[0].Free = 50 << 30
 	m.Check(ctx)
 	got := h.titles()
-	if len(got) != 3 || got[1] != "Disk almost full (still)" || got[2] != "Disk space is back to normal" {
+	if len(got) != 4 || got[1] != "Disk almost full" || got[2] != "Disk almost full" || got[3] != "Disk space is back to normal" {
 		t.Fatalf("sent %v", got)
+	}
+	h.mu.Lock()
+	msg, level := h.got[1]["message"], h.got[2]["level"]
+	h.mu.Unlock()
+	if msg != "The disk with data (/data) is 95% full: 5.0 GB free of 100.0 GB." || level != LevelCritical {
+		t.Fatalf("95%%: %v, 99%%: %v", msg, level)
 	}
 	if len(m.Firing()) != 0 {
 		t.Fatalf("still firing %v", m.Firing())
 	}
 	hist := m.History(ctx)
-	if len(hist) != 3 || !hist[0].Resolved || hist[0].Sent != 1 {
+	if len(hist) != 4 || !hist[0].Resolved || hist[0].Sent != 1 {
 		t.Fatalf("history %+v", hist)
 	}
 }

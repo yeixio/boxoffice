@@ -50,6 +50,7 @@ What changed in Box Office, newest first. The format follows [Keep a Changelog](
 
 ### Fixed
 
+- **Disk space alerts don't repeat.** One is sent when a disk reaches the alert's percent, then again only when it's 5 points fuller (90%, then 95%) or at 98%, in place of every day. Restarting Box Office no longer sends it again, and a disk that dips a point or two under and back doesn't count as clearing up and filling again ([matinee#308](https://github.com/yeixio/matinee/pull/308) groups the rest in Matinee's bell).
 - An episode whose video file has a meaningless name is matched by the download's name ([#24](https://github.com/yeixio/boxoffice/pull/24)).
 - An import no longer fails when the original can't be removed from a downloads share ([#18](https://github.com/yeixio/boxoffice/pull/18)).
 - A release's length is judged by its main video, so samples and extras don't quarantine it ([#16](https://github.com/yeixio/boxoffice/pull/16)).
