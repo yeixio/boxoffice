@@ -1558,6 +1558,8 @@
     "history": "Istoric",
     "clear": "Golește istoricul",
     "noHistory": "Descărcările terminate apar aici.",
+    "search": "Caută descărcări",
+    "noMatch": "Nimic nu se potrivește cu „{{query}}”.",
     "showMissing": "Arată incompletele ({{count}})",
     "hideMissing": "Ascunde incompletele",
     "missingHint": "Lansări prea incomplete pe serverele de știri pentru a fi reparate. Box Office le-a blocat pe fiecare și a căutat alta, așa că nu e nimic de făcut.",

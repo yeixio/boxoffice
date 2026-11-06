@@ -1467,6 +1467,8 @@
     "history": "Historia",
     "clear": "Tyhjennä historia",
     "noHistory": "Valmiit lataukset näkyvät täällä.",
+    "search": "Hae latauksia",
+    "noMatch": "Mikään ei vastaa hakua ”{{query}}”.",
     "showMissing": "Näytä vajaat ({{count}})",
     "hideMissing": "Piilota vajaat",
     "missingHint": "Julkaisuja, joista puuttuu uutispalvelimilta liikaa korjattavaksi. Box Office esti jokaisen ja etsi toisen, joten mitään ei tarvitse tehdä.",

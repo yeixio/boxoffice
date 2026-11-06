@@ -1467,6 +1467,8 @@
     "history": "Tarih",
     "clear": "Geçmişi temizle",
     "noHistory": "Biten indirmeler burada görünür.",
+    "search": "İndirmelerde ara",
+    "noMatch": "“{{query}}” ile eşleşen bir şey yok.",
     "showMissing": "Eksik olanları göster ({{count}})",
     "hideMissing": "Eksik olanları gizle",
     "missingHint": "Haber sunucularında onarılamayacak kadar eksik olan sürümler. Box Office her birini engelledi ve başkasını aradı, yapılacak bir şey yok.",

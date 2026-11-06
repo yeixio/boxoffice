@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
+	"strings"
 	"time"
 )
 
@@ -167,26 +168,43 @@ var historyOrder = map[string]string{
 	"status": "CASE WHEN status = 'failed' THEN 0 WHEN imported_to = '' AND kind <> '' THEN 2 ELSE 3 END",
 }
 
-// DownloadHistoryPage is one page of finished downloads, sorted by one of
-// historyOrder's keys (newest finished first when it isn't one), and how
-// many there are in all.
-//
-// Failures for missing articles are left out unless withMissing; hidden
-// says how many were.
-func (s *Store) DownloadHistoryPage(ctx context.Context, sort string, asc bool, withMissing bool, offset, limit int) (list []Download, total, hidden int, err error) {
+// HistoryPage says which finished downloads to list, and how.
+type HistoryPage struct {
+	// Sort is one of historyOrder's keys; newest finished first when it
+	// isn't one.
+	Sort string
+	Asc  bool
+	// Missing includes failures for articles gone from the news servers,
+	// which are left out otherwise.
+	Missing bool
+	// Query keeps those whose name has every word of it, ignoring case
+	// and the dots and underscores release names use for spaces.
+	Query         string
+	Offset, Limit int
+}
+
+// DownloadHistoryPage is one page of finished downloads, how many there
+// are in all, and how many failures for missing articles were left out.
+func (s *Store) DownloadHistoryPage(ctx context.Context, p HistoryPage) (list []Download, total, hidden int, err error) {
 	where := "status IN ('completed', 'failed')"
-	if err := s.row(ctx, "SELECT COUNT(*) FROM downloads WHERE "+where+" AND missing <> 0").Scan(&hidden); err != nil {
+	var args []any
+	for _, w := range nameWords(p.Query) {
+		where += ` AND LOWER(REPLACE(REPLACE(REPLACE(name, '.', ' '), '_', ' '), '-', ' ')) LIKE ? ESCAPE '\'`
+		args = append(args, "%"+likeEscaper.Replace(w)+"%")
+	}
+	if err := s.row(ctx, "SELECT COUNT(*) FROM downloads WHERE "+where+" AND missing <> 0", args...).Scan(&hidden); err != nil {
 		return nil, 0, 0, err
 	}
-	if !withMissing {
+	if !p.Missing {
 		where += " AND missing = 0"
 	} else {
 		hidden = 0
 	}
-	if err := s.row(ctx, "SELECT COUNT(*) FROM downloads WHERE "+where).Scan(&total); err != nil {
+	if err := s.row(ctx, "SELECT COUNT(*) FROM downloads WHERE "+where, args...).Scan(&total); err != nil {
 		return nil, 0, 0, err
 	}
-	col, ok := historyOrder[sort]
+	col, ok := historyOrder[p.Sort]
+	asc := p.Asc
 	if !ok {
 		col, asc = historyOrder["finished"], false
 	}
@@ -194,8 +212,18 @@ func (s *Store) DownloadHistoryPage(ctx context.Context, sort string, asc bool, 
 	if asc {
 		dir = " ASC"
 	}
-	list, err = s.downloads(ctx, where+" ORDER BY "+col+dir+", id DESC LIMIT ? OFFSET ?", limit, max(offset, 0))
+	list, err = s.downloads(ctx, where+" ORDER BY "+col+dir+", id DESC LIMIT ? OFFSET ?", append(args, p.Limit, max(p.Offset, 0))...)
 	return list, total, hidden, err
+}
+
+var likeEscaper = strings.NewReplacer(`\`, `\\`, "%", `\%`, "_", `\_`)
+
+// nameWords splits a search into lowercase words, the way release names
+// separate them.
+func nameWords(q string) []string {
+	return strings.FieldsFunc(strings.ToLower(q), func(r rune) bool {
+		return r == ' ' || r == '.' || r == '_' || r == '-' || r == '\t'
+	})
 }
 
 // SetDownloadMissing marks a download as failed for articles gone from the

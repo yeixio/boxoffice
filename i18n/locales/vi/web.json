@@ -1376,6 +1376,8 @@
     "history": "Lịch sử",
     "clear": "Xóa lịch sử",
     "noHistory": "Bản tải đã xong hiển thị ở đây.",
+    "search": "Tìm tải xuống",
+    "noMatch": "Không có gì khớp với “{{query}}”.",
     "showMissing": "Hiện bản không đầy đủ ({{count}})",
     "hideMissing": "Ẩn bản không đầy đủ",
     "missingHint": "Các bản phát hành thiếu quá nhiều trên máy chủ tin tức để sửa. Box Office đã chặn từng bản và tìm bản khác, nên bạn không cần làm gì.",

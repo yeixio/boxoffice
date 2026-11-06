@@ -1376,6 +1376,8 @@
     "history": "역사",
     "clear": "기록 지우기",
     "noHistory": "완료된 다운로드가 여기에 표시돼요.",
+    "search": "다운로드 검색",
+    "noMatch": "“{{query}}”와 일치하는 항목이 없습니다.",
     "showMissing": "불완전한 항목 보기 ({{count}})",
     "hideMissing": "불완전한 항목 숨기기",
     "missingHint": "뉴스 서버에서 빠진 부분이 너무 많아 복구할 수 없는 릴리스입니다. Box Office가 각각 차단하고 다른 릴리스를 찾았으니 할 일은 없습니다.",

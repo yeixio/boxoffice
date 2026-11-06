@@ -1558,6 +1558,8 @@
     "history": "Histoire",
     "clear": "Effacer l’historique",
     "noHistory": "Les téléchargements terminés apparaissent ici.",
+    "search": "Rechercher dans les téléchargements",
+    "noMatch": "Rien ne correspond à « {{query}} ».",
     "showMissing": "Afficher les incomplètes ({{count}})",
     "hideMissing": "Masquer les incomplètes",
     "missingHint": "Des releases trop incomplètes sur les serveurs de news pour être réparées. Box Office a bloqué chacune et en a cherché une autre, il n'y a donc rien à faire.",

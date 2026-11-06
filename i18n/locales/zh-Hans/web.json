@@ -1376,6 +1376,8 @@
     "history": "历史",
     "clear": "清除历史",
     "noHistory": "完成的下载会显示在这里。",
+    "search": "搜索下载",
+    "noMatch": "没有与“{{query}}”匹配的内容。",
     "showMissing": "显示不完整的 ({{count}})",
     "hideMissing": "隐藏不完整的",
     "missingHint": "这些发布在新闻服务器上缺失太多，无法修复。Box Office 已逐个屏蔽并寻找其他发布，无需操作。",

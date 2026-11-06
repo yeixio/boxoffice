@@ -1376,6 +1376,8 @@
     "history": "歷史",
     "clear": "清除歷史",
     "noHistory": "完成的下載會顯示在這裡。",
+    "search": "搜尋下載",
+    "noMatch": "沒有符合「{{query}}」的內容。",
     "showMissing": "顯示不完整的 ({{count}})",
     "hideMissing": "隱藏不完整的",
     "missingHint": "這些發佈在新聞伺服器上缺失太多，無法修復。Box Office 已逐一封鎖並尋找其他發佈，無需處理。",

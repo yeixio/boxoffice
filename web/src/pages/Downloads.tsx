@@ -44,6 +44,7 @@ import {
   Empty,
   ErrorNote,
   Heading,
+  Input,
   Modal,
   Spinner,
   Toggle,
@@ -69,11 +70,39 @@ type HistoryPage = {
   // Show failures for articles gone from the news servers, hidden as
   // there's nothing to do about them.
   missing?: boolean;
+  // Only those whose name has every word of this.
+  query?: string;
 };
+
+// nameWords splits a search, or a release name, into lowercase words: dots,
+// underscores and dashes stand for spaces in release names.
+export function nameWords(s: string) {
+  return s
+    .toLowerCase()
+    .split(/[\s._-]+/)
+    .filter(Boolean);
+}
+
+// matches says whether a release name has every word of a search.
+export function matches(name: string, query: string) {
+  const n = nameWords(name).join(" ");
+  return nameWords(query).every((w) => n.includes(w));
+}
+
+// useSettled is value once it has stopped changing for a moment, so a
+// search isn't sent for every key pressed.
+function useSettled<T>(value: T, ms = 250) {
+  const [settled, setSettled] = useState(value);
+  useEffect(() => {
+    const id = setTimeout(() => setSettled(value), ms);
+    return () => clearTimeout(id);
+  }, [value, ms]);
+  return settled;
+}
 
 export function useDownloads(page?: HistoryPage) {
   const q = page
-    ? `?historyOffset=${page.offset}&historyLimit=${page.limit}&historySort=${page.sort}&historyDir=${page.dir}${page.missing ? "&historyMissing=true" : ""}`
+    ? `?historyOffset=${page.offset}&historyLimit=${page.limit}&historySort=${page.sort}&historyDir=${page.dir}${page.missing ? "&historyMissing=true" : ""}${page.query ? `&historyQuery=${encodeURIComponent(page.query)}` : ""}`
     : "";
   return useQuery({
     queryKey: ["downloads", page ?? null],
@@ -185,16 +214,21 @@ export function Downloads() {
   const [queuePage, setQueuePage] = useState(0);
   const [historyPage, setHistoryPage] = useState(0);
   const [showMissing, setShowMissing] = useState(false);
+  const [queueQuery, setQueueQuery] = useState("");
+  const [historyQuery, setHistoryQuery] = useState("");
+  const historySearch = useSettled(historyQuery.trim());
   useEffect(
     () => setHistoryPage(0),
-    [sort.option.key, sort.dir, historySize, showMissing],
+    [sort.option.key, sort.dir, historySize, showMissing, historySearch],
   );
+  useEffect(() => setQueuePage(0), [queueQuery]);
   const d = useDownloads({
     offset: historyPage * historySize,
     limit: historySize,
     sort: sort.option.key,
     dir: sort.dir,
     missing: showMissing,
+    query: historySearch,
   });
   // A page past the end (the history got shorter) goes back to the last.
   const total = d.data?.historyTotal ?? 0;
@@ -246,9 +280,12 @@ export function Downloads() {
   const historyHidden = data.historyHidden ?? 0;
   // The queue's own pages; a page past the end (the queue got shorter)
   // shows the last one.
-  const queuePages = Math.max(1, Math.ceil(data.queue.length / queueSize));
+  const shownQueue = queueQuery.trim()
+    ? data.queue.filter((x) => matches(x.name, queueQuery))
+    : data.queue;
+  const queuePages = Math.max(1, Math.ceil(shownQueue.length / queueSize));
   const qp = Math.min(queuePage, queuePages - 1);
-  const queue = data.queue.slice(qp * queueSize, (qp + 1) * queueSize);
+  const queue = shownQueue.slice(qp * queueSize, (qp + 1) * queueSize);
   // Turning the page drops what was picked: Select all picks a page.
   const turn = (set: (p: number) => void) => (p: number) => {
     set(p);
@@ -370,9 +407,16 @@ export function Downloads() {
           <h2 className="me-auto font-display text-xl font-semibold">
             {t("dl.queue")}
           </h2>
+          {data.queue.length > 1 && (
+            <Search value={queueQuery} onChange={setQueueQuery} />
+          )}
           {pickHead("queue", queue, queuePages > 1)}
         </div>
-        {data.queue.length === 0 ? (
+        {data.queue.length > 0 && shownQueue.length === 0 ? (
+          <p className="text-sm text-muted">
+            {t("dl.noMatch", { query: queueQuery.trim() })}
+          </p>
+        ) : data.queue.length === 0 ? (
           <Empty
             icon={<DownloadIcon className="size-8" />}
             title={t("dl.nothing")}
@@ -399,7 +443,7 @@ export function Downloads() {
         <Pager
           page={qp}
           size={queueSize}
-          total={data.queue.length}
+          total={shownQueue.length}
           onPage={turn(setQueuePage)}
           label={t("dl.queue")}
         />
@@ -410,6 +454,9 @@ export function Downloads() {
           <h2 className="me-auto font-display text-xl font-semibold">
             {t("dl.history")}
           </h2>
+          {(historyTotal > 1 || historyQuery) && (
+            <Search value={historyQuery} onChange={setHistoryQuery} />
+          )}
           {historyTotal > 1 && (
             <SortControl
               sort={sort}
@@ -441,7 +488,11 @@ export function Downloads() {
           )}
         </div>
         {data.history.length === 0 ? (
-          <p className="text-sm text-muted">{t("dl.noHistory")}</p>
+          <p className="text-sm text-muted">
+            {historySearch
+              ? t("dl.noMatch", { query: historySearch })
+              : t("dl.noHistory")}
+          </p>
         ) : (
           <ul className="divide-y divide-line rounded-xl border border-line bg-card">
             {history.map((x) => (
@@ -892,6 +943,28 @@ function RemoveDialog({
         </Button>
       </div>
     </Modal>
+  );
+}
+
+// Search is the box that narrows a list to the downloads whose names
+// have what's typed.
+function Search({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  const { t } = useTranslation();
+  return (
+    <Input
+      type="search"
+      className="order-last sm:order-none sm:w-56"
+      placeholder={t("dl.search")}
+      aria-label={t("dl.search")}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+    />
   );
 }
 

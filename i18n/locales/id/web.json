@@ -1376,6 +1376,8 @@
     "history": "Sejarah",
     "clear": "Hapus riwayat",
     "noHistory": "Unduhan yang selesai tampil di sini.",
+    "search": "Cari unduhan",
+    "noMatch": "Tidak ada yang cocok dengan “{{query}}”.",
     "showMissing": "Tampilkan yang tidak lengkap ({{count}})",
     "hideMissing": "Sembunyikan yang tidak lengkap",
     "missingHint": "Rilis yang terlalu tidak lengkap di server berita untuk diperbaiki. Box Office memblokir masing-masing dan mencari yang lain, jadi tidak ada yang perlu dilakukan.",

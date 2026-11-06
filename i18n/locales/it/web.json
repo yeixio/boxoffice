@@ -1558,6 +1558,8 @@
     "history": "Storia",
     "clear": "Cancella la cronologia",
     "noHistory": "I download finiti compaiono qui.",
+    "search": "Cerca nei download",
+    "noMatch": "Nessun risultato per «{{query}}».",
     "showMissing": "Mostra incomplete ({{count}})",
     "hideMissing": "Nascondi incomplete",
     "missingHint": "Release troppo incomplete sui server di news per essere riparate. Box Office le ha bloccate una per una e ne ha cercate altre, quindi non c'è niente da fare.",
