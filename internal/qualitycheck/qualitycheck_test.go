@@ -137,7 +137,7 @@ func TestPass(t *testing.T) {
 }
 
 func TestParse(t *testing.T) {
-	m, err := Parse([]byte(`{"format":{"duration":"7200.5","bit_rate":"60000000"},"streams":[
+	m, err := Parse([]byte(`{"format":{"duration":"7200.5","bit_rate":"60000000","tags":{"TITLE":"Blade Runner: The Final Cut"}},"streams":[
 		{"codec_type":"video","codec_name":"mjpeg","width":600,"height":900,"disposition":{"attached_pic":1}},
 		{"codec_type":"video","codec_name":"hevc","width":3840,"height":1608,"pix_fmt":"yuv420p10le","color_transfer":"smpte2084",
 		 "side_data_list":[{"side_data_type":"DOVI configuration record"}]},
@@ -146,7 +146,7 @@ func TestParse(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	want := quality.Media{Width: 3840, Height: 1608, VideoCodec: "hevc", BitDepth: 10, HDR: "Dolby Vision", AudioCodec: "TrueHD", Channels: 8, Bitrate: 60000000, Duration: 7200.5}
+	want := quality.Media{Width: 3840, Height: 1608, VideoCodec: "hevc", BitDepth: 10, HDR: "Dolby Vision", AudioCodec: "TrueHD", Channels: 8, Bitrate: 60000000, Duration: 7200.5, Title: "Blade Runner: The Final Cut"}
 	if m != want {
 		t.Fatalf("got %+v", m)
 	}

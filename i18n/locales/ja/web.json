@@ -374,10 +374,16 @@
     "notOnDisk": "まだディスクにありません。",
     "filesOf": "{{title}} のファイル",
     "edition": "エディション",
-    "editionByLength": "再生時間からの推定",
     "runs": "再生時間",
     "otherEditions": "ほかのエディション",
-    "otherEditionsSub": "映画のコピーの隣に置かれた別バージョンです。重複ではなく、Box Office はアップグレードを探しません。"
+    "otherEditionsSub": "映画のコピーの隣に置かれた別バージョンです。重複ではなく、Box Office はアップグレードを探しません。",
+    "editionFrom": {
+      "name": "ファイル名から",
+      "release": "ダウンロード元のリリース名から",
+      "file": "ファイル内のタイトルから",
+      "length": "再生時間からの推定"
+    },
+    "wantedEdition": "{{edition}} として希望"
   },
   "show": {
     "lookingNow": "欲しいエピソードを探しています。アクティビティを見てください。",
@@ -1887,5 +1893,21 @@
     "video": "映像が壊れています",
     "audio": "音声が壊れているか、ずれています",
     "fixing": "Box Office はそのコピーのリリースをブロックし、別のものを取得しています。"
+  },
+  "editions": {
+    "look": "エディションを探す",
+    "title": "{{title}} のエディション",
+    "sub": "インデクサーにあるエディション（リリース名による）。今のコピーの隣に置くか、置き換えるかを選べます。Box Office が自分からエディションを探すことはありません。",
+    "searching": "インデクサーを検索中…",
+    "none": "Extended や Director's Cut のようなエディション名の付いたリリースはありません。",
+    "owned": "ライブラリにあり",
+    "releases": "リリース: {{n}}",
+    "alongside": "隣に残す",
+    "replace": "コピーを置き換える",
+    "get": "入手する",
+    "asked": "{{edition}} を探しています。アクティビティを確認してください。",
+    "other": "ほかのエディション",
+    "otherHint": "一覧にない場合は選ぶと、Box Office がすぐに探します。",
+    "pick": "エディションを選択"
   }
 }

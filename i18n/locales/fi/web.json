@@ -399,10 +399,16 @@
     "notOnDisk": "Ei vielä levyllä.",
     "filesOf": "Nimikkeen {{title}} tiedosto",
     "edition": "Versio",
-    "editionByLength": "Arvio kestosta",
     "runs": "Kesto",
     "otherEditions": "Muut versiot",
-    "otherEditionsSub": "Muut leikkaukset elokuvan kopion vieressä. Ne eivät ole kaksoiskappaleita, eikä Box Office etsi niihin päivityksiä."
+    "otherEditionsSub": "Muut leikkaukset elokuvan kopion vieressä. Ne eivät ole kaksoiskappaleita, eikä Box Office etsi niihin päivityksiä.",
+    "editionFrom": {
+      "name": "Tiedostonimestä",
+      "release": "Julkaisusta, josta se ladattiin",
+      "file": "Tiedoston sisäisestä nimestä",
+      "length": "Arvio kestosta"
+    },
+    "wantedEdition": "Halutaan versiona {{edition}}"
   },
   "show": {
     "lookingNow": "Etsitään toivottuja jaksoja; katso Toiminta.",
@@ -1981,5 +1987,21 @@
     "video": "kuva on rikki",
     "audio": "ääni on rikki tai epätahdissa",
     "fixing": "Box Office esti kopion julkaisun ja hakee toisen."
+  },
+  "editions": {
+    "look": "Etsi versio",
+    "title": "Elokuvan {{title}} versiot",
+    "sub": "Versiot, jotka indeksoijilla on julkaisujen nimien mukaan. Hae yksi kopiosi rinnalle tai sen tilalle. Box Office ei koskaan etsi versioita itsestään.",
+    "searching": "Etsitään indeksoijista…",
+    "none": "Indeksoijilla ei ole versiolla nimettyä julkaisua, kuten Extended tai Director's Cut.",
+    "owned": "Kirjastossa",
+    "releases": "Julkaisuja: {{n}}",
+    "alongside": "Pidä rinnalla",
+    "replace": "Korvaa kopio",
+    "get": "Hae",
+    "asked": "Etsitään versiota {{edition}} nyt; katso Toiminta.",
+    "other": "Muu versio",
+    "otherHint": "Eikö listalla? Valitse yksi, niin Box Office etsii sitä nyt.",
+    "pick": "Valitse versio"
   }
 }

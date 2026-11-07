@@ -399,10 +399,16 @@
     "notOnDisk": "Nog niet op schijf.",
     "filesOf": "Bestand van {{title}}",
     "edition": "Editie",
-    "editionByLength": "Een schatting op basis van de speelduur",
     "runs": "Speelduur",
     "otherEditions": "Andere edities",
-    "otherEditionsSub": "Andere versies naast de kopie van de film. Het zijn geen duplicaten, en Box Office zoekt er geen upgrades voor."
+    "otherEditionsSub": "Andere versies naast de kopie van de film. Het zijn geen duplicaten, en Box Office zoekt er geen upgrades voor.",
+    "editionFrom": {
+      "name": "Uit de bestandsnaam",
+      "release": "Uit de release waarvan het is gedownload",
+      "file": "Uit de titel in het bestand",
+      "length": "Een schatting op basis van de speelduur"
+    },
+    "wantedEdition": "Gewenst als {{edition}}"
   },
   "show": {
     "lookingNow": "Gewenste afleveringen worden gezocht; zie Activiteit.",
@@ -1981,5 +1987,21 @@
     "video": "het beeld is kapot",
     "audio": "het geluid is kapot of loopt niet synchroon",
     "fixing": "Box Office heeft de release van die kopie geblokkeerd en haalt een andere."
+  },
+  "editions": {
+    "look": "Zoek een editie",
+    "title": "Edities van {{title}}",
+    "sub": "Edities die de indexers hebben, zoals hun releases ze noemen. Haal er een naast je kopie of in plaats daarvan. Box Office zoekt nooit uit zichzelf naar edities.",
+    "searching": "Zoeken bij de indexers…",
+    "none": "De indexers hebben geen release die naar een editie is vernoemd, zoals Extended of Director's Cut.",
+    "owned": "In de bibliotheek",
+    "releases": "Releases: {{n}}",
+    "alongside": "Ernaast houden",
+    "replace": "Kopie vervangen",
+    "get": "Ophalen",
+    "asked": "Nu op zoek naar {{edition}}; zie Activiteit.",
+    "other": "Andere editie",
+    "otherHint": "Staat hij er niet bij? Kies er een en Box Office zoekt er nu naar.",
+    "pick": "Kies een editie"
   }
 }

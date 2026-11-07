@@ -449,10 +449,16 @@
     "notOnDisk": "Jeszcze nie na dysku.",
     "filesOf": "Plik {{title}}",
     "edition": "Wydanie",
-    "editionByLength": "Przypuszczenie na podstawie długości",
     "runs": "Czas trwania",
     "otherEditions": "Inne wydania",
-    "otherEditionsSub": "Inne wersje trzymane obok kopii filmu. To nie duplikaty, a Box Office nie szuka dla nich lepszych wersji."
+    "otherEditionsSub": "Inne wersje trzymane obok kopii filmu. To nie duplikaty, a Box Office nie szuka dla nich lepszych wersji.",
+    "editionFrom": {
+      "name": "Z nazwy pliku",
+      "release": "Z wydania, z którego został pobrany",
+      "file": "Z tytułu w pliku",
+      "length": "Przypuszczenie na podstawie długości"
+    },
+    "wantedEdition": "Chciane jako {{edition}}"
   },
   "show": {
     "lookingNow": "Szukanie poszukiwanych odcinków; zobacz Aktywność.",
@@ -2169,5 +2175,21 @@
     "video": "obraz jest uszkodzony",
     "audio": "dźwięk jest uszkodzony lub niezsynchronizowany",
     "fixing": "Box Office zablokował wydanie tej kopii i pobiera inną."
+  },
+  "editions": {
+    "look": "Szukaj wydania",
+    "title": "Wydania filmu {{title}}",
+    "sub": "Wydania, które mają indeksery, według nazw ich wydań. Pobierz jedno obok swojej kopii lub w jej miejsce. Box Office nigdy sam nie szuka wydań.",
+    "searching": "Szukam w indekserach…",
+    "none": "Indeksery nie mają wydania nazwanego wersją, jak Extended czy Director's Cut.",
+    "owned": "W bibliotece",
+    "releases": "Wydania: {{n}}",
+    "alongside": "Zachowaj obok",
+    "replace": "Zastąp kopię",
+    "get": "Pobierz",
+    "asked": "Szukam {{edition}}; zobacz Aktywność.",
+    "other": "Inne wydanie",
+    "otherHint": "Nie ma na liście? Wybierz jedno, a Box Office zacznie go szukać.",
+    "pick": "Wybierz wydanie"
   }
 }

@@ -399,10 +399,16 @@
     "notOnDisk": "Not on disk yet.",
     "filesOf": "{{title}}'s file",
     "edition": "Edition",
-    "editionByLength": "A guess from how long it runs",
     "runs": "Runs",
     "otherEditions": "Other editions",
-    "otherEditionsSub": "Other cuts kept next to the movie's copy. They aren't duplicates, and Box Office doesn't look for upgrades of them."
+    "otherEditionsSub": "Other cuts kept next to the movie's copy. They aren't duplicates, and Box Office doesn't look for upgrades of them.",
+    "editionFrom": {
+      "name": "From its file name",
+      "release": "From the release it was downloaded from",
+      "file": "From the title inside the file",
+      "length": "A guess from how long it runs"
+    },
+    "wantedEdition": "Wanted as the {{edition}}"
   },
   "show": {
     "lookingNow": "Looking for its wanted episodes; see Activity.",
@@ -1981,5 +1987,21 @@
     "video": "the picture is broken",
     "audio": "the sound is broken or out of sync",
     "fixing": "Box Office blocked that copy's release and is getting another."
+  },
+  "editions": {
+    "look": "Look for an edition",
+    "title": "Editions of {{title}}",
+    "sub": "Editions the indexers have, named in their releases. Get one to keep next to the copy you have, or in its place. Box Office never looks for editions by itself.",
+    "searching": "Looking on the indexers…",
+    "none": "The indexers have no release of it named for an edition, like Extended or Director's Cut.",
+    "owned": "In the library",
+    "releases": "Releases: {{n}}",
+    "alongside": "Keep alongside",
+    "replace": "Replace the copy",
+    "get": "Get it",
+    "asked": "Looking for the {{edition}} now; see Activity.",
+    "other": "Another edition",
+    "otherHint": "Not listed? Pick one and Box Office looks for it now, the same way.",
+    "pick": "Pick an edition"
   }
 }

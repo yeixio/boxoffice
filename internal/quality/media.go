@@ -14,6 +14,9 @@ type Media struct {
 	Channels   int     `json:"channels,omitempty"`
 	Bitrate    int64   `json:"bitrate,omitempty"`  // bits a second, the whole file
 	Duration   float64 `json:"duration,omitempty"` // seconds
+	// Title is the title the file gives itself, which a disc's copy
+	// often keeps with its cut in it ("Blade Runner: The Final Cut").
+	Title string `json:"title,omitempty"`
 	// Error is why the file couldn't be looked inside, when it couldn't.
 	Error string `json:"error,omitempty"`
 }

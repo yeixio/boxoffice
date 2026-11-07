@@ -424,10 +424,16 @@
     "notOnDisk": "Încă nu e pe disc.",
     "filesOf": "Fișierul lui {{title}}",
     "edition": "Ediție",
-    "editionByLength": "O estimare după durată",
     "runs": "Durată",
     "otherEditions": "Alte ediții",
-    "otherEditionsSub": "Alte versiuni păstrate lângă copia filmului. Nu sunt duplicate, iar Box Office nu caută îmbunătățiri pentru ele."
+    "otherEditionsSub": "Alte versiuni păstrate lângă copia filmului. Nu sunt duplicate, iar Box Office nu caută îmbunătățiri pentru ele.",
+    "editionFrom": {
+      "name": "Din numele fișierului",
+      "release": "Din lansarea din care a fost descărcat",
+      "file": "Din titlul din fișier",
+      "length": "O estimare după durată"
+    },
+    "wantedEdition": "Dorit ca {{edition}}"
   },
   "show": {
     "lookingNow": "Se caută episoadele dorite; vezi Activitate.",
@@ -2075,5 +2081,21 @@
     "video": "imaginea este defectă",
     "audio": "sunetul este defect sau desincronizat",
     "fixing": "Box Office a blocat lansarea acelei copii și aduce alta."
+  },
+  "editions": {
+    "look": "Caută o ediție",
+    "title": "Edițiile {{title}}",
+    "sub": "Edițiile pe care le au indexerele, după numele lansărilor. Ia una lângă copia ta sau în locul ei. Box Office nu caută niciodată ediții singur.",
+    "searching": "Caut la indexere…",
+    "none": "Indexerele nu au nicio lansare numită după o ediție, cum ar fi Extended sau Director's Cut.",
+    "owned": "În bibliotecă",
+    "releases": "Lansări: {{n}}",
+    "alongside": "Păstrează alături",
+    "replace": "Înlocuiește copia",
+    "get": "Ia-o",
+    "asked": "Caut {{edition}} acum; vezi Activitate.",
+    "other": "Altă ediție",
+    "otherHint": "Nu e în listă? Alege una și Box Office o caută acum.",
+    "pick": "Alege o ediție"
   }
 }

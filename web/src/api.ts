@@ -73,6 +73,8 @@ export type MediaFile = {
   media?: FileMedia
   guessed?: number
   edition?: string
+  // Where the edition was told from; length is a guess.
+  editionFrom?: 'name' | 'release' | 'file' | 'length'
   editionByLength?: boolean
 }
 
@@ -108,6 +110,8 @@ export type Movie = {
   file?: MediaFile
   // Other cuts kept next to its copy.
   editions?: MediaFile[]
+  // The edition its copy should be, once one was asked for in its place.
+  wantedEdition?: string
   reported?: Reported
 }
 

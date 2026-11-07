@@ -374,10 +374,16 @@
     "notOnDisk": "Belum pada cakera.",
     "filesOf": "Fail {{title}}",
     "edition": "Edisi",
-    "editionByLength": "Tekaan daripada tempoh tayangan",
     "runs": "Tempoh",
     "otherEditions": "Edisi lain",
-    "otherEditionsSub": "Versi lain yang disimpan di sebelah salinan filem. Ia bukan pendua, dan Box Office tidak mencari naik taraf untuknya."
+    "otherEditionsSub": "Versi lain yang disimpan di sebelah salinan filem. Ia bukan pendua, dan Box Office tidak mencari naik taraf untuknya.",
+    "editionFrom": {
+      "name": "Daripada nama fail",
+      "release": "Daripada keluaran asal muat turunnya",
+      "file": "Daripada tajuk di dalam fail",
+      "length": "Tekaan daripada tempoh tayangan"
+    },
+    "wantedEdition": "Dikehendaki sebagai {{edition}}"
   },
   "show": {
     "lookingNow": "Mencari episod yang dikehendaki; lihat Aktiviti.",
@@ -1887,5 +1893,21 @@
     "video": "gambarnya rosak",
     "audio": "bunyinya rosak atau tidak segerak",
     "fixing": "Box Office menyekat keluaran salinan itu dan sedang mendapatkan yang lain."
+  },
+  "editions": {
+    "look": "Cari edisi",
+    "title": "Edisi {{title}}",
+    "sub": "Edisi yang ada pada pengindeks, mengikut nama keluaran. Dapatkan satu untuk disimpan di sebelah salinan anda atau menggantikannya. Box Office tidak pernah mencari edisi sendiri.",
+    "searching": "Mencari di pengindeks…",
+    "none": "Pengindeks tiada keluaran yang dinamakan edisi, seperti Extended atau Director's Cut.",
+    "owned": "Dalam pustaka",
+    "releases": "Keluaran: {{n}}",
+    "alongside": "Simpan di sebelah",
+    "replace": "Ganti salinan",
+    "get": "Dapatkan",
+    "asked": "Mencari {{edition}} sekarang; lihat Aktiviti.",
+    "other": "Edisi lain",
+    "otherHint": "Tiada dalam senarai? Pilih satu dan Box Office mencarinya sekarang.",
+    "pick": "Pilih edisi"
   }
 }

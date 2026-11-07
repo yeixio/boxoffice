@@ -317,7 +317,7 @@ func (h *Handler) ownedEditions(ctx context.Context, m store.Movie) (current str
 	if m.Editions, err = h.Catalog.Store.EditionFiles(ctx, m.ID); err != nil {
 		return "", nil, err
 	}
-	m.LabelEditions()
+	m.LabelEditions(h.Catalog.Store.ReleaseNames(ctx))
 	if m.File != nil {
 		current = m.File.Edition
 	}

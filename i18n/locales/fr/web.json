@@ -424,10 +424,16 @@
     "notOnDisk": "Pas encore sur le disque.",
     "filesOf": "Fichier de {{title}}",
     "edition": "Édition",
-    "editionByLength": "Une supposition d'après sa durée",
     "runs": "Durée",
     "otherEditions": "Autres éditions",
-    "otherEditionsSub": "D'autres montages gardés à côté de la copie du film. Ce ne sont pas des doublons, et Box Office ne cherche pas de meilleures versions pour eux."
+    "otherEditionsSub": "D'autres montages gardés à côté de la copie du film. Ce ne sont pas des doublons, et Box Office ne cherche pas de meilleures versions pour eux.",
+    "editionFrom": {
+      "name": "D'après le nom du fichier",
+      "release": "D'après la release téléchargée",
+      "file": "D'après le titre dans le fichier",
+      "length": "Une supposition d'après sa durée"
+    },
+    "wantedEdition": "Voulu en {{edition}}"
   },
   "show": {
     "lookingNow": "Recherche de ses épisodes recherchés ; voir Activité.",
@@ -2075,5 +2081,21 @@
     "video": "l'image est défectueuse",
     "audio": "le son est défectueux ou désynchronisé",
     "fixing": "Box Office a bloqué la release de cette copie et en récupère une autre."
+  },
+  "editions": {
+    "look": "Chercher une édition",
+    "title": "Éditions de {{title}}",
+    "sub": "Les éditions que les indexeurs ont, d'après le nom de leurs releases. Obtenez-en une à garder à côté de votre copie ou à sa place. Box Office ne cherche jamais d'éditions de lui-même.",
+    "searching": "Recherche sur les indexeurs…",
+    "none": "Les indexeurs n'ont aucune release nommée d'après une édition, comme Extended ou Director's Cut.",
+    "owned": "Dans la bibliothèque",
+    "releases": "Releases : {{n}}",
+    "alongside": "Garder à côté",
+    "replace": "Remplacer la copie",
+    "get": "L'obtenir",
+    "asked": "Recherche de {{edition}} en cours ; voir Activité.",
+    "other": "Une autre édition",
+    "otherHint": "Pas dans la liste ? Choisissez-en une et Box Office la cherche maintenant.",
+    "pick": "Choisir une édition"
   }
 }

@@ -449,10 +449,16 @@
     "notOnDisk": "Zatím není na disku.",
     "filesOf": "Soubor {{title}}",
     "edition": "Edice",
-    "editionByLength": "Odhad podle délky",
     "runs": "Délka",
     "otherEditions": "Další edice",
-    "otherEditionsSub": "Další verze uložené vedle kopie filmu. Nejsou to duplikáty a Box Office pro ně nehledá vylepšení."
+    "otherEditionsSub": "Další verze uložené vedle kopie filmu. Nejsou to duplikáty a Box Office pro ně nehledá vylepšení.",
+    "editionFrom": {
+      "name": "Z názvu souboru",
+      "release": "Z vydání, ze kterého byl stažen",
+      "file": "Z titulu uvnitř souboru",
+      "length": "Odhad podle délky"
+    },
+    "wantedEdition": "Požadováno jako {{edition}}"
   },
   "show": {
     "lookingNow": "Hledají se chtěné díly; viz Aktivita.",
@@ -2169,5 +2175,21 @@
     "video": "obraz je poškozený",
     "audio": "zvuk je poškozený nebo nesynchronní",
     "fixing": "Box Office zablokoval vydání této kopie a stahuje jinou."
+  },
+  "editions": {
+    "look": "Hledat edici",
+    "title": "Edice filmu {{title}}",
+    "sub": "Edice, které mají indexery, podle názvů vydání. Získejte jednu vedle své kopie nebo místo ní. Box Office edice sám nehledá.",
+    "searching": "Hledám v indexerech…",
+    "none": "Indexery nemají žádné vydání pojmenované podle edice, jako Extended nebo Director's Cut.",
+    "owned": "V knihovně",
+    "releases": "Vydání: {{n}}",
+    "alongside": "Ponechat vedle",
+    "replace": "Nahradit kopii",
+    "get": "Získat",
+    "asked": "Hledám edici {{edition}}; viz Aktivita.",
+    "other": "Jiná edice",
+    "otherHint": "Není v seznamu? Vyberte ji a Box Office ji hned začne hledat.",
+    "pick": "Vyberte edici"
   }
 }

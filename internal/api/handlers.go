@@ -358,7 +358,7 @@ func (s *Server) movie(w http.ResponseWriter, r *http.Request) error {
 	if m.Editions, err = s.Store.EditionFiles(r.Context(), m.ID); err != nil {
 		return err
 	}
-	m.LabelEditions()
+	m.LabelEditions(s.Store.ReleaseNames(r.Context()))
 	tw, err := s.Store.TitleWant(r.Context(), "movie", m.ID)
 	if err != nil {
 		return err
@@ -368,7 +368,10 @@ func (s *Server) movie(w http.ResponseWriter, r *http.Request) error {
 		// Reported is a problem reported in Matinee that a replacement
 		// is being looked for.
 		Reported *store.TitleWant `json:"reported,omitempty"`
-	}{Movie: m}
+		// WantedEdition is the edition its copy should be, once one was
+		// asked for in its place.
+		WantedEdition string `json:"wantedEdition,omitempty"`
+	}{Movie: m, WantedEdition: tw.Edition}
 	if tw.Want == store.WantReplace && tw.Problem != "" {
 		out.Reported = &tw
 	}

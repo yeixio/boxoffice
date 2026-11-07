@@ -374,10 +374,16 @@
     "notOnDisk": "Chưa có trên ổ đĩa.",
     "filesOf": "Tệp của {{title}}",
     "edition": "Phiên bản",
-    "editionByLength": "Ước đoán theo thời lượng",
     "runs": "Thời lượng",
     "otherEditions": "Phiên bản khác",
-    "otherEditionsSub": "Các bản dựng khác được giữ cạnh bản sao của phim. Chúng không phải bản trùng, và Box Office không tìm bản nâng cấp cho chúng."
+    "otherEditionsSub": "Các bản dựng khác được giữ cạnh bản sao của phim. Chúng không phải bản trùng, và Box Office không tìm bản nâng cấp cho chúng.",
+    "editionFrom": {
+      "name": "Theo tên tệp",
+      "release": "Theo bản phát hành đã tải về",
+      "file": "Theo tiêu đề bên trong tệp",
+      "length": "Ước đoán theo thời lượng"
+    },
+    "wantedEdition": "Muốn là bản {{edition}}"
   },
   "show": {
     "lookingNow": "Đang tìm các tập cần có; xem Hoạt động.",
@@ -1887,5 +1893,21 @@
     "video": "hình ảnh bị lỗi",
     "audio": "âm thanh bị lỗi hoặc lệch tiếng",
     "fixing": "Box Office đã chặn bản phát hành của bản sao đó và đang lấy bản khác."
+  },
+  "editions": {
+    "look": "Tìm phiên bản",
+    "title": "Các phiên bản của {{title}}",
+    "sub": "Các phiên bản mà trình lập chỉ mục có, theo tên bản phát hành. Lấy một bản để giữ cạnh bản sao hoặc thay thế nó. Box Office không bao giờ tự tìm phiên bản.",
+    "searching": "Đang tìm trên trình lập chỉ mục…",
+    "none": "Trình lập chỉ mục không có bản phát hành nào mang tên phiên bản, như Extended hay Director's Cut.",
+    "owned": "Trong thư viện",
+    "releases": "Bản phát hành: {{n}}",
+    "alongside": "Giữ bên cạnh",
+    "replace": "Thay bản sao",
+    "get": "Lấy",
+    "asked": "Đang tìm {{edition}}; xem Hoạt động.",
+    "other": "Phiên bản khác",
+    "otherHint": "Không có trong danh sách? Chọn một và Box Office sẽ tìm ngay.",
+    "pick": "Chọn phiên bản"
   }
 }

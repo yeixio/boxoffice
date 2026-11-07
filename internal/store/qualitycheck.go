@@ -68,6 +68,13 @@ func (s *Store) SaveCheck(ctx context.Context, f File, m quality.Media, q int) e
 	return err
 }
 
+// CheckMoviesAgain has the quality check look inside every movie copy
+// and edition again.
+func (s *Store) CheckMoviesAgain(ctx context.Context) error {
+	_, err := s.exec(ctx, "UPDATE media_files SET probed_at = 0 WHERE kind IN ('movie', 'edition')")
+	return err
+}
+
 // CheckAgain has the quality check look inside every file again.
 func (s *Store) CheckAgain(ctx context.Context) error {
 	_, err := s.exec(ctx, "UPDATE media_files SET probed_at = 0 WHERE kind IN "+checkKinds)
