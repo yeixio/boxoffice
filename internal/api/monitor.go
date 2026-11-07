@@ -335,7 +335,7 @@ func (s *Server) disks(uses []monitorUse) []monitorDisk {
 	for i, u := range uses {
 		res := *byPath[paths[i]]
 		if res.ok {
-			if j := slices.IndexFunc(out, func(d monitorDisk) bool { return d.Reachable && sameDisk(d.Disk, res.d) }); j >= 0 {
+			if j := slices.IndexFunc(out, func(o monitorDisk) bool { return o.Reachable && sameDisk(o.Disk, res.d) }); j >= 0 {
 				out[j].Uses = append(out[j].Uses, u)
 				continue
 			}
@@ -345,17 +345,17 @@ func (s *Server) disks(uses []monitorUse) []monitorDisk {
 	return out
 }
 
-// sameDisk says whether two folders' disk space is one disk's. Network
-// shares of one server (Unraid's, say) each read as a disk of their own,
-// and as files are written their free space differs from one reading to
-// the next, so a little difference is allowed: otherwise they're grouped
-// differently each time, and an alert about the disk comes and goes.
+// sameDisk says whether two folders' readings are of one disk: the same
+// size, and free space a moment apart. Shares of one NAS each report its
+// whole disk, but files written between the readings change the free
+// space, and comparing it exactly listed (and alerted about) one disk once
+// per share.
 func sameDisk(a, b monitor.Disk) bool {
+	const drift = 1 << 30 // 1 GiB
 	if a.Total != b.Total {
 		return false
 	}
-	diff := max(a.Free, b.Free) - min(a.Free, b.Free)
-	return diff <= a.Total/1000
+	return max(a.Free, b.Free)-min(a.Free, b.Free) <= drift
 }
 
 // diskWait is how long the Health page waits for a folder's disk. A network

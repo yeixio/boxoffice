@@ -28,10 +28,9 @@ What changed in Box Office, newest first. The format follows [Keep a Changelog](
 - **A download's folder that another app made, and Box Office can't write in, no longer fails the release.** It gets a fresh folder of its own; and a permissions problem pauses the download instead of blocking a release that's fine.
 - **Old RAR sets (RAR 2 era, .rar, .r00, .r01…) unpack when posted beside another archive,** such as subtitles. Their volumes were added to the other archive, and both failed to unpack.
 - **Blocked releases moved in from Sonarr and Radarr say why they were blocked.** Those NZBGet failed came over as its raw status line, `{scriptStatus}` and all; they now read as missing articles, password protected, failed repair, duplicate and so on, including the ones already moved in.
-- **Disk space alerts no longer flap or come once per folder** for shares of one server: their folders are kept together as one disk even when free space reads a little differently from one moment to the next.
 - **Jobs cut short by a restart run again** at the next start, instead of ending as failed with "context canceled".
 - **Titles TMDB doesn't know any more aren't warned about on every refresh.** They're named in the refresh's result and asked about weekly.
-
+- **One "Disk almost full" alert for one NAS.** Shares of the same NAS read a moment apart were told apart by a few bytes of free space while files were being written, so Health listed the disk once per share and each sent its own alert. The same size with free space within 1 GiB now counts as one disk.
 - **Choose a release no longer goes to a blank screen when nothing is found.** A search with no releases came back as `null` instead of an empty list, and the releases window crashed the page. It hit audiobooks first, since indexers often have none, but albums, ebooks, movies and episodes did the same when a search came up empty. Now it says nothing was found.
 
 ## [0.1.0] - 2026-11-06
