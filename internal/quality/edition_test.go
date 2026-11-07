@@ -28,3 +28,39 @@ func TestEdition(t *testing.T) {
 		t.Errorf("EditionTag = %q", got)
 	}
 }
+
+func TestLengthEdition(t *testing.T) {
+	const min = 60.0
+	cases := []struct {
+		name    string
+		secs    float64
+		others  []float64
+		runtime int
+		want    string
+	}{
+		{"longer than the other copy", 201 * min, []float64{178 * min}, 178, "Extended"},
+		{"shorter than the other copy", 178 * min, []float64{201 * min}, 178, "Theatrical"},
+		{"same cut, logos apart", 120*min + 40, []float64{120 * min}, 120, ""},
+		{"a PAL copy runs 4% short", 115 * min, []float64{120 * min}, 120, ""},
+		{"five minutes is too little on a long film", 185 * min, []float64{180 * min}, 180, ""},
+		{"alone, well past TMDB's runtime", 150 * min, nil, 120, "Extended"},
+		{"alone, credits past TMDB's runtime", 128 * min, nil, 120, ""},
+		{"alone, runtime unknown", 150 * min, nil, 0, ""},
+		{"length unknown", 0, []float64{120 * min}, 120, ""},
+		{"others unknown", 150 * min, []float64{0}, 120, ""},
+	}
+	for _, c := range cases {
+		if got := LengthEdition(c.secs, c.others, c.runtime); got != c.want {
+			t.Errorf("%s: got %q, want %q", c.name, got, c.want)
+		}
+	}
+}
+
+func TestEditionOf(t *testing.T) {
+	if e, by := EditionOf("Heat (1995) {edition-Director's Cut}.mkv", 100*60, []float64{200 * 60}, 0); e != "Director's Cut" || by {
+		t.Errorf("named: got %q %v", e, by)
+	}
+	if e, by := EditionOf("Heat (1995).mkv", 200*60, []float64{170 * 60}, 0); e != "Extended" || !by {
+		t.Errorf("by length: got %q %v", e, by)
+	}
+}

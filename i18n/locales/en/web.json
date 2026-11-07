@@ -397,7 +397,12 @@
     "added": "Added",
     "deleteFile": "Delete file from disk",
     "notOnDisk": "Not on disk yet.",
-    "filesOf": "{{title}}'s file"
+    "filesOf": "{{title}}'s file",
+    "edition": "Edition",
+    "editionByLength": "A guess from how long it runs",
+    "runs": "Runs",
+    "otherEditions": "Other editions",
+    "otherEditionsSub": "Other cuts kept next to the movie's copy. They aren't duplicates, and Box Office doesn't look for upgrades of them."
   },
   "show": {
     "lookingNow": "Looking for its wanted episodes; see Activity.",
@@ -1741,7 +1746,8 @@
     "copiesNote": "Each of these runs as long as a whole movie, so they look like copies (another cut or quality), not parts. Pick the one to keep, or join them if they really are parts.",
     "instead": {
       "keepOne": "Keep one instead",
-      "join": "Join them instead"
+      "join": "Join them instead",
+      "keepEditions": "Keep all as editions instead"
     },
     "subtitles": "subtitles: {{count}}",
     "recent": "Recent fixes",
@@ -1766,7 +1772,8 @@
       "forget": "Forget it",
       "convert": "Remux to MKV",
       "join": "Join the parts",
-      "removeDirs": "Remove"
+      "removeDirs": "Remove",
+      "keepEditions": "Keep all as editions"
     },
     "did": {
       "rename": "Renamed",
@@ -1776,7 +1783,8 @@
       "forget": "Forgot",
       "convert": "Remuxed",
       "join": "Joined",
-      "removeDirs": "Removed"
+      "removeDirs": "Removed",
+      "keepEditions": "Kept as editions"
     },
     "state": {
       "done": "Done",
@@ -1822,6 +1830,10 @@
       "empty": {
         "title": "Empty folders",
         "hint": "Folders with nothing in them."
+      },
+      "editions": {
+        "title": "Different cuts of a movie",
+        "hint": "These copies run for very different lengths or are named for different cuts, so they aren't duplicates. Keeping them all records each other cut as an edition, named with an {edition-…} tag that Matinee, Plex and Jellyfin read. Nothing is set aside."
       }
     },
     "waiting": {
@@ -1885,7 +1897,10 @@
     },
     "addWithScan": "Add with Scan",
     "filesIn": "{{count}} files",
-    "garbledName": "The name on disk is garbled; it's meant to be “{{name}}”."
+    "garbledName": "The name on disk is garbled; it's meant to be “{{name}}”.",
+    "staysCopy": "stays the movie's copy",
+    "asEdition": "kept as the {{edition}} edition",
+    "byLength": "{{edition}}, going by its length"
   },
   "ereaders": {
     "title": "Send to e-readers",

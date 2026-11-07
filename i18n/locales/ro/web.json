@@ -422,7 +422,12 @@
     "added": "Adăugat",
     "deleteFile": "Șterge fișierul de pe disc",
     "notOnDisk": "Încă nu e pe disc.",
-    "filesOf": "Fișierul lui {{title}}"
+    "filesOf": "Fișierul lui {{title}}",
+    "edition": "Ediție",
+    "editionByLength": "O estimare după durată",
+    "runs": "Durată",
+    "otherEditions": "Alte ediții",
+    "otherEditionsSub": "Alte versiuni păstrate lângă copia filmului. Nu sunt duplicate, iar Box Office nu caută îmbunătățiri pentru ele."
   },
   "show": {
     "lookingNow": "Se caută episoadele dorite; vezi Activitate.",
@@ -1835,7 +1840,8 @@
     "copiesNote": "Fiecare durează cât un film întreg, deci par copii (altă versiune sau calitate), nu părți. Alege pe care o păstrezi sau unește-le dacă sunt cu adevărat părți.",
     "instead": {
       "keepOne": "Păstrează una în schimb",
-      "join": "Unește-le în schimb"
+      "join": "Unește-le în schimb",
+      "keepEditions": "Păstrează-le mai bine pe toate ca ediții"
     },
     "subtitles": "subtitrări: {{count}}",
     "recent": "Corectări recente",
@@ -1860,7 +1866,8 @@
       "forget": "Uită-l",
       "convert": "Remuxează în MKV",
       "join": "Unește părțile",
-      "removeDirs": "Elimină"
+      "removeDirs": "Elimină",
+      "keepEditions": "Păstrează-le pe toate ca ediții"
     },
     "did": {
       "rename": "Redenumit",
@@ -1870,7 +1877,8 @@
       "forget": "Uitat",
       "convert": "Remuxat",
       "join": "Unit",
-      "removeDirs": "Eliminat"
+      "removeDirs": "Eliminat",
+      "keepEditions": "Păstrate ca ediții"
     },
     "state": {
       "done": "Gata",
@@ -1916,6 +1924,10 @@
       "empty": {
         "title": "Dosare goale",
         "hint": "Dosare fără nimic în ele."
+      },
+      "editions": {
+        "title": "Versiuni diferite ale unui film",
+        "hint": "Aceste copii au durate foarte diferite sau poartă nume de versiuni diferite, deci nu sunt duplicate. Păstrarea tuturor înregistrează fiecare altă versiune ca ediție, cu o etichetă {edition-…} pe care o citesc Matinee, Plex și Jellyfin. Nimic nu e pus deoparte."
       }
     },
     "waiting": {
@@ -1979,7 +1991,10 @@
     },
     "addWithScan": "Adaugă cu Scanează",
     "filesIn": "{{count}} fișiere",
-    "garbledName": "Numele de pe disc e stricat; ar trebui să fie „{{name}}”."
+    "garbledName": "Numele de pe disc e stricat; ar trebui să fie „{{name}}”.",
+    "staysCopy": "rămâne copia filmului",
+    "asEdition": "păstrată ca ediția {{edition}}",
+    "byLength": "{{edition}}, după durată"
   },
   "ereaders": {
     "title": "Trimite pe cititoare",

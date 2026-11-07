@@ -8,7 +8,7 @@ import { bytes, when } from '../format'
 import { Badge, Button, Card, ErrorNote, Heading, Modal, Spinner } from '../ui'
 
 // The order the kinds of problem are shown in, most worth fixing first.
-const kinds: ProblemKind[] = ['duplicate', 'parts', 'disc_image', 'untracked', 'missing', 'naming', 'unknown', 'not_listed', 'leftover', 'empty']
+const kinds: ProblemKind[] = ['duplicate', 'editions', 'parts', 'disc_image', 'untracked', 'missing', 'naming', 'unknown', 'not_listed', 'leftover', 'empty']
 
 const busy = (s?: ProblemsState) => !!s && (s.status.looking || !!s.status.fixing || s.status.queued.length > 0 || !!s.status.deciding)
 
@@ -208,8 +208,16 @@ function Row(props: {
   const queued = state.status.queued.includes(p.id)
   const failed = state.status.failed.find((f) => f.id === p.id)
   const action = props.action
-  // The other way to fix parts that look like copies.
-  const other: ProblemAction | undefined = p.copies ? (action === 'join' ? 'keep_one' : 'join') : undefined
+  // The other way to fix parts that look like copies, or cuts of a movie.
+  const other: ProblemAction | undefined = p.copies
+    ? action === 'join'
+      ? 'keep_one'
+      : 'join'
+    : p.kind === 'editions'
+      ? action === 'keep_one'
+        ? 'keep_editions'
+        : 'keep_one'
+      : undefined
   const link = p.title && (p.title.kind === 'movie' ? `/movies/${p.title.id}` : `/shows/${p.title.id}`)
   const name = p.title ? (p.title.year ? `${p.title.name} (${p.title.year})` : p.title.name) : (p.files[0]?.name ?? base(p.files[0]?.path ?? ''))
   // A folder that isn't any title's is usually one to add, not set aside.
@@ -271,6 +279,11 @@ function Row(props: {
           )}
         </div>
       )}
+      {p.kind === 'editions' && other && !fixing && !queued && props.fixable && (
+        <button type="button" className="self-start text-xs font-medium text-marquee hover:underline" onClick={() => props.onAction(other)}>
+          {t(`problems.instead.${key(other)}`)}
+        </button>
+      )}
       <Change {...props} />
       {p.fix?.blocked && p.fix.blocked !== 'locked' && <p className="text-xs text-gold">{t(`problems.blocked.${key(p.fix.blocked)}`)}</p>}
       {failed && (
@@ -298,7 +311,7 @@ function Change({ p, keep, onKeep, fixable, action }: { p: LibProblem; keep: str
       </span>
       {extra}
       {f.name && <span className="block text-xs text-gold">{t('problems.garbledName', { name: f.name })}</span>}
-      {(f.media || f.edition) && <MediaLine media={f.media} edition={f.edition} />}
+      {(f.media || f.edition) && <MediaLine media={f.media} edition={f.edition} byLength={f.byLength} />}
     </>
   )
   if (action === 'keep_one') {
@@ -314,6 +327,29 @@ function Change({ p, keep, onKeep, fixable, action }: { p: LibProblem; keep: str
           </label>
         ))}
       </fieldset>
+    )
+  }
+  if (action === 'keep_editions') {
+    // Every copy stays: the one kept as the movie's, and the others as
+    // its editions, renamed for their cut.
+    return (
+      <ul className="flex flex-col gap-1 ps-1">
+        {p.files.map((f) => {
+          const move = fix?.moves?.find((m) => m.from === f.path)
+          const main = f.path === fix?.keep
+          return (
+            <li key={f.path}>
+              {file(f, <span className="text-ok"> · {main ? t('problems.staysCopy') : t('problems.asEdition', { edition: f.edition })}</span>)}
+              {move && (
+                <span className="flex flex-wrap items-center gap-x-2 text-xs">
+                  <ArrowRight className="size-3.5 shrink-0 rtl:rotate-180" aria-hidden />
+                  <code className="break-all">{rel(p.root, move.to)}</code>
+                </span>
+              )}
+            </li>
+          )
+        })}
+      </ul>
     )
   }
   const moves = fix?.moves ?? []
@@ -342,7 +378,7 @@ function Change({ p, keep, onKeep, fixable, action }: { p: LibProblem; keep: str
 
 // MediaLine says what's in a video, to tell copies and parts apart: how
 // long it runs, its picture, its sound and its cut.
-function MediaLine({ media, edition }: { media?: ProblemMedia; edition?: string }) {
+function MediaLine({ media, edition, byLength }: { media?: ProblemMedia; edition?: string; byLength?: boolean }) {
   const { t } = useTranslation()
   const bits: string[] = []
   if (media) {
@@ -352,7 +388,7 @@ function MediaLine({ media, edition }: { media?: ProblemMedia; edition?: string 
     if (media.audio?.length) bits.push(media.audio.join(', '))
     if (media.subtitles) bits.push(t('problems.subtitles', { count: media.subtitles }))
   }
-  if (edition) bits.push(edition)
+  if (edition) bits.push(byLength ? t('problems.byLength', { edition }) : edition)
   else if (media?.title) bits.push(`“${media.title}”`)
   return <span className="block text-xs text-muted">{bits.join(' · ')}</span>
 }

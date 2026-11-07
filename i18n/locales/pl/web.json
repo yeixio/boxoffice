@@ -447,7 +447,12 @@
     "added": "Dodano",
     "deleteFile": "Usuń plik z dysku",
     "notOnDisk": "Jeszcze nie na dysku.",
-    "filesOf": "Plik {{title}}"
+    "filesOf": "Plik {{title}}",
+    "edition": "Wydanie",
+    "editionByLength": "Przypuszczenie na podstawie długości",
+    "runs": "Czas trwania",
+    "otherEditions": "Inne wydania",
+    "otherEditionsSub": "Inne wersje trzymane obok kopii filmu. To nie duplikaty, a Box Office nie szuka dla nich lepszych wersji."
   },
   "show": {
     "lookingNow": "Szukanie poszukiwanych odcinków; zobacz Aktywność.",
@@ -1929,7 +1934,8 @@
     "copiesNote": "Każdy z nich trwa tyle co cały film, więc wyglądają na kopie (inna wersja lub jakość), nie części. Wybierz, którą zostawić, albo połącz je, jeśli to naprawdę części.",
     "instead": {
       "keepOne": "Zamiast tego zostaw jedną",
-      "join": "Zamiast tego połącz"
+      "join": "Zamiast tego połącz",
+      "keepEditions": "Zamiast tego zachowaj wszystkie jako wydania"
     },
     "subtitles": "napisy: {{count}}",
     "recent": "Ostatnie poprawki",
@@ -1954,7 +1960,8 @@
       "forget": "Zapomnij",
       "convert": "Remuksuj do MKV",
       "join": "Połącz części",
-      "removeDirs": "Usuń"
+      "removeDirs": "Usuń",
+      "keepEditions": "Zachowaj wszystkie jako wydania"
     },
     "did": {
       "rename": "Zmieniono nazwę",
@@ -1964,7 +1971,8 @@
       "forget": "Zapomniano",
       "convert": "Zremuksowano",
       "join": "Połączono",
-      "removeDirs": "Usunięto"
+      "removeDirs": "Usunięto",
+      "keepEditions": "Zachowano jako wydania"
     },
     "state": {
       "done": "Gotowe",
@@ -2010,6 +2018,10 @@
       "empty": {
         "title": "Puste foldery",
         "hint": "Foldery, w których nic nie ma."
+      },
+      "editions": {
+        "title": "Różne wersje filmu",
+        "hint": "Te kopie mają bardzo różną długość lub nazwy różnych wersji, więc to nie duplikaty. Zachowanie wszystkich zapisuje każdą inną wersję jako wydanie, z tagiem {edition-…}, który czytają Matinee, Plex i Jellyfin. Nic nie jest odkładane."
       }
     },
     "waiting": {
@@ -2073,7 +2085,10 @@
     },
     "addWithScan": "Dodaj przez Skanuj",
     "filesIn": "Plików: {{count}}",
-    "garbledName": "Nazwa na dysku jest zniekształcona; powinna brzmieć „{{name}}”."
+    "garbledName": "Nazwa na dysku jest zniekształcona; powinna brzmieć „{{name}}”.",
+    "staysCopy": "pozostaje kopią filmu",
+    "asEdition": "zachowane jako wydanie {{edition}}",
+    "byLength": "{{edition}}, według długości"
   },
   "ereaders": {
     "title": "Wysyłanie na czytniki",

@@ -397,7 +397,12 @@
     "added": "Hinzugefügt",
     "deleteFile": "Datei von der Festplatte löschen",
     "notOnDisk": "Noch nicht vorhanden.",
-    "filesOf": "Datei von {{title}}"
+    "filesOf": "Datei von {{title}}",
+    "edition": "Fassung",
+    "editionByLength": "Geschätzt anhand der Laufzeit",
+    "runs": "Laufzeit",
+    "otherEditions": "Weitere Fassungen",
+    "otherEditionsSub": "Weitere Schnittfassungen neben der Kopie des Films. Sie sind keine Duplikate, und Box Office sucht keine Upgrades für sie."
   },
   "show": {
     "lookingNow": "Die gesuchten Folgen werden gesucht; siehe Aktivität.",
@@ -1741,7 +1746,8 @@
     "copiesNote": "Jede dieser Dateien ist so lang wie ein ganzer Film, sie sehen also nach Kopien aus (eine andere Fassung oder Qualität), nicht nach Teilen. Wähle die, die bleibt, oder füge sie zusammen, wenn es wirklich Teile sind.",
     "instead": {
       "keepOne": "Stattdessen eine behalten",
-      "join": "Stattdessen zusammenfügen"
+      "join": "Stattdessen zusammenfügen",
+      "keepEditions": "Stattdessen alle als Fassungen behalten"
     },
     "subtitles": "Untertitel: {{count}}",
     "recent": "Letzte Korrekturen",
@@ -1766,7 +1772,8 @@
       "forget": "Vergessen",
       "convert": "In MKV umpacken",
       "join": "Teile zusammenfügen",
-      "removeDirs": "Entfernen"
+      "removeDirs": "Entfernen",
+      "keepEditions": "Alle als Fassungen behalten"
     },
     "did": {
       "rename": "Umbenannt",
@@ -1776,7 +1783,8 @@
       "forget": "Vergessen",
       "convert": "Umgepackt",
       "join": "Zusammengefügt",
-      "removeDirs": "Entfernt"
+      "removeDirs": "Entfernt",
+      "keepEditions": "Als Fassungen behalten"
     },
     "state": {
       "done": "Erledigt",
@@ -1822,6 +1830,10 @@
       "empty": {
         "title": "Leere Ordner",
         "hint": "Ordner, in denen nichts ist."
+      },
+      "editions": {
+        "title": "Verschiedene Fassungen eines Films",
+        "hint": "Diese Kopien sind sehr unterschiedlich lang oder nach verschiedenen Fassungen benannt, also keine Duplikate. Behältst du alle, wird jede weitere als Fassung erfasst, benannt mit einem {edition-…}-Tag, den Matinee, Plex und Jellyfin lesen. Nichts wird beiseitegelegt."
       }
     },
     "waiting": {
@@ -1885,7 +1897,10 @@
     },
     "addWithScan": "Mit Scannen hinzufügen",
     "filesIn": "{{count}} Dateien",
-    "garbledName": "Der Name auf der Festplatte ist verstümmelt; gemeint ist „{{name}}“."
+    "garbledName": "Der Name auf der Festplatte ist verstümmelt; gemeint ist „{{name}}“.",
+    "staysCopy": "bleibt die Kopie des Films",
+    "asEdition": "als Fassung {{edition}} behalten",
+    "byLength": "{{edition}}, nach der Laufzeit"
   },
   "ereaders": {
     "title": "An E-Reader senden",

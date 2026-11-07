@@ -372,7 +372,12 @@
     "added": "Ngày thêm",
     "deleteFile": "Xóa tệp khỏi ổ đĩa",
     "notOnDisk": "Chưa có trên ổ đĩa.",
-    "filesOf": "Tệp của {{title}}"
+    "filesOf": "Tệp của {{title}}",
+    "edition": "Phiên bản",
+    "editionByLength": "Ước đoán theo thời lượng",
+    "runs": "Thời lượng",
+    "otherEditions": "Phiên bản khác",
+    "otherEditionsSub": "Các bản dựng khác được giữ cạnh bản sao của phim. Chúng không phải bản trùng, và Box Office không tìm bản nâng cấp cho chúng."
   },
   "show": {
     "lookingNow": "Đang tìm các tập cần có; xem Hoạt động.",
@@ -1647,7 +1652,8 @@
     "copiesNote": "Mỗi tệp dài bằng cả một bộ phim, nên có vẻ là các bản sao (bản dựng hoặc chất lượng khác), không phải các phần. Chọn bản muốn giữ, hoặc ghép lại nếu thật sự là các phần.",
     "instead": {
       "keepOne": "Thay vào đó giữ một bản",
-      "join": "Thay vào đó ghép lại"
+      "join": "Thay vào đó ghép lại",
+      "keepEditions": "Thay vào đó giữ tất cả làm phiên bản"
     },
     "subtitles": "phụ đề: {{count}}",
     "recent": "Các bản sửa gần đây",
@@ -1672,7 +1678,8 @@
       "forget": "Bỏ qua",
       "convert": "Remux sang MKV",
       "join": "Ghép các phần",
-      "removeDirs": "Xóa"
+      "removeDirs": "Xóa",
+      "keepEditions": "Giữ tất cả làm phiên bản"
     },
     "did": {
       "rename": "Đã đổi tên",
@@ -1682,7 +1689,8 @@
       "forget": "Đã bỏ qua",
       "convert": "Đã remux",
       "join": "Đã ghép",
-      "removeDirs": "Đã xóa"
+      "removeDirs": "Đã xóa",
+      "keepEditions": "Đã giữ làm phiên bản"
     },
     "state": {
       "done": "Xong",
@@ -1728,6 +1736,10 @@
       "empty": {
         "title": "Thư mục trống",
         "hint": "Thư mục không có gì bên trong."
+      },
+      "editions": {
+        "title": "Các bản dựng khác nhau của một phim",
+        "hint": "Các bản sao này có thời lượng rất khác nhau hoặc mang tên các bản dựng khác nhau, nên không phải bản trùng. Giữ tất cả sẽ ghi mỗi bản dựng khác thành một phiên bản, với thẻ {edition-…} mà Matinee, Plex và Jellyfin đọc được. Không có gì bị để riêng."
       }
     },
     "waiting": {
@@ -1791,7 +1803,10 @@
     },
     "addWithScan": "Thêm bằng Quét",
     "filesIn": "{{count}} tệp",
-    "garbledName": "Tên trên đĩa bị lỗi mã hóa; đúng ra là “{{name}}”."
+    "garbledName": "Tên trên đĩa bị lỗi mã hóa; đúng ra là “{{name}}”.",
+    "staysCopy": "vẫn là bản sao của phim",
+    "asEdition": "giữ làm phiên bản {{edition}}",
+    "byLength": "{{edition}}, theo thời lượng"
   },
   "ereaders": {
     "title": "Gửi đến máy đọc sách",

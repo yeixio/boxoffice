@@ -397,7 +397,12 @@
     "added": "Toegevoegd",
     "deleteFile": "Bestand van schijf verwijderen",
     "notOnDisk": "Nog niet op schijf.",
-    "filesOf": "Bestand van {{title}}"
+    "filesOf": "Bestand van {{title}}",
+    "edition": "Editie",
+    "editionByLength": "Een schatting op basis van de speelduur",
+    "runs": "Speelduur",
+    "otherEditions": "Andere edities",
+    "otherEditionsSub": "Andere versies naast de kopie van de film. Het zijn geen duplicaten, en Box Office zoekt er geen upgrades voor."
   },
   "show": {
     "lookingNow": "Gewenste afleveringen worden gezocht; zie Activiteit.",
@@ -1741,7 +1746,8 @@
     "copiesNote": "Elk hiervan duurt zo lang als een hele film, dus het lijken kopieën (een andere versie of kwaliteit), geen delen. Kies welke je houdt, of voeg ze samen als het echt delen zijn.",
     "instead": {
       "keepOne": "Liever één houden",
-      "join": "Liever samenvoegen"
+      "join": "Liever samenvoegen",
+      "keepEditions": "In plaats daarvan alles als edities houden"
     },
     "subtitles": "ondertitels: {{count}}",
     "recent": "Recente oplossingen",
@@ -1766,7 +1772,8 @@
       "forget": "Vergeten",
       "convert": "Remuxen naar MKV",
       "join": "Delen samenvoegen",
-      "removeDirs": "Verwijderen"
+      "removeDirs": "Verwijderen",
+      "keepEditions": "Alles als edities houden"
     },
     "did": {
       "rename": "Hernoemd",
@@ -1776,7 +1783,8 @@
       "forget": "Vergeten",
       "convert": "Geremuxt",
       "join": "Samengevoegd",
-      "removeDirs": "Verwijderd"
+      "removeDirs": "Verwijderd",
+      "keepEditions": "Als edities gehouden"
     },
     "state": {
       "done": "Klaar",
@@ -1822,6 +1830,10 @@
       "empty": {
         "title": "Lege mappen",
         "hint": "Mappen waar niets in staat."
+      },
+      "editions": {
+        "title": "Verschillende versies van een film",
+        "hint": "Deze kopieën verschillen sterk in lengte of zijn naar verschillende versies vernoemd, dus het zijn geen duplicaten. Als je ze allemaal houdt, wordt elke andere versie vastgelegd als editie, met een {edition-…}-tag die Matinee, Plex en Jellyfin lezen. Er wordt niets opzijgezet."
       }
     },
     "waiting": {
@@ -1885,7 +1897,10 @@
     },
     "addWithScan": "Toevoegen met Scannen",
     "filesIn": "{{count}} bestanden",
-    "garbledName": "De naam op schijf is verminkt; bedoeld is ‘{{name}}’."
+    "garbledName": "De naam op schijf is verminkt; bedoeld is ‘{{name}}’.",
+    "staysCopy": "blijft de kopie van de film",
+    "asEdition": "gehouden als de editie {{edition}}",
+    "byLength": "{{edition}}, op basis van de lengte"
   },
   "ereaders": {
     "title": "Naar e-readers sturen",

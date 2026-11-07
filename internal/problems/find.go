@@ -52,6 +52,7 @@ const (
 	Leftover  = "leftover"   // a sample, a program, a shortcut, a partial download
 	Unknown   = "unknown"    // a video in a show's folder that isn't named for an episode
 	EmptyDir  = "empty"      // an empty folder
+	Editions  = "editions"   // copies of a movie that are each a different cut
 )
 
 // Fix actions.
@@ -64,6 +65,9 @@ const (
 	ActConvert    = "convert"     // remux a disc image into Output
 	ActJoin       = "join"        // join parts into Output
 	ActRemoveDirs = "remove_dirs" // remove empty folders
+	// keep every copy: Keep stays the movie's, the others are recorded as
+	// its editions, renamed per Moves
+	ActKeepEditions = "keep_editions"
 )
 
 // Problem is one thing in a library folder that needs a hand.
@@ -109,6 +113,9 @@ type File struct {
 	// there; Edition the cut its name or title says it is.
 	Media   *Media `json:"media,omitempty"`
 	Edition string `json:"edition,omitempty"`
+	// ByLength says the edition is a guess from how long it runs against
+	// the other copies, not what its name says.
+	ByLength bool `json:"byLength,omitempty"`
 
 	mtime   int64
 	episode *store.Episode
@@ -354,7 +361,7 @@ func Find(ctx context.Context, st *store.Store, progress func(done, total int)) 
 	return rep, nil
 }
 
-var order = []string{Duplicate, Parts, DiscImage, Untracked, Missing, Naming, Unknown, NotListed, Leftover, EmptyDir}
+var order = []string{Duplicate, Editions, Parts, DiscImage, Untracked, Missing, Naming, Unknown, NotListed, Leftover, EmptyDir}
 
 func kindOrder(k string) int { return slices.Index(order, k) }
 

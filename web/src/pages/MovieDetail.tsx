@@ -7,11 +7,55 @@ import { Releases } from '../Releases'
 import { DeleteFiles, RemoveTitle } from '../RemoveFiles'
 import { AutoUpgradeField } from '../AutoUpgrade'
 import { LockedNote, ReportedNote } from '../Bulk'
-import { get, patch, post, type Movie } from '../api'
+import { get, patch, post, type MediaFile, type Movie } from '../api'
 import { bytes, day, runtime } from '../format'
 import { qualityName, useProfiles, useQualities } from '../hooks'
 import { pictureText } from './QualityCheck'
 import { Badge, Button, Card, ErrorNote, Field, Poster, Select, Spinner, Toggle } from '../ui'
+
+// FileFacts are what's known of one copy of the movie: its cut, path,
+// quality, picture, length, size and when it came.
+function FileFacts({ f }: { f: MediaFile }) {
+  const { t } = useTranslation()
+  const qualities = useQualities()
+  const length = f.media && !f.media.error && f.media.duration ? Math.round(f.media.duration / 60) : 0
+  return (
+    <>
+      {f.edition && (
+        <>
+          <dt className="text-muted">{t('title.edition')}</dt>
+          <dd>
+            <Badge tone="gold">{f.edition}</Badge>
+            {f.editionByLength && <div className="text-xs text-muted">{t('title.editionByLength')}</div>}
+          </dd>
+        </>
+      )}
+      <dt className="text-muted">{t('title.path')}</dt>
+      <dd className="break-all font-mono text-xs">{f.path}</dd>
+      <dt className="text-muted">{t('title.quality')}</dt>
+      <dd>
+        {qualityName(qualities.data, f.quality)}
+        {f.guessed !== undefined && <div className="text-xs text-muted">{t('qualityCheck.correctedFrom', { was: qualityName(qualities.data, f.guessed) })}</div>}
+      </dd>
+      {f.media && !f.media.error && (
+        <>
+          <dt className="text-muted">{t('qualityCheck.picture')}</dt>
+          <dd>{pictureText(f.media, (n) => t('qualityCheck.bits', { bits: n }))}</dd>
+        </>
+      )}
+      {length > 0 && (
+        <>
+          <dt className="text-muted">{t('title.runs')}</dt>
+          <dd>{runtime(length)}</dd>
+        </>
+      )}
+      <dt className="text-muted">{t('title.size')}</dt>
+      <dd>{bytes(f.size)}</dd>
+      <dt className="text-muted">{t('title.added')}</dt>
+      <dd>{day(f.addedAt)}</dd>
+    </>
+  )
+}
 
 export function MovieDetail() {
   const { t } = useTranslation()
@@ -20,7 +64,6 @@ export function MovieDetail() {
   const nav = useNavigate()
   const movie = useQuery({ queryKey: ['movie', id], queryFn: () => get<Movie>(`/movies/${id}`) })
   const profiles = useProfiles()
-  const qualities = useQualities()
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [note, setNote] = useState('')
   const [releases, setReleases] = useState(false)
@@ -130,23 +173,7 @@ export function MovieDetail() {
           <h2 className="mb-4 font-display text-lg font-semibold">{t('title.file')}</h2>
           {m.file ? (
             <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">
-              <dt className="text-muted">{t('title.path')}</dt>
-              <dd className="break-all font-mono text-xs">{m.file.path}</dd>
-              <dt className="text-muted">{t('title.quality')}</dt>
-              <dd>
-                {qualityName(qualities.data, m.file.quality)}
-                {m.file.guessed !== undefined && <div className="text-xs text-muted">{t('qualityCheck.correctedFrom', { was: qualityName(qualities.data, m.file.guessed) })}</div>}
-              </dd>
-              {m.file.media && !m.file.media.error && (
-                <>
-                  <dt className="text-muted">{t('qualityCheck.picture')}</dt>
-                  <dd>{pictureText(m.file.media, (n) => t('qualityCheck.bits', { bits: n }))}</dd>
-                </>
-              )}
-              <dt className="text-muted">{t('title.size')}</dt>
-              <dd>{bytes(m.file.size)}</dd>
-              <dt className="text-muted">{t('title.added')}</dt>
-              <dd>{day(m.file.addedAt)}</dd>
+              <FileFacts f={m.file} />
               {!locked && (
                 <dd className="col-span-2 mt-2">
                   <Button variant="danger" onClick={() => setDeleteFile(true)}>
@@ -157,6 +184,23 @@ export function MovieDetail() {
             </dl>
           ) : (
             <p className="text-sm text-muted">{t('title.notOnDisk')}</p>
+          )}
+          {/* Other cuts kept next to the copy: not duplicates, and never
+              searched for or upgraded on their own. */}
+          {(m.editions?.length ?? 0) > 0 && (
+            <>
+              <h3 className="mb-1 mt-6 font-display font-semibold">{t('title.otherEditions')}</h3>
+              <p className="mb-3 text-xs text-muted">{t('title.otherEditionsSub')}</p>
+              <ul className="flex flex-col divide-y divide-line">
+                {m.editions!.map((f) => (
+                  <li key={f.id} className="py-3 first:pt-0">
+                    <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">
+                      <FileFacts f={f} />
+                    </dl>
+                  </li>
+                ))}
+              </ul>
+            </>
           )}
         </Card>
       </div>

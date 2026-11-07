@@ -62,7 +62,19 @@ export type FileMedia = {
   error?: string
 }
 // guessed is the quality a file had before the quality check corrected it.
-export type MediaFile = { id: number; path: string; size: number; quality: number; addedAt: string; media?: FileMedia; guessed?: number }
+// edition is the cut a movie's copy is, from its name or, with
+// editionByLength, a guess from how long it runs.
+export type MediaFile = {
+  id: number
+  path: string
+  size: number
+  quality: number
+  addedAt: string
+  media?: FileMedia
+  guessed?: number
+  edition?: string
+  editionByLength?: boolean
+}
 
 export type QualityCheckState = {
   status: { running: boolean; done: number; ffprobe: boolean; error?: string; files: number; checked: number; unreadable: number; unknown: number }
@@ -94,6 +106,8 @@ export type Movie = {
   path: string
   addedAt: string
   file?: MediaFile
+  // Other cuts kept next to its copy.
+  editions?: MediaFile[]
   reported?: Reported
 }
 
@@ -643,12 +657,12 @@ export type LookupAuthor = { key: string; name: string; born?: string; died?: st
 
 // ---- problem files ----
 
-export type ProblemKind = 'duplicate' | 'parts' | 'disc_image' | 'untracked' | 'missing' | 'naming' | 'unknown' | 'not_listed' | 'leftover' | 'empty'
-export type ProblemAction = 'rename' | 'set_aside' | 'keep_one' | 'record' | 'forget' | 'convert' | 'join' | 'remove_dirs'
+export type ProblemKind = 'duplicate' | 'editions' | 'parts' | 'disc_image' | 'untracked' | 'missing' | 'naming' | 'unknown' | 'not_listed' | 'leftover' | 'empty'
+export type ProblemAction = 'rename' | 'set_aside' | 'keep_one' | 'keep_editions' | 'record' | 'forget' | 'convert' | 'join' | 'remove_dirs'
 export type ProblemMedia = { duration: number; width?: number; height?: number; video?: string; hdr?: string; audio?: string[]; subtitles?: number; title?: string }
 // name is the file's name as it was meant to be, when it's garbled on
 // disk; count, for a folder, how many files are in it.
-export type ProblemFile = { path: string; size: number; dir?: boolean; count?: number; name?: string; recorded?: boolean; episode?: string; media?: ProblemMedia; edition?: string }
+export type ProblemFile = { path: string; size: number; dir?: boolean; count?: number; name?: string; recorded?: boolean; episode?: string; media?: ProblemMedia; edition?: string; byLength?: boolean }
 export type ProblemMove = { from: string; to: string; folder?: boolean }
 export type LibProblem = {
   id: string

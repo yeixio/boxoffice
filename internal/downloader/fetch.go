@@ -332,8 +332,11 @@ var stallWait, stallGrace = 10 * time.Minute, time.Minute
 // stopped for any other reason).
 func (e *Engine) watchStall(ctx context.Context, cancel context.CancelCauseFunc, r *running, done <-chan struct{}) <-chan struct{} {
 	stuck := make(chan struct{})
+	// Read once, here: the watch can outlive a download stuck on a hung
+	// share, and tests set these.
+	wait, grace := stallWait, stallGrace
 	go func() {
-		tick := time.NewTicker(min(stallWait/4, 30*time.Second))
+		tick := time.NewTicker(min(wait/4, 30*time.Second))
 		defer tick.Stop()
 		last, at := r.bytes.Load(), time.Now()
 		for {
@@ -345,7 +348,7 @@ func (e *Engine) watchStall(ctx context.Context, cancel context.CancelCauseFunc,
 				// it gets as long to finish.
 				select {
 				case <-done:
-				case <-time.After(stallGrace):
+				case <-time.After(grace):
 					close(stuck)
 				}
 				return
@@ -355,13 +358,13 @@ func (e *Engine) watchStall(ctx context.Context, cancel context.CancelCauseFunc,
 				last, at = b, time.Now()
 				continue
 			}
-			if time.Since(at) < stallWait {
+			if time.Since(at) < wait {
 				continue
 			}
-			cancel(shareError{fmt.Errorf("nothing was saved for %s: %w", stallWait.Round(time.Second), syscall.ETIMEDOUT)})
+			cancel(shareError{fmt.Errorf("nothing was saved for %s: %w", wait.Round(time.Second), syscall.ETIMEDOUT)})
 			select {
 			case <-done:
-			case <-time.After(stallGrace):
+			case <-time.After(grace):
 				close(stuck)
 			}
 			return

@@ -137,7 +137,7 @@ func (s *Store) AddEditionFile(ctx context.Context, movieID int64, path string, 
 
 // EditionFiles are a movie's extra editions.
 func (s *Store) EditionFiles(ctx context.Context, movieID int64) ([]File, error) {
-	rows, err := s.query(ctx, "SELECT id, kind, owner_id, path, size, quality, added_at FROM media_files WHERE kind = 'edition' AND owner_id = ? ORDER BY path", movieID)
+	rows, err := s.query(ctx, "SELECT id, kind, owner_id, path, size, quality, added_at, media, guessed FROM media_files WHERE kind = 'edition' AND owner_id = ? ORDER BY path", movieID)
 	if err != nil {
 		return nil, err
 	}
@@ -146,10 +146,13 @@ func (s *Store) EditionFiles(ctx context.Context, movieID int64) ([]File, error)
 	for rows.Next() {
 		var f File
 		var added int64
-		if err := rows.Scan(&f.ID, &f.Kind, &f.OwnerID, &f.Path, &f.Size, &f.Quality, &added); err != nil {
+		var media sql.NullString
+		var guessed sql.NullInt64
+		if err := rows.Scan(&f.ID, &f.Kind, &f.OwnerID, &f.Path, &f.Size, &f.Quality, &added, &media, &guessed); err != nil {
 			return nil, err
 		}
 		f.AddedAt = time.Unix(added, 0).UTC()
+		f.checked(media, guessed)
 		out = append(out, f)
 	}
 	return out, rows.Err()

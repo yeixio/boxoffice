@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
+	"path/filepath"
 	"time"
 
 	"github.com/yeixio/boxoffice/internal/quality"
@@ -37,6 +38,9 @@ type Movie struct {
 	// movie: whether Box Office looks for upgrades of it by itself.
 	AutoUpgrade string `json:"autoUpgrade"`
 	File        *File  `json:"file,omitempty"`
+	// Editions are other cuts of it kept next to its copy (see
+	// AddEditionFile), when asked for with LabelEditions.
+	Editions []File `json:"editions,omitempty"`
 }
 
 // File is a copy on disk of a movie or an episode.
@@ -52,6 +56,39 @@ type File struct {
 	// looked; Guessed the quality it had before the check corrected it.
 	Media   *quality.Media `json:"media,omitempty"`
 	Guessed *int           `json:"guessed,omitempty"`
+	// Edition is the cut a movie's copy is (Director's Cut, Extended…),
+	// from its name or, with EditionByLength, from how long it runs;
+	// filled in by Movie.LabelEditions.
+	Edition         string `json:"edition,omitempty"`
+	EditionByLength bool   `json:"editionByLength,omitempty"`
+}
+
+// LabelEditions fills in the edition of the movie's copy and of each of
+// its other editions, from their names or how long they run against
+// each other and the movie's runtime (see quality.EditionOf).
+func (m *Movie) LabelEditions() {
+	files := make([]*File, 0, 1+len(m.Editions))
+	if m.File != nil {
+		files = append(files, m.File)
+	}
+	for i := range m.Editions {
+		files = append(files, &m.Editions[i])
+	}
+	length := func(f *File) float64 {
+		if f.Media == nil || f.Media.Error != "" {
+			return 0
+		}
+		return f.Media.Duration
+	}
+	for _, f := range files {
+		var others []float64
+		for _, o := range files {
+			if o != f {
+				others = append(others, length(o))
+			}
+		}
+		f.Edition, f.EditionByLength = quality.EditionOf(filepath.Base(f.Path), length(f), others, m.Runtime)
+	}
 }
 
 // checked fills in what the quality check found, from the media and

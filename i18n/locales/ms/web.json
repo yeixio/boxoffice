@@ -372,7 +372,12 @@
     "added": "Ditambah",
     "deleteFile": "Padam fail daripada cakera",
     "notOnDisk": "Belum pada cakera.",
-    "filesOf": "Fail {{title}}"
+    "filesOf": "Fail {{title}}",
+    "edition": "Edisi",
+    "editionByLength": "Tekaan daripada tempoh tayangan",
+    "runs": "Tempoh",
+    "otherEditions": "Edisi lain",
+    "otherEditionsSub": "Versi lain yang disimpan di sebelah salinan filem. Ia bukan pendua, dan Box Office tidak mencari naik taraf untuknya."
   },
   "show": {
     "lookingNow": "Mencari episod yang dikehendaki; lihat Aktiviti.",
@@ -1647,7 +1652,8 @@
     "copiesNote": "Setiap satu berdurasi seperti sebuah filem penuh, jadi ia kelihatan seperti salinan (versi atau kualiti lain), bukan bahagian. Pilih yang hendak disimpan, atau cantumkan jika ia benar-benar bahagian.",
     "instead": {
       "keepOne": "Simpan satu sahaja",
-      "join": "Cantumkan sahaja"
+      "join": "Cantumkan sahaja",
+      "keepEditions": "Simpan semua sebagai edisi sahaja"
     },
     "subtitles": "sari kata: {{count}}",
     "recent": "Pembetulan terkini",
@@ -1672,7 +1678,8 @@
       "forget": "Lupakan",
       "convert": "Remux ke MKV",
       "join": "Cantumkan bahagian",
-      "removeDirs": "Buang"
+      "removeDirs": "Buang",
+      "keepEditions": "Simpan semua sebagai edisi"
     },
     "did": {
       "rename": "Dinamakan semula",
@@ -1682,7 +1689,8 @@
       "forget": "Dilupakan",
       "convert": "Di-remux",
       "join": "Dicantumkan",
-      "removeDirs": "Dibuang"
+      "removeDirs": "Dibuang",
+      "keepEditions": "Disimpan sebagai edisi"
     },
     "state": {
       "done": "Selesai",
@@ -1728,6 +1736,10 @@
       "empty": {
         "title": "Folder kosong",
         "hint": "Folder yang tiada apa-apa di dalamnya."
+      },
+      "editions": {
+        "title": "Versi berbeza sebuah filem",
+        "hint": "Salinan ini sangat berbeza tempohnya atau dinamakan dengan versi berbeza, jadi ia bukan pendua. Menyimpan semuanya merekodkan setiap versi lain sebagai edisi, dengan tag {edition-…} yang dibaca oleh Matinee, Plex dan Jellyfin. Tiada apa yang diketepikan."
       }
     },
     "waiting": {
@@ -1791,7 +1803,10 @@
     },
     "addWithScan": "Tambah dengan Imbas",
     "filesIn": "{{count}} fail",
-    "garbledName": "Nama pada cakera rosak; sepatutnya “{{name}}”."
+    "garbledName": "Nama pada cakera rosak; sepatutnya “{{name}}”.",
+    "staysCopy": "kekal sebagai salinan filem",
+    "asEdition": "disimpan sebagai edisi {{edition}}",
+    "byLength": "{{edition}}, mengikut tempohnya"
   },
   "ereaders": {
     "title": "Hantar ke e-pembaca",

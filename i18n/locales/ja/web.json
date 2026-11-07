@@ -372,7 +372,12 @@
     "added": "追加",
     "deleteFile": "ディスクからファイルを削除",
     "notOnDisk": "まだディスクにありません。",
-    "filesOf": "{{title}} のファイル"
+    "filesOf": "{{title}} のファイル",
+    "edition": "エディション",
+    "editionByLength": "再生時間からの推定",
+    "runs": "再生時間",
+    "otherEditions": "ほかのエディション",
+    "otherEditionsSub": "映画のコピーの隣に置かれた別バージョンです。重複ではなく、Box Office はアップグレードを探しません。"
   },
   "show": {
     "lookingNow": "欲しいエピソードを探しています。アクティビティを見てください。",
@@ -1647,7 +1652,8 @@
     "copiesNote": "どれも映画1本分の長さがあるため、分割ではなくコピー（別の版や画質）のようです。残すものを選ぶか、本当に分割なら結合してください。",
     "instead": {
       "keepOne": "代わりに1つ残す",
-      "join": "代わりに結合する"
+      "join": "代わりに結合する",
+      "keepEditions": "代わりにすべてエディションとして残す"
     },
     "subtitles": "字幕：{{count}}",
     "recent": "最近の修正",
@@ -1672,7 +1678,8 @@
       "forget": "登録を外す",
       "convert": "MKV にリマックス",
       "join": "分割ファイルを結合",
-      "removeDirs": "削除"
+      "removeDirs": "削除",
+      "keepEditions": "すべてエディションとして残す"
     },
     "did": {
       "rename": "名前を変更しました",
@@ -1682,7 +1689,8 @@
       "forget": "登録を外しました",
       "convert": "リマックスしました",
       "join": "結合しました",
-      "removeDirs": "削除しました"
+      "removeDirs": "削除しました",
+      "keepEditions": "エディションとして残しました"
     },
     "state": {
       "done": "完了",
@@ -1728,6 +1736,10 @@
       "empty": {
         "title": "空のフォルダ",
         "hint": "中に何もないフォルダ。"
+      },
+      "editions": {
+        "title": "映画の異なるバージョン",
+        "hint": "これらのコピーは長さが大きく違うか、別バージョンの名前が付いているため、重複ではありません。すべて残すと、ほかの各バージョンはエディションとして記録され、Matinee・Plex・Jellyfin が読む {edition-…} タグ付きの名前になります。何も脇に移しません。"
       }
     },
     "waiting": {
@@ -1791,7 +1803,10 @@
     },
     "addWithScan": "スキャンで追加",
     "filesIn": "{{count}} 個のファイル",
-    "garbledName": "ディスク上の名前が文字化けしています。正しくは「{{name}}」です。"
+    "garbledName": "ディスク上の名前が文字化けしています。正しくは「{{name}}」です。",
+    "staysCopy": "映画のコピーのまま",
+    "asEdition": "{{edition}} エディションとして残す",
+    "byLength": "{{edition}}（長さから推定）"
   },
   "ereaders": {
     "title": "電子書籍リーダーに送る",

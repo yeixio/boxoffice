@@ -372,7 +372,12 @@
     "added": "Ditambahkan",
     "deleteFile": "Hapus file dari disk",
     "notOnDisk": "Belum di disk.",
-    "filesOf": "File {{title}}"
+    "filesOf": "File {{title}}",
+    "edition": "Edisi",
+    "editionByLength": "Tebakan dari durasinya",
+    "runs": "Durasi",
+    "otherEditions": "Edisi lain",
+    "otherEditionsSub": "Versi lain yang disimpan di samping salinan film. Bukan duplikat, dan Box Office tidak mencari peningkatan untuknya."
   },
   "show": {
     "lookingNow": "Mencari episode yang diinginkan; lihat Aktivitas.",
@@ -1647,7 +1652,8 @@
     "copiesNote": "Masing-masing berdurasi seperti satu film utuh, jadi tampaknya ini salinan (versi atau kualitas lain), bukan bagian. Pilih yang disimpan, atau gabungkan jika memang bagian.",
     "instead": {
       "keepOne": "Simpan satu saja",
-      "join": "Gabungkan saja"
+      "join": "Gabungkan saja",
+      "keepEditions": "Simpan semua sebagai edisi saja"
     },
     "subtitles": "subtitle: {{count}}",
     "recent": "Perbaikan terbaru",
@@ -1672,7 +1678,8 @@
       "forget": "Lupakan",
       "convert": "Remux ke MKV",
       "join": "Gabungkan bagian",
-      "removeDirs": "Hapus"
+      "removeDirs": "Hapus",
+      "keepEditions": "Simpan semua sebagai edisi"
     },
     "did": {
       "rename": "Diganti nama",
@@ -1682,7 +1689,8 @@
       "forget": "Dilupakan",
       "convert": "Di-remux",
       "join": "Digabung",
-      "removeDirs": "Dihapus"
+      "removeDirs": "Dihapus",
+      "keepEditions": "Disimpan sebagai edisi"
     },
     "state": {
       "done": "Selesai",
@@ -1728,6 +1736,10 @@
       "empty": {
         "title": "Folder kosong",
         "hint": "Folder yang tidak berisi apa pun."
+      },
+      "editions": {
+        "title": "Versi berbeda dari sebuah film",
+        "hint": "Salinan ini durasinya sangat berbeda atau dinamai dengan versi yang berbeda, jadi bukan duplikat. Menyimpan semuanya mencatat setiap versi lain sebagai edisi, dengan tag {edition-…} yang dibaca Matinee, Plex, dan Jellyfin. Tidak ada yang disisihkan."
       }
     },
     "waiting": {
@@ -1791,7 +1803,10 @@
     },
     "addWithScan": "Tambah dengan Pindai",
     "filesIn": "{{count}} file",
-    "garbledName": "Nama di disk rusak; seharusnya “{{name}}”."
+    "garbledName": "Nama di disk rusak; seharusnya “{{name}}”.",
+    "staysCopy": "tetap menjadi salinan film",
+    "asEdition": "disimpan sebagai edisi {{edition}}",
+    "byLength": "{{edition}}, menurut durasinya"
   },
   "ereaders": {
     "title": "Kirim ke e-reader",

@@ -397,7 +397,12 @@
     "added": "Tilføjet",
     "deleteFile": "Slet fil fra disken",
     "notOnDisk": "Ikke på disk endnu.",
-    "filesOf": "Filen til {{title}}"
+    "filesOf": "Filen til {{title}}",
+    "edition": "Udgave",
+    "editionByLength": "Et gæt ud fra spilletiden",
+    "runs": "Spilletid",
+    "otherEditions": "Andre udgaver",
+    "otherEditionsSub": "Andre klip gemt ved siden af filmens kopi. De er ikke dubletter, og Box Office leder ikke efter opgraderinger af dem."
   },
   "show": {
     "lookingNow": "Leder efter ønskede afsnit; se Aktivitet.",
@@ -1741,7 +1746,8 @@
     "copiesNote": "Hver af dem varer lige så længe som en hel film, så de ligner kopier (en anden version eller kvalitet), ikke dele. Vælg den, der skal beholdes, eller sæt dem sammen, hvis de virkelig er dele.",
     "instead": {
       "keepOne": "Behold én i stedet",
-      "join": "Sæt sammen i stedet"
+      "join": "Sæt sammen i stedet",
+      "keepEditions": "Behold i stedet alle som udgaver"
     },
     "subtitles": "undertekster: {{count}}",
     "recent": "Seneste rettelser",
@@ -1766,7 +1772,8 @@
       "forget": "Glem den",
       "convert": "Remux til MKV",
       "join": "Saml delene",
-      "removeDirs": "Fjern"
+      "removeDirs": "Fjern",
+      "keepEditions": "Behold alle som udgaver"
     },
     "did": {
       "rename": "Omdøbt",
@@ -1776,7 +1783,8 @@
       "forget": "Glemt",
       "convert": "Remuxet",
       "join": "Samlet",
-      "removeDirs": "Fjernet"
+      "removeDirs": "Fjernet",
+      "keepEditions": "Beholdt som udgaver"
     },
     "state": {
       "done": "Færdig",
@@ -1822,6 +1830,10 @@
       "empty": {
         "title": "Tomme mapper",
         "hint": "Mapper uden noget i."
+      },
+      "editions": {
+        "title": "Forskellige klip af en film",
+        "hint": "Disse kopier har meget forskellig længde eller er navngivet efter forskellige klip, så de er ikke dubletter. Beholder du dem alle, registreres hvert andet klip som en udgave med et {edition-…}-mærke, som Matinee, Plex og Jellyfin læser. Intet lægges til side."
       }
     },
     "waiting": {
@@ -1885,7 +1897,10 @@
     },
     "addWithScan": "Tilføj med Scan",
     "filesIn": "{{count}} filer",
-    "garbledName": "Navnet på disken er forvansket; det skulle være “{{name}}”."
+    "garbledName": "Navnet på disken er forvansket; det skulle være “{{name}}”.",
+    "staysCopy": "forbliver filmens kopi",
+    "asEdition": "beholdes som udgaven {{edition}}",
+    "byLength": "{{edition}}, ud fra længden"
   },
   "ereaders": {
     "title": "Send til e-bogslæsere",

@@ -397,7 +397,12 @@
     "added": "Lagt til",
     "deleteFile": "Slett fil fra disken",
     "notOnDisk": "Ikke på disk ennå.",
-    "filesOf": "Filen til {{title}}"
+    "filesOf": "Filen til {{title}}",
+    "edition": "Utgave",
+    "editionByLength": "Et anslag ut fra spilletiden",
+    "runs": "Spilletid",
+    "otherEditions": "Andre utgaver",
+    "otherEditionsSub": "Andre klipp lagret ved siden av filmens kopi. De er ikke duplikater, og Box Office ser ikke etter oppgraderinger av dem."
   },
   "show": {
     "lookingNow": "Leter etter ønskede episoder; se Aktivitet.",
@@ -1741,7 +1746,8 @@
     "copiesNote": "Hver av dem er like lang som en hel film, så de ser ut som kopier (en annen versjon eller kvalitet), ikke deler. Velg hvilken som skal beholdes, eller slå dem sammen hvis de virkelig er deler.",
     "instead": {
       "keepOne": "Behold én i stedet",
-      "join": "Slå sammen i stedet"
+      "join": "Slå sammen i stedet",
+      "keepEditions": "Behold heller alle som utgaver"
     },
     "subtitles": "undertekster: {{count}}",
     "recent": "Siste rettinger",
@@ -1766,7 +1772,8 @@
       "forget": "Glem den",
       "convert": "Remux til MKV",
       "join": "Slå sammen delene",
-      "removeDirs": "Fjern"
+      "removeDirs": "Fjern",
+      "keepEditions": "Behold alle som utgaver"
     },
     "did": {
       "rename": "Nytt navn",
@@ -1776,7 +1783,8 @@
       "forget": "Glemt",
       "convert": "Remuxet",
       "join": "Slått sammen",
-      "removeDirs": "Fjernet"
+      "removeDirs": "Fjernet",
+      "keepEditions": "Beholdt som utgaver"
     },
     "state": {
       "done": "Ferdig",
@@ -1822,6 +1830,10 @@
       "empty": {
         "title": "Tomme mapper",
         "hint": "Mapper uten noe i."
+      },
+      "editions": {
+        "title": "Ulike klipp av en film",
+        "hint": "Disse kopiene har svært ulik lengde eller er navngitt etter ulike klipp, så de er ikke duplikater. Beholder du alle, registreres hvert annet klipp som en utgave med en {edition-…}-merkelapp som Matinee, Plex og Jellyfin leser. Ingenting legges til side."
       }
     },
     "waiting": {
@@ -1885,7 +1897,10 @@
     },
     "addWithScan": "Legg til med Skann",
     "filesIn": "{{count}} filer",
-    "garbledName": "Navnet på disken er forvrengt; det skal være «{{name}}»."
+    "garbledName": "Navnet på disken er forvrengt; det skal være «{{name}}».",
+    "staysCopy": "forblir filmens kopi",
+    "asEdition": "beholdes som utgaven {{edition}}",
+    "byLength": "{{edition}}, ut fra lengden"
   },
   "ereaders": {
     "title": "Send til lesebrett",

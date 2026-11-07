@@ -283,7 +283,7 @@ func (s *Service) Fix(ids []string, keep, as map[string]string) error {
 			continue
 		}
 		if a := as[id]; a != "" && a != p.Fix.Action {
-			if a != Instead || p.Kind != Parts {
+			if a != Instead || p.Kind != Parts && p.Kind != Editions {
 				return fmt.Errorf("%s isn't a way to fix it", a)
 			}
 			f := *p.Fix
