@@ -136,6 +136,9 @@ CREATE TABLE IF NOT EXISTS title_wants (
 	want       TEXT NOT NULL DEFAULT '', -- better, replace (the copy's bad) or ''
 	note       TEXT NOT NULL DEFAULT '',
 	updated_at BIGINT NOT NULL,
+	problem    TEXT NOT NULL DEFAULT '', -- what someone reported in Matinee: wrong, language, video, audio
+	language   TEXT NOT NULL DEFAULT '', -- the language its sound should be in (ISO 639-1), for language
+	reported_by TEXT NOT NULL DEFAULT '', -- who reported it, by their Matinee name
 	PRIMARY KEY (kind, owner_id)
 );
 

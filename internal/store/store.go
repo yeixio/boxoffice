@@ -123,6 +123,9 @@ func (s *Store) migrate(ctx context.Context) error {
 		{"media_files", "guessed", "INTEGER NOT NULL DEFAULT -1"},
 		{"problem_fixes", "kind", "TEXT NOT NULL DEFAULT ''"},
 		{"problem_fixes", "detail", "TEXT NOT NULL DEFAULT ''"},
+		{"title_wants", "problem", "TEXT NOT NULL DEFAULT ''"},
+		{"title_wants", "language", "TEXT NOT NULL DEFAULT ''"},
+		{"title_wants", "reported_by", "TEXT NOT NULL DEFAULT ''"},
 	} {
 		if _, err := s.db.ExecContext(ctx, "SELECT "+c.column+" FROM "+c.table+" WHERE 1 = 0"); err != nil {
 			if _, err := s.db.ExecContext(ctx, "ALTER TABLE "+c.table+" ADD COLUMN "+c.column+" "+c.def); err != nil {

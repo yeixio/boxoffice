@@ -75,6 +75,7 @@ type Candidate struct {
 	episodes   []int64
 	priority   int
 	formatRank int
+	langRank   int // 1 when its name says it's in the language asked for
 }
 
 // Results are a search's releases, best first, and the indexers that
@@ -273,6 +274,7 @@ func (s *Service) MovieFor(ctx context.Context, id int64, ask Ask) (Results, err
 		if m.IMDBID == "" && !titleMatches(r.Title, m.Title) {
 			c.reject("its name doesn't match the movie's")
 		}
+		ask.judgeLanguage(&c)
 		out.Releases = append(out.Releases, c)
 	}
 	s.rank(ctx, &out)
@@ -334,7 +336,9 @@ func (s *Service) EpisodeFor(ctx context.Context, id int64, ask Ask) (Results, e
 	}
 	out := Results{Errors: notes, Searched: n}
 	for _, r := range rs {
-		out.Releases = append(out.Releases, s.judgeEpisodes(ctx, r, t, p, []store.Episode{e}, blocked, false, true))
+		c := s.judgeEpisodes(ctx, r, t, p, []store.Episode{e}, blocked, false, true)
+		ask.judgeLanguage(&c)
+		out.Releases = append(out.Releases, c)
 	}
 	s.rank(ctx, &out)
 	s.markSearched(ctx, "episode", e.ID, out)
@@ -439,6 +443,8 @@ func (s *Service) rank(ctx context.Context, out *Results) {
 				return -1
 			}
 			return 1
+		case a.langRank != b.langRank:
+			return b.langRank - a.langRank
 		case a.Quality != b.Quality:
 			return quality.Rank(b.Quality) - quality.Rank(a.Quality)
 		case a.formatRank != b.formatRank:

@@ -1863,5 +1863,14 @@
     "correctedFrom": "查看檔案內部後從 {{was}} 修正",
     "picture": "畫面和聲音",
     "bits": "{{bits}} 位元"
+  },
+  "reported": {
+    "title": "已在 Matinee 中回報：{{what}}。",
+    "by": "{{name}} 在 Matinee 中回報：{{what}}。",
+    "wrong": "這是另一部電影或另一集",
+    "language": "應該是{{language}}",
+    "video": "畫面有問題",
+    "audio": "聲音有問題或不同步",
+    "fixing": "Box Office 已封鎖該副本的發行，正在取得另一個。"
   }
 }

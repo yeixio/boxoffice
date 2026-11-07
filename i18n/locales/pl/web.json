@@ -2145,5 +2145,14 @@
     "correctedFrom": "Poprawiono z {{was}} po zajrzeniu do pliku",
     "picture": "Obraz i dźwięk",
     "bits": "{{bits}} bitów"
+  },
+  "reported": {
+    "title": "Zgłoszono w Matinee: {{what}}.",
+    "by": "{{name}} zgłosił(a) w Matinee: {{what}}.",
+    "wrong": "to inny film lub odcinek",
+    "language": "powinien być w języku: {{language}}",
+    "video": "obraz jest uszkodzony",
+    "audio": "dźwięk jest uszkodzony lub niezsynchronizowany",
+    "fixing": "Box Office zablokował wydanie tej kopii i pobiera inną."
   }
 }

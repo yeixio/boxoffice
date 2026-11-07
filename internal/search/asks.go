@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"slices"
+	"strings"
 
 	"github.com/yeixio/boxoffice/internal/jobs"
 	"github.com/yeixio/boxoffice/internal/quality"
@@ -30,6 +31,9 @@ type Ask struct {
 	Mode    string `json:"mode,omitempty"`
 	// Want is store.WantBetter or store.WantReplace, or "".
 	Want string `json:"want,omitempty"`
+	// Language is the language (ISO 639-1) a replacement's sound must be
+	// in, for a copy reported in the wrong language; "" for any.
+	Language string `json:"language,omitempty"`
 }
 
 // with fills in from what was asked before and is still wanted: the
@@ -37,6 +41,9 @@ type Ask struct {
 func (a Ask) with(tw store.TitleWant) Ask {
 	if a.Want == "" {
 		a.Want = tw.Want
+	}
+	if a.Language == "" && a.Want == store.WantReplace && tw.Want == store.WantReplace {
+		a.Language = tw.Language
 	}
 	if a.Edition == "" && tw.Edition != "" {
 		// The copy there should be this edition; a better copy of it
@@ -66,6 +73,27 @@ func (a Ask) profile(p quality.Profile, has bool) (quality.Profile, bool) {
 		p.Cutoff, p.UpgradeOK = best, true
 	}
 	return p, has
+}
+
+// judgeLanguage turns down a release whose name says its sound is only in
+// other languages than the one asked for, and puts first those that say
+// it's in that one.
+func (a Ask) judgeLanguage(c *Candidate) {
+	if a.Language == "" {
+		return
+	}
+	ok, named := quality.ReleaseInLanguage(c.Title, a.Language)
+	if !ok {
+		langs, _ := quality.ReleaseLanguages(c.Title)
+		names := make([]string, len(langs))
+		for i, l := range langs {
+			names[i] = quality.LanguageName(l)
+		}
+		c.reject(fmt.Sprintf("its name says it's in %s, and %s was asked for", strings.Join(names, " and "), quality.LanguageName(a.Language)))
+	}
+	if named {
+		c.langRank = 1
+	}
 }
 
 // AskedJob is JobSearchAsked's payload.

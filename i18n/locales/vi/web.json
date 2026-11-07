@@ -1863,5 +1863,14 @@
     "correctedFrom": "Đã sửa từ {{was}} sau khi xem bên trong tệp",
     "picture": "Hình ảnh và âm thanh",
     "bits": "{{bits}}-bit"
+  },
+  "reported": {
+    "title": "Đã báo trong Matinee: {{what}}.",
+    "by": "{{name}} đã báo trong Matinee: {{what}}.",
+    "wrong": "đây là phim hoặc tập khác",
+    "language": "lẽ ra phải là tiếng {{language}}",
+    "video": "hình ảnh bị lỗi",
+    "audio": "âm thanh bị lỗi hoặc lệch tiếng",
+    "fixing": "Box Office đã chặn bản phát hành của bản sao đó và đang lấy bản khác."
   }
 }

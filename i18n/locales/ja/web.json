@@ -1863,5 +1863,14 @@
     "correctedFrom": "ファイルの中身を調べて {{was}} から修正しました",
     "picture": "映像と音声",
     "bits": "{{bits}} ビット"
+  },
+  "reported": {
+    "title": "Matinee で報告されました: {{what}}。",
+    "by": "{{name}} さんが Matinee で報告しました: {{what}}。",
+    "wrong": "別の映画またはエピソードです",
+    "language": "{{language}}であるべきです",
+    "video": "映像が壊れています",
+    "audio": "音声が壊れているか、ずれています",
+    "fixing": "Box Office はそのコピーのリリースをブロックし、別のものを取得しています。"
   }
 }

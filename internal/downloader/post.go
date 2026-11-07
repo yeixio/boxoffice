@@ -44,6 +44,9 @@ func (e *Engine) postProcess(ctx context.Context, r *running, d *store.Download,
 	if len(found) > 0 {
 		return e.quarantine(ctx, d, job, found)
 	}
+	if err := e.checkLanguage(ctx, d, job.dir, files); err != nil {
+		return err
+	}
 	lead := ""
 	if len(notes) > 0 {
 		lead = sentence(strings.Join(notes, "; ")) + ". "

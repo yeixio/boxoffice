@@ -1957,5 +1957,14 @@
     "correctedFrom": "Rettet fra {{was}} efter at have kigget ind i filen",
     "picture": "Billede og lyd",
     "bits": "{{bits}}-bit"
+  },
+  "reported": {
+    "title": "Rapporteret i Matinee: {{what}}.",
+    "by": "{{name}} rapporterede i Matinee: {{what}}.",
+    "wrong": "det er en anden film eller episode",
+    "language": "den burde være på {{language}}",
+    "video": "billedet er i stykker",
+    "audio": "lyden er i stykker eller ude af sync",
+    "fixing": "Box Office blokerede udgivelsen af den kopi og henter en anden."
   }
 }

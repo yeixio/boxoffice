@@ -29,14 +29,32 @@ const (
 	ModeAlongside = "alongside"
 )
 
+// Problems someone can report with a copy in Matinee. Each asks for
+// another copy (WantReplace); the bad one's release is blocked.
+const (
+	ProblemWrong    = "wrong"    // it's another movie or episode
+	ProblemLanguage = "language" // its sound is in the wrong language
+	ProblemVideo    = "video"    // the picture is broken
+	ProblemAudio    = "audio"    // the sound is broken or out of sync
+)
+
+// ReportedProblems are the problems Matinee can report.
+var ReportedProblems = []string{ProblemWrong, ProblemLanguage, ProblemVideo, ProblemAudio}
+
 // TitleWant is what was asked for one movie or episode.
 type TitleWant struct {
-	Kind    string    `json:"kind"` // movie or episode
-	OwnerID int64     `json:"ownerId"`
-	Edition string    `json:"edition,omitempty"`
-	Want    string    `json:"want,omitempty"`
-	Note    string    `json:"note,omitempty"`
-	Updated time.Time `json:"updatedAt"`
+	Kind    string `json:"kind"` // movie or episode
+	OwnerID int64  `json:"ownerId"`
+	Edition string `json:"edition,omitempty"`
+	Want    string `json:"want,omitempty"`
+	Note    string `json:"note,omitempty"`
+	// Problem is what was reported in Matinee for a replacement (one of
+	// ReportedProblems), Language the language (ISO 639-1) its sound should be in
+	// for ProblemLanguage, and ReportedBy who reported it.
+	Problem    string    `json:"problem,omitempty"`
+	Language   string    `json:"language,omitempty"`
+	ReportedBy string    `json:"reportedBy,omitempty"`
+	Updated    time.Time `json:"updatedAt"`
 }
 
 // TitleWant is what was asked for a movie or an episode; the zero value
@@ -44,8 +62,8 @@ type TitleWant struct {
 func (s *Store) TitleWant(ctx context.Context, kind string, id int64) (TitleWant, error) {
 	w := TitleWant{Kind: kind, OwnerID: id}
 	var at int64
-	err := s.row(ctx, "SELECT edition, want, note, updated_at FROM title_wants WHERE kind = ? AND owner_id = ?", kind, id).
-		Scan(&w.Edition, &w.Want, &w.Note, &at)
+	err := s.row(ctx, "SELECT edition, want, note, problem, language, reported_by, updated_at FROM title_wants WHERE kind = ? AND owner_id = ?", kind, id).
+		Scan(&w.Edition, &w.Want, &w.Note, &w.Problem, &w.Language, &w.ReportedBy, &at)
 	if errors.Is(err, sql.ErrNoRows) {
 		return w, nil
 	}
@@ -61,10 +79,35 @@ func (s *Store) SetTitleWant(ctx context.Context, w TitleWant) error {
 		_, err := s.exec(ctx, "DELETE FROM title_wants WHERE kind = ? AND owner_id = ?", w.Kind, w.OwnerID)
 		return err
 	}
-	_, err := s.exec(ctx, `INSERT INTO title_wants (kind, owner_id, edition, want, note, updated_at) VALUES (?, ?, ?, ?, ?, ?)
-		ON CONFLICT (kind, owner_id) DO UPDATE SET edition = excluded.edition, want = excluded.want, note = excluded.note, updated_at = excluded.updated_at`,
-		w.Kind, w.OwnerID, w.Edition, w.Want, w.Note, now())
+	if w.Want == "" {
+		w.Problem, w.Language, w.ReportedBy = "", "", ""
+	}
+	_, err := s.exec(ctx, `INSERT INTO title_wants (kind, owner_id, edition, want, note, problem, language, reported_by, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+		ON CONFLICT (kind, owner_id) DO UPDATE SET edition = excluded.edition, want = excluded.want, note = excluded.note,
+		problem = excluded.problem, language = excluded.language, reported_by = excluded.reported_by, updated_at = excluded.updated_at`,
+		w.Kind, w.OwnerID, w.Edition, w.Want, w.Note, w.Problem, w.Language, w.ReportedBy, now())
 	return err
+}
+
+// ReportedWants are the movies or episodes (kind) with a problem reported
+// in Matinee that a replacement is still being looked for, by id.
+func (s *Store) ReportedWants(ctx context.Context, kind string) (map[int64]TitleWant, error) {
+	rows, err := s.query(ctx, "SELECT owner_id, edition, want, note, problem, language, reported_by, updated_at FROM title_wants WHERE kind = ? AND want = ? AND problem <> ''", kind, WantReplace)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	out := map[int64]TitleWant{}
+	for rows.Next() {
+		w := TitleWant{Kind: kind}
+		var at int64
+		if err := rows.Scan(&w.OwnerID, &w.Edition, &w.Want, &w.Note, &w.Problem, &w.Language, &w.ReportedBy, &at); err != nil {
+			return nil, err
+		}
+		w.Updated = time.Unix(at, 0).UTC()
+		out[w.OwnerID] = w
+	}
+	return out, rows.Err()
 }
 
 // ClearWant forgets a better or replacement copy asked for, once one is
