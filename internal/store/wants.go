@@ -158,6 +158,19 @@ func (s *Store) EditionFiles(ctx context.Context, movieID int64) ([]File, error)
 	return out, rows.Err()
 }
 
+// ReleaseNames gives, for a copy's path, the name of the release it was
+// downloaded from, or "" when Box Office didn't download it, for
+// Movie.LabelEditions.
+func (s *Store) ReleaseNames(ctx context.Context) func(path string) string {
+	return func(path string) string {
+		d, err := s.DownloadImportedTo(ctx, path)
+		if err != nil {
+			return ""
+		}
+		return d.Name
+	}
+}
+
 // RecentDownloads are downloads that finished since t, newest first.
 func (s *Store) RecentDownloads(ctx context.Context, since time.Time) ([]Download, error) {
 	return s.downloads(ctx, "finished_at >= ? AND status IN ('completed', 'failed') ORDER BY finished_at DESC LIMIT 500", since.Unix())

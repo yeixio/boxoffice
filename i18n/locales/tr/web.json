@@ -399,10 +399,16 @@
     "notOnDisk": "Henüz diskte değil.",
     "filesOf": "{{title}} dosyası",
     "edition": "Sürüm",
-    "editionByLength": "Süresine göre bir tahmin",
     "runs": "Süre",
     "otherEditions": "Diğer sürümler",
-    "otherEditionsSub": "Filmin kopyasının yanında tutulan diğer kurgular. Kopya değiller ve Box Office onlar için yükseltme aramaz."
+    "otherEditionsSub": "Filmin kopyasının yanında tutulan diğer kurgular. Kopya değiller ve Box Office onlar için yükseltme aramaz.",
+    "editionFrom": {
+      "name": "Dosya adından",
+      "release": "İndirildiği sürümden",
+      "file": "Dosyanın içindeki başlıktan",
+      "length": "Süresine göre bir tahmin"
+    },
+    "wantedEdition": "{{edition}} olarak isteniyor"
   },
   "show": {
     "lookingNow": "İstenen bölümleri aranıyor; Etkinlik'e bakın.",
@@ -1981,5 +1987,21 @@
     "video": "görüntü bozuk",
     "audio": "ses bozuk ya da senkronize değil",
     "fixing": "Box Office bu kopyanın sürümünü engelledi ve başka birini getiriyor."
+  },
+  "editions": {
+    "look": "Bir sürüm ara",
+    "title": "{{title}} sürümleri",
+    "sub": "Dizinleyicilerde bulunan sürümler, sürüm adlarına göre. Kopyanızın yanına ya da yerine birini alın. Box Office kendiliğinden asla sürüm aramaz.",
+    "searching": "Dizinleyicilerde aranıyor…",
+    "none": "Dizinleyicilerde Extended ya da Director's Cut gibi bir sürüm adı taşıyan yayın yok.",
+    "owned": "Kitaplıkta",
+    "releases": "Yayınlar: {{n}}",
+    "alongside": "Yanında tut",
+    "replace": "Kopyayı değiştir",
+    "get": "Al",
+    "asked": "Şimdi {{edition}} aranıyor; Etkinlik'e bakın.",
+    "other": "Başka bir sürüm",
+    "otherHint": "Listede yok mu? Birini seçin, Box Office hemen arasın.",
+    "pick": "Bir sürüm seçin"
   }
 }

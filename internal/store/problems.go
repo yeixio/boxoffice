@@ -126,7 +126,11 @@ func (s *Store) FileByPath(ctx context.Context, path string) (File, error) {
 // MoveFileRecord says a recorded file is now at another path, with its
 // new size.
 func (s *Store) MoveFileRecord(ctx context.Context, from, to string, size int64) error {
-	_, err := s.exec(ctx, "UPDATE media_files SET path = ?, size = ? WHERE path = ?", to, size, from)
+	if _, err := s.exec(ctx, "UPDATE media_files SET path = ?, size = ? WHERE path = ?", to, size, from); err != nil {
+		return err
+	}
+	// The release it came from goes along, for telling its edition.
+	_, err := s.exec(ctx, "UPDATE downloads SET imported_to = ? WHERE imported_to = ?", to, from)
 	return err
 }
 

@@ -399,10 +399,16 @@
     "notOnDisk": "Noch nicht vorhanden.",
     "filesOf": "Datei von {{title}}",
     "edition": "Fassung",
-    "editionByLength": "Geschätzt anhand der Laufzeit",
     "runs": "Laufzeit",
     "otherEditions": "Weitere Fassungen",
-    "otherEditionsSub": "Weitere Schnittfassungen neben der Kopie des Films. Sie sind keine Duplikate, und Box Office sucht keine Upgrades für sie."
+    "otherEditionsSub": "Weitere Schnittfassungen neben der Kopie des Films. Sie sind keine Duplikate, und Box Office sucht keine Upgrades für sie.",
+    "editionFrom": {
+      "name": "Aus dem Dateinamen",
+      "release": "Aus dem Release, aus dem sie geladen wurde",
+      "file": "Aus dem Titel in der Datei",
+      "length": "Geschätzt anhand der Laufzeit"
+    },
+    "wantedEdition": "Gewünscht als {{edition}}"
   },
   "show": {
     "lookingNow": "Die gesuchten Folgen werden gesucht; siehe Aktivität.",
@@ -1981,5 +1987,21 @@
     "video": "das Bild ist fehlerhaft",
     "audio": "der Ton ist fehlerhaft oder nicht synchron",
     "fixing": "Box Office hat das Release dieser Kopie gesperrt und besorgt eine andere."
+  },
+  "editions": {
+    "look": "Nach einer Fassung suchen",
+    "title": "Fassungen von {{title}}",
+    "sub": "Fassungen, die die Indexer haben, wie ihre Releases sie nennen. Hol dir eine neben deine Kopie oder an ihrer Stelle. Box Office sucht nie von selbst nach Fassungen.",
+    "searching": "Suche bei den Indexern…",
+    "none": "Die Indexer haben kein Release, das nach einer Fassung wie Extended oder Director's Cut benannt ist.",
+    "owned": "In der Bibliothek",
+    "releases": "Releases: {{n}}",
+    "alongside": "Daneben behalten",
+    "replace": "Kopie ersetzen",
+    "get": "Holen",
+    "asked": "Suche jetzt nach {{edition}}; siehe Aktivität.",
+    "other": "Andere Fassung",
+    "otherHint": "Nicht dabei? Wähle eine, und Box Office sucht jetzt danach.",
+    "pick": "Fassung wählen"
   }
 }

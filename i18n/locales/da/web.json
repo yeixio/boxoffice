@@ -399,10 +399,16 @@
     "notOnDisk": "Ikke på disk endnu.",
     "filesOf": "Filen til {{title}}",
     "edition": "Udgave",
-    "editionByLength": "Et gæt ud fra spilletiden",
     "runs": "Spilletid",
     "otherEditions": "Andre udgaver",
-    "otherEditionsSub": "Andre klip gemt ved siden af filmens kopi. De er ikke dubletter, og Box Office leder ikke efter opgraderinger af dem."
+    "otherEditionsSub": "Andre klip gemt ved siden af filmens kopi. De er ikke dubletter, og Box Office leder ikke efter opgraderinger af dem.",
+    "editionFrom": {
+      "name": "Fra filnavnet",
+      "release": "Fra udgivelsen, den blev hentet fra",
+      "file": "Fra titlen inde i filen",
+      "length": "Et gæt ud fra spilletiden"
+    },
+    "wantedEdition": "Ønskes som {{edition}}"
   },
   "show": {
     "lookingNow": "Leder efter ønskede afsnit; se Aktivitet.",
@@ -1981,5 +1987,21 @@
     "video": "billedet er i stykker",
     "audio": "lyden er i stykker eller ude af sync",
     "fixing": "Box Office blokerede udgivelsen af den kopi og henter en anden."
+  },
+  "editions": {
+    "look": "Søg efter en udgave",
+    "title": "Udgaver af {{title}}",
+    "sub": "Udgaver, som indekserne har, navngivet i deres udgivelser. Hent én til at ligge ved siden af din kopi eller i stedet for den. Box Office leder aldrig selv efter udgaver.",
+    "searching": "Søger hos indekserne…",
+    "none": "Indekserne har ingen udgivelse navngivet efter en udgave, som Extended eller Director's Cut.",
+    "owned": "I biblioteket",
+    "releases": "Udgivelser: {{n}}",
+    "alongside": "Behold ved siden af",
+    "replace": "Erstat kopien",
+    "get": "Hent den",
+    "asked": "Leder efter {{edition}} nu; se Aktivitet.",
+    "other": "En anden udgave",
+    "otherHint": "Ikke på listen? Vælg én, så leder Box Office efter den nu.",
+    "pick": "Vælg en udgave"
   }
 }

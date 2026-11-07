@@ -60,13 +60,17 @@ type File struct {
 	// from its name or, with EditionByLength, from how long it runs;
 	// filled in by Movie.LabelEditions.
 	Edition         string `json:"edition,omitempty"`
+	EditionFrom     string `json:"editionFrom,omitempty"`
 	EditionByLength bool   `json:"editionByLength,omitempty"`
 }
 
 // LabelEditions fills in the edition of the movie's copy and of each of
-// its other editions, from their names or how long they run against
-// each other and the movie's runtime (see quality.EditionOf).
-func (m *Movie) LabelEditions() {
+// its other editions, and where it was told from (EditionFrom): its file
+// name, else the name of the release it was downloaded from (release
+// gives it, by path; "" when not known), else the title the file gives
+// itself, else how long it runs against the others and the movie's
+// runtime (see quality.LengthEdition), the only one that's a guess.
+func (m *Movie) LabelEditions(release func(path string) string) {
 	files := make([]*File, 0, 1+len(m.Editions))
 	if m.File != nil {
 		files = append(files, m.File)
@@ -81,15 +85,43 @@ func (m *Movie) LabelEditions() {
 		return f.Media.Duration
 	}
 	for _, f := range files {
+		f.Edition, f.EditionFrom, f.EditionByLength = "", "", false
+		var inner string
+		if f.Media != nil {
+			inner = f.Media.Title
+		}
+		var rel string
+		if release != nil {
+			rel = release(f.Path)
+		}
+		for _, src := range []struct{ from, name string }{{EditionFromName, filepath.Base(f.Path)}, {EditionFromRelease, rel}, {EditionFromFile, inner}} {
+			if e := quality.Edition(src.name); src.name != "" && e != "" {
+				f.Edition, f.EditionFrom = e, src.from
+				break
+			}
+		}
+		if f.Edition != "" {
+			continue
+		}
 		var others []float64
 		for _, o := range files {
 			if o != f {
 				others = append(others, length(o))
 			}
 		}
-		f.Edition, f.EditionByLength = quality.EditionOf(filepath.Base(f.Path), length(f), others, m.Runtime)
+		if e := quality.LengthEdition(length(f), others, m.Runtime); e != "" {
+			f.Edition, f.EditionFrom, f.EditionByLength = e, EditionFromLength, true
+		}
 	}
 }
+
+// Where a copy's edition was told from.
+const (
+	EditionFromName    = "name"    // its file name
+	EditionFromRelease = "release" // the release it was downloaded from
+	EditionFromFile    = "file"    // the title inside the file
+	EditionFromLength  = "length"  // how long it runs: a guess
+)
 
 // checked fills in what the quality check found, from the media and
 // guessed columns.

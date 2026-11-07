@@ -374,10 +374,16 @@
     "notOnDisk": "尚未在磁盘上。",
     "filesOf": "{{title}} 的文件",
     "edition": "版本",
-    "editionByLength": "根据时长推测",
     "runs": "时长",
     "otherEditions": "其他版本",
-    "otherEditionsSub": "与电影副本放在一起的其他剪辑版。它们不是重复文件，Box Office 不会为它们寻找升级。"
+    "otherEditionsSub": "与电影副本放在一起的其他剪辑版。它们不是重复文件，Box Office 不会为它们寻找升级。",
+    "editionFrom": {
+      "name": "来自文件名",
+      "release": "来自下载时的发布名",
+      "file": "来自文件内的标题",
+      "length": "根据时长推测"
+    },
+    "wantedEdition": "想要 {{edition}} 版本"
   },
   "show": {
     "lookingNow": "正在寻找想要的单集，见活动。",
@@ -1887,5 +1893,21 @@
     "video": "画面有问题",
     "audio": "声音有问题或不同步",
     "fixing": "Box Office 已屏蔽该副本的发布，正在获取另一个。"
+  },
+  "editions": {
+    "look": "查找版本",
+    "title": "{{title}} 的版本",
+    "sub": "索引器上有的版本（按发布名称）。可以下载一个放在现有副本旁边，或替换它。Box Office 不会自行查找版本。",
+    "searching": "正在索引器上查找…",
+    "none": "索引器上没有以版本命名的发布，例如 Extended 或 Director's Cut。",
+    "owned": "已在媒体库",
+    "releases": "发布数：{{n}}",
+    "alongside": "放在旁边",
+    "replace": "替换副本",
+    "get": "获取",
+    "asked": "正在查找 {{edition}}，请查看活动。",
+    "other": "其他版本",
+    "otherHint": "列表里没有？选一个，Box Office 会立即查找。",
+    "pick": "选择版本"
   }
 }

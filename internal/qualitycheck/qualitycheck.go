@@ -131,8 +131,23 @@ func (s *Service) Run(ctx context.Context) {
 	}
 }
 
+// titlesKey notes that movie files have been looked inside again for the
+// title they give themselves, which earlier looks didn't keep.
+const titlesKey = "qualitycheck:titles"
+
 // Pass looks inside every file not looked at yet, one at a time.
 func (s *Service) Pass(ctx context.Context) error {
+	if v, err := s.Store.Setting(ctx, titlesKey); err == nil && v == "" {
+		// Once: movie copies are looked at again for their own title, so
+		// it can say which cut they are. It only reads them, and a quality
+		// that matches is never changed (see quality.Correct).
+		if err := s.Store.CheckMoviesAgain(ctx); err != nil {
+			return err
+		}
+		if err := s.Store.SetSetting(ctx, titlesKey, "1"); err != nil {
+			return err
+		}
+	}
 	s.mu.Lock()
 	if s.running {
 		s.mu.Unlock()
@@ -267,8 +282,9 @@ func FFprobe(ctx context.Context, ffprobe, path string) (quality.Media, error) {
 func Parse(out []byte) (quality.Media, error) {
 	var r struct {
 		Format struct {
-			Duration string `json:"duration"`
-			BitRate  string `json:"bit_rate"`
+			Duration string            `json:"duration"`
+			BitRate  string            `json:"bit_rate"`
+			Tags     map[string]string `json:"tags"`
 		} `json:"format"`
 		Streams []struct {
 			CodecType     string `json:"codec_type"`
@@ -294,6 +310,11 @@ func Parse(out []byte) (quality.Media, error) {
 	var m quality.Media
 	m.Duration, _ = strconv.ParseFloat(r.Format.Duration, 64)
 	m.Bitrate, _ = strconv.ParseInt(r.Format.BitRate, 10, 64)
+	for k, v := range r.Format.Tags {
+		if strings.EqualFold(k, "title") {
+			m.Title = strings.TrimSpace(v)
+		}
+	}
 	video, audio := false, false
 	for _, st := range r.Streams {
 		switch {

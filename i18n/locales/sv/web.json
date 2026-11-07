@@ -399,10 +399,16 @@
     "notOnDisk": "Inte på disk än.",
     "filesOf": "Filen för {{title}}",
     "edition": "Utgåva",
-    "editionByLength": "En gissning utifrån speltiden",
     "runs": "Speltid",
     "otherEditions": "Andra utgåvor",
-    "otherEditionsSub": "Andra versioner som sparas bredvid filmens kopia. De är inte dubbletter, och Box Office letar inte efter uppgraderingar av dem."
+    "otherEditionsSub": "Andra versioner som sparas bredvid filmens kopia. De är inte dubbletter, och Box Office letar inte efter uppgraderingar av dem.",
+    "editionFrom": {
+      "name": "Från filnamnet",
+      "release": "Från utgåvan den laddades ner från",
+      "file": "Från titeln inuti filen",
+      "length": "En gissning utifrån speltiden"
+    },
+    "wantedEdition": "Önskas som {{edition}}"
   },
   "show": {
     "lookingNow": "Letar efter önskade avsnitt; se Aktivitet.",
@@ -1981,5 +1987,21 @@
     "video": "bilden är trasig",
     "audio": "ljudet är trasigt eller osynkat",
     "fixing": "Box Office spärrade den kopians release och hämtar en annan."
+  },
+  "editions": {
+    "look": "Leta efter en utgåva",
+    "title": "Utgåvor av {{title}}",
+    "sub": "Utgåvor som indexerarna har, som deras releaser namnger dem. Hämta en att ha bredvid din kopia eller i dess ställe. Box Office letar aldrig efter utgåvor på egen hand.",
+    "searching": "Söker hos indexerarna…",
+    "none": "Indexerarna har ingen release namngiven efter en utgåva, som Extended eller Director's Cut.",
+    "owned": "I biblioteket",
+    "releases": "Releaser: {{n}}",
+    "alongside": "Behåll bredvid",
+    "replace": "Ersätt kopian",
+    "get": "Hämta",
+    "asked": "Letar efter {{edition}} nu; se Aktivitet.",
+    "other": "En annan utgåva",
+    "otherHint": "Inte med? Välj en så letar Box Office efter den nu.",
+    "pick": "Välj en utgåva"
   }
 }

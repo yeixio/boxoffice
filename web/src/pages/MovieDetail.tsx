@@ -2,8 +2,9 @@ import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
-import { ListFilter, RefreshCw, Search, Trash2 } from 'lucide-react'
+import { Clapperboard, ListFilter, RefreshCw, Search, Trash2 } from 'lucide-react'
 import { Releases } from '../Releases'
+import { Editions } from '../Editions'
 import { DeleteFiles, RemoveTitle } from '../RemoveFiles'
 import { AutoUpgradeField } from '../AutoUpgrade'
 import { LockedNote, ReportedNote } from '../Bulk'
@@ -26,7 +27,7 @@ function FileFacts({ f }: { f: MediaFile }) {
           <dt className="text-muted">{t('title.edition')}</dt>
           <dd>
             <Badge tone="gold">{f.edition}</Badge>
-            {f.editionByLength && <div className="text-xs text-muted">{t('title.editionByLength')}</div>}
+            {f.editionFrom && <div className="text-xs text-muted">{t(`title.editionFrom.${f.editionFrom}`)}</div>}
           </dd>
         </>
       )}
@@ -67,6 +68,7 @@ export function MovieDetail() {
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [note, setNote] = useState('')
   const [releases, setReleases] = useState(false)
+  const [editions, setEditions] = useState(false)
   const [deleteFile, setDeleteFile] = useState(false)
 
   const edit = useMutation({
@@ -139,6 +141,9 @@ export function MovieDetail() {
                 <Button onClick={() => setReleases(true)}>
                   <ListFilter className="size-4" aria-hidden /> {t('title.choose')}
                 </Button>
+                <Button onClick={() => setEditions(true)}>
+                  <Clapperboard className="size-4" aria-hidden /> {t('editions.look')}
+                </Button>
               </>
             )}
             <Button busy={action.isPending && action.variables === 'refresh'} onClick={() => action.mutate('refresh')}>
@@ -149,6 +154,7 @@ export function MovieDetail() {
             </Button>
           </div>
           {note && <p className="mt-3 text-sm text-muted">{note}</p>}
+          {editions && <Editions id={id} title={m.title} hasFile={!!m.file} onClose={() => setEditions(false)} />}
           {releases && <Releases path={`/movies/${id}/releases`} title={m.title} onClose={() => setReleases(false)} />}
           <ErrorNote error={action.error || edit.error} />
         </div>
@@ -187,6 +193,7 @@ export function MovieDetail() {
           )}
           {/* Other cuts kept next to the copy: not duplicates, and never
               searched for or upgraded on their own. */}
+          {m.wantedEdition && <p className="mt-4 text-xs text-muted">{t('title.wantedEdition', { edition: m.wantedEdition })}</p>}
           {(m.editions?.length ?? 0) > 0 && (
             <>
               <h3 className="mb-1 mt-6 font-display font-semibold">{t('title.otherEditions')}</h3>

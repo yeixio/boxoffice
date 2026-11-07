@@ -374,10 +374,16 @@
     "notOnDisk": "Belum di disk.",
     "filesOf": "File {{title}}",
     "edition": "Edisi",
-    "editionByLength": "Tebakan dari durasinya",
     "runs": "Durasi",
     "otherEditions": "Edisi lain",
-    "otherEditionsSub": "Versi lain yang disimpan di samping salinan film. Bukan duplikat, dan Box Office tidak mencari peningkatan untuknya."
+    "otherEditionsSub": "Versi lain yang disimpan di samping salinan film. Bukan duplikat, dan Box Office tidak mencari peningkatan untuknya.",
+    "editionFrom": {
+      "name": "Dari nama file",
+      "release": "Dari rilis asal unduhannya",
+      "file": "Dari judul di dalam file",
+      "length": "Tebakan dari durasinya"
+    },
+    "wantedEdition": "Diinginkan sebagai {{edition}}"
   },
   "show": {
     "lookingNow": "Mencari episode yang diinginkan; lihat Aktivitas.",
@@ -1887,5 +1893,21 @@
     "video": "gambarnya rusak",
     "audio": "suaranya rusak atau tidak sinkron",
     "fixing": "Box Office memblokir rilis salinan itu dan sedang mengambil yang lain."
+  },
+  "editions": {
+    "look": "Cari edisi",
+    "title": "Edisi {{title}}",
+    "sub": "Edisi yang dimiliki pengindeks, menurut nama rilisnya. Ambil satu untuk disimpan di samping salinan Anda atau menggantikannya. Box Office tidak pernah mencari edisi sendiri.",
+    "searching": "Mencari di pengindeks…",
+    "none": "Pengindeks tidak punya rilis yang dinamai edisi, seperti Extended atau Director's Cut.",
+    "owned": "Di perpustakaan",
+    "releases": "Rilis: {{n}}",
+    "alongside": "Simpan di samping",
+    "replace": "Ganti salinan",
+    "get": "Ambil",
+    "asked": "Mencari {{edition}} sekarang; lihat Aktivitas.",
+    "other": "Edisi lain",
+    "otherHint": "Tidak ada di daftar? Pilih satu dan Box Office mencarinya sekarang.",
+    "pick": "Pilih edisi"
   }
 }

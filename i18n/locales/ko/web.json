@@ -374,10 +374,16 @@
     "notOnDisk": "아직 디스크에 없어요.",
     "filesOf": "{{title}}의 파일",
     "edition": "에디션",
-    "editionByLength": "재생 시간으로 추정",
     "runs": "재생 시간",
     "otherEditions": "다른 에디션",
-    "otherEditionsSub": "영화 사본 옆에 보관된 다른 편집판입니다. 중복이 아니며 Box Office는 업그레이드를 찾지 않습니다."
+    "otherEditionsSub": "영화 사본 옆에 보관된 다른 편집판입니다. 중복이 아니며 Box Office는 업그레이드를 찾지 않습니다.",
+    "editionFrom": {
+      "name": "파일 이름에서",
+      "release": "다운로드한 릴리스에서",
+      "file": "파일 안의 제목에서",
+      "length": "재생 시간으로 추정"
+    },
+    "wantedEdition": "{{edition}}(으)로 원함"
   },
   "show": {
     "lookingNow": "원하는 에피소드를 찾고 있어요. 활동을 보세요.",
@@ -1887,5 +1893,21 @@
     "video": "화면이 깨졌습니다",
     "audio": "소리가 깨졌거나 싱크가 맞지 않습니다",
     "fixing": "Box Office가 그 사본의 릴리스를 차단하고 다른 것을 가져오는 중입니다."
+  },
+  "editions": {
+    "look": "에디션 찾기",
+    "title": "{{title}} 에디션",
+    "sub": "인덱서에 있는 에디션(릴리스 이름 기준)입니다. 지금 사본 옆에 두거나 대신할 하나를 받으세요. Box Office는 스스로 에디션을 찾지 않습니다.",
+    "searching": "인덱서에서 찾는 중…",
+    "none": "인덱서에 Extended나 Director's Cut 같은 에디션 이름의 릴리스가 없습니다.",
+    "owned": "라이브러리에 있음",
+    "releases": "릴리스: {{n}}",
+    "alongside": "옆에 유지",
+    "replace": "사본 교체",
+    "get": "받기",
+    "asked": "지금 {{edition}}을(를) 찾는 중입니다. 활동을 확인하세요.",
+    "other": "다른 에디션",
+    "otherHint": "목록에 없나요? 하나를 고르면 Box Office가 지금 찾습니다.",
+    "pick": "에디션 선택"
   }
 }

@@ -399,10 +399,16 @@
     "notOnDisk": "Még nincs a lemezen.",
     "filesOf": "{{title}} fájlja",
     "edition": "Változat",
-    "editionByLength": "Becslés a játékidő alapján",
     "runs": "Játékidő",
     "otherEditions": "Más változatok",
-    "otherEditionsSub": "A film példánya mellett tárolt további vágások. Nem duplikátumok, és a Box Office nem keres hozzájuk jobb minőséget."
+    "otherEditionsSub": "A film példánya mellett tárolt további vágások. Nem duplikátumok, és a Box Office nem keres hozzájuk jobb minőséget.",
+    "editionFrom": {
+      "name": "A fájlnévből",
+      "release": "A kiadásból, amelyből letöltődött",
+      "file": "A fájlban tárolt címből",
+      "length": "Becslés a játékidő alapján"
+    },
+    "wantedEdition": "{{edition}} változatként kérve"
   },
   "show": {
     "lookingNow": "A keresett epizódjainak keresése; lásd a Tevékenységet.",
@@ -1981,5 +1987,21 @@
     "video": "a kép hibás",
     "audio": "a hang hibás vagy nincs szinkronban",
     "fixing": "A Box Office letiltotta a másolat kiadását, és szerez egy másikat."
+  },
+  "editions": {
+    "look": "Változat keresése",
+    "title": "{{title}} változatai",
+    "sub": "Az indexelők változatai, a kiadások neve szerint. Szerezz egyet a példányod mellé vagy helyette. A Box Office magától soha nem keres változatot.",
+    "searching": "Keresés az indexelőknél…",
+    "none": "Az indexelőknek nincs változatról elnevezett kiadása, például Extended vagy Director's Cut.",
+    "owned": "A könyvtárban",
+    "releases": "Kiadások: {{n}}",
+    "alongside": "Megtartás mellette",
+    "replace": "Példány cseréje",
+    "get": "Megszerzés",
+    "asked": "Most a(z) {{edition}} keresése folyik; lásd Tevékenység.",
+    "other": "Másik változat",
+    "otherHint": "Nincs a listán? Válassz egyet, és a Box Office most megkeresi.",
+    "pick": "Válassz változatot"
   }
 }
