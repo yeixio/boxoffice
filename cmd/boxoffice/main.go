@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"strings"
 	"sync"
 	"syscall"
@@ -105,7 +106,7 @@ func run() error {
 		mb.Base = cfg.MusicBrainz
 	}
 	backups := &backup.Manager{Store: db, Dir: cfg.BackupDir(), Log: log}
-	downloads := &downloader.Engine{Store: db, Dir: cfg.Downloads, Log: log, Importer: &downloader.LibraryImporter{Store: db},
+	downloads := &downloader.Engine{Store: db, Dir: cfg.Downloads, NZBDir: filepath.Join(cfg.DataDir, "nzb"), Log: log, Importer: &downloader.LibraryImporter{Store: db},
 		Libraries: func(ctx context.Context) ([]string, error) {
 			roots, err := db.RootFolders(ctx, "")
 			var out []string
@@ -220,16 +221,29 @@ func run() error {
 	case <-ctx.Done():
 	}
 	log.Info("stopping")
-	shut, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+	// Everything has stopWait to finish. Work stuck on a network share
+	// that stopped answering may never come back, and waiting for it
+	// would hold up the stop until Kubernetes or Docker gave up on it.
+	shut, cancel := context.WithTimeout(context.Background(), stopWait)
 	defer cancel()
+	stopped := make(chan struct{})
+	go func() { wg.Wait(); close(stopped) }()
 	if err := hs.Shutdown(shut); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		log.Warn("stopping the web server", "err", err)
 	}
-	wg.Wait()
-	// A clean stop, so the next start isn't taken for a crash.
-	alerter.Stopped(context.Background())
+	select {
+	case <-stopped:
+		// A clean stop, so the next start isn't taken for a crash.
+		alerter.Stopped(shut)
+	case <-shut.Done():
+		log.Warn("stopping without waiting for work that's stuck; a network share may have stopped answering")
+	}
 	return nil
 }
+
+// stopWait is how long Box Office takes to stop, at most: under the 30
+// seconds Kubernetes and Docker give before killing it.
+const stopWait = 20 * time.Second
 
 // initDBSecret makes the bundled PostgreSQL's credentials in Kubernetes,
 // so a fresh Helm install needs no hand-made Secret.

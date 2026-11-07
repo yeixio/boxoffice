@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/yeixio/boxoffice/internal/arrapi"
+	"github.com/yeixio/boxoffice/internal/flush"
 	"github.com/yeixio/boxoffice/internal/quality"
 	"github.com/yeixio/boxoffice/internal/store"
 )
@@ -544,7 +545,7 @@ func copyFile(src, dest string) error {
 	if err != nil {
 		return err
 	}
-	n, err := io.Copy(out, in)
+	n, err := io.Copy(&flush.Writer{F: out}, in)
 	if err == nil {
 		err = out.Sync()
 	}
