@@ -21,6 +21,7 @@ What changed in Box Office, newest first. The format follows [Keep a Changelog](
 
 ### Fixed
 
+- **One "Disk almost full" alert for one NAS.** Shares of the same NAS read a moment apart were told apart by a few bytes of free space while files were being written, so Health listed the disk once per share and each sent its own alert. The same size with free space within 1 GiB now counts as one disk.
 - **Choose a release no longer goes to a blank screen when nothing is found.** A search with no releases came back as `null` instead of an empty list, and the releases window crashed the page. It hit audiobooks first, since indexers often have none, but albums, ebooks, movies and episodes did the same when a search came up empty. Now it says nothing was found.
 
 ## [0.1.0] - 2026-11-06
