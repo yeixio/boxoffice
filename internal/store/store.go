@@ -137,6 +137,11 @@ func (s *Store) migrate(ctx context.Context) error {
 	if err := s.MergeDuplicateDownloadClients(ctx); err != nil {
 		return err
 	}
+	// Blocked releases brought over with NZBGet's raw status line say
+	// what went wrong instead.
+	if err := s.fixBlockReasons(ctx); err != nil {
+		return fmt.Errorf("fix blocklist reasons: %w", err)
+	}
 	// A new server starts with the default quality profiles.
 	var n int
 	if err := s.db.QueryRowContext(ctx, "SELECT COUNT(*) FROM quality_profiles").Scan(&n); err != nil {

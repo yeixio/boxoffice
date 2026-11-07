@@ -476,7 +476,7 @@ func (m *Migrator) importSettings(ctx context.Context, p *pending, pr *Progress)
 			continue
 		}
 		if err := st.Block(ctx, store.Blocked{Kind: kind, TitleID: id, SourceTitle: b.SourceTitle, Quality: quality.Parse(b.Quality.Quality.Name).ID,
-			Protocol: b.Protocol, Indexer: b.Indexer, Reason: b.Message, At: b.Date, Source: app}); err != nil {
+			Protocol: b.Protocol, Indexer: b.Indexer, Reason: store.BlockReason(b.Message), At: b.Date, Source: app}); err != nil {
 			return "", err
 		}
 		nBlock++
