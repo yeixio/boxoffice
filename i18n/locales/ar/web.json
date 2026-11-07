@@ -2333,5 +2333,14 @@
     "correctedFrom": "صُحّحت من {{was}} بعد فحص داخل الملف",
     "picture": "الصورة والصوت",
     "bits": "{{bits}} بت"
+  },
+  "reported": {
+    "title": "تم الإبلاغ في Matinee: {{what}}.",
+    "by": "أبلغ {{name}} في Matinee: {{what}}.",
+    "wrong": "إنه فيلم أو حلقة أخرى",
+    "language": "يجب أن يكون باللغة {{language}}",
+    "video": "الصورة معطوبة",
+    "audio": "الصوت معطوب أو غير متزامن",
+    "fixing": "حظر Box Office إصدار هذه النسخة ويجلب نسخة أخرى."
   }
 }

@@ -6,7 +6,7 @@ import { ListFilter, RefreshCw, Search, Trash2 } from 'lucide-react'
 import { Releases } from '../Releases'
 import { DeleteFiles, RemoveTitle } from '../RemoveFiles'
 import { AutoUpgradeField } from '../AutoUpgrade'
-import { LockedNote } from '../Bulk'
+import { LockedNote, ReportedNote } from '../Bulk'
 import { get, patch, post, type Movie } from '../api'
 import { bytes, day, runtime } from '../format'
 import { qualityName, useProfiles, useQualities } from '../hooks'
@@ -29,7 +29,8 @@ export function MovieDetail() {
   const edit = useMutation({
     mutationFn: (body: Partial<Pick<Movie, 'monitored' | 'profileId' | 'autoUpgrade'>>) => patch<Movie>(`/movies/${id}`, body),
     onSuccess: (m) => {
-      qc.setQueryData(['movie', id], m)
+      // The edit's answer is the movie alone; what was reported stays.
+      qc.setQueryData(['movie', id], (old: Movie | undefined) => ({ ...m, reported: old?.reported }))
       qc.invalidateQueries({ queryKey: ['movies'] })
     },
   })
@@ -85,6 +86,7 @@ export function MovieDetail() {
             </dl>
           )}
           {locked && <LockedNote />}
+          {m.reported && <ReportedNote reported={m.reported} />}
           <div className="mt-6 flex flex-wrap gap-2">
             {!locked && (
               <>

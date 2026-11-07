@@ -215,4 +215,29 @@ func TestAskEditionAndUpgrade(t *testing.T) {
 	if tw, _ := st.TitleWant(ctx, "movie", mv.ID); tw.Want != "" {
 		t.Fatalf("want after: %+v", tw)
 	}
+
+	// A problem reported in Matinee: the wrong language, wanted in English.
+	if code := call(t, "POST", e.url+"/radarr/api/v3/boxoffice/upgrade", map[string]any{"movieId": mv.ID, "want": "replace", "problem": "language", "language": "fr"}, nil); code != 202 {
+		t.Fatalf("problem: %d", code)
+	}
+	if tw, _ := st.TitleWant(ctx, "movie", mv.ID); tw.Want != store.WantReplace || tw.Problem != store.ProblemLanguage || tw.Language != "fr" {
+		t.Fatalf("problem want: %+v", tw)
+	}
+	for _, bad := range []map[string]any{
+		{"movieId": mv.ID, "want": "replace", "problem": "language"},                   // which language?
+		{"movieId": mv.ID, "want": "replace", "problem": "language", "language": "xx"}, // not one
+		{"movieId": mv.ID, "want": "better", "problem": "wrong"},                       // a problem wants another copy
+		{"movieId": mv.ID, "want": "replace", "problem": "smell"},
+	} {
+		if code := call(t, "POST", e.url+"/radarr/api/v3/boxoffice/upgrade", bad, nil); code != 400 {
+			t.Errorf("%v: %d", bad, code)
+		}
+	}
+	// What's asked next replaces the report.
+	if code := call(t, "POST", e.url+"/radarr/api/v3/boxoffice/upgrade", map[string]any{"movieId": mv.ID, "want": "replace", "problem": "wrong", "reportedBy": "Ellen"}, nil); code != 202 {
+		t.Fatalf("problem wrong: %d", code)
+	}
+	if tw, _ := st.TitleWant(ctx, "movie", mv.ID); tw.Problem != store.ProblemWrong || tw.Language != "" || tw.ReportedBy != "Ellen" {
+		t.Fatalf("problem want: %+v", tw)
+	}
 }

@@ -1863,5 +1863,14 @@
     "correctedFrom": "Diperbaiki dari {{was}} setelah melihat isi file",
     "picture": "Gambar dan suara",
     "bits": "{{bits}}-bit"
+  },
+  "reported": {
+    "title": "Dilaporkan di Matinee: {{what}}.",
+    "by": "{{name}} melaporkan di Matinee: {{what}}.",
+    "wrong": "ini film atau episode lain",
+    "language": "seharusnya dalam bahasa {{language}}",
+    "video": "gambarnya rusak",
+    "audio": "suaranya rusak atau tidak sinkron",
+    "fixing": "Box Office memblokir rilis salinan itu dan sedang mengambil yang lain."
   }
 }

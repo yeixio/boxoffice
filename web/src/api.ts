@@ -94,6 +94,20 @@ export type Movie = {
   path: string
   addedAt: string
   file?: MediaFile
+  reported?: Reported
+}
+
+// A problem someone reported in Matinee with a movie's or an episode's
+// copy: Box Office blocked the bad copy's release and is getting another.
+export type Reported = {
+  kind: 'movie' | 'episode'
+  ownerId: number
+  problem: 'wrong' | 'language' | 'video' | 'audio'
+  // The language (ISO 639-1) its sound should be in, for language.
+  language?: string
+  reportedBy?: string
+  note?: string
+  updatedAt: string
 }
 
 export type Season = { number: number; monitored: boolean }

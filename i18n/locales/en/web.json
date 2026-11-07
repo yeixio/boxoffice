@@ -1957,5 +1957,14 @@
     "correctedFrom": "Corrected from {{was}} after looking inside the file",
     "picture": "Picture and sound",
     "bits": "{{bits}}-bit"
+  },
+  "reported": {
+    "title": "Reported in Matinee: {{what}}.",
+    "by": "{{name}} reported in Matinee: {{what}}.",
+    "wrong": "it's another movie or episode",
+    "language": "it should be in {{language}}",
+    "video": "the picture is broken",
+    "audio": "the sound is broken or out of sync",
+    "fixing": "Box Office blocked that copy's release and is getting another."
   }
 }

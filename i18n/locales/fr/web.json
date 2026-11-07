@@ -2051,5 +2051,14 @@
     "correctedFrom": "Corrigée depuis {{was}} après examen du fichier",
     "picture": "Image et son",
     "bits": "{{bits}} bits"
+  },
+  "reported": {
+    "title": "Signalé dans Matinee : {{what}}.",
+    "by": "{{name}} a signalé dans Matinee : {{what}}.",
+    "wrong": "c'est un autre film ou un autre épisode",
+    "language": "il devrait être en {{language}}",
+    "video": "l'image est défectueuse",
+    "audio": "le son est défectueux ou désynchronisé",
+    "fixing": "Box Office a bloqué la release de cette copie et en récupère une autre."
   }
 }

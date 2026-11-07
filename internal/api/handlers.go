@@ -354,7 +354,20 @@ func (s *Server) movie(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
-	return writeJSON(w, http.StatusOK, m)
+	tw, err := s.Store.TitleWant(r.Context(), "movie", m.ID)
+	if err != nil {
+		return err
+	}
+	out := struct {
+		store.Movie
+		// Reported is a problem reported in Matinee that a replacement
+		// is being looked for.
+		Reported *store.TitleWant `json:"reported,omitempty"`
+	}{Movie: m}
+	if tw.Want == store.WantReplace && tw.Problem != "" {
+		out.Reported = &tw
+	}
+	return writeJSON(w, http.StatusOK, out)
 }
 
 type addInput struct {
@@ -512,7 +525,18 @@ func (s *Server) series(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
-	return writeJSON(w, http.StatusOK, map[string]any{"series": t, "episodes": eps})
+	all, err := s.Store.ReportedWants(r.Context(), "episode")
+	if err != nil {
+		return err
+	}
+	// Problems reported in Matinee with its episodes, being fixed.
+	reported := []store.TitleWant{}
+	for _, e := range eps {
+		if tw, ok := all[e.ID]; ok {
+			reported = append(reported, tw)
+		}
+	}
+	return writeJSON(w, http.StatusOK, map[string]any{"series": t, "episodes": eps, "reported": reported})
 }
 
 // showDefaults are which seasons a new show watches when nobody picks:

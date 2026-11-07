@@ -2145,5 +2145,14 @@
     "correctedFrom": "Opraveno z {{was}} po nahlédnutí do souboru",
     "picture": "Obraz a zvuk",
     "bits": "{{bits}} bitů"
+  },
+  "reported": {
+    "title": "Nahlášeno v Matinee: {{what}}.",
+    "by": "{{name}} nahlásil(a) v Matinee: {{what}}.",
+    "wrong": "je to jiný film nebo díl",
+    "language": "měl by být v jazyce {{language}}",
+    "video": "obraz je poškozený",
+    "audio": "zvuk je poškozený nebo nesynchronní",
+    "fixing": "Box Office zablokoval vydání této kopie a stahuje jinou."
   }
 }

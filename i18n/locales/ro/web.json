@@ -2051,5 +2051,14 @@
     "correctedFrom": "Corectată din {{was}} după verificarea fișierului",
     "picture": "Imagine și sunet",
     "bits": "{{bits}} biți"
+  },
+  "reported": {
+    "title": "Raportat în Matinee: {{what}}.",
+    "by": "{{name}} a raportat în Matinee: {{what}}.",
+    "wrong": "este alt film sau episod",
+    "language": "ar trebui să fie în {{language}}",
+    "video": "imaginea este defectă",
+    "audio": "sunetul este defect sau desincronizat",
+    "fixing": "Box Office a blocat lansarea acelei copii și aduce alta."
   }
 }

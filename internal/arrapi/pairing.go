@@ -55,7 +55,7 @@ func (h *Handler) features() []string {
 		f = append(f, "requests")
 	}
 	if h.Pairing != nil {
-		f = append(f, "progress", "upgrades")
+		f = append(f, "progress", "upgrades", "problems")
 		if h.App == Radarr {
 			f = append(f, "editions")
 		}
@@ -420,6 +420,12 @@ func catalogName(title string, year int) string {
 // bad (want replace, with a reason). A bad copy's release goes on the
 // blocklist, so it isn't grabbed again. It queues a search, and answers
 // at once.
+//
+// A problem someone reported in Matinee ("problems") comes as want
+// replace with the problem (store.ReportedProblems), who reported it, and
+// for the wrong language the language its sound should be in: then only
+// releases that may be in that language are taken, and a download whose
+// sound turns out to be in another is turned down and another looked for.
 func (h *Handler) upgrade(w http.ResponseWriter, r *http.Request) error {
 	var in struct {
 		MovieID   int64  `json:"movieId"`
@@ -431,12 +437,35 @@ func (h *Handler) upgrade(w http.ResponseWriter, r *http.Request) error {
 		Episode   int    `json:"episodeNumber"`
 		Want      string `json:"want"`
 		Reason    string `json:"reason"`
+		// Problem, Language and ReportedBy are for a reported problem.
+		Problem    string `json:"problem"`
+		Language   string `json:"language"`
+		ReportedBy string `json:"reportedBy"`
 	}
 	if err := read(r, &in); err != nil {
 		return err
 	}
 	if in.Want != store.WantBetter && in.Want != store.WantReplace {
 		return invalid("want", "want is better or replace")
+	}
+	if in.Problem != "" {
+		if !slices.Contains(store.ReportedProblems, in.Problem) {
+			return invalid("problem", "problem is one of "+strings.Join(store.ReportedProblems, ", "))
+		}
+		if in.Want != store.WantReplace {
+			return invalid("want", "a problem asks for another copy: want is replace")
+		}
+	}
+	if in.Problem == store.ProblemLanguage {
+		if in.Language = quality.LanguageCode(in.Language); in.Language == "" {
+			return invalid("language", "say which language its sound should be in, as an ISO 639-1 code such as en")
+		}
+	} else {
+		in.Language = ""
+	}
+	in.ReportedBy = strings.TrimSpace(in.ReportedBy)
+	if len(in.ReportedBy) > 100 {
+		in.ReportedBy = in.ReportedBy[:100]
 	}
 	in.Reason = strings.TrimSpace(in.Reason)
 	if len(in.Reason) > 500 {
@@ -477,6 +506,9 @@ func (h *Handler) upgrade(w http.ResponseWriter, r *http.Request) error {
 		}
 		if blocked != "" {
 			reason := "reported as a bad copy"
+			if in.Problem != "" {
+				reason = "reported in Matinee: " + problemText(in.Problem, in.Language)
+			}
 			if in.Reason != "" {
 				reason += ": " + in.Reason
 			}
@@ -491,13 +523,29 @@ func (h *Handler) upgrade(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 	tw.Want, tw.Note = in.Want, in.Reason
+	tw.Problem, tw.Language, tw.ReportedBy = in.Problem, in.Language, in.ReportedBy
 	if err := st.SetTitleWant(ctx, tw); err != nil {
 		return err
 	}
 	if err := h.Pairing.Ask(ctx, kind, id, subject, "", "", in.Want); err != nil {
 		return err
 	}
-	return write(w, http.StatusAccepted, map[string]any{"kind": kind, "id": id, "want": in.Want, "blocked": blocked, "queued": true})
+	return write(w, http.StatusAccepted, map[string]any{"kind": kind, "id": id, "want": in.Want, "problem": in.Problem, "blocked": blocked, "queued": true})
+}
+
+// problemText says what a reported problem is, for the blocklist.
+func problemText(problem, lang string) string {
+	switch problem {
+	case store.ProblemWrong:
+		return "it's another movie or episode"
+	case store.ProblemLanguage:
+		return "it's in the wrong language (" + quality.LanguageName(lang) + " was wanted)"
+	case store.ProblemVideo:
+		return "the picture is broken"
+	case store.ProblemAudio:
+		return "the sound is broken or out of sync"
+	}
+	return problem
 }
 
 // episodeFor is the episode a request names: by Box Office's id, or by

@@ -1957,5 +1957,14 @@
     "correctedFrom": "Dosyanın içine bakıldıktan sonra {{was}} değerinden düzeltildi",
     "picture": "Görüntü ve ses",
     "bits": "{{bits}} bit"
+  },
+  "reported": {
+    "title": "Matinee'de bildirildi: {{what}}.",
+    "by": "{{name}} Matinee'de bildirdi: {{what}}.",
+    "wrong": "başka bir film ya da bölüm",
+    "language": "{{language}} olmalı",
+    "video": "görüntü bozuk",
+    "audio": "ses bozuk ya da senkronize değil",
+    "fixing": "Box Office bu kopyanın sürümünü engelledi ve başka birini getiriyor."
   }
 }
