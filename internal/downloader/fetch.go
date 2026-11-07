@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"slices"
@@ -14,6 +15,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/yeixio/boxoffice/internal/flush"
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/usenet/nntp"
 	"github.com/yeixio/boxoffice/internal/usenet/nzb"
@@ -65,7 +67,22 @@ func (e *Engine) fetch(ctx context.Context, r *running, d *store.Download, srv *
 		return nil, errors.New("the download's folder isn't in the downloads folder")
 	}
 	if err := os.MkdirAll(dir, 0o750); err != nil {
-		return nil, err
+		return nil, local(err)
+	}
+	// A folder of that name another app made (NZBGet, say, as another
+	// user) may not take Box Office's files. If nothing of this download
+	// is in it yet, it gets a fresh folder of its own instead.
+	if !writable(dir) && len(d.DoneFiles) == 0 {
+		old := d.Folder
+		d.Folder = e.uniqueFolder(d.Name)
+		if dir, ok = e.inside(d.Folder); !ok {
+			return nil, errors.New("the download's folder isn't in the downloads folder")
+		}
+		if err := os.MkdirAll(dir, 0o750); err != nil {
+			return nil, local(err)
+		}
+		e.Log.Info("download's folder isn't writable; using another", "name", d.Name, "id", d.ID, "was", old, "now", d.Folder)
+		e.Store.SaveDownloadProgress(context.WithoutCancel(ctx), *d)
 	}
 	job := &fetchJob{dir: dir, nzb: n}
 	hasIndex := false
@@ -99,7 +116,13 @@ func (e *Engine) fetch(ctx context.Context, r *running, d *store.Download, srv *
 	again := e.again[d.ID]
 	delete(e.again, d.ID)
 	e.mu.Unlock()
-	e.Log.Info("download started", "name", d.Name, "id", d.ID, "files", len(job.files), "fetching", len(want), "size", size,
+	left := 0
+	for _, f := range want {
+		if !slices.Contains(d.DoneFiles, f.index) {
+			left++
+		}
+	}
+	e.Log.Info("download started", "name", d.Name, "id", d.ID, "files", len(job.files), "fetching", left, "already", len(want)-left, "size", size,
 		"par2 index", hasIndex, "folder", d.Folder, "again", again)
 	if again {
 		// Checking and unpacking again: the files are already here,
@@ -141,6 +164,7 @@ type fileState struct {
 	remaining atomic.Int32
 	mu        sync.Mutex
 	yname     string
+	written   flush.Counter
 }
 
 type segment struct {
@@ -172,20 +196,20 @@ func (e *Engine) download(ctx context.Context, r *running, d *store.Download, sr
 		tmp := filepath.Join(job.dir, fmt.Sprintf(".boxoffice-%d-%s.part", f.index, try))
 		fh, err := os.OpenFile(tmp, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0o640)
 		if err != nil {
-			return shareTrouble(fmt.Errorf("Box Office couldn't make a file in its download folder %s: %w", job.dir, err))
+			return local(shareTrouble(fmt.Errorf("Box Office couldn't make a file in its download folder %s: %w", job.dir, err)))
 		}
 		st := &fileState{nf: f, fh: fh, tmp: tmp}
 		st.remaining.Store(int32(len(f.file.Segments)))
 		states = append(states, st)
 	}
-	defer func() {
+	cleanup := func() {
 		for _, st := range states {
 			if st.fh != nil {
 				st.fh.Close()
 				os.Remove(st.tmp)
 			}
 		}
-	}()
+	}
 	r.bytes.Store(d.DoneBytes)
 	if d.DoneBytes == 0 {
 		r.bytes.Store(done)
@@ -275,7 +299,20 @@ func (e *Engine) download(ctx context.Context, r *running, d *store.Download, sr
 			}
 		}()
 	}
-	wg.Wait()
+	// A download that gets nowhere for stallWait is stuck: a share that
+	// hung mid-write, most likely. It's stopped and tried again, and if
+	// its writes still haven't come back a while after, they're left to
+	// finish on their own, so the queue isn't held up by them.
+	waited := make(chan struct{})
+	go func() { wg.Wait(); close(waited) }()
+	stuck := e.watchStall(ctx, cancel, r, waited)
+	select {
+	case <-waited:
+		cleanup()
+	case <-stuck:
+		e.Log.Warn("a download's writes to the downloads folder never came back; leaving them and going on", "name", d.Name, "id", d.ID)
+		go func() { <-waited; cleanup() }()
+	}
 	mu.Lock()
 	d.DoneBytes, d.FailedBytes = r.bytes.Load(), r.failed.Load()
 	mu.Unlock()
@@ -283,6 +320,54 @@ func (e *Engine) download(ctx context.Context, r *running, d *store.Download, sr
 		return err
 	}
 	return nil
+}
+
+// stallWait is how long a download may get nowhere before it's taken for
+// stuck, and stallGrace how long it's then given to stop.
+var stallWait, stallGrace = 10 * time.Minute, time.Minute
+
+// watchStall cancels a download that gets nowhere for stallWait, as the
+// downloads folder stopped answering, and closes the channel it returns
+// if it still hasn't stopped stallGrace after that (or after it was
+// stopped for any other reason).
+func (e *Engine) watchStall(ctx context.Context, cancel context.CancelCauseFunc, r *running, done <-chan struct{}) <-chan struct{} {
+	stuck := make(chan struct{})
+	go func() {
+		tick := time.NewTicker(min(stallWait/4, 30*time.Second))
+		defer tick.Stop()
+		last, at := r.bytes.Load(), time.Now()
+		for {
+			select {
+			case <-done:
+				return
+			case <-ctx.Done():
+				// Stopped (paused, removed, or Box Office is stopping):
+				// it gets as long to finish.
+				select {
+				case <-done:
+				case <-time.After(stallGrace):
+					close(stuck)
+				}
+				return
+			case <-tick.C:
+			}
+			if b := r.bytes.Load(); b != last {
+				last, at = b, time.Now()
+				continue
+			}
+			if time.Since(at) < stallWait {
+				continue
+			}
+			cancel(shareError{fmt.Errorf("nothing was saved for %s: %w", stallWait.Round(time.Second), syscall.ETIMEDOUT)})
+			select {
+			case <-done:
+			case <-time.After(stallGrace):
+				close(stuck)
+			}
+			return
+		}
+	}()
+	return stuck
 }
 
 // segment fetches, decodes and writes one article. A missing or damaged
@@ -340,7 +425,25 @@ func (e *Engine) segment(ctx context.Context, r *running, srv *servers, s segmen
 	if _, err := s.fs.fh.WriteAt(p.Data, p.Begin); err != nil {
 		return shareTrouble(fmt.Errorf("write to the downloads folder: %w", err))
 	}
+	// Bounded, so written data waiting to go out to a slow share doesn't
+	// fill the memory limit.
+	s.fs.written.Wrote(s.fs.fh, len(p.Data))
 	return nil
+}
+
+// localError is a download that failed for Box Office's own folders (it
+// isn't allowed to write there), not for anything wrong with the release:
+// it's paused, not failed, so the release isn't blocked.
+type localError struct{ error }
+
+func (l localError) Unwrap() error { return l.error }
+
+// local marks err as a localError when it's a permissions problem.
+func local(err error) error {
+	if errors.Is(err, fs.ErrPermission) {
+		return localError{err}
+	}
+	return err
 }
 
 // closePart closes a finished part file; tests swap it.
@@ -356,12 +459,16 @@ type shareError struct{ error }
 func (s shareError) Unwrap() error { return s.error }
 
 func (s shareError) Error() string {
-	why := s.error.Error()
+	return "the downloads folder stopped answering while Box Office was saving to it (" + s.why() + "); if it's a network share, check it's up, then download it again"
+}
+
+// why is what the system said, in short.
+func (s shareError) why() string {
 	var errno syscall.Errno
 	if errors.As(s.error, &errno) {
-		why = errno.Error()
+		return errno.Error()
 	}
-	return "the downloads folder stopped answering while Box Office was saving to it (" + why + "); if it's a network share, check it's up, then download it again"
+	return s.error.Error()
 }
 
 // shareTrouble marks err as a shareError when it's the downloads folder

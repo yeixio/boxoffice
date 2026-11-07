@@ -519,6 +519,7 @@ func (s *Server) AlertReadings(ctx context.Context) alerts.Readings {
 				names = append(names, name)
 			}
 		}
+		slices.Sort(names)
 		disk.Name, disk.Path = strings.Join(names, ", "), d.Uses[0].Path
 		r.Disks = append(r.Disks, disk)
 	}

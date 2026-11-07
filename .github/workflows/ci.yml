@@ -104,3 +104,30 @@ jobs:
             tmdb_key=${{ secrets.TMDB_API_KEY }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  # Once main's image is pushed, the image-ready branch moves to that commit.
+  # A deployment that follows image-ready (as the home lab's Argo CD app
+  # does, with image.tag sha-<its commit>) only ever asks for an image that
+  # exists, instead of sitting in ImagePullBackOff while the build runs, or
+  # for good when it fails. It never moves backwards, so an older build
+  # finishing last leaves it alone.
+  image-ready:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [go, web, docker]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: image-ready
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Move image-ready to this commit
+        run: |
+          if git fetch origin image-ready 2>/dev/null && ! git merge-base --is-ancestor FETCH_HEAD "$GITHUB_SHA"; then
+            echo "image-ready is already at a newer commit; leaving it"
+            exit 0
+          fi
+          git push --force origin "$GITHUB_SHA:refs/heads/image-ready"

@@ -583,11 +583,20 @@ func (s *Service) jobRefreshAll(ctx context.Context, _ string) (jobs.Result, err
 		return jobs.Result{}, err
 	}
 	n, failed := 0, 0
+	// Titles TMDB doesn't know any more (removed there, or their ID
+	// changed) aren't worth asking about every day: they're asked about
+	// weekly, and named once each time.
+	var gone []string
+	retry := time.Now().Add(goneRetry - 20*time.Hour)
 	for _, m := range movies {
 		if m.RefreshedAt.After(stale) {
 			continue
 		}
-		if err := s.RefreshMovie(ctx, m.ID); err != nil {
+		if err := s.RefreshMovie(ctx, m.ID); errors.Is(err, tmdb.ErrNotFound) {
+			gone = append(gone, m.Title)
+			s.Store.SetRefreshed(ctx, "movie", m.ID, retry)
+			continue
+		} else if err != nil {
 			failed++
 			s.Log.Warn("couldn't refresh a movie", "title", m.Title, "err", err)
 			continue
@@ -602,18 +611,31 @@ func (s *Service) jobRefreshAll(ctx context.Context, _ string) (jobs.Result, err
 		if t.RefreshedAt.After(stale) {
 			continue
 		}
-		if err := s.RefreshSeries(ctx, t.ID); err != nil {
+		if err := s.RefreshSeries(ctx, t.ID); errors.Is(err, tmdb.ErrNotFound) {
+			gone = append(gone, t.Title)
+			s.Store.SetRefreshed(ctx, "series", t.ID, retry)
+			continue
+		} else if err != nil {
 			failed++
 			s.Log.Warn("couldn't refresh a show", "title", t.Title, "err", err)
 			continue
 		}
 		n++
 	}
+	msg := fmt.Sprintf("refreshed %d titles", n)
 	if failed > 0 {
-		return jobs.Done("refreshed %d titles; %d couldn't be refreshed", n, failed), nil
+		msg += fmt.Sprintf("; %d couldn't be refreshed", failed)
 	}
-	return jobs.Done("refreshed %d titles", n), nil
+	if len(gone) > 0 {
+		s.Log.Info("titles TMDB doesn't know any more; asking again in a week", "titles", strings.Join(gone, ", "))
+		msg += fmt.Sprintf("; TMDB doesn't know %d of them any more (removed there, or their ID changed), so they're checked weekly instead: %s",
+			len(gone), strings.Join(gone, ", "))
+	}
+	return jobs.Done("%s", msg), nil
 }
+
+// goneRetry is how often a title TMDB doesn't know any more is asked about.
+const goneRetry = 7 * 24 * time.Hour
 
 // RefreshEvery queues a refresh of stale titles now and then every interval.
 func (s *Service) RefreshEvery(ctx context.Context, every time.Duration) {

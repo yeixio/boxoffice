@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 	"sync/atomic"
 	"syscall"
 	"testing"
@@ -389,7 +390,7 @@ func TestShareDropsOut(t *testing.T) {
 		name  string
 		fails int
 		want  string
-	}{{"comes back", 2, store.DownloadCompleted}, {"stays down", 100, store.DownloadFailed}} {
+	}{{"comes back", 2, store.DownloadCompleted}, {"stays down", 100, store.DownloadPaused}} {
 		t.Run(c.name, func(t *testing.T) {
 			srv := nntptest.New()
 			defer srv.Close()
@@ -406,8 +407,10 @@ func TestShareDropsOut(t *testing.T) {
 			}, time.Millisecond
 			t.Cleanup(func() { closePart, shareWait = (*os.File).Close, 15*time.Second })
 			run(t, e)
+			var failed atomic.Int32
+			e.Failed = func(context.Context, store.Download, string) { failed.Add(1) }
 			d, _ := e.Add(context.Background(), store.Download{}, data)
-			d = waitFor(t, st, d.ID, store.DownloadCompleted, store.DownloadFailed)
+			d = waitFor(t, st, d.ID, store.DownloadCompleted, store.DownloadFailed, store.DownloadPaused)
 			if d.Status != c.want {
 				t.Fatalf("%s: %s", d.Status, d.Message)
 			}
@@ -415,8 +418,10 @@ func TestShareDropsOut(t *testing.T) {
 				checkFiles(t, filepath.Join(e.Dir, d.Folder), want)
 				return
 			}
-			if !strings.Contains(d.Message, "stopped answering") || !strings.Contains(d.Message, "host is down") || d.Missing {
-				t.Fatalf("missing %v: %s", d.Missing, d.Message)
+			// The folder's trouble isn't the release's: it waits, paused,
+			// and the release isn't blocked.
+			if !strings.Contains(d.Message, "kept dropping out") || !strings.Contains(d.Message, "host is down") || d.Missing || failed.Load() != 0 {
+				t.Fatalf("missing %v, failed %d: %s", d.Missing, failed.Load(), d.Message)
 			}
 			// Its files never all came, so there's nothing to unpack again.
 			if d.Fetched || e.CanReprocess(d) {
@@ -428,5 +433,109 @@ func TestShareDropsOut(t *testing.T) {
 				t.Fatalf("tried %d times", got)
 			}
 		})
+	}
+}
+
+// While the downloads folder is away, the queue waits and says why; no
+// download is paused for it. Downloads an older version paused for it go
+// back in the queue once it answers.
+func TestFolderAwayWaits(t *testing.T) {
+	srv := nntptest.New()
+	defer srv.Close()
+	data, want, _ := release(t, srv, false)
+	e, st := newEngine(t, srv)
+	e.NZBDir = filepath.Join(t.TempDir(), "nzb")
+	enable(t, st, Settings{})
+	ctx := context.Background()
+	// A share that dropped: reading the folder fails, and making it says
+	// it exists.
+	mkdirAll = func(p string, _ os.FileMode) error {
+		return &os.PathError{Op: "mkdir", Path: p, Err: syscall.EEXIST}
+	}
+	t.Cleanup(func() { mkdirAll = os.MkdirAll })
+	d, err := e.Add(ctx, store.Download{}, data)
+	if err != nil {
+		t.Fatalf("couldn't grab while the downloads folder was away: %v", err)
+	}
+	old, _ := e.Add(ctx, store.Download{}, data)
+	st.SetDownloadStatus(ctx, old.ID, store.DownloadPaused, "Box Office can't make its downloads folder /downloads: mkdir /downloads: file exists")
+	e.init()
+	var wg sync.WaitGroup
+	e.startNext(ctx, &wg)
+	if d, _ = st.Download(ctx, d.ID); d.Status != store.DownloadQueued {
+		t.Fatalf("download is %s: %s", d.Status, d.Message)
+	}
+	if !strings.Contains(e.Waiting(), "isn't answering") {
+		t.Fatalf("waiting: %q", e.Waiting())
+	}
+	mkdirAll = os.MkdirAll
+	run(t, e)
+	for _, id := range []int64{d.ID, old.ID} {
+		got := waitFor(t, st, id, store.DownloadCompleted, store.DownloadFailed)
+		if got.Status != store.DownloadCompleted {
+			t.Fatalf("%d: %s", id, got.Message)
+		}
+		checkFiles(t, filepath.Join(e.Dir, got.Folder), want)
+	}
+}
+
+// A download that gets nowhere (a share that hung mid-write) is stopped
+// and tried again, and doesn't hold up the queue for good.
+func TestStalledDownload(t *testing.T) {
+	srv := nntptest.New()
+	defer srv.Close()
+	data, want, _ := release(t, srv, false)
+	e, st := newEngine(t, srv)
+	enable(t, st, Settings{})
+	var hung atomic.Bool
+	block := make(chan struct{})
+	closePart, shareWait, stallWait, stallGrace = func(f *os.File) error {
+		if hung.CompareAndSwap(false, true) {
+			<-block // the first close never comes back while the test runs
+		}
+		return f.Close()
+	}, time.Millisecond, 200*time.Millisecond, 100*time.Millisecond
+	t.Cleanup(func() {
+		close(block)
+		closePart, shareWait, stallWait, stallGrace = (*os.File).Close, 15*time.Second, 10*time.Minute, time.Minute
+	})
+	run(t, e)
+	d, _ := e.Add(context.Background(), store.Download{}, data)
+	d = waitFor(t, st, d.ID, store.DownloadCompleted, store.DownloadFailed, store.DownloadPaused)
+	if d.Status != store.DownloadCompleted {
+		t.Fatalf("%s: %s", d.Status, d.Message)
+	}
+	checkFiles(t, filepath.Join(e.Dir, d.Folder), want)
+}
+
+// A folder of the download's name that Box Office can't write in (made by
+// another app as another user) is passed over for a fresh one; and when it
+// can't write at all, the download waits, paused, and the release isn't
+// blocked.
+func TestFolderNotWritable(t *testing.T) {
+	if os.Geteuid() == 0 {
+		t.Skip("root can write anywhere")
+	}
+	srv := nntptest.New()
+	defer srv.Close()
+	data, want, _ := release(t, srv, false)
+	e, st := newEngine(t, srv)
+	enable(t, st, Settings{})
+	ctx := context.Background()
+	var failed atomic.Int32
+	e.Failed = func(context.Context, store.Download, string) { failed.Add(1) }
+	d, _ := e.Add(ctx, store.Download{}, data)
+	d.Folder = "Made.By.NZBGet"
+	os.Mkdir(filepath.Join(e.Dir, d.Folder), 0o555)
+	t.Cleanup(func() { os.Chmod(filepath.Join(e.Dir, "Made.By.NZBGet"), 0o755) })
+	st.SaveDownloadProgress(ctx, d)
+	run(t, e)
+	d = waitFor(t, st, d.ID, store.DownloadCompleted, store.DownloadFailed, store.DownloadPaused)
+	if d.Status != store.DownloadCompleted || d.Folder == "Made.By.NZBGet" {
+		t.Fatalf("%s in %s: %s", d.Status, d.Folder, d.Message)
+	}
+	checkFiles(t, filepath.Join(e.Dir, d.Folder), want)
+	if failed.Load() != 0 {
+		t.Fatal("blocked the release")
 	}
 }

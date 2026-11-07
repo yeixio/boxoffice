@@ -389,3 +389,27 @@ func (s *Store) Pending(ctx context.Context, kind string, titleID int64) ([]Down
 	return s.downloads(ctx, `kind = ? AND title_id = ? AND (status NOT IN ('completed', 'failed')
 		OR (status = 'completed' AND imported_to = '' AND quarantined = '' AND finished_at > ?)) ORDER BY id`, kind, titleID, since)
 }
+
+// ResumeDownloadsPaused puts back in the queue paused downloads whose
+// message begins with one of prefixes or holds note, and says how many.
+func (s *Store) ResumeDownloadsPaused(ctx context.Context, prefixes []string, note string) (int64, error) {
+	var conds []string
+	var args []any
+	for _, p := range prefixes {
+		conds = append(conds, "message LIKE ?")
+		args = append(args, p+"%")
+	}
+	if note != "" {
+		conds = append(conds, "message LIKE ?")
+		args = append(args, "%"+note+"%")
+	}
+	if len(conds) == 0 {
+		return 0, nil
+	}
+	res, err := s.exec(ctx, "UPDATE downloads SET status = ?, message = '', finished_at = 0 WHERE status = ? AND ("+strings.Join(conds, " OR ")+")",
+		append([]any{DownloadQueued, DownloadPaused}, args...)...)
+	if err != nil {
+		return 0, err
+	}
+	return res.RowsAffected()
+}

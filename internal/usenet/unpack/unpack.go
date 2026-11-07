@@ -18,6 +18,8 @@ import (
 
 	"github.com/bodgit/sevenzip"
 	"github.com/nwaples/rardecode/v2"
+
+	"github.com/yeixio/boxoffice/internal/flush"
 )
 
 // ErrPassword means the archive needs a password, and the one given (if
@@ -139,7 +141,7 @@ func write(ctx context.Context, dir, name string, mode fs.FileMode, r io.Reader)
 	if err != nil {
 		return "", err
 	}
-	_, err = io.Copy(f, ctxReader{ctx, r})
+	_, err = io.Copy(&flush.Writer{F: f}, ctxReader{ctx, r})
 	if cerr := f.Close(); err == nil {
 		err = cerr
 	}

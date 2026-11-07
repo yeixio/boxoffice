@@ -21,6 +21,15 @@ What changed in Box Office, newest first. The format follows [Keep a Changelog](
 
 ### Fixed
 
+- **A downloads folder on a network share that drops out no longer pauses the queue for good.** When the share went away, making the folder said "file exists", and download after download was paused for it and stayed paused. Now the queue waits, says on Downloads that the folder isn't answering, and carries on by itself once it answers; downloads paused that way before are resumed then. Checking the folder gives up after 20 seconds, so a hung share can't freeze the queue or the Downloads page. NZBs are now kept in the data folder, so releases can still be grabbed while the downloads folder is away.
+- **A download stuck on a hung share no longer holds up the queue.** One that gets nowhere for 10 minutes is stopped and tried again, and writes that never come back are left to finish on their own. A download the share kept dropping out on is paused and tried again within the hour instead of failing, since nothing is wrong with the release, so it isn't blocked.
+- **Writing to a slow network share no longer fills the memory limit.** Downloads, unpacks and copies into the library flush every 32 MB and drop what was written from the page cache, so data waiting to go out to the share can't get Box Office killed for running out of memory.
+- **Box Office stops within 20 seconds,** instead of waiting on work stuck on a share that stopped answering, which held up restarts and rollouts.
+- **A download's folder that another app made, and Box Office can't write in, no longer fails the release.** It gets a fresh folder of its own; and a permissions problem pauses the download instead of blocking a release that's fine.
+- **Old RAR sets (RAR 2 era, .rar, .r00, .r01…) unpack when posted beside another archive,** such as subtitles. Their volumes were added to the other archive, and both failed to unpack.
+- **Blocked releases moved in from Sonarr and Radarr say why they were blocked.** Those NZBGet failed came over as its raw status line, `{scriptStatus}` and all; they now read as missing articles, password protected, failed repair, duplicate and so on, including the ones already moved in.
+- **Jobs cut short by a restart run again** at the next start, instead of ending as failed with "context canceled".
+- **Titles TMDB doesn't know any more aren't warned about on every refresh.** They're named in the refresh's result and asked about weekly.
 - **One "Disk almost full" alert for one NAS.** Shares of the same NAS read a moment apart were told apart by a few bytes of free space while files were being written, so Health listed the disk once per share and each sent its own alert. The same size with free space within 1 GiB now counts as one disk.
 - **Choose a release no longer goes to a blank screen when nothing is found.** A search with no releases came back as `null` instead of an empty list, and the releases window crashed the page. It hit audiobooks first, since indexers often have none, but albums, ebooks, movies and episodes did the same when a search came up empty. Now it says nothing was found.
 

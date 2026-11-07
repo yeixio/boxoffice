@@ -5,6 +5,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io/fs"
 	"log/slog"
 	"os"
 	"path/filepath"
@@ -24,7 +25,11 @@ import (
 type Engine struct {
 	Store *store.Store
 	Dir   string // the downloads folder; nothing outside it is written, save imports
-	Log   *slog.Logger
+	// NZBDir keeps downloads' NZBs, off the downloads folder so a release
+	// can be grabbed while that's away (a network share that dropped).
+	// Empty keeps them in the downloads folder, as before.
+	NZBDir string
+	Log    *slog.Logger
 	// Importer moves a finished download into the library. Nil leaves
 	// finished downloads where they are.
 	Importer Importer
@@ -63,7 +68,12 @@ type Engine struct {
 	// moves holds folders picked in the file browser to move into the
 	// library, by their path in the downloads folder.
 	moves map[string]*folderMove
-	once  sync.Once
+	// folderOK is whether the downloads folder answered when last checked,
+	// and checking whether a check is under way: one on a share that hung
+	// can take minutes, and isn't started twice.
+	folderOK atomic.Bool
+	checking atomic.Bool
+	once     sync.Once
 }
 
 // Importer moves the files of a finished download into the library and
@@ -114,8 +124,25 @@ func (e *Engine) Wake() {
 	}
 }
 
+// nzbPath is where a download's NZB is: in NZBDir, or for one saved
+// before that was set, in the downloads folder.
 func (e *Engine) nzbPath(id int64) string {
-	return filepath.Join(e.Dir, ".nzb", fmt.Sprintf("%d.nzb", id))
+	name := fmt.Sprintf("%d.nzb", id)
+	if e.NZBDir != "" {
+		p := filepath.Join(e.NZBDir, name)
+		if _, err := os.Stat(p); err == nil {
+			return p
+		}
+	}
+	return filepath.Join(e.Dir, nzbDir, name)
+}
+
+// newNZBPath is where a new download's NZB is saved.
+func (e *Engine) newNZBPath(id int64) string {
+	if e.NZBDir != "" {
+		return filepath.Join(e.NZBDir, fmt.Sprintf("%d.nzb", id))
+	}
+	return filepath.Join(e.Dir, nzbDir, fmt.Sprintf("%d.nzb", id))
 }
 
 // Add queues a release from its NZB.
@@ -142,8 +169,11 @@ func (e *Engine) Add(ctx context.Context, d store.Download, nzbData []byte) (sto
 	if d.Quality == 0 {
 		d.Quality = quality.Parse(d.Name).ID
 	}
-	if err := os.MkdirAll(filepath.Join(e.Dir, ".nzb"), 0o750); err != nil {
-		return d, fmt.Errorf("make the downloads folder: %w", err)
+	if err := os.MkdirAll(filepath.Dir(e.newNZBPath(0)), 0o750); err != nil {
+		if folderAway(err) {
+			return d, fmt.Errorf("the downloads folder %s isn't answering, so the release can't be saved to download; if it's a network share, check it's mounted and up", e.Dir)
+		}
+		return d, fmt.Errorf("make the folder for NZBs: %w", err)
 	}
 	// It waits, paused, until its NZB is saved.
 	want := d.Status
@@ -155,7 +185,7 @@ func (e *Engine) Add(ctx context.Context, d store.Download, nzbData []byte) (sto
 	if err != nil {
 		return d, err
 	}
-	if err := os.WriteFile(e.nzbPath(d.ID), nzbData, 0o640); err != nil {
+	if err := os.WriteFile(e.newNZBPath(d.ID), nzbData, 0o640); err != nil {
 		e.Store.DeleteDownload(ctx, d.ID)
 		return d, err
 	}
@@ -528,9 +558,53 @@ func (e *Engine) Live() Live {
 	return l
 }
 
+// folderWait is how long checking the downloads folder may take. A
+// network share that dropped can hang for minutes.
+var folderWait = 20 * time.Second
+
+// errFolderBusy says a check of the downloads folder is still waiting
+// for it to answer.
+var errFolderBusy = errors.New("busy")
+
 // CheckFolder says what's wrong with the downloads folder, if anything:
-// it must take writes, and mustn't be a library folder or inside one.
+// it must answer and take writes, and mustn't be a library folder or
+// inside one. It gives up after folderWait, as a share that dropped can
+// hang.
 func (e *Engine) CheckFolder(ctx context.Context) error {
+	if !e.checking.CompareAndSwap(false, true) {
+		return e.folderAwayError()
+	}
+	done := make(chan error, 1)
+	go func() {
+		defer e.checking.Store(false)
+		done <- e.checkFolder(ctx)
+	}()
+	select {
+	case err := <-done:
+		return err
+	case <-time.After(folderWait):
+		return e.folderAwayError()
+	case <-ctx.Done():
+		return ctx.Err()
+	}
+}
+
+func (e *Engine) folderAwayError() error {
+	return fmt.Errorf("the downloads folder %s isn't answering; if it's a network share, check it's mounted and up. Downloads wait, and carry on by themselves once it answers", e.Dir)
+}
+
+// folderAway says whether err is a folder that's there but can't be
+// reached: a network share that dropped. Making it then says it exists
+// (EEXIST) though reading it fails.
+func folderAway(err error) bool {
+	var se shareError
+	return errors.Is(err, fs.ErrExist) || errors.As(shareTrouble(err), &se)
+}
+
+// mkdirAll makes a folder; tests swap it.
+var mkdirAll = os.MkdirAll
+
+func (e *Engine) checkFolder(ctx context.Context) error {
 	if e.Libraries != nil {
 		libs, err := e.Libraries(ctx)
 		if err != nil {
@@ -547,7 +621,10 @@ func (e *Engine) CheckFolder(ctx context.Context) error {
 			}
 		}
 	}
-	if err := os.MkdirAll(e.Dir, 0o750); err != nil {
+	if err := mkdirAll(e.Dir, 0o750); err != nil {
+		if folderAway(err) {
+			return e.folderAwayError()
+		}
 		return fmt.Errorf("Box Office can't make its downloads folder %s: %v", e.Dir, err)
 	}
 	if !writable(e.Dir) {
@@ -575,6 +652,9 @@ func (e *Engine) Run(ctx context.Context) {
 		}
 		if n%720 == 0 { // hourly
 			e.PurgeQuarantine(ctx)
+			if n > 0 && e.folderOK.Load() {
+				e.resumeFolderWaits(ctx)
+			}
 		}
 		e.startNext(ctx, &wg)
 		select {
@@ -628,9 +708,15 @@ func (e *Engine) startNext(ctx context.Context, wg *sync.WaitGroup) {
 		e.waiting.Store(c.Why())
 		return
 	}
+	// A folder that's away or wrong holds up the whole queue, not this
+	// download: each would fail alike. They all carry on once it's right.
 	if err := e.CheckFolder(ctx); err != nil {
-		e.Store.SetDownloadStatus(ctx, d.ID, store.DownloadPaused, err.Error())
+		e.folderOK.Store(false)
+		e.waiting.Store(sentence(err.Error()))
 		return
+	}
+	if !e.folderOK.Swap(true) {
+		e.resumeFolderWaits(ctx)
 	}
 	list, err := e.Store.UsenetServers(ctx)
 	if err != nil {
@@ -733,6 +819,11 @@ func (e *Engine) process(ctx context.Context, r *running, d store.Download, srv 
 	case errors.Is(cause, errRemoved):
 	case errors.Is(cause, context.Canceled):
 		// Box Office is stopping; it carries on at the next start.
+	case errors.As(err, new(localError)):
+		// Box Office's own folder trouble, not the release's: it waits,
+		// and nothing is blocked.
+		e.Log.Warn("download paused: Box Office can't write its files", "name", d.Name, "id", d.ID, "err", err)
+		e.Store.SetDownloadStatus(bg, d.ID, store.DownloadPaused, sentence(err.Error())+". Nothing is wrong with the release: give Box Office permission to write there, then resume it.")
 	default:
 		e.Log.Warn("download failed", "name", d.Name, "err", err)
 		msg := sentence(err.Error())
@@ -781,11 +872,18 @@ func (e *Engine) shareRetry(ctx context.Context, r *running, d *store.Download, 
 	if err == nil || ctx.Err() != nil || !errors.As(err, &se) {
 		return false
 	}
+	bg := context.WithoutCancel(ctx)
 	if tries >= shareTries {
+		// The folder's trouble, not the release's: it waits, paused, and
+		// the queue goes on. It's tried again within the hour.
 		e.mu.Lock()
 		delete(e.shareTries, d.ID)
 		e.mu.Unlock()
-		return false
+		e.Log.Warn("the downloads folder kept dropping out; pausing the download for now", "name", d.Name, "id", d.ID, "err", err)
+		d.DoneBytes = 0
+		e.Store.SaveDownloadProgress(bg, *d)
+		e.Store.SetDownloadStatus(bg, d.ID, store.DownloadPaused, "The downloads folder kept dropping out while Box Office was saving this ("+se.why()+"); if it's a network share, check it's up. "+shareWaitNote)
+		return true
 	}
 	e.mu.Lock()
 	e.shareTries[d.ID] = tries + 1
@@ -800,10 +898,32 @@ func (e *Engine) shareRetry(ctx context.Context, r *running, d *store.Download, 
 	}
 	// What a part file had is gone, so progress counts finished files.
 	d.DoneBytes = 0
-	bg := context.WithoutCancel(ctx)
 	e.Store.SaveDownloadProgress(bg, *d)
 	e.Store.SetDownloadStatus(bg, d.ID, store.DownloadQueued, "")
 	return true
+}
+
+// shareWaitNote ends the message of a download paused because the
+// downloads folder kept dropping out; resumeFolderWaits looks for it.
+const shareWaitNote = "Nothing is wrong with the release: Box Office tries it again within the hour, or resume it now"
+
+// folderWaits begin the messages of downloads paused for the downloads
+// folder, not for anything of their own: older versions paused one after
+// another when the folder was away.
+var folderWaits = []string{"Box Office can't make its downloads folder ", "Box Office can't write in its downloads folder "}
+
+// resumeFolderWaits puts back in the queue downloads paused because the
+// downloads folder was away, now it answers.
+func (e *Engine) resumeFolderWaits(ctx context.Context) {
+	n, err := e.Store.ResumeDownloadsPaused(ctx, folderWaits, shareWaitNote)
+	if err != nil {
+		e.Log.Warn("couldn't resume downloads that waited for the downloads folder", "err", err)
+		return
+	}
+	if n > 0 {
+		e.Log.Info("the downloads folder answers again; resumed the downloads waiting for it", "downloads", n)
+		e.Wake()
+	}
 }
 
 // hopelessError marks a failure no retry of the same files can fix: too

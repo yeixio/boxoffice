@@ -225,6 +225,27 @@ func findRARSets(dir string, files []string) []rarSet {
 			loose = append(loose, v)
 		}
 	}
+	// Volumes whose headers don't number them (RAR 2 and older, or
+	// encrypted headers) and that share a name no set has make a set of
+	// their own, first by name: an old release posted beside a newer
+	// archive (subtitles, say) mustn't be poured into that one.
+	byStem := map[string][]rarVolume{}
+	for _, v := range loose {
+		st := stem(v.path)
+		if v.num < 0 && !slices.ContainsFunc(sets, func(s rarSet) bool { return s[0].multi && stem(s[0].path) == st }) {
+			byStem[st] = append(byStem[st], v)
+		}
+	}
+	for _, vs := range byStem {
+		if len(vs) < 2 {
+			continue
+		}
+		slices.SortFunc(vs, func(a, b rarVolume) int { return strings.Compare(volOrder(a.path), volOrder(b.path)) })
+		first := vs[0]
+		first.first, first.num = true, 0
+		sets = append(sets, rarSet{first})
+		loose = slices.DeleteFunc(loose, func(v rarVolume) bool { return v.path == first.path })
+	}
 	// A set whose first volume's header couldn't be read (encrypted
 	// headers, or RAR 2 and older): the name says which is first.
 	if len(sets) == 0 && len(loose) > 0 {
