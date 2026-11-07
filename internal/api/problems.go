@@ -20,6 +20,7 @@ func (s *Server) problemRoutes() []route {
 		{"GET /api/v1/problems/fixes", true, s.problemFixes},
 		{"POST /api/v1/problems/fixes/{id}/putback", true, s.putBackFix},
 		{"POST /api/v1/problems/fixes/{id}/delete", true, s.deleteFixOriginals},
+		{"POST /api/v1/problems/fixes/decide", true, s.decideFixes},
 	}
 }
 
@@ -35,7 +36,53 @@ func (s *Server) problemFiles(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
+	for i := range fixes {
+		problems.Reason(&fixes[i])
+	}
 	return writeJSON(w, http.StatusOK, problemsResponse{st, rep, fixes})
+}
+
+// decideFixes puts back, or deletes for good, many fixes' originals at
+// once, in the background. Deleting must say how much it expects to
+// delete, as shown, so it can't delete more than the admin saw.
+func (s *Server) decideFixes(w http.ResponseWriter, r *http.Request) error {
+	var req struct {
+		IDs    []int64 `json:"ids"`
+		Action string  `json:"action"`
+		// ExpectSize is the size of the originals shown, for delete.
+		ExpectSize int64 `json:"expectSize"`
+	}
+	if err := readJSON(r, &req); err != nil {
+		return err
+	}
+	if len(req.IDs) == 0 {
+		return errorf(http.StatusBadRequest, "pick at least one")
+	}
+	var size int64
+	for _, id := range req.IDs {
+		f, err := s.Store.ProblemFix(r.Context(), id)
+		if err != nil {
+			return fixError(err)
+		}
+		if f.State != store.FixWaiting {
+			return errorf(http.StatusConflict, problems.Repair(f.Title)+" has been decided already; reload the page")
+		}
+		for _, ff := range f.Files {
+			if ff.Role == store.FixAside {
+				size += ff.Size
+			}
+		}
+	}
+	if req.Action == problems.DeleteAll && size != req.ExpectSize {
+		return errorf(http.StatusConflict, "what's waiting changed since the page showed it; reload and check again")
+	}
+	if err := s.Problems.Decide(req.IDs, req.Action); err != nil {
+		if errors.Is(err, problems.ErrBusy) {
+			return errorf(http.StatusConflict, err.Error())
+		}
+		return errorf(http.StatusBadRequest, err.Error())
+	}
+	return s.problemFiles(w, r)
 }
 
 func (s *Server) lookForProblems(w http.ResponseWriter, r *http.Request) error {

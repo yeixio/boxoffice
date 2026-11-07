@@ -632,7 +632,9 @@ export type LookupAuthor = { key: string; name: string; born?: string; died?: st
 export type ProblemKind = 'duplicate' | 'parts' | 'disc_image' | 'untracked' | 'missing' | 'naming' | 'unknown' | 'not_listed' | 'leftover' | 'empty'
 export type ProblemAction = 'rename' | 'set_aside' | 'keep_one' | 'record' | 'forget' | 'convert' | 'join' | 'remove_dirs'
 export type ProblemMedia = { duration: number; width?: number; height?: number; video?: string; hdr?: string; audio?: string[]; subtitles?: number; title?: string }
-export type ProblemFile = { path: string; size: number; dir?: boolean; recorded?: boolean; episode?: string; media?: ProblemMedia; edition?: string }
+// name is the file's name as it was meant to be, when it's garbled on
+// disk; count, for a folder, how many files are in it.
+export type ProblemFile = { path: string; size: number; dir?: boolean; count?: number; name?: string; recorded?: boolean; episode?: string; media?: ProblemMedia; edition?: string }
 export type ProblemMove = { from: string; to: string; folder?: boolean }
 export type LibProblem = {
   id: string
@@ -649,6 +651,9 @@ export type ProblemFixFile = { role: 'aside' | 'moved' | 'made' | 'record' | 'fo
 export type ProblemFix = {
   id: number
   action: ProblemAction
+  // The kind of problem it fixed, so the page can say why.
+  kind: ProblemKind | ''
+  detail?: string
   title: string
   root: string
   state: 'waiting' | 'done' | 'undone'
@@ -668,6 +673,10 @@ export type ProblemsState = {
     fixing?: { id: string; action: ProblemAction; progress: number }
     queued: string[]
     failed: { id: string; error: string }[]
+    // A batch of set-aside originals being put back or deleted for good,
+    // and the ones the last batch couldn't.
+    deciding?: { action: 'put_back' | 'delete'; done: number; total: number; freed: number }
+    undecided: { id: number; title: string; error: string }[]
   }
   report: { roots: ProblemRoot[]; problems: LibProblem[] } | null
   fixes: ProblemFix[]

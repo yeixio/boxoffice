@@ -1754,7 +1754,9 @@
       "outsideFolder": "säilytetään kansionsa ulkopuolella",
       "folder": "sen kansio",
       "show": "sarjan levy",
-      "notListed": "ei listalla"
+      "notListed": "ei listalla",
+      "foundFolder": "sen kansio, levyllä eri nimellä",
+      "secondFolder": "toinen kansio sille"
     },
     "act": {
       "rename": "Nimeä uudelleen",
@@ -1811,7 +1813,7 @@
       },
       "notListed": {
         "title": "Ei listalla",
-        "hint": "Kansiot ja videot, jotka eivät ole mikään listan nimike. Lisää ne Skannaa-toiminnolla juurikansion kohdalla Asetuksissa, tai siirrä ne sivuun."
+        "hint": "Kansiot ja videot, jotka eivät ole mikään listan nimike. Usein elokuvia tai sarjoja, joita Box Office ei vielä tunne: lisää ne Skannaa-toiminnolla. Siirrä sivuun vain, jos olet varma, ettet halua sitä."
       },
       "leftover": {
         "title": "Jäänteet",
@@ -1823,8 +1825,8 @@
       }
     },
     "waiting": {
-      "title": "Odottaa hyväksyntääsi",
-      "sub": "Korjauksen sivuun siirtämät alkuperäiset ovat kirjaston kansiossa <code>.recycle/problem-files</code>. Ne pysyvät siellä, kunnes poistat ne lopullisesti tai palautat ne: roskakorikansioiden tyhjennys ei koske niihin.",
+      "title": "Sivuun siirretyt odottavat lupaasi",
+      "sub": "<b>Sivuun siirtäminen</b> tarkoittaa siirtoa pois kirjastosta sen kansioon <code>.recycle/problem-files</code>. Mitään ei ole poistettu, mutta ennen kuin palautat ne, Plex, Matinee ja Box Office eivät näe niitä. Palauta vie jokaisen takaisin paikalleen; Poista lopullisesti vapauttaa tilan. Roskakorikansioiden tyhjennys ei koske niihin.",
       "aside": "sivuun siirretty: {{count}} ({{size}})",
       "asideOne": "sivuun siirretty: {{name}} ({{size}})",
       "made": "uusi tiedosto: {{name}}",
@@ -1835,8 +1837,55 @@
       "confirmTitle": "Poistetaanko alkuperäiset lopullisesti?",
       "confirmBody": "Tämä poistaa {{count}} sivuun siirrettyä tiedostoa ({{size}}) roskakorikansiosta. Toimintoa ei voi perua.",
       "cancel": "Peruuta",
-      "delete": "Poista lopullisesti"
-    }
+      "delete": "Poista lopullisesti",
+      "putBackAll": "Palauta kaikki ({{count}})",
+      "deleteAll": "Poista kaikki lopullisesti ({{count}})",
+      "allGood": "Kaikki näyttävät hyviltä ({{count}})",
+      "showAll": "Näytä kaikki {{count}}",
+      "showFewer": "Näytä vähemmän",
+      "deciding": {
+        "putBack": "Palautetaan… {{done}}/{{total}}",
+        "delete": "Poistetaan lopullisesti… {{done}}/{{total}}, {{size}} vapautettu"
+      },
+      "undecided": "{{title}} ei onnistunut: {{error}}",
+      "reasons": {
+        "notListed": {
+          "title": "Mikään listan nimike ei täsmännyt",
+          "hint": "Usein elokuvia tai sarjoja, joita Box Office ei vielä tunne tai tuntee sotkeutuneella nimellä. Palauta ne ja lisää Skannaa-toiminnolla. Poista vain se, mitä et varmasti halua."
+        },
+        "secondFolder": {
+          "title": "Toinen kansio nimikkeelle",
+          "hint": "Nimikkeen oma kansio on yhä kirjastossa. Tarkista ennen poistoa, ettei tässä ole mitään, mitä siitä puuttuu."
+        },
+        "unknown": {
+          "title": "Sarjan kansion videot, jotka eivät olleet jaksoja",
+          "hint": "Katso ennen poistoa: jokin voi olla erikoisjakso tai oudosti nimetty jakso."
+        },
+        "duplicate": {
+          "title": "Ylimääräiset kopiot",
+          "hint": "Säilyttämäsi kopio on yhä kirjastossa ja kirjattu. Nämä ovat muut."
+        },
+        "parts": {
+          "title": "Yhdistettyjen elokuvien osat",
+          "hint": "Yhdistetty MKV on kirjastossa ja tarkistettu. Nämä ovat osat, joista se tehtiin."
+        },
+        "discImage": {
+          "title": "Levykuvat",
+          "hint": "Kun levykuva remuxattiin, uusi MKV on kirjastossa. Sarjan levy tai nimikkeetön levykuva vain siirrettiin sivuun."
+        },
+        "leftover": {
+          "title": "Jäänteet",
+          "hint": "Näytteet, pikakuvakkeet, ohjelmat ja latausten jäänteet (.nzb, .par2, arkistot). Voi poistaa."
+        },
+        "other": {
+          "title": "Nimetty uudelleen ja kirjattu",
+          "hint": "Mitään ei siirretty sivuun. Ne odottavat vain, että sanot niiden olevan kunnossa."
+        }
+      }
+    },
+    "addWithScan": "Lisää Skannaa-toiminnolla",
+    "filesIn": "{{count}} tiedostoa",
+    "garbledName": "Nimi levyllä on sotkeutunut; sen pitäisi olla ”{{name}}”."
   },
   "ereaders": {
     "title": "Lähetä lukulaitteille",

@@ -1754,7 +1754,9 @@
       "outsideFolder": "kept outside its folder",
       "folder": "its folder",
       "show": "a show's disc",
-      "notListed": "not on the list"
+      "notListed": "not on the list",
+      "foundFolder": "its folder, named differently on disk",
+      "secondFolder": "a second folder for it"
     },
     "act": {
       "rename": "Rename",
@@ -1811,7 +1813,7 @@
       },
       "notListed": {
         "title": "Not on the list",
-        "hint": "Folders and videos that aren't any title on the list. To add them, use Scan on the root folder in Settings; or set them aside."
+        "hint": "Folders and videos that aren't any title on the list. They're often movies or shows Box Office doesn't know yet: add them with Scan. Set one aside only when you're sure you don't want it."
       },
       "leftover": {
         "title": "Leftovers",
@@ -1823,8 +1825,8 @@
       }
     },
     "waiting": {
-      "title": "Waiting for your OK",
-      "sub": "Originals a fix set aside are in the library's <code>.recycle/problem-files</code> folder. They stay there until you delete them for good or put them back: emptying the recycle folders leaves them alone.",
+      "title": "Set aside, waiting for your OK",
+      "sub": "<b>Set aside</b> means moved out of the library into its <code>.recycle/problem-files</code> folder. Nothing has been deleted, but until you put them back, Plex, Matinee and Box Office don't see them. Put back returns each to where it was; Delete for good frees the space. Emptying the recycle folders leaves them alone.",
       "aside": "set aside: {{count}} ({{size}})",
       "asideOne": "set aside: {{name}} ({{size}})",
       "made": "new file: {{name}}",
@@ -1835,8 +1837,55 @@
       "confirmTitle": "Delete the originals for good?",
       "confirmBody": "This deletes {{count}} set aside ({{size}}) from the recycle folder. It can't be undone.",
       "cancel": "Cancel",
-      "delete": "Delete for good"
-    }
+      "delete": "Delete for good",
+      "putBackAll": "Put all back ({{count}})",
+      "deleteAll": "Delete all for good ({{count}})",
+      "allGood": "All look good ({{count}})",
+      "showAll": "Show all {{count}}",
+      "showFewer": "Show fewer",
+      "deciding": {
+        "putBack": "Putting back… {{done}}/{{total}}",
+        "delete": "Deleting for good… {{done}}/{{total}}, {{size}} freed"
+      },
+      "undecided": "Couldn't do {{title}}: {{error}}",
+      "reasons": {
+        "notListed": {
+          "title": "No title on the list matched them",
+          "hint": "Often movies or shows Box Office doesn't know yet, or knows by a garbled name. Put them back, then add them with Scan. Delete only what you're sure you don't want."
+        },
+        "secondFolder": {
+          "title": "A second folder for a title",
+          "hint": "The title's own folder is still in the library. Check this one holds nothing it lacks before deleting."
+        },
+        "unknown": {
+          "title": "Videos in a show's folder that weren't an episode",
+          "hint": "Look before deleting: one may be a special or an episode with an odd name."
+        },
+        "duplicate": {
+          "title": "Extra copies",
+          "hint": "The copy you kept is still in the library and recorded. These are the others."
+        },
+        "parts": {
+          "title": "Parts of joined movies",
+          "hint": "The joined MKV is in the library and was checked. These are the parts it was made from."
+        },
+        "discImage": {
+          "title": "Disc images",
+          "hint": "Where an image was remuxed, the new MKV is in the library. A show's disc or an image that wasn't any title's was only set aside."
+        },
+        "leftover": {
+          "title": "Leftovers",
+          "hint": "Samples, shortcuts, programs, and what's left of downloads (.nzb, .par2, archives). Safe to delete."
+        },
+        "other": {
+          "title": "Renamed and recorded",
+          "hint": "Nothing was set aside. These only wait for you to say they look right."
+        }
+      }
+    },
+    "addWithScan": "Add with Scan",
+    "filesIn": "{{count}} files",
+    "garbledName": "The name on disk is garbled; it's meant to be “{{name}}”."
   },
   "ereaders": {
     "title": "Send to e-readers",

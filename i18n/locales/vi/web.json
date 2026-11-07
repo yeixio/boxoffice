@@ -1660,7 +1660,9 @@
       "outsideFolder": "nằm ngoài thư mục của nó",
       "folder": "thư mục của nó",
       "show": "đĩa của một chương trình",
-      "notListed": "không có trong danh sách"
+      "notListed": "không có trong danh sách",
+      "foundFolder": "thư mục của nó, trên đĩa có tên khác",
+      "secondFolder": "thư mục thứ hai cho nó"
     },
     "act": {
       "rename": "Đổi tên",
@@ -1717,7 +1719,7 @@
       },
       "notListed": {
         "title": "Không có trong danh sách",
-        "hint": "Thư mục và video không thuộc tựa nào trong danh sách. Để thêm chúng, dùng Quét trên thư mục gốc trong Cài đặt; hoặc để riêng."
+        "hint": "Thư mục và video không thuộc tựa nào trong danh sách. Thường là phim hoặc chương trình Box Office chưa biết: hãy thêm bằng Quét. Chỉ để riêng khi bạn chắc là không cần."
       },
       "leftover": {
         "title": "Đồ thừa",
@@ -1729,8 +1731,8 @@
       }
     },
     "waiting": {
-      "title": "Đang chờ bạn đồng ý",
-      "sub": "Bản gốc mà bản sửa để riêng nằm trong thư mục <code>.recycle/problem-files</code> của thư viện. Chúng ở đó cho đến khi bạn xóa vĩnh viễn hoặc đặt lại: dọn thư mục thùng rác không động đến chúng.",
+      "title": "Đã để riêng, đang chờ bạn đồng ý",
+      "sub": "<b>Để riêng</b> nghĩa là chuyển ra khỏi thư viện vào thư mục <code>.recycle/problem-files</code> của nó. Chưa có gì bị xóa, nhưng cho đến khi bạn đặt lại, Plex, Matinee và Box Office không thấy chúng. Đặt lại đưa từng mục về chỗ cũ; Xóa vĩnh viễn giải phóng dung lượng. Dọn thư mục tái chế không đụng đến chúng.",
       "aside": "để riêng: {{count}} ({{size}})",
       "asideOne": "để riêng: {{name}} ({{size}})",
       "made": "tệp mới: {{name}}",
@@ -1741,8 +1743,55 @@
       "confirmTitle": "Xóa vĩnh viễn bản gốc?",
       "confirmBody": "Thao tác này xóa {{count}} mục đã để riêng ({{size}}) khỏi thư mục thùng rác. Không thể hoàn tác.",
       "cancel": "Hủy",
-      "delete": "Xóa vĩnh viễn"
-    }
+      "delete": "Xóa vĩnh viễn",
+      "putBackAll": "Đặt lại tất cả ({{count}})",
+      "deleteAll": "Xóa vĩnh viễn tất cả ({{count}})",
+      "allGood": "Tất cả đều ổn ({{count}})",
+      "showAll": "Hiện cả {{count}}",
+      "showFewer": "Hiện ít hơn",
+      "deciding": {
+        "putBack": "Đang đặt lại… {{done}}/{{total}}",
+        "delete": "Đang xóa vĩnh viễn… {{done}}/{{total}}, đã giải phóng {{size}}"
+      },
+      "undecided": "Không làm được với {{title}}: {{error}}",
+      "reasons": {
+        "notListed": {
+          "title": "Không tựa nào trong danh sách khớp",
+          "hint": "Thường là phim hoặc chương trình Box Office chưa biết, hoặc biết dưới tên bị lỗi. Hãy đặt lại rồi thêm bằng Quét. Chỉ xóa những gì bạn chắc là không cần."
+        },
+        "secondFolder": {
+          "title": "Thư mục thứ hai của một tựa",
+          "hint": "Thư mục riêng của tựa vẫn ở trong thư viện. Trước khi xóa, hãy kiểm tra thư mục này không có gì mà thư mục kia thiếu."
+        },
+        "unknown": {
+          "title": "Video trong thư mục chương trình không phải là tập",
+          "hint": "Xem trước khi xóa: có thể có tập đặc biệt hoặc tập đặt tên lạ."
+        },
+        "duplicate": {
+          "title": "Bản sao thừa",
+          "hint": "Bản bạn giữ vẫn ở trong thư viện và đã ghi nhận. Đây là các bản còn lại."
+        },
+        "parts": {
+          "title": "Các phần của phim đã ghép",
+          "hint": "MKV đã ghép nằm trong thư viện và đã được kiểm tra. Đây là các phần tạo nên nó."
+        },
+        "discImage": {
+          "title": "Ảnh đĩa",
+          "hint": "Nếu ảnh đã được remux, MKV mới nằm trong thư viện. Đĩa của chương trình hoặc ảnh không thuộc tựa nào chỉ được để riêng."
+        },
+        "leftover": {
+          "title": "Đồ thừa",
+          "hint": "Mẫu, lối tắt, chương trình và phần thừa của tải xuống (.nzb, .par2, tệp nén). Có thể xóa an toàn."
+        },
+        "other": {
+          "title": "Đã đổi tên và ghi nhận",
+          "hint": "Không có gì bị để riêng. Chúng chỉ chờ bạn xác nhận là ổn."
+        }
+      }
+    },
+    "addWithScan": "Thêm bằng Quét",
+    "filesIn": "{{count}} tệp",
+    "garbledName": "Tên trên đĩa bị lỗi mã hóa; đúng ra là “{{name}}”."
   },
   "ereaders": {
     "title": "Gửi đến máy đọc sách",

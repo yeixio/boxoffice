@@ -1754,7 +1754,9 @@
       "outsideFolder": "außerhalb seines Ordners",
       "folder": "sein Ordner",
       "show": "eine Serien-Disc",
-      "notListed": "nicht auf der Liste"
+      "notListed": "nicht auf der Liste",
+      "foundFolder": "sein Ordner, auf der Festplatte anders benannt",
+      "secondFolder": "ein zweiter Ordner dafür"
     },
     "act": {
       "rename": "Umbenennen",
@@ -1811,7 +1813,7 @@
       },
       "notListed": {
         "title": "Nicht auf der Liste",
-        "hint": "Ordner und Videos, die zu keinem Titel auf der Liste gehören. Füge sie mit „Scannen“ beim Stammordner in den Einstellungen hinzu, oder lege sie beiseite."
+        "hint": "Ordner und Videos, die zu keinem Titel auf der Liste gehören. Oft sind es Filme oder Serien, die Box Office noch nicht kennt: Füge sie mit „Scannen“ hinzu. Lege einen nur beiseite, wenn du ihn sicher nicht willst."
       },
       "leftover": {
         "title": "Überbleibsel",
@@ -1823,8 +1825,8 @@
       }
     },
     "waiting": {
-      "title": "Warten auf dein OK",
-      "sub": "Originale, die eine Korrektur beiseitegelegt hat, liegen im Ordner <code>.recycle/problem-files</code> der Mediathek. Sie bleiben dort, bis du sie endgültig löschst oder zurücklegst: Das Leeren der Papierkorbordner lässt sie in Ruhe.",
+      "title": "Beiseitegelegt, wartet auf dein OK",
+      "sub": "<b>Beiseitelegen</b> heißt: aus der Mediathek in ihren Ordner <code>.recycle/problem-files</code> verschoben. Nichts wurde gelöscht, aber bis du sie zurücklegst, sehen Plex, Matinee und Box Office sie nicht. Zurücklegen bringt jedes an seinen Platz zurück; Endgültig löschen gibt den Platz frei. Das Leeren der Papierkorbordner lässt sie in Ruhe.",
       "aside": "beiseitegelegt: {{count}} ({{size}})",
       "asideOne": "beiseitegelegt: {{name}} ({{size}})",
       "made": "neue Datei: {{name}}",
@@ -1835,8 +1837,55 @@
       "confirmTitle": "Die Originale endgültig löschen?",
       "confirmBody": "Dadurch werden {{count}} beiseitegelegte Dateien ({{size}}) aus dem Papierkorbordner gelöscht. Das lässt sich nicht rückgängig machen.",
       "cancel": "Abbrechen",
-      "delete": "Endgültig löschen"
-    }
+      "delete": "Endgültig löschen",
+      "putBackAll": "Alle zurücklegen ({{count}})",
+      "deleteAll": "Alle endgültig löschen ({{count}})",
+      "allGood": "Alle sehen gut aus ({{count}})",
+      "showAll": "Alle {{count}} zeigen",
+      "showFewer": "Weniger zeigen",
+      "deciding": {
+        "putBack": "Wird zurückgelegt… {{done}}/{{total}}",
+        "delete": "Wird endgültig gelöscht… {{done}}/{{total}}, {{size}} frei"
+      },
+      "undecided": "{{title}} ging nicht: {{error}}",
+      "reasons": {
+        "notListed": {
+          "title": "Kein Titel auf der Liste passte",
+          "hint": "Oft Filme oder Serien, die Box Office noch nicht kennt oder unter einem verstümmelten Namen kennt. Lege sie zurück und füge sie mit „Scannen“ hinzu. Lösche nur, was du sicher nicht willst."
+        },
+        "secondFolder": {
+          "title": "Ein zweiter Ordner für einen Titel",
+          "hint": "Der eigene Ordner des Titels ist noch in der Mediathek. Prüfe vor dem Löschen, dass dieser nichts enthält, was ihm fehlt."
+        },
+        "unknown": {
+          "title": "Videos im Ordner einer Serie, die keine Folge waren",
+          "hint": "Erst ansehen, dann löschen: Eins könnte ein Special oder eine seltsam benannte Folge sein."
+        },
+        "duplicate": {
+          "title": "Zusätzliche Kopien",
+          "hint": "Die behaltene Kopie ist noch in der Mediathek und erfasst. Das hier sind die anderen."
+        },
+        "parts": {
+          "title": "Teile zusammengefügter Filme",
+          "hint": "Die zusammengefügte MKV ist in der Mediathek und wurde geprüft. Das sind die Teile, aus denen sie entstand."
+        },
+        "discImage": {
+          "title": "Disc-Images",
+          "hint": "Wo ein Image umgepackt wurde, liegt die neue MKV in der Mediathek. Die Disc einer Serie oder ein Image ohne Titel wurde nur beiseitegelegt."
+        },
+        "leftover": {
+          "title": "Reste",
+          "hint": "Samples, Verknüpfungen, Programme und Reste von Downloads (.nzb, .par2, Archive). Kann gelöscht werden."
+        },
+        "other": {
+          "title": "Umbenannt und erfasst",
+          "hint": "Nichts wurde beiseitegelegt. Diese warten nur darauf, dass du sie für gut befindest."
+        }
+      }
+    },
+    "addWithScan": "Mit Scannen hinzufügen",
+    "filesIn": "{{count}} Dateien",
+    "garbledName": "Der Name auf der Festplatte ist verstümmelt; gemeint ist „{{name}}“."
   },
   "ereaders": {
     "title": "An E-Reader senden",

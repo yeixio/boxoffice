@@ -37,6 +37,7 @@ import (
 	"unicode"
 
 	"github.com/yeixio/boxoffice/internal/store"
+	"golang.org/x/text/unicode/norm"
 )
 
 // Kinds of problems.
@@ -93,8 +94,13 @@ type TitleRef struct {
 type File struct {
 	Path string `json:"path"`
 	Size int64  `json:"size"`
-	// Dir is set for a folder; Size then counts everything in it.
-	Dir bool `json:"dir,omitempty"`
+	// Dir is set for a folder; Size then counts everything in it, and
+	// Count how many files that is.
+	Dir   bool `json:"dir,omitempty"`
+	Count int  `json:"count,omitempty"`
+	// Name is the file's name as it was meant to be, when it's garbled on
+	// disk ("WALL·E (2008)" for "WALLÂ·E (2008)").
+	Name string `json:"name,omitempty"`
 	// Recorded says Box Office has it as the title's copy (or an edition).
 	Recorded bool `json:"recorded,omitempty"`
 	// Episode is a show's file's S01E02.
@@ -184,9 +190,10 @@ func stem(name string) string {
 }
 
 // key turns a name into what's compared: letters and digits, lower case,
-// with bracketed tags ({tmdb-1}, [imdbid-tt1], {edition-…}) dropped.
+// with bracketed tags ({tmdb-1}, [imdbid-tt1], {edition-…}) dropped, and
+// accents written the one way (see Repair).
 func key(name string) string {
-	name = reTags.ReplaceAllString(name, "")
+	name = norm.NFC.String(reTags.ReplaceAllString(name, ""))
 	var b strings.Builder
 	for _, r := range strings.ToLower(name) {
 		if unicode.IsLetter(r) || unicode.IsDigit(r) {
@@ -287,7 +294,10 @@ type finder struct {
 	titles   []*store.LibraryTitle
 	byFolder map[string]*store.LibraryTitle
 	recorded map[string]recorded
-	out      []Problem
+	// found are titles whose folder is missing and was found under another
+	// spelling: their files aren't missing.
+	found map[int64]bool
+	out   []Problem
 }
 
 type recorded struct {
@@ -319,7 +329,7 @@ func Find(ctx context.Context, st *store.Store, progress func(done, total int)) 
 		if err := ctx.Err(); err != nil {
 			return rep, err
 		}
-		f := &finder{root: filepath.Clean(r.Path), kind: r.Kind, byFolder: map[string]*store.LibraryTitle{}, recorded: map[string]recorded{}}
+		f := &finder{root: filepath.Clean(r.Path), kind: r.Kind, byFolder: map[string]*store.LibraryTitle{}, recorded: map[string]recorded{}, found: map[int64]bool{}}
 		for i := range titles {
 			t := &titles[i]
 			if t.Kind != r.Kind || filepath.Clean(t.Root) != f.root {
@@ -365,6 +375,11 @@ func (f *finder) add(p Problem) {
 		paths = append(paths, fl.Path)
 	}
 	p.ID = problemID(p.Kind, paths...)
+	for i := range p.Files {
+		if b := filepath.Base(p.Files[i].Path); Garbled(b) {
+			p.Files[i].Name = Repair(b)
+		}
+	}
 	if p.Fix != nil && p.Fix.Blocked == "" {
 		switch {
 		case !f.writable:
@@ -413,7 +428,11 @@ func (f *finder) run(ctx context.Context) (Root, []Problem) {
 			} else if f.titleAbove(path) == nil {
 				// A folder holding titles kept deeper down, such as a
 				// collection folder, is looked at title by title below.
-				f.notListed(path, true)
+				if t := f.titleNamed(name); t != nil {
+					f.foundFolder(t, path, seen)
+				} else {
+					f.notListed(path, true)
+				}
 			}
 			continue
 		}
@@ -429,7 +448,7 @@ func (f *finder) run(ctx context.Context) (Root, []Problem) {
 	}
 	// Recorded files that are gone.
 	for path, rc := range f.recorded {
-		if seen[path] || !inside(f.root, path) {
+		if seen[path] || !inside(f.root, path) || f.found[rc.title.ID] {
 			continue
 		}
 		if _, err := os.Lstat(path); !errors.Is(err, fs.ErrNotExist) {
@@ -456,6 +475,60 @@ func (f *finder) titleAbove(path string) *store.LibraryTitle {
 		}
 	}
 	return nil
+}
+
+// titleNamed is the title on the list a folder in the root is named for
+// once its name is repaired, when Box Office keeps that title's folder
+// under another spelling: "WALLÂ·E (2008)" for "WALL·E (2008)", or "TÁR"
+// with its accent written another way.
+func (f *finder) titleNamed(name string) *store.LibraryTitle {
+	k := key(Repair(name))
+	if k == "" {
+		return nil
+	}
+	for _, t := range f.titles {
+		if p := filepath.Clean(t.Path); filepath.Dir(p) == f.root && key(Repair(filepath.Base(p))) == k {
+			return t
+		}
+	}
+	for _, t := range f.titles {
+		if filepath.Dir(filepath.Clean(t.Path)) != f.root {
+			continue
+		}
+		if t.Year > 0 && key(FileName(t.Title, t.Year)) == k || t.Kind == "series" && key(t.Title) == k {
+			return t
+		}
+	}
+	return nil
+}
+
+// foundFolder is a folder named for a title on the list that Box Office
+// keeps at another path.
+func (f *finder) foundFolder(t *store.LibraryTitle, path string, seen map[string]bool) {
+	here, err := os.Stat(path)
+	if err != nil {
+		return
+	}
+	there, err := os.Stat(t.Path)
+	switch {
+	case err == nil && os.SameFile(here, there):
+		// The same folder, by a name the share takes either way.
+		f.titleFolder(t, seen)
+		return
+	case err == nil:
+		// The title's folder is there too: this is a second one.
+		n, size := dirSize(path)
+		f.add(Problem{Kind: NotListed, Title: ref(t), Detail: "second_folder", Files: []File{{Path: path, Size: size, Dir: true, Count: n}},
+			Fix: &Fix{Action: ActSetAside, Paths: []string{path}}})
+		return
+	}
+	// The title's folder isn't there: this is it, named another way.
+	// Renaming it to the name Box Office has puts it back where its
+	// records say, so nothing else changes.
+	f.found[t.ID] = true
+	n, size := dirSize(path)
+	f.add(Problem{Kind: Naming, Title: ref(t), Detail: "found_folder", Files: []File{{Path: path, Size: size, Dir: true, Count: n}},
+		Fix: &Fix{Action: ActRename, Moves: []Move{{From: path, To: filepath.Clean(t.Path)}}}})
 }
 
 // walk lists the files under dir, skipping hidden folders and, with
@@ -503,7 +576,7 @@ func (f *finder) notListed(path string, dir bool) {
 	fl := File{Path: path, Dir: dir}
 	if dir {
 		n, size := dirSize(path)
-		fl.Size = size
+		fl.Size, fl.Count = size, n
 		if n == 0 {
 			f.add(Problem{Kind: EmptyDir, Files: []File{fl}, Fix: &Fix{Action: ActRemoveDirs, Paths: []string{path}}})
 			return

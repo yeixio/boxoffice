@@ -1754,7 +1754,9 @@
       "outsideFolder": "a mappáján kívül van",
       "folder": "a mappája",
       "show": "sorozat lemeze",
-      "notListed": "nincs a listán"
+      "notListed": "nincs a listán",
+      "foundFolder": "a mappája, a lemezen más néven",
+      "secondFolder": "egy második mappa hozzá"
     },
     "act": {
       "rename": "Átnevezés",
@@ -1811,7 +1813,7 @@
       },
       "notListed": {
         "title": "Nincs a listán",
-        "hint": "Mappák és videók, amelyek egyik címhez sem tartoznak a listán. Add hozzá őket a Beállításokban a gyökérmappánál a Beolvasással, vagy tedd félre őket."
+        "hint": "Mappák és videók, amelyek egyik címhez sem tartoznak a listán. Gyakran filmek vagy sorozatok, amelyeket a Box Office még nem ismer: add hozzá őket a Beolvasással. Csak azt tedd félre, amit biztosan nem akarsz."
       },
       "leftover": {
         "title": "Maradékok",
@@ -1823,8 +1825,8 @@
       }
     },
     "waiting": {
-      "title": "Jóváhagyásodra vár",
-      "sub": "A javítások által félretett eredetik a könyvtár <code>.recycle/problem-files</code> mappájában vannak. Ott maradnak, amíg végleg nem törlöd vagy vissza nem teszed őket: a lomtár mappák ürítése nem nyúl hozzájuk.",
+      "title": "Félretéve, az OK-dra vár",
+      "sub": "A <b>félretétel</b> azt jelenti: kivéve a könyvtárból, annak <code>.recycle/problem-files</code> mappájába. Semmi sincs törölve, de amíg vissza nem teszed őket, a Plex, a Matinee és a Box Office nem látja őket. A Visszatesz mindegyiket a helyére viszi; a Végleges törlés felszabadítja a helyet. A lomtármappák ürítése nem nyúl hozzájuk.",
       "aside": "félretéve: {{count}} ({{size}})",
       "asideOne": "félretéve: {{name}} ({{size}})",
       "made": "új fájl: {{name}}",
@@ -1835,8 +1837,55 @@
       "confirmTitle": "Végleg törlöd az eredetiket?",
       "confirmBody": "Ez {{count}} félretett fájlt ({{size}}) töröl a lomtár mappából. Nem vonható vissza.",
       "cancel": "Mégse",
-      "delete": "Végleges törlés"
-    }
+      "delete": "Végleges törlés",
+      "putBackAll": "Mind visszatesz ({{count}})",
+      "deleteAll": "Mind végleges törlése ({{count}})",
+      "allGood": "Mind rendben ({{count}})",
+      "showAll": "Mind a {{count}} mutatása",
+      "showFewer": "Kevesebb",
+      "deciding": {
+        "putBack": "Visszatétel… {{done}}/{{total}}",
+        "delete": "Végleges törlés… {{done}}/{{total}}, {{size}} felszabadítva"
+      },
+      "undecided": "{{title}} nem sikerült: {{error}}",
+      "reasons": {
+        "notListed": {
+          "title": "Egyik cím sem illett rájuk a listán",
+          "hint": "Gyakran filmek vagy sorozatok, amelyeket a Box Office még nem ismer, vagy eltorzult néven ismer. Tedd vissza őket, és add hozzá a Beolvasással. Csak azt töröld, amit biztosan nem akarsz."
+        },
+        "secondFolder": {
+          "title": "Egy cím második mappája",
+          "hint": "A cím saját mappája még a könyvtárban van. Törlés előtt nézd meg, nincs-e ebben olyan, ami abból hiányzik."
+        },
+        "unknown": {
+          "title": "Sorozatmappában lévő videók, amelyek nem voltak epizódok",
+          "hint": "Törlés előtt nézd meg: valamelyik lehet különkiadás vagy furcsán elnevezett epizód."
+        },
+        "duplicate": {
+          "title": "Fölös másolatok",
+          "hint": "A megtartott másolat még a könyvtárban van és nyilvántartva. Ezek a többiek."
+        },
+        "parts": {
+          "title": "Egyesített filmek részei",
+          "hint": "Az egyesített MKV a könyvtárban van és ellenőrizve. Ezek a részek, amelyekből készült."
+        },
+        "discImage": {
+          "title": "Lemezképek",
+          "hint": "Ahol egy lemezkép remuxolva lett, az új MKV a könyvtárban van. Egy sorozat lemeze vagy cím nélküli lemezkép csak félre lett téve."
+        },
+        "leftover": {
+          "title": "Maradékok",
+          "hint": "Minták, parancsikonok, programok és letöltések maradékai (.nzb, .par2, archívumok). Nyugodtan törölhetők."
+        },
+        "other": {
+          "title": "Átnevezve és nyilvántartva",
+          "hint": "Semmi sem lett félretéve. Csak arra várnak, hogy jóváhagyd őket."
+        }
+      }
+    },
+    "addWithScan": "Hozzáadás Beolvasással",
+    "filesIn": "{{count}} fájl",
+    "garbledName": "A név a lemezen eltorzult; helyesen „{{name}}”."
   },
   "ereaders": {
     "title": "Küldés e-olvasóra",

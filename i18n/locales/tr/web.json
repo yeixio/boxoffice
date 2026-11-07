@@ -1754,7 +1754,9 @@
       "outsideFolder": "klasörünün dışında duruyor",
       "folder": "klasörü",
       "show": "bir dizi diski",
-      "notListed": "listede değil"
+      "notListed": "listede değil",
+      "foundFolder": "klasörü, diskte farklı adla",
+      "secondFolder": "onun için ikinci bir klasör"
     },
     "act": {
       "rename": "Yeniden adlandır",
@@ -1811,7 +1813,7 @@
       },
       "notListed": {
         "title": "Listede değil",
-        "hint": "Listedeki hiçbir başlığa ait olmayan klasörler ve videolar. Eklemek için Ayarlar'da kök klasördeki Tara'yı kullanın ya da kenara koyun."
+        "hint": "Listedeki hiçbir başlığa ait olmayan klasörler ve videolar. Çoğu zaman Box Office'in henüz tanımadığı filmler ya da diziler: Tara ile ekleyin. Yalnızca istemediğinizden eminseniz kenara koyun."
       },
       "leftover": {
         "title": "Artıklar",
@@ -1823,8 +1825,8 @@
       }
     },
     "waiting": {
-      "title": "Onayınızı bekleyenler",
-      "sub": "Bir düzeltmenin kenara koyduğu asıllar kitaplığın <code>.recycle/problem-files</code> klasöründedir. Siz kalıcı olarak silene ya da geri koyana kadar orada kalırlar: geri dönüşüm klasörlerini boşaltmak onlara dokunmaz.",
+      "title": "Kenara konanlar onayınızı bekliyor",
+      "sub": "<b>Kenara koymak</b>, kitaplıktan çıkarıp <code>.recycle/problem-files</code> klasörüne taşımak demek. Hiçbir şey silinmedi, ama geri koyana kadar Plex, Matinee ve Box Office onları görmez. Geri koy her birini yerine götürür; Kalıcı olarak sil alanı boşaltır. Geri dönüşüm klasörlerini boşaltmak onlara dokunmaz.",
       "aside": "kenara konan: {{count}} ({{size}})",
       "asideOne": "kenara konan: {{name}} ({{size}})",
       "made": "yeni dosya: {{name}}",
@@ -1835,8 +1837,55 @@
       "confirmTitle": "Asıllar kalıcı olarak silinsin mi?",
       "confirmBody": "Bu, geri dönüşüm klasöründen kenara konan {{count}} dosyayı ({{size}}) siler. Geri alınamaz.",
       "cancel": "Vazgeç",
-      "delete": "Kalıcı olarak sil"
-    }
+      "delete": "Kalıcı olarak sil",
+      "putBackAll": "Hepsini geri koy ({{count}})",
+      "deleteAll": "Hepsini kalıcı olarak sil ({{count}})",
+      "allGood": "Hepsi iyi ({{count}})",
+      "showAll": "{{count}} öğenin hepsini göster",
+      "showFewer": "Daha az göster",
+      "deciding": {
+        "putBack": "Geri konuyor… {{done}}/{{total}}",
+        "delete": "Kalıcı olarak siliniyor… {{done}}/{{total}}, {{size}} boşaldı"
+      },
+      "undecided": "{{title}} yapılamadı: {{error}}",
+      "reasons": {
+        "notListed": {
+          "title": "Listedeki hiçbir başlık eşleşmedi",
+          "hint": "Çoğu zaman Box Office'in henüz tanımadığı ya da bozuk bir adla tanıdığı filmler veya diziler. Geri koyun, sonra Tara ile ekleyin. Yalnızca istemediğinizden emin olduklarınızı silin."
+        },
+        "secondFolder": {
+          "title": "Bir başlık için ikinci klasör",
+          "hint": "Başlığın kendi klasörü hâlâ kitaplıkta. Silmeden önce bunda onda eksik olan bir şey olmadığını kontrol edin."
+        },
+        "unknown": {
+          "title": "Dizi klasöründe bölüm olmayan videolar",
+          "hint": "Silmeden önce bakın: biri özel bölüm ya da tuhaf adlı bir bölüm olabilir."
+        },
+        "duplicate": {
+          "title": "Fazla kopyalar",
+          "hint": "Tuttuğunuz kopya hâlâ kitaplıkta ve kayıtlı. Bunlar diğerleri."
+        },
+        "parts": {
+          "title": "Birleştirilmiş filmlerin parçaları",
+          "hint": "Birleştirilen MKV kitaplıkta ve kontrol edildi. Bunlar onu oluşturan parçalar."
+        },
+        "discImage": {
+          "title": "Disk kalıpları",
+          "hint": "Bir kalıbın remux edildiği yerde yeni MKV kitaplıkta. Bir dizinin diski ya da başlıksız bir kalıp yalnızca kenara kondu."
+        },
+        "leftover": {
+          "title": "Artıklar",
+          "hint": "Örnekler, kısayollar, programlar ve indirme artıkları (.nzb, .par2, arşivler). Güvenle silinebilir."
+        },
+        "other": {
+          "title": "Yeniden adlandırıldı ve kaydedildi",
+          "hint": "Hiçbir şey kenara konmadı. Yalnızca iyi göründüklerini söylemenizi bekliyorlar."
+        }
+      }
+    },
+    "addWithScan": "Tara ile ekle",
+    "filesIn": "{{count}} dosya",
+    "garbledName": "Diskteki ad bozuk; doğrusu “{{name}}”."
   },
   "ereaders": {
     "title": "E-okuyuculara gönder",

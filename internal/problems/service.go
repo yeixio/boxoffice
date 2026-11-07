@@ -22,6 +22,9 @@ type Service struct {
 	Log   *slog.Logger
 	// Tools finds FFmpeg; FindTools when nil.
 	Tools func() (Tools, error)
+	// Deleted, when set, is told what a batch deleted for good, for
+	// Activity.
+	Deleted func(ctx context.Context, fixes int, freed int64)
 	// Alert tells the admins what a daily look found that's new: the
 	// Problem files alert rule (internal/alerts). Nil sends nothing.
 	Alert func(ctx context.Context, title, message string)
@@ -32,6 +35,8 @@ type Service struct {
 	queue   []job
 	working bool
 	next    time.Time
+	// loadOnce brings back the last look's report after a restart.
+	loadOnce sync.Once
 }
 
 // Every is how often Box Office looks through the library by itself.
@@ -47,6 +52,9 @@ const firstWait = 10 * time.Minute
 const (
 	settingLookedAt = "problems:looked_at"
 	settingKnown    = "problems:known"
+	// settingReport keeps what the last look found, so the page has it
+	// straight away after a restart, without looking again.
+	settingReport = "problems:report"
 )
 
 // Status is where the look and the fixes stand.
@@ -64,6 +72,32 @@ type Status struct {
 	Fixing *Fixing   `json:"fixing,omitempty"`
 	Queued []string  `json:"queued"`
 	Failed []Failure `json:"failed"`
+	// Deciding is a batch of set-aside originals being put back or
+	// deleted for good; Undecided the ones in the last batch that couldn't.
+	Deciding  *Deciding   `json:"deciding,omitempty"`
+	Undecided []Undecided `json:"undecided"`
+}
+
+// Decisions on the originals fixes set aside.
+const (
+	PutBackAll = "put_back"
+	DeleteAll  = "delete"
+)
+
+// Deciding is a batch of fixes being put back or deleted for good.
+type Deciding struct {
+	Action string `json:"action"`
+	Done   int    `json:"done"`
+	Total  int    `json:"total"`
+	// Freed is what the deleting has freed so far.
+	Freed int64 `json:"freed"`
+}
+
+// Undecided is a fix a batch couldn't put back or delete.
+type Undecided struct {
+	ID    int64  `json:"id"`
+	Title string `json:"title"`
+	Error string `json:"error"`
 }
 
 // Fixing is the fix being carried out.
@@ -97,6 +131,7 @@ func (s *Service) tools() (Tools, error) {
 
 // State is the status and what the last look found.
 func (s *Service) State() (Status, *Report) {
+	s.load()
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	st := s.status
@@ -110,6 +145,14 @@ func (s *Service) State() (Status, *Report) {
 		n := s.next
 		st.Next = &n
 	}
+	st.Undecided = slices.Clone(s.status.Undecided)
+	if st.Undecided == nil {
+		st.Undecided = []Undecided{}
+	}
+	if st.Deciding != nil {
+		d := *st.Deciding
+		st.Deciding = &d
+	}
 	st.Failed = slices.Clone(s.status.Failed)
 	if st.Failed == nil {
 		st.Failed = []Failure{}
@@ -119,6 +162,46 @@ func (s *Service) State() (Status, *Report) {
 		st.Fixing = &f
 	}
 	return st, s.report
+}
+
+// load brings back, once, what the last look before a restart found and
+// when, unless a look since has found something newer.
+func (s *Service) load() {
+	s.loadOnce.Do(func() {
+		ctx := context.Background()
+		v, _ := s.Store.Setting(ctx, settingReport)
+		at, _ := s.Store.Setting(ctx, settingLookedAt)
+		var rep Report
+		if v == "" || json.Unmarshal([]byte(v), &rep) != nil {
+			return
+		}
+		s.mu.Lock()
+		defer s.mu.Unlock()
+		if s.report != nil {
+			return
+		}
+		if rep.Roots == nil {
+			rep.Roots = []Root{}
+		}
+		if rep.Problems == nil {
+			rep.Problems = []Problem{}
+		}
+		s.report = &rep
+		if t, err := time.Parse(time.RFC3339, at); err == nil && s.status.LookedAt == nil {
+			s.status.LookedAt = &t
+		}
+	})
+}
+
+// save keeps what a look found, for after a restart.
+func (s *Service) save(ctx context.Context, rep Report) {
+	b, err := json.Marshal(rep)
+	if err == nil {
+		err = s.Store.SetSetting(ctx, settingReport, string(b))
+	}
+	if err != nil {
+		s.Log.Warn("problem files: couldn't save what the look found", "err", err)
+	}
 }
 
 // Look starts a look through the library, unless one is running. It
@@ -160,6 +243,7 @@ func (s *Service) look(ctx context.Context, daily bool) {
 	s.status.LookedAt = &now
 	s.next = now.Add(Every)
 	news := s.remember(ctx, rep, now)
+	s.save(ctx, rep)
 	if daily && len(news) > 0 && s.Alert != nil {
 		title, msg := alertText(news, len(rep.Problems))
 		go s.Alert(context.WithoutCancel(ctx), title, msg)
@@ -179,6 +263,7 @@ var ErrNotFound = errors.New("there's no such problem now; look again")
 // problems with several copies, which to keep; as, for parts, to keep one
 // (Instead) instead of joining them.
 func (s *Service) Fix(ids []string, keep, as map[string]string) error {
+	s.load()
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if s.report == nil {
@@ -221,6 +306,7 @@ func (s *Service) Fix(ids []string, keep, as map[string]string) error {
 
 func (s *Service) work() {
 	ctx := context.Background()
+	saved := false // a fix took a problem off the report since it was saved
 	for {
 		s.mu.Lock()
 		if len(s.queue) == 0 {
@@ -250,9 +336,80 @@ func (s *Service) work() {
 			s.Log.Info("problem files: fixed", "problem", j.p.Kind, "action", j.p.Fix.Action, "fix", fix.ID, "title", fix.Title)
 			if s.report != nil {
 				s.report.Problems = slices.DeleteFunc(s.report.Problems, func(p Problem) bool { return p.ID == j.p.ID })
+				saved = true
 			}
 		}
+		var rep Report
+		if saved && len(s.queue) == 0 {
+			// What's left is kept once the queue is through.
+			rep = Report{Roots: s.report.Roots, Problems: slices.Clone(s.report.Problems)}
+		}
 		s.mu.Unlock()
+		if rep.Roots != nil {
+			s.save(ctx, rep)
+			saved = false
+		}
+	}
+}
+
+// ErrBusy means a batch of decisions is under way already.
+var ErrBusy = errors.New("Box Office is still working through the last batch")
+
+// Decide puts back, or deletes for good, the originals of many fixes, one
+// at a time in the background: hundreds of folders on a slow share take
+// longer than a request may. Each is checked and done the way a single
+// one is (PutBack, DeleteForGood); one that can't be is listed in
+// Undecided, and the rest carry on.
+func (s *Service) Decide(ids []int64, action string) error {
+	if action != PutBackAll && action != DeleteAll {
+		return fmt.Errorf("%s isn't a way to decide", action)
+	}
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if s.status.Deciding != nil {
+		return ErrBusy
+	}
+	s.status.Deciding = &Deciding{Action: action, Total: len(ids)}
+	s.status.Undecided = nil
+	go s.decide(slices.Clone(ids), action)
+	return nil
+}
+
+func (s *Service) decide(ids []int64, action string) {
+	ctx := context.Background()
+	var freed int64
+	deleted := 0
+	for _, id := range ids {
+		var err error
+		if action == DeleteAll {
+			var n int64
+			n, err = DeleteForGood(ctx, s.Store, id)
+			freed += n
+			if err == nil {
+				deleted++
+			}
+		} else {
+			err = PutBack(ctx, s.Store, id)
+		}
+		s.mu.Lock()
+		s.status.Deciding.Done++
+		s.status.Deciding.Freed = freed
+		if err != nil {
+			title := ""
+			if f, ferr := s.Store.ProblemFix(ctx, id); ferr == nil {
+				title = Repair(f.Title)
+			}
+			s.status.Undecided = append(s.status.Undecided, Undecided{ID: id, Title: title, Error: err.Error()})
+		}
+		s.mu.Unlock()
+	}
+	s.mu.Lock()
+	failed := len(s.status.Undecided)
+	s.status.Deciding = nil
+	s.mu.Unlock()
+	s.Log.Info("problem files: decided", "action", action, "fixes", len(ids), "failed", failed, "freed", freed)
+	if deleted > 0 && s.Deleted != nil {
+		s.Deleted(ctx, deleted, freed)
 	}
 }
 

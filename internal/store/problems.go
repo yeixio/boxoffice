@@ -215,8 +215,13 @@ const (
 
 // ProblemFix is what one fix on the Problem files page did.
 type ProblemFix struct {
-	ID        int64            `json:"id"`
-	Action    string           `json:"action"`
+	ID     int64  `json:"id"`
+	Action string `json:"action"`
+	// Kind is the kind of problem it fixed (package problems' kinds), and
+	// Detail what more the problem said, such as second_folder. Fixes
+	// from before they were noted have them worked out from their files.
+	Kind      string           `json:"kind"`
+	Detail    string           `json:"detail,omitempty"`
 	Title     string           `json:"title"`
 	Root      string           `json:"root"`
 	State     string           `json:"state"`
@@ -240,8 +245,8 @@ func (s *Store) AddProblemFix(ctx context.Context, f ProblemFix) (ProblemFix, er
 	if f.State == "" {
 		f.State = FixWaiting
 	}
-	id, err := s.insert(ctx, "INSERT INTO problem_fixes (action, title, root, state, created_at) VALUES (?, ?, ?, ?, ?)",
-		f.Action, f.Title, f.Root, f.State, now())
+	id, err := s.insert(ctx, "INSERT INTO problem_fixes (action, kind, detail, title, root, state, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
+		f.Action, f.Kind, f.Detail, f.Title, f.Root, f.State, now())
 	if err != nil {
 		return f, err
 	}
@@ -286,7 +291,7 @@ func (s *Store) ProblemFixes(ctx context.Context, recent int) ([]ProblemFix, err
 }
 
 func (s *Store) problemFixes(ctx context.Context, where string, args ...any) ([]ProblemFix, error) {
-	rows, err := s.query(ctx, "SELECT id, action, title, root, state, created_at, decided_at FROM problem_fixes "+where, args...)
+	rows, err := s.query(ctx, "SELECT id, action, kind, detail, title, root, state, created_at, decided_at FROM problem_fixes "+where, args...)
 	if err != nil {
 		return nil, err
 	}
@@ -294,7 +299,7 @@ func (s *Store) problemFixes(ctx context.Context, where string, args ...any) ([]
 	for rows.Next() {
 		var f ProblemFix
 		var created, decided int64
-		if err := rows.Scan(&f.ID, &f.Action, &f.Title, &f.Root, &f.State, &created, &decided); err != nil {
+		if err := rows.Scan(&f.ID, &f.Action, &f.Kind, &f.Detail, &f.Title, &f.Root, &f.State, &created, &decided); err != nil {
 			rows.Close()
 			return nil, err
 		}

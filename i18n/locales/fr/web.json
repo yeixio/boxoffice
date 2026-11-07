@@ -1848,7 +1848,9 @@
       "outsideFolder": "rangé hors de son dossier",
       "folder": "son dossier",
       "show": "un disque de série",
-      "notListed": "absent de la liste"
+      "notListed": "absent de la liste",
+      "foundFolder": "son dossier, nommé autrement sur le disque",
+      "secondFolder": "un deuxième dossier pour lui"
     },
     "act": {
       "rename": "Renommer",
@@ -1905,7 +1907,7 @@
       },
       "notListed": {
         "title": "Absents de la liste",
-        "hint": "Des dossiers et des vidéos qui ne sont aucun titre de la liste. Pour les ajouter, utilisez Analyser sur le dossier racine dans les Réglages ; ou mettez-les de côté."
+        "hint": "Des dossiers et des vidéos qui ne sont aucun titre de la liste. Ce sont souvent des films ou des séries que Box Office ne connaît pas encore : ajoutez-les avec Analyser. Ne mettez-en un de côté que si vous êtes sûr de ne pas le vouloir."
       },
       "leftover": {
         "title": "Restes",
@@ -1917,8 +1919,8 @@
       }
     },
     "waiting": {
-      "title": "En attente de votre accord",
-      "sub": "Les originaux mis de côté par une correction sont dans le dossier <code>.recycle/problem-files</code> de la bibliothèque. Ils y restent jusqu'à ce que vous les supprimiez définitivement ou les remettiez en place : vider les dossiers de recyclage ne les touche pas.",
+      "title": "Mis de côté, en attente de votre accord",
+      "sub": "<b>Mettre de côté</b> veut dire déplacer hors de la bibliothèque, dans son dossier <code>.recycle/problem-files</code>. Rien n'est supprimé, mais tant que vous ne les remettez pas en place, Plex, Matinee et Box Office ne les voient pas. Remettre en place ramène chacun à sa place ; Supprimer définitivement libère l'espace. Vider les dossiers de recyclage ne les touche pas.",
       "aside": "mis de côté : {{count}} ({{size}})",
       "asideOne": "mis de côté : {{name}} ({{size}})",
       "made": "nouveau fichier : {{name}}",
@@ -1929,8 +1931,55 @@
       "confirmTitle": "Supprimer définitivement les originaux ?",
       "confirmBody": "Cela supprime {{count}} fichiers mis de côté ({{size}}) du dossier de recyclage. C'est irréversible.",
       "cancel": "Annuler",
-      "delete": "Supprimer définitivement"
-    }
+      "delete": "Supprimer définitivement",
+      "putBackAll": "Tout remettre en place ({{count}})",
+      "deleteAll": "Tout supprimer définitivement ({{count}})",
+      "allGood": "Tout est bon ({{count}})",
+      "showAll": "Tout afficher ({{count}})",
+      "showFewer": "Afficher moins",
+      "deciding": {
+        "putBack": "Remise en place… {{done}}/{{total}}",
+        "delete": "Suppression définitive… {{done}}/{{total}}, {{size}} libérés"
+      },
+      "undecided": "Impossible pour {{title}} : {{error}}",
+      "reasons": {
+        "notListed": {
+          "title": "Aucun titre de la liste ne correspondait",
+          "hint": "Souvent des films ou des séries que Box Office ne connaît pas encore, ou connaît sous un nom brouillé. Remettez-les en place, puis ajoutez-les avec Analyser. Ne supprimez que ce dont vous êtes sûr de ne pas vouloir."
+        },
+        "secondFolder": {
+          "title": "Un deuxième dossier pour un titre",
+          "hint": "Le dossier du titre est toujours dans la bibliothèque. Vérifiez que celui-ci ne contient rien qui lui manque avant de supprimer."
+        },
+        "unknown": {
+          "title": "Vidéos dans le dossier d'une série qui n'étaient pas un épisode",
+          "hint": "Regardez avant de supprimer : l'une peut être un épisode spécial ou un épisode au nom bizarre."
+        },
+        "duplicate": {
+          "title": "Copies en trop",
+          "hint": "La copie gardée est toujours dans la bibliothèque et enregistrée. Voici les autres."
+        },
+        "parts": {
+          "title": "Parties de films joints",
+          "hint": "Le MKV joint est dans la bibliothèque et a été vérifié. Voici les parties dont il est fait."
+        },
+        "discImage": {
+          "title": "Images disque",
+          "hint": "Là où une image a été remuxée, le nouveau MKV est dans la bibliothèque. Le disque d'une série ou une image sans titre a seulement été mis de côté."
+        },
+        "leftover": {
+          "title": "Restes",
+          "hint": "Extraits, raccourcis, programmes et restes de téléchargements (.nzb, .par2, archives). Peuvent être supprimés sans risque."
+        },
+        "other": {
+          "title": "Renommés et enregistrés",
+          "hint": "Rien n'a été mis de côté. Ils attendent seulement que vous confirmiez que tout va bien."
+        }
+      }
+    },
+    "addWithScan": "Ajouter avec Analyser",
+    "filesIn": "{{count}} fichiers",
+    "garbledName": "Le nom sur le disque est brouillé ; il devrait être « {{name}} »."
   },
   "ereaders": {
     "title": "Envoyer aux liseuses",

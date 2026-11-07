@@ -498,6 +498,8 @@ CREATE INDEX IF NOT EXISTS ereader_sends_book ON ereader_sends (device_id, book_
 CREATE TABLE IF NOT EXISTS problem_fixes (
 	id         INTEGER PRIMARY KEY AUTOINCREMENT,
 	action     TEXT NOT NULL, -- rename, set_aside, keep_one, convert, join, record, forget
+	kind       TEXT NOT NULL DEFAULT '', -- the kind of problem it fixed: not_listed, leftover, duplicate…
+	detail     TEXT NOT NULL DEFAULT '', -- what more the problem said, such as second_folder
 	title      TEXT NOT NULL DEFAULT '', -- what it was about, for the list
 	root       TEXT NOT NULL,
 	state      TEXT NOT NULL DEFAULT 'waiting', -- waiting, done (originals deleted), undone (put back)

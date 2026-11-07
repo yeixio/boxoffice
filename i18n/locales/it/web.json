@@ -1848,7 +1848,9 @@
       "outsideFolder": "tenuto fuori dalla sua cartella",
       "folder": "la sua cartella",
       "show": "un disco di una serie",
-      "notListed": "non è nella lista"
+      "notListed": "non è nella lista",
+      "foundFolder": "la sua cartella, con un altro nome sul disco",
+      "secondFolder": "una seconda cartella per il titolo"
     },
     "act": {
       "rename": "Rinomina",
@@ -1905,7 +1907,7 @@
       },
       "notListed": {
         "title": "Non nella lista",
-        "hint": "Cartelle e video che non sono nessun titolo della lista. Per aggiungerli, usa Scansiona sulla cartella principale nelle Impostazioni; oppure mettili da parte."
+        "hint": "Cartelle e video che non sono nessun titolo della lista. Spesso sono film o serie che Box Office non conosce ancora: aggiungili con Scansiona. Mettine da parte uno solo se sei sicuro di non volerlo."
       },
       "leftover": {
         "title": "Avanzi",
@@ -1917,8 +1919,8 @@
       }
     },
     "waiting": {
-      "title": "In attesa del tuo OK",
-      "sub": "Gli originali messi da parte da una correzione sono nella cartella <code>.recycle/problem-files</code> della libreria. Restano lì finché non li elimini per sempre o li rimetti a posto: svuotare le cartelle del cestino non li tocca.",
+      "title": "Messi da parte, in attesa del tuo OK",
+      "sub": "<b>Mettere da parte</b> vuol dire spostare fuori dalla libreria, nella sua cartella <code>.recycle/problem-files</code>. Non è stato eliminato nulla, ma finché non li rimetti a posto Plex, Matinee e Box Office non li vedono. Rimetti a posto riporta ognuno dov'era; Elimina per sempre libera lo spazio. Svuotare le cartelle del cestino non li tocca.",
       "aside": "messi da parte: {{count}} ({{size}})",
       "asideOne": "messo da parte: {{name}} ({{size}})",
       "made": "nuovo file: {{name}}",
@@ -1929,8 +1931,55 @@
       "confirmTitle": "Eliminare gli originali per sempre?",
       "confirmBody": "Vengono eliminati {{count}} file messi da parte ({{size}}) dalla cartella del cestino. Non si può annullare.",
       "cancel": "Annulla",
-      "delete": "Elimina per sempre"
-    }
+      "delete": "Elimina per sempre",
+      "putBackAll": "Rimetti tutto a posto ({{count}})",
+      "deleteAll": "Elimina tutto per sempre ({{count}})",
+      "allGood": "Tutto a posto ({{count}})",
+      "showAll": "Mostra tutti i {{count}}",
+      "showFewer": "Mostra meno",
+      "deciding": {
+        "putBack": "Rimessa a posto… {{done}}/{{total}}",
+        "delete": "Eliminazione definitiva… {{done}}/{{total}}, {{size}} liberati"
+      },
+      "undecided": "Impossibile per {{title}}: {{error}}",
+      "reasons": {
+        "notListed": {
+          "title": "Nessun titolo della lista corrispondeva",
+          "hint": "Spesso film o serie che Box Office non conosce ancora, o conosce con un nome storpiato. Rimettili a posto, poi aggiungili con Scansiona. Elimina solo ciò che di sicuro non vuoi."
+        },
+        "secondFolder": {
+          "title": "Una seconda cartella per un titolo",
+          "hint": "La cartella del titolo è ancora nella libreria. Prima di eliminare, controlla che questa non contenga nulla che a quella manchi."
+        },
+        "unknown": {
+          "title": "Video nella cartella di una serie che non erano un episodio",
+          "hint": "Guarda prima di eliminare: uno potrebbe essere uno speciale o un episodio con un nome strano."
+        },
+        "duplicate": {
+          "title": "Copie in più",
+          "hint": "La copia tenuta è ancora nella libreria e registrata. Queste sono le altre."
+        },
+        "parts": {
+          "title": "Parti di film uniti",
+          "hint": "L'MKV unito è nella libreria ed è stato controllato. Queste sono le parti da cui è nato."
+        },
+        "discImage": {
+          "title": "Immagini disco",
+          "hint": "Dove un'immagine è stata remuxata, il nuovo MKV è nella libreria. Il disco di una serie o un'immagine senza titolo è stato solo messo da parte."
+        },
+        "leftover": {
+          "title": "Avanzi",
+          "hint": "Sample, collegamenti, programmi e avanzi dei download (.nzb, .par2, archivi). Si possono eliminare."
+        },
+        "other": {
+          "title": "Rinominati e registrati",
+          "hint": "Non è stato messo da parte nulla. Aspettano solo che tu dica che vanno bene."
+        }
+      }
+    },
+    "addWithScan": "Aggiungi con Scansiona",
+    "filesIn": "{{count}} file",
+    "garbledName": "Il nome sul disco è storpiato; dovrebbe essere «{{name}}»."
   },
   "ereaders": {
     "title": "Invia agli e-reader",

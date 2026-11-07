@@ -1660,7 +1660,9 @@
       "outsideFolder": "放在其資料夾之外",
       "folder": "其資料夾",
       "show": "影集的光碟",
-      "notListed": "不在清單中"
+      "notListed": "不在清單中",
+      "foundFolder": "它的資料夾，在磁碟上名稱不同",
+      "secondFolder": "它的第二個資料夾"
     },
     "act": {
       "rename": "重新命名",
@@ -1717,7 +1719,7 @@
       },
       "notListed": {
         "title": "不在清單中",
-        "hint": "不屬於清單中任何作品的資料夾和影片。要加入它們，請在設定中對根資料夾使用掃描；或將它們移到一旁。"
+        "hint": "不屬於清單中任何作品的資料夾和影片。它們常常是 Box Office 還不認識的電影或影集：請用掃描加入。只有確定不要時才移到一旁。"
       },
       "leftover": {
         "title": "殘留物",
@@ -1729,8 +1731,8 @@
       }
     },
     "waiting": {
-      "title": "等待你確認",
-      "sub": "修正移到一旁的原始檔案位於媒體庫的 <code>.recycle/problem-files</code> 資料夾中。它們會一直留在那裡，直到你永久刪除或放回：清空回收資料夾不會動到它們。",
+      "title": "已移到一旁，等你確認",
+      "sub": "<b>移到一旁</b>是指移出媒體庫，放進它的 <code>.recycle/problem-files</code> 資料夾。沒有刪除任何東西，但在你放回之前，Plex、Matinee 和 Box Office 都看不到它們。放回會把每一項放回原處；永久刪除會騰出空間。清空回收資料夾不會動它們。",
       "aside": "已移到一旁：{{count}}（{{size}}）",
       "asideOne": "已移到一旁：{{name}}（{{size}}）",
       "made": "新檔案：{{name}}",
@@ -1741,8 +1743,55 @@
       "confirmTitle": "永久刪除原始檔案？",
       "confirmBody": "這會從回收資料夾中刪除移到一旁的 {{count}} 項（{{size}}）。此操作無法復原。",
       "cancel": "取消",
-      "delete": "永久刪除"
-    }
+      "delete": "永久刪除",
+      "putBackAll": "全部放回（{{count}}）",
+      "deleteAll": "全部永久刪除（{{count}}）",
+      "allGood": "全部沒問題（{{count}}）",
+      "showAll": "顯示全部 {{count}} 項",
+      "showFewer": "收起",
+      "deciding": {
+        "putBack": "正在放回… {{done}}/{{total}}",
+        "delete": "正在永久刪除… {{done}}/{{total}}，已騰出 {{size}}"
+      },
+      "undecided": "{{title}} 未能完成：{{error}}",
+      "reasons": {
+        "notListed": {
+          "title": "沒有符合清單中任何作品",
+          "hint": "常常是 Box Office 還不認識，或以亂碼名稱認識的電影或影集。請放回，再用掃描加入。只刪除確定不要的。"
+        },
+        "secondFolder": {
+          "title": "作品的第二個資料夾",
+          "hint": "作品本來的資料夾仍在媒體庫中。刪除前請確認這個資料夾裡沒有那邊缺少的東西。"
+        },
+        "unknown": {
+          "title": "影集資料夾中不是某一集的影片",
+          "hint": "刪除前先看看：其中可能有特別篇或名稱奇怪的一集。"
+        },
+        "duplicate": {
+          "title": "多餘的副本",
+          "hint": "你保留的副本仍在媒體庫中並已記錄。這些是其餘的。"
+        },
+        "parts": {
+          "title": "已合併電影的分段",
+          "hint": "合併後的 MKV 在媒體庫中並已檢查。這些是它的原始分段。"
+        },
+        "discImage": {
+          "title": "光碟映像檔",
+          "hint": "已重新封裝的映像檔，新的 MKV 在媒體庫中。影集的光碟或不屬於任何作品的映像檔只是移到了一旁。"
+        },
+        "leftover": {
+          "title": "殘留檔案",
+          "hint": "樣片、捷徑、程式和下載的殘留（.nzb、.par2、壓縮檔）。可以放心刪除。"
+        },
+        "other": {
+          "title": "已重新命名並記錄",
+          "hint": "沒有移到一旁的東西。只等你確認沒問題。"
+        }
+      }
+    },
+    "addWithScan": "用掃描加入",
+    "filesIn": "{{count}} 個檔案",
+    "garbledName": "磁碟上的名稱是亂碼，原本應為「{{name}}」。"
   },
   "ereaders": {
     "title": "傳送到電子閱讀器",

@@ -1942,7 +1942,9 @@
       "outsideFolder": "mimo svou složku",
       "folder": "jeho složka",
       "show": "disk seriálu",
-      "notListed": "není na seznamu"
+      "notListed": "není na seznamu",
+      "foundFolder": "jeho složka, na disku pojmenovaná jinak",
+      "secondFolder": "druhá složka pro titul"
     },
     "act": {
       "rename": "Přejmenovat",
@@ -1999,7 +2001,7 @@
       },
       "notListed": {
         "title": "Není na seznamu",
-        "hint": "Složky a videa, které nejsou žádným titulem ze seznamu. Přidejte je pomocí Skenovat u kořenové složky v Nastavení, nebo je odložte."
+        "hint": "Složky a videa, které nejsou žádným titulem ze seznamu. Často jde o filmy nebo seriály, které Box Office ještě nezná: přidejte je přes Skenovat. Odložte jen to, co určitě nechcete."
       },
       "leftover": {
         "title": "Zbytky",
@@ -2011,8 +2013,8 @@
       }
     },
     "waiting": {
-      "title": "Čeká na vaše OK",
-      "sub": "Originály, které oprava odložila, jsou ve složce knihovny <code>.recycle/problem-files</code>. Zůstanou tam, dokud je nadobro nesmažete nebo nevrátíte: vyprázdnění složek koše se jich netýká.",
+      "title": "Odloženo, čeká na vaše OK",
+      "sub": "<b>Odložit</b> znamená přesunout z knihovny do její složky <code>.recycle/problem-files</code>. Nic nebylo smazáno, ale dokud je nevrátíte, Plex, Matinee ani Box Office je nevidí. Vrátit dá každou zpět na místo; Smazat nadobro uvolní místo. Vyprázdnění složek koše se jich netkne.",
       "aside": "odloženo: {{count}} ({{size}})",
       "asideOne": "odloženo: {{name}} ({{size}})",
       "made": "nový soubor: {{name}}",
@@ -2023,8 +2025,55 @@
       "confirmTitle": "Smazat originály nadobro?",
       "confirmBody": "Tím se ze složky koše smažou odložené soubory ({{count}}, {{size}}). Nelze to vrátit.",
       "cancel": "Zrušit",
-      "delete": "Smazat nadobro"
-    }
+      "delete": "Smazat nadobro",
+      "putBackAll": "Vrátit vše ({{count}})",
+      "deleteAll": "Smazat vše nadobro ({{count}})",
+      "allGood": "Vše v pořádku ({{count}})",
+      "showAll": "Zobrazit všech {{count}}",
+      "showFewer": "Zobrazit méně",
+      "deciding": {
+        "putBack": "Vrací se… {{done}}/{{total}}",
+        "delete": "Maže se nadobro… {{done}}/{{total}}, uvolněno {{size}}"
+      },
+      "undecided": "{{title}} nešlo: {{error}}",
+      "reasons": {
+        "notListed": {
+          "title": "Žádný titul ze seznamu neodpovídal",
+          "hint": "Často filmy nebo seriály, které Box Office ještě nezná, nebo je zná pod zkomoleným názvem. Vraťte je a přidejte přes Skenovat. Smažte jen to, co určitě nechcete."
+        },
+        "secondFolder": {
+          "title": "Druhá složka titulu",
+          "hint": "Vlastní složka titulu je stále v knihovně. Před smazáním ověřte, že tahle neobsahuje nic, co jí chybí."
+        },
+        "unknown": {
+          "title": "Videa ve složce seriálu, která nebyla epizodou",
+          "hint": "Před smazáním se podívejte: některé může být speciál nebo divně pojmenovaná epizoda."
+        },
+        "duplicate": {
+          "title": "Kopie navíc",
+          "hint": "Ponechaná kopie je stále v knihovně a zapsaná. Tohle jsou ostatní."
+        },
+        "parts": {
+          "title": "Části spojených filmů",
+          "hint": "Spojené MKV je v knihovně a bylo zkontrolováno. Tohle jsou části, ze kterých vzniklo."
+        },
+        "discImage": {
+          "title": "Obrazy disků",
+          "hint": "Kde byl obraz remuxován, je nové MKV v knihovně. Disk seriálu nebo obraz bez titulu byl jen odložen."
+        },
+        "leftover": {
+          "title": "Zbytky",
+          "hint": "Ukázky, zástupci, programy a zbytky stahování (.nzb, .par2, archivy). Lze bezpečně smazat."
+        },
+        "other": {
+          "title": "Přejmenováno a zapsáno",
+          "hint": "Nic nebylo odloženo. Čekají jen, až potvrdíte, že jsou v pořádku."
+        }
+      }
+    },
+    "addWithScan": "Přidat přes Skenovat",
+    "filesIn": "Souborů: {{count}}",
+    "garbledName": "Název na disku je zkomolený; má být „{{name}}“."
   },
   "ereaders": {
     "title": "Posílat do čteček",

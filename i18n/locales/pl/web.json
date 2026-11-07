@@ -1942,7 +1942,9 @@
       "outsideFolder": "trzymany poza swoim folderem",
       "folder": "jego folder",
       "show": "płyta serialu",
-      "notListed": "spoza listy"
+      "notListed": "spoza listy",
+      "foundFolder": "jego folder, inaczej nazwany na dysku",
+      "secondFolder": "drugi folder tego tytułu"
     },
     "act": {
       "rename": "Zmień nazwę",
@@ -1999,7 +2001,7 @@
       },
       "notListed": {
         "title": "Spoza listy",
-        "hint": "Foldery i filmy, które nie są żadnym tytułem z listy. Aby je dodać, użyj Skanuj przy folderze głównym w Ustawieniach; albo je odłóż."
+        "hint": "Foldery i filmy, które nie są żadnym tytułem z listy. Często to filmy lub seriale, których Box Office jeszcze nie zna: dodaj je przez Skanuj. Odłóż coś tylko, gdy na pewno tego nie chcesz."
       },
       "leftover": {
         "title": "Resztki",
@@ -2011,8 +2013,8 @@
       }
     },
     "waiting": {
-      "title": "Czeka na Twoje OK",
-      "sub": "Oryginały odłożone przez poprawkę są w folderze <code>.recycle/problem-files</code> biblioteki. Zostają tam, dopóki nie usuniesz ich na dobre albo nie przywrócisz: opróżnianie folderów kosza ich nie rusza.",
+      "title": "Odłożone, czekają na Twoje OK",
+      "sub": "<b>Odłożenie</b> oznacza przeniesienie poza bibliotekę, do jej folderu <code>.recycle/problem-files</code>. Nic nie zostało usunięte, ale dopóki ich nie przywrócisz, Plex, Matinee i Box Office ich nie widzą. Przywróć odkłada każdy na miejsce; Usuń na dobre zwalnia miejsce. Opróżnianie folderów kosza ich nie rusza.",
       "aside": "odłożone: {{count}} ({{size}})",
       "asideOne": "odłożony: {{name}} ({{size}})",
       "made": "nowy plik: {{name}}",
@@ -2023,8 +2025,55 @@
       "confirmTitle": "Usunąć oryginały na dobre?",
       "confirmBody": "To usunie odłożone pliki ({{count}}, {{size}}) z folderu kosza. Nie da się tego cofnąć.",
       "cancel": "Anuluj",
-      "delete": "Usuń na dobre"
-    }
+      "delete": "Usuń na dobre",
+      "putBackAll": "Przywróć wszystkie ({{count}})",
+      "deleteAll": "Usuń wszystkie na dobre ({{count}})",
+      "allGood": "Wszystkie są w porządku ({{count}})",
+      "showAll": "Pokaż wszystkie ({{count}})",
+      "showFewer": "Pokaż mniej",
+      "deciding": {
+        "putBack": "Przywracanie… {{done}}/{{total}}",
+        "delete": "Usuwanie na dobre… {{done}}/{{total}}, zwolniono {{size}}"
+      },
+      "undecided": "Nie udało się z {{title}}: {{error}}",
+      "reasons": {
+        "notListed": {
+          "title": "Żaden tytuł z listy nie pasował",
+          "hint": "Często filmy lub seriale, których Box Office jeszcze nie zna albo zna pod zniekształconą nazwą. Przywróć je, a potem dodaj przez Skanuj. Usuń tylko to, czego na pewno nie chcesz."
+        },
+        "secondFolder": {
+          "title": "Drugi folder tytułu",
+          "hint": "Właściwy folder tytułu wciąż jest w bibliotece. Przed usunięciem sprawdź, czy ten nie ma czegoś, czego tamtemu brakuje."
+        },
+        "unknown": {
+          "title": "Filmy w folderze serialu, które nie były odcinkiem",
+          "hint": "Obejrzyj przed usunięciem: któryś może być odcinkiem specjalnym albo dziwnie nazwanym odcinkiem."
+        },
+        "duplicate": {
+          "title": "Dodatkowe kopie",
+          "hint": "Zachowana kopia wciąż jest w bibliotece i zapisana. To są pozostałe."
+        },
+        "parts": {
+          "title": "Części połączonych filmów",
+          "hint": "Połączony MKV jest w bibliotece i został sprawdzony. To części, z których powstał."
+        },
+        "discImage": {
+          "title": "Obrazy płyt",
+          "hint": "Tam, gdzie obraz zremuksowano, nowy MKV jest w bibliotece. Płytę serialu lub obraz bez tytułu tylko odłożono."
+        },
+        "leftover": {
+          "title": "Resztki",
+          "hint": "Próbki, skróty, programy i resztki pobrań (.nzb, .par2, archiwa). Można bezpiecznie usunąć."
+        },
+        "other": {
+          "title": "Zmienione nazwy i zapisane",
+          "hint": "Nic nie odłożono. Czekają tylko, aż potwierdzisz, że są w porządku."
+        }
+      }
+    },
+    "addWithScan": "Dodaj przez Skanuj",
+    "filesIn": "Plików: {{count}}",
+    "garbledName": "Nazwa na dysku jest zniekształcona; powinna brzmieć „{{name}}”."
   },
   "ereaders": {
     "title": "Wysyłanie na czytniki",

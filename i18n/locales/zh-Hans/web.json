@@ -1660,7 +1660,9 @@
       "outsideFolder": "放在其文件夹之外",
       "folder": "其文件夹",
       "show": "剧集的光盘",
-      "notListed": "不在列表中"
+      "notListed": "不在列表中",
+      "foundFolder": "它的文件夹，在磁盘上名称不同",
+      "secondFolder": "它的第二个文件夹"
     },
     "act": {
       "rename": "重命名",
@@ -1717,7 +1719,7 @@
       },
       "notListed": {
         "title": "不在列表中",
-        "hint": "不属于列表中任何作品的文件夹和视频。要添加它们，请在设置中对根文件夹使用扫描；或将它们移到一边。"
+        "hint": "不属于列表中任何作品的文件夹和视频。它们常常是 Box Office 还不认识的电影或剧集：请用扫描添加。只有确定不要时才移到一边。"
       },
       "leftover": {
         "title": "残留物",
@@ -1729,8 +1731,8 @@
       }
     },
     "waiting": {
-      "title": "等待你确认",
-      "sub": "修复移到一边的原始文件位于媒体库的 <code>.recycle/problem-files</code> 文件夹中。它们会一直留在那里，直到你永久删除或放回：清空回收文件夹不会动它们。",
+      "title": "已移到一边，等你确认",
+      "sub": "<b>移到一边</b>是指移出媒体库，放进它的 <code>.recycle/problem-files</code> 文件夹。没有删除任何东西，但在你放回之前，Plex、Matinee 和 Box Office 都看不到它们。放回会把每一项放回原处；永久删除会腾出空间。清空回收文件夹不会动它们。",
       "aside": "已移到一边：{{count}}（{{size}}）",
       "asideOne": "已移到一边：{{name}}（{{size}}）",
       "made": "新文件：{{name}}",
@@ -1741,8 +1743,55 @@
       "confirmTitle": "永久删除原始文件？",
       "confirmBody": "这会从回收文件夹中删除移到一边的 {{count}} 项（{{size}}）。此操作无法撤销。",
       "cancel": "取消",
-      "delete": "永久删除"
-    }
+      "delete": "永久删除",
+      "putBackAll": "全部放回（{{count}}）",
+      "deleteAll": "全部永久删除（{{count}}）",
+      "allGood": "全部没问题（{{count}}）",
+      "showAll": "显示全部 {{count}} 项",
+      "showFewer": "收起",
+      "deciding": {
+        "putBack": "正在放回… {{done}}/{{total}}",
+        "delete": "正在永久删除… {{done}}/{{total}}，已腾出 {{size}}"
+      },
+      "undecided": "{{title}} 未能完成：{{error}}",
+      "reasons": {
+        "notListed": {
+          "title": "没有匹配列表中任何作品",
+          "hint": "常常是 Box Office 还不认识，或以乱码名称认识的电影或剧集。请放回，再用扫描添加。只删除确定不要的。"
+        },
+        "secondFolder": {
+          "title": "作品的第二个文件夹",
+          "hint": "作品本来的文件夹仍在媒体库中。删除前请确认这个文件夹里没有那边缺少的东西。"
+        },
+        "unknown": {
+          "title": "剧集文件夹中不是某一集的视频",
+          "hint": "删除前先看看：其中可能有特别篇或名称奇怪的一集。"
+        },
+        "duplicate": {
+          "title": "多余的副本",
+          "hint": "你保留的副本仍在媒体库中并已记录。这些是其余的。"
+        },
+        "parts": {
+          "title": "已合并电影的分段",
+          "hint": "合并后的 MKV 在媒体库中并已检查。这些是它的原始分段。"
+        },
+        "discImage": {
+          "title": "光盘镜像",
+          "hint": "已重封装的镜像，新的 MKV 在媒体库中。剧集的光盘或不属于任何作品的镜像只是移到了一边。"
+        },
+        "leftover": {
+          "title": "残留文件",
+          "hint": "样片、快捷方式、程序和下载的残留（.nzb、.par2、压缩包）。可以放心删除。"
+        },
+        "other": {
+          "title": "已重命名并记录",
+          "hint": "没有移到一边的东西。只等你确认没问题。"
+        }
+      }
+    },
+    "addWithScan": "用扫描添加",
+    "filesIn": "{{count}} 个文件",
+    "garbledName": "磁盘上的名称是乱码，原本应为“{{name}}”。"
   },
   "ereaders": {
     "title": "发送到电子阅读器",

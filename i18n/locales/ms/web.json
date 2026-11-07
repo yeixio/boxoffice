@@ -1660,7 +1660,9 @@
       "outsideFolder": "disimpan di luar foldernya",
       "folder": "foldernya",
       "show": "cakera sebuah rancangan",
-      "notListed": "tiada dalam senarai"
+      "notListed": "tiada dalam senarai",
+      "foundFolder": "foldernya, dengan nama lain pada cakera",
+      "secondFolder": "folder kedua untuknya"
     },
     "act": {
       "rename": "Namakan semula",
@@ -1717,7 +1719,7 @@
       },
       "notListed": {
         "title": "Tiada dalam senarai",
-        "hint": "Folder dan video yang bukan mana-mana tajuk dalam senarai. Untuk menambahnya, gunakan Imbas pada folder akar dalam Tetapan; atau ketepikan."
+        "hint": "Folder dan video yang bukan mana-mana tajuk dalam senarai. Selalunya filem atau rancangan yang Box Office belum kenal: tambahkan dengan Imbas. Ketepikan hanya jika anda pasti tidak mahukannya."
       },
       "leftover": {
         "title": "Sisa",
@@ -1729,8 +1731,8 @@
       }
     },
     "waiting": {
-      "title": "Menunggu kelulusan anda",
-      "sub": "Fail asal yang diketepikan oleh pembetulan berada dalam folder <code>.recycle/problem-files</code> pustaka. Ia kekal di situ sehingga anda memadamnya terus atau memulangkannya: mengosongkan folder kitar semula tidak menyentuhnya.",
+      "title": "Diketepikan, menunggu OK anda",
+      "sub": "<b>Ketepikan</b> bermaksud dipindahkan keluar dari pustaka ke folder <code>.recycle/problem-files</code>-nya. Tiada yang dipadam, tetapi sehingga anda memulangkannya, Plex, Matinee dan Box Office tidak nampak. Pulangkan meletakkan setiap satu di tempat asal; Padam terus mengosongkan ruang. Mengosongkan folder kitar semula tidak menyentuhnya.",
       "aside": "diketepikan: {{count}} ({{size}})",
       "asideOne": "diketepikan: {{name}} ({{size}})",
       "made": "fail baharu: {{name}}",
@@ -1741,8 +1743,55 @@
       "confirmTitle": "Padam fail asal terus?",
       "confirmBody": "Ini memadam {{count}} yang diketepikan ({{size}}) daripada folder kitar semula. Ia tidak boleh dibatalkan.",
       "cancel": "Batal",
-      "delete": "Padam terus"
-    }
+      "delete": "Padam terus",
+      "putBackAll": "Pulangkan semua ({{count}})",
+      "deleteAll": "Padam semua terus ({{count}})",
+      "allGood": "Semua nampak baik ({{count}})",
+      "showAll": "Tunjukkan semua {{count}}",
+      "showFewer": "Tunjukkan kurang",
+      "deciding": {
+        "putBack": "Memulangkan… {{done}}/{{total}}",
+        "delete": "Memadam terus… {{done}}/{{total}}, {{size}} dikosongkan"
+      },
+      "undecided": "Tidak dapat untuk {{title}}: {{error}}",
+      "reasons": {
+        "notListed": {
+          "title": "Tiada tajuk dalam senarai yang sepadan",
+          "hint": "Selalunya filem atau rancangan yang Box Office belum kenal, atau kenal dengan nama yang rosak. Pulangkan, kemudian tambahkan dengan Imbas. Padam hanya yang pasti anda tidak mahu."
+        },
+        "secondFolder": {
+          "title": "Folder kedua untuk satu tajuk",
+          "hint": "Folder tajuk itu sendiri masih dalam pustaka. Sebelum memadam, semak folder ini tiada apa yang tiada di sana."
+        },
+        "unknown": {
+          "title": "Video dalam folder rancangan yang bukan episod",
+          "hint": "Lihat dulu sebelum memadam: satu mungkin episod khas atau episod bernama pelik."
+        },
+        "duplicate": {
+          "title": "Salinan berlebihan",
+          "hint": "Salinan yang anda simpan masih dalam pustaka dan direkodkan. Ini yang lain."
+        },
+        "parts": {
+          "title": "Bahagian filem yang digabung",
+          "hint": "MKV gabungan ada dalam pustaka dan sudah disemak. Ini bahagian asalnya."
+        },
+        "discImage": {
+          "title": "Imej cakera",
+          "hint": "Jika imej sudah di-remux, MKV baharu ada dalam pustaka. Cakera rancangan atau imej tanpa tajuk hanya diketepikan."
+        },
+        "leftover": {
+          "title": "Sisa",
+          "hint": "Sampel, pintasan, program dan sisa muat turun (.nzb, .par2, arkib). Selamat dipadam."
+        },
+        "other": {
+          "title": "Dinamakan semula dan direkodkan",
+          "hint": "Tiada yang diketepikan. Ini hanya menunggu anda kata ia betul."
+        }
+      }
+    },
+    "addWithScan": "Tambah dengan Imbas",
+    "filesIn": "{{count}} fail",
+    "garbledName": "Nama pada cakera rosak; sepatutnya “{{name}}”."
   },
   "ereaders": {
     "title": "Hantar ke e-pembaca",
