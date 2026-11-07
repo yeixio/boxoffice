@@ -69,10 +69,12 @@ type Engine struct {
 	// library, by their path in the downloads folder.
 	moves map[string]*folderMove
 	// folderOK is whether the downloads folder answered when last checked,
-	// and checking whether a check is under way: one on a share that hung
-	// can take minutes, and isn't started twice.
+	// and check the check under way, if any: one on a share that hung can
+	// take minutes, so it isn't started twice, and whoever asks meanwhile
+	// waits for its answer.
 	folderOK atomic.Bool
-	checking atomic.Bool
+	checkMu  sync.Mutex
+	check    *folderCheck
 	once     sync.Once
 }
 
@@ -562,31 +564,39 @@ func (e *Engine) Live() Live {
 // network share that dropped can hang for minutes.
 var folderWait = 20 * time.Second
 
-// errFolderBusy says a check of the downloads folder is still waiting
-// for it to answer.
-var errFolderBusy = errors.New("busy")
-
 // CheckFolder says what's wrong with the downloads folder, if anything:
 // it must answer and take writes, and mustn't be a library folder or
 // inside one. It gives up after folderWait, as a share that dropped can
 // hang.
 func (e *Engine) CheckFolder(ctx context.Context) error {
-	if !e.checking.CompareAndSwap(false, true) {
-		return e.folderAwayError()
+	e.checkMu.Lock()
+	c := e.check
+	if c == nil {
+		c = &folderCheck{done: make(chan struct{})}
+		e.check = c
+		go func() {
+			c.err = e.checkFolder(context.WithoutCancel(ctx))
+			e.checkMu.Lock()
+			e.check = nil
+			e.checkMu.Unlock()
+			close(c.done)
+		}()
 	}
-	done := make(chan error, 1)
-	go func() {
-		defer e.checking.Store(false)
-		done <- e.checkFolder(ctx)
-	}()
+	e.checkMu.Unlock()
 	select {
-	case err := <-done:
-		return err
+	case <-c.done:
+		return c.err
 	case <-time.After(folderWait):
 		return e.folderAwayError()
 	case <-ctx.Done():
 		return ctx.Err()
 	}
+}
+
+// folderCheck is a check of the downloads folder under way.
+type folderCheck struct {
+	done chan struct{}
+	err  error
 }
 
 func (e *Engine) folderAwayError() error {
