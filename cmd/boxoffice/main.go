@@ -29,6 +29,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/ereader"
 	"github.com/yeixio/boxoffice/internal/jobs"
 	"github.com/yeixio/boxoffice/internal/kube"
+	"github.com/yeixio/boxoffice/internal/library"
 	"github.com/yeixio/boxoffice/internal/libscan"
 	"github.com/yeixio/boxoffice/internal/migrate"
 	"github.com/yeixio/boxoffice/internal/monitor"
@@ -177,6 +178,9 @@ func run() error {
 	// Admin alerts reach Matinee's admins too, with download news.
 	alerter.Forward = notes.Alert
 	finds.Alert = alerter.ProblemFiles
+	finds.Deleted = func(ctx context.Context, n int, freed int64) {
+		db.RecordJob(ctx, api.JobDeleteFiles, "Problem files", "done", fmt.Sprintf("Deleted the originals of %d fixes, freeing %s.", n, library.Bytes(freed)))
+	}
 	backups.Failed = alerter.BackupFailed
 	if err := srv.EnsureAPIKey(ctx); err != nil {
 		return err

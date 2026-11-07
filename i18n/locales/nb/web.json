@@ -1754,7 +1754,9 @@
       "outsideFolder": "ligger utenfor mappen sin",
       "folder": "mappen sin",
       "show": "en series plate",
-      "notListed": "ikke på listen"
+      "notListed": "ikke på listen",
+      "foundFolder": "mappen dens, med et annet navn på disken",
+      "secondFolder": "en ekstra mappe for den"
     },
     "act": {
       "rename": "Gi nytt navn",
@@ -1811,7 +1813,7 @@
       },
       "notListed": {
         "title": "Ikke på listen",
-        "hint": "Mapper og videoer som ikke er noen tittel på listen. Legg dem til med Skann ved rotmappen i Innstillinger, eller legg dem til side."
+        "hint": "Mapper og videoer som ikke er noen tittel på listen. Ofte filmer eller serier Box Office ikke kjenner ennå: legg dem til med Skann. Legg bare en til side hvis du er sikker på at du ikke vil ha den."
       },
       "leftover": {
         "title": "Rester",
@@ -1823,8 +1825,8 @@
       }
     },
     "waiting": {
-      "title": "Venter på ditt OK",
-      "sub": "Originaler en retting har lagt til side, ligger i bibliotekets mappe <code>.recycle/problem-files</code>. De blir der til du sletter dem for godt eller legger dem tilbake: tømming av papirkurvmappene rører dem ikke.",
+      "title": "Lagt til side, venter på ditt OK",
+      "sub": "<b>Legg til side</b> betyr flyttet ut av biblioteket til mappen <code>.recycle/problem-files</code>. Ingenting er slettet, men til du legger dem tilbake, ser ikke Plex, Matinee og Box Office dem. Legg tilbake setter hver der den var; Slett for godt frigjør plassen. Tømming av papirkurvmappene lar dem være.",
       "aside": "lagt til side: {{count}} ({{size}})",
       "asideOne": "lagt til side: {{name}} ({{size}})",
       "made": "ny fil: {{name}}",
@@ -1835,8 +1837,55 @@
       "confirmTitle": "Slette originalene for godt?",
       "confirmBody": "Dette sletter {{count}} filer lagt til side ({{size}}) fra papirkurvmappen. Det kan ikke angres.",
       "cancel": "Avbryt",
-      "delete": "Slett for godt"
-    }
+      "delete": "Slett for godt",
+      "putBackAll": "Legg alle tilbake ({{count}})",
+      "deleteAll": "Slett alle for godt ({{count}})",
+      "allGood": "Alle ser bra ut ({{count}})",
+      "showAll": "Vis alle {{count}}",
+      "showFewer": "Vis færre",
+      "deciding": {
+        "putBack": "Legger tilbake… {{done}}/{{total}}",
+        "delete": "Sletter for godt… {{done}}/{{total}}, {{size}} frigjort"
+      },
+      "undecided": "Fikk ikke til {{title}}: {{error}}",
+      "reasons": {
+        "notListed": {
+          "title": "Ingen tittel på listen passet",
+          "hint": "Ofte filmer eller serier Box Office ikke kjenner ennå, eller kjenner under et forvrengt navn. Legg dem tilbake, og legg dem til med Skann. Slett bare det du er sikker på at du ikke vil ha."
+        },
+        "secondFolder": {
+          "title": "En ekstra mappe for en tittel",
+          "hint": "Tittelens egen mappe er fortsatt i biblioteket. Sjekk før sletting at denne ikke har noe den mangler."
+        },
+        "unknown": {
+          "title": "Videoer i en series mappe som ikke var en episode",
+          "hint": "Se før du sletter: en kan være en spesial eller en episode med rart navn."
+        },
+        "duplicate": {
+          "title": "Ekstra kopier",
+          "hint": "Kopien du beholdt, er fortsatt i biblioteket og registrert. Dette er de andre."
+        },
+        "parts": {
+          "title": "Deler av sammenføyde filmer",
+          "hint": "Den sammenføyde MKV-en er i biblioteket og er sjekket. Dette er delene den ble laget av."
+        },
+        "discImage": {
+          "title": "Diskbilder",
+          "hint": "Der et bilde ble remuxet, ligger den nye MKV-en i biblioteket. En series disk eller et bilde uten tittel ble bare lagt til side."
+        },
+        "leftover": {
+          "title": "Rester",
+          "hint": "Samples, snarveier, programmer og rester etter nedlastinger (.nzb, .par2, arkiver). Trygt å slette."
+        },
+        "other": {
+          "title": "Omdøpt og registrert",
+          "hint": "Ingenting ble lagt til side. De venter bare på at du sier at de ser riktige ut."
+        }
+      }
+    },
+    "addWithScan": "Legg til med Skann",
+    "filesIn": "{{count}} filer",
+    "garbledName": "Navnet på disken er forvrengt; det skal være «{{name}}»."
   },
   "ereaders": {
     "title": "Send til lesebrett",

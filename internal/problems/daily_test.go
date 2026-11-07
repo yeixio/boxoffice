@@ -103,3 +103,39 @@ func TestRunWaitsForTheDay(t *testing.T) {
 	}
 	t.Fatal("Run didn't set the next look")
 }
+
+// What a look found is there after a restart, without looking again.
+func TestReportKeptAcrossRestarts(t *testing.T) {
+	l := newLibrary(t)
+	ctx := context.Background()
+	s := &Service{Store: l.st, Log: slog.New(slog.DiscardHandler), Tools: noTools}
+	s.Look(ctx)
+	for range 500 {
+		if st, _ := s.State(); !st.Looking {
+			break
+		}
+		time.Sleep(10 * time.Millisecond)
+	}
+	_, rep := s.State()
+	if rep == nil || len(rep.Problems) == 0 {
+		t.Fatal("found nothing")
+	}
+	again := &Service{Store: l.st, Log: slog.New(slog.DiscardHandler), Tools: noTools}
+	st, saved := again.State()
+	if saved == nil || len(saved.Problems) != len(rep.Problems) || st.LookedAt == nil || st.Looking {
+		t.Fatalf("after a restart: %+v, %v", st, saved)
+	}
+	// A show's episode can still be recorded from the saved report.
+	var p *Problem
+	for i, x := range saved.Problems {
+		if x.Kind == Untracked && x.Title.Name == "Lost" {
+			p = &saved.Problems[i]
+		}
+	}
+	if p == nil {
+		t.Fatal("no untracked episode")
+	}
+	if _, err := Apply(ctx, l.st, noTools, *p, "", nil); err != nil {
+		t.Fatalf("recording from the saved report: %v", err)
+	}
+}

@@ -1754,7 +1754,9 @@
       "outsideFolder": "ligger utanför sin mapp",
       "folder": "dess mapp",
       "show": "en seriens skiva",
-      "notListed": "inte på listan"
+      "notListed": "inte på listan",
+      "foundFolder": "dess mapp, med ett annat namn på disken",
+      "secondFolder": "en andra mapp för den"
     },
     "act": {
       "rename": "Byt namn",
@@ -1811,7 +1813,7 @@
       },
       "notListed": {
         "title": "Inte på listan",
-        "hint": "Mappar och videor som inte är någon titel på listan. Lägg till dem med Skanna vid rotmappen i Inställningar, eller lägg undan dem."
+        "hint": "Mappar och videor som inte är någon titel på listan. Ofta filmer eller serier som Box Office inte känner till än: lägg till dem med Skanna. Lägg bara undan en om du är säker på att du inte vill ha den."
       },
       "leftover": {
         "title": "Rester",
@@ -1823,8 +1825,8 @@
       }
     },
     "waiting": {
-      "title": "Väntar på ditt OK",
-      "sub": "Original som en åtgärd lagt undan finns i bibliotekets mapp <code>.recycle/problem-files</code>. De ligger kvar tills du raderar dem för gott eller lägger tillbaka dem: att tömma papperskorgsmapparna rör dem inte.",
+      "title": "Undanlagt, väntar på ditt OK",
+      "sub": "<b>Lägg undan</b> betyder flyttat ut ur biblioteket till dess mapp <code>.recycle/problem-files</code>. Inget är raderat, men tills du lägger tillbaka dem ser Plex, Matinee och Box Office dem inte. Lägg tillbaka sätter var och en där den var; Radera för gott frigör utrymmet. Att tömma papperskorgsmapparna lämnar dem i fred.",
       "aside": "undanlagda: {{count}} ({{size}})",
       "asideOne": "undanlagd: {{name}} ({{size}})",
       "made": "ny fil: {{name}}",
@@ -1835,8 +1837,55 @@
       "confirmTitle": "Radera originalen för gott?",
       "confirmBody": "Detta raderar {{count}} undanlagda filer ({{size}}) från papperskorgsmappen. Det går inte att ångra.",
       "cancel": "Avbryt",
-      "delete": "Radera för gott"
-    }
+      "delete": "Radera för gott",
+      "putBackAll": "Lägg tillbaka alla ({{count}})",
+      "deleteAll": "Radera alla för gott ({{count}})",
+      "allGood": "Alla ser bra ut ({{count}})",
+      "showAll": "Visa alla {{count}}",
+      "showFewer": "Visa färre",
+      "deciding": {
+        "putBack": "Lägger tillbaka… {{done}}/{{total}}",
+        "delete": "Raderar för gott… {{done}}/{{total}}, {{size}} frigjort"
+      },
+      "undecided": "Gick inte med {{title}}: {{error}}",
+      "reasons": {
+        "notListed": {
+          "title": "Ingen titel på listan matchade",
+          "hint": "Ofta filmer eller serier som Box Office inte känner till än, eller känner under ett förvanskat namn. Lägg tillbaka dem och lägg till dem med Skanna. Radera bara det du är säker på att du inte vill ha."
+        },
+        "secondFolder": {
+          "title": "En andra mapp för en titel",
+          "hint": "Titelns egen mapp finns kvar i biblioteket. Kontrollera innan du raderar att den här inte har något den saknar."
+        },
+        "unknown": {
+          "title": "Videor i en series mapp som inte var ett avsnitt",
+          "hint": "Titta innan du raderar: en kan vara en special eller ett konstigt namngivet avsnitt."
+        },
+        "duplicate": {
+          "title": "Extra kopior",
+          "hint": "Kopian du behöll finns kvar i biblioteket och är registrerad. Det här är de andra."
+        },
+        "parts": {
+          "title": "Delar av sammanfogade filmer",
+          "hint": "Den sammanfogade MKV:n finns i biblioteket och har kontrollerats. Det här är delarna den gjordes av."
+        },
+        "discImage": {
+          "title": "Skivavbilder",
+          "hint": "Där en avbild remuxades ligger den nya MKV:n i biblioteket. En series skiva eller en avbild utan titel lades bara undan."
+        },
+        "leftover": {
+          "title": "Rester",
+          "hint": "Samples, genvägar, program och rester av nedladdningar (.nzb, .par2, arkiv). Kan raderas."
+        },
+        "other": {
+          "title": "Omdöpta och registrerade",
+          "hint": "Inget lades undan. De väntar bara på att du säger att de ser rätt ut."
+        }
+      }
+    },
+    "addWithScan": "Lägg till med Skanna",
+    "filesIn": "{{count}} filer",
+    "garbledName": "Namnet på disken är förvanskat; det ska vara ”{{name}}”."
   },
   "ereaders": {
     "title": "Skicka till läsplattor",

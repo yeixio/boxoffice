@@ -1848,7 +1848,9 @@
       "outsideFolder": "ținut în afara dosarului său",
       "folder": "dosarul său",
       "show": "un disc de serial",
-      "notListed": "nu e pe listă"
+      "notListed": "nu e pe listă",
+      "foundFolder": "dosarul lui, numit altfel pe disc",
+      "secondFolder": "un al doilea dosar pentru el"
     },
     "act": {
       "rename": "Redenumește",
@@ -1905,7 +1907,7 @@
       },
       "notListed": {
         "title": "Nu sunt pe listă",
-        "hint": "Dosare și videoclipuri care nu sunt niciun titlu de pe listă. Ca să le adaugi, folosește Scanează la dosarul rădăcină în Setări; sau pune-le deoparte."
+        "hint": "Dosare și videoclipuri care nu sunt niciun titlu de pe listă. Adesea sunt filme sau seriale pe care Box Office nu le știe încă: adaugă-le cu Scanează. Pune deoparte doar ce sigur nu vrei."
       },
       "leftover": {
         "title": "Resturi",
@@ -1917,8 +1919,8 @@
       }
     },
     "waiting": {
-      "title": "Așteaptă OK-ul tău",
-      "sub": "Originalele puse deoparte de o corectare sunt în dosarul <code>.recycle/problem-files</code> al bibliotecii. Rămân acolo până le ștergi definitiv sau le pui la loc: golirea dosarelor de reciclare nu le atinge.",
+      "title": "Puse deoparte, așteaptă OK-ul tău",
+      "sub": "<b>Pune deoparte</b> înseamnă mutat din bibliotecă în dosarul ei <code>.recycle/problem-files</code>. Nu s-a șters nimic, dar până nu le pui la loc, Plex, Matinee și Box Office nu le văd. Pune la loc duce fiecare unde era; Șterge definitiv eliberează spațiul. Golirea dosarelor de reciclare nu le atinge.",
       "aside": "puse deoparte: {{count}} ({{size}})",
       "asideOne": "pus deoparte: {{name}} ({{size}})",
       "made": "fișier nou: {{name}}",
@@ -1929,8 +1931,55 @@
       "confirmTitle": "Ștergi originalele definitiv?",
       "confirmBody": "Se șterg {{count}} fișiere puse deoparte ({{size}}) din dosarul de reciclare. Nu se poate anula.",
       "cancel": "Anulează",
-      "delete": "Șterge definitiv"
-    }
+      "delete": "Șterge definitiv",
+      "putBackAll": "Pune toate la loc ({{count}})",
+      "deleteAll": "Șterge toate definitiv ({{count}})",
+      "allGood": "Toate arată bine ({{count}})",
+      "showAll": "Arată toate cele {{count}}",
+      "showFewer": "Arată mai puține",
+      "deciding": {
+        "putBack": "Se pun la loc… {{done}}/{{total}}",
+        "delete": "Se șterg definitiv… {{done}}/{{total}}, {{size}} eliberați"
+      },
+      "undecided": "Nu s-a putut pentru {{title}}: {{error}}",
+      "reasons": {
+        "notListed": {
+          "title": "Niciun titlu de pe listă nu se potrivea",
+          "hint": "Adesea filme sau seriale pe care Box Office nu le știe încă sau le știe sub un nume stricat. Pune-le la loc, apoi adaugă-le cu Scanează. Șterge doar ce sigur nu vrei."
+        },
+        "secondFolder": {
+          "title": "Un al doilea dosar pentru un titlu",
+          "hint": "Dosarul propriu al titlului e încă în bibliotecă. Înainte de ștergere, verifică dacă acesta nu are ceva ce îi lipsește aceluia."
+        },
+        "unknown": {
+          "title": "Videoclipuri din dosarul unui serial care nu erau episoade",
+          "hint": "Uită-te înainte de ștergere: unul poate fi un special sau un episod cu nume ciudat."
+        },
+        "duplicate": {
+          "title": "Copii în plus",
+          "hint": "Copia păstrată e încă în bibliotecă și înregistrată. Acestea sunt celelalte."
+        },
+        "parts": {
+          "title": "Părți ale filmelor unite",
+          "hint": "MKV-ul unit e în bibliotecă și a fost verificat. Acestea sunt părțile din care a fost făcut."
+        },
+        "discImage": {
+          "title": "Imagini de disc",
+          "hint": "Unde o imagine a fost remuxată, noul MKV e în bibliotecă. Discul unui serial sau o imagine fără titlu a fost doar pus deoparte."
+        },
+        "leftover": {
+          "title": "Resturi",
+          "hint": "Mostre, scurtături, programe și resturi de descărcări (.nzb, .par2, arhive). Se pot șterge."
+        },
+        "other": {
+          "title": "Redenumite și înregistrate",
+          "hint": "Nimic nu a fost pus deoparte. Așteaptă doar să spui că arată bine."
+        }
+      }
+    },
+    "addWithScan": "Adaugă cu Scanează",
+    "filesIn": "{{count}} fișiere",
+    "garbledName": "Numele de pe disc e stricat; ar trebui să fie „{{name}}”."
   },
   "ereaders": {
     "title": "Trimite pe cititoare",

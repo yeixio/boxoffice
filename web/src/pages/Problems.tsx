@@ -10,7 +10,7 @@ import { Badge, Button, Card, ErrorNote, Heading, Modal, Spinner } from '../ui'
 // The order the kinds of problem are shown in, most worth fixing first.
 const kinds: ProblemKind[] = ['duplicate', 'parts', 'disc_image', 'untracked', 'missing', 'naming', 'unknown', 'not_listed', 'leftover', 'empty']
 
-const busy = (s?: ProblemsState) => !!s && (s.status.looking || !!s.status.fixing || s.status.queued.length > 0)
+const busy = (s?: ProblemsState) => !!s && (s.status.looking || !!s.status.fixing || s.status.queued.length > 0 || !!s.status.deciding)
 
 export function useProblems() {
   return useQuery({
@@ -34,7 +34,8 @@ export function Problems() {
   const set = (s: ProblemsState) => qc.setQueryData(['problems'], s)
   const look = useMutation({ mutationFn: () => post<ProblemsState>('/problems/look'), onSuccess: set })
   const s = state.data
-  // The first visit looks right away: looking only reads the disk.
+  // Box Office keeps what the daily look found, across restarts; only if
+  // it has never looked does the first visit look right away.
   useEffect(() => {
     if (s && !s.report && !s.status.looking && !look.isPending && !look.isSuccess) look.mutate()
   }, [s, look])
@@ -64,7 +65,7 @@ export function Problems() {
         <div className="flex flex-col gap-6">
           <Status state={s!} />
           <ErrorNote error={look.error} />
-          <Waiting fixes={s!.fixes} />
+          <Waiting state={s!} />
           {s!.report && <Found state={s!} />}
           <Recent fixes={s!.fixes} />
         </div>
@@ -147,7 +148,9 @@ function Found({ state }: { state: ProblemsState }) {
                 </h2>
                 <p className="text-sm text-muted">{t(`problems.kinds.${key(g.kind)}.hint`)}</p>
               </div>
-              {ready.length > 1 && (
+              {/* Folders not on the list are often movies or shows Box Office
+                  doesn't know yet: each is set aside only when picked. */}
+              {ready.length > 1 && g.kind !== 'not_listed' && (
                 <Button busy={fix.isPending} onClick={() => fix.mutate(ready.map((p) => p.id))}>
                   <Wrench className="size-4" aria-hidden /> {t('problems.fixAll', { count: ready.length })}
                 </Button>
@@ -208,7 +211,10 @@ function Row(props: {
   // The other way to fix parts that look like copies.
   const other: ProblemAction | undefined = p.copies ? (action === 'join' ? 'keep_one' : 'join') : undefined
   const link = p.title && (p.title.kind === 'movie' ? `/movies/${p.title.id}` : `/shows/${p.title.id}`)
-  const name = p.title ? (p.title.year ? `${p.title.name} (${p.title.year})` : p.title.name) : base(p.files[0]?.path ?? '')
+  const name = p.title ? (p.title.year ? `${p.title.name} (${p.title.year})` : p.title.name) : (p.files[0]?.name ?? base(p.files[0]?.path ?? ''))
+  // A folder that isn't any title's is usually one to add, not set aside.
+  const root = state.report?.roots.find((r) => r.path === p.root)
+  const scan = p.kind === 'not_listed' && !p.title && p.files[0]?.dir && root ? `/settings?tab=library#folders-${root.kind}` : undefined
   const detail = p.detail && !/^\d+$/.test(p.detail) ? (/^S\d/.test(p.detail) ? p.detail : t(`problems.detail.${key(p.detail)}`)) : ''
   return (
     <li className="flex flex-col gap-2 py-3 text-sm">
@@ -234,6 +240,11 @@ function Row(props: {
           </p>
         </div>
         <div className="flex items-center gap-2">
+          {scan && !fixing && !queued && (
+            <Link to={scan} className="inline-flex items-center rounded-md border border-line bg-card px-3 py-1.5 text-xs font-medium hover:border-ink/40">
+              {t('problems.addWithScan')}
+            </Link>
+          )}
           {fixing ? (
             <span className="text-xs font-medium text-marquee">
               {t('problems.fixing')}
@@ -281,10 +292,12 @@ function Change({ p, keep, onKeep, fixable, action }: { p: LibProblem; keep: str
       <span className="text-muted">
         {' '}
         {f.size > 0 && bytes(f.size)}
+        {f.dir && (f.count ?? 0) > 1 && ` · ${t('problems.filesIn', { count: f.count })}`}
         {f.episode && ` · ${f.episode}`}
         {f.recorded && ` · ${t('problems.recorded')}`}
       </span>
       {extra}
+      {f.name && <span className="block text-xs text-gold">{t('problems.garbledName', { name: f.name })}</span>}
       {(f.media || f.edition) && <MediaLine media={f.media} edition={f.edition} />}
     </>
   )
@@ -312,6 +325,7 @@ function Change({ p, keep, onKeep, fixable, action }: { p: LibProblem; keep: str
               <code className="break-all text-muted line-through decoration-muted/50">{rel(p.root, m.from)}</code>
               <ArrowRight className="size-3.5 shrink-0 rtl:rotate-180" aria-hidden />
               <code className="break-all">{rel(p.root, m.to)}</code>
+              {p.files[0]?.name && m.from === p.files[0].path && <span className="w-full text-xs text-gold">{t('problems.garbledName', { name: p.files[0].name })}</span>}
             </li>
           ))
         : p.files.map((f) => <li key={f.path}>{file(f)}</li>)}
@@ -356,61 +370,201 @@ function resolution(w?: number, h?: number) {
   return `${h}p`
 }
 
-// Waiting lists fixes whose originals are in the recycle folder, for the
-// admin to delete for good or put back.
-function Waiting({ fixes }: { fixes: ProblemFix[] }) {
+// Why fixes set originals aside, in the order the groups are shown: the
+// ones most likely to hold something wanted first.
+const reasons = ['notListed', 'secondFolder', 'unknown', 'duplicate', 'parts', 'discImage', 'leftover', 'other'] as const
+type Reason = (typeof reasons)[number]
+
+function reasonOf(f: ProblemFix): Reason {
+  if (f.detail === 'second_folder') return 'secondFolder'
+  if (!f.files.some((x) => x.role === 'aside')) return 'other'
+  switch (f.kind) {
+    case 'not_listed':
+      return 'notListed'
+    case 'unknown':
+    case 'duplicate':
+    case 'parts':
+    case 'leftover':
+      return f.kind
+    case 'disc_image':
+      return 'discImage'
+  }
+  return 'other'
+}
+
+const asideOf = (f: ProblemFix) => f.files.filter((x) => x.role === 'aside')
+const sizeOf = (list: ProblemFix[]) => list.reduce((n, f) => n + asideOf(f).reduce((m, x) => m + x.size, 0), 0)
+
+// Waiting lists fixes whose originals are set aside in the recycle folder,
+// grouped by why, for the admin to put back or delete for good, one by
+// one or a group at a time.
+function Waiting({ state }: { state: ProblemsState }) {
   const { t } = useTranslation()
   const qc = useQueryClient()
-  const waiting = fixes.filter((f) => f.state === 'waiting')
-  const [confirm, setConfirm] = useState<ProblemFix | null>(null)
+  const waiting = state.fixes.filter((f) => f.state === 'waiting')
+  const deciding = state.status.deciding
+  const [confirm, setConfirm] = useState<ProblemFix[] | null>(null)
   const set = (s: ProblemsState) => qc.setQueryData(['problems'], s)
   const putBack = useMutation({ mutationFn: (id: number) => post<ProblemsState>(`/problems/fixes/${id}/putback`), onSuccess: set })
-  const done = useMutation({
-    mutationFn: (id: number) => post<ProblemsState>(`/problems/fixes/${id}/delete`),
+  const done = useMutation({ mutationFn: (id: number) => post<ProblemsState>(`/problems/fixes/${id}/delete`), onSuccess: set })
+  const decide = useMutation({
+    mutationFn: (v: { fixes: ProblemFix[]; action: 'put_back' | 'delete' }) =>
+      post<ProblemsState>('/problems/fixes/decide', { ids: v.fixes.map((f) => f.id), action: v.action, expectSize: sizeOf(v.fixes) }),
     onSuccess: (s) => {
       set(s)
       setConfirm(null)
     },
   })
-  if (waiting.length === 0) return null
+  const groups = useMemo(() => reasons.map((r) => ({ reason: r, list: waiting.filter((f) => reasonOf(f) === r) })).filter((g) => g.list.length > 0), [waiting])
+  if (waiting.length === 0 && !deciding && state.status.undecided.length === 0) return null
+  const del = (fixes: ProblemFix[]) => {
+    // Nothing set aside: there's nothing to delete, only to agree to.
+    if (fixes.every((f) => asideOf(f).length === 0)) {
+      if (fixes.length === 1) done.mutate(fixes[0].id)
+      else decide.mutate({ fixes, action: 'delete' })
+    } else setConfirm(fixes)
+  }
+  const confirmAside = confirm?.flatMap((f) => asideOf(f).map((x) => ({ ...x, root: f.root }))) ?? []
   return (
     <Card>
       <h2 className="mb-1 font-display text-lg font-semibold">
         {t('problems.waiting.title')} <span className="text-muted">({waiting.length})</span>
       </h2>
       <p className="mb-3 text-sm text-muted">
-        <Trans i18nKey="problems.waiting.sub" components={{ code: <code /> }} />
+        <Trans i18nKey="problems.waiting.sub" components={{ code: <code />, b: <strong className="text-ink" /> }} />
       </p>
-      <ul className="flex flex-col divide-y divide-line">
-        {waiting.map((f) => {
-          const aside = f.files.filter((x) => x.role === 'aside')
-          const size = aside.reduce((n, x) => n + x.size, 0)
+      {deciding && (
+        <p className="mb-3 flex items-center gap-2 text-sm font-medium text-marquee" role="status">
+          <RefreshCw className="size-4 animate-spin" aria-hidden />
+          {t(`problems.waiting.deciding.${deciding.action === 'delete' ? 'delete' : 'putBack'}`, { done: deciding.done, total: deciding.total, size: bytes(deciding.freed) })}
+        </p>
+      )}
+      {state.status.undecided.map((u) => (
+        <p key={u.id} className="mb-1 text-xs text-bad" role="alert">
+          {t('problems.waiting.undecided', { title: u.title, error: u.error })}
+        </p>
+      ))}
+      <div className="flex flex-col gap-5">
+        {groups.map((g) => (
+          <Group
+            key={g.reason}
+            reason={g.reason}
+            fixes={g.list}
+            locked={!!deciding || decide.isPending}
+            onPutBackAll={() => decide.mutate({ fixes: g.list, action: 'put_back' })}
+            onDeleteAll={() => del(g.list)}
+            putBack={(id) => putBack.mutate(id)}
+            putting={putBack.isPending ? putBack.variables : undefined}
+            onDelete={(f) => del([f])}
+          />
+        ))}
+      </div>
+      <ErrorNote error={putBack.error ?? done.error ?? (confirm ? null : decide.error)} />
+      {confirm && (
+        <Modal title={t('problems.waiting.confirmTitle')} onClose={() => setConfirm(null)}>
+          <p className="text-sm">{t('problems.waiting.confirmBody', { count: confirmAside.length, size: bytes(sizeOf(confirm)) })}</p>
+          <ul className="mt-3 flex max-h-60 flex-col gap-1 overflow-auto text-xs">
+            {confirmAside.map((x) => (
+              <li key={x.dest}>
+                <code className="break-all">{rel(x.root, x.src)}</code> <span className="text-muted">{bytes(x.size)}</span>
+              </li>
+            ))}
+          </ul>
+          <ErrorNote error={decide.error} />
+          <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+            <Button variant="ghost" onClick={() => setConfirm(null)}>
+              {t('problems.waiting.cancel')}
+            </Button>
+            <Button variant="danger" busy={decide.isPending} onClick={() => decide.mutate({ fixes: confirm, action: 'delete' })}>
+              <Trash2 className="size-4" aria-hidden /> {t('problems.waiting.delete')}
+            </Button>
+          </div>
+        </Modal>
+      )}
+    </Card>
+  )
+}
+
+// How many of a group's fixes show before Show all.
+const groupFirst = 5
+
+function Group(props: {
+  reason: Reason
+  fixes: ProblemFix[]
+  locked: boolean
+  onPutBackAll: () => void
+  onDeleteAll: () => void
+  putBack: (id: number) => void
+  putting?: number
+  onDelete: (f: ProblemFix) => void
+}) {
+  const { t } = useTranslation()
+  const { fixes, reason } = props
+  const [all, setAll] = useState(false)
+  const shown = all ? fixes : fixes.slice(0, groupFirst)
+  const size = sizeOf(fixes)
+  const anyAside = fixes.some((f) => asideOf(f).length > 0)
+  return (
+    <section className="rounded-md border border-line p-3">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="min-w-0 flex-1 basis-64">
+          <h3 className="font-semibold">
+            {t(`problems.waiting.reasons.${reason}.title`)}{' '}
+            <span className="font-normal text-muted">
+              ({fixes.length}
+              {size > 0 && ` · ${bytes(size)}`})
+            </span>
+          </h3>
+          <p className="text-sm text-muted">{t(`problems.waiting.reasons.${reason}.hint`)}</p>
+        </div>
+        {fixes.length > 1 && (
+          <div className="flex flex-wrap gap-2">
+            {anyAside && (
+              <Button variant="ghost" className="px-3 py-1.5 text-xs" disabled={props.locked} onClick={props.onPutBackAll}>
+                <Undo2 className="size-4" aria-hidden /> {t('problems.waiting.putBackAll', { count: fixes.length })}
+              </Button>
+            )}
+            {anyAside ? (
+              <Button variant="danger" className="px-3 py-1.5 text-xs" disabled={props.locked} onClick={props.onDeleteAll}>
+                <Trash2 className="size-4" aria-hidden /> {t('problems.waiting.deleteAll', { count: fixes.length })}
+              </Button>
+            ) : (
+              <Button className="px-3 py-1.5 text-xs" disabled={props.locked} onClick={props.onDeleteAll}>
+                {t('problems.waiting.allGood', { count: fixes.length })}
+              </Button>
+            )}
+          </div>
+        )}
+      </div>
+      <ul className="mt-2 flex flex-col divide-y divide-line">
+        {shown.map((f) => {
+          const aside = asideOf(f)
+          const asideSize = aside.reduce((n, x) => n + x.size, 0)
           const made = f.files.find((x) => x.role === 'made')
           const moved = f.files.filter((x) => x.role === 'moved')
           return (
-            <li key={f.id} className="flex flex-wrap items-center gap-x-3 gap-y-2 py-3 text-sm">
+            <li key={f.id} className="flex flex-wrap items-center gap-x-3 gap-y-2 py-2.5 text-sm">
               <div className="min-w-0 flex-1 basis-60">
-                <p className="font-medium">
-                  {t(`problems.did.${key(f.action)}`)}: <span className="break-all">{f.title}</span>
-                </p>
+                <p className="font-medium break-all">{f.title}</p>
                 <p className="text-xs text-muted">
-                  {when(f.createdAt)}
-                  {aside.length === 1 && ` · ${t('problems.waiting.asideOne', { name: base(aside[0].src), size: bytes(size) })}`}
-                  {aside.length > 1 && ` · ${t('problems.waiting.aside', { count: aside.length, size: bytes(size) })}`}
+                  {aside.length > 0 && <code className="break-all">{rel(f.root, aside[0].src)}</code>}
+                  {aside.length > 1 && ` +${aside.length - 1}`}
+                  {asideSize > 0 && ` · ${bytes(asideSize)}`}
                   {made && ` · ${t('problems.waiting.made', { name: base(made.dest) })}`}
                   {moved.length > 0 && ` · ${t('problems.waiting.moved', { count: moved.length })}`}
+                  {` · ${when(f.createdAt)}`}
                 </p>
               </div>
               <div className="flex gap-2">
-                <Button variant="ghost" className="px-3 py-1.5 text-xs" busy={putBack.isPending && putBack.variables === f.id} onClick={() => putBack.mutate(f.id)}>
+                <Button variant="ghost" className="px-3 py-1.5 text-xs" disabled={props.locked} busy={props.putting === f.id} onClick={() => props.putBack(f.id)}>
                   <Undo2 className="size-4" aria-hidden /> {t('problems.waiting.putBack')}
                 </Button>
                 {aside.length > 0 ? (
-                  <Button variant="danger" className="px-3 py-1.5 text-xs" onClick={() => setConfirm(f)}>
+                  <Button variant="danger" className="px-3 py-1.5 text-xs" disabled={props.locked} onClick={() => props.onDelete(f)}>
                     <Trash2 className="size-4" aria-hidden /> {t('problems.waiting.deleteOriginals')}
                   </Button>
                 ) : (
-                  <Button className="px-3 py-1.5 text-xs" busy={done.isPending && done.variables === f.id} onClick={() => done.mutate(f.id)}>
+                  <Button className="px-3 py-1.5 text-xs" disabled={props.locked} onClick={() => props.onDelete(f)}>
                     {t('problems.waiting.ok')}
                   </Button>
                 )}
@@ -419,36 +573,12 @@ function Waiting({ fixes }: { fixes: ProblemFix[] }) {
           )
         })}
       </ul>
-      <ErrorNote error={putBack.error ?? (confirm ? null : done.error)} />
-      {confirm && (
-        <Modal title={t('problems.waiting.confirmTitle')} onClose={() => setConfirm(null)}>
-          {(() => {
-            const aside = confirm.files.filter((x) => x.role === 'aside')
-            return (
-              <>
-                <p className="text-sm">{t('problems.waiting.confirmBody', { count: aside.length, size: bytes(aside.reduce((n, x) => n + x.size, 0)) })}</p>
-                <ul className="mt-3 flex max-h-60 flex-col gap-1 overflow-auto text-xs">
-                  {aside.map((x) => (
-                    <li key={x.dest}>
-                      <code className="break-all">{rel(confirm.root, x.src)}</code>
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )
-          })()}
-          <ErrorNote error={done.error} />
-          <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-            <Button variant="ghost" onClick={() => setConfirm(null)}>
-              {t('problems.waiting.cancel')}
-            </Button>
-            <Button variant="danger" busy={done.isPending} onClick={() => done.mutate(confirm.id)}>
-              <Trash2 className="size-4" aria-hidden /> {t('problems.waiting.delete')}
-            </Button>
-          </div>
-        </Modal>
+      {fixes.length > groupFirst && (
+        <button type="button" className="mt-1 text-sm font-medium text-marquee hover:underline" onClick={() => setAll(!all)}>
+          {all ? t('problems.waiting.showFewer') : t('problems.waiting.showAll', { count: fixes.length })}
+        </button>
       )}
-    </Card>
+    </section>
   )
 }
 

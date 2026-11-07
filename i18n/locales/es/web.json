@@ -1848,7 +1848,9 @@
       "outsideFolder": "guardado fuera de su carpeta",
       "folder": "su carpeta",
       "show": "un disco de serie",
-      "notListed": "no está en la lista"
+      "notListed": "no está en la lista",
+      "foundFolder": "su carpeta, con otro nombre en el disco",
+      "secondFolder": "una segunda carpeta para él"
     },
     "act": {
       "rename": "Renombrar",
@@ -1905,7 +1907,7 @@
       },
       "notListed": {
         "title": "No están en la lista",
-        "hint": "Carpetas y vídeos que no son de ningún título de la lista. Para añadirlos, usa Escanear en la carpeta raíz en Ajustes; o apártalos."
+        "hint": "Carpetas y vídeos que no son de ningún título de la lista. Suelen ser películas o series que Box Office aún no conoce: añádelos con Escanear. Aparta uno solo si estás seguro de que no lo quieres."
       },
       "leftover": {
         "title": "Restos",
@@ -1917,8 +1919,8 @@
       }
     },
     "waiting": {
-      "title": "Esperando tu OK",
-      "sub": "Los originales que apartó una corrección están en la carpeta <code>.recycle/problem-files</code> de la biblioteca. Se quedan ahí hasta que los borres para siempre o los devuelvas: vaciar las carpetas de reciclaje no los toca.",
+      "title": "Apartado, esperando tu visto bueno",
+      "sub": "<b>Apartar</b> significa mover fuera de la biblioteca, a su carpeta <code>.recycle/problem-files</code>. No se ha borrado nada, pero hasta que los devuelvas, Plex, Matinee y Box Office no los ven. Devolver pone cada uno donde estaba; Borrar para siempre libera el espacio. Vaciar las papeleras no los toca.",
       "aside": "apartados: {{count}} ({{size}})",
       "asideOne": "apartado: {{name}} ({{size}})",
       "made": "archivo nuevo: {{name}}",
@@ -1929,8 +1931,55 @@
       "confirmTitle": "¿Borrar los originales para siempre?",
       "confirmBody": "Esto borra {{count}} archivos apartados ({{size}}) de la carpeta de reciclaje. No se puede deshacer.",
       "cancel": "Cancelar",
-      "delete": "Borrar para siempre"
-    }
+      "delete": "Borrar para siempre",
+      "putBackAll": "Devolver todo ({{count}})",
+      "deleteAll": "Borrar todo para siempre ({{count}})",
+      "allGood": "Todo bien ({{count}})",
+      "showAll": "Ver los {{count}}",
+      "showFewer": "Ver menos",
+      "deciding": {
+        "putBack": "Devolviendo… {{done}}/{{total}}",
+        "delete": "Borrando para siempre… {{done}}/{{total}}, {{size}} liberados"
+      },
+      "undecided": "No se pudo con {{title}}: {{error}}",
+      "reasons": {
+        "notListed": {
+          "title": "Ningún título de la lista coincidía",
+          "hint": "Suelen ser películas o series que Box Office aún no conoce, o conoce con un nombre desfigurado. Devuélvelos y añádelos con Escanear. Borra solo lo que seguro no quieres."
+        },
+        "secondFolder": {
+          "title": "Una segunda carpeta de un título",
+          "hint": "La carpeta propia del título sigue en la biblioteca. Comprueba que esta no tenga nada que a aquella le falte antes de borrar."
+        },
+        "unknown": {
+          "title": "Vídeos en la carpeta de una serie que no eran un episodio",
+          "hint": "Míralos antes de borrar: alguno puede ser un especial o un episodio con un nombre raro."
+        },
+        "duplicate": {
+          "title": "Copias de más",
+          "hint": "La copia que guardaste sigue en la biblioteca y registrada. Estas son las demás."
+        },
+        "parts": {
+          "title": "Partes de películas unidas",
+          "hint": "El MKV unido está en la biblioteca y se comprobó. Estas son las partes de las que salió."
+        },
+        "discImage": {
+          "title": "Imágenes de disco",
+          "hint": "Donde se remuxó una imagen, el MKV nuevo está en la biblioteca. El disco de una serie o una imagen sin título solo se apartó."
+        },
+        "leftover": {
+          "title": "Restos",
+          "hint": "Muestras, accesos directos, programas y restos de descargas (.nzb, .par2, archivos comprimidos). Se pueden borrar."
+        },
+        "other": {
+          "title": "Renombrados y registrados",
+          "hint": "No se apartó nada. Solo esperan a que digas que están bien."
+        }
+      }
+    },
+    "addWithScan": "Añadir con Escanear",
+    "filesIn": "{{count}} archivos",
+    "garbledName": "El nombre en el disco está desfigurado; debería ser «{{name}}»."
   },
   "ereaders": {
     "title": "Enviar a lectores electrónicos",

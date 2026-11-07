@@ -1848,7 +1848,9 @@
       "outsideFolder": "guardado fora da pasta dele",
       "folder": "a pasta dele",
       "show": "um disco de série",
-      "notListed": "fora da lista"
+      "notListed": "fora da lista",
+      "foundFolder": "a pasta dele, com outro nome no disco",
+      "secondFolder": "uma segunda pasta para ele"
     },
     "act": {
       "rename": "Renomear",
@@ -1905,7 +1907,7 @@
       },
       "notListed": {
         "title": "Fora da lista",
-        "hint": "Pastas e vídeos que não são nenhum título da lista. Para adicioná-los, use Escanear na pasta raiz em Configurações; ou deixe-os de lado."
+        "hint": "Pastas e vídeos que não são nenhum título da lista. Muitas vezes são filmes ou séries que o Box Office ainda não conhece: adicione-os com Escanear. Deixe um de lado só se tiver certeza de que não o quer."
       },
       "leftover": {
         "title": "Sobras",
@@ -1917,8 +1919,8 @@
       }
     },
     "waiting": {
-      "title": "Aguardando seu OK",
-      "sub": "Os originais que uma correção deixou de lado estão na pasta <code>.recycle/problem-files</code> da biblioteca. Ficam lá até você apagá-los de vez ou devolvê-los: esvaziar as pastas de reciclagem não mexe neles.",
+      "title": "Deixados de lado, esperando seu OK",
+      "sub": "<b>Deixar de lado</b> significa mover para fora da biblioteca, para a pasta <code>.recycle/problem-files</code> dela. Nada foi apagado, mas até você devolvê-los, Plex, Matinee e Box Office não os veem. Devolver põe cada um onde estava; Apagar de vez libera o espaço. Esvaziar as lixeiras não mexe neles.",
       "aside": "deixados de lado: {{count}} ({{size}})",
       "asideOne": "deixado de lado: {{name}} ({{size}})",
       "made": "arquivo novo: {{name}}",
@@ -1929,8 +1931,55 @@
       "confirmTitle": "Apagar os originais de vez?",
       "confirmBody": "Isto apaga {{count}} arquivos deixados de lado ({{size}}) da pasta de reciclagem. Não dá para desfazer.",
       "cancel": "Cancelar",
-      "delete": "Apagar de vez"
-    }
+      "delete": "Apagar de vez",
+      "putBackAll": "Devolver todos ({{count}})",
+      "deleteAll": "Apagar todos de vez ({{count}})",
+      "allGood": "Todos estão bons ({{count}})",
+      "showAll": "Mostrar todos os {{count}}",
+      "showFewer": "Mostrar menos",
+      "deciding": {
+        "putBack": "Devolvendo… {{done}}/{{total}}",
+        "delete": "Apagando de vez… {{done}}/{{total}}, {{size}} liberados"
+      },
+      "undecided": "Não deu para {{title}}: {{error}}",
+      "reasons": {
+        "notListed": {
+          "title": "Nenhum título da lista correspondeu",
+          "hint": "Muitas vezes filmes ou séries que o Box Office ainda não conhece, ou conhece por um nome embaralhado. Devolva-os e adicione-os com Escanear. Apague só o que tem certeza de que não quer."
+        },
+        "secondFolder": {
+          "title": "Uma segunda pasta de um título",
+          "hint": "A pasta do próprio título ainda está na biblioteca. Antes de apagar, confira se esta não tem nada que falte nela."
+        },
+        "unknown": {
+          "title": "Vídeos na pasta de uma série que não eram episódio",
+          "hint": "Olhe antes de apagar: algum pode ser um especial ou um episódio com nome estranho."
+        },
+        "duplicate": {
+          "title": "Cópias a mais",
+          "hint": "A cópia mantida ainda está na biblioteca e registrada. Estas são as outras."
+        },
+        "parts": {
+          "title": "Partes de filmes unidos",
+          "hint": "O MKV unido está na biblioteca e foi verificado. Estas são as partes de que ele veio."
+        },
+        "discImage": {
+          "title": "Imagens de disco",
+          "hint": "Onde uma imagem foi remuxada, o MKV novo está na biblioteca. O disco de uma série ou uma imagem sem título só foi deixado de lado."
+        },
+        "leftover": {
+          "title": "Sobras",
+          "hint": "Amostras, atalhos, programas e sobras de downloads (.nzb, .par2, arquivos compactados). Podem ser apagadas."
+        },
+        "other": {
+          "title": "Renomeados e registrados",
+          "hint": "Nada foi deixado de lado. Só esperam você dizer que estão certos."
+        }
+      }
+    },
+    "addWithScan": "Adicionar com Escanear",
+    "filesIn": "{{count}} arquivos",
+    "garbledName": "O nome no disco está embaralhado; deveria ser “{{name}}”."
   },
   "ereaders": {
     "title": "Enviar para e-readers",

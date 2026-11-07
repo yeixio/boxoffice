@@ -149,9 +149,9 @@ func Apply(ctx context.Context, st *store.Store, tools func() (Tools, error), p 
 			title += " " + p.Detail
 		}
 	} else if len(p.Files) > 0 {
-		title = filepath.Base(p.Files[0].Path)
+		title = Repair(filepath.Base(p.Files[0].Path))
 	}
-	fix, err := st.AddProblemFix(ctx, store.ProblemFix{Action: p.Fix.Action, Title: title, Root: p.Root, State: store.FixWaiting, Files: x.done})
+	fix, err := st.AddProblemFix(ctx, store.ProblemFix{Action: p.Fix.Action, Kind: p.Kind, Detail: p.Detail, Title: title, Root: p.Root, State: store.FixWaiting, Files: x.done})
 	if err != nil {
 		return fix, fmt.Errorf("done, but couldn't note it to put it back later: %w", err)
 	}
@@ -294,8 +294,23 @@ func (x *fixer) owner(path string) (kind string, id int64, err error) {
 		return "movie", x.p.Title.ID, nil
 	}
 	for _, f := range x.p.Files {
-		if f.Path == path && f.episode != nil {
+		if f.Path != path {
+			continue
+		}
+		if f.episode != nil {
 			return "episode", f.episode.ID, nil
+		}
+		// A problem from a saved look has only the episode's S01E02.
+		if season, numbers := episodeNumbers(f.Episode); len(numbers) > 0 {
+			eps, err := x.st.Episodes(context.Background(), x.p.Title.ID)
+			if err != nil {
+				return "", 0, err
+			}
+			for _, e := range eps {
+				if e.Season == season && e.Number == numbers[0] {
+					return "episode", e.ID, nil
+				}
+			}
 		}
 	}
 	return "", 0, errors.New("it isn't named for an episode")
@@ -473,6 +488,55 @@ func undo(ctx context.Context, st *store.Store, root string, files []store.Probl
 		}
 	}
 	return errors.Join(errs...)
+}
+
+// Reason fills in, for a fix from before the kind of problem it fixed was
+// noted, the kind it most likely was, from what it did and to what; and
+// repairs its title, if garbled.
+func Reason(f *store.ProblemFix) {
+	f.Title = Repair(f.Title)
+	if f.Kind != "" {
+		return
+	}
+	switch f.Action {
+	case ActKeepOne:
+		f.Kind = Duplicate
+	case ActJoin:
+		f.Kind = Parts
+	case ActConvert:
+		f.Kind = DiscImage
+	case ActRename:
+		f.Kind = Naming
+	case ActRecord:
+		f.Kind = Untracked
+	case ActForget:
+		f.Kind = Missing
+	case ActRemoveDirs:
+		f.Kind = EmptyDir
+	case ActSetAside:
+		f.Kind = NotListed
+		var aside []store.ProblemFixFile
+		for _, ff := range f.Files {
+			if ff.Role == store.FixAside {
+				aside = append(aside, ff)
+			}
+		}
+		if len(aside) == 0 {
+			return
+		}
+		src := aside[0].Src
+		switch name := filepath.Base(src); {
+		case isLeftover(name):
+			// Subtitles named like a sample go along with it.
+			f.Kind = Leftover
+		case hasExt(name, discExts):
+			f.Kind = DiscImage
+		case filepath.Dir(src) != filepath.Clean(f.Root) && isVideo(name):
+			// A video inside a folder, set aside alone: one in a show's
+			// folder that wasn't an episode.
+			f.Kind = Unknown
+		}
+	}
 }
 
 // DeleteForGood deletes the originals a fix set aside, and marks it done.

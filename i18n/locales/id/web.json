@@ -1660,7 +1660,9 @@
       "outsideFolder": "disimpan di luar foldernya",
       "folder": "foldernya",
       "show": "disk sebuah acara",
-      "notListed": "tidak ada di daftar"
+      "notListed": "tidak ada di daftar",
+      "foundFolder": "foldernya, dengan nama lain di disk",
+      "secondFolder": "folder kedua untuknya"
     },
     "act": {
       "rename": "Ganti nama",
@@ -1717,7 +1719,7 @@
       },
       "notListed": {
         "title": "Tidak ada di daftar",
-        "hint": "Folder dan video yang bukan judul mana pun di daftar. Untuk menambahkannya, gunakan Pindai pada folder root di Pengaturan; atau sisihkan."
+        "hint": "Folder dan video yang bukan judul mana pun di daftar. Sering kali film atau serial yang belum dikenal Box Office: tambahkan dengan Pindai. Sisihkan hanya jika Anda yakin tidak menginginkannya."
       },
       "leftover": {
         "title": "Sisa-sisa",
@@ -1729,8 +1731,8 @@
       }
     },
     "waiting": {
-      "title": "Menunggu persetujuan Anda",
-      "sub": "File asli yang disisihkan perbaikan ada di folder <code>.recycle/problem-files</code> pustaka. File itu tetap di sana sampai Anda menghapusnya selamanya atau mengembalikannya: mengosongkan folder daur ulang tidak menyentuhnya.",
+      "title": "Disisihkan, menunggu OK Anda",
+      "sub": "<b>Menyisihkan</b> berarti memindahkan keluar dari pustaka ke folder <code>.recycle/problem-files</code>-nya. Tidak ada yang dihapus, tetapi sampai Anda mengembalikannya, Plex, Matinee, dan Box Office tidak melihatnya. Kembalikan menaruh masing-masing ke tempat semula; Hapus selamanya mengosongkan ruang. Mengosongkan folder daur ulang tidak menyentuhnya.",
       "aside": "disisihkan: {{count}} ({{size}})",
       "asideOne": "disisihkan: {{name}} ({{size}})",
       "made": "file baru: {{name}}",
@@ -1741,8 +1743,55 @@
       "confirmTitle": "Hapus file asli selamanya?",
       "confirmBody": "Ini menghapus {{count}} yang disisihkan ({{size}}) dari folder daur ulang. Tidak bisa dibatalkan.",
       "cancel": "Batal",
-      "delete": "Hapus selamanya"
-    }
+      "delete": "Hapus selamanya",
+      "putBackAll": "Kembalikan semua ({{count}})",
+      "deleteAll": "Hapus semua selamanya ({{count}})",
+      "allGood": "Semua sudah benar ({{count}})",
+      "showAll": "Tampilkan semua {{count}}",
+      "showFewer": "Tampilkan lebih sedikit",
+      "deciding": {
+        "putBack": "Mengembalikan… {{done}}/{{total}}",
+        "delete": "Menghapus selamanya… {{done}}/{{total}}, {{size}} dikosongkan"
+      },
+      "undecided": "Gagal untuk {{title}}: {{error}}",
+      "reasons": {
+        "notListed": {
+          "title": "Tidak ada judul di daftar yang cocok",
+          "hint": "Sering kali film atau serial yang belum dikenal Box Office, atau dikenal dengan nama yang rusak. Kembalikan, lalu tambahkan dengan Pindai. Hapus hanya yang pasti tidak Anda inginkan."
+        },
+        "secondFolder": {
+          "title": "Folder kedua untuk sebuah judul",
+          "hint": "Folder milik judul itu masih ada di pustaka. Sebelum menghapus, pastikan folder ini tidak berisi sesuatu yang tidak ada di sana."
+        },
+        "unknown": {
+          "title": "Video di folder serial yang bukan episode",
+          "hint": "Lihat dulu sebelum menghapus: salah satunya mungkin spesial atau episode dengan nama aneh."
+        },
+        "duplicate": {
+          "title": "Salinan berlebih",
+          "hint": "Salinan yang Anda simpan masih ada di pustaka dan tercatat. Ini yang lainnya."
+        },
+        "parts": {
+          "title": "Bagian film yang digabung",
+          "hint": "MKV gabungan ada di pustaka dan sudah diperiksa. Ini bagian-bagian asalnya."
+        },
+        "discImage": {
+          "title": "Image disk",
+          "hint": "Jika image sudah di-remux, MKV barunya ada di pustaka. Disk serial atau image tanpa judul hanya disisihkan."
+        },
+        "leftover": {
+          "title": "Sisa",
+          "hint": "Sampel, pintasan, program, dan sisa unduhan (.nzb, .par2, arsip). Aman dihapus."
+        },
+        "other": {
+          "title": "Diganti nama dan dicatat",
+          "hint": "Tidak ada yang disisihkan. Ini hanya menunggu Anda menyatakan sudah benar."
+        }
+      }
+    },
+    "addWithScan": "Tambah dengan Pindai",
+    "filesIn": "{{count}} file",
+    "garbledName": "Nama di disk rusak; seharusnya “{{name}}”."
   },
   "ereaders": {
     "title": "Kirim ke e-reader",

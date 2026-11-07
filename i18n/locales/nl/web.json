@@ -1754,7 +1754,9 @@
       "outsideFolder": "buiten zijn map bewaard",
       "folder": "zijn map",
       "show": "een schijf van een serie",
-      "notListed": "niet op de lijst"
+      "notListed": "niet op de lijst",
+      "foundFolder": "de map ervan, op schijf anders genoemd",
+      "secondFolder": "een tweede map ervoor"
     },
     "act": {
       "rename": "Hernoemen",
@@ -1811,7 +1813,7 @@
       },
       "notListed": {
         "title": "Niet op de lijst",
-        "hint": "Mappen en video's die geen titel op de lijst zijn. Voeg ze toe met Scannen bij de hoofdmap in Instellingen, of zet ze apart."
+        "hint": "Mappen en video's die geen titel op de lijst zijn. Vaak films of series die Box Office nog niet kent: voeg ze toe met Scannen. Zet er alleen een apart als je zeker weet dat je hem niet wilt."
       },
       "leftover": {
         "title": "Restjes",
@@ -1823,8 +1825,8 @@
       }
     },
     "waiting": {
-      "title": "Wacht op je OK",
-      "sub": "Originelen die een oplossing apart heeft gezet, staan in de map <code>.recycle/problem-files</code> van de bibliotheek. Ze blijven daar tot je ze definitief verwijdert of terugzet: het legen van de prullenbakmappen laat ze met rust.",
+      "title": "Apart gezet, wacht op je OK",
+      "sub": "<b>Apart zetten</b> betekent: uit de bibliotheek verplaatst naar de map <code>.recycle/problem-files</code>. Er is niets verwijderd, maar tot je ze terugzet, zien Plex, Matinee en Box Office ze niet. Terugzetten zet elk terug waar het stond; Definitief verwijderen maakt de ruimte vrij. Het legen van de prullenbakmappen laat ze met rust.",
       "aside": "apart gezet: {{count}} ({{size}})",
       "asideOne": "apart gezet: {{name}} ({{size}})",
       "made": "nieuw bestand: {{name}}",
@@ -1835,8 +1837,55 @@
       "confirmTitle": "De originelen definitief verwijderen?",
       "confirmBody": "Dit verwijdert {{count}} apart gezette bestanden ({{size}}) uit de prullenbakmap. Dit kan niet ongedaan worden gemaakt.",
       "cancel": "Annuleren",
-      "delete": "Definitief verwijderen"
-    }
+      "delete": "Definitief verwijderen",
+      "putBackAll": "Alles terugzetten ({{count}})",
+      "deleteAll": "Alles definitief verwijderen ({{count}})",
+      "allGood": "Alles is goed ({{count}})",
+      "showAll": "Alle {{count}} tonen",
+      "showFewer": "Minder tonen",
+      "deciding": {
+        "putBack": "Terugzetten… {{done}}/{{total}}",
+        "delete": "Definitief verwijderen… {{done}}/{{total}}, {{size}} vrij"
+      },
+      "undecided": "{{title}} lukte niet: {{error}}",
+      "reasons": {
+        "notListed": {
+          "title": "Geen titel op de lijst kwam overeen",
+          "hint": "Vaak films of series die Box Office nog niet kent, of kent onder een verminkte naam. Zet ze terug en voeg ze toe met Scannen. Verwijder alleen wat je zeker niet wilt."
+        },
+        "secondFolder": {
+          "title": "Een tweede map voor een titel",
+          "hint": "De eigen map van de titel staat nog in de bibliotheek. Controleer voor het verwijderen dat deze niets bevat wat daar ontbreekt."
+        },
+        "unknown": {
+          "title": "Video's in de map van een serie die geen aflevering waren",
+          "hint": "Kijk voor je verwijdert: een ervan kan een special zijn of een vreemd genoemde aflevering."
+        },
+        "duplicate": {
+          "title": "Extra kopieën",
+          "hint": "De bewaarde kopie staat nog in de bibliotheek en is vastgelegd. Dit zijn de andere."
+        },
+        "parts": {
+          "title": "Delen van samengevoegde films",
+          "hint": "De samengevoegde MKV staat in de bibliotheek en is gecontroleerd. Dit zijn de delen waaruit hij is gemaakt."
+        },
+        "discImage": {
+          "title": "Schijfkopieën",
+          "hint": "Waar een kopie is geremuxt, staat de nieuwe MKV in de bibliotheek. De schijf van een serie of een kopie zonder titel is alleen apart gezet."
+        },
+        "leftover": {
+          "title": "Restjes",
+          "hint": "Samples, snelkoppelingen, programma's en restjes van downloads (.nzb, .par2, archieven). Kunnen weg."
+        },
+        "other": {
+          "title": "Hernoemd en vastgelegd",
+          "hint": "Er is niets apart gezet. Ze wachten alleen tot je zegt dat ze goed zijn."
+        }
+      }
+    },
+    "addWithScan": "Toevoegen met Scannen",
+    "filesIn": "{{count}} bestanden",
+    "garbledName": "De naam op schijf is verminkt; bedoeld is ‘{{name}}’."
   },
   "ereaders": {
     "title": "Naar e-readers sturen",
