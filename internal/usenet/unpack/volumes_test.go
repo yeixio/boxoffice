@@ -19,6 +19,9 @@ import (
 // noVolNumber leaves the volume number out of end blocks, as RAR 2 did.
 var noVolNumber bool
 
+// noFirstFlag leaves the first-volume flag out of the main header, as RAR 2 did.
+var noFirstFlag bool
+
 func writeRAR4(t *testing.T, dir, file string, data []byte, names []string) {
 	writeRAR4Named(t, dir, file, data, names, true)
 }
@@ -46,7 +49,7 @@ func writeRAR4Named(t *testing.T, dir, file string, data []byte, names []string,
 		if newNaming {
 			arc |= 0x0010
 		}
-		if i == 0 {
+		if i == 0 && !noFirstFlag {
 			arc |= 0x0100
 		}
 		b.Write(block(0x73, arc, make([]byte, 6)))
@@ -274,5 +277,34 @@ func TestScrambledWithoutNumbers(t *testing.T) {
 	arcs = Find(dir, []string{"s.r00", "s.r01", "s.rar"})
 	if _, err := Extract(context.Background(), arcs[0], dir, ""); err != nil {
 		t.Fatal(err)
+	}
+}
+
+// An old (RAR 2 era) set, whose headers neither mark the first volume nor
+// number any, posted beside a newer archive: each stays a set of its own.
+// Before, the old set's volumes were added to the newer one, and both
+// failed to unpack.
+func TestUnnumberedSetBesideAnother(t *testing.T) {
+	dir := t.TempDir()
+	noVolNumber, noFirstFlag = true, true
+	data := bytes.Repeat([]byte("Earth 2 "), 4000)
+	writeRAR4Named(t, dir, "earth.2.avi", data, []string{"e.rar", "e.r00", "e.r01"}, false)
+	noVolNumber, noFirstFlag = false, false
+	subs := bytes.Repeat([]byte("subs"), 3000)
+	writeRAR4Named(t, dir, "earth.2.srt", subs, []string{"s.rar", "s.r00"}, false)
+	arcs := Find(dir, []string{"e.r00", "e.r01", "e.rar", "s.r00", "s.rar"})
+	if len(arcs) != 2 || len(arcs[0].Volumes) != 3 || len(arcs[1].Volumes) != 2 {
+		t.Fatalf("found %+v", arcs)
+	}
+	for _, a := range arcs {
+		if _, err := Extract(context.Background(), a, dir, ""); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if b, _ := os.ReadFile(filepath.Join(dir, "earth.2.avi")); !bytes.Equal(b, data) {
+		t.Fatal("episode differs")
+	}
+	if b, _ := os.ReadFile(filepath.Join(dir, "earth.2.srt")); !bytes.Equal(b, subs) {
+		t.Fatal("subtitles differ")
 	}
 }
