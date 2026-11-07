@@ -332,19 +332,30 @@ func (s *Server) disks(uses []monitorUse) []monitorDisk {
 	}
 	wg.Wait()
 	out := []monitorDisk{}
-	index := map[monitor.Disk]int{}
 	for i, u := range uses {
 		res := *byPath[paths[i]]
 		if res.ok {
-			if j, ok := index[res.d]; ok {
+			if j := slices.IndexFunc(out, func(d monitorDisk) bool { return d.Reachable && sameDisk(d.Disk, res.d) }); j >= 0 {
 				out[j].Uses = append(out[j].Uses, u)
 				continue
 			}
-			index[res.d] = len(out)
 		}
 		out = append(out, monitorDisk{Disk: res.d, Reachable: res.ok, Uses: []monitorUse{u}})
 	}
 	return out
+}
+
+// sameDisk says whether two folders' disk space is one disk's. Network
+// shares of one server (Unraid's, say) each read as a disk of their own,
+// and as files are written their free space differs from one reading to
+// the next, so a little difference is allowed: otherwise they're grouped
+// differently each time, and an alert about the disk comes and goes.
+func sameDisk(a, b monitor.Disk) bool {
+	if a.Total != b.Total {
+		return false
+	}
+	diff := max(a.Free, b.Free) - min(a.Free, b.Free)
+	return diff <= a.Total/1000
 }
 
 // diskWait is how long the Health page waits for a folder's disk. A network
@@ -508,6 +519,7 @@ func (s *Server) AlertReadings(ctx context.Context) alerts.Readings {
 				names = append(names, name)
 			}
 		}
+		slices.Sort(names)
 		disk.Name, disk.Path = strings.Join(names, ", "), d.Uses[0].Path
 		r.Disks = append(r.Disks, disk)
 	}
