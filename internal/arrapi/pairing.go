@@ -426,6 +426,7 @@ func catalogName(title string, year int) string {
 // for the wrong language the language its sound should be in: then only
 // releases that may be in that language are taken, and a download whose
 // sound turns out to be in another is turned down and another looked for.
+// With fileName, the copy is only replaced if it's the file reported.
 func (h *Handler) upgrade(w http.ResponseWriter, r *http.Request) error {
 	var in struct {
 		MovieID   int64  `json:"movieId"`
@@ -441,6 +442,10 @@ func (h *Handler) upgrade(w http.ResponseWriter, r *http.Request) error {
 		Problem    string `json:"problem"`
 		Language   string `json:"language"`
 		ReportedBy string `json:"reportedBy"`
+		// FileName is the name of the file that was reported, to be sure
+		// it's the copy Box Office has: a title matched wrong in Matinee
+		// would otherwise have another title's copy replaced.
+		FileName string `json:"fileName"`
 	}
 	if err := read(r, &in); err != nil {
 		return err
@@ -495,6 +500,9 @@ func (h *Handler) upgrade(w http.ResponseWriter, r *http.Request) error {
 	}
 	if file == nil {
 		return fail(http.StatusConflict, "there's no copy of it yet; it's being looked for already")
+	}
+	if name := filepath.Base(strings.TrimSpace(in.FileName)); in.FileName != "" && !strings.EqualFold(name, filepath.Base(file.Path)) {
+		return fail(http.StatusConflict, fmt.Sprintf("the file reported, %s, isn't Box Office's copy of %s (%s), so it's left alone; the title may be matched wrong in Matinee", name, subject, filepath.Base(file.Path)))
 	}
 	blocked := ""
 	if in.Want == store.WantReplace {

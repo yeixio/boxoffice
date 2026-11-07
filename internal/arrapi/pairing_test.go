@@ -8,6 +8,7 @@ import (
 	"log/slog"
 	"net/http"
 	"net/http/httptest"
+	"path/filepath"
 	"slices"
 	"testing"
 
@@ -232,6 +233,14 @@ func TestAskEditionAndUpgrade(t *testing.T) {
 		if code := call(t, "POST", e.url+"/radarr/api/v3/boxoffice/upgrade", bad, nil); code != 400 {
 			t.Errorf("%v: %d", bad, code)
 		}
+	}
+	// A file that isn't Box Office's copy is left alone: the title may be
+	// matched wrong in Matinee.
+	if code := call(t, "POST", e.url+"/radarr/api/v3/boxoffice/upgrade", map[string]any{"movieId": mv.ID, "want": "replace", "problem": "wrong", "fileName": "Other Movie (2001).mkv"}, nil); code != 409 {
+		t.Fatalf("another file: %d", code)
+	}
+	if code := call(t, "POST", e.url+"/radarr/api/v3/boxoffice/upgrade", map[string]any{"movieId": mv.ID, "want": "replace", "problem": "wrong", "fileName": filepath.Base(path)}, nil); code != 202 {
+		t.Fatalf("its file: %d", code)
 	}
 	// What's asked next replaces the report.
 	if code := call(t, "POST", e.url+"/radarr/api/v3/boxoffice/upgrade", map[string]any{"movieId": mv.ID, "want": "replace", "problem": "wrong", "reportedBy": "Ellen"}, nil); code != 202 {
