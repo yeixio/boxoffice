@@ -539,3 +539,24 @@ func TestFolderNotWritable(t *testing.T) {
 		t.Fatal("blocked the release")
 	}
 }
+
+// Checks asked for at once (the queue's, and the Downloads page's every few
+// seconds) share one look at the folder: one asked while another is under
+// way gets its answer, not "isn't answering".
+func TestFolderCheckedAtOnce(t *testing.T) {
+	e := &Engine{Dir: t.TempDir()}
+	slow := make(chan struct{})
+	mkdirAll = func(p string, m os.FileMode) error { <-slow; return os.MkdirAll(p, m) }
+	t.Cleanup(func() { mkdirAll = os.MkdirAll })
+	errs := make(chan error, 5)
+	for range 5 {
+		go func() { errs <- e.CheckFolder(context.Background()) }()
+	}
+	time.Sleep(50 * time.Millisecond)
+	close(slow)
+	for range 5 {
+		if err := <-errs; err != nil {
+			t.Fatal(err)
+		}
+	}
+}
