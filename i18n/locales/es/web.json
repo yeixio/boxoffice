@@ -2066,5 +2066,14 @@
     "correctedFrom": "Corregida desde {{was}} tras mirar dentro del archivo",
     "picture": "Imagen y sonido",
     "bits": "{{bits}} bits"
+  },
+  "reported": {
+    "title": "Notificado en Matinee: {{what}}.",
+    "by": "{{name}} lo notificó en Matinee: {{what}}.",
+    "wrong": "es otra película u otro episodio",
+    "language": "debería estar en {{language}}",
+    "video": "la imagen está dañada",
+    "audio": "el sonido está dañado o desincronizado",
+    "fixing": "Box Office bloqueó la versión de esa copia y está consiguiendo otra."
   }
 }

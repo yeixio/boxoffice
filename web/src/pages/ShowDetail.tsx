@@ -4,16 +4,16 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import { ArrowUpCircle, ChevronDown, ListChecks, RefreshCw, Search, Trash2 } from 'lucide-react'
 import { AutoUpgradeField } from '../AutoUpgrade'
-import { LockedNote } from '../Bulk'
+import { LockedNote, ReportedNote } from '../Bulk'
 import { Releases } from '../Releases'
 import { DeleteFiles, RemoveTitle } from '../RemoveFiles'
-import { get, patch, post, type Episode, type Profile, type Series } from '../api'
+import { get, patch, post, type Episode, type Profile, type Reported, type Series } from '../api'
 import { bytes, day, episodeCode } from '../format'
 import { qualityName, useProfiles, useQualities } from '../hooks'
 import { pictureText } from './QualityCheck'
 import { Badge, Button, Card, ErrorNote, Field, Poster, Select, Spinner, Toggle } from '../ui'
 
-type Detail = { series: Series; episodes: Episode[] }
+type Detail = { series: Series; episodes: Episode[]; reported?: Reported[] }
 
 export function ShowDetail() {
   const { t } = useTranslation()
@@ -71,6 +71,10 @@ export function ShowDetail() {
           </div>
           {s.overview && <p className="mt-4 max-w-3xl leading-relaxed">{s.overview}</p>}
           {locked && <LockedNote />}
+          {show.data.reported?.map((r) => {
+            const e = episodes.find((x) => x.id === r.ownerId)
+            return <ReportedNote key={r.ownerId} reported={r} episode={e ? episodeCode(e.season, e.number) : undefined} />
+          })}
           <div className="mt-6 flex flex-wrap gap-2">
             {!locked && (
               <Button variant="primary" busy={action.isPending && action.variables === 'search'} onClick={() => action.mutate('search')}>
@@ -113,7 +117,7 @@ export function ShowDetail() {
             monitored={se.monitored}
             episodes={episodes.filter((e) => e.season === se.number)}
             onMonitor={(v) => season.mutate({ n: se.number, monitored: v })}
-            onEpisode={(e) => set({ series: s, episodes: episodes.map((x) => (x.id === e.id ? e : x)) })}
+            onEpisode={(e) => set({ ...show.data, series: s, episodes: episodes.map((x) => (x.id === e.id ? e : x)) })}
             onShow={set}
             showTitle={s.title}
             defaultOpen={se.number === seasons[0]?.number}

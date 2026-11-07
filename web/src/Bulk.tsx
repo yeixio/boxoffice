@@ -4,8 +4,8 @@
 import { useTranslation } from 'react-i18next'
 import { useState, type ReactNode } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Lock } from 'lucide-react'
-import { post } from './api'
+import { Flag, Lock } from 'lucide-react'
+import { post, type Reported } from './api'
 import { useProfiles } from './hooks'
 import { Button, ErrorNote, Select } from './ui'
 
@@ -117,6 +117,31 @@ export function LockedNote() {
       <Lock className="mt-0.5 size-4 shrink-0 text-muted" aria-hidden />
       <span>
         <span className="font-medium">{t('bulk.lockedTitle')}</span> {t('bulk.lockedBody')}
+      </span>
+    </p>
+  )
+}
+
+/** ReportedNote says a problem was reported in Matinee and is being fixed. */
+export function ReportedNote({ reported, episode }: { reported: Reported; episode?: string }) {
+  const { t, i18n } = useTranslation()
+  let lang = reported.language ?? ''
+  try {
+    lang = (lang && new Intl.DisplayNames([i18n.language], { type: 'language' }).of(lang)) || lang
+  } catch {
+    // An old browser: the code will do.
+  }
+  const what = t(`reported.${reported.problem}`, { language: lang })
+  return (
+    <p className="mt-4 flex max-w-3xl items-start gap-2 rounded-md border border-line px-3 py-2 text-sm">
+      <Flag className="mt-0.5 size-4 shrink-0 text-gold" aria-hidden />
+      <span>
+        <span className="font-medium">
+          {episode ? `${episode}: ` : ''}
+          {reported.reportedBy ? t('reported.by', { name: reported.reportedBy, what }) : t('reported.title', { what })}
+        </span>{' '}
+        {t('reported.fixing')}
+        {reported.note ? <span className="block text-muted">“{reported.note}”</span> : null}
       </span>
     </p>
   )

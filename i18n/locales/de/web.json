@@ -1972,5 +1972,14 @@
     "correctedFrom": "Korrigiert von {{was}}, nachdem in die Datei geschaut wurde",
     "picture": "Bild und Ton",
     "bits": "{{bits}} Bit"
+  },
+  "reported": {
+    "title": "In Matinee gemeldet: {{what}}.",
+    "by": "{{name}} hat in Matinee gemeldet: {{what}}.",
+    "wrong": "es ist ein anderer Film oder eine andere Folge",
+    "language": "es sollte auf {{language}} sein",
+    "video": "das Bild ist fehlerhaft",
+    "audio": "der Ton ist fehlerhaft oder nicht synchron",
+    "fixing": "Box Office hat das Release dieser Kopie gesperrt und besorgt eine andere."
   }
 }

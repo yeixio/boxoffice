@@ -1972,5 +1972,14 @@
     "correctedFrom": "Gecorrigeerd van {{was}} na in het bestand te kijken",
     "picture": "Beeld en geluid",
     "bits": "{{bits}}-bit"
+  },
+  "reported": {
+    "title": "Gemeld in Matinee: {{what}}.",
+    "by": "{{name}} meldde in Matinee: {{what}}.",
+    "wrong": "het is een andere film of aflevering",
+    "language": "het zou in het {{language}} moeten zijn",
+    "video": "het beeld is kapot",
+    "audio": "het geluid is kapot of loopt niet synchroon",
+    "fixing": "Box Office heeft de release van die kopie geblokkeerd en haalt een andere."
   }
 }

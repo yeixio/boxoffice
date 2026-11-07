@@ -1972,5 +1972,14 @@
     "correctedFrom": "Korjattu laadusta {{was}} tiedoston tarkistuksen jälkeen",
     "picture": "Kuva ja ääni",
     "bits": "{{bits}}-bittinen"
+  },
+  "reported": {
+    "title": "Ilmoitettu Matineessa: {{what}}.",
+    "by": "{{name}} ilmoitti Matineessa: {{what}}.",
+    "wrong": "se on eri elokuva tai jakso",
+    "language": "sen pitäisi olla kielellä {{language}}",
+    "video": "kuva on rikki",
+    "audio": "ääni on rikki tai epätahdissa",
+    "fixing": "Box Office esti kopion julkaisun ja hakee toisen."
   }
 }

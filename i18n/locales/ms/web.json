@@ -1878,5 +1878,14 @@
     "correctedFrom": "Dibetulkan daripada {{was}} selepas melihat isi fail",
     "picture": "Gambar dan bunyi",
     "bits": "{{bits}}-bit"
+  },
+  "reported": {
+    "title": "Dilaporkan dalam Matinee: {{what}}.",
+    "by": "{{name}} melaporkan dalam Matinee: {{what}}.",
+    "wrong": "ia filem atau episod lain",
+    "language": "ia sepatutnya dalam bahasa {{language}}",
+    "video": "gambarnya rosak",
+    "audio": "bunyinya rosak atau tidak segerak",
+    "fixing": "Box Office menyekat keluaran salinan itu dan sedang mendapatkan yang lain."
   }
 }

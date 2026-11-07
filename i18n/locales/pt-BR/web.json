@@ -2066,5 +2066,14 @@
     "correctedFrom": "Corrigida de {{was}} depois de olhar dentro do arquivo",
     "picture": "Imagem e som",
     "bits": "{{bits}} bits"
+  },
+  "reported": {
+    "title": "Relatado no Matinee: {{what}}.",
+    "by": "{{name}} relatou no Matinee: {{what}}.",
+    "wrong": "é outro filme ou episódio",
+    "language": "deveria estar em {{language}}",
+    "video": "a imagem está com defeito",
+    "audio": "o som está com defeito ou fora de sincronia",
+    "fixing": "O Box Office bloqueou o lançamento dessa cópia e está buscando outra."
   }
 }

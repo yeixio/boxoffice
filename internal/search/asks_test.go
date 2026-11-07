@@ -98,3 +98,40 @@ func TestAskBetterPastCutoff(t *testing.T) {
 		t.Fatalf("better %+v", res.Releases[0])
 	}
 }
+
+func TestAskReplaceInLanguage(t *testing.T) {
+	srv, _ := indexer(t,
+		item("The.Matrix.1999.German.DL.1080p.BluRay.x264-GRP", "de", 9e9),
+		item("The.Matrix.1999.GERMAN.1080p.BluRay.x264-GRP", "g", 9e9),
+		item("The.Matrix.1999.1080p.WEB-DL.x264-GRP", "w", 7e9),
+		item("The.Matrix.1999.FRENCH.1080p.BluRay.x264-GRP", "f", 9e9),
+	)
+	s, st, m := setup(t, srv.URL)
+	ctx := context.Background()
+	st.AddFile(ctx, store.File{Kind: "movie", OwnerID: m.ID, Path: m.Path + "/The Matrix (1999).mkv", Quality: 11})
+
+	// Reported as French, wanted in German: German first, then
+	// dual-language and unnamed ones; French-only is turned down.
+	st.SetTitleWant(ctx, store.TitleWant{Kind: "movie", OwnerID: m.ID, Want: store.WantReplace, Problem: store.ProblemLanguage, Language: "de"})
+	res, _ := s.Movie(ctx, m.ID)
+	got := map[string]Candidate{}
+	for _, c := range res.Releases {
+		got[c.GUID] = c
+	}
+	if res.Releases[0].GUID != "de" && res.Releases[0].GUID != "g" {
+		t.Fatalf("first %+v", res.Releases[0])
+	}
+	if !got["w"].Accepted || got["f"].Accepted || !strings.Contains(strings.Join(got["f"].Rejections, ";"), "it's in French, and German was asked for") {
+		t.Fatalf("judged %+v", got)
+	}
+
+	// Wanted in English: the German-only one is turned down, the
+	// dual-language one isn't.
+	st.SetTitleWant(ctx, store.TitleWant{Kind: "movie", OwnerID: m.ID, Want: store.WantReplace, Problem: store.ProblemLanguage, Language: "en"})
+	res, _ = s.Movie(ctx, m.ID)
+	for _, c := range res.Releases {
+		if c.Accepted != (c.GUID == "de" || c.GUID == "w") {
+			t.Errorf("%s accepted %v %v", c.Title, c.Accepted, c.Rejections)
+		}
+	}
+}

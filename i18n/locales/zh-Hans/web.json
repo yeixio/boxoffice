@@ -1878,5 +1878,14 @@
     "correctedFrom": "查看文件内部后从 {{was}} 纠正",
     "picture": "画面和声音",
     "bits": "{{bits}} 位"
+  },
+  "reported": {
+    "title": "已在 Matinee 中报告：{{what}}。",
+    "by": "{{name}} 在 Matinee 中报告：{{what}}。",
+    "wrong": "这是另一部电影或另一集",
+    "language": "应该是{{language}}",
+    "video": "画面有问题",
+    "audio": "声音有问题或不同步",
+    "fixing": "Box Office 已屏蔽该副本的发布，正在获取另一个。"
   }
 }

@@ -1878,5 +1878,14 @@
     "correctedFrom": "파일 안을 살펴본 뒤 {{was}}에서 바로잡음",
     "picture": "화면과 소리",
     "bits": "{{bits}}비트"
+  },
+  "reported": {
+    "title": "Matinee에서 신고됨: {{what}}.",
+    "by": "{{name}}님이 Matinee에서 신고함: {{what}}.",
+    "wrong": "다른 영화나 에피소드입니다",
+    "language": "{{language}}여야 합니다",
+    "video": "화면이 깨졌습니다",
+    "audio": "소리가 깨졌거나 싱크가 맞지 않습니다",
+    "fixing": "Box Office가 그 사본의 릴리스를 차단하고 다른 것을 가져오는 중입니다."
   }
 }

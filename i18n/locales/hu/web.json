@@ -1972,5 +1972,14 @@
     "correctedFrom": "Javítva erről: {{was}}, a fájl átnézése után",
     "picture": "Kép és hang",
     "bits": "{{bits}} bites"
+  },
+  "reported": {
+    "title": "Bejelentve a Matinee-ben: {{what}}.",
+    "by": "{{name}} bejelentette a Matinee-ben: {{what}}.",
+    "wrong": "ez egy másik film vagy epizód",
+    "language": "{{language}} nyelvűnek kellene lennie",
+    "video": "a kép hibás",
+    "audio": "a hang hibás vagy nincs szinkronban",
+    "fixing": "A Box Office letiltotta a másolat kiadását, és szerez egy másikat."
   }
 }

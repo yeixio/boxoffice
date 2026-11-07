@@ -2066,5 +2066,14 @@
     "correctedFrom": "תוקנה מ-{{was}} אחרי בדיקת הקובץ מבפנים",
     "picture": "תמונה וקול",
     "bits": "{{bits}} ביט"
+  },
+  "reported": {
+    "title": "דווח ב-Matinee: {{what}}.",
+    "by": "{{name}} דיווח/ה ב-Matinee: {{what}}.",
+    "wrong": "זה סרט או פרק אחר",
+    "language": "זה אמור להיות ב{{language}}",
+    "video": "התמונה פגומה",
+    "audio": "הסאונד פגום או לא מסונכרן",
+    "fixing": "Box Office חסם את הגרסה של העותק הזה ומביא אחר."
   }
 }

@@ -36,6 +36,10 @@ type Engine struct {
 	// Libraries lists the library folders, so the downloads folder is never
 	// one of them or inside one.
 	Libraries func(ctx context.Context) ([]string, error)
+	// AudioLanguages lists the languages a video's audio tracks are
+	// tagged with (ISO 639-1), for a copy reported in the wrong language;
+	// ffprobe when nil.
+	AudioLanguages func(ctx context.Context, path string) ([]string, error)
 	// Failed hears of a download that failed, to block the release and
 	// look for another.
 	Failed func(ctx context.Context, d store.Download, why string)
