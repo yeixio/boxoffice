@@ -422,7 +422,12 @@
     "added": "Adicionado",
     "deleteFile": "Excluir arquivo do disco",
     "notOnDisk": "Ainda não está no disco.",
-    "filesOf": "Arquivo de {{title}}"
+    "filesOf": "Arquivo de {{title}}",
+    "edition": "Edição",
+    "editionByLength": "Um palpite pela duração",
+    "runs": "Duração",
+    "otherEditions": "Outras edições",
+    "otherEditionsSub": "Outras versões guardadas ao lado da cópia do filme. Não são duplicatas, e o Box Office não procura melhorias para elas."
   },
   "show": {
     "lookingNow": "Procurando os episódios desejados; veja Atividade.",
@@ -1835,7 +1840,8 @@
     "copiesNote": "Cada um dura o mesmo que um filme inteiro, então parecem cópias (outra versão ou qualidade), não partes. Escolha qual manter ou junte-os se forem mesmo partes.",
     "instead": {
       "keepOne": "Manter um em vez disso",
-      "join": "Juntar em vez disso"
+      "join": "Juntar em vez disso",
+      "keepEditions": "Manter todas como edições em vez disso"
     },
     "subtitles": "legendas: {{count}}",
     "recent": "Correções recentes",
@@ -1860,7 +1866,8 @@
       "forget": "Esquecer",
       "convert": "Remuxar para MKV",
       "join": "Unir as partes",
-      "removeDirs": "Remover"
+      "removeDirs": "Remover",
+      "keepEditions": "Manter todas como edições"
     },
     "did": {
       "rename": "Renomeado",
@@ -1870,7 +1877,8 @@
       "forget": "Esquecido",
       "convert": "Remuxado",
       "join": "Unido",
-      "removeDirs": "Removido"
+      "removeDirs": "Removido",
+      "keepEditions": "Mantidas como edições"
     },
     "state": {
       "done": "Feito",
@@ -1916,6 +1924,10 @@
       "empty": {
         "title": "Pastas vazias",
         "hint": "Pastas sem nada dentro."
+      },
+      "editions": {
+        "title": "Versões diferentes de um filme",
+        "hint": "Estas cópias têm durações bem diferentes ou nomes de versões diferentes, então não são duplicatas. Manter todas registra cada outra versão como uma edição, com uma etiqueta {edition-…} que o Matinee, o Plex e o Jellyfin leem. Nada é posto de lado."
       }
     },
     "waiting": {
@@ -1979,7 +1991,10 @@
     },
     "addWithScan": "Adicionar com Escanear",
     "filesIn": "{{count}} arquivos",
-    "garbledName": "O nome no disco está embaralhado; deveria ser “{{name}}”."
+    "garbledName": "O nome no disco está embaralhado; deveria ser “{{name}}”.",
+    "staysCopy": "continua sendo a cópia do filme",
+    "asEdition": "mantida como a edição {{edition}}",
+    "byLength": "{{edition}}, pela duração"
   },
   "ereaders": {
     "title": "Enviar para e-readers",

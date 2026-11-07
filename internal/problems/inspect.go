@@ -194,6 +194,8 @@ func (s *Service) inspect(ctx context.Context, rep *Report) {
 		if p.Kind == Duplicate && p.Fix != nil && !slices.ContainsFunc(p.Files, func(f File) bool { return f.Recorded }) {
 			p.Fix.Keep = best(p.Files)
 		}
+		// Different cuts of a movie aren't duplicates.
+		asEditions(p)
 	}
 }
 

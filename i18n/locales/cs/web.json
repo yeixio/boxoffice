@@ -447,7 +447,12 @@
     "added": "Přidáno",
     "deleteFile": "Smazat soubor z disku",
     "notOnDisk": "Zatím není na disku.",
-    "filesOf": "Soubor {{title}}"
+    "filesOf": "Soubor {{title}}",
+    "edition": "Edice",
+    "editionByLength": "Odhad podle délky",
+    "runs": "Délka",
+    "otherEditions": "Další edice",
+    "otherEditionsSub": "Další verze uložené vedle kopie filmu. Nejsou to duplikáty a Box Office pro ně nehledá vylepšení."
   },
   "show": {
     "lookingNow": "Hledají se chtěné díly; viz Aktivita.",
@@ -1929,7 +1934,8 @@
     "copiesNote": "Každý z nich trvá jako celý film, takže vypadají jako kopie (jiná verze nebo kvalita), ne části. Vyberte, kterou ponechat, nebo je spojte, pokud jde opravdu o části.",
     "instead": {
       "keepOne": "Místo toho ponechat jednu",
-      "join": "Místo toho spojit"
+      "join": "Místo toho spojit",
+      "keepEditions": "Raději ponechat vše jako edice"
     },
     "subtitles": "titulky: {{count}}",
     "recent": "Nedávné opravy",
@@ -1954,7 +1960,8 @@
       "forget": "Zapomenout",
       "convert": "Remuxovat do MKV",
       "join": "Spojit části",
-      "removeDirs": "Odstranit"
+      "removeDirs": "Odstranit",
+      "keepEditions": "Ponechat vše jako edice"
     },
     "did": {
       "rename": "Přejmenováno",
@@ -1964,7 +1971,8 @@
       "forget": "Zapomenuto",
       "convert": "Remuxováno",
       "join": "Spojeno",
-      "removeDirs": "Odstraněno"
+      "removeDirs": "Odstraněno",
+      "keepEditions": "Ponecháno jako edice"
     },
     "state": {
       "done": "Hotovo",
@@ -2010,6 +2018,10 @@
       "empty": {
         "title": "Prázdné složky",
         "hint": "Složky, ve kterých nic není."
+      },
+      "editions": {
+        "title": "Různé verze filmu",
+        "hint": "Tyto kopie mají velmi odlišnou délku nebo nesou názvy různých verzí, takže nejde o duplikáty. Ponecháním všech se každá další verze zaznamená jako edice se značkou {edition-…}, kterou čtou Matinee, Plex a Jellyfin. Nic se neodkládá stranou."
       }
     },
     "waiting": {
@@ -2073,7 +2085,10 @@
     },
     "addWithScan": "Přidat přes Skenovat",
     "filesIn": "Souborů: {{count}}",
-    "garbledName": "Název na disku je zkomolený; má být „{{name}}“."
+    "garbledName": "Název na disku je zkomolený; má být „{{name}}“.",
+    "staysCopy": "zůstává kopií filmu",
+    "asEdition": "ponecháno jako edice {{edition}}",
+    "byLength": "{{edition}}, podle délky"
   },
   "ereaders": {
     "title": "Posílat do čteček",

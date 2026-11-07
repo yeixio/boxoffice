@@ -307,24 +307,26 @@ func (h *Handler) movieFor(ctx context.Context, movieID, tmdbID int64) (store.Mo
 }
 
 // ownedEditions are the editions of a movie the library has: its copy's,
-// when the name gives one ("" when it doesn't), and those kept next to it.
+// when its name or length gives one ("" when neither does), and those
+// kept next to it.
 func (h *Handler) ownedEditions(ctx context.Context, m store.Movie) (current string, others []string, err error) {
-	if m.File != nil {
-		current = quality.Edition(filepath.Base(m.File.Path))
-	}
 	tw, err := h.Catalog.Store.TitleWant(ctx, "movie", m.ID)
 	if err != nil {
 		return "", nil, err
 	}
-	if current == "" {
-		current = tw.Edition
-	}
-	files, err := h.Catalog.Store.EditionFiles(ctx, m.ID)
-	if err != nil {
+	if m.Editions, err = h.Catalog.Store.EditionFiles(ctx, m.ID); err != nil {
 		return "", nil, err
 	}
-	for _, f := range files {
-		if e := quality.Edition(filepath.Base(f.Path)); e != "" && !slices.Contains(others, e) {
+	m.LabelEditions()
+	if m.File != nil {
+		current = m.File.Edition
+	}
+	if tw.Edition != "" && (current == "" || m.File.EditionByLength) {
+		// The edition asked for says more than a guess from its length.
+		current = tw.Edition
+	}
+	for _, f := range m.Editions {
+		if e := f.Edition; e != "" && !slices.Contains(others, e) {
 			others = append(others, e)
 		}
 	}

@@ -397,7 +397,12 @@
     "added": "Eklenme",
     "deleteFile": "Dosyayı diskten sil",
     "notOnDisk": "Henüz diskte değil.",
-    "filesOf": "{{title}} dosyası"
+    "filesOf": "{{title}} dosyası",
+    "edition": "Sürüm",
+    "editionByLength": "Süresine göre bir tahmin",
+    "runs": "Süre",
+    "otherEditions": "Diğer sürümler",
+    "otherEditionsSub": "Filmin kopyasının yanında tutulan diğer kurgular. Kopya değiller ve Box Office onlar için yükseltme aramaz."
   },
   "show": {
     "lookingNow": "İstenen bölümleri aranıyor; Etkinlik'e bakın.",
@@ -1741,7 +1746,8 @@
     "copiesNote": "Her biri bütün bir film kadar sürüyor, bu yüzden parça değil kopya gibi görünüyorlar (başka bir kurgu ya da kalite). Saklanacak olanı seçin ya da gerçekten parçaysalar birleştirin.",
     "instead": {
       "keepOne": "Bunun yerine birini sakla",
-      "join": "Bunun yerine birleştir"
+      "join": "Bunun yerine birleştir",
+      "keepEditions": "Bunun yerine hepsini sürüm olarak tut"
     },
     "subtitles": "altyazılar: {{count}}",
     "recent": "Son düzeltmeler",
@@ -1766,7 +1772,8 @@
       "forget": "Unut",
       "convert": "MKV'ye remux et",
       "join": "Parçaları birleştir",
-      "removeDirs": "Kaldır"
+      "removeDirs": "Kaldır",
+      "keepEditions": "Hepsini sürüm olarak tut"
     },
     "did": {
       "rename": "Yeniden adlandırıldı",
@@ -1776,7 +1783,8 @@
       "forget": "Unutuldu",
       "convert": "Remux edildi",
       "join": "Birleştirildi",
-      "removeDirs": "Kaldırıldı"
+      "removeDirs": "Kaldırıldı",
+      "keepEditions": "Sürüm olarak tutuldu"
     },
     "state": {
       "done": "Tamam",
@@ -1822,6 +1830,10 @@
       "empty": {
         "title": "Boş klasörler",
         "hint": "İçinde hiçbir şey olmayan klasörler."
+      },
+      "editions": {
+        "title": "Bir filmin farklı kurguları",
+        "hint": "Bu kopyaların süreleri çok farklı ya da farklı kurguların adlarını taşıyorlar, yani kopya değiller. Hepsini tutmak her diğer kurguyu, Matinee, Plex ve Jellyfin'in okuduğu bir {edition-…} etiketiyle sürüm olarak kaydeder. Hiçbir şey kenara ayrılmaz."
       }
     },
     "waiting": {
@@ -1885,7 +1897,10 @@
     },
     "addWithScan": "Tara ile ekle",
     "filesIn": "{{count}} dosya",
-    "garbledName": "Diskteki ad bozuk; doğrusu “{{name}}”."
+    "garbledName": "Diskteki ad bozuk; doğrusu “{{name}}”.",
+    "staysCopy": "filmin kopyası olarak kalır",
+    "asEdition": "{{edition}} sürümü olarak tutulur",
+    "byLength": "{{edition}}, süresine göre"
   },
   "ereaders": {
     "title": "E-okuyuculara gönder",

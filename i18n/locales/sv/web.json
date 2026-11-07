@@ -397,7 +397,12 @@
     "added": "Tillagd",
     "deleteFile": "Radera fil från disken",
     "notOnDisk": "Inte på disk än.",
-    "filesOf": "Filen för {{title}}"
+    "filesOf": "Filen för {{title}}",
+    "edition": "Utgåva",
+    "editionByLength": "En gissning utifrån speltiden",
+    "runs": "Speltid",
+    "otherEditions": "Andra utgåvor",
+    "otherEditionsSub": "Andra versioner som sparas bredvid filmens kopia. De är inte dubbletter, och Box Office letar inte efter uppgraderingar av dem."
   },
   "show": {
     "lookingNow": "Letar efter önskade avsnitt; se Aktivitet.",
@@ -1741,7 +1746,8 @@
     "copiesNote": "Var och en är lika lång som en hel film, så de ser ut som kopior (en annan version eller kvalitet), inte delar. Välj vilken som ska behållas, eller slå ihop dem om de verkligen är delar.",
     "instead": {
       "keepOne": "Behåll en i stället",
-      "join": "Slå ihop i stället"
+      "join": "Slå ihop i stället",
+      "keepEditions": "Behåll hellre alla som utgåvor"
     },
     "subtitles": "undertexter: {{count}}",
     "recent": "Senaste åtgärder",
@@ -1766,7 +1772,8 @@
       "forget": "Glöm den",
       "convert": "Remuxa till MKV",
       "join": "Slå ihop delarna",
-      "removeDirs": "Ta bort"
+      "removeDirs": "Ta bort",
+      "keepEditions": "Behåll alla som utgåvor"
     },
     "did": {
       "rename": "Namnbytt",
@@ -1776,7 +1783,8 @@
       "forget": "Glömd",
       "convert": "Remuxad",
       "join": "Ihopslagen",
-      "removeDirs": "Borttagen"
+      "removeDirs": "Borttagen",
+      "keepEditions": "Behölls som utgåvor"
     },
     "state": {
       "done": "Klar",
@@ -1822,6 +1830,10 @@
       "empty": {
         "title": "Tomma mappar",
         "hint": "Mappar utan något i."
+      },
+      "editions": {
+        "title": "Olika versioner av en film",
+        "hint": "De här kopiorna är mycket olika långa eller namngivna efter olika versioner, så de är inte dubbletter. Behåller du alla registreras varje annan version som en utgåva, med en {edition-…}-tagg som Matinee, Plex och Jellyfin läser. Inget läggs åt sidan."
       }
     },
     "waiting": {
@@ -1885,7 +1897,10 @@
     },
     "addWithScan": "Lägg till med Skanna",
     "filesIn": "{{count}} filer",
-    "garbledName": "Namnet på disken är förvanskat; det ska vara ”{{name}}”."
+    "garbledName": "Namnet på disken är förvanskat; det ska vara ”{{name}}”.",
+    "staysCopy": "förblir filmens kopia",
+    "asEdition": "behålls som utgåvan {{edition}}",
+    "byLength": "{{edition}}, utifrån längden"
   },
   "ereaders": {
     "title": "Skicka till läsplattor",

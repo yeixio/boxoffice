@@ -130,6 +130,8 @@ func Apply(ctx context.Context, st *store.Store, tools func() (Tools, error), p 
 		err = x.record(ctx)
 	case ActKeepOne:
 		err = x.keepOne(ctx, keep)
+	case ActKeepEditions:
+		err = x.keepEditions(ctx)
 	case ActConvert, ActJoin:
 		err = x.remux(ctx, progress)
 	default:
@@ -380,6 +382,47 @@ func (x *fixer) keepOne(ctx context.Context, keep string) error {
 	return x.recordAs(ctx, kind, id, keep)
 }
 
+// keepEditions keeps every cut of a movie: the one to keep stays (or
+// becomes) the movie's copy, and each other one is renamed for its cut
+// and recorded as an edition of it.
+func (x *fixer) keepEditions(ctx context.Context) error {
+	if x.p.Title == nil || x.p.Title.Kind != "movie" {
+		return errors.New("only a movie has editions")
+	}
+	main := x.p.Fix.Keep
+	if !slices.ContainsFunc(x.p.Files, func(f File) bool { return f.Path == main }) {
+		return errors.New("the movie's copy isn't one of them")
+	}
+	if err := x.recordAs(ctx, "movie", x.p.Title.ID, main); err != nil {
+		return err
+	}
+	if err := x.moveAll(ctx, x.p.Fix.Moves); err != nil {
+		return err
+	}
+	for _, f := range x.p.Files {
+		if f.Path == main {
+			continue
+		}
+		path := f.Path
+		if i := slices.IndexFunc(x.p.Fix.Moves, func(m Move) bool { return m.From == f.Path }); i >= 0 {
+			path = x.p.Fix.Moves[i].To
+		}
+		info, err := os.Stat(path)
+		if err != nil {
+			return err
+		}
+		if rec, err := x.st.FileByPath(ctx, path); err == nil {
+			// Recorded as something else: noted, so putting back restores it.
+			x.done = append(x.done, store.ProblemFixFile{Role: roleForgot, Src: path, Dest: path, Size: rec.Size, Record: &rec})
+		}
+		if _, err := x.st.AddEditionFile(ctx, x.p.Title.ID, path, info.Size(), quality.Parse(filepath.Base(path)).ID); err != nil {
+			return err
+		}
+		x.done = append(x.done, store.ProblemFixFile{Role: roleRecord, Src: path, Dest: path, Size: info.Size()})
+	}
+	return nil
+}
+
 func (x *fixer) remux(ctx context.Context, progress Progress) error {
 	tools, err := x.tools()
 	if err != nil {
@@ -501,6 +544,8 @@ func Reason(f *store.ProblemFix) {
 	switch f.Action {
 	case ActKeepOne:
 		f.Kind = Duplicate
+	case ActKeepEditions:
+		f.Kind = Editions
 	case ActJoin:
 		f.Kind = Parts
 	case ActConvert:

@@ -354,6 +354,11 @@ func (s *Server) movie(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
+	// Other cuts kept next to its copy, and which cut each one is.
+	if m.Editions, err = s.Store.EditionFiles(r.Context(), m.ID); err != nil {
+		return err
+	}
+	m.LabelEditions()
 	return writeJSON(w, http.StatusOK, m)
 }
 

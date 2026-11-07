@@ -422,7 +422,12 @@
     "added": "Ajout",
     "deleteFile": "Supprimer le fichier du disque",
     "notOnDisk": "Pas encore sur le disque.",
-    "filesOf": "Fichier de {{title}}"
+    "filesOf": "Fichier de {{title}}",
+    "edition": "Édition",
+    "editionByLength": "Une supposition d'après sa durée",
+    "runs": "Durée",
+    "otherEditions": "Autres éditions",
+    "otherEditionsSub": "D'autres montages gardés à côté de la copie du film. Ce ne sont pas des doublons, et Box Office ne cherche pas de meilleures versions pour eux."
   },
   "show": {
     "lookingNow": "Recherche de ses épisodes recherchés ; voir Activité.",
@@ -1835,7 +1840,8 @@
     "copiesNote": "Chacun dure autant qu'un film entier : ce sont sans doute des copies (une autre version ou une autre qualité), pas des parties. Choisissez celle à garder, ou assemblez-les si ce sont vraiment des parties.",
     "instead": {
       "keepOne": "Garder une copie à la place",
-      "join": "Les assembler à la place"
+      "join": "Les assembler à la place",
+      "keepEditions": "Plutôt tout garder comme éditions"
     },
     "subtitles": "sous-titres : {{count}}",
     "recent": "Corrections récentes",
@@ -1860,7 +1866,8 @@
       "forget": "L'oublier",
       "convert": "Remuxer en MKV",
       "join": "Assembler les parties",
-      "removeDirs": "Supprimer"
+      "removeDirs": "Supprimer",
+      "keepEditions": "Tout garder comme éditions"
     },
     "did": {
       "rename": "Renommé",
@@ -1870,7 +1877,8 @@
       "forget": "Oublié",
       "convert": "Remuxé",
       "join": "Assemblé",
-      "removeDirs": "Supprimé"
+      "removeDirs": "Supprimé",
+      "keepEditions": "Gardées comme éditions"
     },
     "state": {
       "done": "Fait",
@@ -1916,6 +1924,10 @@
       "empty": {
         "title": "Dossiers vides",
         "hint": "Des dossiers sans rien dedans."
+      },
+      "editions": {
+        "title": "Différents montages d'un film",
+        "hint": "Ces copies ont des durées très différentes ou portent des noms de montages différents : ce ne sont pas des doublons. Les garder toutes enregistre chaque autre montage comme une édition, nommée avec une balise {edition-…} que lisent Matinee, Plex et Jellyfin. Rien n'est mis de côté."
       }
     },
     "waiting": {
@@ -1979,7 +1991,10 @@
     },
     "addWithScan": "Ajouter avec Analyser",
     "filesIn": "{{count}} fichiers",
-    "garbledName": "Le nom sur le disque est brouillé ; il devrait être « {{name}} »."
+    "garbledName": "Le nom sur le disque est brouillé ; il devrait être « {{name}} ».",
+    "staysCopy": "reste la copie du film",
+    "asEdition": "gardée comme l'édition {{edition}}",
+    "byLength": "{{edition}}, d'après sa durée"
   },
   "ereaders": {
     "title": "Envoyer aux liseuses",

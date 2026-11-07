@@ -422,7 +422,12 @@
     "added": "Añadido",
     "deleteFile": "Borrar el archivo del disco",
     "notOnDisk": "Aún no está en disco.",
-    "filesOf": "Archivo de {{title}}"
+    "filesOf": "Archivo de {{title}}",
+    "edition": "Edición",
+    "editionByLength": "Una suposición por su duración",
+    "runs": "Duración",
+    "otherEditions": "Otras ediciones",
+    "otherEditionsSub": "Otros montajes guardados junto a la copia de la película. No son duplicados y Box Office no busca mejoras para ellos."
   },
   "show": {
     "lookingNow": "Buscando sus episodios buscados; mira Actividad.",
@@ -1835,7 +1840,8 @@
     "copiesNote": "Cada uno dura lo que una película entera, así que parecen copias (otro montaje u otra calidad), no partes. Elige cuál conservar, o únelos si de verdad son partes.",
     "instead": {
       "keepOne": "Conservar uno en su lugar",
-      "join": "Unirlos en su lugar"
+      "join": "Unirlos en su lugar",
+      "keepEditions": "Conservar todas como ediciones en su lugar"
     },
     "subtitles": "subtítulos: {{count}}",
     "recent": "Correcciones recientes",
@@ -1860,7 +1866,8 @@
       "forget": "Olvidarlo",
       "convert": "Remuxar a MKV",
       "join": "Unir las partes",
-      "removeDirs": "Quitar"
+      "removeDirs": "Quitar",
+      "keepEditions": "Conservar todas como ediciones"
     },
     "did": {
       "rename": "Renombrado",
@@ -1870,7 +1877,8 @@
       "forget": "Olvidado",
       "convert": "Remuxado",
       "join": "Unido",
-      "removeDirs": "Quitado"
+      "removeDirs": "Quitado",
+      "keepEditions": "Conservadas como ediciones"
     },
     "state": {
       "done": "Hecho",
@@ -1916,6 +1924,10 @@
       "empty": {
         "title": "Carpetas vacías",
         "hint": "Carpetas sin nada dentro."
+      },
+      "editions": {
+        "title": "Distintos montajes de una película",
+        "hint": "Estas copias duran tiempos muy distintos o llevan nombres de montajes distintos, así que no son duplicados. Conservarlas todas registra cada otro montaje como una edición, con una etiqueta {edition-…} que leen Matinee, Plex y Jellyfin. No se aparta nada."
       }
     },
     "waiting": {
@@ -1979,7 +1991,10 @@
     },
     "addWithScan": "Añadir con Escanear",
     "filesIn": "{{count}} archivos",
-    "garbledName": "El nombre en el disco está desfigurado; debería ser «{{name}}»."
+    "garbledName": "El nombre en el disco está desfigurado; debería ser «{{name}}».",
+    "staysCopy": "sigue siendo la copia de la película",
+    "asEdition": "se conserva como la edición {{edition}}",
+    "byLength": "{{edition}}, según su duración"
   },
   "ereaders": {
     "title": "Enviar a lectores electrónicos",

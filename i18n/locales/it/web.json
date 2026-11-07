@@ -422,7 +422,12 @@
     "added": "Aggiunta",
     "deleteFile": "Elimina il file dal disco",
     "notOnDisk": "Non ancora sul disco.",
-    "filesOf": "Il file di {{title}}"
+    "filesOf": "Il file di {{title}}",
+    "edition": "Edizione",
+    "editionByLength": "Una stima dalla durata",
+    "runs": "Durata",
+    "otherEditions": "Altre edizioni",
+    "otherEditionsSub": "Altri montaggi tenuti accanto alla copia del film. Non sono duplicati e Box Office non cerca miglioramenti per loro."
   },
   "show": {
     "lookingNow": "Ricerca degli episodi voluti; vedi Attività.",
@@ -1835,7 +1840,8 @@
     "copiesNote": "Ognuno dura quanto un film intero, quindi sembrano copie (un altro montaggio o un'altra qualità), non parti. Scegli quale tenere, oppure uniscili se sono davvero parti.",
     "instead": {
       "keepOne": "Tienine uno invece",
-      "join": "Uniscili invece"
+      "join": "Uniscili invece",
+      "keepEditions": "Tieni invece tutte come edizioni"
     },
     "subtitles": "sottotitoli: {{count}}",
     "recent": "Correzioni recenti",
@@ -1860,7 +1866,8 @@
       "forget": "Dimenticalo",
       "convert": "Rimuxa in MKV",
       "join": "Unisci le parti",
-      "removeDirs": "Rimuovi"
+      "removeDirs": "Rimuovi",
+      "keepEditions": "Tieni tutte come edizioni"
     },
     "did": {
       "rename": "Rinominato",
@@ -1870,7 +1877,8 @@
       "forget": "Dimenticato",
       "convert": "Rimuxato",
       "join": "Unito",
-      "removeDirs": "Rimosso"
+      "removeDirs": "Rimosso",
+      "keepEditions": "Tenute come edizioni"
     },
     "state": {
       "done": "Fatto",
@@ -1916,6 +1924,10 @@
       "empty": {
         "title": "Cartelle vuote",
         "hint": "Cartelle senza niente dentro."
+      },
+      "editions": {
+        "title": "Montaggi diversi di un film",
+        "hint": "Queste copie hanno durate molto diverse o portano nomi di montaggi diversi, quindi non sono duplicati. Tenerle tutte registra ogni altro montaggio come edizione, con un tag {edition-…} che Matinee, Plex e Jellyfin leggono. Nulla viene messo da parte."
       }
     },
     "waiting": {
@@ -1979,7 +1991,10 @@
     },
     "addWithScan": "Aggiungi con Scansiona",
     "filesIn": "{{count}} file",
-    "garbledName": "Il nome sul disco è storpiato; dovrebbe essere «{{name}}»."
+    "garbledName": "Il nome sul disco è storpiato; dovrebbe essere «{{name}}».",
+    "staysCopy": "resta la copia del film",
+    "asEdition": "tenuta come edizione {{edition}}",
+    "byLength": "{{edition}}, in base alla durata"
   },
   "ereaders": {
     "title": "Invia agli e-reader",

@@ -397,7 +397,12 @@
     "added": "Lisätty",
     "deleteFile": "Poista tiedosto levyltä",
     "notOnDisk": "Ei vielä levyllä.",
-    "filesOf": "Nimikkeen {{title}} tiedosto"
+    "filesOf": "Nimikkeen {{title}} tiedosto",
+    "edition": "Versio",
+    "editionByLength": "Arvio kestosta",
+    "runs": "Kesto",
+    "otherEditions": "Muut versiot",
+    "otherEditionsSub": "Muut leikkaukset elokuvan kopion vieressä. Ne eivät ole kaksoiskappaleita, eikä Box Office etsi niihin päivityksiä."
   },
   "show": {
     "lookingNow": "Etsitään toivottuja jaksoja; katso Toiminta.",
@@ -1741,7 +1746,8 @@
     "copiesNote": "Jokainen näistä on kokonaisen elokuvan mittainen, joten ne näyttävät kopioilta (eri versio tai laatu), eivät osilta. Valitse säilytettävä tai yhdistä ne, jos ne todella ovat osia.",
     "instead": {
       "keepOne": "Säilytä yksi sen sijaan",
-      "join": "Yhdistä sen sijaan"
+      "join": "Yhdistä sen sijaan",
+      "keepEditions": "Pidä sen sijaan kaikki versioina"
     },
     "subtitles": "tekstitykset: {{count}}",
     "recent": "Viimeisimmät korjaukset",
@@ -1766,7 +1772,8 @@
       "forget": "Unohda se",
       "convert": "Remuxaa MKV:ksi",
       "join": "Yhdistä osat",
-      "removeDirs": "Poista"
+      "removeDirs": "Poista",
+      "keepEditions": "Pidä kaikki versioina"
     },
     "did": {
       "rename": "Nimetty uudelleen",
@@ -1776,7 +1783,8 @@
       "forget": "Unohdettu",
       "convert": "Remuxattu",
       "join": "Yhdistetty",
-      "removeDirs": "Poistettu"
+      "removeDirs": "Poistettu",
+      "keepEditions": "Pidetty versioina"
     },
     "state": {
       "done": "Valmis",
@@ -1822,6 +1830,10 @@
       "empty": {
         "title": "Tyhjät kansiot",
         "hint": "Kansiot, joissa ei ole mitään."
+      },
+      "editions": {
+        "title": "Elokuvan eri leikkaukset",
+        "hint": "Nämä kopiot ovat hyvin eripituisia tai nimetty eri leikkauksiksi, joten ne eivät ole kaksoiskappaleita. Kun pidät ne kaikki, jokainen muu leikkaus kirjataan versioksi {edition-…}-tunnisteella, jonka Matinee, Plex ja Jellyfin lukevat. Mitään ei siirretä sivuun."
       }
     },
     "waiting": {
@@ -1885,7 +1897,10 @@
     },
     "addWithScan": "Lisää Skannaa-toiminnolla",
     "filesIn": "{{count}} tiedostoa",
-    "garbledName": "Nimi levyllä on sotkeutunut; sen pitäisi olla ”{{name}}”."
+    "garbledName": "Nimi levyllä on sotkeutunut; sen pitäisi olla ”{{name}}”.",
+    "staysCopy": "pysyy elokuvan kopiona",
+    "asEdition": "pidetään versiona {{edition}}",
+    "byLength": "{{edition}}, keston perusteella"
   },
   "ereaders": {
     "title": "Lähetä lukulaitteille",

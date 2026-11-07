@@ -372,7 +372,12 @@
     "added": "添加",
     "deleteFile": "从磁盘删除文件",
     "notOnDisk": "尚未在磁盘上。",
-    "filesOf": "{{title}} 的文件"
+    "filesOf": "{{title}} 的文件",
+    "edition": "版本",
+    "editionByLength": "根据时长推测",
+    "runs": "时长",
+    "otherEditions": "其他版本",
+    "otherEditionsSub": "与电影副本放在一起的其他剪辑版。它们不是重复文件，Box Office 不会为它们寻找升级。"
   },
   "show": {
     "lookingNow": "正在寻找想要的单集，见活动。",
@@ -1647,7 +1652,8 @@
     "copiesNote": "每个都和整部电影一样长，所以它们看起来是副本（其他版本或画质），而不是分段。选择要保留的一个，如果确实是分段就合并它们。",
     "instead": {
       "keepOne": "改为保留一个",
-      "join": "改为合并"
+      "join": "改为合并",
+      "keepEditions": "改为全部保留为版本"
     },
     "subtitles": "字幕：{{count}}",
     "recent": "最近的修复",
@@ -1672,7 +1678,8 @@
       "forget": "忘记它",
       "convert": "重新封装为 MKV",
       "join": "合并分段",
-      "removeDirs": "移除"
+      "removeDirs": "移除",
+      "keepEditions": "全部保留为版本"
     },
     "did": {
       "rename": "已重命名",
@@ -1682,7 +1689,8 @@
       "forget": "已忘记",
       "convert": "已重新封装",
       "join": "已合并",
-      "removeDirs": "已移除"
+      "removeDirs": "已移除",
+      "keepEditions": "已保留为版本"
     },
     "state": {
       "done": "完成",
@@ -1728,6 +1736,10 @@
       "empty": {
         "title": "空文件夹",
         "hint": "里面什么都没有的文件夹。"
+      },
+      "editions": {
+        "title": "同一电影的不同剪辑版",
+        "hint": "这些副本时长相差很大，或以不同剪辑版命名，因此不是重复文件。全部保留会把其他每个剪辑版记录为一个版本，文件名带有 Matinee、Plex 和 Jellyfin 都能读取的 {edition-…} 标签。不会移开任何文件。"
       }
     },
     "waiting": {
@@ -1791,7 +1803,10 @@
     },
     "addWithScan": "用扫描添加",
     "filesIn": "{{count}} 个文件",
-    "garbledName": "磁盘上的名称是乱码，原本应为“{{name}}”。"
+    "garbledName": "磁盘上的名称是乱码，原本应为“{{name}}”。",
+    "staysCopy": "仍是电影的副本",
+    "asEdition": "保留为 {{edition}} 版本",
+    "byLength": "{{edition}}（根据时长）"
   },
   "ereaders": {
     "title": "发送到电子阅读器",

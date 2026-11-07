@@ -397,7 +397,12 @@
     "added": "Hozzáadva",
     "deleteFile": "Fájl törlése a lemezről",
     "notOnDisk": "Még nincs a lemezen.",
-    "filesOf": "{{title}} fájlja"
+    "filesOf": "{{title}} fájlja",
+    "edition": "Változat",
+    "editionByLength": "Becslés a játékidő alapján",
+    "runs": "Játékidő",
+    "otherEditions": "Más változatok",
+    "otherEditionsSub": "A film példánya mellett tárolt további vágások. Nem duplikátumok, és a Box Office nem keres hozzájuk jobb minőséget."
   },
   "show": {
     "lookingNow": "A keresett epizódjainak keresése; lásd a Tevékenységet.",
@@ -1741,7 +1746,8 @@
     "copiesNote": "Mindegyik olyan hosszú, mint egy egész film, így inkább másolatoknak tűnnek (más változat vagy minőség), nem részeknek. Válaszd ki, melyik maradjon, vagy fűzd össze őket, ha tényleg részek.",
     "instead": {
       "keepOne": "Inkább egy marad",
-      "join": "Inkább összefűzés"
+      "join": "Inkább összefűzés",
+      "keepEditions": "Inkább mind megtartása változatként"
     },
     "subtitles": "feliratok: {{count}}",
     "recent": "Legutóbbi javítások",
@@ -1766,7 +1772,8 @@
       "forget": "Elfelejt",
       "convert": "Remux MKV-ba",
       "join": "Részek összefűzése",
-      "removeDirs": "Eltávolítás"
+      "removeDirs": "Eltávolítás",
+      "keepEditions": "Mind megtartása változatként"
     },
     "did": {
       "rename": "Átnevezve",
@@ -1776,7 +1783,8 @@
       "forget": "Elfelejtve",
       "convert": "Remuxolva",
       "join": "Összefűzve",
-      "removeDirs": "Eltávolítva"
+      "removeDirs": "Eltávolítva",
+      "keepEditions": "Változatként megtartva"
     },
     "state": {
       "done": "Kész",
@@ -1822,6 +1830,10 @@
       "empty": {
         "title": "Üres mappák",
         "hint": "Mappák, amelyekben nincs semmi."
+      },
+      "editions": {
+        "title": "Egy film különböző vágásai",
+        "hint": "Ezek a példányok nagyon eltérő hosszúak, vagy különböző vágások nevét viselik, így nem duplikátumok. Ha mindet megtartod, minden további vágás változatként kerül nyilvántartásba, {edition-…} címkével, amelyet a Matinee, a Plex és a Jellyfin olvas. Semmi sem kerül félre."
       }
     },
     "waiting": {
@@ -1885,7 +1897,10 @@
     },
     "addWithScan": "Hozzáadás Beolvasással",
     "filesIn": "{{count}} fájl",
-    "garbledName": "A név a lemezen eltorzult; helyesen „{{name}}”."
+    "garbledName": "A név a lemezen eltorzult; helyesen „{{name}}”.",
+    "staysCopy": "a film példánya marad",
+    "asEdition": "{{edition}} változatként megtartva",
+    "byLength": "{{edition}}, a hossza alapján"
   },
   "ereaders": {
     "title": "Küldés e-olvasóra",
