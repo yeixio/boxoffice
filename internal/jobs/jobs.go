@@ -106,13 +106,19 @@ func (r *Runner) runOne(ctx context.Context) bool {
 			res = Result{"failed", err.Error()}
 		}
 	}
+	if res.Status == "failed" && ctx.Err() != nil {
+		// Box Office is stopping, and that's what ended it: it stays as
+		// it was, running, and goes back in the queue at the next start.
+		r.Log.Info("job stopped; it runs again at the next start", "kind", j.Kind, "subject", j.Subject, "id", j.ID)
+		return false
+	}
 	if res.Status == "failed" {
 		r.Log.Warn("job failed", "kind", j.Kind, "subject", j.Subject, "err", res.Message, "took", time.Since(start).Round(time.Millisecond).String())
 	} else {
 		r.Log.Info("job finished", "kind", j.Kind, "subject", j.Subject, "status", res.Status, "result", res.Message,
 			"took", time.Since(start).Round(time.Millisecond).String())
 	}
-	// Record the outcome even when ctx just ended.
+	// Record the outcome even when ctx just ended: it finished first.
 	if err := r.Store.FinishJob(context.WithoutCancel(ctx), j.ID, res.Status, res.Message); err != nil {
 		r.Log.Warn("couldn't record a job's outcome", "err", err)
 	}

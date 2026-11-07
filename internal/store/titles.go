@@ -571,3 +571,14 @@ func (s *Store) SampleFilePaths(ctx context.Context, n int) ([]string, error) {
 	}
 	return out, rows.Err()
 }
+
+// SetRefreshed records when a movie's or show's details were last
+// refreshed, for one whose refresh is put off.
+func (s *Store) SetRefreshed(ctx context.Context, kind string, id int64, at time.Time) error {
+	table := "movies"
+	if kind == "series" {
+		table = "series"
+	}
+	_, err := s.exec(ctx, "UPDATE "+table+" SET refreshed_at = ? WHERE id = ?", at.Unix(), id)
+	return err
+}
