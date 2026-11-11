@@ -232,6 +232,13 @@ func run() error {
 	case <-ctx.Done():
 	}
 	log.Info("stopping")
+	// Something asked Box Office to stop (Kubernetes, Docker, Ctrl-C), so
+	// the next start is a planned restart, not a crash. Note that now,
+	// before waiting on work that may be stuck on a network share: a slow
+	// stop, or a kill when the grace period runs out, is still planned.
+	mark, unmark := context.WithTimeout(context.Background(), 5*time.Second)
+	alerter.Stopped(mark)
+	unmark()
 	// Everything has stopWait to finish. Work stuck on a network share
 	// that stopped answering may never come back, and waiting for it
 	// would hold up the stop until Kubernetes or Docker gave up on it.
@@ -244,8 +251,6 @@ func run() error {
 	}
 	select {
 	case <-stopped:
-		// A clean stop, so the next start isn't taken for a crash.
-		alerter.Stopped(shut)
 	case <-shut.Done():
 		log.Warn("stopping without waiting for work that's stuck; a network share may have stopped answering")
 	}
