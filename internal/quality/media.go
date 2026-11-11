@@ -19,6 +19,10 @@ type Media struct {
 	Title string `json:"title,omitempty"`
 	// Error is why the file couldn't be looked inside, when it couldn't.
 	Error string `json:"error,omitempty"`
+	// Retry says the file couldn't be read for now, through no fault of
+	// its own (its share stopped answering), so it's looked inside again
+	// later.
+	Retry bool `json:"retry,omitempty"`
 }
 
 // Resolution is the picture's size as a quality names it (2160, 1080,

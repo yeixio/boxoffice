@@ -25,8 +25,14 @@ type ToCheck struct {
 	ProfileID int
 }
 
+// retryAfter is how long a file that couldn't be read for now waits
+// before it's looked inside again.
+const retryAfter = 24 * time.Hour
+
 // FilesToCheck lists up to n files the quality check hasn't looked inside,
-// or whose size changed since it did.
+// or whose size changed since it did, and those it couldn't read for now
+// (quality.Media.Retry) a day ago or more. Before Retry, a look that ran
+// out of time was saved as ffprobe being killed; those are retried too.
 func (s *Store) FilesToCheck(ctx context.Context, n int) ([]ToCheck, error) {
 	rows, err := s.query(ctx, `SELECT f.id, f.kind, f.owner_id, f.path, f.size, f.quality,
 		COALESCE(m.profile_id, t.profile_id, 0)
@@ -34,8 +40,9 @@ func (s *Store) FilesToCheck(ctx context.Context, n int) ([]ToCheck, error) {
 		LEFT JOIN movies m ON f.kind IN ('movie', 'edition') AND m.id = f.owner_id
 		LEFT JOIN episodes e ON f.kind = 'episode' AND e.id = f.owner_id
 		LEFT JOIN series t ON t.id = e.series_id
-		WHERE f.kind IN `+checkKinds+` AND (f.probed_at = 0 OR f.probed_size <> f.size)
-		ORDER BY f.id LIMIT ?`, n)
+		WHERE f.kind IN `+checkKinds+` AND (f.probed_at = 0 OR f.probed_size <> f.size
+			OR f.probed_at < ? AND (f.media LIKE '%"retry":true%' OR f.media LIKE '%"error":"ffprobe: signal: killed"%'))
+		ORDER BY f.id LIMIT ?`, time.Now().Add(-retryAfter).Unix(), n)
 	if err != nil {
 		return nil, err
 	}
