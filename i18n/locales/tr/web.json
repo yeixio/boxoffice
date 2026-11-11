@@ -134,6 +134,8 @@
     "offListMovie": "Box Office'in listesinden ve Matinee'nin isteklerinden çıkar, Box Office da onu aramayı bırakır.",
     "offList": "Box Office'in listesinden çıkar, Box Office da onu aramayı bırakır.",
     "filesStay": "Dosyaları diskte oldukları yerde kalır.",
+    "downloadsGo_one": "Süren indirmeleri ({{count}}) iptal edilir ve şimdiye kadar indirilenler silinir.",
+    "downloadsGo_other": "Süren indirmeleri ({{count}}) iptal edilir ve şimdiye kadar indirilenler silinir.",
     "checkingFolder": "Klasörü denetleniyor…",
     "cantDelete": "Box Office onları silemiyor: {{problem}}.",
     "noFiles": "Diskte bunun için dosya yok.",

@@ -134,6 +134,8 @@
     "offListMovie": "Den fjernes fra Box Office' liste og Matinees ønsker, og Box Office holder op med at lede efter den.",
     "offList": "Den fjernes fra Box Office' liste, og Box Office holder op med at lede efter den.",
     "filesStay": "Filerne bliver liggende på disken.",
+    "downloadsGo_one": "Dens igangværende downloads ({{count}}) annulleres, og det, de har hentet indtil nu, slettes.",
+    "downloadsGo_other": "Dens igangværende downloads ({{count}}) annulleres, og det, de har hentet indtil nu, slettes.",
     "checkingFolder": "Tjekker mappen…",
     "cantDelete": "Box Office kan ikke slette dem: {{problem}}.",
     "noFiles": "Der er ingen filer på disken til den.",

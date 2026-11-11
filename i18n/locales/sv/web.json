@@ -134,6 +134,8 @@
     "offListMovie": "Den tas bort från Box Offices lista och Matinees önskemål, och Box Office slutar leta efter den.",
     "offList": "Den tas bort från Box Offices lista, och Box Office slutar leta efter den.",
     "filesStay": "Filerna ligger kvar på disken.",
+    "downloadsGo_one": "Pågående nedladdningar för den ({{count}}) avbryts, och det som hämtats hittills raderas.",
+    "downloadsGo_other": "Pågående nedladdningar för den ({{count}}) avbryts, och det som hämtats hittills raderas.",
     "checkingFolder": "Kontrollerar mappen…",
     "cantDelete": "Box Office kan inte ta bort dem: {{problem}}.",
     "noFiles": "Det finns inga filer på disken för den.",

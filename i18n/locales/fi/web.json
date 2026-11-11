@@ -134,6 +134,8 @@
     "offListMovie": "Se poistuu Box Officen listalta ja Matineen toiveista, ja Box Office lakkaa etsimästä sitä.",
     "offList": "Se poistuu Box Officen listalta, ja Box Office lakkaa etsimästä sitä.",
     "filesStay": "Sen tiedostot jäävät levylle paikoilleen.",
+    "downloadsGo_one": "Sen keskeneräiset lataukset ({{count}}) perutaan, ja tähän asti ladattu poistetaan.",
+    "downloadsGo_other": "Sen keskeneräiset lataukset ({{count}}) perutaan, ja tähän asti ladattu poistetaan.",
     "checkingFolder": "Tarkistetaan kansiota…",
     "cantDelete": "Box Office ei voi poistaa niitä: {{problem}}.",
     "noFiles": "Sille ei ole tiedostoja levyllä.",

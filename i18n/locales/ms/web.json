@@ -122,6 +122,7 @@
     "offListMovie": "Ia dikeluarkan daripada senarai Box Office dan permintaan Matinee, dan Box Office berhenti mencarinya.",
     "offList": "Ia dikeluarkan daripada senarai Box Office, dan Box Office berhenti mencarinya.",
     "filesStay": "Failnya kekal di tempatnya pada cakera.",
+    "downloadsGo_other": "Muat turun yang sedang berjalan untuknya ({{count}}) dibatalkan, dan apa yang sudah dimuat turun dipadam.",
     "checkingFolder": "Menyemak foldernya…",
     "cantDelete": "Box Office tidak dapat memadamnya: {{problem}}.",
     "noFiles": "Tiada fail pada cakera untuknya.",

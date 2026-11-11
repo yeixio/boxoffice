@@ -134,6 +134,8 @@
     "offListMovie": "It comes off Box Office's list and Matinee's requests, and Box Office stops looking for it.",
     "offList": "It comes off Box Office's list, and Box Office stops looking for it.",
     "filesStay": "Its files stay where they are on disk.",
+    "downloadsGo_one": "{{count}} download for it is in progress. It's cancelled, and what it fetched so far is deleted.",
+    "downloadsGo_other": "{{count}} downloads for it are in progress. They're cancelled, and what they fetched so far is deleted.",
     "checkingFolder": "Checking its folder…",
     "cantDelete": "Box Office can't delete them: {{problem}}.",
     "noFiles": "There are no files on disk for it.",

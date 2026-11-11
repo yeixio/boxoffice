@@ -134,6 +134,8 @@
     "offListMovie": "Lekerül a Box Office listájáról és a Matinee kéréseiből, és a Box Office nem keresi tovább.",
     "offList": "Lekerül a Box Office listájáról, és a Box Office nem keresi tovább.",
     "filesStay": "A fájljai ott maradnak a lemezen, ahol vannak.",
+    "downloadsGo_one": "A folyamatban lévő letöltései ({{count}}) megszakadnak, és ami eddig letöltődött, törlődik.",
+    "downloadsGo_other": "A folyamatban lévő letöltései ({{count}}) megszakadnak, és ami eddig letöltődött, törlődik.",
     "checkingFolder": "A mappája ellenőrzése…",
     "cantDelete": "A Box Office nem tudja törölni őket: {{problem}}.",
     "noFiles": "Nincsenek hozzá fájlok a lemezen.",

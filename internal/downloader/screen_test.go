@@ -87,7 +87,7 @@ func TestDownloadQuarantined(t *testing.T) {
 	e.Failed = func(_ context.Context, _ store.Download, why string) { failed <- why }
 	run(t, e)
 	nzb := postFiles(srv, "Some.Movie.2024", [][2]any{{"Some.Movie.2024.mkv.exe", windowsProgram()}, {"readme.txt", []byte("codec needed")}})
-	d, err := e.Add(context.Background(), store.Download{Source: "search", Kind: "movie", TitleID: 1}, nzb)
+	d, err := e.Add(context.Background(), store.Download{Source: "search", Kind: "movie", TitleID: aMovie(t, st)}, nzb)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -149,7 +149,7 @@ func TestDownloadNoVideo(t *testing.T) {
 	enable(t, st, Settings{})
 	run(t, e)
 	nzb := postFiles(srv, "Other.Movie.2024", [][2]any{{"other.movie.2024.nfo", []byte("visit our site")}})
-	d, err := e.Add(context.Background(), store.Download{Source: "search", Kind: "movie", TitleID: 1}, nzb)
+	d, err := e.Add(context.Background(), store.Download{Source: "search", Kind: "movie", TitleID: aMovie(t, st)}, nzb)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -246,7 +246,7 @@ func TestImportLater(t *testing.T) {
 	enable(t, st, Settings{Import: true})
 	run(t, e)
 	ctx := context.Background()
-	d, err := e.Add(ctx, store.Download{Source: "search", Kind: "movie", TitleID: 1}, postFiles(srv, "Amerikatsi.2022", obfuscatedSet(t)))
+	d, err := e.Add(ctx, store.Download{Source: "search", Kind: "movie", TitleID: aMovie(t, st)}, postFiles(srv, "Amerikatsi.2022", obfuscatedSet(t)))
 	if err != nil {
 		t.Fatal(err)
 	}
