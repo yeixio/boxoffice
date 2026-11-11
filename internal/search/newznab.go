@@ -32,6 +32,9 @@ type Release struct {
 	Indexer     string    `json:"indexer"`
 	Protocol    string    `json:"protocol"`
 	Password    string    `json:"-"`
+	// Locked is set when the indexer says the release is locked with a
+	// password (Newznab's password attribute, 1 or 2).
+	Locked bool `json:"locked,omitempty"`
 	// What the indexer says it's of, when it says (extended results).
 	IMDBID string `json:"-"`
 	TMDBID int64  `json:"-"`
@@ -340,8 +343,14 @@ func parseFeed(body []byte, ix store.Indexer) ([]Release, Limits, error) {
 					r.Categories = append(r.Categories, n)
 				}
 			case "password":
-				if a.Value != "0" && a.Value != "1" {
-					r.Password = a.Value
+				// 0 is none, 1 a RAR locked with a password, 2 locked files
+				// inside. Some indexers give the password itself.
+				switch v := strings.TrimSpace(a.Value); v {
+				case "", "0":
+				case "1", "2":
+					r.Locked = true
+				default:
+					r.Password = v
 				}
 			case "usenetdate":
 				if t, err := time.Parse(time.RFC1123Z, a.Value); err == nil {

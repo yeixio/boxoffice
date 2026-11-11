@@ -52,8 +52,9 @@ type Download struct {
 	ImportedTo string         `json:"importedTo,omitempty"`
 	// Quarantined is where the files were moved when they looked unsafe.
 	Quarantined string `json:"quarantined,omitempty"`
-	// Missing says it failed because too much of it is gone from the news
-	// servers to repair: nothing to fix, so it's kept out of sight.
+	// Missing says it failed because it can't be used: too much of it is
+	// gone from the news servers to repair, or it's locked with a password
+	// nobody gave. Nothing to fix, so it's kept out of sight.
 	Missing bool `json:"missing,omitempty"`
 	// Fetched says every file it needed was downloaded, so it can be
 	// checked and unpacked again without downloading.
@@ -182,8 +183,9 @@ type HistoryPage struct {
 	// isn't one.
 	Sort string
 	Asc  bool
-	// Missing includes failures for articles gone from the news servers,
-	// which are left out otherwise.
+	// Missing includes failures for releases that can't be used (gone
+	// from the news servers, or locked with a password), which are left
+	// out otherwise.
 	Missing bool
 	// Query keeps those whose name has every word of it, ignoring case
 	// and the dots and underscores release names use for spaces.

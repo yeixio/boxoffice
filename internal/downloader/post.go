@@ -199,10 +199,7 @@ func (e *Engine) unpack(ctx context.Context, r *running, d *store.Download, job 
 		}
 		res, err := unpack.ExtractWithProgress(ctx, a, job.dir, d.Password, r.step)
 		if errors.Is(err, unpack.ErrPassword) {
-			if d.Password == "" {
-				return errors.New("the archive needs a password, and the release didn't give one. Releases like this are often fake")
-			}
-			return errors.New("the archive's password isn't right")
+			return lockedError(d.Password != "")
 		}
 		if err != nil {
 			return fmt.Errorf("unpack %s: %w", filepath.Base(a.Path), err)

@@ -22,6 +22,9 @@ var noVolNumber bool
 // noFirstFlag leaves the first-volume flag out of the main header, as RAR 2 did.
 var noFirstFlag bool
 
+// encryptFiles marks the file headers encrypted, as a password does.
+var encryptFiles bool
+
 func writeRAR4(t *testing.T, dir, file string, data []byte, names []string) {
 	writeRAR4Named(t, dir, file, data, names, true)
 }
@@ -70,6 +73,9 @@ func writeRAR4Named(t *testing.T, dir, file string, data []byte, names []string,
 		le(uint32(0x20))
 		fh.WriteString(file)
 		flags := uint16(0x8000)
+		if encryptFiles {
+			flags |= 0x0004
+		}
 		if i > 0 {
 			flags |= 0x01
 		}

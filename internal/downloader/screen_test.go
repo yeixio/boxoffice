@@ -193,15 +193,20 @@ func TestReprocess(t *testing.T) {
 	smallMedia(t)
 	srv := nntptest.New()
 	defer srv.Close()
-	locked, err := os.ReadFile(filepath.Join("..", "usenet", "unpack", "testdata", "locked.rar"))
-	if err != nil {
-		t.Fatal(err)
+	// A set with its last volume missing, and no par2 files to rebuild it.
+	var files [][2]any
+	for i, to := range []string{"a1b2c3.rar", "d4e5f6"} {
+		b, err := os.ReadFile(filepath.Join("..", "usenet", "unpack", "testdata", fmt.Sprintf("multi.part%d.rar", i+1)))
+		if err != nil {
+			t.Fatal(err)
+		}
+		files = append(files, [2]any{to, b})
 	}
 	e, st := newEngine(t, srv)
 	enable(t, st, Settings{})
 	run(t, e)
 	ctx := context.Background()
-	d, err := e.Add(ctx, store.Download{Source: "upload"}, postFiles(srv, "Locked", [][2]any{{"a1b2c3.rar", locked}}))
+	d, err := e.Add(ctx, store.Download{Source: "upload"}, postFiles(srv, "Short", files))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -214,7 +219,7 @@ func TestReprocess(t *testing.T) {
 		t.Fatal(err)
 	}
 	d = waitFor(t, st, d.ID, store.DownloadFailed)
-	if !strings.Contains(d.Message, "password") {
+	if !strings.Contains(strings.ToLower(d.Message), "unpack") {
 		t.Fatalf("message %q", d.Message)
 	}
 	if n := srv.Fetches.Load(); n != fetched {

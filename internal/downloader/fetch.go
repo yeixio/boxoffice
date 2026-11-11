@@ -19,6 +19,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/usenet/nntp"
 	"github.com/yeixio/boxoffice/internal/usenet/nzb"
+	"github.com/yeixio/boxoffice/internal/usenet/unpack"
 	"github.com/yeixio/boxoffice/internal/usenet/yenc"
 )
 
@@ -269,6 +270,13 @@ func (e *Engine) download(ctx context.Context, r *running, d *store.Download, sr
 		final := filepath.Join(job.dir, name)
 		if err := os.Rename(st.tmp, final); err != nil {
 			return shareTrouble(err)
+		}
+		// A release locked with a password, and none given, can never be
+		// unpacked. Any one volume of the archive says so, so it's
+		// stopped as soon as the first is here, not when all of it is.
+		if d.Password == "" && !st.nf.par2 && unpack.Locked(final) {
+			e.Log.Info("download is locked with a password, and none was given; discarding it", "name", d.Name, "id", d.ID, "file", name)
+			return lockedError(false)
 		}
 		mu.Lock()
 		st.nf.name = name

@@ -214,6 +214,9 @@ func (s *Service) judgeBook(r Release, a store.Author, b store.Book, format stri
 	if blocked[strings.ToLower(r.Title)] {
 		c.reject("it's on the blocklist")
 	}
+	if lockedNoPassword(r) {
+		c.reject(whyLocked)
+	}
 	if slices.Contains(r.Categories, catComics) || reComic.MatchString(r.Title) {
 		c.reject("it's a comic")
 	}

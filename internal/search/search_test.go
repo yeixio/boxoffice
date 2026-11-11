@@ -181,3 +181,35 @@ func TestResultsNoReleasesIsEmptyList(t *testing.T) {
 		t.Fatalf("got %s", b)
 	}
 }
+
+// Releases the indexer says are locked with a password are passed over,
+// unless the password comes with them.
+func TestLockedReleases(t *testing.T) {
+	attr := func(title, guid, value string) string {
+		return strings.Replace(item(title, guid, 9e9), "</item>", `<newznab:attr name="password" value="`+value+`"/></item>`, 1)
+	}
+	srv, _ := indexer(t,
+		attr("The.Matrix.1999.1080p.BluRay.x264-RAR", "a", "1"),
+		attr("The.Matrix.1999.1080p.BluRay.x264-FILES", "b", "2"),
+		attr("The.Matrix.1999.1080p.BluRay.x264-GIVEN", "c", "hunter2"),
+		attr("The.Matrix.1999.1080p.BluRay.x264-NAMED{{hunter2}}", "d", "1"),
+		attr("The.Matrix.1999.1080p.BluRay.x264-OPEN", "e", "0"),
+	)
+	s, _, m := setup(t, srv.URL)
+	res, err := s.Movie(context.Background(), m.ID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := map[string]bool{"a": false, "b": false, "c": true, "d": true, "e": true}
+	for _, c := range res.Releases {
+		if c.Accepted != want[c.GUID] {
+			t.Errorf("%s: accepted %v (%v)", c.Title, c.Accepted, c.Rejections)
+		}
+		if c.GUID == "b" && c.Password != "" {
+			t.Errorf("took %q for a password", c.Password)
+		}
+		if c.GUID == "c" && c.Password != "hunter2" {
+			t.Errorf("password %q", c.Password)
+		}
+	}
+}

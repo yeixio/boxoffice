@@ -400,6 +400,9 @@ func (s *Service) judge(ctx context.Context, r Release, p quality.Profile, has b
 	if blocked[strings.ToLower(r.Title)] {
 		c.reject("it's on the blocklist")
 	}
+	if lockedNoPassword(r) {
+		c.reject(whyLocked)
+	}
 	if !p.Accepts(q.ID) {
 		c.reject(fmt.Sprintf("the %s profile doesn't take %s", p.Name, q.Name))
 	} else if !p.Wants(has, have, q.ID) {
@@ -407,6 +410,18 @@ func (s *Service) judge(ctx context.Context, r Release, p quality.Profile, has b
 		c.reject(fmt.Sprintf("there's a %s copy already", hq.Name))
 	}
 	return c
+}
+
+// rePasswordInName is a password given in a release's name, as
+// "name{{password}}"; the downloader takes it from there.
+var rePasswordInName = regexp.MustCompile(`\{\{.+\}\}\s*$`)
+
+const whyLocked = "the indexer says it's locked with a password, and gives no password"
+
+// lockedNoPassword says whether the indexer says a release is locked with
+// a password and doesn't give one, so it could never be unpacked.
+func lockedNoPassword(r Release) bool {
+	return r.Locked && r.Password == "" && !rePasswordInName.MatchString(r.Title)
 }
 
 func key(r Release) string {
