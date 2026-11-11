@@ -397,6 +397,21 @@ func (s *Store) TitleLocked(ctx context.Context, kind string, id int64) (bool, e
 	return locked == 1, err
 }
 
+// TitleExists says whether a movie, show, album or book is still on the
+// list. kind is a download's: movie, series, album, ebook or audiobook.
+func (s *Store) TitleExists(ctx context.Context, kind string, id int64) (bool, error) {
+	table := map[string]string{"movie": "movies", "series": "series", AlbumKind: "albums", Ebook: "books", Audiobook: "books"}[kind]
+	if table == "" {
+		return false, fmt.Errorf("no such kind of title %q", kind)
+	}
+	var one int
+	err := s.row(ctx, "SELECT 1 FROM "+table+" WHERE id = ?", id).Scan(&one)
+	if errors.Is(err, sql.ErrNoRows) {
+		return false, nil
+	}
+	return err == nil, err
+}
+
 // ErrAuthorLocked is ErrLocked for a book: its author is on Do not touch.
 // errors.Is(ErrAuthorLocked, ErrLocked) holds.
 var ErrAuthorLocked error = authorLocked{}

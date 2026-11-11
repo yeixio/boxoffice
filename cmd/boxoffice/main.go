@@ -85,10 +85,24 @@ func run() error {
 	// The Health page shows the latest lines and the problems among them.
 	logs := monitor.NewLogs(0)
 	log := slog.New(logs.Handler(handler))
+	// Packages that use the standard log, such as net/http when a page
+	// panics, log here too.
+	slog.SetDefault(log)
 	mon := &api.Monitoring{Monitor: monitor.NewMonitor(logs), Level: level, ForcedDebug: cfg.Debug}
 
 	if err := os.MkdirAll(cfg.DataDir, 0o750); err != nil {
 		return fmt.Errorf("make the data folder: %w", err)
+	}
+	// The log and a crash are written to the data folder too, so the next
+	// start can show them: a pod's own output goes with the pod.
+	prev, err := monitor.OpenJournal(cfg.LogDir(), logs)
+	if err != nil {
+		log.Warn("not keeping the log on disk; the Log page will only have this run", "dir", cfg.LogDir(), "err", err)
+	}
+	defer logs.CloseJournal()
+	mon.Monitor.Previous = prev
+	if prev.Crashed() {
+		log.Warn("Box Office crashed last time; Health → Log → Previous run has what it wrote", "crash", prev.CrashSummary())
 	}
 	db, err := store.Open(cfg.Database())
 	if err != nil {
@@ -179,6 +193,7 @@ func run() error {
 		Restart:    func() { restartNow(errRestart) },
 	}
 	alerter := srv.Alerts()
+	alerter.Crash = prev.CrashSummary()
 	// Ebooks go to the e-readers set to get them as they download.
 	readers := &ereader.Service{Store: db, Log: log, Convert: cfg.EbookConvert,
 		AlertMail: func(ctx context.Context) (alerts.Email, error) {
@@ -270,6 +285,7 @@ func run() error {
 	case <-shut.Done():
 		log.Warn("stopping without waiting for work that's stuck; a network share may have stopped answering")
 	}
+	log.Info("stopped")
 	if restarting {
 		return errRestart
 	}

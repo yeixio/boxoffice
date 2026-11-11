@@ -21,11 +21,12 @@ func TestDownloadWrongLanguage(t *testing.T) {
 	enable(t, st, Settings{})
 	run(t, e)
 	ctx := context.Background()
-	st.SetTitleWant(ctx, store.TitleWant{Kind: "movie", OwnerID: 1, Want: store.WantReplace, Problem: store.ProblemLanguage, Language: "en"})
+	movie := aMovie(t, st)
+	st.SetTitleWant(ctx, store.TitleWant{Kind: "movie", OwnerID: movie, Want: store.WantReplace, Problem: store.ProblemLanguage, Language: "en"})
 
 	get := func(name string) store.Download {
 		nzb := postFiles(srv, name, [][2]any{{strings.ToLower(name) + ".mkv", []byte(strings.Repeat("video ", 2000))}})
-		d, err := e.Add(ctx, store.Download{Source: "search", Kind: "movie", TitleID: 1}, nzb)
+		d, err := e.Add(ctx, store.Download{Source: "search", Kind: "movie", TitleID: movie}, nzb)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -44,7 +45,7 @@ func TestDownloadWrongLanguage(t *testing.T) {
 		t.Fatalf("untagged: %s: %s", d.Status, d.Message)
 	}
 	// Nothing reported: anything goes.
-	st.SetTitleWant(ctx, store.TitleWant{Kind: "movie", OwnerID: 1})
+	st.SetTitleWant(ctx, store.TitleWant{Kind: "movie", OwnerID: movie})
 	tracks = []string{"de"}
 	if d := get("Movie.2024.GERMAN.720p"); d.Status != store.DownloadCompleted {
 		t.Fatalf("not reported: %s: %s", d.Status, d.Message)
