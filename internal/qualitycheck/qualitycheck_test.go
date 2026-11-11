@@ -2,11 +2,13 @@ package qualitycheck
 
 import (
 	"context"
+	"errors"
 	"log/slog"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"testing"
+	"time"
 
 	"github.com/yeixio/boxoffice/internal/quality"
 	"github.com/yeixio/boxoffice/internal/store"
@@ -155,5 +157,57 @@ func TestParse(t *testing.T) {
 	}
 	if _, err := Parse([]byte(`{"streams":[{"codec_type":"audio","codec_name":"flac"}]}`)); err == nil {
 		t.Error("no picture should fail")
+	}
+}
+
+// A file whose share stops answering isn't taken for unreadable for good:
+// ffprobe running out of time is marked to try again later, and the pass
+// goes on without looking at it again.
+func TestStalledProbe(t *testing.T) {
+	dir := t.TempDir()
+	slow := filepath.Join(dir, "ffprobe")
+	if err := os.WriteFile(slow, []byte("#!/bin/sh\nexec sleep 5\n"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	old := probeTimeout
+	probeTimeout = 100 * time.Millisecond
+	defer func() { probeTimeout = old }()
+	_, err := FFprobe(context.Background(), slow, filepath.Join(dir, "a.mkv"))
+	if !errors.Is(err, ErrStalled) {
+		t.Fatalf("timed out: %v", err)
+	}
+
+	ctx := context.Background()
+	st := storetest.Open(t)
+	profiles, _ := st.Profiles(ctx)
+	m, err := st.AddMovie(ctx, store.Movie{TMDBID: 1, Title: "Stalled", ProfileID: profiles[0].ID, Path: filepath.Join(dir, "Stalled")})
+	if err != nil {
+		t.Fatal(err)
+	}
+	path := filepath.Join(dir, "Stalled", "Stalled.mkv")
+	os.MkdirAll(filepath.Dir(path), 0o755)
+	os.WriteFile(path, []byte("x"), 0o644)
+	f, err := st.AddFile(ctx, store.File{Kind: "movie", OwnerID: m.ID, Path: path, Size: 1})
+	if err != nil {
+		t.Fatal(err)
+	}
+	probes := 0
+	s := &Service{Store: st, Log: slog.New(slog.DiscardHandler), Probe: func(ctx context.Context, p string) (quality.Media, error) {
+		probes++
+		return FFprobe(ctx, slow, p)
+	}}
+	if err := s.Pass(ctx); err != nil {
+		t.Fatal(err)
+	}
+	if probes != 1 {
+		t.Errorf("probed %d times in a pass", probes)
+	}
+	got, _ := st.FileByID(ctx, f.ID)
+	if got.Media == nil || !got.Media.Retry || got.Media.Error == "" {
+		t.Errorf("media %+v", got.Media)
+	}
+	s.Pass(ctx)
+	if probes != 1 {
+		t.Errorf("looked again straight away: %d", probes)
 	}
 }

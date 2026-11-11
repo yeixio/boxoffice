@@ -37,10 +37,19 @@ var (
 	firstWait = 5 * time.Minute
 	every     = 10 * time.Minute
 	pause     = 250 * time.Millisecond
+	// probeTimeout is how long ffprobe gets to name a file's streams.
+	probeTimeout = time.Minute
 )
 
 // batch is how many files a pass reads from the database at a time.
 const batch = 100
+
+// ErrStalled means a file couldn't be read for now: ffprobe ran out of
+// time, as it does when a network share stops answering, or the share
+// gave an error. It isn't the file's fault, so the file is looked inside
+// again a day later (see store.FilesToCheck) instead of being taken for
+// unreadable for good.
+var ErrStalled = errors.New("couldn't be read for now")
 
 // Service runs the check in the background.
 type Service struct {
@@ -198,7 +207,7 @@ func (s *Service) pass(ctx context.Context) error {
 			m, err := s.look(ctx, probe, f.Path)
 			q := f.Quality
 			if err != nil {
-				m = quality.Media{Error: err.Error()}
+				m = quality.Media{Error: err.Error(), Retry: errors.Is(err, ErrStalled)}
 				s.Log.Debug("quality check: couldn't look inside", "path", f.Path, "err", err)
 			} else {
 				q = quality.Correct(f.Quality, nameOf(f.Path), m, profileOf(f.ProfileID))
@@ -245,7 +254,7 @@ func (s *Service) look(ctx context.Context, probe func(context.Context, string) 
 		if errors.Is(err, os.ErrNotExist) {
 			return quality.Media{}, errors.New("the file isn't there")
 		}
-		return quality.Media{}, err
+		return quality.Media{}, fmt.Errorf("%w: %w", ErrStalled, err)
 	}
 	return probe(ctx, path)
 }
@@ -259,12 +268,15 @@ func nameOf(path string) string {
 // FFprobe looks inside a file with ffprobe, reading only as much as it
 // needs to name its streams.
 func FFprobe(ctx context.Context, ffprobe, path string) (quality.Media, error) {
-	ctx, cancel := context.WithTimeout(ctx, time.Minute)
+	ctx, cancel := context.WithTimeout(ctx, probeTimeout)
 	defer cancel()
 	cmd := exec.CommandContext(ctx, ffprobe, "-v", "error", "-print_format", "json", "-show_format", "-show_streams", "-i", path)
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr
 	out, err := cmd.Output()
+	if err != nil && errors.Is(ctx.Err(), context.DeadlineExceeded) {
+		return quality.Media{}, fmt.Errorf("ffprobe: %w: it took more than a minute to answer", ErrStalled)
+	}
 	if err != nil {
 		msg := strings.TrimSpace(stderr.String())
 		if i := strings.IndexByte(msg, '\n'); i > 0 {
