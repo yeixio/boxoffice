@@ -376,6 +376,9 @@ export type Monitor = {
   alerts: Alert[]
   logLines: number
   logsSince?: number
+  // The run before this one, from the log on disk; crash is the first line
+  // of its crash, when it crashed.
+  previousRun?: { lines: number; started?: number; ended?: number; crash?: string }
 }
 
 export type WebhookKind = 'discord' | 'ntfy' | 'homeassistant' | 'json'

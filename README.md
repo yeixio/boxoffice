@@ -352,7 +352,7 @@ Yes. In **Settings → Send to e-readers**, paste your reader's Send to Kindle o
 <details>
 <summary><b>Where do I report a problem?</b></summary>
 
-[Open an issue](https://github.com/yeixio/boxoffice/issues/new/choose) with the version (shown at the bottom of each page) and what happened. The **Health → Log** tab can download the log; take out API keys, passwords and addresses before you paste it. Security problems go through [SECURITY.md](SECURITY.md).
+[Open an issue](https://github.com/yeixio/boxoffice/issues/new/choose) with the version (shown at the bottom of each page) and what happened. The **Health → Log** tab can download the log, starting with the end of the run before the last restart and any crash; take out API keys, passwords and addresses before you paste it. Security problems go through [SECURITY.md](SECURITY.md).
 </details>
 
 ## How it's built
