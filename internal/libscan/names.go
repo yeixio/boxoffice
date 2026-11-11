@@ -5,6 +5,8 @@ import (
 	"strconv"
 	"strings"
 	"unicode"
+
+	"github.com/yeixio/boxoffice/internal/names"
 )
 
 // Guess is what a folder's name says about the title in it.
@@ -29,6 +31,9 @@ var (
 // ParseName reads a title's folder name, such as "The Matrix (1999)",
 // "The.Matrix.1999.1080p.BluRay-GRP" or "Severance {tvdb-371980}".
 func ParseName(name string) Guess {
+	// "Ame\u0301lie" as macOS writes it, or garbled "LÃ©on", is the title
+	// it was meant to be.
+	name = names.Repair(name)
 	var g Guess
 	for _, m := range reID.FindAllStringSubmatch(name, -1) {
 		switch strings.ToLower(m[1]) {
@@ -65,12 +70,12 @@ func ParseName(name string) Guess {
 	return g
 }
 
-// same says two titles are the same but for case, punctuation, "and" for
-// "&" and a leading "The".
+// same says two titles are the same but for case, accents, punctuation,
+// "and" for "&" and a leading "The".
 func same(a, b string) bool { return norm(a) != "" && norm(a) == norm(b) }
 
 func norm(s string) string {
-	s = strings.ToLower(strings.ReplaceAll(s, "&", " and "))
+	s = names.Fold(strings.ReplaceAll(s, "&", " and "))
 	s = strings.TrimPrefix(strings.TrimSpace(s), "the ")
 	var b strings.Builder
 	for _, r := range s {

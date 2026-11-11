@@ -92,7 +92,7 @@ func (s *Service) Season(ctx context.Context, t store.Series, season int, want [
 		if t.TVDBID > 0 {
 			q.TVDBID = t.TVDBID
 		} else {
-			q.Text = t.Title
+			q.Text = searchText(t.Title)
 		}
 		return q
 	})
