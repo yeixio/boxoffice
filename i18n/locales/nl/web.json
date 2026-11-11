@@ -1079,12 +1079,23 @@
     "new": "Nieuw wachtwoord",
     "newHint": "Minstens 8 tekens. Elk apparaat logt opnieuw in.",
     "change": "Wachtwoord wijzigen",
+    "restart": "Box Office herstarten",
+    "restartSub": "Stopt Box Office netjes en start het opnieuw, voor als iets vast lijkt te zitten. Downloads pauzeren waar ze zijn en gaan verder zodra het terug is.",
+    "restartButton": "Herstarten",
+    "restartTitle": "Box Office herstarten?",
+    "restartBody": "Box Office stopt netjes en start opnieuw. Meestal is het binnen een minuut terug, en deze pagina maakt vanzelf weer verbinding.",
+    "restartDownloads": "Downloads die nu lopen: {{n}}. Ze pauzeren waar ze zijn en gaan na de herstart verder.",
+    "restartNow": "Nu herstarten",
+    "restarting": "Box Office herstart…",
+    "restartingSub": "Deze pagina maakt vanzelf weer verbinding zodra Box Office terug is.",
+    "restartSlow": "Box Office is nog niet terug. Als het wegblijft, kijk dan in de logs waar het draait, zoals de logs van de pod in Kubernetes of docker logs.",
+    "reload": "Pagina opnieuw laden",
     "system": "Box Office {{version}} op {{os}}, {{go}}, {{db}} · gegevens in <code>{{dir}}</code> · actief sinds {{since}}",
     "languageHint": "De taal waarin Box Office zich aan je toont, op elk apparaat waarop je inlogt. Automatisch volgt de taal van elke browser.",
     "sections": {
       "general": {
         "label": "Algemeen",
-        "sub": "Je taal en wachtwoord, en de TMDB-sleutel waarmee Box Office titels opzoekt."
+        "sub": "Je taal en wachtwoord, de TMDB-sleutel waarmee Box Office titels opzoekt, en het herstarten van Box Office."
       },
       "library": {
         "label": "Bibliotheek",

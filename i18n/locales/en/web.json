@@ -1079,12 +1079,23 @@
     "new": "New password",
     "newHint": "At least 8 characters. Every device signs in again.",
     "change": "Change password",
+    "restart": "Restart Box Office",
+    "restartSub": "Stops Box Office cleanly and starts it again, for when something seems stuck. Downloads pause where they are and carry on once it's back.",
+    "restartButton": "Restart",
+    "restartTitle": "Restart Box Office?",
+    "restartBody": "Box Office stops cleanly and starts again. It's usually back within a minute, and this page reconnects by itself.",
+    "restartDownloads": "Downloads running now: {{n}}. They pause where they are and carry on after the restart.",
+    "restartNow": "Restart now",
+    "restarting": "Restarting Box Office…",
+    "restartingSub": "This page reconnects by itself once Box Office is back.",
+    "restartSlow": "Box Office isn't back yet. If it stays away, look at its logs where it runs, such as the pod's logs in Kubernetes or docker logs.",
+    "reload": "Reload the page",
     "system": "Box Office {{version}} on {{os}}, {{go}}, {{db}} · data in <code>{{dir}}</code> · running since {{since}}",
     "languageHint": "The language Box Office shows you, on every device you sign in on. Automatic follows each browser's language.",
     "sections": {
       "general": {
         "label": "General",
-        "sub": "Your language and password, and the TMDB key Box Office looks titles up with."
+        "sub": "Your language and password, the TMDB key Box Office looks titles up with, and restarting Box Office."
       },
       "library": {
         "label": "Library",

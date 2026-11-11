@@ -1233,12 +1233,23 @@
     "new": "Nowe hasło",
     "newHint": "Co najmniej 8 znaków. Każde urządzenie zaloguje się ponownie.",
     "change": "Zmień hasło",
+    "restart": "Uruchom ponownie Box Office",
+    "restartSub": "Porządnie zatrzymuje Box Office i uruchamia go od nowa, gdy coś wydaje się zawieszone. Pobierania wstrzymują się w miejscu, w którym są, i wznawiają się po jego powrocie.",
+    "restartButton": "Uruchom ponownie",
+    "restartTitle": "Uruchomić ponownie Box Office?",
+    "restartBody": "Box Office porządnie się zatrzyma i uruchomi od nowa. Zwykle wraca w ciągu minuty, a ta strona połączy się ponownie sama.",
+    "restartDownloads": "Trwające pobierania: {{n}}. Wstrzymają się w miejscu, w którym są, i wznowią się po ponownym uruchomieniu.",
+    "restartNow": "Uruchom ponownie teraz",
+    "restarting": "Ponowne uruchamianie Box Office…",
+    "restartingSub": "Ta strona połączy się ponownie sama, gdy Box Office wróci.",
+    "restartSlow": "Box Office jeszcze nie wrócił. Jeśli nie wraca, zajrzyj do jego logów tam, gdzie działa, na przykład do logów poda w Kubernetes lub docker logs.",
+    "reload": "Odśwież stronę",
     "system": "Box Office {{version}} na {{os}}, {{go}}, {{db}} · dane w <code>{{dir}}</code> · działa od {{since}}",
     "languageHint": "Język, w którym Box Office się wyświetla, na każdym urządzeniu, na którym się logujesz. Automatyczny podąża za językiem każdej przeglądarki.",
     "sections": {
       "general": {
         "label": "Ogólne",
-        "sub": "Twój język i hasło oraz klucz TMDB, za pomocą którego Box Office wyszukuje tytuły."
+        "sub": "Twój język i hasło, klucz TMDB, za pomocą którego Box Office wyszukuje tytuły, oraz ponowne uruchamianie Box Office."
       },
       "library": {
         "label": "Biblioteka",

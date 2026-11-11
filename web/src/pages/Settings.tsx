@@ -4,8 +4,8 @@ import { Trans, useTranslation } from 'react-i18next'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { ArrowRight, Copy, Lock, Search, Folder, FolderUp, KeyRound, Plus, Trash2 } from 'lucide-react'
-import { del, get, post, put, type Status, type MediaType, type MediaTypeKey, type Profile, type Recycle, type RootFolder, type RootKind, type Settings as SettingsData, type ShowDefaults, type SystemInfo } from '../api'
+import { ArrowRight, Copy, Lock, Search, Folder, FolderUp, KeyRound, LoaderCircle, Plus, RotateCcw, Trash2 } from 'lucide-react'
+import { del, get, post, put, type Status, type MediaType, type MediaTypeKey, type Profile, type Recycle, type RestartInfo, type RootFolder, type RootKind, type Settings as SettingsData, type ShowDefaults, type SystemInfo } from '../api'
 import { bytes, day } from '../format'
 import { monitorOptions, useProfiles, useQualities, useRootFolders, useShowDefaults } from '../hooks'
 import { AutoSearchSettings, Connections, DataCapSettingsCard, DownloadSettings, NumberField } from './Connections'
@@ -38,6 +38,7 @@ const sections: SectionDef[] = [
       { id: 'language', el: <Language /> },
       { id: 'tmdb', el: <General />, keys: ['settings.tmdbKey'], terms: ['API'] },
       { id: 'password', el: <Account /> },
+      { id: 'restart', el: <Restart />, keys: ['settings.restartNow'], terms: ['reboot', 'Kubernetes', 'Docker'] },
     ],
   },
   {
@@ -941,6 +942,94 @@ function Account() {
         </Button>
       </div>
     </Card>
+  )
+}
+
+// Restart stops Box Office cleanly and starts it again. Downloads stop
+// where they are and carry on after, and the page waits for the new run,
+// told apart by when it started, then loads again.
+function Restart() {
+  const { t } = useTranslation()
+  const [confirm, setConfirm] = useState(false)
+  const info = useQuery({ queryKey: ['restart'], queryFn: () => get<RestartInfo>('/admin/restart'), enabled: confirm, staleTime: 0 })
+  const [since, setSince] = useState<string>()
+  const go = useMutation({
+    mutationFn: () => post<{ startedAt: string }>('/admin/restart'),
+    onSuccess: (r) => {
+      setConfirm(false)
+      setSince(r.startedAt)
+    },
+  })
+  const n = info.data?.downloads ?? 0
+  return (
+    <Card>
+      <h2 className="mb-1 font-display text-lg font-semibold">{t('settings.restart')}</h2>
+      <p className="mb-4 text-sm text-muted">{t('settings.restartSub')}</p>
+      <Button onClick={() => setConfirm(true)}>
+        <RotateCcw className="size-4" aria-hidden /> {t('settings.restartButton')}
+      </Button>
+      {confirm && (
+        <Modal title={t('settings.restartTitle')} onClose={() => setConfirm(false)}>
+          <div className="flex flex-col gap-3 text-sm">
+            <p>{t('settings.restartBody')}</p>
+            {n > 0 && <p className="font-medium">{t('settings.restartDownloads', { n })}</p>}
+          </div>
+          <ErrorNote error={go.error} />
+          <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+            <Button variant="ghost" onClick={() => setConfirm(false)}>
+              {t('common.cancel')}
+            </Button>
+            <Button variant="danger" busy={go.isPending} onClick={() => go.mutate()}>
+              <RotateCcw className="size-4" aria-hidden /> {t('settings.restartNow')}
+            </Button>
+          </div>
+        </Modal>
+      )}
+      {since && <Restarting since={since} />}
+    </Card>
+  )
+}
+
+// Restarting covers the page while Box Office is away, and loads the page
+// again once a new run answers. It says so if that takes long.
+function Restarting({ since }: { since: string }) {
+  const { t } = useTranslation()
+  const [slow, setSlow] = useState(false)
+  useEffect(() => {
+    let done = false
+    const look = async () => {
+      try {
+        const s = await get<SystemInfo>('/system')
+        if (!done && s.startedAt !== since) {
+          done = true
+          window.location.reload()
+        }
+      } catch {
+        // Still away.
+      }
+    }
+    const every = window.setInterval(look, 2000)
+    const late = window.setTimeout(() => setSlow(true), 2 * 60 * 1000)
+    return () => {
+      done = true
+      window.clearInterval(every)
+      window.clearTimeout(late)
+    }
+  }, [since])
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+      <div role="status" aria-live="polite" className="flex w-full max-w-md flex-col items-center gap-3 rounded-xl border border-line bg-card p-6 text-center text-ink">
+        <LoaderCircle className="size-8 animate-spin text-muted" aria-hidden />
+        <h2 className="font-display text-lg font-semibold">{t('settings.restarting')}</h2>
+        <p className="text-sm text-muted">{t('settings.restartingSub')}</p>
+        {slow && (
+          <>
+            <p className="text-sm">{t('settings.restartSlow')}</p>
+            <Button onClick={() => window.location.reload()}>{t('settings.reload')}</Button>
+          </>
+        )}
+      </div>
+    </div>
   )
 }
 

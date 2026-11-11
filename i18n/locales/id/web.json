@@ -1002,12 +1002,23 @@
     "new": "Kata sandi baru",
     "newHint": "Minimal 8 karakter. Setiap perangkat masuk lagi.",
     "change": "Ubah kata sandi",
+    "restart": "Mulai ulang Box Office",
+    "restartSub": "Menghentikan Box Office dengan rapi lalu menjalankannya lagi, untuk saat sesuatu tampak macet. Unduhan dijeda di posisinya dan berlanjut setelah kembali.",
+    "restartButton": "Mulai ulang",
+    "restartTitle": "Mulai ulang Box Office?",
+    "restartBody": "Box Office berhenti dengan rapi lalu berjalan lagi. Biasanya kembali dalam satu menit, dan halaman ini tersambung lagi dengan sendirinya.",
+    "restartDownloads": "Unduhan yang sedang berjalan: {{n}}. Unduhan dijeda di posisinya dan berlanjut setelah dimulai ulang.",
+    "restartNow": "Mulai ulang sekarang",
+    "restarting": "Memulai ulang Box Office…",
+    "restartingSub": "Halaman ini tersambung lagi dengan sendirinya setelah Box Office kembali.",
+    "restartSlow": "Box Office belum kembali. Jika tidak kembali, lihat log-nya di tempat ia berjalan, seperti log pod di Kubernetes atau docker logs.",
+    "reload": "Muat ulang halaman",
     "system": "Box Office {{version}} di {{os}}, {{go}}, {{db}} · data di <code>{{dir}}</code> · berjalan sejak {{since}}",
     "languageHint": "Bahasa yang digunakan Box Office untuk Anda, di setiap perangkat tempat Anda masuk. Otomatis mengikuti bahasa setiap browser.",
     "sections": {
       "general": {
         "label": "Umum",
-        "sub": "Bahasa dan kata sandi Anda, serta kunci TMDB yang dipakai Box Office untuk mencari judul."
+        "sub": "Bahasa dan kata sandi Anda, kunci TMDB yang dipakai Box Office untuk mencari judul, dan memulai ulang Box Office."
       },
       "library": {
         "label": "Perpustakaan",
