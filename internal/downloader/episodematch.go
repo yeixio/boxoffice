@@ -13,6 +13,7 @@ import (
 	"time"
 	"unicode"
 
+	"github.com/yeixio/boxoffice/internal/namefix"
 	"github.com/yeixio/boxoffice/internal/store"
 )
 
@@ -283,7 +284,7 @@ func init() {
 func words(s string) []string {
 	seen := map[string]bool{}
 	var out []string
-	for _, w := range strings.FieldsFunc(strings.ToLower(s), func(r rune) bool { return !unicode.IsLetter(r) && !unicode.IsDigit(r) && r != '\'' }) {
+	for _, w := range strings.FieldsFunc(namefix.Fold(s), func(r rune) bool { return !unicode.IsLetter(r) && !unicode.IsDigit(r) && r != '\'' }) {
 		w = strings.Trim(w, "'")
 		w = strings.TrimSuffix(w, "'s")
 		if len(w) < 3 || stopWords[w] {

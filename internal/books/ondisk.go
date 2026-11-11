@@ -11,6 +11,7 @@ import (
 
 	"github.com/yeixio/boxoffice/internal/downloader"
 	"github.com/yeixio/boxoffice/internal/mediatypes"
+	"github.com/yeixio/boxoffice/internal/namefix"
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/usenet/screen"
 )
@@ -20,8 +21,11 @@ var (
 	reYearTag = regexp.MustCompile(`\s*[\(\[]\d{4}[\)\]]\s*$`)
 )
 
+// norm is a name for comparing: without accents (so "García" on disk,
+// whichever way its accent is written, is "Garcia" in a release), lower
+// case, "and" for "&" and spaces for punctuation.
 func norm(s string) string {
-	s = strings.ToLower(strings.ReplaceAll(s, "&", "and"))
+	s = namefix.Fold(strings.ReplaceAll(s, "&", "and"))
 	return strings.TrimSpace(reNonWord.ReplaceAllString(s, " "))
 }
 
