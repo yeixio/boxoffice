@@ -245,6 +245,9 @@ func (s *Service) judgeAlbum(r Release, a store.Artist, b store.Album, want stri
 	if blocked[strings.ToLower(r.Title)] {
 		c.reject("it's on the blocklist")
 	}
+	if lockedNoPassword(r) {
+		c.reject(whyLocked)
+	}
 	if ok, why := albumMatches(r.Title, a.Name, b.Title); !ok {
 		c.reject(why)
 	}

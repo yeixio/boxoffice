@@ -841,8 +841,9 @@ func (e *Engine) process(ctx context.Context, r *running, d store.Download, srv 
 	default:
 		e.Log.Warn("download failed", "name", d.Name, "err", err)
 		msg := sentence(err.Error())
-		// Gone from the news servers: nothing to fix or tell anyone, so
-		// it's blocked, another looked for, and it's out of sight.
+		// Gone from the news servers, or locked with a password: nothing
+		// to fix or tell anyone, so it's blocked, another looked for, and
+		// it's out of sight.
 		var h hopelessError
 		if errors.As(err, &h) {
 			d.Missing = true
@@ -941,13 +942,25 @@ func (e *Engine) resumeFolderWaits(ctx context.Context) {
 }
 
 // hopelessError marks a failure no retry of the same files can fix: too
-// much is gone from the news servers, or too much is damaged to repair.
+// much is gone from the news servers, too much is damaged to repair, or
+// it's locked with a password nobody gave.
 // (A failed unpack isn't one: Unpack again can still work.)
 type hopelessError struct{ error }
 
 func (h hopelessError) Unwrap() error { return h.error }
 
 func hopeless(err error) error { return hopelessError{err} }
+
+// lockedError is the failure of a release locked with a password: with
+// none, or a wrong one, nothing can open it, so it's hopeless. It's
+// discarded like one gone from the news servers: blocked, its files
+// deleted, another looked for, and nobody told.
+func lockedError(gavePassword bool) error {
+	if gavePassword {
+		return hopeless(errors.New("it's locked with a password, and the one the release gave doesn't open it; try another release"))
+	}
+	return hopeless(errors.New("it's locked with a password, and the release didn't give one. Releases like this are usually fake; try another release"))
+}
 
 // dropHopeless deletes a failed download's files when they can't be used
 // and the settings say so, and says whether it did. Quarantined files are
