@@ -86,7 +86,7 @@ func TestLinksStayInside(t *testing.T) {
 	if _, _, err := e.OpenFile(context.Background(), "lib/keep.mkv"); err == nil {
 		t.Fatal("opened a file through a link")
 	}
-	if err := e.ImportPath(context.Background(), "lib/keep.mkv", "movie", 1); err == nil {
+	if err := e.ImportPath(context.Background(), "lib/keep.mkv", "movie", 1, 0); err == nil {
 		t.Fatal("imported through a link")
 	}
 	// Deleting the link deletes the link, never what it points to.
@@ -151,7 +151,7 @@ func TestReleaseAndOpen(t *testing.T) {
 	if _, _, err := e.OpenFile(context.Background(), QuarantineDir+"/Rel/movie.mkv"); err == nil {
 		t.Fatal("opened a quarantined file")
 	}
-	if err := e.ImportPath(ctx, QuarantineDir+"/Rel", "movie", 1); err == nil {
+	if err := e.ImportPath(ctx, QuarantineDir+"/Rel", "movie", 1, 0); err == nil {
 		t.Fatal("imported from quarantine")
 	}
 	if _, err := e.Release(ctx, QuarantineDir+"/Rel/movie.mkv"); err == nil {
@@ -183,7 +183,7 @@ func TestImportPath(t *testing.T) {
 	}
 	write(t, filepath.Join(e.Dir, "Test.Movie.2024.1080p", "test.movie.mkv"), 5000)
 	write(t, filepath.Join(e.Dir, "Test.Movie.2024.1080p", "test.movie.nfo"), 5)
-	if err := e.ImportPath(ctx, "Test.Movie.2024.1080p", "movie", m.ID); err != nil {
+	if err := e.ImportPath(ctx, "Test.Movie.2024.1080p", "movie", m.ID, 0); err != nil {
 		t.Fatal(err)
 	}
 	deadline := time.Now().Add(10 * time.Second)
