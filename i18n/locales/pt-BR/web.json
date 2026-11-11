@@ -1156,12 +1156,23 @@
     "new": "Nova senha",
     "newHint": "Pelo menos 8 caracteres. Todos os dispositivos entram de novo.",
     "change": "Alterar senha",
+    "restart": "Reiniciar o Box Office",
+    "restartSub": "Para o Box Office de forma limpa e o inicia de novo, para quando algo parece travado. Os downloads pausam onde estão e continuam quando ele voltar.",
+    "restartButton": "Reiniciar",
+    "restartTitle": "Reiniciar o Box Office?",
+    "restartBody": "O Box Office para de forma limpa e inicia de novo. Normalmente volta em até um minuto, e esta página se reconecta sozinha.",
+    "restartDownloads": "Downloads em andamento agora: {{n}}. Eles pausam onde estão e continuam depois do reinício.",
+    "restartNow": "Reiniciar agora",
+    "restarting": "Reiniciando o Box Office…",
+    "restartingSub": "Esta página se reconecta sozinha assim que o Box Office voltar.",
+    "restartSlow": "O Box Office ainda não voltou. Se ele não voltar, veja os logs onde ele roda, como os logs do pod no Kubernetes ou o docker logs.",
+    "reload": "Recarregar a página",
     "system": "Box Office {{version}} em {{os}}, {{go}}, {{db}} · dados em <code>{{dir}}</code> · rodando desde {{since}}",
     "languageHint": "O idioma em que o Box Office aparece para você, em todos os dispositivos em que você entrar. Automático segue o idioma de cada navegador.",
     "sections": {
       "general": {
         "label": "Geral",
-        "sub": "Seu idioma e senha, e a chave do TMDB com que o Box Office busca os títulos."
+        "sub": "Seu idioma e senha, a chave do TMDB com que o Box Office busca os títulos, e reiniciar o Box Office."
       },
       "library": {
         "label": "Biblioteca",

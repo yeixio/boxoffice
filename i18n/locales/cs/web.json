@@ -1233,12 +1233,23 @@
     "new": "Nové heslo",
     "newHint": "Alespoň 8 znaků. Každé zařízení se znovu přihlásí.",
     "change": "Změnit heslo",
+    "restart": "Restartovat Box Office",
+    "restartSub": "Čistě zastaví Box Office a znovu ho spustí, když se zdá, že se něco zaseklo. Stahování se pozastaví tam, kde je, a po návratu pokračuje.",
+    "restartButton": "Restartovat",
+    "restartTitle": "Restartovat Box Office?",
+    "restartBody": "Box Office se čistě zastaví a znovu spustí. Obvykle je zpět do minuty a tato stránka se znovu připojí sama.",
+    "restartDownloads": "Právě běžící stahování: {{n}}. Pozastaví se tam, kde jsou, a po restartu pokračují.",
+    "restartNow": "Restartovat nyní",
+    "restarting": "Box Office se restartuje…",
+    "restartingSub": "Jakmile bude Box Office zpět, tato stránka se znovu připojí sama.",
+    "restartSlow": "Box Office ještě není zpět. Pokud se nevrátí, podívejte se do jeho logů tam, kde běží, například do logů podu v Kubernetes nebo do docker logs.",
+    "reload": "Znovu načíst stránku",
     "system": "Box Office {{version}} na {{os}}, {{go}}, {{db}} · data v <code>{{dir}}</code> · běží od {{since}}",
     "languageHint": "Jazyk, ve kterém se vám Box Office zobrazuje, na každém zařízení, kde se přihlásíte. Automaticky se řídí jazykem každého prohlížeče.",
     "sections": {
       "general": {
         "label": "Obecné",
-        "sub": "Váš jazyk a heslo a klíč TMDB, kterým Box Office vyhledává tituly."
+        "sub": "Váš jazyk a heslo, klíč TMDB, kterým Box Office vyhledává tituly, a restart Box Office."
       },
       "library": {
         "label": "Knihovna",

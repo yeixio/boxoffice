@@ -4,10 +4,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"slices"
 	"strings"
+	"syscall"
 
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/usenet/par2"
@@ -26,11 +28,13 @@ func (e *Engine) postProcess(ctx context.Context, r *running, d *store.Download,
 	status(store.DownloadVerifying, "")
 	notes, err := e.repair(ctx, r, d, job, status)
 	if err != nil {
-		return err
+		// Reading the files back can fail as the downloads folder drops
+		// out: that's passing, and it's checked again later.
+		return shareTrouble(err)
 	}
 	status(store.DownloadUnpacking, "")
 	if err := e.unpack(ctx, r, d, job); err != nil {
-		return err
+		return shareTrouble(vanished(err))
 	}
 	files := listFiles(job.dir)
 	if len(files) == 0 {
@@ -69,6 +73,20 @@ func (e *Engine) postProcess(ctx context.Context, r *running, d *store.Download,
 	r.setStage("")
 	e.Log.Info("download finished", "name", d.Name, "id", d.ID, "result", msg)
 	return e.Store.SetDownloadStatus(context.WithoutCancel(ctx), d.ID, store.DownloadCompleted, msg)
+}
+
+// vanished marks an unpack that failed as a volume it was reading went
+// away underneath it ("read …part08.rar: no such file or directory"):
+// on a network share that's a file handle gone stale, as the file was
+// replaced, so unpacking is tried again a little later, like the share
+// dropping out. A volume that was never there isn't one: rardecode takes
+// that for the end of the archive.
+func vanished(err error) error {
+	var pe *fs.PathError
+	if errors.As(err, &pe) && pe.Op == "read" && errors.Is(err, syscall.ENOENT) {
+		return &fs.PathError{Op: pe.Op, Path: pe.Path, Err: syscall.ESTALE}
+	}
+	return err
 }
 
 // wants is what a download for a kind of title must hold.

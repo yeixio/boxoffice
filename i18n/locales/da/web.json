@@ -1079,12 +1079,23 @@
     "new": "Ny adgangskode",
     "newHint": "Mindst 8 tegn. Alle enheder logger ind igen.",
     "change": "Skift adgangskode",
+    "restart": "Genstart Box Office",
+    "restartSub": "Stopper Box Office pænt og starter det igen, når noget ser ud til at sidde fast. Downloads sættes på pause, hvor de er, og fortsætter, når det er tilbage.",
+    "restartButton": "Genstart",
+    "restartTitle": "Genstart Box Office?",
+    "restartBody": "Box Office stopper pænt og starter igen. Det er som regel tilbage inden for et minut, og siden forbinder igen af sig selv.",
+    "restartDownloads": "Downloads i gang nu: {{n}}. De sættes på pause, hvor de er, og fortsætter efter genstarten.",
+    "restartNow": "Genstart nu",
+    "restarting": "Genstarter Box Office…",
+    "restartingSub": "Siden forbinder igen af sig selv, når Box Office er tilbage.",
+    "restartSlow": "Box Office er ikke tilbage endnu. Hvis det bliver væk, så se i dets logs, der hvor det kører, fx pod'ens logs i Kubernetes eller docker logs.",
+    "reload": "Genindlæs siden",
     "system": "Box Office {{version}} på {{os}}, {{go}}, {{db}} · data i <code>{{dir}}</code> · kørt siden {{since}}",
     "languageHint": "Det sprog, Box Office vises på for dig, på alle enheder, du logger ind på. Automatisk følger sproget i hver browser.",
     "sections": {
       "general": {
         "label": "Generelt",
-        "sub": "Dit sprog og din adgangskode samt den TMDB-nøgle, Box Office slår titler op med."
+        "sub": "Dit sprog og din adgangskode, den TMDB-nøgle, Box Office slår titler op med, og genstart af Box Office."
       },
       "library": {
         "label": "Bibliotek",

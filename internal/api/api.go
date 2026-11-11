@@ -84,6 +84,9 @@ type Server struct {
 	Monitoring *Monitoring
 	// Ereaders sends ebooks to e-readers; nil makes one.
 	Ereaders *ereader.Service
+	// Restart stops Box Office cleanly and starts it again, for the
+	// Restart button in Settings; nil means it can't.
+	Restart func()
 
 	ereaderOnce sync.Once
 	started     time.Time
@@ -257,6 +260,8 @@ func (s *Server) Handler() http.Handler {
 		{"GET /api/v1/admin/logs", true, s.getLogs},
 		{"GET /api/v1/admin/logs/download", true, s.downloadLogs},
 		{"PUT /api/v1/admin/debug", true, s.putDebug},
+		{"GET /api/v1/admin/restart", true, s.getRestart},
+		{"POST /api/v1/admin/restart", true, s.postRestart},
 		{"GET /api/v1/admin/alerts", true, s.getAlerts},
 		{"PUT /api/v1/admin/alerts", true, s.putAlerts},
 		{"POST /api/v1/admin/alerts/test", true, s.testAlerts},

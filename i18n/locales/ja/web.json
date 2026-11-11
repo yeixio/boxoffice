@@ -1002,12 +1002,23 @@
     "new": "新しいパスワード",
     "newHint": "8 文字以上。すべてのデバイスでもう一度サインインします。",
     "change": "パスワードを変更",
+    "restart": "Box Office を再起動",
+    "restartSub": "何かが止まっているようなときに、Box Office をきれいに停止して起動し直します。ダウンロードはその場で一時停止し、戻ったあとに続きから再開します。",
+    "restartButton": "再起動",
+    "restartTitle": "Box Office を再起動しますか？",
+    "restartBody": "Box Office はきれいに停止してから起動し直します。たいてい 1 分以内に戻り、このページは自動で再接続します。",
+    "restartDownloads": "実行中のダウンロード: {{n}}。その場で一時停止し、再起動後に続きから再開します。",
+    "restartNow": "今すぐ再起動",
+    "restarting": "Box Office を再起動しています…",
+    "restartingSub": "Box Office が戻ると、このページは自動で再接続します。",
+    "restartSlow": "Box Office はまだ戻っていません。戻らない場合は、動いている場所でログを確認してください。たとえば Kubernetes の pod のログや docker logs です。",
+    "reload": "ページを再読み込み",
     "system": "Box Office {{version}}（{{os}}、{{go}}、{{db}}）· データは <code>{{dir}}</code> · {{since}} から稼働",
     "languageHint": "Box Office の表示言語です。サインインするすべてのデバイスで使われます。「自動」は各ブラウザの言語に合わせます。",
     "sections": {
       "general": {
         "label": "一般",
-        "sub": "あなたの言語とパスワード、そして Box Office がタイトルを調べるのに使う TMDB キー。"
+        "sub": "あなたの言語とパスワード、Box Office がタイトルを調べるのに使う TMDB キー、そして Box Office の再起動。"
       },
       "library": {
         "label": "ライブラリ",

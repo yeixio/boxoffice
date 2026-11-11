@@ -1002,12 +1002,23 @@
     "new": "Mật khẩu mới",
     "newHint": "Ít nhất 8 ký tự. Mọi thiết bị sẽ đăng nhập lại.",
     "change": "Đổi mật khẩu",
+    "restart": "Khởi động lại Box Office",
+    "restartSub": "Dừng Box Office một cách gọn gàng rồi chạy lại, khi có gì đó có vẻ bị kẹt. Các lượt tải tạm dừng tại chỗ và tiếp tục khi nó trở lại.",
+    "restartButton": "Khởi động lại",
+    "restartTitle": "Khởi động lại Box Office?",
+    "restartBody": "Box Office dừng một cách gọn gàng rồi chạy lại. Thường nó trở lại trong vòng một phút, và trang này tự kết nối lại.",
+    "restartDownloads": "Lượt tải đang chạy: {{n}}. Chúng tạm dừng tại chỗ và tiếp tục sau khi khởi động lại.",
+    "restartNow": "Khởi động lại ngay",
+    "restarting": "Đang khởi động lại Box Office…",
+    "restartingSub": "Trang này tự kết nối lại khi Box Office trở lại.",
+    "restartSlow": "Box Office vẫn chưa trở lại. Nếu nó không trở lại, hãy xem log ở nơi nó chạy, chẳng hạn log của pod trong Kubernetes hoặc docker logs.",
+    "reload": "Tải lại trang",
     "system": "Box Office {{version}} trên {{os}}, {{go}}, {{db}} · dữ liệu trong <code>{{dir}}</code> · chạy từ {{since}}",
     "languageHint": "Ngôn ngữ Box Office hiển thị cho bạn, trên mọi thiết bị bạn đăng nhập. Tự động sẽ theo ngôn ngữ của từng trình duyệt.",
     "sections": {
       "general": {
         "label": "Chung",
-        "sub": "Ngôn ngữ và mật khẩu của bạn, cùng khóa TMDB mà Box Office dùng để tra cứu tựa phim."
+        "sub": "Ngôn ngữ và mật khẩu của bạn, khóa TMDB mà Box Office dùng để tra cứu tựa phim, và khởi động lại Box Office."
       },
       "library": {
         "label": "Thư viện",

@@ -30,6 +30,9 @@ type rarVolume struct {
 	// ended is set when a RAR 3/4 volume's end block was read, and last
 	// when that says no volume follows.
 	ended, last bool
+	// newNames is set when a RAR 3/4 set names its volumes .partN.rar,
+	// not .rar, .r00, .r01…
+	newNames bool
 }
 
 var (
@@ -141,6 +144,7 @@ func probeRAR4(f *os.File, v *rarVolume) bool {
 	flags := binary.LittleEndian.Uint16(h[3:])
 	size := int64(binary.LittleEndian.Uint16(h[5:]))
 	v.multi = flags&0x0001 != 0
+	v.newNames = flags&0x0010 != 0
 	if flags&0x0100 != 0 {
 		v.first, v.num = true, 0
 	}
@@ -246,6 +250,30 @@ func findRARSets(dir string, files []string) []rarSet {
 		sets = append(sets, rarSet{first})
 		loose = slices.DeleteFunc(loose, func(v rarVolume) bool { return v.path == first.path })
 	}
+	// Volumes posted under hashes that kept their old-style extensions
+	// (abc….rar, def….r00, 123….r01…), whose headers neither mark the
+	// first nor number any (RAR 2): each has a name of its own, so the
+	// names can't group them, but the extensions still give the order.
+	// They make one set when nothing else could be meant: one .rar among
+	// them, no extension twice, and no set already taking them by name.
+	var hashed []rarVolume
+	for _, v := range loose {
+		st := stem(v.path)
+		if v.num < 0 && oldExt(v.path) >= 0 && len(byStem[st]) < 2 &&
+			!slices.ContainsFunc(sets, func(s rarSet) bool { return s[0].multi && stem(s[0].path) == st }) {
+			hashed = append(hashed, v)
+		}
+	}
+	slices.SortFunc(hashed, func(a, b rarVolume) int { return oldExt(a.path) - oldExt(b.path) })
+	if len(hashed) >= 2 && oldExt(hashed[0].path) == 0 && oldExt(hashed[1].path) != 0 &&
+		len(slices.CompactFunc(slices.Clone(hashed), func(a, b rarVolume) bool { return oldExt(a.path) == oldExt(b.path) })) == len(hashed) {
+		set := rarSet(slices.Clone(hashed))
+		set[0].first, set[0].num = true, 0
+		sets = append(sets, set)
+		loose = slices.DeleteFunc(loose, func(v rarVolume) bool {
+			return slices.ContainsFunc(hashed, func(h rarVolume) bool { return h.path == v.path })
+		})
+	}
 	// A set whose first volume's header couldn't be read (encrypted
 	// headers, or RAR 2 and older): the name says which is first.
 	if len(sets) == 0 && len(loose) > 0 {
@@ -286,6 +314,10 @@ func findRARSets(dir string, files []string) []rarSet {
 			if a.num >= 0 && b.num >= 0 && a.num != b.num {
 				return a.num - b.num
 			}
+			// Hashed names that kept their extensions: those say.
+			if stem(a.path) != stem(b.path) && oldExt(a.path) > 0 && oldExt(b.path) > 0 {
+				return oldExt(a.path) - oldExt(b.path)
+			}
 			return strings.Compare(volOrder(a.path), volOrder(b.path))
 		})
 		// The same volume twice (a repost) only counts once.
@@ -293,6 +325,24 @@ func findRARSets(dir string, files []string) []rarSet {
 	}
 	slices.SortFunc(sets, func(a, b rarSet) int { return strings.Compare(a[0].path, b[0].path) })
 	return sets
+}
+
+// reOldExt is an old-style volume's extension: .rar, then .r00 to .r99,
+// .s00 to .s99 and so on.
+var reOldExt = regexp.MustCompile(`(?i)\.(rar|[r-z]\d\d)$`)
+
+// oldExt is where a name's extension puts it in an old-style set: 0 for
+// .rar, 1 for .r00, 101 for .s00; -1 for any other name.
+func oldExt(p string) int {
+	m := reOldExt.FindStringSubmatch(p)
+	if m == nil {
+		return -1
+	}
+	e := strings.ToLower(m[1])
+	if e == "rar" {
+		return 0
+	}
+	return 1 + int(e[0]-'r')*100 + int(e[1]-'0')*10 + int(e[2]-'0')
 }
 
 func stem(p string) string { return strings.ToLower(reStem.ReplaceAllString(filepath.Base(p), "")) }
@@ -386,7 +436,7 @@ func checkSet(paths []string) error {
 		if v.num >= 0 && v.num != i {
 			return fmt.Errorf("volume %d of the archive is missing", i+1)
 		}
-		if v.num < 0 && i > 0 && stem(v.path) != stem(vols[0].path) {
+		if v.num < 0 && i > 0 && stem(v.path) != stem(vols[0].path) && (oldExt(vols[0].path) != 0 || oldExt(v.path) != i) {
 			return fmt.Errorf("the archive's volumes have scrambled names and don't say which comes first, so they can't be put in order")
 		}
 	}

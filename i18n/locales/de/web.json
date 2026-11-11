@@ -1079,12 +1079,23 @@
     "new": "Neues Passwort",
     "newHint": "Mindestens 8 Zeichen. Jedes Gerät meldet sich neu an.",
     "change": "Passwort ändern",
+    "restart": "Box Office neu starten",
+    "restartSub": "Beendet Box Office sauber und startet es wieder, wenn etwas zu hängen scheint. Downloads pausieren, wo sie gerade sind, und laufen weiter, sobald es wieder da ist.",
+    "restartButton": "Neu starten",
+    "restartTitle": "Box Office neu starten?",
+    "restartBody": "Box Office beendet sich sauber und startet wieder. Meist ist es nach einer Minute zurück, und diese Seite verbindet sich von selbst neu.",
+    "restartDownloads": "Laufende Downloads: {{n}}. Sie pausieren, wo sie gerade sind, und laufen nach dem Neustart weiter.",
+    "restartNow": "Jetzt neu starten",
+    "restarting": "Box Office startet neu…",
+    "restartingSub": "Diese Seite verbindet sich von selbst neu, sobald Box Office wieder da ist.",
+    "restartSlow": "Box Office ist noch nicht zurück. Wenn es weg bleibt, schau in seine Logs dort, wo es läuft, etwa die Logs des Pods in Kubernetes oder docker logs.",
+    "reload": "Seite neu laden",
     "system": "Box Office {{version}} auf {{os}}, {{go}}, {{db}} · Daten in <code>{{dir}}</code> · läuft seit {{since}}",
     "languageHint": "Die Sprache, in der Box Office dir alles zeigt, auf jedem Gerät, auf dem du dich anmeldest. Automatisch folgt der Sprache des jeweiligen Browsers.",
     "sections": {
       "general": {
         "label": "Allgemein",
-        "sub": "Deine Sprache und dein Passwort sowie der TMDB-Schlüssel, mit dem Box Office Titel nachschlägt."
+        "sub": "Deine Sprache und dein Passwort, der TMDB-Schlüssel, mit dem Box Office Titel nachschlägt, und der Neustart von Box Office."
       },
       "library": {
         "label": "Mediathek",
