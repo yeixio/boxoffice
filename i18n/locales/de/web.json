@@ -134,6 +134,8 @@
     "offListMovie": "Der Titel verschwindet aus der Liste von Box Office und aus den Wünschen in Matinee, und Box Office sucht nicht mehr danach.",
     "offList": "Der Titel verschwindet aus der Liste von Box Office, und Box Office sucht nicht mehr danach.",
     "filesStay": "Seine Dateien bleiben, wo sie auf der Festplatte sind.",
+    "downloadsGo_one": "Laufende Downloads dafür ({{count}}) werden abgebrochen, und was bisher geladen wurde, wird gelöscht.",
+    "downloadsGo_other": "Laufende Downloads dafür ({{count}}) werden abgebrochen, und was bisher geladen wurde, wird gelöscht.",
     "checkingFolder": "Ordner wird geprüft…",
     "cantDelete": "Box Office kann sie nicht löschen: {{problem}}.",
     "noFiles": "Auf der Festplatte gibt es keine Dateien dafür.",

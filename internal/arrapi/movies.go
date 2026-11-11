@@ -309,15 +309,23 @@ func (h *Handler) editMovie(w http.ResponseWriter, r *http.Request) error {
 	return write(w, http.StatusAccepted, h.movieJSON(m, ids))
 }
 
-// deleteMovie takes a movie off the wanted list. Its files stay where they
-// are, whatever deleteFiles says: Box Office never deletes a library.
+// deleteMovie takes a movie off the wanted list, cancelling its downloads.
+// Its files stay where they are, whatever deleteFiles says: Box Office
+// never deletes a library.
 func (h *Handler) deleteMovie(w http.ResponseWriter, r *http.Request) error {
 	id, err := pathID(r)
 	if err != nil {
 		return err
 	}
+	t, err := h.Catalog.Store.Movie(r.Context(), id)
+	if err != nil {
+		return err
+	}
 	if err := h.Catalog.Store.DeleteMovie(r.Context(), id); err != nil {
 		return err
+	}
+	if h.Pairing != nil && h.Pairing.Removed != nil {
+		h.Pairing.Removed(r.Context(), "movie", id, t.Title)
 	}
 	w.WriteHeader(http.StatusOK)
 	return nil

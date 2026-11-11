@@ -122,6 +122,7 @@
     "offListMovie": "它会从 Box Office 的列表和 Matinee 的请求中移除，Box Office 也不再寻找它。",
     "offList": "它会从 Box Office 的列表中移除，Box Office 也不再寻找它。",
     "filesStay": "它的文件留在磁盘原处。",
+    "downloadsGo_other": "它正在进行的下载（{{count}} 个）会被取消，已下载的内容会被删除。",
     "checkingFolder": "正在检查文件夹…",
     "cantDelete": "Box Office 无法删除它们：{{problem}}。",
     "noFiles": "磁盘上没有它的文件。",

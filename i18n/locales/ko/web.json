@@ -122,6 +122,7 @@
     "offListMovie": "Box Office 목록과 Matinee 요청에서 빠지고, Box Office가 더 이상 찾지 않아요.",
     "offList": "Box Office 목록에서 빠지고, Box Office가 더 이상 찾지 않아요.",
     "filesStay": "파일은 디스크에 그대로 남아요.",
+    "downloadsGo_other": "진행 중인 다운로드({{count}}개)는 취소되고, 지금까지 받은 파일은 삭제됩니다.",
     "checkingFolder": "폴더 확인 중…",
     "cantDelete": "Box Office가 삭제할 수 없어요: {{problem}}.",
     "noFiles": "디스크에 파일이 없어요.",

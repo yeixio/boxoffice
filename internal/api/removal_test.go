@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/yeixio/boxoffice/internal/downloader"
 	"github.com/yeixio/boxoffice/internal/store"
 )
 
@@ -126,5 +127,50 @@ func TestRemoveMovieWithFiles(t *testing.T) {
 	}
 	if _, err := s.Store.Movie(ctx, gone.ID); err == nil {
 		t.Fatal("still listed")
+	}
+}
+
+// Removing a show cancels its downloads, deleting what they fetched, and
+// the Remove dialog's plan says how many there are; files in the library
+// stay unless asked for.
+func TestRemoveSeriesCancelsDownloads(t *testing.T) {
+	s, hs, _ := monitorServer(t)
+	ctx := context.Background()
+	s.Downloads = &downloader.Engine{Store: s.Store, Dir: t.TempDir(), Log: s.Log}
+	root := t.TempDir()
+	profiles, _ := s.Store.Profiles(ctx)
+	show, err := s.Store.AddSeries(ctx, store.Series{TMDBID: 1, Title: "Gone", ProfileID: profiles[0].ID, RootFolder: root, Path: filepath.Join(root, "Gone")})
+	if err != nil {
+		t.Fatal(err)
+	}
+	touch(t, filepath.Join(show.Path, "Gone S01E01.mkv"), 500)
+	d, err := s.Store.AddDownload(ctx, store.Download{Name: "Gone.S01E02", Kind: "series", TitleID: show.ID})
+	if err != nil {
+		t.Fatal(err)
+	}
+	d.Folder = "Gone.S01E02"
+	partial := filepath.Join(s.Downloads.Dir, d.Folder, "part.rar")
+	touch(t, partial, 100)
+	s.Store.SaveDownloadProgress(ctx, d)
+	s.Store.SetDownloadStatus(ctx, d.ID, store.DownloadPaused, "")
+
+	var plan struct {
+		Downloads int `json:"downloads"`
+	}
+	call(t, hs, "GET", fmt.Sprintf("/api/v1/series/%d/removal", show.ID), "", &plan)
+	if plan.Downloads != 1 {
+		t.Fatalf("plan says %d downloads", plan.Downloads)
+	}
+	if code := call(t, hs, "DELETE", fmt.Sprintf("/api/v1/series/%d", show.ID), "", nil); code != 204 {
+		t.Fatal(code)
+	}
+	if _, err := s.Store.Download(ctx, d.ID); err != store.ErrNotFound {
+		t.Fatal("its download is still listed")
+	}
+	if there(partial) {
+		t.Fatal("what it fetched is still there")
+	}
+	if !there(show.Path) {
+		t.Fatal("library files deleted without being asked")
 	}
 }
