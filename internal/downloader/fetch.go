@@ -7,6 +7,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"regexp"
 	"slices"
 	"strconv"
 	"strings"
@@ -253,7 +254,7 @@ func (e *Engine) download(ctx context.Context, r *running, d *store.Download, sr
 	finishFile := func(st *fileState) error {
 		st.mu.Lock()
 		name := st.nf.name
-		if st.yname != "" {
+		if st.yname != "" && !(hashedName(st.yname) && !hashedName(name) && sameExt(name, st.yname)) {
 			name = st.yname
 		}
 		st.mu.Unlock()
@@ -263,6 +264,15 @@ func (e *Engine) download(ctx context.Context, r *running, d *store.Download, sr
 		}
 		err := closePart(st.fh)
 		st.fh = nil
+		// A try that was stopped (it stalled on the share, say) while its
+		// last write hung must not finish a file late: the next try may
+		// have saved it already, and be unpacking it, and renaming over
+		// it then pulls it away mid-read ("read …part08.rar: no such
+		// file or directory"). Its part file is just dropped.
+		if err == nil && ctx.Err() != nil {
+			os.Remove(st.tmp)
+			return context.Cause(ctx)
+		}
 		if err != nil {
 			os.Remove(st.tmp)
 			return shareTrouble(err)
@@ -400,6 +410,10 @@ func (e *Engine) watchStall(ctx context.Context, cancel context.CancelCauseFunc,
 	return stuck
 }
 
+// serverAttempts is how many more times an article is asked for, serverPause
+// apart, when no news server answers, before the download stops for it.
+var serverAttempts, serverPause = 6, 10 * time.Second
+
 // segment fetches, decodes and writes one article. A missing or damaged
 // article isn't an error here: par2 may fix it. A news server that can't
 // be reached is, after a minute of trying.
@@ -411,12 +425,12 @@ func (e *Engine) segment(ctx context.Context, r *running, srv *servers, s segmen
 		if err == nil || errors.Is(err, nntp.ErrNoArticle) || ctx.Err() != nil {
 			break
 		}
-		if attempt >= 6 {
-			return fmt.Errorf("the news servers stopped answering: %w", err)
+		if attempt >= serverAttempts {
+			return serverError{fmt.Errorf("the news servers stopped answering: %w", err)}
 		}
-		e.Log.Debug("news server didn't answer; trying again in 10s", "article", s.seg.MessageID, "attempt", attempt+1, "err", err)
+		e.Log.Debug("news server didn't answer; trying again", "article", s.seg.MessageID, "in", serverPause.String(), "attempt", attempt+1, "err", err)
 		select {
-		case <-time.After(10 * time.Second):
+		case <-time.After(serverPause):
 		case <-ctx.Done():
 			return context.Cause(ctx)
 		}
@@ -513,6 +527,45 @@ func shareTrouble(err error) error {
 	return err
 }
 
+// reHashed is a name made of nothing but a long run of hex digits or
+// letters and digits, as obfuscated posts name their files.
+var reHashed = regexp.MustCompile(`^(?i:[0-9a-f]{16,}|[0-9a-z]{24,})$`)
+
+// hashedName says whether a file's name, without its extension, is a
+// hash: what an obfuscated post calls a file in place of its real name.
+// The NZB's subject may still give the real name (earth.2.s01e09-med.r00
+// for 6f2d940f….r00), and that's the one kept, as old-style RAR sets
+// find each next volume by name.
+func hashedName(name string) bool {
+	base := filepath.Base(strings.ReplaceAll(name, "\\", "/"))
+	return reHashed.MatchString(strings.TrimSuffix(base, filepath.Ext(base)))
+}
+
+// sameExt says whether two names end alike (.r00 and .R00), so a subject
+// that names another file isn't taken for this one's.
+func sameExt(a, b string) bool {
+	ea := filepath.Ext(a)
+	return ea != "" && strings.EqualFold(ea, filepath.Ext(b)) && !strings.ContainsAny(a, "/\\")
+}
+
+// serverError is a download that stopped because the news servers
+// couldn't be reached for a while (their name didn't look up, they didn't
+// answer, they turned down the sign-in): nothing to do with the release,
+// so it's tried again later, not blocked.
+type serverError struct{ error }
+
+func (s serverError) Unwrap() error { return s.error }
+
+// why is what went wrong, in short: the last part of the chain, as
+// "lookup reader.example.com: i/o timeout".
+func (s serverError) why() string {
+	msg := s.error.Error()
+	if i := strings.Index(msg, "dial tcp: "); i >= 0 {
+		return msg[i+len("dial tcp: "):]
+	}
+	return strings.TrimPrefix(msg, "the news servers stopped answering: ")
+}
+
 func humanBytes(n int64) string {
 	const unit = 1000
 	if n < unit {
@@ -540,6 +593,10 @@ func doneName(dir string, d *store.Download, f *nzbFile) (string, bool) {
 	return "", false
 }
 
+// removePart deletes a part file; tests swap it for an SMB share, where
+// one still open can't be deleted.
+var removePart = os.Remove
+
 // clearParts deletes the part files earlier tries left in dir, as far as
 // it can; one that can't go yet is left for the folder's cleanup.
 func clearParts(dir string) {
@@ -549,7 +606,7 @@ func clearParts(dir string) {
 	}
 	for _, de := range entries {
 		if n := de.Name(); strings.HasPrefix(n, ".boxoffice-") && strings.HasSuffix(n, ".part") && de.Type().IsRegular() {
-			os.Remove(filepath.Join(dir, n))
+			removePart(filepath.Join(dir, n))
 		}
 	}
 }

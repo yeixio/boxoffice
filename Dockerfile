@@ -30,10 +30,14 @@ RUN --mount=type=secret,id=tmdb_key \
 # Debian with FFmpeg, for Problem files: remuxing disc images into MKVs
 # (DVDs through FFmpeg's dvdvideo demuxer, Blu-rays through libbluray) and
 # joining movies split into parts. The build stops if this FFmpeg can't
-# read either. Box Office runs as the same user (65532) as before.
+# read either. Also RARLAB's unrar (from Debian's non-free section), which
+# unpacking falls back on for RAR archives its own reader can't open.
+# Box Office runs as the same user (65532) as before.
 FROM debian:trixie-slim
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends ffmpeg ca-certificates tzdata \
+RUN sed -i 's/^Components: main$/Components: main non-free/' /etc/apt/sources.list.d/debian.sources \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends ffmpeg unrar ca-certificates tzdata \
+    && unrar | grep -q "UNRAR" \
     && rm -rf /var/lib/apt/lists/* \
     && ffmpeg -hide_banner -demuxers | grep -q dvdvideo \
     && ffmpeg -hide_banner -protocols | grep -q bluray \

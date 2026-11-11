@@ -209,7 +209,46 @@ func passwordErr(err error) bool {
 	return strings.Contains(s, "password") || strings.Contains(s, "encrypt") || errors.Is(err, rardecode.ErrBadPassword)
 }
 
+// extractRAR extracts a RAR archive with rardecode, and when that can't
+// read it, with unrar, if it's there.
 func extractRAR(ctx context.Context, a Archive, dir, password string) (Result, error) {
+	if len(a.Volumes) > 0 {
+		// A volume missing: neither can help.
+		if err := checkSet(a.Volumes); err != nil {
+			return Result{}, err
+		}
+	}
+	res, err := decode(ctx, a, dir, password)
+	if err == nil || errors.Is(err, ErrPassword) || ctx.Err() != nil || unreadable(err) {
+		return res, err
+	}
+	bin := unrarPath()
+	if bin == "" {
+		return res, err
+	}
+	// What rardecode wrote is replaced.
+	ures, uerr := extractUnrar(ctx, bin, a, dir, password)
+	if uerr == nil {
+		ures.Files = append(ures.Files, slices.DeleteFunc(res.Files, func(f string) bool { return slices.Contains(ures.Files, f) })...)
+		return ures, nil
+	}
+	if errors.Is(uerr, ErrPassword) {
+		return Result{}, ErrPassword
+	}
+	return res, fmt.Errorf("%w; unrar couldn't either: %v", err, uerr)
+}
+
+// unreadable says whether an error is reading the files themselves (the
+// share dropped out), which unrar can't help with either.
+func unreadable(err error) bool {
+	var pe *fs.PathError
+	return errors.As(err, &pe) && (pe.Op == "read" || pe.Op == "open")
+}
+
+// decode is rardecode's go at an archive; tests swap it.
+var decode = decodeRAR
+
+func decodeRAR(ctx context.Context, a Archive, dir, password string) (Result, error) {
 	var opts []rardecode.Option
 	if password != "" {
 		opts = append(opts, rardecode.Password(password))
@@ -217,9 +256,6 @@ func extractRAR(ctx context.Context, a Archive, dir, password string) (Result, e
 	path := a.Path
 	var vfs *volumeFS
 	if len(a.Volumes) > 0 {
-		if err := checkSet(a.Volumes); err != nil {
-			return Result{}, err
-		}
 		vfs = &volumeFS{paths: a.Volumes, width: max(4, len(fmt.Sprint(len(a.Volumes))))}
 		opts = append(opts, rardecode.FileSystem(vfs))
 		path = vfs.name(0)
