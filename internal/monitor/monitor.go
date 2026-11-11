@@ -96,6 +96,9 @@ type Monitor struct {
 	// Downloads says how many downloads are running and how fast they
 	// fetch together, in bytes per second; nil counts none.
 	Downloads func() (active int, rate float64)
+	// Previous is what the run before this one logged, and its crash; nil
+	// when there's no journal.
+	Previous *PreviousRun
 
 	started                   time.Time
 	mu                        sync.Mutex

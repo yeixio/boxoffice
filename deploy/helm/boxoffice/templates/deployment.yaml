@@ -25,6 +25,9 @@ spec:
         - name: boxoffice
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          # When the container fails, the end of its output (a crash) is
+          # kept in the pod's status, for kubectl describe pod.
+          terminationMessagePolicy: FallbackToLogsOnError
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           env:

@@ -128,3 +128,6 @@ func (c Config) Database() string {
 
 // BackupDir is where backups are kept on this server.
 func (c Config) BackupDir() string { return filepath.Join(c.DataDir, "backups") }
+
+// LogDir is where the log and a crash are kept, this run's and the one before.
+func (c Config) LogDir() string { return filepath.Join(c.DataDir, "logs") }

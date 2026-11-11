@@ -268,6 +268,9 @@ type Manager struct {
 	// Forward, when set, also hands every alert to Matinee's notifications
 	// (or anything else that wants them), whatever the channels are.
 	Forward func(ctx context.Context, a Alert)
+	// Crash is the first line of what Go wrote when the run before this
+	// one crashed, such as "panic: ...", for the restart alert.
+	Crash string
 
 	now      func() time.Time
 	mu       sync.Mutex
@@ -380,7 +383,11 @@ func (m *Manager) Started(ctx context.Context) {
 	var lines []string
 	if known && prev.Running {
 		a.Level, a.Title = LevelWarning, "Box Office restarted unexpectedly"
-		lines = append(lines, "The server stopped without shutting down cleanly, so it may have crashed, been killed, or the machine lost power. The log from before the restart is wherever the server's output goes.")
+		if m.Crash != "" {
+			lines = append(lines, "The server crashed: "+m.Crash+". The log from before the restart, with the whole crash, is in Health → Log → Previous run.")
+		} else {
+			lines = append(lines, "The server stopped without shutting down cleanly, so it may have been killed (such as running out of memory) or the machine lost power. The log from before the restart is in Health → Log → Previous run.")
+		}
 	} else {
 		lines = append(lines, "The server started.")
 	}
