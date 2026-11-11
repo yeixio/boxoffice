@@ -18,7 +18,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/catalog"
 	"github.com/yeixio/boxoffice/internal/downloader"
 	"github.com/yeixio/boxoffice/internal/jobs"
-	"github.com/yeixio/boxoffice/internal/names"
+	"github.com/yeixio/boxoffice/internal/namefix"
 	"github.com/yeixio/boxoffice/internal/quality"
 	"github.com/yeixio/boxoffice/internal/store"
 )
@@ -530,7 +530,7 @@ func releaseEpisode(title string) (int, []int, bool) {
 // (release names are mostly written "Amelie", "Aeon Flux"), in lower case,
 // with "and" for "&" and spaces for punctuation.
 func normalize(s string) string {
-	s = names.Fold(strings.ReplaceAll(s, "&", "and"))
+	s = namefix.Fold(strings.ReplaceAll(s, "&", "and"))
 	return strings.TrimSpace(reNonWord.ReplaceAllString(s, " "))
 }
 
@@ -540,7 +540,7 @@ func normalize(s string) string {
 func searchText(title string) string {
 	for _, r := range title {
 		if r >= 0x80 {
-			return strings.Join(strings.Fields(names.Fold(title)), " ")
+			return strings.Join(strings.Fields(namefix.Fold(title)), " ")
 		}
 	}
 	return title

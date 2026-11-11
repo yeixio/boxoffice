@@ -11,7 +11,7 @@ import (
 
 	"github.com/yeixio/boxoffice/internal/downloader"
 	"github.com/yeixio/boxoffice/internal/mediatypes"
-	"github.com/yeixio/boxoffice/internal/names"
+	"github.com/yeixio/boxoffice/internal/namefix"
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/usenet/screen"
 )
@@ -25,7 +25,7 @@ var (
 // whichever way its accent is written, is "Garcia" in a release), lower
 // case, "and" for "&" and spaces for punctuation.
 func norm(s string) string {
-	s = names.Fold(strings.ReplaceAll(s, "&", "and"))
+	s = namefix.Fold(strings.ReplaceAll(s, "&", "and"))
 	return strings.TrimSpace(reNonWord.ReplaceAllString(s, " "))
 }
 

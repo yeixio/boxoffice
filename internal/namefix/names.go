@@ -1,4 +1,4 @@
-// Package names repairs titles read from file and folder names.
+// Package namefix repairs titles read from file and folder names.
 //
 // Names on disk aren't always written the way a title is. Two kinds of
 // difference show up in real libraries:
@@ -10,7 +10,7 @@
 //   - garbled names (mojibake), where a tool read UTF-8 as Latin-1 or
 //     Windows-1252 and wrote it back: "Æon Flux" became "Ã\u0086on Flux"
 //     or "Ã†on Flux", "Léon" "LÃ©on".
-package names
+package namefix
 
 import (
 	"strings"

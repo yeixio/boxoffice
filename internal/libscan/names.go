@@ -6,7 +6,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/yeixio/boxoffice/internal/names"
+	"github.com/yeixio/boxoffice/internal/namefix"
 )
 
 // Guess is what a folder's name says about the title in it.
@@ -33,7 +33,7 @@ var (
 func ParseName(name string) Guess {
 	// "Ame\u0301lie" as macOS writes it, or garbled "LÃ©on", is the title
 	// it was meant to be.
-	name = names.Repair(name)
+	name = namefix.Repair(name)
 	var g Guess
 	for _, m := range reID.FindAllStringSubmatch(name, -1) {
 		switch strings.ToLower(m[1]) {
@@ -75,7 +75,7 @@ func ParseName(name string) Guess {
 func same(a, b string) bool { return norm(a) != "" && norm(a) == norm(b) }
 
 func norm(s string) string {
-	s = names.Fold(strings.ReplaceAll(s, "&", " and "))
+	s = namefix.Fold(strings.ReplaceAll(s, "&", " and "))
 	s = strings.TrimPrefix(strings.TrimSpace(s), "the ")
 	var b strings.Builder
 	for _, r := range s {
