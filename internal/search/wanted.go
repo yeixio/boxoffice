@@ -289,7 +289,7 @@ func (s *Service) WantedList(ctx context.Context) ([]Wanted, error) {
 			return nil, err
 		}
 		for _, e := range eps {
-			if !e.Monitored || !seasons[e.Season] || e.Season == 0 || e.AirDate == nil || !e.AirDate.Before(now) {
+			if !e.Monitored || !seasons[e.Season] || e.AirDate == nil || !e.AirDate.Before(now) {
 				continue
 			}
 			w := Wanted{Kind: "episode", ID: e.ID, SeriesID: t.ID, Subject: fmt.Sprintf("%s S%02dE%02d", t.Title, e.Season, e.Number),

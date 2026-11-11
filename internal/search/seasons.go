@@ -207,7 +207,9 @@ func (s *Service) findEpisodes(ctx context.Context, t store.Series, season int, 
 		return o, nil
 	}
 	code := func(e store.Episode) string { return fmt.Sprintf("%s S%02dE%02d", t.Title, e.Season, e.Number) }
-	if len(free) < seasonSearchFrom {
+	// Specials are looked for one by one: indexers file them as season 0,
+	// and there's no pack of them to find.
+	if len(free) < seasonSearchFrom || season == 0 {
 		for _, e := range free {
 			if ctx.Err() != nil {
 				return o, ctx.Err()

@@ -260,6 +260,34 @@ func TestImportSeasonPackByTags(t *testing.T) {
 	}
 }
 
+// With the special in the show's episodes, the whole pack goes in, the
+// special to Season 00.
+func TestImportSeasonPackSpecial(t *testing.T) {
+	st := storetest.Open(t)
+	ctx := context.Background()
+	lib := t.TempDir()
+	profiles, _ := st.Profiles(ctx)
+	show, _ := st.AddSeries(ctx, store.Series{TMDBID: 7, Title: "Pantry Lab", Year: 2001, Runtime: 22, ProfileID: profiles[0].ID, RootFolder: lib, Path: filepath.Join(lib, "Pantry Lab (2001)"), Monitored: true, Seasons: []store.Season{{Number: 0}, {Number: 3, Monitored: true}}})
+	all, tags, _ := pantry()
+	for _, e := range append(all, pantrySpecial) {
+		e.ID, e.SeriesID = 0, show.ID
+		st.UpsertEpisode(ctx, e)
+	}
+	dl := t.TempDir()
+	for v := range tags {
+		os.WriteFile(filepath.Join(dl, v), make([]byte, 5000), 0o644)
+	}
+	li := &LibraryImporter{Store: st, Tags: func(_ context.Context, p string) (VideoTags, error) {
+		return tags[filepath.Base(p)], nil
+	}}
+	if _, err := li.Import(ctx, store.Download{Kind: "series", TitleID: show.ID, Name: "Pantry.Lab.S03.576p.WEB-DL-GROUP"}, dl, listFiles(dl)); err != nil {
+		t.Fatal(err)
+	}
+	if p := filepath.Join(show.Path, "Season 00", "Pantry Lab (2001) - S00E04 - Turkey Trouble.mkv"); !fileExists(p) {
+		t.Errorf("%s missing", p)
+	}
+}
+
 func fileExists(p string) bool {
 	_, err := os.Stat(p)
 	return err == nil

@@ -497,10 +497,10 @@ func (li *LibraryImporter) matchTags(ctx context.Context, d store.Download, dir 
 			}
 		}
 		if len(seasons) == 1 && releaseSeason(d.Name) == 0 {
-			return matchByTags(tags, eps, seasons[0], runtime)
+			return matchPack(tags, eps, seasons[0], runtime)
 		}
 	}
-	return matchByTags(tags, eps, releaseSeason(d.Name), runtime)
+	return matchPack(tags, eps, releaseSeason(d.Name), runtime)
 }
 
 // releaseEpisode is the episode a download is for, from its release name,

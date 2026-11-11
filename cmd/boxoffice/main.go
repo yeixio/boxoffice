@@ -197,7 +197,8 @@ func run() error {
 	var wg sync.WaitGroup
 	for _, loop := range []func(context.Context){runner.Run, backups.Run, downloads.Run, mon.Monitor.Run, alerter.Run,
 		func(ctx context.Context) { cat.RefreshEvery(ctx, cfg.Refresh) }, func(ctx context.Context) { finder.AutoSearchEvery(ctx, runner) },
-		finder.RSSEvery, finder.PruneEvery, shelf.DetailsEvery, finds.Run, checker.Run, func(ctx context.Context) { api.RecycleSweepEvery(ctx, db, log) }} {
+		finder.RSSEvery, finder.PruneEvery, shelf.DetailsEvery, finds.Run, checker.Run, func(ctx context.Context) { api.RecycleSweepEvery(ctx, db, log) },
+		func(ctx context.Context) { retryImports(ctx, downloads, log) }} {
 		wg.Add(1)
 		go func() { defer wg.Done(); loop(ctx) }()
 	}
@@ -309,4 +310,21 @@ func healthcheck() error {
 		return fmt.Errorf("healthz answered %d", res.StatusCode)
 	}
 	return nil
+}
+
+// retryImports gives finished downloads that couldn't go into the library
+// one more go after an update, a minute after starting so network shares
+// are up.
+func retryImports(ctx context.Context, downloads *downloader.Engine, log *slog.Logger) {
+	select {
+	case <-ctx.Done():
+		return
+	case <-time.After(time.Minute):
+	}
+	n, err := downloads.RetryImports(ctx, version.Version)
+	if err != nil {
+		log.Warn("couldn't retry moving waiting downloads into the library", "err", err)
+	} else if n > 0 {
+		log.Info("moved waiting downloads into the library after an update", "downloads", n)
+	}
 }
