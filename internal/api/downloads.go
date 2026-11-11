@@ -11,7 +11,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/yeixio/boxoffice/internal/arrapi"
 	"github.com/yeixio/boxoffice/internal/downloader"
 	"github.com/yeixio/boxoffice/internal/search"
 	"github.com/yeixio/boxoffice/internal/store"
@@ -186,9 +185,12 @@ func (s *Server) downloads(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	for i, d := range history {
-		history[i].CanReprocess = s.Downloads.CanReprocess(d)
-		history[i].CanImport = s.Downloads.CanImport(d)
+	// What can be done with each hangs on its files in the downloads
+	// folder, which on a share that dropped could hang the page; the
+	// folder's problem below says why when it doesn't answer.
+	acts, _ := s.Downloads.HistoryActions(ctx, history)
+	for i := range history {
+		history[i].CanReprocess, history[i].CanImport = acts[i].Reprocess, acts[i].Import
 	}
 	live := s.Downloads.Live()
 	for i, d := range queue {
@@ -213,8 +215,11 @@ func (s *Server) downloads(w http.ResponseWriter, r *http.Request) error {
 			enabled++
 		}
 	}
-	folder := map[string]any{"path": s.Downloads.Dir, "freeSpace": arrapi.FreeSpace(s.Downloads.Dir)}
-	if err := s.Downloads.CheckFolder(ctx); err != nil {
+	folder := map[string]any{"path": s.Downloads.Dir, "freeSpace": int64(0)}
+	if d, ok := s.diskSpace(s.Downloads.Dir); ok {
+		folder["freeSpace"] = int64(d.Free)
+	}
+	if err := s.Downloads.FolderProblem(ctx); err != nil {
 		folder["problem"] = err.Error()
 	}
 	dataCap, err := downloader.LoadCap(ctx, s.Store)

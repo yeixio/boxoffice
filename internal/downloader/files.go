@@ -185,6 +185,10 @@ func top(rel string) string {
 
 // Browse lists one folder in the downloads folder.
 func (e *Engine) Browse(ctx context.Context, p string) (Listing, error) {
+	return onDisk(e, ctx, "browse:"+p, func(ctx context.Context) (Listing, error) { return e.browse(ctx, p) })
+}
+
+func (e *Engine) browse(ctx context.Context, p string) (Listing, error) {
 	e.init()
 	rel, err := cleanRel(p)
 	if err != nil {

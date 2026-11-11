@@ -25,8 +25,13 @@ type QuarantineItem struct {
 	Busy     bool           `json:"busy,omitempty"`
 }
 
-// Quarantine lists what's in the quarantine folder, newest first.
+// Quarantine lists what's in the quarantine folder, newest first. It
+// waits only so long for a share that hung (see onDisk).
 func (e *Engine) Quarantine(ctx context.Context) ([]QuarantineItem, error) {
+	return onDisk(e, ctx, "quarantine", e.listQuarantine)
+}
+
+func (e *Engine) listQuarantine(ctx context.Context) ([]QuarantineItem, error) {
 	e.init()
 	root, err := e.root()
 	if err != nil {
@@ -90,7 +95,7 @@ func (e *Engine) PurgeQuarantine(ctx context.Context) int {
 	if _, err := os.Stat(e.Dir); err != nil {
 		return 0
 	}
-	items, err := e.Quarantine(ctx)
+	items, err := e.listQuarantine(ctx)
 	if err != nil {
 		e.Log.Warn("couldn't look in quarantine", "err", err)
 		return 0
