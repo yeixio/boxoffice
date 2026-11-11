@@ -3,6 +3,7 @@ package downloader
 import (
 	"context"
 	"encoding/json"
+	"maps"
 	"math"
 	"os/exec"
 	"regexp"
@@ -224,6 +225,31 @@ func matchRound(tags map[string]VideoTags, names []string, cands []store.Episode
 		}
 		out[p.v], taken[e.ID] = e, true
 	}
+}
+
+// matchPack matches a download's videos by their tags: first among the
+// season's episodes (or all of them), then the ones left over among the
+// show's specials, which packs often carry along, where length isn't held
+// against them, as specials run any length.
+func matchPack(tags map[string]VideoTags, eps []store.Episode, season int, runtime time.Duration) map[string]store.Episode {
+	out := matchByTags(tags, eps, season, runtime)
+	left := map[string]VideoTags{}
+	for v, t := range tags {
+		if _, ok := out[v]; !ok {
+			left[v] = t
+		}
+	}
+	var specials []store.Episode
+	for _, e := range eps {
+		if e.Season == 0 && !slices.ContainsFunc(slices.Collect(maps.Values(out)), func(o store.Episode) bool { return o.ID == e.ID }) {
+			specials = append(specials, e)
+		}
+	}
+	if len(left) == 0 || len(specials) == 0 {
+		return out
+	}
+	maps.Copy(out, matchByTags(left, specials, 0, 0))
+	return out
 }
 
 // usualLength says whether a video runs about as long as the show's

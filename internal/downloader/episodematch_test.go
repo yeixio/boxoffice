@@ -140,3 +140,28 @@ func TestParseTags(t *testing.T) {
 		t.Fatalf("%+v %v", got, err)
 	}
 }
+
+// pantrySpecial is the special the pack's double-length video is, filed
+// in season 0 as TMDB does.
+var pantrySpecial = store.Episode{ID: 300, Season: 0, Number: 4, Title: "Turkey Trouble", Overview: "The host takes on the curse of the dry holiday turkey that has plagued his family for generations, with the relatives on the way."}
+
+// A pack's videos that aren't any of its season's episodes are looked for
+// among the show's specials, whatever their length.
+func TestMatchPackSpecials(t *testing.T) {
+	eps, tags, want := pantry()
+	eps = append(eps, pantrySpecial, store.Episode{ID: 301, Season: 0, Number: 5, Title: "Behind the Lab", Overview: "A look behind the scenes at how the show is made."})
+	got := matchPack(tags, eps, 3, 22*time.Minute)
+	for v, w := range want {
+		e, ok := got[v]
+		switch {
+		case w == 0 && (!ok || e.ID != pantrySpecial.ID):
+			t.Errorf("%s: %+v, want the special", v, e)
+		case w != 0 && (!ok || e.Season != 3 || e.Number != w):
+			t.Errorf("%s: %+v, want E%02d", v, e, w)
+		}
+	}
+	// Without specials it's left alone, as before.
+	if got := matchPack(tags, eps[:len(eps)-2], 3, 22*time.Minute); got["af03d2.mkv"].ID != 0 {
+		t.Errorf("matched to %+v", got["af03d2.mkv"])
+	}
+}

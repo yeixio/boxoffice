@@ -470,3 +470,57 @@ func TestMovieSearchJobFollowsUpgradeRules(t *testing.T) {
 		t.Fatalf("counted %d", n)
 	}
 }
+
+// Specials are looked for once a show's Specials are switched on: one by
+// one, asking indexers for season 0. Switched off (the default), they're
+// left out.
+func TestSpecialsSearch(t *testing.T) {
+	srv, asked := fakeIndexer(t, func(r *http.Request) (int, string) {
+		return 200, feedOf(item("Show.S00E02.1080p.WEB-DL-GRP", "special", 1e9))
+	})
+	s, st, m := setup(t, srv.URL)
+	ctx := context.Background()
+	downloader.SaveSettings(ctx, st, downloader.Settings{Enabled: true})
+	show, err := st.AddSeries(ctx, store.Series{TMDBID: 1, TVDBID: 11, Title: "Show", ProfileID: m.ProfileID, RootFolder: "/tv", Path: "/tv/Show",
+		Monitored: true, Seasons: []store.Season{{Number: 0}, {Number: 1, Monitored: true}}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	aired := time.Now().AddDate(-1, 0, 0)
+	for i := 1; i <= 3; i++ {
+		st.UpsertEpisode(ctx, store.Episode{SeriesID: show.ID, Season: 0, Number: i, AirDate: &aired, Monitored: true})
+	}
+	tvsearches := func() (out []string) {
+		for _, q := range *asked {
+			if strings.Contains(q, "t=tvsearch") {
+				out = append(out, q)
+			}
+		}
+		return out
+	}
+	if _, err := s.jobSeries(ctx, fmt.Sprintf(`{"id":%d}`, show.ID)); err != nil {
+		t.Fatal(err)
+	}
+	if got := tvsearches(); len(got) != 0 {
+		t.Fatalf("specials off, yet searched %v", got)
+	}
+	if err := st.SetSeason(ctx, show.ID, store.Season{Number: 0, Monitored: true}); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := s.jobSeries(ctx, fmt.Sprintf(`{"id":%d}`, show.ID)); err != nil {
+		t.Fatal(err)
+	}
+	got := tvsearches()
+	if len(got) != 3 {
+		t.Fatalf("searches %v", got)
+	}
+	for _, q := range got {
+		if !strings.Contains(q, "season=0") || !strings.Contains(q, "ep=") {
+			t.Fatalf("search %s", q)
+		}
+	}
+	q, _ := st.DownloadQueue(ctx)
+	if len(q) != 1 || q[0].Name != "Show.S00E02.1080p.WEB-DL-GRP" {
+		t.Fatalf("queue %+v", q)
+	}
+}

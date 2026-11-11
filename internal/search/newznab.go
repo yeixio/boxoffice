@@ -281,7 +281,8 @@ func (c *Client) Query(ctx context.Context, ix store.Indexer, q Query) ([]Releas
 	if q.TVDBID > 0 {
 		p.Set("tvdbid", strconv.FormatInt(q.TVDBID, 10))
 	}
-	if q.Season > 0 {
+	// Specials are season 0, which an episode search names too.
+	if q.Season > 0 || q.Episode > 0 {
 		p.Set("season", strconv.Itoa(q.Season))
 	}
 	if q.Episode > 0 {
