@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"log/slog"
+	"net"
 	"os"
 	"path/filepath"
 	"strings"
@@ -489,15 +490,26 @@ func TestStalledDownload(t *testing.T) {
 	enable(t, st, Settings{})
 	var hung atomic.Bool
 	block := make(chan struct{})
+	var release sync.Once
+	var hungPart atomic.Value
 	closePart, shareWait, stallWait, stallGrace = func(f *os.File) error {
 		if hung.CompareAndSwap(false, true) {
-			<-block // the first close never comes back while the test runs
+			hungPart.Store(f.Name())
+			<-block // the first close doesn't come back until the download is done
 		}
 		return f.Close()
 	}, time.Millisecond, 200*time.Millisecond, 100*time.Millisecond
+	// On an SMB share, the stopped try's part file, still open, can't be
+	// cleared away by the next try.
+	removePart = func(p string) error {
+		if h, _ := hungPart.Load().(string); h == p {
+			return syscall.EBUSY
+		}
+		return os.Remove(p)
+	}
 	t.Cleanup(func() {
-		close(block)
-		closePart, shareWait, stallWait, stallGrace = (*os.File).Close, 15*time.Second, 10*time.Minute, time.Minute
+		release.Do(func() { close(block) })
+		closePart, shareWait, stallWait, stallGrace, removePart = (*os.File).Close, 15*time.Second, 10*time.Minute, time.Minute, os.Remove
 	})
 	run(t, e)
 	d, _ := e.Add(context.Background(), store.Download{}, data)
@@ -505,7 +517,28 @@ func TestStalledDownload(t *testing.T) {
 	if d.Status != store.DownloadCompleted {
 		t.Fatalf("%s: %s", d.Status, d.Message)
 	}
-	checkFiles(t, filepath.Join(e.Dir, d.Folder), want)
+	dir := filepath.Join(e.Dir, d.Folder)
+	for name, data := range want {
+		if got, err := os.ReadFile(filepath.Join(dir, name)); err != nil || !bytes.Equal(got, data) {
+			t.Fatalf("%s: %v (%d bytes)", name, err, len(got))
+		}
+	}
+	// When the hung close comes back, the stopped try doesn't put its
+	// file over the one the next try saved (and may be unpacking).
+	before := map[string]os.FileInfo{}
+	for _, f := range listFiles(dir) {
+		before[f], _ = os.Stat(filepath.Join(dir, f))
+	}
+	release.Do(func() { close(block) })
+	time.Sleep(200 * time.Millisecond)
+	for f, fi := range before {
+		now, err := os.Stat(filepath.Join(dir, f))
+		if err != nil || !os.SameFile(fi, now) {
+			t.Fatalf("%s was replaced after the download finished", f)
+		}
+	}
+	// Its part file was dropped instead.
+	checkFiles(t, dir, want)
 }
 
 // A folder of the download's name that Box Office can't write in (made by
@@ -558,5 +591,60 @@ func TestFolderCheckedAtOnce(t *testing.T) {
 		if err := <-errs; err != nil {
 			t.Fatal(err)
 		}
+	}
+}
+
+// When the news servers can't be reached (Mike's DNS went down with the
+// node it runs on), the download waits and tries again, keeping what it
+// has; it's never failed, blocked or searched again for it. If they stay
+// away, it waits, paused, saying why, and is tried within the hour.
+func TestServersAway(t *testing.T) {
+	for _, c := range []struct {
+		name string
+		back bool
+		want string
+	}{{"come back", true, store.DownloadCompleted}, {"stay away", false, store.DownloadPaused}} {
+		t.Run(c.name, func(t *testing.T) {
+			srv := nntptest.New()
+			defer srv.Close()
+			data, want, _ := release(t, srv, false)
+			e, st := newEngine(t, srv)
+			enable(t, st, Settings{})
+			ctx := context.Background()
+			// A port nothing listens on.
+			ln, _ := net.Listen("tcp", "127.0.0.1:0")
+			deadPort := ln.Addr().(*net.TCPAddr).Port
+			ln.Close()
+			list, _ := st.UsenetServers(ctx)
+			real := list[0]
+			dead := real
+			dead.Port = deadPort
+			if err := st.UpdateUsenetServer(ctx, dead); err != nil {
+				t.Fatal(err)
+			}
+			serverAttempts, serverPause, serverWait = 1, time.Millisecond, 20*time.Millisecond
+			t.Cleanup(func() { serverAttempts, serverPause, serverWait = 6, 10*time.Second, time.Minute })
+			var failed atomic.Int32
+			e.Failed = func(context.Context, store.Download, string) { failed.Add(1) }
+			run(t, e)
+			d, _ := e.Add(ctx, store.Download{}, data)
+			if c.back {
+				time.Sleep(30 * time.Millisecond)
+				if err := st.UpdateUsenetServer(ctx, real); err != nil {
+					t.Fatal(err)
+				}
+			}
+			d = waitFor(t, st, d.ID, store.DownloadCompleted, store.DownloadFailed, store.DownloadPaused)
+			if d.Status != c.want || failed.Load() != 0 || d.Missing {
+				t.Fatalf("%s (failed %d, missing %v): %s", d.Status, failed.Load(), d.Missing, d.Message)
+			}
+			if c.back {
+				checkFiles(t, filepath.Join(e.Dir, d.Folder), want)
+				return
+			}
+			if !strings.Contains(d.Message, "couldn't be reached") || !strings.Contains(d.Message, shareWaitNote) {
+				t.Fatalf("message: %s", d.Message)
+			}
+		})
 	}
 }

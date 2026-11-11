@@ -881,15 +881,20 @@ func (e *Engine) process(ctx context.Context, r *running, d store.Download, srv 
 
 // shareWait is how long a download waits after the downloads folder
 // stopped answering before it's tried again, doubling each time; after
-// shareTries tries it fails.
-var shareWait = 15 * time.Second
+// shareTries tries it waits, paused. serverWait is the same for news
+// servers that can't be reached (a DNS lookup that timed out, a server
+// that's down): that's rarely over in seconds.
+var shareWait, serverWait = 15 * time.Second, time.Minute
 
 const shareTries = 3
 
-// shareRetry puts a download that failed because the downloads folder
-// stopped answering back in the queue after a wait, keeping the files it
-// finished, and says whether it did. The queue waits with it, as nothing
-// else could be saved meanwhile either.
+// shareRetry puts a download that failed for something passing, not for
+// anything wrong with the release, back in the queue after a wait, keeping
+// the files it finished, and says whether it did: the downloads folder
+// stopped answering (while saving, checking or unpacking), or the news
+// servers couldn't be reached. The queue waits with it, as the next
+// download would fail alike. If it keeps happening, the download waits,
+// paused, and is tried again within the hour; the release isn't blocked.
 func (e *Engine) shareRetry(ctx context.Context, r *running, d *store.Download, err error) bool {
 	e.mu.Lock()
 	tries := e.shareTries[d.ID]
@@ -897,36 +902,55 @@ func (e *Engine) shareRetry(ctx context.Context, r *running, d *store.Download, 
 		delete(e.shareTries, d.ID)
 	}
 	e.mu.Unlock()
+	if err == nil || ctx.Err() != nil {
+		return false
+	}
 	var se shareError
-	if err == nil || ctx.Err() != nil || !errors.As(err, &se) {
+	var ve serverError
+	isShare, isServer := errors.As(err, &se), errors.As(err, &ve)
+	if !isShare && !isServer {
 		return false
 	}
 	bg := context.WithoutCancel(ctx)
 	if tries >= shareTries {
-		// The folder's trouble, not the release's: it waits, paused, and
-		// the queue goes on. It's tried again within the hour.
+		// The folder's or the servers' trouble, not the release's: it
+		// waits, paused, and the queue goes on. It's tried again within
+		// the hour.
 		e.mu.Lock()
 		delete(e.shareTries, d.ID)
 		e.mu.Unlock()
-		e.Log.Warn("the downloads folder kept dropping out; pausing the download for now", "name", d.Name, "id", d.ID, "err", err)
-		d.DoneBytes = 0
+		if !d.Fetched {
+			d.DoneBytes = 0
+		}
 		e.Store.SaveDownloadProgress(bg, *d)
-		e.Store.SetDownloadStatus(bg, d.ID, store.DownloadPaused, "The downloads folder kept dropping out while Box Office was saving this ("+se.why()+"); if it's a network share, check it's up. "+shareWaitNote)
+		if isServer {
+			e.Log.Warn("the news servers kept not answering; pausing the download for now", "name", d.Name, "id", d.ID, "err", err)
+			e.Store.SetDownloadStatus(bg, d.ID, store.DownloadPaused, "The news servers couldn't be reached ("+ve.why()+"); check your internet connection and the server in Settings. "+shareWaitNote)
+			return true
+		}
+		e.Log.Warn("the downloads folder kept dropping out; pausing the download for now", "name", d.Name, "id", d.ID, "err", err)
+		e.Store.SetDownloadStatus(bg, d.ID, store.DownloadPaused, "The downloads folder kept dropping out while Box Office was working on this ("+se.why()+"); if it's a network share, check it's up. "+shareWaitNote)
 		return true
 	}
 	e.mu.Lock()
 	e.shareTries[d.ID] = tries + 1
 	e.mu.Unlock()
-	wait := shareWait << tries
-	e.Log.Warn("the downloads folder stopped answering; trying the download again", "name", d.Name, "id", d.ID, "in", wait.String(), "try", tries+1, "err", err)
-	r.setStage(fmt.Sprintf("The downloads folder stopped answering; trying again in %s", wait.Round(time.Second)))
+	wait, what := shareWait<<tries, "The downloads folder stopped answering"
+	if isServer {
+		wait, what = serverWait<<tries, "The news servers couldn't be reached"
+	}
+	e.Log.Warn(strings.ToLower(what[:1])+what[1:]+"; trying the download again", "name", d.Name, "id", d.ID, "in", wait.String(), "try", tries+1, "err", err)
+	r.setStage(fmt.Sprintf("%s; trying again in %s", what, wait.Round(time.Second)))
 	select {
 	case <-time.After(wait):
 	case <-ctx.Done():
 		return false
 	}
 	// What a part file had is gone, so progress counts finished files.
-	d.DoneBytes = 0
+	// One that was all fetched carries on from checking and unpacking.
+	if !d.Fetched {
+		d.DoneBytes = 0
+	}
 	e.Store.SaveDownloadProgress(bg, *d)
 	e.Store.SetDownloadStatus(bg, d.ID, store.DownloadQueued, "")
 	return true

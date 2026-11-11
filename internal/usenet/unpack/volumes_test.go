@@ -314,3 +314,47 @@ func TestUnnumberedSetBesideAnother(t *testing.T) {
 		t.Fatal("subtitles differ")
 	}
 }
+
+// Mike's Earth 2 episodes: an old (RAR 2) set posted under hashes that
+// kept their extensions (….rar, ….r00, ….r01…), whose headers neither
+// mark the first volume nor number any, beside a subtitles archive. The
+// extensions give the order. Before, only the .rar was read, and
+// unpacking stopped with "unexpected end of archive".
+func TestHashedOldStyleNames(t *testing.T) {
+	dir := t.TempDir()
+	noVolNumber, noFirstFlag = true, true
+	data := bytes.Repeat([]byte("Earth 2 "), 9000)
+	exts := []string{".rar", ".r00", ".r01", ".r02", ".r03", ".r04"}
+	hashes := []string{"6f2d940f3fa058e9", "ee75c6d4a1b2c3d4", "0a1b2c3d4e5f6071", "ffeeddccbbaa9988", "1234567890abcdef", "9a8b7c6d5e4f3a2b"}
+	var names []string
+	for i, e := range exts {
+		names = append(names, hashes[i]+e)
+	}
+	writeRAR4Named(t, dir, "earth.2.s01e09-med.avi", data, names, false)
+	noVolNumber, noFirstFlag = false, false
+	subs := bytes.Repeat([]byte("subs"), 3000)
+	writeRAR4Named(t, dir, "earth.2.s01e09-med.idx", subs, []string{"c0ffee00c0ffee00.rar"}, false)
+	files := append(slices.Clone(names), "c0ffee00c0ffee00.rar", "earth.2.s01e09-med.sfv")
+	slices.Sort(files)
+	arcs := Find(dir, files)
+	var main *Archive
+	for i, a := range arcs {
+		if len(a.Volumes) == len(names) {
+			main = &arcs[i]
+		}
+	}
+	if main == nil {
+		t.Fatalf("found %+v", arcs)
+	}
+	for i, v := range main.Volumes {
+		if filepath.Base(v) != names[i] {
+			t.Fatalf("volume %d is %s, want %s", i+1, filepath.Base(v), names[i])
+		}
+	}
+	if _, err := Extract(context.Background(), *main, dir, ""); err != nil {
+		t.Fatal(err)
+	}
+	if b, _ := os.ReadFile(filepath.Join(dir, "earth.2.s01e09-med.avi")); !bytes.Equal(b, data) {
+		t.Fatal("episode differs")
+	}
+}
