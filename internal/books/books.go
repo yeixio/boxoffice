@@ -8,7 +8,9 @@ package books
 import (
 	"context"
 	"errors"
+	"log/slog"
 	"strings"
+	"sync"
 
 	"github.com/yeixio/boxoffice/internal/catalog"
 	"github.com/yeixio/boxoffice/internal/downloader"
@@ -17,6 +19,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/openlibrary"
 	"github.com/yeixio/boxoffice/internal/search"
 	"github.com/yeixio/boxoffice/internal/store"
+	"github.com/yeixio/boxoffice/internal/wikidata"
 )
 
 // ErrOff means neither ebooks nor audiobooks, or not the format asked
@@ -39,6 +42,13 @@ type Service struct {
 	OpenLibrary *openlibrary.Client
 	// Jobs runs a search for a book as soon as it's wanted, when set.
 	Jobs *jobs.Runner
+	// Wikidata fills in author photos and series Open Library doesn't
+	// have, when set.
+	Wikidata *wikidata.Client
+	Log      *slog.Logger
+
+	wakeOnce sync.Once
+	wake     chan struct{}
 }
 
 func checkFormat(format string) error {
@@ -135,7 +145,11 @@ func (s *Service) Add(ctx context.Context, o AddOptions) (store.Author, error) {
 	if err != nil {
 		return store.Author{}, err
 	}
-	added, err := s.Store.AddAuthor(ctx, store.Author{OLKey: a.Key, Name: a.Name, Born: a.Born, Died: a.Died, Bio: a.Bio,
+	photo := ""
+	if a.HasPhoto {
+		photo = a.Photo
+	}
+	added, err := s.Store.AddAuthor(ctx, store.Author{OLKey: a.Key, Name: a.Name, Born: a.Born, Died: a.Died, Bio: a.Bio, Photo: photo, Wikidata: a.Wikidata,
 		NewEbooks: o.Format == store.Ebook && o.New, NewAudiobooks: o.Format == store.Audiobook && o.New})
 	if errors.Is(err, store.ErrExists) {
 		return store.Author{}, catalog.ErrExists
@@ -143,6 +157,9 @@ func (s *Service) Add(ctx context.Context, o AddOptions) (store.Author, error) {
 	if err != nil {
 		return store.Author{}, err
 	}
+	// The photo from Wikidata, when Open Library has none, and the series
+	// come in the background.
+	defer s.kick()
 	if err := s.refreshBooks(ctx, added, o.All && o.Format == store.Ebook, o.All && o.Format == store.Audiobook); err != nil {
 		return added, err
 	}
@@ -173,6 +190,16 @@ func (s *Service) Refresh(ctx context.Context, id int64) (store.Author, error) {
 	if err := s.Store.UpdateAuthor(ctx, have); err != nil {
 		return store.Author{}, err
 	}
+	// The photo and series are looked up again in the background, keeping
+	// Open Library's photo, or the one there was, till then.
+	photo := have.Photo
+	if a.HasPhoto {
+		photo = a.Photo
+	}
+	if err := s.Store.RedoAuthorDetails(ctx, id, photo); err != nil {
+		return store.Author{}, err
+	}
+	defer s.kick()
 	if err := s.refreshBooks(ctx, have, have.NewEbooks, have.NewAudiobooks); err != nil {
 		return store.Author{}, err
 	}
@@ -312,4 +339,29 @@ func (s *Service) WantAll(ctx context.Context, authorID int64, format string, on
 		return err
 	}
 	return s.Store.SetAuthorBooksWanted(ctx, authorID, format, on)
+}
+
+// WantSeries says whether every book of one of an author's series is
+// wanted in a format.
+func (s *Service) WantSeries(ctx context.Context, authorID int64, series, format string, on bool) error {
+	if err := checkFormat(format); err != nil {
+		return err
+	}
+	if err := s.on(ctx, format); err != nil {
+		return err
+	}
+	if strings.TrimSpace(series) == "" {
+		return &catalog.Error{Message: "say which series"}
+	}
+	if _, err := s.Store.Author(ctx, authorID); err != nil {
+		return err
+	}
+	n, err := s.Store.SetSeriesWanted(ctx, authorID, series, format, on)
+	if err != nil {
+		return err
+	}
+	if n == 0 {
+		return store.ErrNotFound
+	}
+	return nil
 }

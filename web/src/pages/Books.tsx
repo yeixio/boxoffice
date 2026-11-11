@@ -3,7 +3,7 @@ import i18n from '../i18n'
 import { useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
-import { BookOpen, CircleCheck, Headphones, ListFilter, Lock, Plus, RefreshCw, Search, Trash2 } from 'lucide-react'
+import { BookOpen, CircleCheck, Headphones, Library, ListFilter, Lock, Plus, RefreshCw, Search, Trash2 } from 'lucide-react'
 import { del, get, patch, post, put, type Author, type AuthorDetail, type Book, type BookFormat, type LookupAuthor } from '../api'
 import { bytes, day } from '../format'
 import { Releases } from '../Releases'
@@ -91,9 +91,7 @@ export function Books({ format }: { format: BookFormat }) {
             {shown.map((a) => (
               <li key={a.id}>
                 <Link to={`${f.path}/${a.id}`} className="flex items-center gap-3 py-3 hover:text-marquee">
-                  <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-line font-display font-semibold text-muted" aria-hidden>
-                    {a.name.slice(0, 1).toUpperCase()}
-                  </span>
+                  <AuthorPhoto src={a.photo} name={a.name} className="size-10" />
                   <span className="min-w-0 flex-1">
                     <span className="block truncate font-medium">{a.name}</span>
                     <span className="block truncate text-xs text-muted">{sort.option.key === 'added' ? t('fact.added', { date: day(a.addedAt) }) : t('books.count', { count: a.books })}</span>
@@ -149,6 +147,7 @@ function AddAuthor({ format, onClose }: { format: BookFormat; onClose: () => voi
           <ul className="flex flex-col divide-y divide-line">
             {results.data?.map((a) => (
               <li key={a.key} className="flex items-center gap-4 py-3">
+                <AuthorPhoto src={a.photo} name={a.name} className="size-12" />
                 <div className="min-w-0 flex-1">
                   <div className="font-display font-semibold">{a.name}</div>
                   <p className="truncate text-sm text-muted">
@@ -249,6 +248,10 @@ export function AuthorPage({ format }: { format: BookFormat }) {
   const edit = useMutation({ mutationFn: (body: Partial<Pick<Author, 'newEbooks' | 'newAudiobooks' | 'locked'>>) => patch<AuthorDetail>(`/authors/${id}`, body), onSuccess: set })
   const refresh = useMutation({ mutationFn: () => post<AuthorDetail>(`/authors/${id}/refresh`), onSuccess: set })
   const all = useMutation({ mutationFn: (wanted: boolean) => put<AuthorDetail>(`/authors/${id}/wanted`, { format, wanted }), onSuccess: set })
+  const series = useMutation({
+    mutationFn: (v: { series: string; wanted: boolean }) => put<AuthorDetail>(`/authors/${id}/series/wanted`, { format, ...v }),
+    onSuccess: set,
+  })
   const book = useMutation({
     mutationFn: (v: { id: number; wanted: boolean }) => put<Book>(`/books/${v.id}/wanted`, { format, wanted: v.wanted }),
     onSuccess: (b) => {
@@ -271,8 +274,9 @@ export function AuthorPage({ format }: { format: BookFormat }) {
   })
   const shown = useMemo(() => {
     const q = text.trim().toLowerCase()
-    return (author.data?.bookList ?? []).filter((b) => !q || b.title.toLowerCase().includes(q))
+    return (author.data?.bookList ?? []).filter((b) => !q || b.title.toLowerCase().includes(q) || b.series?.toLowerCase().includes(q))
   }, [author.data, text])
+  const groups = useMemo(() => groupSeries(shown), [shown])
   // A link to one book (from Downloads, say) opens it.
   useEffect(() => {
     const m = /^#book-(\d+)$/.exec(window.location.hash)
@@ -287,8 +291,11 @@ export function AuthorPage({ format }: { format: BookFormat }) {
   const opened = a.bookList.find((b) => b.id === open)
   return (
     <div>
-      <h1 className="font-display text-4xl font-bold tracking-tight">{a.name}</h1>
-      <div className="mt-2 flex flex-wrap gap-2">
+      <div className="flex items-center gap-4 sm:gap-5">
+        <AuthorPhoto src={a.photo} name={a.name} className="size-20 text-3xl sm:size-28 sm:text-4xl" />
+        <h1 className="min-w-0 font-display text-3xl font-bold tracking-tight sm:text-4xl">{a.name}</h1>
+      </div>
+      <div className="mt-3 flex flex-wrap gap-2">
         <Badge tone={wanted ? 'gold' : 'plain'}>
           {t(`books.${format}.wanted`, { count: wanted })}
         </Badge>
@@ -305,7 +312,7 @@ export function AuthorPage({ format }: { format: BookFormat }) {
           <Trash2 className="size-4" aria-hidden /> {t('title.remove')}
         </Button>
       </div>
-      <ErrorNote error={refresh.error ?? edit.error ?? all.error ?? book.error} />
+      <ErrorNote error={refresh.error ?? edit.error ?? all.error ?? series.error ?? book.error} />
 
       <Card className="mt-6">
         <div className="flex flex-col gap-4">
@@ -340,40 +347,45 @@ export function AuthorPage({ format }: { format: BookFormat }) {
       </div>
       {a.books === 0 && <p className="text-sm text-muted">{t('books.noBooks', { name: a.name })}</p>}
       <p className="mb-4 text-xs text-muted">{t('books.orderPick')}</p>
-      <ul className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-        {shown.map((b) => {
-          const on = f.wants(b)
-          const file = f.file(b)
-          return (
-            <li key={b.id} id={`book-${b.id}`}>
-              <button type="button" className="relative block w-full text-start" onClick={() => setOpen(b.id)} aria-label={t('books.open', { title: b.title })}>
-                <Cover src={b.cover} title={b.title} />
-                {file && (
-                  <span className="absolute top-2 end-2 rounded-full bg-ok p-1 text-white shadow" title={t('common.onDisk')}>
-                    <CircleCheck className="size-4" aria-label={t('common.onDisk')} />
-                  </span>
-                )}
-              </button>
-              <div className="mt-2 line-clamp-2 font-medium leading-snug" title={b.subtitle ? `${b.title}: ${b.subtitle}` : b.title}>
-                {b.title}
-              </div>
-              <div className="mt-1 flex items-center justify-between gap-2 text-xs text-muted">
-                <span>{b.year || t('artist.noDate')}</span>
-                <button
-                  type="button"
-                  disabled={book.isPending}
-                  aria-pressed={on}
-                  aria-label={on ? t(`books.${format}.stop`, { title: b.title }) : t(`books.${format}.want`, { title: b.title })}
-                  onClick={() => book.mutate({ id: b.id, wanted: !on })}
-                  className={`rounded-full border px-2 py-1 sm:py-0.5 ${on ? 'border-gold text-ink' : 'border-line hover:text-ink'}`}
+      {groups.series.map((g) => {
+        const wantedHere = g.books.filter(f.wants).length
+        return (
+          <section key={g.name} className="mb-8" aria-label={g.name}>
+            <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-line pb-2">
+              <h3 className="flex items-center gap-2 font-display font-semibold">
+                <Library className="size-4 text-muted" aria-hidden />
+                {g.name} <span className="font-normal text-muted">{g.books.length}</span>
+              </h3>
+              <div className="ms-auto flex gap-2">
+                <Button
+                  className="px-2.5 py-1"
+                  busy={series.isPending && series.variables?.series === g.name && series.variables.wanted}
+                  disabled={wantedHere === g.books.length}
+                  onClick={() => series.mutate({ series: g.name, wanted: true })}
                 >
-                  {on ? t('common.wanted') : t('artist.notWanted')}
-                </button>
+                  {t('books.wantSeries')}
+                </Button>
+                <Button
+                  className="px-2.5 py-1"
+                  variant="ghost"
+                  busy={series.isPending && series.variables?.series === g.name && !series.variables.wanted}
+                  disabled={wantedHere === 0}
+                  onClick={() => series.mutate({ series: g.name, wanted: false })}
+                >
+                  {t('books.wantNone')}
+                </Button>
               </div>
-            </li>
-          )
-        })}
-      </ul>
+            </div>
+            <BookGrid format={format} books={g.books} inSeries busy={book.isPending} onOpen={setOpen} onWant={(b, wanted) => book.mutate({ id: b.id, wanted })} />
+          </section>
+        )
+      })}
+      {groups.series.length > 0 && groups.rest.length > 0 && (
+        <h3 className="mb-3 border-b border-line pb-2 font-display font-semibold">
+          {t('books.otherBooks')} <span className="font-normal text-muted">{groups.rest.length}</span>
+        </h3>
+      )}
+      <BookGrid format={format} books={groups.rest} busy={book.isPending} onOpen={setOpen} onWant={(b, wanted) => book.mutate({ id: b.id, wanted })} />
 
       {opened && (
         <BookDialog
@@ -408,6 +420,96 @@ export function AuthorPage({ format }: { format: BookFormat }) {
         </Modal>
       )}
     </div>
+  )
+}
+
+// groupSeries puts books of a series with two or more of them together,
+// in order, ahead of the rest.
+function groupSeries(books: Book[]): { series: { name: string; books: Book[] }[]; rest: Book[] } {
+  const by = new Map<string, Book[]>()
+  for (const b of books) if (b.series) by.set(b.series, [...(by.get(b.series) ?? []), b])
+  const series = [...by]
+    .filter(([, list]) => list.length > 1)
+    .map(([name, list]) => ({ name, books: [...list].sort((x, y) => seriesNumber(x.seriesPosition) - seriesNumber(y.seriesPosition) || (x.year ?? 0) - (y.year ?? 0)) }))
+  const grouped = new Set(series.map((g) => g.name))
+  return { series, rest: books.filter((b) => !b.series || !grouped.has(b.series)) }
+}
+
+// seriesNumber puts a series position in order: "2" is 2, "1-3" is 1,
+// and none comes last.
+export function seriesNumber(pos?: string): number {
+  const n = parseFloat((pos ?? '').trim())
+  return Number.isFinite(n) ? n : Infinity
+}
+
+// seriesPlace says where a book falls in its series: "Book 2", or "Book 2
+// of The Lord of the Rings" when the series isn't already the heading.
+function seriesPlace(b: Book, withName: boolean): string {
+  if (!b.series) return ''
+  if (!b.seriesPosition) return withName ? i18n.t('books.partOf', { series: b.series }) : ''
+  return withName ? i18n.t('books.seriesOf', { pos: b.seriesPosition, series: b.series }) : i18n.t('books.seriesPos', { pos: b.seriesPosition })
+}
+
+function BookGrid({
+  format,
+  books,
+  inSeries,
+  busy,
+  onOpen,
+  onWant,
+}: {
+  format: BookFormat
+  books: Book[]
+  inSeries?: boolean
+  busy: boolean
+  onOpen: (id: number) => void
+  onWant: (b: Book, wanted: boolean) => void
+}) {
+  const { t } = useTranslation()
+  const f = formats[format]
+  if (books.length === 0) return null
+  return (
+      <ul className="mb-8 grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+        {books.map((b) => {
+          const on = f.wants(b)
+          const file = f.file(b)
+          const place = seriesPlace(b, !inSeries)
+          return (
+            <li key={b.id} id={`book-${b.id}`}>
+              <button type="button" className="relative block w-full text-start" onClick={() => onOpen(b.id)} aria-label={t('books.open', { title: b.title })}>
+                <Cover src={b.cover} title={b.title} />
+                {file && (
+                  <span className="absolute top-2 end-2 rounded-full bg-ok p-1 text-white shadow" title={t('common.onDisk')}>
+                    <CircleCheck className="size-4" aria-label={t('common.onDisk')} />
+                  </span>
+                )}
+              </button>
+              <div className="mt-2 line-clamp-2 font-medium leading-snug" title={b.subtitle ? `${b.title}: ${b.subtitle}` : b.title}>
+                {b.title}
+              </div>
+              {place && (
+                <div className="mt-0.5 truncate text-xs text-muted" title={place}>
+                  {place}
+                </div>
+              )}
+              <div className="mt-1 flex items-center justify-between gap-2 text-xs text-muted">
+                <span>{b.year || t('artist.noDate')}</span>
+                <button
+                  type="button"
+                  disabled={busy}
+                  aria-pressed={on}
+                  aria-label={on ? t(`books.${format}.stop`, { title: b.title }) : t(`books.${format}.want`, { title: b.title })}
+                  onClick={() => onWant(b, !on)}
+                  className={`rounded-full border px-2 py-1 sm:py-0.5 ${on ? 'border-gold text-ink' : 'border-line hover:text-ink'}`}
+                >
+                  {on ? t('common.wanted') : t('artist.notWanted')}
+                </button>
+              </div>
+            </li>
+          )
+        })}
+      </ul>
+
   )
 }
 
@@ -447,6 +549,7 @@ function BookDialog({
         </div>
         <div className="min-w-0 flex-1 text-sm">
           {b.subtitle && <p className="mb-1 text-muted">{b.subtitle}</p>}
+          {b.series && <p className="mb-1 font-medium">{seriesPlace(b, true)}</p>}
           <p className="text-muted">{[b.year, b.editions ? t('books.editions', { count: b.editions }) : ''].filter(Boolean).join(' · ')}</p>
           <div className="mt-3 flex flex-wrap gap-2">
             {file ? <Badge tone="ok">{t('common.onDisk')}</Badge> : on ? <Badge tone="gold">{t('common.wanted')}</Badge> : <Badge>{t('artist.notWanted')}</Badge>}
@@ -489,6 +592,17 @@ export function BookLink({ format }: { format: BookFormat }) {
   if (book.isPending) return <Spinner />
   if (book.isError) return <ErrorNote error={book.error} />
   return <Navigate to={`${formats[format].path}/${book.data.authorId}#book-${id}`} replace />
+}
+
+// AuthorPhoto is a picture of an author, or their initial when there's
+// none.
+function AuthorPhoto({ src, name, className = '' }: { src?: string; name: string; className?: string }) {
+  const [failed, setFailed] = useState(false)
+  return (
+    <span className={`flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-line font-display font-semibold text-muted ${className}`} aria-hidden>
+      {src && !failed ? <img src={src} alt="" loading="lazy" className="size-full object-cover object-top" onError={() => setFailed(true)} /> : name.slice(0, 1).toUpperCase()}
+    </span>
+  )
 }
 
 // Cover is a book's cover, or its title when there's none.

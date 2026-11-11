@@ -169,6 +169,7 @@ func (s *Server) Handler() http.Handler {
 		{"DELETE /api/v1/authors/{id}", true, s.deleteAuthor},
 		{"POST /api/v1/authors/{id}/refresh", true, s.refreshAuthor},
 		{"PUT /api/v1/authors/{id}/wanted", true, s.wantAllBooks},
+		{"PUT /api/v1/authors/{id}/series/wanted", true, s.wantSeries},
 		{"PUT /api/v1/books/{id}/wanted", true, s.wantBook},
 		{"GET /api/v1/books", true, s.allBooks},
 		{"GET /api/v1/books/{id}", true, s.book},
@@ -676,5 +677,6 @@ func (s *Server) changePassword(w http.ResponseWriter, r *http.Request) error {
 
 // imageSources are where posters and backdrops are shown from.
 // Album covers come from the Cover Art Archive, which sends browsers on to
-// archive.org.
-const imageSources = "https://image.tmdb.org https://artworks.thetvdb.com https://thetvdb.com https://assets.fanart.tv https://coverartarchive.org https://archive.org https://*.archive.org https://covers.openlibrary.org"
+// archive.org. Author photos Open Library doesn't have come from
+// Wikimedia Commons, which sends browsers on to upload.wikimedia.org.
+const imageSources = "https://image.tmdb.org https://artworks.thetvdb.com https://thetvdb.com https://assets.fanart.tv https://coverartarchive.org https://archive.org https://*.archive.org https://covers.openlibrary.org https://commons.wikimedia.org https://upload.wikimedia.org"

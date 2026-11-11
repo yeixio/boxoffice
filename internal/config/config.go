@@ -36,6 +36,10 @@ type Config struct {
 	// OpenLibrary is another Open Library to look books up on, in place
 	// of openlibrary.org; BOXOFFICE_OPENLIBRARY_URL.
 	OpenLibrary string
+	// Wikidata is another Wikidata query service to look author photos
+	// and series up on, in place of query.wikidata.org, or "off" not to
+	// ask Wikidata at all; BOXOFFICE_WIKIDATA_URL.
+	Wikidata string
 	// EbookConvert is Calibre's ebook-convert, to turn ebooks an e-reader
 	// won't take by email into EPUB; BOXOFFICE_EBOOK_CONVERT. Empty looks
 	// for it on the PATH.
@@ -64,6 +68,7 @@ func load(args []string, env func(string) string) (Config, error) {
 		Refresh:      12 * time.Hour,
 		MusicBrainz:  strings.TrimRight(env("BOXOFFICE_MUSICBRAINZ_URL"), "/"),
 		OpenLibrary:  strings.TrimRight(env("BOXOFFICE_OPENLIBRARY_URL"), "/"),
+		Wikidata:     strings.TrimRight(env("BOXOFFICE_WIKIDATA_URL"), "/"),
 		EbookConvert: env("BOXOFFICE_EBOOK_CONVERT"),
 	}
 	if v := env("BOXOFFICE_REFRESH_EVERY"); v != "" {
