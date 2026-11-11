@@ -204,6 +204,40 @@ func TestScanShows(t *testing.T) {
 	if after := snapshot(t, dir); !slices.Equal(before, after) {
 		t.Fatal("the disk changed")
 	}
+
+	// A second folder of the same show is on the list in another folder;
+	// it can't be added, but it can go in with the show.
+	more := filepath.Join(dir, "Severance Season Two {tmdb-95396}")
+	touch(t, filepath.Join(more, "Severance - S02E01.mkv"), 60)
+	before = snapshot(t, dir)
+	s.Start(ctx, root.ID)
+	sc = wait(t, s, root.ID, Ready)
+	f = find(sc, filepath.Base(more))
+	if f.Have == nil || f.Have.ID != got.ID {
+		t.Fatalf("second folder %+v", f)
+	}
+	if _, err := s.Link(ctx, root.ID, show); err == nil {
+		t.Fatal("linked a folder the scan didn't find")
+	}
+	sc, err := s.Link(ctx, root.ID, more)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if f := find(sc, filepath.Base(more)); !f.Linked || f.Added != got.ID {
+		t.Fatalf("linked %+v", f)
+	}
+	links, _ := s.Store.FolderLinks(ctx)
+	if len(links) != 1 || links[0].Path != more || links[0].TitleID != got.ID || links[0].Kind != "series" {
+		t.Fatalf("links %+v", links)
+	}
+	s.Start(ctx, root.ID)
+	sc = wait(t, s, root.ID, Ready)
+	if len(sc.Found) != 0 || sc.Listed != 2 {
+		t.Fatalf("rescan after linking %+v", sc)
+	}
+	if after := snapshot(t, dir); !slices.Equal(before, after) {
+		t.Fatal("the disk changed")
+	}
 }
 
 // Root folders for what Box Office can't add yet can't be scanned.

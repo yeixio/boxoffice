@@ -876,10 +876,13 @@
     "findIt": "Le trouver",
     "elsewhereTitle": "Sur la liste dans un autre dossier",
     "elsewhereHint": "Ils correspondent à un titre que Box Office a déjà ailleurs, ils ne sont donc pas touchés. Changez la correspondance si l’un d’eux est un autre titre.",
+    "elsewhereFilesHint": "Ils correspondent à un titre que Box Office a déjà dans un autre dossier. Si l'un contient davantage de ce titre, comme une autre saison ou une seconde copie, ajoutez ses fichiers et Fichiers à problème proposera de les y déplacer. Changez la correspondance s'il s'agit d'un autre titre.",
     "isAt": "{{title}} se trouve dans <code>{{path}}</code>",
     "change": "Modifier",
+    "addFilesTo": "Ajouter ses fichiers à {{title}}",
     "addedHeading": "Ajout",
     "from": "de {{name}}",
+    "linked": "<code>{{name}}</code> va désormais avec {{title}}. <problems>Fichiers à problème</problems> propose d'y déplacer ce qui manque à {{title}} et liste les éventuelles secondes copies.",
     "whichEpisodes": "Quels épisodes surveiller",
     "watch": {
       "music": "Surveiller leurs nouveaux albums",
@@ -1891,7 +1894,8 @@
       "show": "un disque de série",
       "notListed": "absent de la liste",
       "foundFolder": "son dossier, nommé autrement sur le disque",
-      "secondFolder": "un deuxième dossier pour lui"
+      "secondFolder": "un deuxième dossier pour lui",
+      "wrongEpisode": "nommé d'après un autre épisode"
     },
     "act": {
       "rename": "Renommer",

@@ -928,10 +928,13 @@
     "findIt": "Najít",
     "elsewhereTitle": "Na seznamu v jiné složce",
     "elsewhereHint": "Odpovídají titulu, který už Box Office má jinde, takže zůstanou nedotčené. Změňte shodu, pokud je některý jiný titul.",
+    "elsewhereFilesHint": "Tyto odpovídají titulu, který Box Office už má v jiné složce. Pokud některá obsahuje více z toho titulu, třeba další sérii nebo druhou kopii, přidejte její soubory k němu a Problémové soubory nabídnou jejich přesunutí. Pokud je to jiný titul, změňte shodu.",
     "isAt": "{{title}} je v <code>{{path}}</code>",
     "change": "Změnit",
+    "addFilesTo": "Přidat jeho soubory k {{title}}",
     "addedHeading": "Přidáno",
     "from": "od {{name}}",
+    "linked": "<code>{{name}}</code> teď patří k {{title}}. <problems>Problémové soubory</problems> nabídnou přesunout, co {{title}} chybí, a vypíšou případné druhé kopie.",
     "whichEpisodes": "Které díly sledovat",
     "watch": {
       "music": "Sledovat jejich nová alba",
@@ -1986,7 +1989,8 @@
       "show": "disk seriálu",
       "notListed": "není na seznamu",
       "foundFolder": "jeho složka, na disku pojmenovaná jinak",
-      "secondFolder": "druhá složka pro titul"
+      "secondFolder": "druhá složka pro titul",
+      "wrongEpisode": "pojmenováno podle jiné epizody"
     },
     "act": {
       "rename": "Přejmenovat",

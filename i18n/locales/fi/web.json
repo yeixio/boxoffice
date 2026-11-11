@@ -824,10 +824,13 @@
     "findIt": "Etsi se",
     "elsewhereTitle": "Listalla toisessa kansiossa",
     "elsewhereHint": "Nämä vastaavat nimikettä, joka Box Officella on jo muualla, joten niihin ei kosketa. Muuta vastaavuutta, jos jokin on eri nimike.",
+    "elsewhereFilesHint": "Nämä vastaavat nimikettä, joka Box Officella on jo toisessa kansiossa. Jos jossakin on lisää tätä nimikettä, kuten toinen kausi tai toinen kopio, lisää sen tiedostot siihen, niin Ongelmatiedostot tarjoaa niiden siirtämistä. Vaihda vastaavuus, jos kyse on eri nimikkeestä.",
     "isAt": "{{title}} on kansiossa <code>{{path}}</code>",
     "change": "Muuta",
+    "addFilesTo": "Lisää sen tiedostot nimikkeeseen {{title}}",
     "addedHeading": "Lisätty",
     "from": "lähteestä {{name}}",
+    "linked": "<code>{{name}}</code> kuuluu nyt nimikkeeseen {{title}}. <problems>Ongelmatiedostot</problems> tarjoaa siirtää sen, mitä {{title}} puuttuu, ja näyttää mahdolliset toiset kopiot.",
     "whichEpisodes": "Mitä jaksoja seurataan",
     "watch": {
       "music": "Seuraa heidän uusia albumeitaan",
@@ -1796,7 +1799,8 @@
       "show": "sarjan levy",
       "notListed": "ei listalla",
       "foundFolder": "sen kansio, levyllä eri nimellä",
-      "secondFolder": "toinen kansio sille"
+      "secondFolder": "toinen kansio sille",
+      "wrongEpisode": "nimetty toisen jakson mukaan"
     },
     "act": {
       "rename": "Nimeä uudelleen",

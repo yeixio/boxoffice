@@ -824,10 +824,13 @@
     "findIt": "Find den",
     "elsewhereTitle": "På listen i en anden mappe",
     "elsewhereHint": "Disse passer med en titel, Box Office allerede har et andet sted, så de får lov at være. Ret matchet, hvis en af dem er en anden titel.",
+    "elsewhereFilesHint": "Disse matcher en titel, Box Office allerede har i en anden mappe. Hvis en af dem rummer mere af titlen, fx en anden sæson eller en ekstra kopi, så føj dens filer til den, så tilbyder Problemfiler at flytte dem ind. Skift matchet, hvis det er en anden titel.",
     "isAt": "{{title}} ligger i <code>{{path}}</code>",
     "change": "Skift",
+    "addFilesTo": "Føj dens filer til {{title}}",
     "addedHeading": "Tilføjet",
     "from": "fra {{name}}",
+    "linked": "<code>{{name}}</code> hører nu til {{title}}. <problems>Problemfiler</problems> tilbyder at flytte det ind, som {{title}} mangler, og viser eventuelle ekstra kopier.",
     "whichEpisodes": "Hvilke afsnit der skal overvåges",
     "watch": {
       "music": "Overvåg deres nye album",
@@ -1796,7 +1799,8 @@
       "show": "en series disk",
       "notListed": "ikke på listen",
       "foundFolder": "dens mappe, med et andet navn på disken",
-      "secondFolder": "en ekstra mappe til den"
+      "secondFolder": "en ekstra mappe til den",
+      "wrongEpisode": "navngivet efter et andet afsnit"
     },
     "act": {
       "rename": "Omdøb",

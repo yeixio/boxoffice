@@ -126,6 +126,14 @@ function ScanReview({ folder, onClose, onRescan }: { folder: RootFolder; onClose
       setChosen({})
     },
   })
+  // A folder holding more of a title kept in another folder goes in with it.
+  const link = useMutation({
+    mutationFn: (path: string) => post<LibScan>(`/rootfolders/${folder.id}/scan/link`, { path }),
+    onSuccess: (r) => {
+      qc.setQueryData(['libscan', folder.id], r)
+      qc.invalidateQueries({ queryKey: ['problems'] })
+    },
+  })
   const dismiss = useMutation({
     mutationFn: () => del(`/rootfolders/${folder.id}/scan`),
     onSuccess: () => {
@@ -202,19 +210,26 @@ function ScanReview({ folder, onClose, onRescan }: { folder: RootFolder; onClose
             {groups.have.length > 0 && (
               <section>
                 <h3 className="mb-1 font-display font-semibold">{t('scan.elsewhereTitle')}</h3>
-                <p className="mb-2 text-xs text-muted">{t('scan.elsewhereHint')}</p>
+                <p className="mb-2 text-xs text-muted">{t(kind === 'movie' || kind === 'series' ? 'scan.elsewhereFilesHint' : 'scan.elsewhereHint')}</p>
                 <ul className="flex flex-col divide-y divide-line">
                   {groups.have.map((f) => (
                     <li key={f.path} className="flex flex-wrap items-center gap-3 py-2 text-sm">
-                      <div className="min-w-0 flex-1">
+                      <div className="min-w-0 flex-1 basis-60">
                         <code className="break-all">{f.name}</code>
                         <p className="text-xs text-muted">
                           <Trans i18nKey="scan.isAt" values={{ title: f.have!.title, path: f.have!.path }} components={{ code: <code className="break-all" /> }} />
                         </p>
                       </div>
-                      <Button variant="ghost" className="px-2 py-1 text-xs" onClick={() => setChanging(f.path)}>
-                        {t('scan.change')}
-                      </Button>
+                      <div className="flex flex-wrap items-center gap-2">
+                        {(kind === 'movie' || kind === 'series') && (
+                          <Button className="px-2 py-1 text-xs" busy={link.isPending && link.variables === f.path} disabled={link.isPending} onClick={() => link.mutate(f.path)}>
+                            {t('scan.addFilesTo', { title: f.have!.title })}
+                          </Button>
+                        )}
+                        <Button variant="ghost" className="px-2 py-1 text-xs" onClick={() => setChanging(f.path)}>
+                          {t('scan.change')}
+                        </Button>
+                      </div>
                     </li>
                   ))}
                 </ul>
@@ -225,12 +240,22 @@ function ScanReview({ folder, onClose, onRescan }: { folder: RootFolder; onClose
                 <h3 className="mb-1 font-display font-semibold">{t('scan.addedHeading')}</h3>
                 <ul className="flex flex-col gap-1 text-sm">
                   {groups.added.map((f) => (
+                    f.linked ? (
+                      <li key={f.path}>
+                        <Trans
+                          i18nKey="scan.linked"
+                          values={{ name: f.name, title: f.have?.title ?? '' }}
+                          components={{ code: <code className="break-all" />, problems: <Link className="text-marquee" to="/problems" onClick={onClose} /> }}
+                        />
+                      </li>
+                    ) : (
                     <li key={f.path}>
                       <Link className="text-marquee" to={`/${kind === 'movie' ? 'movies' : kind === 'series' ? 'shows' : kind === 'ebook' ? 'books' : kind === 'audiobook' ? 'audiobooks' : 'music'}/${f.added}`} onClick={onClose}>
                         {(picks[f.path] ?? f.match)?.title ?? f.name}
                       </Link>{' '}
                       <span className="text-xs text-muted">{t('scan.from', { name: f.name })}</span>
                     </li>
+                    )
                   ))}
                 </ul>
               </section>
@@ -256,7 +281,7 @@ function ScanReview({ folder, onClose, onRescan }: { folder: RootFolder; onClose
                 </div>
               </div>
             )}
-            <ErrorNote error={add.error || dismiss.error} />
+            <ErrorNote error={add.error || link.error || dismiss.error} />
             <p className="text-xs text-muted">
               {t('scan.leaves')}
               {isBooks(kind) && ` ${t('scan.booksNote')}`}

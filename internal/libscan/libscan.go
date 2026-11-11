@@ -111,8 +111,11 @@ type Found struct {
 	Note string `json:"note,omitempty"`
 	// Problem says why it can't be matched or added.
 	Problem string `json:"problem,omitempty"`
-	// Added is set once it's on the list.
-	Added int64 `json:"added,omitempty"`
+	// Added is set once it's on the list. Linked says it went in with the
+	// title it matched, kept in another folder (Have), and Problem files
+	// looks at its files with that title's.
+	Added  int64 `json:"added,omitempty"`
+	Linked bool  `json:"linked,omitempty"`
 }
 
 // Match is a title on TMDB or an artist on MusicBrainz.
@@ -297,6 +300,15 @@ func (s *Service) scan(ctx context.Context, sc *Scan) error {
 		if l.Kind == sc.Kind {
 			byName[strings.ToLower(filepath.Base(l.Path))] = l
 		}
+	}
+	// Folders linked to a title kept in another folder are on the list
+	// with it.
+	links, err := s.Store.FolderLinks(ctx)
+	if err != nil {
+		return err
+	}
+	for _, l := range links {
+		have[key(l.Path)] = true
 	}
 	// Authors have no folder of their own on the list, so an author's
 	// folder is on the list when an author of that name is.
@@ -973,4 +985,53 @@ func fileQuality(path string) int {
 		return q
 	}
 	return quality.Parse(filepath.Base(filepath.Dir(path))).ID
+}
+
+// Link says a found folder holds more of the title it matched, which Box
+// Office keeps in another folder: "Cunk on Britain" for the show TMDB
+// calls "Cunk on...", whose first season it is. Nothing on disk changes;
+// Problem files then looks through the folder with the title's own, and
+// offers to move in what the title hasn't got and set aside second copies.
+func (s *Service) Link(ctx context.Context, rootID int, path string) (Scan, error) {
+	s.mu.Lock()
+	sc, ok := s.scans[rootID]
+	if !ok {
+		s.mu.Unlock()
+		return Scan{}, store.ErrNotFound
+	}
+	if sc.Status != Ready && sc.Status != Done {
+		s.mu.Unlock()
+		return Scan{}, ErrBusy
+	}
+	i := slices.IndexFunc(sc.Found, func(f Found) bool { return f.Path == path })
+	if i < 0 {
+		s.mu.Unlock()
+		return Scan{}, badf("%s isn't one of the folders the scan found", path)
+	}
+	f := sc.Found[i]
+	kind := sc.Kind
+	s.mu.Unlock()
+	switch {
+	case kind != "movie" && kind != "series":
+		return Scan{}, badf("Box Office can only do this for movies and shows")
+	case f.Added != 0:
+		return Scan{}, badf("%s is on the list already", f.Name)
+	case f.Have == nil:
+		return Scan{}, badf("%s isn't a title Box Office has in another folder", f.Name)
+	}
+	if st, err := os.Stat(path); err != nil || !st.IsDir() {
+		return Scan{}, badf("%s isn't there any more", f.Name)
+	}
+	if err := s.Store.LinkFolder(ctx, store.FolderLink{Path: path, Kind: kind, TitleID: f.Have.ID}); err != nil {
+		return Scan{}, err
+	}
+	s.Log.Info("linked a folder to a title in another folder", "folder", path, "title", f.Have.Title)
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if i < len(sc.Found) && sc.Found[i].Path == path {
+		sc.Found[i].Added, sc.Found[i].Linked = f.Have.ID, true
+	}
+	out := *sc
+	out.Found = slices.Clone(sc.Found)
+	return out, nil
 }

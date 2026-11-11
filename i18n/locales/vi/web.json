@@ -772,10 +772,13 @@
     "findIt": "Tìm nó",
     "elsewhereTitle": "Có trong danh sách ở thư mục khác",
     "elsewhereHint": "Các mục này khớp với một tựa Box Office đã có ở nơi khác, nên được để yên. Đổi kết quả khớp nếu một mục là tựa khác.",
+    "elsewhereFilesHint": "Những mục này khớp với một tựa mà Box Office đã có trong thư mục khác. Nếu một mục chứa thêm nội dung của tựa đó, như mùa khác hoặc bản thứ hai, hãy thêm tệp của nó và Tệp có vấn đề sẽ đề nghị chuyển chúng vào. Đổi kết quả khớp nếu đó là tựa khác.",
     "isAt": "{{title}} nằm ở <code>{{path}}</code>",
     "change": "Thay đổi",
+    "addFilesTo": "Thêm tệp của nó vào {{title}}",
     "addedHeading": "Ngày thêm",
     "from": "từ {{name}}",
+    "linked": "<code>{{name}}</code> giờ thuộc về {{title}}. <problems>Tệp có vấn đề</problems> đề nghị chuyển vào những gì {{title}} còn thiếu và liệt kê các bản thứ hai.",
     "whichEpisodes": "Theo dõi những tập nào",
     "watch": {
       "music": "Theo dõi album mới của họ",
@@ -1701,7 +1704,8 @@
       "show": "đĩa của một chương trình",
       "notListed": "không có trong danh sách",
       "foundFolder": "thư mục của nó, trên đĩa có tên khác",
-      "secondFolder": "thư mục thứ hai cho nó"
+      "secondFolder": "thư mục thứ hai cho nó",
+      "wrongEpisode": "đặt tên theo tập khác"
     },
     "act": {
       "rename": "Đổi tên",

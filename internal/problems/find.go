@@ -304,7 +304,11 @@ type finder struct {
 	// found are titles whose folder is missing and was found under another
 	// spelling: their files aren't missing.
 	found map[int64]bool
-	out   []Problem
+	// linked are folders someone said hold more of a title (by path), and
+	// extras the folders looked through with a title's own (by title).
+	linked map[string]int64
+	extras map[int64][]string
+	out    []Problem
 }
 
 type recorded struct {
@@ -322,6 +326,10 @@ func Find(ctx context.Context, st *store.Store, progress func(done, total int)) 
 	if err != nil {
 		return Report{}, err
 	}
+	links, err := st.FolderLinks(ctx)
+	if err != nil {
+		return Report{}, err
+	}
 	rep := Report{Roots: []Root{}, Problems: []Problem{}}
 	var todo []store.RootFolder
 	for _, r := range roots {
@@ -336,7 +344,12 @@ func Find(ctx context.Context, st *store.Store, progress func(done, total int)) 
 		if err := ctx.Err(); err != nil {
 			return rep, err
 		}
-		f := &finder{root: filepath.Clean(r.Path), kind: r.Kind, byFolder: map[string]*store.LibraryTitle{}, recorded: map[string]recorded{}, found: map[int64]bool{}}
+		f := &finder{root: filepath.Clean(r.Path), kind: r.Kind, byFolder: map[string]*store.LibraryTitle{}, recorded: map[string]recorded{}, found: map[int64]bool{}, linked: map[string]int64{}, extras: map[int64][]string{}}
+		for _, l := range links {
+			if l.Kind == r.Kind {
+				f.linked[filepath.Clean(l.Path)] = l.TitleID
+			}
+		}
 		for i := range titles {
 			t := &titles[i]
 			if t.Kind != r.Kind || filepath.Clean(t.Root) != f.root {
@@ -420,6 +433,7 @@ func (f *finder) run(ctx context.Context) (Root, []Problem) {
 	f.writable = writable(f.root)
 	r.Writable = f.writable
 	seen := map[string]bool{}
+	extra := f.findExtras(entries)
 	for _, e := range entries {
 		if ctx.Err() != nil {
 			break
@@ -432,6 +446,14 @@ func (f *finder) run(ctx context.Context) (Root, []Problem) {
 		if e.IsDir() {
 			if t := f.byFolder[path]; t != nil {
 				f.titleFolder(t, seen)
+			} else if t := extra[path]; t != nil {
+				// Looked through with the title's own folder.
+				if f.byFolder[filepath.Clean(t.Path)] == nil || filepath.Dir(filepath.Clean(t.Path)) != f.root {
+					continue // by the titles kept deeper down, below
+				}
+				if _, err := os.Stat(t.Path); err != nil {
+					f.titleFolder(t, seen) // its own folder is gone: this is all of it
+				}
 			} else if f.titleAbove(path) == nil {
 				// A folder holding titles kept deeper down, such as a
 				// collection folder, is looked at title by title below.
@@ -510,32 +532,63 @@ func (f *finder) titleNamed(name string) *store.LibraryTitle {
 }
 
 // foundFolder is a folder named for a title on the list that Box Office
-// keeps at another path.
+// keeps at another path, when the title's own folder isn't there: it's
+// that folder, named another way. Renaming it to the name Box Office has
+// puts it back where its records say, so nothing else changes. (When the
+// title's folder is there too, findExtras takes it for a second one.)
 func (f *finder) foundFolder(t *store.LibraryTitle, path string, seen map[string]bool) {
-	here, err := os.Stat(path)
-	if err != nil {
+	if here, err := os.Stat(path); err != nil {
 		return
-	}
-	there, err := os.Stat(t.Path)
-	switch {
-	case err == nil && os.SameFile(here, there):
+	} else if there, err := os.Stat(t.Path); err == nil && os.SameFile(here, there) {
 		// The same folder, by a name the share takes either way.
 		f.titleFolder(t, seen)
 		return
-	case err == nil:
-		// The title's folder is there too: this is a second one.
-		n, size := dirSize(path)
-		f.add(Problem{Kind: NotListed, Title: ref(t), Detail: "second_folder", Files: []File{{Path: path, Size: size, Dir: true, Count: n}},
-			Fix: &Fix{Action: ActSetAside, Paths: []string{path}}})
-		return
 	}
-	// The title's folder isn't there: this is it, named another way.
-	// Renaming it to the name Box Office has puts it back where its
-	// records say, so nothing else changes.
 	f.found[t.ID] = true
 	n, size := dirSize(path)
 	f.add(Problem{Kind: Naming, Title: ref(t), Detail: "found_folder", Files: []File{{Path: path, Size: size, Dir: true, Count: n}},
 		Fix: &Fix{Action: ActRename, Moves: []Move{{From: path, To: filepath.Clean(t.Path)}}}})
+}
+
+// findExtras finds the folders in the root that hold more of a title kept
+// in another folder: ones linked to it from a root folder scan, and ones
+// named for it once their name is repaired while its own folder is there
+// too. Each is looked through with the title's own folder, so an episode
+// the title hasn't got is moved in and recorded, a second copy of one it
+// has is a duplicate, and the folder isn't set aside whole with files in
+// it that the title needs.
+func (f *finder) findExtras(entries []os.DirEntry) map[string]*store.LibraryTitle {
+	byID := map[int64]*store.LibraryTitle{}
+	for _, t := range f.titles {
+		byID[t.ID] = t
+	}
+	out := map[string]*store.LibraryTitle{}
+	for _, e := range entries {
+		name := e.Name()
+		path := filepath.Join(f.root, name)
+		if !e.IsDir() || strings.HasPrefix(name, ".") || f.byFolder[path] != nil || f.titleAbove(path) != nil {
+			continue
+		}
+		t := byID[f.linked[path]]
+		if t == nil {
+			if t = f.titleNamed(name); t == nil {
+				continue
+			}
+			here, err := os.Stat(path)
+			if err != nil {
+				continue
+			}
+			if there, err := os.Stat(t.Path); err != nil || os.SameFile(here, there) {
+				continue // foundFolder's
+			}
+		}
+		if filepath.Clean(t.Path) == path {
+			continue
+		}
+		out[path] = t
+		f.extras[t.ID] = append(f.extras[t.ID], path)
+	}
+	return out
 }
 
 // walk lists the files under dir, skipping hidden folders and, with
@@ -798,6 +851,10 @@ func (f *finder) titleFolder(t *store.LibraryTitle, seen map[string]bool) {
 		}
 	}
 	files, empty := walk(t.Path, true)
+	for _, x := range f.extras[t.ID] {
+		more, moreEmpty := walk(x, true)
+		files, empty = append(files, more...), append(empty, moreEmpty...)
+	}
 	for _, d := range empty {
 		f.add(Problem{Kind: EmptyDir, Title: ref(t), Files: []File{{Path: d, Dir: true}}, Fix: &Fix{Action: ActRemoveDirs, Paths: []string{d}}})
 	}
@@ -819,6 +876,27 @@ func (f *finder) titleFolder(t *store.LibraryTitle, seen map[string]bool) {
 	} else {
 		f.showFolder(t, videos, discs)
 	}
+	for _, x := range f.extras[t.ID] {
+		f.extraLeft(t, x)
+	}
+}
+
+// extraLeft is what's left in a second folder of a title once it has no
+// videos in it: artwork and the like, or nothing.
+func (f *finder) extraLeft(t *store.LibraryTitle, dir string) {
+	files, _ := walk(dir, false)
+	for _, e := range files {
+		if isVideo(filepath.Base(e.path)) || hasExt(filepath.Base(e.path), discExts) {
+			return // its videos are listed above, to move in or set aside
+		}
+	}
+	if len(files) == 0 {
+		f.add(Problem{Kind: EmptyDir, Title: ref(t), Files: []File{{Path: dir, Dir: true}}, Fix: &Fix{Action: ActRemoveDirs, Paths: []string{dir}}})
+		return
+	}
+	n, size := dirSize(dir)
+	f.add(Problem{Kind: NotListed, Title: ref(t), Detail: "second_folder", Files: []File{{Path: dir, Size: size, Dir: true, Count: n}},
+		Fix: &Fix{Action: ActSetAside, Paths: []string{dir}}})
 }
 
 func (f *finder) movieFolder(t *store.LibraryTitle, videos, discs []entry) {
@@ -939,6 +1017,48 @@ func (f *finder) checkName(t *store.LibraryTitle, tf store.TitleFile, fl File) {
 	f.add(Problem{Kind: Naming, Title: ref(t), Detail: fl.Episode, Files: []File{fl}, Fix: fix})
 }
 
+// episodeNamed is the episode of a show a file's name says it is by its
+// title, when that's another episode than the one its number (or record)
+// says. A show TMDB keeps as seasons of one ("Cunk on..." has Cunk on
+// Britain as season 1 and Cunk on Earth as season 2) gets files numbered
+// as each was on its own: "Cunk on Earth - S01E01 - In the Beginnings" is
+// season 2's first episode, not season 1's "Beginnings". Only a title
+// that's plainly there after the episode's number counts, and only when
+// the episode the number says has a title the name doesn't have.
+func episodeNamed(t *store.LibraryTitle, ep *store.Episode, path string) *store.Episode {
+	if ep == nil || ep.Title == "" {
+		return nil
+	}
+	name := stem(path)
+	loc := reEpisode.FindStringIndex(name)
+	if loc == nil {
+		return nil
+	}
+	rest := key(name[loc[1]:])
+	if own := key(ep.Title); own == "" || strings.HasPrefix(rest, own) {
+		return nil
+	}
+	var best *store.Episode
+	n, tie := 0, false
+	for i := range t.Episodes {
+		e := &t.Episodes[i]
+		k := key(e.Title)
+		if e.ID == ep.ID || len([]rune(k)) < 5 || !strings.HasPrefix(rest, k) {
+			continue
+		}
+		switch l := len(k); {
+		case l > n:
+			best, n, tie = e, l, false
+		case l == n:
+			tie = true
+		}
+	}
+	if tie {
+		return nil
+	}
+	return best
+}
+
 func (f *finder) showFolder(t *store.LibraryTitle, videos, discs []entry) {
 	for _, d := range discs {
 		// A show's disc holds several episodes; it can't be turned into
@@ -970,6 +1090,9 @@ func (f *finder) showFolder(t *store.LibraryTitle, videos, discs []entry) {
 				}
 			}
 		}
+		if other := episodeNamed(t, ep, v.path); other != nil {
+			ep = other
+		}
 		if ep == nil {
 			detail := ""
 			if s, n := episodeNumbers(filepath.Base(v.path)); len(n) > 0 {
@@ -990,6 +1113,15 @@ func (f *finder) showFolder(t *store.LibraryTitle, videos, discs []entry) {
 		ep := episodes[id]
 		code := episodeCode(ep.Season, []int{ep.Number})
 		switch {
+		case len(files) == 1 && files[0].Recorded && files[0].record.OwnerID != ep.ID:
+			// Recorded as another episode, but named for this one: it's
+			// recorded as this one, and named for it.
+			tf := store.TitleFile{File: store.File{Kind: "episode", OwnerID: ep.ID}, Season: ep.Season, Number: ep.Number, EpisodeTitle: ep.Title}
+			var moves []Move
+			if !nameOK(t, tf, files[0].Path) {
+				moves = withSubtitles(files[0].Path, f.expected(t, tf, files[0].Path))
+			}
+			f.add(Problem{Kind: Naming, Title: ref(t), Detail: "wrong_episode", Files: files, Fix: &Fix{Action: ActRecord, Paths: []string{files[0].Path}, Moves: moves}})
 		case len(files) == 1 && files[0].Recorded:
 			f.checkName(t, store.TitleFile{File: *files[0].record, Season: ep.Season, Number: ep.Number, EpisodeTitle: ep.Title}, files[0])
 		case len(files) == 1:
@@ -1002,7 +1134,7 @@ func (f *finder) showFolder(t *store.LibraryTitle, videos, discs []entry) {
 		default:
 			keep := files[0].Path
 			for _, c := range files {
-				if c.Recorded {
+				if c.Recorded && c.record.OwnerID == ep.ID {
 					keep = c.Path
 				}
 			}

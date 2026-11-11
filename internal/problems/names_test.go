@@ -3,6 +3,7 @@ package problems
 import (
 	"context"
 	"log/slog"
+	"os"
 	"path/filepath"
 	"testing"
 	"time"
@@ -74,9 +75,14 @@ func TestFoundFolders(t *testing.T) {
 	if tar == nil || tar.Detail != "found_folder" || tar.Files[0].Name != "" {
 		t.Fatalf("TÁR: %+v", tar)
 	}
-	second := titled(byKind(rep, NotListed), "Fárgo")
-	if second == nil || second.Detail != "second_folder" || second.Fix.Action != ActSetAside {
+	// The second folder's movie is looked at with Fárgo's own: a second
+	// copy, not a folder set aside whole.
+	second := titled(byKind(rep, Duplicate), "Fárgo")
+	if second == nil || len(second.Files) != 2 || second.Fix.Keep != filepath.Join(l.movies, "Fárgo (1996)", "Fárgo (1996).mkv") {
 		t.Fatalf("second Fargo folder: %+v", second)
+	}
+	if p := titled(byKind(rep, NotListed), "Fárgo"); p != nil {
+		t.Fatalf("second Fargo folder set aside with a video in it: %+v", p)
 	}
 
 	// Renaming puts WALL·E's folder where its record says, and putting it
@@ -207,5 +213,168 @@ func TestDecide(t *testing.T) {
 	}
 	if err := s.Decide(ids, "shred"); err == nil {
 		t.Error("took a decision that isn't one")
+	}
+}
+
+// A folder a root folder scan linked to a show kept in another folder
+// ("Cunk on Britain" for TMDB's "Cunk on...") is looked through with the
+// show's own: episodes it hasn't got are moved in and recorded, and
+// second copies of ones it has are duplicates.
+func TestLinkedFolder(t *testing.T) {
+	l := newLibrary(t)
+	ctx := context.Background()
+	extra := filepath.Join(l.tv, "Lost Season One")
+	touch(t, filepath.Join(extra, "Lost.S01E01.HDTV.mkv"), 4) // Lost has it
+	touch(t, filepath.Join(extra, "Lost.S01E02.HDTV.mkv"), 5) // and in its folder, unrecorded
+	touch(t, filepath.Join(extra, "folder.jpg"), 1)
+
+	// Before it's linked, it's a folder not on the list.
+	rep := mustFind(t, l)
+	if p := byPath(byKind(rep, NotListed), extra); p == nil || p.Title != nil {
+		t.Fatalf("before linking: %+v", p)
+	}
+	if err := l.st.LinkFolder(ctx, store.FolderLink{Path: extra, Kind: "series", TitleID: l.ids["Lost"]}); err != nil {
+		t.Fatal(err)
+	}
+	rep = mustFind(t, l)
+	if p := byPath(byKind(rep, NotListed), extra); p != nil {
+		t.Fatalf("linked folder still set aside whole: %+v", p)
+	}
+	var e1, e2 *Problem
+	for i, p := range byKind(rep, Duplicate) {
+		if p.Title != nil && p.Title.Name == "Lost" {
+			switch p.Detail {
+			case "S01E01":
+				e1 = &byKind(rep, Duplicate)[i]
+			case "S01E02":
+				e2 = &byKind(rep, Duplicate)[i]
+			}
+		}
+	}
+	if e1 == nil || e1.Fix.Keep != filepath.Join(l.tv, "Lost (2004)", "Season 01", "Lost (2004) - S01E01 - Pilot.mkv") {
+		t.Fatalf("S01E01: %+v", e1)
+	}
+	if e2 == nil || len(e2.Files) != 2 {
+		t.Fatalf("S01E02: %+v", e2)
+	}
+
+	// Once its videos are gone, what's left can be set aside.
+	os.Remove(filepath.Join(extra, "Lost.S01E01.HDTV.mkv"))
+	os.Remove(filepath.Join(extra, "Lost.S01E02.HDTV.mkv"))
+	rep = mustFind(t, l)
+	if p := byPath(byKind(rep, NotListed), extra); p == nil || p.Detail != "second_folder" || p.Title == nil || p.Title.Name != "Lost" {
+		t.Fatalf("what's left: %+v", p)
+	}
+}
+
+func byPath(list []Problem, path string) *Problem {
+	for i := range list {
+		for _, f := range list[i].Files {
+			if f.Path == path {
+				return &list[i]
+			}
+		}
+	}
+	return nil
+}
+
+// TMDB keeps Cunk on Britain and Cunk on Earth as seasons 1 and 2 of one
+// show, "Cunk on...". Cunk on Earth's files, numbered S01E01 and so on,
+// were recorded as season 1; Cunk on Britain's sit in a folder of their
+// own, linked to the show from a root folder scan. Each file goes to the
+// episode its name says, and nothing is taken for a copy.
+func TestEpisodesNamedForAnotherSeason(t *testing.T) {
+	l := newLibrary(t)
+	ctx := context.Background()
+	show, err := l.st.AddSeries(ctx, store.Series{TMDBID: 79063, Title: "Cunk on...", Year: 2018, Monitored: true, ProfileID: 1, RootFolder: l.tv, Path: filepath.Join(l.tv, "Cunk on... (2018)")})
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, e := range []store.Episode{{Season: 1, Number: 1, Title: "Beginnings"}, {Season: 1, Number: 2, Title: "The Empire Strikes Back"}, {Season: 2, Number: 1, Title: "In the Beginnings"}, {Season: 2, Number: 2, Title: "Faith Off"}} {
+		e.SeriesID, e.Monitored = show.ID, true
+		if err := l.st.UpsertEpisode(ctx, e); err != nil {
+			t.Fatal(err)
+		}
+	}
+	eps, _ := l.st.Episodes(ctx, show.ID)
+	id := map[string]int64{}
+	for _, e := range eps {
+		id[episodeCode(e.Season, []int{e.Number})] = e.ID
+	}
+	earth1 := filepath.Join(l.tv, "Cunk on... (2018)", "Season 1", "Cunk on Earth - S01E01 - In the Beginnings WEBRip-480p.mp4")
+	earth2 := filepath.Join(l.tv, "Cunk on... (2018)", "Season 1", "Cunk on Earth - S01E02 - Faith+Off WEBRip-480p.mp4")
+	touch(t, earth1, 6)
+	touch(t, earth2, 6)
+	l.st.AddFile(ctx, store.File{Kind: "episode", OwnerID: id["S01E01"], Path: earth1, Size: 6})
+	l.st.AddFile(ctx, store.File{Kind: "episode", OwnerID: id["S01E02"], Path: earth2, Size: 6})
+	britain := filepath.Join(l.tv, "Cunk on Britain")
+	britain1 := filepath.Join(britain, "Season 1", "Cunk on Britain - S01E01 - Beginnings WEBRip-480p.mp4")
+	touch(t, britain1, 5)
+	touch(t, filepath.Join(britain, "Season 1", "Cunk on Britain - S01E02 - The Empire Strikes Back WEBRip-480p.mp4"), 5)
+	l.st.LinkFolder(ctx, store.FolderLink{Path: britain, Kind: "series", TitleID: show.ID})
+
+	rep := mustFind(t, l)
+	for _, p := range rep.Problems {
+		if p.Title != nil && p.Title.ID == show.ID && p.Kind == Duplicate {
+			t.Errorf("taken for a copy: %+v", p)
+		}
+	}
+	var wrong, untracked []Problem
+	for _, p := range rep.Problems {
+		if p.Title == nil || p.Title.ID != show.ID {
+			continue
+		}
+		switch {
+		case p.Kind == Naming && p.Detail == "wrong_episode":
+			wrong = append(wrong, p)
+		case p.Kind == Untracked:
+			untracked = append(untracked, p)
+		}
+	}
+	if len(wrong) != 2 || len(untracked) != 2 {
+		t.Fatalf("wrong episode %+v, not recorded %+v", wrong, untracked)
+	}
+	var w *Problem
+	for i := range wrong {
+		if wrong[i].Files[0].Path == earth1 {
+			w = &wrong[i]
+		}
+	}
+	if w == nil || w.Files[0].Episode != "S02E01" || len(w.Fix.Moves) == 0 || w.Fix.Moves[0].To != filepath.Join(l.tv, "Cunk on... (2018)", "Season 02", "Cunk on... (2018) - S02E01 - In the Beginnings.mp4") {
+		t.Fatalf("Cunk on Earth's first: %+v", w)
+	}
+
+	// Fixing it records it as season 2's, renamed, and putting it back
+	// turns that back.
+	fix, err := Apply(ctx, l.st, noTools, *w, "", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	moved := w.Fix.Moves[0].To
+	if e, _ := l.st.Episode(ctx, id["S02E01"]); e.File == nil || e.File.Path != moved {
+		t.Fatalf("S02E01 %+v", e.File)
+	}
+	if e, _ := l.st.Episode(ctx, id["S01E01"]); e.File != nil {
+		t.Fatalf("S01E01 still has %+v", e.File)
+	}
+	if err := PutBack(ctx, l.st, fix.ID); err != nil {
+		t.Fatal(err)
+	}
+	if e, _ := l.st.Episode(ctx, id["S01E01"]); e.File == nil || e.File.Path != earth1 {
+		t.Fatalf("S01E01 after putting back %+v", e.File)
+	}
+	if e, _ := l.st.Episode(ctx, id["S02E01"]); e.File != nil {
+		t.Fatalf("S02E01 after putting back %+v", e.File)
+	}
+
+	// Cunk on Britain's first episode is season 1's, moved in.
+	var b *Problem
+	for i := range untracked {
+		if untracked[i].Files[0].Path == britain1 {
+			b = &untracked[i]
+		}
+	}
+	if b == nil || b.Files[0].Episode != "S01E01" || b.Fix.Moves[0].To != filepath.Join(l.tv, "Cunk on... (2018)", "Season 01", "Cunk on... (2018) - S01E01 - Beginnings.mp4") {
+		t.Fatalf("Cunk on Britain's first: %+v", b)
 	}
 }

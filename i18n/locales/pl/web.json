@@ -928,10 +928,13 @@
     "findIt": "Znajdź",
     "elsewhereTitle": "Na liście w innym folderze",
     "elsewhereHint": "Pasują do tytułu, który Box Office ma już gdzie indziej, więc zostają nietknięte. Zmień dopasowanie, jeśli któryś to inny tytuł.",
+    "elsewhereFilesHint": "Pasują do tytułu, który Box Office ma już w innym folderze. Jeśli któryś zawiera więcej z tego tytułu, np. inny sezon lub drugą kopię, dodaj jego pliki, a Problematyczne pliki zaproponują ich przeniesienie. Zmień dopasowanie, jeśli to inny tytuł.",
     "isAt": "{{title}} jest w <code>{{path}}</code>",
     "change": "Zmień",
+    "addFilesTo": "Dodaj jego pliki do {{title}}",
     "addedHeading": "Dodano",
     "from": "z {{name}}",
+    "linked": "<code>{{name}}</code> należy teraz do {{title}}. <problems>Problematyczne pliki</problems> proponują przeniesienie tego, czego brakuje w {{title}}, i pokazują drugie kopie.",
     "whichEpisodes": "Których odcinków wypatrywać",
     "watch": {
       "music": "Wypatruj ich nowych albumów",
@@ -1986,7 +1989,8 @@
       "show": "płyta serialu",
       "notListed": "spoza listy",
       "foundFolder": "jego folder, inaczej nazwany na dysku",
-      "secondFolder": "drugi folder tego tytułu"
+      "secondFolder": "drugi folder tego tytułu",
+      "wrongEpisode": "nazwany jak inny odcinek"
     },
     "act": {
       "rename": "Zmień nazwę",

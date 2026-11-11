@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"errors"
 	"net/http"
 	"strconv"
@@ -19,6 +20,7 @@ func (s *Server) libScanRoutes() []route {
 		{"GET /api/v1/rootfolders/{id}/scan", true, s.libScan},
 		{"DELETE /api/v1/rootfolders/{id}/scan", true, s.dismissLibScan},
 		{"POST /api/v1/rootfolders/{id}/scan/add", true, s.addFromLibScan},
+		{"POST /api/v1/rootfolders/{id}/scan/link", true, s.linkFromLibScan},
 	}
 }
 
@@ -92,4 +94,27 @@ func (s *Server) addFromLibScan(w http.ResponseWriter, r *http.Request) error {
 		return libScanError(err)
 	}
 	return writeJSON(w, http.StatusAccepted, sc)
+}
+
+// linkFromLibScan says a found folder holds more of the title it matched,
+// kept in another folder, and has Problem files look again.
+func (s *Server) linkFromLibScan(w http.ResponseWriter, r *http.Request) error {
+	id, err := rootID(r)
+	if err != nil {
+		return err
+	}
+	var in struct {
+		Path string `json:"path"`
+	}
+	if err := readJSON(r, &in); err != nil {
+		return err
+	}
+	sc, err := s.LibScan.Link(r.Context(), id, in.Path)
+	if err != nil {
+		return libScanError(err)
+	}
+	if s.Problems != nil {
+		s.Problems.Look(context.WithoutCancel(r.Context()))
+	}
+	return writeJSON(w, http.StatusOK, sc)
 }

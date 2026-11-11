@@ -339,6 +339,19 @@ func (x *fixer) recordAs(ctx context.Context, kind string, id int64, path string
 	if prev != nil && prev.Path == path {
 		return nil
 	}
+	// Recorded as something else (another episode, say): that record goes,
+	// noted so putting back restores it, unless record noted it already
+	// from where the file was before it moved.
+	if rec, err := x.st.FileByPath(ctx, path); err == nil {
+		if !slices.ContainsFunc(x.done, func(f store.ProblemFixFile) bool {
+			return f.Role == roleForgot && f.Record != nil && f.Record.ID == rec.ID
+		}) {
+			x.done = append(x.done, store.ProblemFixFile{Role: roleForgot, Src: path, Dest: path, Size: rec.Size, Record: &rec})
+		}
+		if err := x.st.ForgetFileAt(ctx, path); err != nil {
+			return err
+		}
+	}
 	if _, err := x.st.AddFile(ctx, store.File{Kind: kind, OwnerID: id, Path: path, Size: info.Size(), Quality: quality.Parse(filepath.Base(path)).ID}); err != nil {
 		return err
 	}
@@ -351,6 +364,12 @@ func (x *fixer) record(ctx context.Context) error {
 	kind, id, err := x.owner(path)
 	if err != nil {
 		return err
+	}
+	// A file recorded as another episode, named for this one: its record
+	// is noted as it is now, where the file is now, so putting back
+	// restores it once the file is moved back.
+	if rec, err := x.st.FileByPath(ctx, path); err == nil && (rec.Kind != kind || rec.OwnerID != id) {
+		x.done = append(x.done, store.ProblemFixFile{Role: roleForgot, Src: path, Dest: path, Size: rec.Size, Record: &rec})
 	}
 	if len(x.p.Fix.Moves) > 0 {
 		if err := x.moveAll(ctx, x.p.Fix.Moves); err != nil {

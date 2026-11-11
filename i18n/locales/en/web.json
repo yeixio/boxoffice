@@ -824,10 +824,13 @@
     "findIt": "Find it",
     "elsewhereTitle": "On the list in another folder",
     "elsewhereHint": "These match a title Box Office already has somewhere else, so they're left alone. Change the match if one is a different title.",
+    "elsewhereFilesHint": "These match a title Box Office already has in another folder. If one holds more of that title, like another season or a second copy, add its files to it and Problem files will offer to move them in. Change the match if one is a different title.",
     "isAt": "{{title}} is at <code>{{path}}</code>",
     "change": "Change",
+    "addFilesTo": "Add its files to {{title}}",
     "addedHeading": "Added",
     "from": "from {{name}}",
+    "linked": "<code>{{name}}</code> now goes with {{title}}: <problems>Problem files</problems> offers to move in what {{title}} hasn't got, and lists any second copies.",
     "whichEpisodes": "Which episodes to watch for",
     "watch": {
       "music": "Watch for their new albums",
@@ -1796,7 +1799,8 @@
       "show": "a show's disc",
       "notListed": "not on the list",
       "foundFolder": "its folder, named differently on disk",
-      "secondFolder": "a second folder for it"
+      "secondFolder": "a second folder for it",
+      "wrongEpisode": "named for another episode"
     },
     "act": {
       "rename": "Rename",

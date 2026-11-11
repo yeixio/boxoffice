@@ -579,6 +579,8 @@ export type ScanFound = {
   note?: string
   problem?: string
   added?: number
+  // linked: it went in with the title it matched, kept in another folder.
+  linked?: boolean
 }
 export type LibScan = {
   rootId: number
