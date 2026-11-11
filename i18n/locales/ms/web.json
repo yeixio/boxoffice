@@ -995,12 +995,23 @@
     "new": "Kata laluan baharu",
     "newHint": "Sekurang-kurangnya 8 aksara. Setiap peranti log masuk semula.",
     "change": "Tukar kata laluan",
+    "restart": "Mulakan semula Box Office",
+    "restartSub": "Menghentikan Box Office dengan kemas dan memulakannya semula, apabila sesuatu kelihatan tersekat. Muat turun dijeda di tempatnya dan bersambung apabila ia kembali.",
+    "restartButton": "Mulakan semula",
+    "restartTitle": "Mulakan semula Box Office?",
+    "restartBody": "Box Office berhenti dengan kemas dan bermula semula. Biasanya ia kembali dalam masa seminit, dan halaman ini bersambung semula dengan sendirinya.",
+    "restartDownloads": "Muat turun yang sedang berjalan: {{n}}. Ia dijeda di tempatnya dan bersambung selepas dimulakan semula.",
+    "restartNow": "Mulakan semula sekarang",
+    "restarting": "Memulakan semula Box Office…",
+    "restartingSub": "Halaman ini bersambung semula dengan sendirinya sebaik sahaja Box Office kembali.",
+    "restartSlow": "Box Office belum kembali. Jika ia tidak kembali, lihat lognya di tempat ia berjalan, seperti log pod dalam Kubernetes atau docker logs.",
+    "reload": "Muat semula halaman",
     "system": "Box Office {{version}} pada {{os}}, {{go}}, {{db}} · data dalam <code>{{dir}}</code> · berjalan sejak {{since}}",
     "languageHint": "Bahasa yang digunakan Box Office untuk anda, pada setiap peranti tempat anda log masuk. Automatik mengikut bahasa setiap pelayar.",
     "sections": {
       "general": {
         "label": "Umum",
-        "sub": "Bahasa dan kata laluan anda, serta kunci TMDB yang digunakan Box Office untuk mencari tajuk."
+        "sub": "Bahasa dan kata laluan anda, kunci TMDB yang digunakan Box Office untuk mencari tajuk, dan memulakan semula Box Office."
       },
       "library": {
         "label": "Pustaka",

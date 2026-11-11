@@ -1147,12 +1147,23 @@
     "new": "Parolă nouă",
     "newHint": "Cel puțin 8 caractere. Fiecare dispozitiv se conectează din nou.",
     "change": "Schimbă parola",
+    "restart": "Repornește Box Office",
+    "restartSub": "Oprește Box Office în mod curat și îl pornește din nou, pentru când ceva pare blocat. Descărcările se întrerup acolo unde sunt și continuă când revine.",
+    "restartButton": "Repornește",
+    "restartTitle": "Repornești Box Office?",
+    "restartBody": "Box Office se oprește în mod curat și pornește din nou. De obicei revine în mai puțin de un minut, iar pagina se reconectează singură.",
+    "restartDownloads": "Descărcări în curs acum: {{n}}. Se întrerup acolo unde sunt și continuă după repornire.",
+    "restartNow": "Repornește acum",
+    "restarting": "Box Office repornește…",
+    "restartingSub": "Pagina se reconectează singură când Box Office revine.",
+    "restartSlow": "Box Office nu a revenit încă. Dacă nu revine, uită-te în jurnalele lui acolo unde rulează, de exemplu jurnalele pod-ului în Kubernetes sau docker logs.",
+    "reload": "Reîncarcă pagina",
     "system": "Box Office {{version}} pe {{os}}, {{go}}, {{db}} · date în <code>{{dir}}</code> · rulează din {{since}}",
     "languageHint": "Limba în care îți apare Box Office, pe fiecare dispozitiv pe care te conectezi. Automat urmează limba fiecărui browser.",
     "sections": {
       "general": {
         "label": "General",
-        "sub": "Limba și parola ta, și cheia TMDB cu care Box Office caută titlurile."
+        "sub": "Limba și parola ta, cheia TMDB cu care Box Office caută titlurile și repornirea Box Office."
       },
       "library": {
         "label": "Bibliotecă",

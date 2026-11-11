@@ -1071,12 +1071,23 @@
     "new": "Yeni parola",
     "newHint": "En az 8 karakter. Her cihaz yeniden giriş yapar.",
     "change": "Parolayı değiştir",
+    "restart": "Box Office'i yeniden başlat",
+    "restartSub": "Bir şey takılmış gibi göründüğünde Box Office'i düzgünce durdurur ve yeniden başlatır. İndirmeler oldukları yerde duraklar ve geri geldiğinde devam eder.",
+    "restartButton": "Yeniden başlat",
+    "restartTitle": "Box Office yeniden başlatılsın mı?",
+    "restartBody": "Box Office düzgünce durur ve yeniden başlar. Genellikle bir dakika içinde geri gelir ve bu sayfa kendiliğinden yeniden bağlanır.",
+    "restartDownloads": "Şu anda süren indirmeler: {{n}}. Oldukları yerde duraklar ve yeniden başlatmadan sonra devam ederler.",
+    "restartNow": "Şimdi yeniden başlat",
+    "restarting": "Box Office yeniden başlatılıyor…",
+    "restartingSub": "Box Office geri geldiğinde bu sayfa kendiliğinden yeniden bağlanır.",
+    "restartSlow": "Box Office henüz geri gelmedi. Gelmezse, çalıştığı yerdeki günlüklerine bakın; örneğin Kubernetes'teki pod günlükleri veya docker logs.",
+    "reload": "Sayfayı yeniden yükle",
     "system": "Box Office {{version}}, {{os}} üzerinde, {{go}}, {{db}} · veriler <code>{{dir}}</code> içinde · {{since}} tarihinden beri çalışıyor",
     "languageHint": "Box Office'in size gösterildiği dil, giriş yaptığınız her cihazda. Otomatik, her tarayıcının dilini izler.",
     "sections": {
       "general": {
         "label": "Genel",
-        "sub": "Diliniz ve parolanız ile Box Office'in başlıkları aradığı TMDB anahtarı."
+        "sub": "Diliniz ve parolanız, Box Office'in başlıkları aradığı TMDB anahtarı ve Box Office'i yeniden başlatma."
       },
       "library": {
         "label": "Kütüphane",

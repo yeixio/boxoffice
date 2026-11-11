@@ -995,12 +995,23 @@
     "new": "新密码",
     "newHint": "至少 8 个字符。所有设备都需要重新登录。",
     "change": "更改密码",
+    "restart": "重启 Box Office",
+    "restartSub": "在有东西似乎卡住时,干净地停止 Box Office 并重新启动。下载会在原处暂停,等它回来后继续。",
+    "restartButton": "重启",
+    "restartTitle": "要重启 Box Office 吗？",
+    "restartBody": "Box Office 会干净地停止并重新启动。通常一分钟内就会回来,此页面会自动重新连接。",
+    "restartDownloads": "正在进行的下载:{{n}}。它们会在原处暂停,重启后继续。",
+    "restartNow": "立即重启",
+    "restarting": "正在重启 Box Office…",
+    "restartingSub": "Box Office 回来后,此页面会自动重新连接。",
+    "restartSlow": "Box Office 还没有回来。如果一直没有回来,请在它运行的地方查看日志,例如 Kubernetes 中 pod 的日志或 docker logs。",
+    "reload": "重新加载页面",
     "system": "Box Office {{version}}，运行于 {{os}}，{{go}}，{{db}} · 数据位于 <code>{{dir}}</code> · 自 {{since}} 起运行",
     "languageHint": "Box Office 显示的语言，适用于你登录的每台设备。“自动”会跟随各浏览器的语言。",
     "sections": {
       "general": {
         "label": "常规",
-        "sub": "你的语言和密码,以及 Box Office 用来查找影片的 TMDB 密钥。"
+        "sub": "你的语言和密码、Box Office 用来查找影片的 TMDB 密钥,以及重启 Box Office。"
       },
       "library": {
         "label": "媒体库",

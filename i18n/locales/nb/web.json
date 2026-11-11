@@ -1071,12 +1071,23 @@
     "new": "Nytt passord",
     "newHint": "Minst 8 tegn. Alle enheter logger inn på nytt.",
     "change": "Bytt passord",
+    "restart": "Start Box Office på nytt",
+    "restartSub": "Stopper Box Office pent og starter det igjen, når noe ser ut til å henge. Nedlastinger settes på pause der de er, og fortsetter når det er tilbake.",
+    "restartButton": "Start på nytt",
+    "restartTitle": "Starte Box Office på nytt?",
+    "restartBody": "Box Office stopper pent og starter igjen. Det er vanligvis tilbake innen et minutt, og denne siden kobler seg til igjen av seg selv.",
+    "restartDownloads": "Nedlastinger som pågår nå: {{n}}. De settes på pause der de er, og fortsetter etter omstarten.",
+    "restartNow": "Start på nytt nå",
+    "restarting": "Starter Box Office på nytt…",
+    "restartingSub": "Denne siden kobler seg til igjen av seg selv når Box Office er tilbake.",
+    "restartSlow": "Box Office er ikke tilbake ennå. Hvis det blir borte, se i loggene der det kjører, for eksempel pod-loggene i Kubernetes eller docker logs.",
+    "reload": "Last inn siden på nytt",
     "system": "Box Office {{version}} på {{os}}, {{go}}, {{db}} · data i <code>{{dir}}</code> · kjørt siden {{since}}",
     "languageHint": "Språket Box Office vises på for deg, på alle enheter du logger inn på. Automatisk følger språket i hver nettleser.",
     "sections": {
       "general": {
         "label": "Generelt",
-        "sub": "Språket og passordet ditt, og TMDB-nøkkelen Box Office slår opp titler med."
+        "sub": "Språket og passordet ditt, TMDB-nøkkelen Box Office slår opp titler med, og omstart av Box Office."
       },
       "library": {
         "label": "Bibliotek",

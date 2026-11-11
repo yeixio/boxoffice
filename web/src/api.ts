@@ -319,6 +319,9 @@ export type Connections = {
   quotas: Record<number, QuotaState>
 }
 
+// What the Restart button needs to know first.
+export type RestartInfo = { downloads: number; how: 'kubernetes' | 'self'; available: boolean }
+
 export type SystemInfo = { version: string; database: string; dataDir: string; go: string; os: string; startedAt: string; movies: number; series: number }
 
 // A problem Box Office found in itself, and how to fix it.

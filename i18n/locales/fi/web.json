@@ -1071,12 +1071,23 @@
     "new": "Uusi salasana",
     "newHint": "Vähintään 8 merkkiä. Jokainen laite kirjautuu uudelleen.",
     "change": "Vaihda salasana",
+    "restart": "Käynnistä Box Office uudelleen",
+    "restartSub": "Pysäyttää Box Officen hallitusti ja käynnistää sen uudelleen, kun jokin tuntuu jumittavan. Lataukset pysähtyvät kohtaansa ja jatkuvat, kun se on taas päällä.",
+    "restartButton": "Käynnistä uudelleen",
+    "restartTitle": "Käynnistetäänkö Box Office uudelleen?",
+    "restartBody": "Box Office pysähtyy hallitusti ja käynnistyy uudelleen. Se on yleensä takaisin minuutin sisällä, ja tämä sivu yhdistää uudelleen itsestään.",
+    "restartDownloads": "Käynnissä olevat lataukset: {{n}}. Ne pysähtyvät kohtaansa ja jatkuvat uudelleenkäynnistyksen jälkeen.",
+    "restartNow": "Käynnistä nyt uudelleen",
+    "restarting": "Box Office käynnistyy uudelleen…",
+    "restartingSub": "Tämä sivu yhdistää uudelleen itsestään, kun Box Office on taas päällä.",
+    "restartSlow": "Box Office ei ole vielä palannut. Jos se ei palaa, katso sen lokeja siellä, missä se toimii, esimerkiksi podin lokeja Kubernetesissa tai docker logs.",
+    "reload": "Lataa sivu uudelleen",
     "system": "Box Office {{version}}, {{os}}, {{go}}, {{db}} · tiedot kansiossa <code>{{dir}}</code> · käynnissä {{since}} alkaen",
     "languageHint": "Kieli, jolla Box Office näytetään sinulle kaikilla laitteilla, joilla kirjaudut sisään. Automaattinen seuraa kunkin selaimen kieltä.",
     "sections": {
       "general": {
         "label": "Yleiset",
-        "sub": "Kielesi ja salasanasi sekä TMDB-avain, jolla Box Office hakee nimikkeiden tiedot."
+        "sub": "Kielesi ja salasanasi, TMDB-avain, jolla Box Office hakee nimikkeiden tiedot, sekä Box Officen uudelleenkäynnistys."
       },
       "library": {
         "label": "Kirjasto",

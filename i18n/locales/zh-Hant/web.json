@@ -995,12 +995,23 @@
     "new": "新密碼",
     "newHint": "至少 8 個字元。所有裝置都需要重新登入。",
     "change": "更改密碼",
+    "restart": "重新啟動 Box Office",
+    "restartSub": "在有東西似乎卡住時,乾淨地停止 Box Office 並重新啟動。下載會在原處暫停,等它回來後繼續。",
+    "restartButton": "重新啟動",
+    "restartTitle": "要重新啟動 Box Office 嗎？",
+    "restartBody": "Box Office 會乾淨地停止並重新啟動。通常一分鐘內就會回來,此頁面會自動重新連線。",
+    "restartDownloads": "正在進行的下載:{{n}}。它們會在原處暫停,重新啟動後繼續。",
+    "restartNow": "立即重新啟動",
+    "restarting": "正在重新啟動 Box Office…",
+    "restartingSub": "Box Office 回來後,此頁面會自動重新連線。",
+    "restartSlow": "Box Office 還沒有回來。如果一直沒有回來,請在它執行的地方查看記錄,例如 Kubernetes 中 pod 的記錄或 docker logs。",
+    "reload": "重新載入頁面",
     "system": "Box Office {{version}}，執行於 {{os}}，{{go}}，{{db}} · 資料位於 <code>{{dir}}</code> · 自 {{since}} 起執行",
     "languageHint": "Box Office 顯示的語言，適用於你登入的每臺裝置。“自動”會跟隨各瀏覽器的語言。",
     "sections": {
       "general": {
         "label": "一般",
-        "sub": "你的語言和密碼,以及 Box Office 用來查詢影片的 TMDB 金鑰。"
+        "sub": "你的語言和密碼、Box Office 用來查詢影片的 TMDB 金鑰,以及重新啟動 Box Office。"
       },
       "library": {
         "label": "媒體庫",

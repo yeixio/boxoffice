@@ -57,7 +57,11 @@ func main() {
 			cmd = healthcheck
 		}
 	}
-	if err := cmd(); err != nil {
+	err := cmd()
+	if errors.Is(err, errRestart) {
+		err = restart()
+	}
+	if err != nil {
 		fmt.Fprintln(os.Stderr, "boxoffice:", err)
 		os.Exit(1)
 	}
@@ -98,6 +102,10 @@ func run() error {
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
+	// The Restart button in Settings stops Box Office the same way a
+	// signal does, then starts it again (see restart).
+	ctx, restartNow := context.WithCancelCause(ctx)
+	defer restartNow(nil)
 
 	runner := jobs.New(db, log)
 	cat := &catalog.Service{Store: db, Jobs: runner, Log: log, EnvTMDBKey: cfg.TMDBKey,
@@ -168,6 +176,7 @@ func run() error {
 		Downloads: downloads, Search: finder,
 		Version: version.Version, Database: dbKind, DataDir: cfg.DataDir, EnvAPIKey: cfg.APIKey, Web: web.FS(),
 		Monitoring: mon,
+		Restart:    func() { restartNow(errRestart) },
 	}
 	alerter := srv.Alerts()
 	// Ebooks go to the e-readers set to get them as they download.
@@ -232,8 +241,14 @@ func run() error {
 		return err
 	case <-ctx.Done():
 	}
-	log.Info("stopping")
-	// Something asked Box Office to stop (Kubernetes, Docker, Ctrl-C), so
+	restarting := errors.Is(context.Cause(ctx), errRestart)
+	if restarting {
+		log.Info("stopping to restart")
+	} else {
+		log.Info("stopping")
+	}
+	// Something asked Box Office to stop (Kubernetes, Docker, Ctrl-C, or
+	// the Restart button), so
 	// the next start is a planned restart, not a crash. Note that now,
 	// before waiting on work that may be stuck on a network share: a slow
 	// stop, or a kill when the grace period runs out, is still planned.
@@ -254,6 +269,9 @@ func run() error {
 	case <-stopped:
 	case <-shut.Done():
 		log.Warn("stopping without waiting for work that's stuck; a network share may have stopped answering")
+	}
+	if restarting {
+		return errRestart
 	}
 	return nil
 }

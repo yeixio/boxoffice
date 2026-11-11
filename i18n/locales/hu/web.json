@@ -1071,12 +1071,23 @@
     "new": "Új jelszó",
     "newHint": "Legalább 8 karakter. Minden eszköz újra bejelentkezik.",
     "change": "Jelszó módosítása",
+    "restart": "A Box Office újraindítása",
+    "restartSub": "Rendben leállítja és újraindítja a Box Office-t, ha valami elakadtnak tűnik. A letöltések ott állnak meg, ahol tartanak, és folytatódnak, amint visszatér.",
+    "restartButton": "Újraindítás",
+    "restartTitle": "Újraindítod a Box Office-t?",
+    "restartBody": "A Box Office rendben leáll, majd újraindul. Általában egy percen belül visszatér, és ez az oldal magától újracsatlakozik.",
+    "restartDownloads": "Most futó letöltések: {{n}}. Ott állnak meg, ahol tartanak, és az újraindítás után folytatódnak.",
+    "restartNow": "Újraindítás most",
+    "restarting": "A Box Office újraindul…",
+    "restartingSub": "Ez az oldal magától újracsatlakozik, amint a Box Office visszatér.",
+    "restartSlow": "A Box Office még nem tért vissza. Ha nem jön vissza, nézd meg a naplóit ott, ahol fut, például a pod naplóit Kubernetesben vagy a docker logs kimenetét.",
+    "reload": "Oldal újratöltése",
     "system": "Box Office {{version}} · {{os}}, {{go}}, {{db}} · adatok itt: <code>{{dir}}</code> · fut {{since}} óta",
     "languageHint": "Az a nyelv, amelyen a Box Office megjelenik neked minden eszközön, ahol bejelentkezel. Az Automatikus mindig a böngésző nyelvét követi.",
     "sections": {
       "general": {
         "label": "Általános",
-        "sub": "A nyelved és jelszavad, valamint a TMDB-kulcs, amellyel a Box Office a címeket keresi."
+        "sub": "A nyelved és jelszavad, a TMDB-kulcs, amellyel a Box Office a címeket keresi, és a Box Office újraindítása."
       },
       "library": {
         "label": "Könyvtár",
