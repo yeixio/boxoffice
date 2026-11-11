@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io/fs"
+	"maps"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -297,13 +298,21 @@ func (e *Engine) download(ctx context.Context, r *running, d *store.Download, sr
 		d.DoneNames[st.nf.index] = name
 		d.DoneBytes = r.bytes.Load()
 		d.FailedBytes = r.failed.Load()
-		save := time.Since(lastSave) > 3*time.Second
+		// What's saved is a copy taken under the lock: the other workers
+		// go on adding to the download's list and map of finished files
+		// while it's written out, and reading a map while it's written
+		// to stops Box Office dead.
+		var snap store.Download
+		save := time.Since(lastSave) > progressEvery
 		if save {
 			lastSave = time.Now()
+			snap = *d
+			snap.DoneFiles = slices.Clone(d.DoneFiles)
+			snap.DoneNames = maps.Clone(d.DoneNames)
 		}
 		mu.Unlock()
 		if save {
-			e.Store.SaveDownloadProgress(context.WithoutCancel(ctx), *d)
+			e.Store.SaveDownloadProgress(context.WithoutCancel(ctx), snap)
 		}
 		return nil
 	}
@@ -358,6 +367,10 @@ func (e *Engine) download(ctx context.Context, r *running, d *store.Download, sr
 	}
 	return nil
 }
+
+// progressEvery is how often, at most, a download's finished files are
+// saved while it downloads.
+var progressEvery = 3 * time.Second
 
 // stallWait is how long a download may get nowhere before it's taken for
 // stuck, and stallGrace how long it's then given to stop.

@@ -3,6 +3,7 @@ package downloader
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"os"
 	"path/filepath"
 	"testing"
@@ -10,6 +11,7 @@ import (
 
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/usenet/nntp/nntptest"
+	"github.com/yeixio/boxoffice/internal/usenet/yenc"
 )
 
 // restartable is an Engine on the same database, downloads folder and NZBs
@@ -110,5 +112,46 @@ func TestRestartAfterFetching(t *testing.T) {
 	checkFiles(t, filepath.Join(e.Dir, d.Folder), want)
 	if n := srv.Fetches.Load() - before; n != 0 {
 		t.Fatalf("%d articles fetched again", n)
+	}
+}
+
+// Saving progress while other files finish doesn't read the list of
+// finished files as it's written to: with a map, that stops Box Office
+// dead, and the download starts over when it's back. (Run with -race.)
+func TestProgressSavedWhileFilesFinish(t *testing.T) {
+	old := progressEvery
+	progressEvery = 0 // save on every file
+	t.Cleanup(func() { progressEvery = old })
+	srv := nntptest.New()
+	defer srv.Close()
+	var x bytes.Buffer
+	x.WriteString(`<?xml version="1.0"?><nzb xmlns="http://www.newzbin.com/DTD/2003/nzb"><head><meta type="title">Many.Files</meta></head>`)
+	want := map[string][]byte{}
+	const files = 60
+	for i := range files {
+		name := fmt.Sprintf("f%02d.bin", i)
+		data := gen(i+7, 500)
+		want[name] = data
+		id := fmt.Sprintf("m%d@test", i)
+		body := yenc.Encode(name, 1, 1, 0, int64(len(data)), data)
+		srv.Add(id, body)
+		fmt.Fprintf(&x, `<file poster="t" date="1" subject="m [%d/%d] - &quot;%s&quot; yEnc (1/1)"><groups><group>a.b.test</group></groups><segments><segment bytes="%d" number="1">%s</segment></segments></file>`,
+			i+1, files, name, len(body), id)
+	}
+	x.WriteString(`</nzb>`)
+	e, st := newEngine(t, srv)
+	enable(t, st, Settings{})
+	run(t, e)
+	d, err := e.Add(context.Background(), store.Download{}, x.Bytes())
+	if err != nil {
+		t.Fatal(err)
+	}
+	d = waitFor(t, st, d.ID, store.DownloadCompleted, store.DownloadFailed)
+	if d.Status != store.DownloadCompleted {
+		t.Fatalf("failed: %s", d.Message)
+	}
+	checkFiles(t, filepath.Join(e.Dir, d.Folder), want)
+	if len(d.DoneNames) != files {
+		t.Fatalf("%d of %d names saved", len(d.DoneNames), files)
 	}
 }
