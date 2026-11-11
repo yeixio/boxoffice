@@ -772,10 +772,13 @@
     "findIt": "찾기",
     "elsewhereTitle": "다른 폴더에서 목록에 있음",
     "elsewhereHint": "Box Office가 이미 다른 곳에 가진 타이틀과 일치해서 그대로 둬요. 다른 타이틀이라면 일치 항목을 바꾸세요.",
+    "elsewhereFilesHint": "이 항목들은 Box Office가 이미 다른 폴더에 가진 타이틀과 일치합니다. 다른 시즌이나 두 번째 사본처럼 그 타이틀의 내용이 더 있다면 파일을 추가하세요. 그러면 문제 파일에서 옮기기를 제안합니다. 다른 타이틀이면 일치 항목을 바꾸세요.",
     "isAt": "{{title}}은(는) <code>{{path}}</code>에 있어요",
     "change": "변경",
+    "addFilesTo": "파일을 {{title}}에 추가",
     "addedHeading": "추가됨",
     "from": "{{name}}에서",
+    "linked": "<code>{{name}}</code>은(는) 이제 {{title}}에 속합니다. <problems>문제 파일</problems>에서 {{title}}에 없는 것을 옮기도록 제안하고 두 번째 사본을 보여 줍니다.",
     "whichEpisodes": "감시할 에피소드",
     "watch": {
       "music": "새 앨범 감시",
@@ -1701,7 +1704,8 @@
       "show": "프로그램의 디스크",
       "notListed": "목록에 없음",
       "foundFolder": "이 작품의 폴더(디스크에서는 다른 이름)",
-      "secondFolder": "이 작품의 두 번째 폴더"
+      "secondFolder": "이 작품의 두 번째 폴더",
+      "wrongEpisode": "다른 에피소드 이름"
     },
     "act": {
       "rename": "이름 바꾸기",

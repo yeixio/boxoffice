@@ -772,10 +772,13 @@
     "findIt": "Cari",
     "elsewhereTitle": "Dalam senarai dalam folder lain",
     "elsewhereHint": "Ini sepadan dengan tajuk yang sudah dimiliki Box Office di tempat lain, jadi ia dibiarkan. Tukar padanan jika salah satunya tajuk lain.",
+    "elsewhereFilesHint": "Ini sepadan dengan tajuk yang Box Office sudah ada dalam folder lain. Jika salah satu mengandungi lebih banyak daripada tajuk itu, seperti musim lain atau salinan kedua, tambah failnya dan Fail bermasalah akan menawarkan untuk memindahkannya. Tukar padanan jika ia tajuk lain.",
     "isAt": "{{title}} berada di <code>{{path}}</code>",
     "change": "Tukar",
+    "addFilesTo": "Tambah failnya ke {{title}}",
     "addedHeading": "Ditambah",
     "from": "dari {{name}}",
+    "linked": "<code>{{name}}</code> kini bersama {{title}}. <problems>Fail bermasalah</problems> menawarkan untuk memindahkan apa yang tiada pada {{title}} dan menyenaraikan salinan kedua.",
     "whichEpisodes": "Episod mana yang dipantau",
     "watch": {
       "music": "Pantau album baharu mereka",
@@ -1701,7 +1704,8 @@
       "show": "cakera sebuah rancangan",
       "notListed": "tiada dalam senarai",
       "foundFolder": "foldernya, dengan nama lain pada cakera",
-      "secondFolder": "folder kedua untuknya"
+      "secondFolder": "folder kedua untuknya",
+      "wrongEpisode": "dinamakan sempena episod lain"
     },
     "act": {
       "rename": "Namakan semula",

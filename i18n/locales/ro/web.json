@@ -876,10 +876,13 @@
     "findIt": "Găsește-l",
     "elsewhereTitle": "În listă, în alt dosar",
     "elsewhereHint": "Acestea se potrivesc cu un titlu pe care Box Office îl are deja în altă parte, așa că sunt lăsate în pace. Schimbă potrivirea dacă unul e alt titlu.",
+    "elsewhereFilesHint": "Acestea se potrivesc cu un titlu pe care Box Office îl are deja în alt dosar. Dacă unul conține mai mult din acel titlu, de exemplu alt sezon sau o a doua copie, adaugă-i fișierele și Fișiere cu probleme va oferi mutarea lor. Schimbă potrivirea dacă e alt titlu.",
     "isAt": "{{title}} e la <code>{{path}}</code>",
     "change": "Schimbă",
+    "addFilesTo": "Adaugă fișierele la {{title}}",
     "addedHeading": "Adăugat",
     "from": "din {{name}}",
+    "linked": "<code>{{name}}</code> merge acum cu {{title}}. <problems>Fișiere cu probleme</problems> oferă mutarea a ce lipsește din {{title}} și listează copiile a doua.",
     "whichEpisodes": "Ce episoade să urmărească",
     "watch": {
       "music": "Urmărește albumele lor noi",
@@ -1891,7 +1894,8 @@
       "show": "un disc de serial",
       "notListed": "nu e pe listă",
       "foundFolder": "dosarul lui, numit altfel pe disc",
-      "secondFolder": "un al doilea dosar pentru el"
+      "secondFolder": "un al doilea dosar pentru el",
+      "wrongEpisode": "numit după alt episod"
     },
     "act": {
       "rename": "Redenumește",

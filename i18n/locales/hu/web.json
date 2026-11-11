@@ -824,10 +824,13 @@
     "findIt": "Keresés",
     "elsewhereTitle": "A listán, egy másik mappában",
     "elsewhereHint": "Ezek egy olyan címmel egyeznek, amely a Box Office-nál már máshol megvan, ezért békén hagyja őket. Módosítsd az egyezést, ha valamelyik egy másik cím.",
+    "elsewhereFilesHint": "Ezek egy olyan címnek felelnek meg, amely a Box Office-ban már egy másik mappában van. Ha valamelyik többet tartalmaz ebből a címből, például egy másik évadot vagy egy második példányt, add hozzá a fájljait, és a Problémás fájlok felajánlja az áthelyezésüket. Ha más címről van szó, módosítsd az egyezést.",
     "isAt": "{{title}} itt van: <code>{{path}}</code>",
     "change": "Módosítás",
+    "addFilesTo": "Fájljainak hozzáadása ehhez: {{title}}",
     "addedHeading": "Hozzáadva",
     "from": "innen: {{name}}",
+    "linked": "A(z) <code>{{name}}</code> mostantól ehhez tartozik: {{title}}. A <problems>Problémás fájlok</problems> felajánlja, hogy áthelyezi, ami a(z) {{title}} címből hiányzik, és listázza a második példányokat.",
     "whichEpisodes": "Mely epizódokat figyelje",
     "watch": {
       "music": "Új albumaik figyelése",
@@ -1796,7 +1799,8 @@
       "show": "sorozat lemeze",
       "notListed": "nincs a listán",
       "foundFolder": "a mappája, a lemezen más néven",
-      "secondFolder": "egy második mappa hozzá"
+      "secondFolder": "egy második mappa hozzá",
+      "wrongEpisode": "egy másik epizódról elnevezve"
     },
     "act": {
       "rename": "Átnevezés",

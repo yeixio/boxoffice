@@ -824,10 +824,13 @@
     "findIt": "Zoeken",
     "elsewhereTitle": "Op de lijst in een andere map",
     "elsewhereHint": "Deze komen overeen met een titel die Box Office al ergens anders heeft, dus ze blijven ongemoeid. Verander de koppeling als een ervan een andere titel is.",
+    "elsewhereFilesHint": "Deze komen overeen met een titel die Box Office al in een andere map heeft. Als er een meer van die titel bevat, zoals een ander seizoen of een tweede kopie, voeg de bestanden dan toe en Probleembestanden biedt aan ze te verplaatsen. Wijzig de match als het een andere titel is.",
     "isAt": "{{title}} staat in <code>{{path}}</code>",
     "change": "Wijzigen",
+    "addFilesTo": "Bestanden toevoegen aan {{title}}",
     "addedHeading": "Toegevoegd",
     "from": "van {{name}}",
+    "linked": "<code>{{name}}</code> hoort nu bij {{title}}. <problems>Probleembestanden</problems> biedt aan te verplaatsen wat {{title}} mist en toont eventuele tweede kopieën.",
     "whichEpisodes": "Naar welke afleveringen uitkijken",
     "watch": {
       "music": "Uitkijken naar hun nieuwe albums",
@@ -1796,7 +1799,8 @@
       "show": "een schijf van een serie",
       "notListed": "niet op de lijst",
       "foundFolder": "de map ervan, op schijf anders genoemd",
-      "secondFolder": "een tweede map ervoor"
+      "secondFolder": "een tweede map ervoor",
+      "wrongEpisode": "genoemd naar een andere aflevering"
     },
     "act": {
       "rename": "Hernoemen",

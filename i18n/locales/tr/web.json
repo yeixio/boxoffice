@@ -824,10 +824,13 @@
     "findIt": "Bul",
     "elsewhereTitle": "Listede, başka bir klasörde",
     "elsewhereHint": "Bunlar Box Office'in başka bir yerde zaten sahip olduğu bir başlıkla eşleşiyor, bu yüzden dokunulmadı. Biri farklı bir başlıksa eşleşmeyi değiştirin.",
+    "elsewhereFilesHint": "Bunlar Box Office'in başka bir klasörde zaten sahip olduğu bir başlıkla eşleşiyor. Biri bu başlıktan daha fazlasını, örneğin başka bir sezonu ya da ikinci bir kopyayı içeriyorsa dosyalarını ekleyin; Sorunlu dosyalar onları taşımayı önerir. Farklı bir başlıksa eşleşmeyi değiştirin.",
     "isAt": "{{title}} <code>{{path}}</code> konumunda",
     "change": "Değiştir",
+    "addFilesTo": "Dosyalarını {{title}} içine ekle",
     "addedHeading": "Eklenme",
     "from": "{{name}} kaynağından",
+    "linked": "<code>{{name}}</code> artık {{title}} ile birlikte. <problems>Sorunlu dosyalar</problems>, {{title}} için eksik olanı taşımayı önerir ve ikinci kopyaları listeler.",
     "whichEpisodes": "Hangi bölümler izlensin",
     "watch": {
       "music": "Yeni albümlerini izle",
@@ -1796,7 +1799,8 @@
       "show": "bir dizi diski",
       "notListed": "listede değil",
       "foundFolder": "klasörü, diskte farklı adla",
-      "secondFolder": "onun için ikinci bir klasör"
+      "secondFolder": "onun için ikinci bir klasör",
+      "wrongEpisode": "başka bir bölümün adıyla"
     },
     "act": {
       "rename": "Yeniden adlandır",

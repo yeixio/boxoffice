@@ -772,10 +772,13 @@
     "findIt": "Temukan",
     "elsewhereTitle": "Di daftar dalam folder lain",
     "elsewhereHint": "Ini cocok dengan judul yang sudah dimiliki Box Office di tempat lain, jadi dibiarkan. Ubah kecocokannya jika salah satunya judul yang berbeda.",
+    "elsewhereFilesHint": "Ini cocok dengan judul yang sudah dimiliki Box Office di folder lain. Jika salah satunya berisi lebih banyak dari judul itu, seperti musim lain atau salinan kedua, tambahkan filenya dan File bermasalah akan menawarkan untuk memindahkannya. Ubah kecocokan jika itu judul lain.",
     "isAt": "{{title}} ada di <code>{{path}}</code>",
     "change": "Ubah",
+    "addFilesTo": "Tambahkan filenya ke {{title}}",
     "addedHeading": "Ditambahkan",
     "from": "dari {{name}}",
+    "linked": "<code>{{name}}</code> kini ikut {{title}}. <problems>File bermasalah</problems> menawarkan untuk memindahkan yang belum dimiliki {{title}} dan mencantumkan salinan kedua.",
     "whichEpisodes": "Episode mana yang dipantau",
     "watch": {
       "music": "Pantau album baru mereka",
@@ -1701,7 +1704,8 @@
       "show": "disk sebuah acara",
       "notListed": "tidak ada di daftar",
       "foundFolder": "foldernya, dengan nama lain di disk",
-      "secondFolder": "folder kedua untuknya"
+      "secondFolder": "folder kedua untuknya",
+      "wrongEpisode": "dinamai menurut episode lain"
     },
     "act": {
       "rename": "Ganti nama",

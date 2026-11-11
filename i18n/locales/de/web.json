@@ -824,10 +824,13 @@
     "findIt": "Finden",
     "elsewhereTitle": "Auf der Liste in einem anderen Ordner",
     "elsewhereHint": "Diese passen zu einem Titel, den Box Office schon woanders hat, und bleiben daher unberührt. Ändere die Zuordnung, wenn einer ein anderer Titel ist.",
+    "elsewhereFilesHint": "Diese passen zu einem Titel, den Box Office schon in einem anderen Ordner hat. Enthält einer mehr von diesem Titel, etwa eine weitere Staffel oder eine zweite Kopie, füge seine Dateien hinzu, dann bietet Problemdateien an, sie zu verschieben. Ändere die Zuordnung, wenn einer ein anderer Titel ist.",
     "isAt": "{{title}} liegt in <code>{{path}}</code>",
     "change": "Ändern",
+    "addFilesTo": "Dateien zu {{title}} hinzufügen",
     "addedHeading": "Hinzugefügt",
     "from": "von {{name}}",
+    "linked": "<code>{{name}}</code> gehört jetzt zu {{title}}. <problems>Problemdateien</problems> bietet an, hineinzuverschieben, was {{title}} fehlt, und zeigt zweite Kopien.",
     "whichEpisodes": "Nach welchen Folgen Ausschau gehalten wird",
     "watch": {
       "music": "Nach ihren neuen Alben Ausschau halten",
@@ -1796,7 +1799,8 @@
       "show": "eine Serien-Disc",
       "notListed": "nicht auf der Liste",
       "foundFolder": "sein Ordner, auf der Festplatte anders benannt",
-      "secondFolder": "ein zweiter Ordner dafür"
+      "secondFolder": "ein zweiter Ordner dafür",
+      "wrongEpisode": "nach einer anderen Folge benannt"
     },
     "act": {
       "rename": "Umbenennen",

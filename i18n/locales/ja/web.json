@@ -772,10 +772,13 @@
     "findIt": "探す",
     "elsewhereTitle": "別のフォルダーでリストにあり",
     "elsewhereHint": "これらは Box Office がすでに別の場所に持っているタイトルと一致するため、そのままにします。別のタイトルなら一致を変更してください。",
+    "elsewhereFilesHint": "これらは Box Office が別のフォルダにすでに持っているタイトルと一致します。別のシーズンや 2 つ目のコピーなど、そのタイトルの続きが入っている場合はファイルを追加すると、問題のあるファイルが移動を提案します。別のタイトルなら一致を変更してください。",
     "isAt": "{{title}} は <code>{{path}}</code> にあります",
     "change": "変更",
+    "addFilesTo": "ファイルを {{title}} に追加",
     "addedHeading": "追加",
     "from": "{{name}} から",
+    "linked": "<code>{{name}}</code> は {{title}} と一緒になりました。<problems>問題のあるファイル</problems>が {{title}} にないものの移動を提案し、2 つ目のコピーを一覧にします。",
     "whichEpisodes": "監視するエピソード",
     "watch": {
       "music": "新しいアルバムを監視",
@@ -1701,7 +1704,8 @@
       "show": "番組のディスク",
       "notListed": "リストにない",
       "foundFolder": "そのフォルダ（ディスク上では別の名前）",
-      "secondFolder": "このタイトルの 2 つ目のフォルダ"
+      "secondFolder": "このタイトルの 2 つ目のフォルダ",
+      "wrongEpisode": "別のエピソードの名前"
     },
     "act": {
       "rename": "名前を変更",

@@ -824,10 +824,13 @@
     "findIt": "Hitta den",
     "elsewhereTitle": "På listan i en annan mapp",
     "elsewhereHint": "De här matchar en titel som Box Office redan har på annat håll, så de lämnas i fred. Ändra matchningen om någon är en annan titel.",
+    "elsewhereFilesHint": "De här matchar en titel som Box Office redan har i en annan mapp. Om någon innehåller mer av titeln, som en annan säsong eller en andra kopia, lägger du till filerna så erbjuder Problemfiler att flytta in dem. Ändra matchningen om det är en annan titel.",
     "isAt": "{{title}} finns i <code>{{path}}</code>",
     "change": "Ändra",
+    "addFilesTo": "Lägg till filerna i {{title}}",
     "addedHeading": "Tillagd",
     "from": "från {{name}}",
+    "linked": "<code>{{name}}</code> hör nu till {{title}}. <problems>Problemfiler</problems> erbjuder att flytta in det som {{title}} saknar och visar eventuella andra kopior.",
     "whichEpisodes": "Vilka avsnitt som ska bevakas",
     "watch": {
       "music": "Bevaka deras nya album",
@@ -1796,7 +1799,8 @@
       "show": "en seriens skiva",
       "notListed": "inte på listan",
       "foundFolder": "dess mapp, med ett annat namn på disken",
-      "secondFolder": "en andra mapp för den"
+      "secondFolder": "en andra mapp för den",
+      "wrongEpisode": "namngiven efter ett annat avsnitt"
     },
     "act": {
       "rename": "Byt namn",

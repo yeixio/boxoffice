@@ -772,10 +772,13 @@
     "findIt": "尋找",
     "elsewhereTitle": "已在列表中的其他資料夾",
     "elsewhereHint": "這些與 Box Office 在別處已有的作品匹配，因此保持不動。如果其中某個是不同的作品，請更改匹配。",
+    "elsewhereFilesHint": "這些與 Box Office 已在另一個資料夾中擁有的作品相符。如果其中某個包含該作品的更多內容，例如另一季或第二份副本，請加入其檔案，問題檔案會提議將它們移入。如果是另一部作品，請變更比對。",
     "isAt": "{{title}} 位於 <code>{{path}}</code>",
     "change": "更改",
+    "addFilesTo": "將其檔案加入 {{title}}",
     "addedHeading": "新增",
     "from": "來自 {{name}}",
+    "linked": "<code>{{name}}</code> 現在歸入 {{title}}。<problems>問題檔案</problems>會提議移入 {{title}} 缺少的內容，並列出第二份副本。",
     "whichEpisodes": "關注哪些集",
     "watch": {
       "music": "關注其新專輯",
@@ -1701,7 +1704,8 @@
       "show": "影集的光碟",
       "notListed": "不在清單中",
       "foundFolder": "它的資料夾，在磁碟上名稱不同",
-      "secondFolder": "它的第二個資料夾"
+      "secondFolder": "它的第二個資料夾",
+      "wrongEpisode": "以另一集命名"
     },
     "act": {
       "rename": "重新命名",
