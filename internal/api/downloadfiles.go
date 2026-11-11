@@ -42,7 +42,7 @@ func (s *Server) browseDownloads(w http.ResponseWriter, r *http.Request) error {
 	if d, ok := s.diskSpace(s.Downloads.Dir); ok {
 		out["disk"] = d
 	}
-	if err := s.Downloads.CheckFolder(r.Context()); err != nil {
+	if err := s.Downloads.FolderProblem(r.Context()); err != nil {
 		out["problem"] = err.Error()
 	}
 	return writeJSON(w, http.StatusOK, out)

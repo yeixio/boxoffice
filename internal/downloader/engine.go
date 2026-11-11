@@ -79,7 +79,12 @@ type Engine struct {
 	folderOK atomic.Bool
 	checkMu  sync.Mutex
 	check    *folderCheck
-	once     sync.Once
+	// disk holds the reads of the downloads folder under way for pages, by
+	// key, and diskStuck how many of them someone gave up waiting on.
+	diskMu    sync.Mutex
+	disk      map[string]*diskCall
+	diskStuck int
+	once      sync.Once
 }
 
 // Importer moves the files of a finished download into the library and
@@ -304,7 +309,7 @@ func (e *Engine) CanReprocess(d store.Download) bool {
 		return false
 	}
 	dir, ok := e.inside(d.Folder)
-	return ok && len(listFiles(dir)) > 0
+	return ok && hasFiles(dir)
 }
 
 // Reprocess runs a failed download's checking, repair and unpacking again
@@ -341,7 +346,7 @@ func (e *Engine) CanImport(d store.Download) bool {
 		return false
 	}
 	dir, ok := e.inside(d.Folder)
-	return ok && len(listFiles(dir)) > 0
+	return ok && hasFiles(dir)
 }
 
 // Import moves a finished download into the library now, doing nothing
