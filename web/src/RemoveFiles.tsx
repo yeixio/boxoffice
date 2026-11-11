@@ -11,7 +11,7 @@ import { Trans, useTranslation } from 'react-i18next'
 import { useState, type ReactNode } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { AlertTriangle, ChevronDown, Trash2 } from 'lucide-react'
-import { api, get, type DeletePlan, type FileRemoval } from './api'
+import { api, get, type DeletePlan, type FileRemoval, type TitleRemoval } from './api'
 import { bytes } from './format'
 import { Button, ErrorNote, Modal, Spinner } from './ui'
 
@@ -71,12 +71,12 @@ function Actions({ children }: { children: ReactNode }) {
   return <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">{children}</div>
 }
 
-// RemoveTitle removes a movie or a show from the list, and deletes its
-// folder only when that's ticked.
+// RemoveTitle removes a movie or a show from the list, cancelling its
+// downloads, and deletes its folder only when that's ticked.
 export function RemoveTitle({ kind, id, title, onClose, onRemoved }: { kind: 'movie' | 'series'; id: number; title: string; onClose: () => void; onRemoved: () => void }) {
   const { t } = useTranslation()
   const base = kind === 'movie' ? `/movies/${id}` : `/series/${id}`
-  const plan = useQuery({ queryKey: ['removal', base], queryFn: () => get<DeletePlan>(`${base}/removal`), gcTime: 0, staleTime: 0 })
+  const plan = useQuery({ queryKey: ['removal', base], queryFn: () => get<TitleRemoval>(`${base}/removal`), gcTime: 0, staleTime: 0 })
   const [deleteFiles, setDeleteFiles] = useState(false)
   const remove = useMutation({
     mutationFn: () => api<void>('DELETE', deleteFiles && plan.data ? `${base}?deleteFiles=true&${expect(plan.data)}` : base),
@@ -91,6 +91,7 @@ export function RemoveTitle({ kind, id, title, onClose, onRemoved }: { kind: 'mo
         {kind === 'movie' ? t('remove.offListMovie') : t('remove.offList')}
         {deleteFiles ? '' : ` ${t('remove.filesStay')}`}
       </p>
+      {!!p?.downloads && <p className="mt-2 text-sm">{t('remove.downloadsGo', { count: p.downloads })}</p>}
       <div className="mt-4 flex flex-col gap-3">
         {plan.isPending ? (
           <Spinner label={t('remove.checkingFolder')} />

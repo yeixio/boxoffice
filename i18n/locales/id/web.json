@@ -122,6 +122,7 @@
     "offListMovie": "Judul ini keluar dari daftar Box Office dan permintaan Matinee, dan Box Office berhenti mencarinya.",
     "offList": "Judul ini keluar dari daftar Box Office, dan Box Office berhenti mencarinya.",
     "filesStay": "Filenya tetap berada di disk.",
+    "downloadsGo_other": "Unduhan yang sedang berjalan untuknya ({{count}}) dibatalkan, dan yang sudah terunduh dihapus.",
     "checkingFolder": "Memeriksa foldernya…",
     "cantDelete": "Box Office tidak dapat menghapusnya: {{problem}}.",
     "noFiles": "Tidak ada file di disk untuknya.",

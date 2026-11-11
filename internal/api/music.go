@@ -2,6 +2,7 @@ package api
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/yeixio/boxoffice/internal/music"
@@ -120,15 +121,25 @@ func (s *Server) refreshArtist(w http.ResponseWriter, r *http.Request) error {
 	return s.writeArtist(w, r, a, http.StatusOK)
 }
 
-// deleteArtist takes an artist off the list; its files stay where they are.
+// deleteArtist takes an artist off the list, cancelling the downloads for
+// their albums; their files stay where they are.
 func (s *Server) deleteArtist(w http.ResponseWriter, r *http.Request) error {
 	id, err := pathID(r, "id")
+	if err != nil {
+		return err
+	}
+	albums, err := s.Store.Albums(r.Context(), id)
 	if err != nil {
 		return err
 	}
 	if err := s.Store.DeleteArtist(r.Context(), id); err != nil {
 		return err
 	}
+	ids := make([]int64, len(albums))
+	for i, b := range albums {
+		ids[i] = b.ID
+	}
+	s.cancelDownloads(r.Context(), store.AlbumKind, ids, fmt.Sprintf("artist %d", id))
 	w.WriteHeader(http.StatusNoContent)
 	return nil
 }

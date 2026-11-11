@@ -23,7 +23,10 @@ func (s *Server) pairing() *arrapi.Pairing {
 			}
 			return out
 		},
-		Waiting:   s.Downloads.Waiting,
+		Waiting: s.Downloads.Waiting,
+		Removed: func(ctx context.Context, kind string, id int64, subject string) {
+			s.cancelDownloads(ctx, kind, []int64{id}, subject)
+		},
 		CanImport: s.Downloads.CanImport,
 		Editions: func(ctx context.Context, movieID int64, owned []string) (any, []string, error) {
 			return s.Search.MovieEditions(ctx, movieID, owned)

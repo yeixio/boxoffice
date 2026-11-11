@@ -134,6 +134,8 @@
     "offListMovie": "Het verdwijnt van de lijst van Box Office en uit de verzoeken van Matinee, en Box Office stopt met zoeken.",
     "offList": "Het verdwijnt van de lijst van Box Office, en Box Office stopt met zoeken.",
     "filesStay": "De bestanden blijven op de schijf staan.",
+    "downloadsGo_one": "Lopende downloads ervoor ({{count}}) worden geannuleerd, en wat al is opgehaald wordt verwijderd.",
+    "downloadsGo_other": "Lopende downloads ervoor ({{count}}) worden geannuleerd, en wat al is opgehaald wordt verwijderd.",
     "checkingFolder": "Map controleren…",
     "cantDelete": "Box Office kan ze niet verwijderen: {{problem}}.",
     "noFiles": "Er staan geen bestanden voor op de schijf.",

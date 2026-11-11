@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
+	"slices"
 	"strings"
 	"time"
 )
@@ -424,4 +425,36 @@ func (s *Store) ResumeDownloadsPaused(ctx context.Context, prefixes []string, no
 		return 0, err
 	}
 	return res.RowsAffected()
+}
+
+// UnfinishedFor is the downloads for some titles that haven't gone into
+// the library: queued, under way, or finished and waiting for Move into
+// library. kinds are the downloads' kinds (movie, series, album, ebook,
+// audiobook) and ids the titles'. Quarantined and failed ones aren't
+// included: they keep to their own rules.
+func (s *Store) UnfinishedFor(ctx context.Context, kinds []string, ids []int64) ([]Download, error) {
+	if len(kinds) == 0 || len(ids) == 0 {
+		return []Download{}, nil
+	}
+	list, err := s.downloads(ctx, "kind IN ("+marks(len(kinds))+") AND status <> 'failed' AND quarantined = '' AND (status <> 'completed' OR imported_to = '') ORDER BY position, id", anys(kinds)...)
+	if err != nil {
+		return nil, err
+	}
+	out := []Download{}
+	for _, d := range list {
+		if slices.Contains(ids, d.TitleID) {
+			out = append(out, d)
+		}
+	}
+	return out, nil
+}
+
+func marks(n int) string { return strings.TrimSuffix(strings.Repeat("?, ", n), ", ") }
+
+func anys[T any](list []T) []any {
+	out := make([]any, len(list))
+	for i, v := range list {
+		out[i] = v
+	}
+	return out
 }
