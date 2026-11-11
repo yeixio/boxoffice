@@ -124,7 +124,16 @@ func (e *Engine) fetch(ctx context.Context, r *running, d *store.Download, srv *
 	}
 	e.Log.Info("download started", "name", d.Name, "id", d.ID, "files", len(job.files), "fetching", left, "already", len(want)-left, "size", size,
 		"par2 index", hasIndex, "folder", d.Folder, "again", again)
-	if again {
+	// Fetched before Box Office stopped (or the download was paused)
+	// while it was waiting to be unpacked, or being checked, unpacked or
+	// moved: its files are here, and unpacking may already have deleted
+	// the archives, so nothing is fetched again. Only if the folder is
+	// empty does it start over.
+	resumed := !again && d.Fetched && len(listFiles(dir)) > 0
+	if resumed {
+		e.Log.Info("download was already fetched; carrying on from checking and unpacking", "name", d.Name, "id", d.ID)
+	}
+	if again || resumed {
 		// Checking and unpacking again: the files are already here,
 		// whatever they've been renamed or unpacked to.
 		r.bytes.Store(d.DoneBytes)
@@ -187,11 +196,13 @@ func (e *Engine) download(ctx context.Context, r *running, d *store.Download, sr
 	try := strconv.FormatInt(time.Now().UnixNano(), 36)
 	for _, f := range files {
 		if slices.Contains(d.DoneFiles, f.index) {
-			if _, err := os.Stat(filepath.Join(job.dir, f.name)); err == nil {
+			if name, ok := doneName(job.dir, d, f); ok {
+				f.name = name
 				done += f.file.Bytes()
 				continue
 			}
 			d.DoneFiles = slices.DeleteFunc(d.DoneFiles, func(i int) bool { return i == f.index })
+			delete(d.DoneNames, f.index)
 		}
 		tmp := filepath.Join(job.dir, fmt.Sprintf(".boxoffice-%d-%s.part", f.index, try))
 		fh, err := os.OpenFile(tmp, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0o640)
@@ -210,10 +221,14 @@ func (e *Engine) download(ctx context.Context, r *running, d *store.Download, sr
 			}
 		}
 	}
-	r.bytes.Store(d.DoneBytes)
-	if d.DoneBytes == 0 {
-		r.bytes.Store(done)
+	// Carrying on: what's done is the files that are here. What the part
+	// files of an earlier try held is fetched again, so it isn't counted.
+	for _, f := range job.files {
+		if slices.Contains(d.DoneFiles, f.index) && !slices.Contains(files, f) {
+			done += f.file.Bytes()
+		}
 	}
+	r.bytes.Store(done)
 	// What can be lost and still repaired: the recovery volumes' share.
 	var allowance int64
 	for _, f := range job.held() {
@@ -258,6 +273,10 @@ func (e *Engine) download(ctx context.Context, r *running, d *store.Download, sr
 		mu.Lock()
 		st.nf.name = name
 		d.DoneFiles = append(d.DoneFiles, st.nf.index)
+		if d.DoneNames == nil {
+			d.DoneNames = map[int]string{}
+		}
+		d.DoneNames[st.nf.index] = name
 		d.DoneBytes = r.bytes.Load()
 		d.FailedBytes = r.failed.Load()
 		save := time.Since(lastSave) > 3*time.Second
@@ -497,6 +516,20 @@ func humanBytes(n int64) string {
 		exp++
 	}
 	return fmt.Sprintf("%.1f %cB", float64(n)/float64(div), "kMGTPE"[exp])
+}
+
+// doneName finds a file an earlier try fetched: under the name it was
+// saved as, or, for one saved before those were kept, its name in the NZB.
+func doneName(dir string, d *store.Download, f *nzbFile) (string, bool) {
+	for _, n := range []string{d.DoneNames[f.index], f.name} {
+		if n == "" || n != filepath.Base(n) {
+			continue
+		}
+		if st, err := os.Stat(filepath.Join(dir, n)); err == nil && st.Mode().IsRegular() {
+			return n, true
+		}
+	}
+	return "", false
 }
 
 // clearParts deletes the part files earlier tries left in dir, as far as

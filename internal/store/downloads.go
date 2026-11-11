@@ -42,10 +42,14 @@ type Download struct {
 	DoneBytes   int64   `json:"doneBytes"`
 	FailedBytes int64   `json:"failedBytes"`
 	DoneFiles   []int   `json:"-"`
-	Position    int     `json:"position"`
-	Folder      string  `json:"folder,omitempty"`
-	Message     string  `json:"message,omitempty"`
-	ImportedTo  string  `json:"importedTo,omitempty"`
+	// DoneNames is what each fetched file was saved as, by its index in
+	// the NZB: the name inside the file's posts, which is often not the
+	// one in the NZB's subject (obfuscated releases).
+	DoneNames  map[int]string `json:"-"`
+	Position   int            `json:"position"`
+	Folder     string         `json:"folder,omitempty"`
+	Message    string         `json:"message,omitempty"`
+	ImportedTo string         `json:"importedTo,omitempty"`
 	// Quarantined is where the files were moved when they looked unsafe.
 	Quarantined string `json:"quarantined,omitempty"`
 	// Missing says it failed because too much of it is gone from the news
@@ -77,14 +81,14 @@ type Download struct {
 func (d Download) Finished() bool { return d.Status == DownloadCompleted || d.Status == DownloadFailed }
 
 const downloadCols = `id, name, status, kind, title_id, episode_ids, quality, indexer, source, password, size, done_bytes, failed_bytes,
-	done_files, position, folder, message, imported_to, quarantined, added_at, started_at, finished_at, edition, mode, missing, fetched`
+	done_files, position, folder, message, imported_to, quarantined, added_at, started_at, finished_at, edition, mode, missing, fetched, done_names`
 
 func scanDownload(r interface{ Scan(...any) error }) (Download, error) {
 	var d Download
-	var eps, files string
+	var eps, files, names string
 	var added, started, finished int64
 	err := r.Scan(&d.ID, &d.Name, &d.Status, &d.Kind, &d.TitleID, &eps, &d.Quality, &d.Indexer, &d.Source, &d.Password, &d.Size,
-		&d.DoneBytes, &d.FailedBytes, &files, &d.Position, &d.Folder, &d.Message, &d.ImportedTo, &d.Quarantined, &added, &started, &finished, &d.Edition, &d.Mode, &d.Missing, &d.Fetched)
+		&d.DoneBytes, &d.FailedBytes, &files, &d.Position, &d.Folder, &d.Message, &d.ImportedTo, &d.Quarantined, &added, &started, &finished, &d.Edition, &d.Mode, &d.Missing, &d.Fetched, &names)
 	if errors.Is(err, sql.ErrNoRows) {
 		return d, ErrNotFound
 	}
@@ -93,6 +97,7 @@ func scanDownload(r interface{ Scan(...any) error }) (Download, error) {
 	}
 	json.Unmarshal([]byte(eps), &d.EpisodeIDs)
 	json.Unmarshal([]byte(files), &d.DoneFiles)
+	json.Unmarshal([]byte(names), &d.DoneNames)
 	d.AddedAt = time.Unix(added, 0).UTC()
 	if started > 0 {
 		d.StartedAt = time.Unix(started, 0).UTC()
@@ -263,8 +268,13 @@ func (s *Store) SetDownloadStatus(ctx context.Context, id int64, status, message
 
 // SaveDownloadProgress records how far a download has got.
 func (s *Store) SaveDownloadProgress(ctx context.Context, d Download) error {
-	_, err := s.exec(ctx, "UPDATE downloads SET done_bytes = ?, failed_bytes = ?, done_files = ?, size = ?, folder = ? WHERE id = ?",
-		d.DoneBytes, d.FailedBytes, jsonText(d.DoneFiles), d.Size, d.Folder, d.ID)
+	names := "{}"
+	if len(d.DoneNames) > 0 {
+		b, _ := json.Marshal(d.DoneNames)
+		names = string(b)
+	}
+	_, err := s.exec(ctx, "UPDATE downloads SET done_bytes = ?, failed_bytes = ?, done_files = ?, done_names = ?, size = ?, folder = ? WHERE id = ?",
+		d.DoneBytes, d.FailedBytes, jsonText(d.DoneFiles), names, d.Size, d.Folder, d.ID)
 	return err
 }
 
@@ -293,7 +303,7 @@ func (s *Store) ResetDownload(ctx context.Context, id int64) error {
 	if err := s.row(ctx, "SELECT COALESCE(MAX(position), 0) FROM downloads").Scan(&pos); err != nil {
 		return err
 	}
-	res, err := s.exec(ctx, `UPDATE downloads SET status = 'queued', message = '', done_bytes = 0, failed_bytes = 0, done_files = '[]', quarantined = '', missing = 0, fetched = 0,
+	res, err := s.exec(ctx, `UPDATE downloads SET status = 'queued', message = '', done_bytes = 0, failed_bytes = 0, done_files = '[]', done_names = '{}', quarantined = '', missing = 0, fetched = 0,
 		started_at = 0, finished_at = 0, position = ? WHERE id = ?`, pos+1, id)
 	if err != nil {
 		return err
