@@ -343,7 +343,9 @@ func (x *fixer) recordAs(ctx context.Context, kind string, id int64, path string
 	// noted so putting back restores it, unless record noted it already
 	// from where the file was before it moved.
 	if rec, err := x.st.FileByPath(ctx, path); err == nil {
-		if !slices.ContainsFunc(x.done, func(f store.ProblemFixFile) bool { return f.Role == roleForgot && f.Record != nil && f.Record.ID == rec.ID }) {
+		if !slices.ContainsFunc(x.done, func(f store.ProblemFixFile) bool {
+			return f.Role == roleForgot && f.Record != nil && f.Record.ID == rec.ID
+		}) {
 			x.done = append(x.done, store.ProblemFixFile{Role: roleForgot, Src: path, Dest: path, Size: rec.Size, Record: &rec})
 		}
 		if err := x.st.ForgetFileAt(ctx, path); err != nil {
