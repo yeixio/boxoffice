@@ -750,7 +750,7 @@
   },
   "discover": {
     "sub": "Vad som är populärt och på väg, och mer i stil med det du har.",
-    "find": "Hitta en film eller serie",
+    "find": "Hitta en film, serie eller skådespelare",
     "needsTmdb": "Upptäck behöver TMDB",
     "needsTmdbBody": "Box Office hämtar det som är populärt och på väg från The Movie Database. Lägg till en TMDB-API-nyckel under <link>Inställningar</link> så fylls den här sidan.",
     "seeAll": "Visa alla",
@@ -774,7 +774,9 @@
     "networks": "Kanaler och tjänster",
     "nothingHere": "Inget här just nu.",
     "showMore": "Visa mer",
-    "back": "← Upptäck"
+    "back": "← Upptäck",
+    "people": "Personer",
+    "knownFor": "Känd från {{titles}}"
   },
   "scan": {
     "n": {

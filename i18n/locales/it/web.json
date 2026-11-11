@@ -795,7 +795,7 @@
   },
   "discover": {
     "sub": "Cosa è popolare e in arrivo, e altro simile a ciò che hai.",
-    "find": "Trova un film o una serie",
+    "find": "Trova un film, una serie o un attore",
     "needsTmdb": "Scopri ha bisogno di TMDB",
     "needsTmdbBody": "Box Office prende da The Movie Database ciò che è popolare e in arrivo. Aggiungi una chiave API TMDB nelle <link>Impostazioni</link> e questa pagina si riempie.",
     "seeAll": "Vedi tutto",
@@ -819,7 +819,9 @@
     "networks": "Reti e servizi",
     "nothingHere": "Niente qui al momento.",
     "showMore": "Mostra altro",
-    "back": "← Scopri"
+    "back": "← Scopri",
+    "people": "Persone",
+    "knownFor": "Noto per {{titles}}"
   },
   "scan": {
     "n": {

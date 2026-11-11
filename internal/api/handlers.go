@@ -337,6 +337,16 @@ func (s *Server) lookupSeries(w http.ResponseWriter, r *http.Request) error {
 	return writeJSON(w, http.StatusOK, res)
 }
 
+// lookupPeople finds actors and others by name; the Discover row
+// person-{tmdbId} is what each is in.
+func (s *Server) lookupPeople(w http.ResponseWriter, r *http.Request) error {
+	res, err := s.Catalog.LookupPeople(r.Context(), strings.TrimSpace(r.URL.Query().Get("q")))
+	if err != nil {
+		return err
+	}
+	return writeJSON(w, http.StatusOK, res)
+}
+
 func (s *Server) movies(w http.ResponseWriter, r *http.Request) error {
 	list, err := s.Store.Movies(r.Context())
 	if err != nil {

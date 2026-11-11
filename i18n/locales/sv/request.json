@@ -48,7 +48,7 @@
   "home": {
     "hi": "Hej {{name}}",
     "welcome": "Hitta en film eller serie och önska den. Du kan följa den under Mina önskemål.",
-    "find": "Hitta en film eller serie",
+    "find": "Hitta en film, serie eller skådespelare",
     "seeAll": "Visa alla",
     "nothing": "Inget att visa än",
     "notSetUp": "Administratören har inte ställt in den här sidan färdigt. Försök igen senare.",

@@ -705,7 +705,7 @@
   },
   "discover": {
     "sub": "Apa yang popular dan akan datang, dan lebih banyak seperti yang anda miliki.",
-    "find": "Cari filem atau rancangan",
+    "find": "Cari filem, rancangan atau pelakon",
     "needsTmdb": "Teroka memerlukan TMDB",
     "needsTmdbBody": "Box Office mendapatkan yang popular dan akan datang dari The Movie Database. Tambah kunci API TMDB dalam <link>Tetapan</link> dan halaman ini akan terisi.",
     "seeAll": "Lihat semua",
@@ -729,7 +729,9 @@
     "networks": "Rangkaian dan perkhidmatan",
     "nothingHere": "Tiada apa di sini sekarang.",
     "showMore": "Tunjuk lagi",
-    "back": "← Teroka"
+    "back": "← Teroka",
+    "people": "Orang",
+    "knownFor": "Dikenali melalui {{titles}}"
   },
   "scan": {
     "n": {

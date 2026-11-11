@@ -795,7 +795,7 @@
   },
   "discover": {
     "sub": "O que está em alta e chegando, e mais do que você já tem.",
-    "find": "Encontrar um filme ou série",
+    "find": "Encontrar um filme, série ou ator",
     "needsTmdb": "O Descobrir precisa do TMDB",
     "needsTmdbBody": "O Box Office pega o que está em alta e chegando no The Movie Database. Adicione uma chave de API do TMDB nas <link>Configurações</link> e esta página se preenche.",
     "seeAll": "Ver tudo",
@@ -819,7 +819,9 @@
     "networks": "Redes e serviços",
     "nothingHere": "Nada aqui no momento.",
     "showMore": "Mostrar mais",
-    "back": "← Descobrir"
+    "back": "← Descobrir",
+    "people": "Pessoas",
+    "knownFor": "Conhecido por {{titles}}"
   },
   "scan": {
     "n": {

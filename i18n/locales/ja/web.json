@@ -705,7 +705,7 @@
   },
   "discover": {
     "sub": "人気の作品と近日公開の作品、そして手持ちに似た作品。",
-    "find": "映画や番組を探す",
+    "find": "映画、番組、俳優を探す",
     "needsTmdb": "見つけるには TMDB が必要です",
     "needsTmdbBody": "Box Office は人気作と近日公開作を The Movie Database から取得します。<link>設定</link>で TMDB の API キーを追加すると、このページが表示されます。",
     "seeAll": "すべて見る",
@@ -729,7 +729,9 @@
     "networks": "ネットワークと配信サービス",
     "nothingHere": "今は何もありません。",
     "showMore": "もっと見る",
-    "back": "← 見つける"
+    "back": "← 見つける",
+    "people": "人物",
+    "knownFor": "代表作: {{titles}}"
   },
   "scan": {
     "n": {

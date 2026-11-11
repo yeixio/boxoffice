@@ -48,7 +48,7 @@
   "home": {
     "hi": "Hallo, {{name}}",
     "welcome": "Finde einen Film oder eine Serie und frag danach. Du kannst es unter Meine Wünsche verfolgen.",
-    "find": "Einen Film oder eine Serie finden",
+    "find": "Film, Serie oder Schauspieler finden",
     "seeAll": "Alle ansehen",
     "nothing": "Noch nichts zu zeigen",
     "notSetUp": "Der Admin hat diese Seite noch nicht fertig eingerichtet. Versuch es später noch einmal.",

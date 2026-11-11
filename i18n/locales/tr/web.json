@@ -750,7 +750,7 @@
   },
   "discover": {
     "sub": "Popüler olanlar, yakında gelenler ve sahip olduklarınıza benzer daha fazlası.",
-    "find": "Bir film veya dizi bulun",
+    "find": "Bir film, dizi veya oyuncu bulun",
     "needsTmdb": "Keşfet için TMDB gerekiyor",
     "needsTmdbBody": "Box Office popüler ve yakında gelenleri The Movie Database'den alır. <link>Ayarlar</link> altından bir TMDB API anahtarı ekleyin, bu sayfa dolar.",
     "seeAll": "Tümünü gör",
@@ -774,7 +774,9 @@
     "networks": "Kanallar ve hizmetler",
     "nothingHere": "Şu anda burada bir şey yok.",
     "showMore": "Daha fazla göster",
-    "back": "← Keşfet"
+    "back": "← Keşfet",
+    "people": "Kişiler",
+    "knownFor": "Bilinen yapımları: {{titles}}"
   },
   "scan": {
     "n": {

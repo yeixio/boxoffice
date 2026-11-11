@@ -48,7 +48,7 @@
   "home": {
     "hi": "Cześć, {{name}}",
     "welcome": "Znajdź film lub serial i poproś o niego. Możesz śledzić to w sekcji Moje prośby.",
-    "find": "Znajdź film lub serial",
+    "find": "Znajdź film, serial lub aktora",
     "seeAll": "Zobacz wszystkie",
     "nothing": "Na razie nic do pokazania",
     "notSetUp": "Administrator nie skończył konfigurować tej strony. Spróbuj później.",

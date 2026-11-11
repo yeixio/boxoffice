@@ -840,7 +840,7 @@
   },
   "discover": {
     "sub": "Co popularne i co wkrótce, i więcej tego, co masz.",
-    "find": "Znajdź film lub serial",
+    "find": "Znajdź film, serial lub aktora",
     "needsTmdb": "Odkrywaj wymaga TMDB",
     "needsTmdbBody": "Box Office pobiera to, co popularne i nadchodzące, z The Movie Database. Dodaj klucz API TMDB w <link>Ustawieniach</link>, a ta strona się wypełni.",
     "seeAll": "Zobacz wszystkie",
@@ -864,7 +864,9 @@
     "networks": "Stacje i serwisy",
     "nothingHere": "Na razie nic tu nie ma.",
     "showMore": "Pokaż więcej",
-    "back": "← Odkrywaj"
+    "back": "← Odkrywaj",
+    "people": "Osoby",
+    "knownFor": "Znany z {{titles}}"
   },
   "scan": {
     "n": {

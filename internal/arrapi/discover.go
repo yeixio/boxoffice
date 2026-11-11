@@ -17,7 +17,7 @@ import (
 //
 //	GET /api/v3/boxoffice/discover              the home rows, and genres and networks
 //	GET /api/v3/boxoffice/discover/rows/{id}    a page (?page=) of one row
-//	GET /api/v3/boxoffice/discover/search?q=    movies and shows by name
+//	GET /api/v3/boxoffice/discover/search?q=    movies and shows by name, or by an actor in them
 
 func (h *Handler) discoverRoutes() {
 	h.route("GET /api/v3/boxoffice/discover", h.discover)

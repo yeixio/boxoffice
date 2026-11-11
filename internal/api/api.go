@@ -181,6 +181,7 @@ func (s *Server) Handler() http.Handler {
 
 		{"GET /api/v1/lookup/movies", true, s.lookupMovies},
 		{"GET /api/v1/lookup/series", true, s.lookupSeries},
+		{"GET /api/v1/lookup/people", true, s.lookupPeople},
 		{"GET /api/v1/movies", true, s.movies},
 		{"POST /api/v1/movies", true, s.addMovie},
 		{"GET /api/v1/movies/{id}", true, s.movie},

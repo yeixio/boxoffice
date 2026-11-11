@@ -48,7 +48,7 @@
   "home": {
     "hi": "Chào {{name}}",
     "welcome": "Tìm một phim hoặc chương trình và yêu cầu nó. Bạn có thể theo dõi trong Yêu cầu của tôi.",
-    "find": "Tìm phim hoặc chương trình",
+    "find": "Tìm phim, chương trình hoặc diễn viên",
     "seeAll": "Xem tất cả",
     "nothing": "Chưa có gì để hiển thị",
     "notSetUp": "Quản trị viên chưa thiết lập xong trang này. Hãy thử lại sau.",

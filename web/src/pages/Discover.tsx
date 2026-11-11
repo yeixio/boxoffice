@@ -4,7 +4,7 @@ import { Trans, useTranslation } from 'react-i18next'
 import { useEffect, useState } from 'react'
 import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, useParams } from 'react-router-dom'
-import { Check, ChevronRight, Compass, LoaderCircle, Plus, Search, Star } from 'lucide-react'
+import { Check, ChevronRight, Compass, LoaderCircle, Plus, Search, Star, User } from 'lucide-react'
 import {
   ApiError,
   get,
@@ -16,6 +16,7 @@ import {
   type DiscoverStatus,
   type DiscoverTitle,
   type LookupMovie,
+  type LookupPerson,
   type LookupShow,
 } from '../api'
 import { pickProfile, useProfiles } from '../hooks'
@@ -342,7 +343,45 @@ function Grid({ items }: { items: DiscoverTitle[] }) {
   )
 }
 
-// SearchResults finds movies and shows by name, both at once.
+// Face is a person's photo in a circle, or an outline when TMDB has none.
+function Face({ src, className = 'size-16' }: { src?: string; className?: string }) {
+  const [failed, setFailed] = useState('')
+  return (
+    <div className={`flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-line text-muted ${className}`}>
+      {src && failed !== src ? <img src={src} alt="" loading="lazy" className="size-full object-cover" onError={() => setFailed(src)} /> : <User className="size-1/2" aria-hidden />}
+    </div>
+  )
+}
+
+// People are actors and others whose names match a search; each leads to
+// everything they're in.
+function People({ people }: { people: LookupPerson[] }) {
+  const { t } = useTranslation()
+  return (
+    <section>
+      <h2 className="mb-3 font-display text-xl font-semibold">{t('discover.people')}</h2>
+      <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {people.slice(0, 6).map((p) => (
+          <li key={p.tmdbId}>
+            <Link
+              to={`/discover/person-${p.tmdbId}`}
+              className="flex items-center gap-3 rounded-xl border border-line bg-card p-3 transition hover:border-marquee"
+            >
+              <Face src={p.photo} className="size-14" />
+              <div className="min-w-0">
+                <div className="truncate font-medium">{p.name}</div>
+                {p.knownFor.length > 0 && <div className="line-clamp-2 text-xs text-muted">{t('discover.knownFor', { titles: p.knownFor.join(', ') })}</div>}
+              </div>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+// SearchResults finds movies and shows by name, both at once, and the
+// people the search names, such as an actor.
 function SearchResults({ q }: { q: string }) {
   const lookup = (kind: DiscoverKind) =>
     get<(LookupMovie | LookupShow)[]>(`/lookup/${kind === 'movie' ? 'movies' : 'series'}?q=${encodeURIComponent(q)}`).then((rs) =>
@@ -351,13 +390,16 @@ function SearchResults({ q }: { q: string }) {
   const { t } = useTranslation()
   const movies = useQuery({ queryKey: ['lookup', 'movie', q], queryFn: () => lookup('movie') })
   const shows = useQuery({ queryKey: ['lookup', 'series', q], queryFn: () => lookup('series') })
-  if (movies.isPending || shows.isPending) return <Spinner label={t('common.looking')} />
+  // Finding no one is no reason to say the search failed.
+  const people = useQuery({ queryKey: ['lookup', 'people', q], queryFn: () => get<LookupPerson[]>(`/lookup/people?q=${encodeURIComponent(q)}`).catch(() => []) })
+  if (movies.isPending || shows.isPending || people.isPending) return <Spinner label={t('common.looking')} />
   const err = movies.error ?? shows.error
   if (err) return <NoTMDB error={err} />
   const all = [...(movies.data ?? []), ...(shows.data ?? [])]
-  if (all.length === 0) return <p className="py-10 text-center text-sm text-muted">{t('add.nothing')}</p>
+  if (all.length === 0 && !people.data?.length) return <p className="py-10 text-center text-sm text-muted">{t('add.nothing')}</p>
   return (
     <div className="flex flex-col gap-10">
+      {!!people.data?.length && <People people={people.data} />}
       {!!movies.data?.length && (
         <section>
           <h2 className="mb-3 font-display text-xl font-semibold">{t('nav.movies')}</h2>
@@ -400,7 +442,14 @@ export function DiscoverRowPage() {
       <Link to="/discover" className="mb-2 inline-block text-sm text-muted hover:text-ink">
         {t('discover.back')}
       </Link>
-      <Heading title={first?.title ?? t('nav.discover')} />
+      {first?.person ? (
+        <div className="mb-6 flex items-center gap-4">
+          <Face src={first.person.photo} className="size-20" />
+          <h1 className="font-display text-3xl font-bold tracking-tight">{first.person.name}</h1>
+        </div>
+      ) : (
+        <Heading title={first?.title ?? t('nav.discover')} />
+      )}
       {row.isPending && <Spinner />}
       {row.error && <NoTMDB error={row.error} />}
       {first && items.length === 0 && <p className="py-10 text-center text-sm text-muted">{t('discover.nothingHere')}</p>}

@@ -48,7 +48,7 @@
   "home": {
     "hi": "Szia, {{name}}",
     "welcome": "Keress egy filmet vagy sorozatot, és kérd. A Kéréseim alatt követheted.",
-    "find": "Film vagy sorozat keresése",
+    "find": "Film, sorozat vagy színész keresése",
     "seeAll": "Összes",
     "nothing": "Még nincs mit mutatni",
     "notSetUp": "A rendszergazda még nem fejezte be az oldal beállítását. Próbáld újra később.",

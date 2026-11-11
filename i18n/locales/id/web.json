@@ -705,7 +705,7 @@
   },
   "discover": {
     "sub": "Yang populer dan segera hadir, serta yang mirip dengan yang Anda miliki.",
-    "find": "Temukan film atau acara",
+    "find": "Temukan film, acara, atau aktor",
     "needsTmdb": "Jelajahi memerlukan TMDB",
     "needsTmdbBody": "Box Office mendapatkan yang populer dan segera hadir dari The Movie Database. Tambahkan kunci API TMDB di <link>Pengaturan</link> dan halaman ini akan terisi.",
     "seeAll": "Lihat semua",
@@ -729,7 +729,9 @@
     "networks": "Jaringan dan layanan",
     "nothingHere": "Tidak ada apa pun di sini saat ini.",
     "showMore": "Tampilkan lebih banyak",
-    "back": "← Jelajahi"
+    "back": "← Jelajahi",
+    "people": "Orang",
+    "knownFor": "Dikenal lewat {{titles}}"
   },
   "scan": {
     "n": {

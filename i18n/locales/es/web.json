@@ -795,7 +795,7 @@
   },
   "discover": {
     "sub": "Lo popular y lo que llega pronto, y más de lo que ya tienes.",
-    "find": "Encuentra una película o serie",
+    "find": "Encuentra una película, serie o actor",
     "needsTmdb": "Descubrir necesita TMDB",
     "needsTmdbBody": "Box Office obtiene lo popular y lo que llega pronto de The Movie Database. Añade una clave API de TMDB en <link>Ajustes</link> y esta página se llenará.",
     "seeAll": "Ver todo",
@@ -819,7 +819,9 @@
     "networks": "Cadenas y servicios",
     "nothingHere": "Ahora mismo no hay nada aquí.",
     "showMore": "Mostrar más",
-    "back": "← Descubrir"
+    "back": "← Descubrir",
+    "people": "Personas",
+    "knownFor": "Conocido por {{titles}}"
   },
   "scan": {
     "n": {

@@ -48,7 +48,7 @@
   "home": {
     "hi": "Olá, {{name}}",
     "welcome": "Encontre um filme ou série e peça. Você pode acompanhar em Meus pedidos.",
-    "find": "Encontrar um filme ou série",
+    "find": "Encontrar um filme, série ou ator",
     "seeAll": "Ver tudo",
     "nothing": "Nada para mostrar ainda",
     "notSetUp": "O administrador ainda não terminou de configurar este site. Tente de novo mais tarde.",

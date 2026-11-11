@@ -750,7 +750,7 @@
   },
   "discover": {
     "sub": "Hvad der er populært og på vej, og mere i stil med det, du har.",
-    "find": "Find en film eller serie",
+    "find": "Find en film, serie eller skuespiller",
     "needsTmdb": "Udforsk kræver TMDB",
     "needsTmdbBody": "Box Office henter det, der er populært og på vej, fra The Movie Database. Tilføj en TMDB-API-nøgle under <link>Indstillinger</link>, så fyldes denne side ud.",
     "seeAll": "Se alle",
@@ -774,7 +774,9 @@
     "networks": "Kanaler og tjenester",
     "nothingHere": "Intet her lige nu.",
     "showMore": "Vis mere",
-    "back": "← Udforsk"
+    "back": "← Udforsk",
+    "people": "Personer",
+    "knownFor": "Kendt fra {{titles}}"
   },
   "scan": {
     "n": {

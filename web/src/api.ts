@@ -611,7 +611,10 @@ export type DiscoverTitle = {
   status?: DiscoverStatus
   id?: number
 }
-export type DiscoverRow = { id: string; title: string; because?: string; items: DiscoverTitle[]; more?: boolean }
+// LookupPerson is an actor or other person found on TMDB; the row
+// person-{tmdbId} is what they're in.
+export type LookupPerson = { tmdbId: number; name: string; photo?: string; department?: string; knownFor: string[] }
+export type DiscoverRow = { id: string; title: string; because?: string; person?: LookupPerson; items: DiscoverTitle[]; more?: boolean }
 export type DiscoverPage = DiscoverRow & { page: number; pages: number }
 export type Genre = { id: number; name: string }
 export type Network = { id: number; name: string; logo?: string }

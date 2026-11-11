@@ -750,7 +750,7 @@
   },
   "discover": {
     "sub": "Wat populair is en binnenkort komt, en meer zoals wat je hebt.",
-    "find": "Een film of serie zoeken",
+    "find": "Een film, serie of acteur zoeken",
     "needsTmdb": "Ontdekken heeft TMDB nodig",
     "needsTmdbBody": "Box Office haalt wat populair is en binnenkort komt bij The Movie Database. Voeg een TMDB-API-sleutel toe onder <link>Instellingen</link> en deze pagina vult zich.",
     "seeAll": "Alles bekijken",
@@ -774,7 +774,9 @@
     "networks": "Zenders en diensten",
     "nothingHere": "Hier is nu niets.",
     "showMore": "Meer tonen",
-    "back": "← Ontdekken"
+    "back": "← Ontdekken",
+    "people": "Personen",
+    "knownFor": "Bekend van {{titles}}"
   },
   "scan": {
     "n": {
