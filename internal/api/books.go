@@ -2,6 +2,7 @@ package api
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/yeixio/boxoffice/internal/books"
@@ -123,15 +124,25 @@ func (s *Server) refreshAuthor(w http.ResponseWriter, r *http.Request) error {
 	return s.writeAuthor(w, r, a)
 }
 
-// deleteAuthor takes an author off the list; files stay where they are.
+// deleteAuthor takes an author off the list, cancelling the downloads for
+// their books; files stay where they are.
 func (s *Server) deleteAuthor(w http.ResponseWriter, r *http.Request) error {
 	id, err := pathID(r, "id")
+	if err != nil {
+		return err
+	}
+	list, err := s.Store.Books(r.Context(), id)
 	if err != nil {
 		return err
 	}
 	if err := s.Store.DeleteAuthor(r.Context(), id); err != nil {
 		return err
 	}
+	ids := make([]int64, len(list))
+	for i, b := range list {
+		ids[i] = b.ID
+	}
+	s.cancelDownloads(r.Context(), "book", ids, fmt.Sprintf("author %d", id))
 	w.WriteHeader(http.StatusNoContent)
 	return nil
 }

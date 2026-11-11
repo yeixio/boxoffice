@@ -64,6 +64,8 @@ type Logs struct {
 	warnings int64 // since the server started
 	errors   int64
 	now      func() time.Time
+	// journal, when set, writes every line to a file too (OpenJournal).
+	journal *Journal
 }
 
 // NewLogs keeps up to n lines.
@@ -110,18 +112,37 @@ func LevelRank(name string) int {
 
 func (l *Logs) add(t time.Time, lv slog.Level, msg string, attrs []Attr) {
 	l.mu.Lock()
-	defer l.mu.Unlock()
 	l.seq++
 	e := Entry{Seq: l.seq, Time: t.UnixMilli(), Level: levelName(lv), Message: msg, Attrs: attrs}
+	l.keep(e)
+	j := l.journal
+	l.mu.Unlock()
+	j.write(e)
+}
+
+// addEntry keeps a line read back from a journal. It's numbered again:
+// lines logged at the same moment can reach the file out of order.
+func (l *Logs) addEntry(e Entry) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	l.seq++
+	e.Seq = l.seq
+	l.keep(e)
+}
+
+// keep puts a line in the ring and counts it if it's a problem. l.mu is held.
+func (l *Logs) keep(e Entry) {
 	l.lines[l.next] = e
 	l.next++
 	if l.next == len(l.lines) {
 		l.next, l.full = 0, true
 	}
-	if lv < slog.LevelWarn {
+	rank := LevelRank(e.Level)
+	if rank < 2 {
 		return
 	}
-	if lv >= slog.LevelError {
+	attrs, msg := e.Attrs, e.Message
+	if rank >= 3 {
 		l.errors++
 	} else {
 		l.warnings++
@@ -250,6 +271,15 @@ func (l *Logs) Kept() (n int, oldest int64) {
 		return 0, 0
 	}
 	return l.next, l.lines[0].Time
+}
+
+// CloseJournal stops writing lines to the journal.
+func (l *Logs) CloseJournal() error {
+	l.mu.Lock()
+	j := l.journal
+	l.journal = nil
+	l.mu.Unlock()
+	return j.Close()
 }
 
 // teeHandler passes lines on to the real log and keeps a copy.

@@ -376,6 +376,7 @@ func (e *Engine) Import(ctx context.Context, id int64) error {
 	}
 	go func() {
 		bg := context.WithoutCancel(ctx)
+		defer e.dropOrphan(bg, id)
 		defer func() {
 			e.mu.Lock()
 			delete(e.importing, id)
@@ -436,6 +437,79 @@ func (e *Engine) Remove(ctx context.Context, id int64, deleteFiles bool) error {
 		e.removeFolder(d)
 	}
 	return nil
+}
+
+// CancelFor stops and removes the downloads for titles that were taken
+// off the list, deleting what they fetched: those queued, downloading,
+// paused, waiting to unpack, or finished and waiting to go into the
+// library. kinds are the downloads' kinds (movie, series, album, ebook,
+// audiobook) and ids the titles'. Quarantined and failed downloads keep
+// to their own rules.
+//
+// One being checked, unpacked or moved into the library can't be stopped
+// in the middle; once that's done it's removed the same way, as its
+// title is gone (see dropOrphan). removed counts those that went now,
+// later those that go once their step is done.
+func (e *Engine) CancelFor(ctx context.Context, kinds []string, ids []int64) (removed, later int, err error) {
+	list, err := e.Store.UnfinishedFor(ctx, kinds, ids)
+	if err != nil {
+		return 0, 0, err
+	}
+	var errs []error
+	for _, d := range list {
+		if e.locked(d) != nil {
+			later++
+			continue
+		}
+		if err := e.Remove(ctx, d.ID, true); err != nil {
+			switch {
+			case errors.Is(err, store.ErrNotFound):
+			case e.lockedNow(ctx, d.ID):
+				// It started a step meanwhile; it goes when that's done.
+				later++
+			default:
+				errs = append(errs, fmt.Errorf("%s: %w", d.Name, err))
+			}
+			continue
+		}
+		removed++
+		e.Log.Info("download cancelled: its title was removed", "name", d.Name, "id", d.ID, "kind", d.Kind, "title", d.TitleID)
+	}
+	return removed, later, errors.Join(errs...)
+}
+
+func (e *Engine) lockedNow(ctx context.Context, id int64) bool {
+	d, err := e.Store.Download(ctx, id)
+	return err == nil && e.locked(d) != nil
+}
+
+// dropOrphan removes a download whose title was taken off the list, with
+// what it fetched, once nothing is working on it: its title went while it
+// was being checked, unpacked or moved in, or before Box Office restarted.
+// Quarantined, failed and imported downloads stay, as do those added by
+// hand, which have no title.
+func (e *Engine) dropOrphan(ctx context.Context, id int64) {
+	d, err := e.Store.Download(ctx, id)
+	if err != nil || !e.orphan(ctx, d) || e.locked(d) != nil {
+		return
+	}
+	if err := e.Remove(ctx, id, true); err != nil {
+		if !errors.Is(err, store.ErrNotFound) {
+			e.Log.Warn("couldn't remove a download for a removed title", "name", d.Name, "id", id, "err", err)
+		}
+		return
+	}
+	e.Log.Info("download removed: its title was removed", "name", d.Name, "id", id, "kind", d.Kind, "title", d.TitleID)
+}
+
+// orphan says a download is for a title that isn't on the list any more,
+// and hasn't gone into the library, failed or been quarantined.
+func (e *Engine) orphan(ctx context.Context, d store.Download) bool {
+	if d.Kind == "" || d.TitleID == 0 || d.Quarantined != "" || d.Status == store.DownloadFailed || d.ImportedTo != "" {
+		return false
+	}
+	ok, err := e.Store.TitleExists(ctx, d.Kind, d.TitleID)
+	return err == nil && !ok
 }
 
 // locked says why a download can't be removed now: while it's being
@@ -728,6 +802,13 @@ func (e *Engine) startNext(ctx context.Context, wg *sync.WaitGroup) {
 		return
 	}
 	d := queue[i]
+	// One whose title was removed isn't fetched; it goes, and the next
+	// is looked at.
+	if e.orphan(ctx, d) {
+		e.dropOrphan(ctx, d.ID)
+		e.Wake()
+		return
+	}
 	// The month's data cap: the download that's on goes on, and the next
 	// waits for next month.
 	if c, err := LoadCap(ctx, e.Store); err != nil {
@@ -787,6 +868,13 @@ func (e *Engine) startNext(ctx context.Context, wg *sync.WaitGroup) {
 
 // process downloads a release, then checks, repairs, unpacks and imports it.
 func (e *Engine) process(ctx context.Context, r *running, d store.Download, srv *servers) {
+	// Runs last, once it's no longer working: if its title was removed
+	// meanwhile, it goes too (unless it's being removed already).
+	defer func() {
+		if !errors.Is(context.Cause(ctx), errRemoved) {
+			e.dropOrphan(context.WithoutCancel(ctx), r.id)
+		}
+	}()
 	defer close(r.done)
 	finish := func() {
 		e.mu.Lock()

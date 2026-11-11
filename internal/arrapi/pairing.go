@@ -24,6 +24,9 @@ type Pairing struct {
 	Live func() LiveState
 	// Waiting says why queued downloads aren't starting, or "".
 	Waiting func() string
+	// Removed hears of a movie or a show taken off the list, to cancel
+	// its downloads; kind is movie or series.
+	Removed func(ctx context.Context, kind string, id int64, subject string)
 	// CanImport says a finished download is waiting to be moved into the
 	// library by hand.
 	CanImport func(store.Download) bool

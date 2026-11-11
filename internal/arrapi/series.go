@@ -244,14 +244,22 @@ func (h *Handler) editSeries(w http.ResponseWriter, r *http.Request) error {
 	return write(w, http.StatusAccepted, h.seriesJSON(t, ids))
 }
 
-// deleteSeries takes a show off the wanted list, leaving its files alone.
+// deleteSeries takes a show off the wanted list, cancelling its downloads
+// and leaving its files alone.
 func (h *Handler) deleteSeries(w http.ResponseWriter, r *http.Request) error {
 	id, err := pathID(r)
 	if err != nil {
 		return err
 	}
+	t, err := h.Catalog.Store.Series(r.Context(), id)
+	if err != nil {
+		return err
+	}
 	if err := h.Catalog.Store.DeleteSeries(r.Context(), id); err != nil {
 		return err
+	}
+	if h.Pairing != nil && h.Pairing.Removed != nil {
+		h.Pairing.Removed(r.Context(), "series", id, t.Title)
 	}
 	w.WriteHeader(http.StatusOK)
 	return nil

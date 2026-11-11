@@ -7,6 +7,8 @@ import (
 	"log/slog"
 	"net/http"
 	"net/http/httptest"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -157,5 +159,60 @@ func TestAlertSettingsHideSecrets(t *testing.T) {
 	}
 	if code := call(t, hs, "PUT", "/api/v1/admin/alerts", `{"webhooks":[{"kind":"discord","url":"nope"}]}`, nil); code != 400 {
 		t.Fatalf("bad webhook: %d", code)
+	}
+}
+
+func TestPreviousRunLogs(t *testing.T) {
+	s, hs, _ := monitorServer(t)
+	// Nothing from before: no previous run to show.
+	var rep monitorReport
+	call(t, hs, "GET", "/api/v1/admin/monitor", "", &rep)
+	if rep.PreviousRun != nil {
+		t.Fatalf("previous run with no journal: %+v", rep.PreviousRun)
+	}
+
+	// A run that logged and crashed, read back from the journal.
+	dir := t.TempDir()
+	before := monitor.NewLogs(0)
+	if _, err := monitor.OpenJournal(dir, before); err != nil {
+		t.Fatal(err)
+	}
+	slog.New(before.Handler(slog.DiscardHandler)).Info("importing", "title", "Nosferatu")
+	before.CloseJournal()
+	os.WriteFile(filepath.Join(dir, "crash.log"), []byte("panic: boom\n\ngoroutine 1 [running]:\n"), 0o600)
+	prev, err := monitor.OpenJournal(dir, s.Monitoring.Monitor.Logs)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { s.Monitoring.Monitor.Logs.CloseJournal() })
+	s.Monitoring.Monitor.Previous = prev
+	s.Log.Info("this run")
+
+	call(t, hs, "GET", "/api/v1/admin/monitor", "", &rep)
+	if rep.PreviousRun == nil || rep.PreviousRun.Lines != 1 || rep.PreviousRun.Crash != "panic: boom" {
+		t.Fatalf("previous run = %+v", rep.PreviousRun)
+	}
+	var page struct {
+		Lines []monitor.Entry `json:"lines"`
+		Crash string          `json:"crash"`
+	}
+	call(t, hs, "GET", "/api/v1/admin/logs?run=previous", "", &page)
+	if len(page.Lines) != 1 || page.Lines[0].Message != "importing" || !strings.HasPrefix(page.Crash, "panic: boom") {
+		t.Fatalf("previous page = %+v", page)
+	}
+
+	// This run's download starts with the end of the run before, and its crash.
+	req, _ := http.NewRequest("GET", hs.URL+"/api/v1/admin/logs/download", nil)
+	req.Header.Set("X-Api-Key", "key")
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	b, _ := io.ReadAll(res.Body)
+	res.Body.Close()
+	text := string(b)
+	i, j, k := strings.Index(text, "importing"), strings.Index(text, "panic: boom"), strings.Index(text, "this run")
+	if i < 0 || j < i || k < j {
+		t.Fatalf("download:\n%s", text)
 	}
 }

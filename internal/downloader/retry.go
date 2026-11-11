@@ -55,6 +55,7 @@ func (e *Engine) RetryImports(ctx context.Context, version string) (int, error) 
 			if err := e.Store.SetDownloadStatus(ctx, d.ID, store.DownloadCompleted, msg); err != nil {
 				return n, err
 			}
+			e.dropOrphan(ctx, d.ID)
 			if d.ImportedTo != "" {
 				n++
 			}

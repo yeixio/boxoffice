@@ -18,6 +18,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/catalog"
 	"github.com/yeixio/boxoffice/internal/downloader"
 	"github.com/yeixio/boxoffice/internal/jobs"
+	"github.com/yeixio/boxoffice/internal/namefix"
 	"github.com/yeixio/boxoffice/internal/quality"
 	"github.com/yeixio/boxoffice/internal/store"
 )
@@ -236,7 +237,7 @@ func (s *Service) MovieFor(ctx context.Context, id int64, ask Ask) (Results, err
 		if m.IMDBID != "" {
 			q.IMDBID = m.IMDBID
 		} else {
-			q.Text = fmt.Sprintf("%s %d", m.Title, m.Year)
+			q.Text = fmt.Sprintf("%s %d", searchText(m.Title), m.Year)
 		}
 		return q
 	})
@@ -309,7 +310,7 @@ func (s *Service) EpisodeFor(ctx context.Context, id int64, ask Ask) (Results, e
 		if t.TVDBID > 0 {
 			q.TVDBID = t.TVDBID
 		} else {
-			q.Text = t.Title
+			q.Text = searchText(t.Title)
 		}
 		return q
 	})
@@ -525,9 +526,24 @@ func releaseEpisode(title string) (int, []int, bool) {
 	return season, eps, true
 }
 
+// normalize is a title or release name for comparing: without accents
+// (release names are mostly written "Amelie", "Aeon Flux"), in lower case,
+// with "and" for "&" and spaces for punctuation.
 func normalize(s string) string {
-	s = strings.ToLower(strings.ReplaceAll(s, "&", "and"))
+	s = namefix.Fold(strings.ReplaceAll(s, "&", "and"))
 	return strings.TrimSpace(reNonWord.ReplaceAllString(s, " "))
+}
+
+// searchText is a title as an indexer is asked for it: without accents,
+// since releases are named "Amelie.2001…" rather than "Amélie", and
+// indexers match the letters as written.
+func searchText(title string) string {
+	for _, r := range title {
+		if r >= 0x80 {
+			return strings.Join(strings.Fields(namefix.Fold(title)), " ")
+		}
+	}
+	return title
 }
 
 func titleMatches(release, title string) bool {

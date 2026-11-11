@@ -119,6 +119,54 @@ func latestPer(list []store.Download, episodes []int64) []store.Download {
 
 // -- whole titles --
 
+// titleRemoval is the plan for removing a movie or a show: its folder,
+// if the person asks for it to go, and the downloads for it that are
+// cancelled whatever they choose.
+type titleRemoval struct {
+	library.Plan
+	// Downloads counts its downloads that haven't gone into the library:
+	// queued, under way, or waiting for Move into library. They're
+	// cancelled and what they fetched is deleted.
+	Downloads int `json:"downloads"`
+}
+
+func (s *Server) titleRemoval(ctx context.Context, kind string, id int64, p library.Plan) (titleRemoval, error) {
+	tr := titleRemoval{Plan: p}
+	if s.Downloads == nil {
+		return tr, nil
+	}
+	list, err := s.Store.UnfinishedFor(ctx, downloadKinds(kind), []int64{id})
+	tr.Downloads = len(list)
+	return tr, err
+}
+
+// downloadKinds is the kinds of download a kind of title has.
+func downloadKinds(kind string) []string {
+	if kind == "book" {
+		return []string{store.Ebook, store.Audiobook}
+	}
+	return []string{kind}
+}
+
+// cancelDownloads stops and removes the downloads for titles that came
+// off the list, deleting what they fetched (see downloader.CancelFor).
+// kind is movie, series, album or book. The titles are gone either way,
+// so a failure is only logged; what's left goes once nothing is working
+// on it.
+func (s *Server) cancelDownloads(ctx context.Context, kind string, ids []int64, subject string) {
+	if s.Downloads == nil || len(ids) == 0 {
+		return
+	}
+	ctx = context.WithoutCancel(ctx)
+	removed, later, err := s.Downloads.CancelFor(ctx, downloadKinds(kind), ids)
+	if err != nil {
+		s.Log.Warn("couldn't cancel all the downloads for a removed title", "title", subject, "err", err)
+	}
+	if removed+later > 0 {
+		s.Log.Info("cancelled the downloads for a removed title", "title", subject, "removed", removed, "after their step", later)
+	}
+}
+
 func (s *Server) moviePlan(r *http.Request) (store.Movie, library.Plan, error) {
 	id, err := pathID(r, "id")
 	if err != nil {
@@ -145,11 +193,15 @@ func (s *Server) lockPlan(ctx context.Context, kind string, id int64, p *library
 }
 
 func (s *Server) movieRemoval(w http.ResponseWriter, r *http.Request) error {
-	_, p, err := s.moviePlan(r)
+	m, p, err := s.moviePlan(r)
 	if err != nil {
 		return err
 	}
-	return writeJSON(w, http.StatusOK, p)
+	tr, err := s.titleRemoval(r.Context(), "movie", m.ID, p)
+	if err != nil {
+		return err
+	}
+	return writeJSON(w, http.StatusOK, tr)
 }
 
 func (s *Server) seriesPlan(r *http.Request) (store.Series, library.Plan, error) {
@@ -169,11 +221,15 @@ func (s *Server) seriesPlan(r *http.Request) (store.Series, library.Plan, error)
 }
 
 func (s *Server) seriesRemoval(w http.ResponseWriter, r *http.Request) error {
-	_, p, err := s.seriesPlan(r)
+	t, p, err := s.seriesPlan(r)
 	if err != nil {
 		return err
 	}
-	return writeJSON(w, http.StatusOK, p)
+	tr, err := s.titleRemoval(r.Context(), "series", t.ID, p)
+	if err != nil {
+		return err
+	}
+	return writeJSON(w, http.StatusOK, tr)
 }
 
 // -- a movie's file --

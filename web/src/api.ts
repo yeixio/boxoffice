@@ -376,6 +376,9 @@ export type Monitor = {
   alerts: Alert[]
   logLines: number
   logsSince?: number
+  // The run before this one, from the log on disk; crash is the first line
+  // of its crash, when it crashed.
+  previousRun?: { lines: number; started?: number; ended?: number; crash?: string }
 }
 
 export type WebhookKind = 'discord' | 'ntfy' | 'homeassistant' | 'json'
@@ -519,6 +522,8 @@ export type IndexerCaps = { categories: { id: number; name: string; subs?: { id:
 // What deleting files from the library takes. folder is set when a whole
 // title's folder goes; files names up to 200 of them, biggest first.
 export type DeletePlan = { folder?: string; files: { path: string; size: number }[]; count: number; size: number; problem?: string }
+// Removing a movie or a show: its folder, and its downloads that are cancelled.
+export type TitleRemoval = DeletePlan & { downloads?: number }
 // Deleting a movie's, a season's or an episode's files, keeping the title.
 export type FileRemoval = DeletePlan & { releases: { name: string; indexer?: string }[]; watched: boolean }
 export type RecycleFolder = { root: string; folder: string; count: number; size: number; oldest?: string }

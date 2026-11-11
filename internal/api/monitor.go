@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"fmt"
+	"io"
 	"log/slog"
 	"net/http"
 	"os"
@@ -220,6 +221,28 @@ type monitorReport struct {
 	Alerts           []alerts.Alert    `json:"alerts"`
 	LogLines         int               `json:"logLines"`
 	LogsSince        int64             `json:"logsSince,omitempty"`
+	// PreviousRun is the run before this one, from the log on disk; absent
+	// when there's nothing from it.
+	PreviousRun *previousRun `json:"previousRun,omitempty"`
+}
+
+// previousRun says what's kept from the run before this one.
+type previousRun struct {
+	Lines   int   `json:"lines"`
+	Started int64 `json:"started,omitempty"`
+	Ended   int64 `json:"ended,omitempty"`
+	// Crash is the crash's first line, such as "panic: ...", when it
+	// crashed.
+	Crash string `json:"crash,omitempty"`
+}
+
+func (m *Monitoring) previousRun() *previousRun {
+	p := m.Monitor.Previous
+	if p.Empty() {
+		return nil
+	}
+	n, _ := p.Logs.Kept()
+	return &previousRun{Lines: n, Started: p.Started, Ended: p.Ended, Crash: p.CrashSummary()}
 }
 
 type monitorJobs struct {
@@ -241,6 +264,7 @@ func (s *Server) getMonitor(w http.ResponseWriter, r *http.Request) error {
 		out.Problems = l.Problems(50)
 		out.LogLines, out.LogsSince = l.Kept()
 	}
+	out.PreviousRun = m.previousRun()
 	dbCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 	start := time.Now()
@@ -420,28 +444,98 @@ func logQuery(r *http.Request) monitor.Query {
 	return monitor.Query{Level: q.Get("level"), Text: q.Get("q"), Before: before, Limit: limit}
 }
 
-// getLogs lists the latest log lines, newest first.
-func (s *Server) getLogs(w http.ResponseWriter, r *http.Request) error {
-	l := s.mon().Monitor.Logs
-	if l == nil {
-		return writeJSON(w, http.StatusOK, map[string]any{"lines": []monitor.Entry{}, "more": false})
+// runLogs is the lines of the run asked for: this one, or with
+// run=previous the one before it, from the log on disk.
+func (s *Server) runLogs(r *http.Request) (*monitor.Logs, *monitor.PreviousRun) {
+	m := s.mon()
+	if r.URL.Query().Get("run") == "previous" {
+		if p := m.Monitor.Previous; !p.Empty() {
+			return p.Logs, p
+		}
+		return nil, nil
 	}
-	lines, more := l.Lines(logQuery(r))
-	return writeJSON(w, http.StatusOK, map[string]any{"lines": lines, "more": more})
+	return m.Monitor.Logs, nil
 }
 
+// getLogs lists the latest log lines, newest first. For the previous run,
+// it also has the crash that ended it, if any.
+func (s *Server) getLogs(w http.ResponseWriter, r *http.Request) error {
+	l, prev := s.runLogs(r)
+	out := map[string]any{"lines": []monitor.Entry{}, "more": false}
+	if l != nil {
+		out["lines"], out["more"] = l.Lines(logQuery(r))
+	}
+	if prev != nil {
+		out["crash"], out["started"], out["ended"] = prev.Crash, prev.Started, prev.Ended
+	}
+	return writeJSON(w, http.StatusOK, out)
+}
+
+// previousInDownload is how many of the previous run's last lines a
+// download of this run's log starts with.
+const previousInDownload = 1000
+
 // downloadLogs sends the matching log lines as a text file, oldest first,
-// to attach to a bug report.
+// to attach to a bug report. This run's log starts with the end of the run
+// before it and its crash, since a restart is often what's being reported.
 func (s *Server) downloadLogs(w http.ResponseWriter, r *http.Request) error {
 	q := logQuery(r)
 	q.Limit = monitor.DefaultLines * 4
+	l, prev := s.runLogs(r)
 	var lines []monitor.Entry
-	if l := s.mon().Monitor.Logs; l != nil {
+	if l != nil {
 		lines, _ = l.Lines(q)
 	}
+	name := "boxoffice-%s.log"
+	if r.URL.Query().Get("run") == "previous" {
+		name = "boxoffice-%s-previous-run.log"
+	}
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.Header().Set("Content-Disposition", fmt.Sprintf(`attachment; filename="boxoffice-%s.log"`, time.Now().Format("2006-01-02-150405")))
+	w.Header().Set("Content-Disposition", fmt.Sprintf(`attachment; filename="`+name+`"`, time.Now().Format("2006-01-02-150405")))
 	fmt.Fprintf(w, "# Box Office %s, %s, %s/%s, %s database\n", s.Version, time.Now().Format(time.RFC3339), runtime.GOOS, runtime.GOARCH, s.Database)
+	if prev == nil && r.URL.Query().Get("run") != "previous" {
+		if p := s.mon().Monitor.Previous; !p.Empty() {
+			pq := q
+			pq.Limit = previousInDownload
+			before, more := p.Logs.Lines(pq)
+			fmt.Fprintf(w, "\n# The run before this one: %s", runSpan(p))
+			if more {
+				fmt.Fprintf(w, ", its last %d lines", len(before))
+			}
+			fmt.Fprintln(w)
+			writeLogLines(w, before)
+			writeCrash(w, p)
+			fmt.Fprintln(w, "\n# This run")
+		}
+	} else if prev != nil {
+		fmt.Fprintf(w, "# The run before this one: %s\n", runSpan(prev))
+	}
+	writeLogLines(w, lines)
+	if prev != nil {
+		writeCrash(w, prev)
+	}
+	return nil
+}
+
+func runSpan(p *monitor.PreviousRun) string {
+	if p.Started == 0 {
+		return "no lines kept"
+	}
+	f := "2006-01-02T15:04:05Z07:00"
+	return time.UnixMilli(p.Started).Format(f) + " to " + time.UnixMilli(p.Ended).Format(f)
+}
+
+// writeCrash ends a run's log with how it ended.
+func writeCrash(w io.Writer, p *monitor.PreviousRun) {
+	if p.Crashed() {
+		fmt.Fprintf(w, "\n# It crashed:\n%s\n", p.Crash)
+	} else {
+		fmt.Fprintln(w, "# It didn't write a crash: it stopped, or was stopped from outside (a deleted pod, running out of memory, a power cut).")
+	}
+}
+
+// writeLogLines writes lines, given newest first, oldest first.
+func writeLogLines(w io.Writer, lines []monitor.Entry) {
 	for i := len(lines) - 1; i >= 0; i-- {
 		e := lines[i]
 		var b strings.Builder
@@ -455,9 +549,8 @@ func (s *Server) downloadLogs(w http.ResponseWriter, r *http.Request) error {
 			b.WriteString(" " + a.Key + "=" + v)
 		}
 		b.WriteString("\n")
-		w.Write([]byte(b.String()))
+		io.WriteString(w, b.String())
 	}
-	return nil
 }
 
 // putDebug switches debug logging on or off, and remembers it.
