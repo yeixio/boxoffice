@@ -210,3 +210,76 @@ func TestImportObfuscatedEpisode(t *testing.T) {
 		}
 	}
 }
+
+// A season pack whose videos are all named with hashes goes in by what
+// the videos' tags say; one that can't be told apart stays in the
+// downloads folder, and the import says so.
+func TestImportSeasonPackByTags(t *testing.T) {
+	st := storetest.Open(t)
+	ctx := context.Background()
+	lib := t.TempDir()
+	profiles, _ := st.Profiles(ctx)
+	show, err := st.AddSeries(ctx, store.Series{TMDBID: 7, Title: "Pantry Lab", Year: 2001, Runtime: 22, ProfileID: profiles[0].ID, RootFolder: lib, Path: filepath.Join(lib, "Pantry Lab (2001)"), Monitored: true, Seasons: []store.Season{{Number: 3, Monitored: true}}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	all, tags, _ := pantry()
+	for _, e := range all {
+		e.ID, e.SeriesID, e.Monitored = 0, show.ID, true
+		if err := st.UpsertEpisode(ctx, e); err != nil {
+			t.Fatal(err)
+		}
+	}
+	dl := t.TempDir()
+	for v := range tags {
+		os.WriteFile(filepath.Join(dl, v), make([]byte, 5000), 0o644)
+	}
+	li := &LibraryImporter{Store: st, Tags: func(_ context.Context, p string) (VideoTags, error) {
+		return tags[filepath.Base(p)], nil
+	}}
+	d := store.Download{Kind: "series", TitleID: show.ID, Name: "Pantry.Lab.S03.576p.WEB-DL.DDP.2.0.H.264-GROUP"}
+	to, err := li.Import(ctx, d, dl, listFiles(dl))
+	var left *LeftOverError
+	if !errors.As(err, &left) || len(left.Left) != 1 || left.Left[0] != "af03d2.mkv" {
+		t.Fatalf("err %v", err)
+	}
+	if to != filepath.Join(show.Path, "Season 03") {
+		t.Fatalf("to %s", to)
+	}
+	if !fileExists(filepath.Join(dl, "af03d2.mkv")) {
+		t.Fatal("the unmatched video should stay where it is")
+	}
+	eps, _ := st.Episodes(ctx, show.ID)
+	for _, e := range eps {
+		if (e.File != nil) != (e.Season == 3) {
+			t.Errorf("S%02dE%02d file %+v", e.Season, e.Number, e.File)
+		}
+	}
+	if p := filepath.Join(to, "Pantry Lab (2001) - S03E04 - Shell Shock.mkv"); !fileExists(p) {
+		t.Errorf("%s missing", p)
+	}
+}
+
+func fileExists(p string) bool {
+	_, err := os.Stat(p)
+	return err == nil
+}
+
+// A video given an episode by hand goes in as that episode, whatever its
+// name says.
+func TestImportChosenEpisode(t *testing.T) {
+	st := storetest.Open(t)
+	ctx := context.Background()
+	lib := t.TempDir()
+	profiles, _ := st.Profiles(ctx)
+	show, _ := st.AddSeries(ctx, store.Series{TMDBID: 9, Title: "Show", Year: 2020, ProfileID: profiles[0].ID, RootFolder: lib, Path: filepath.Join(lib, "Show (2020)"), Monitored: true})
+	st.UpsertEpisode(ctx, store.Episode{SeriesID: show.ID, Season: 0, Number: 3, Title: "Turkey Special", Monitored: true})
+	eps, _ := st.Episodes(ctx, show.ID)
+	dl := t.TempDir()
+	os.WriteFile(filepath.Join(dl, "Show.S01E02.mkv"), make([]byte, 5000), 0o644)
+	li := &LibraryImporter{Store: st}
+	to, err := li.Import(ctx, store.Download{Kind: "series", TitleID: show.ID, Name: "Show.S01E02", EpisodeIDs: []int64{eps[0].ID}, Mode: ModeEpisode}, dl, []string{"Show.S01E02.mkv"})
+	if err != nil || to != filepath.Join(show.Path, "Season 00", "Show (2020) - S00E03 - Turkey Special.mkv") {
+		t.Fatalf("%s %v", to, err)
+	}
+}

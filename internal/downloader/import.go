@@ -19,11 +19,35 @@ import (
 	"github.com/yeixio/boxoffice/internal/flush"
 	"github.com/yeixio/boxoffice/internal/quality"
 	"github.com/yeixio/boxoffice/internal/store"
+	"github.com/yeixio/boxoffice/internal/usenet/screen"
 )
 
 // LibraryImporter moves finished downloads into the titles' folders.
 type LibraryImporter struct {
 	Store *store.Store
+	// Tags reads what a video says about itself (its title, synopsis and
+	// episode tags); ffprobe when nil.
+	Tags func(ctx context.Context, path string) (VideoTags, error)
+}
+
+// ModeEpisode marks an import of one video as the episode in its
+// EpisodeIDs, chosen by hand.
+const ModeEpisode = "episode"
+
+// LeftOverError means some of a download's videos went into the library
+// and others couldn't be matched to an episode: those stay in the
+// downloads folder, so nothing is lost.
+type LeftOverError struct {
+	To   string
+	Left []string
+}
+
+func (e *LeftOverError) Error() string {
+	n := len(e.Left)
+	if n == 1 {
+		return fmt.Sprintf("1 video couldn't be matched to an episode, so it's still in the downloads folder (%s)", e.Left[0])
+	}
+	return fmt.Sprintf("%d videos couldn't be matched to an episode, so they're still in the downloads folder", n)
 }
 
 var videoExts = []string{".mkv", ".mp4", ".m4v", ".avi", ".ts", ".m2ts", ".wmv", ".mov", ".mpg", ".mpeg", ".webm"}
@@ -154,19 +178,64 @@ func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir str
 		if err != nil {
 			return "", err
 		}
-		// Obfuscated posts can name the video anything, so when no video
-		// says which episode it is, the biggest one is taken as the episode
-		// the release is named for, or the one it was grabbed for.
+		// Obfuscated posts can name the video anything. When no video says
+		// which episode it is, the videos' own tags are read next (web
+		// releases carry the store's synopsis), and failing that the
+		// biggest one is taken as the episode the release is named for, or
+		// the one it was grabbed for.
 		named := slices.ContainsFunc(vids, func(v string) bool {
 			_, n := episodeNumbers(filepath.Base(v))
 			return len(n) > 0
 		})
-		var placed []string
-		for k, v := range vids {
-			season, numbers := episodeNumbers(filepath.Base(v))
-			if !named && k == 0 {
-				season, numbers = releaseEpisode(d, eps)
+		type target struct {
+			season  int
+			numbers []int
+		}
+		targets := map[string]target{}
+		for _, v := range vids {
+			if s, n := episodeNumbers(filepath.Base(v)); len(n) > 0 {
+				targets[v] = target{s, n}
 			}
+		}
+		main := map[string]bool{}
+		for _, m := range mainVideos(dir, vids, true) {
+			main[m.name] = true
+		}
+		if d.Mode == ModeEpisode {
+			i := -1
+			if len(d.EpisodeIDs) == 1 {
+				i = slices.IndexFunc(eps, func(e store.Episode) bool { return e.ID == d.EpisodeIDs[0] })
+			}
+			if i < 0 || len(main) != 1 {
+				return "", errors.New("choose one video and an episode of the show it's for")
+			}
+			var v string
+			for m := range main {
+				v = m
+			}
+			targets = map[string]target{v: {eps[i].Season, []int{eps[i].Number}}}
+		} else if !named {
+			if s, n := releaseEpisode(d, eps); len(n) > 0 && len(main) == 1 {
+				targets[vids[0]] = target{s, n}
+			} else {
+				for v, e := range li.matchTags(ctx, d, dir, vids, main, eps, time.Duration(t.Runtime)*time.Minute) {
+					targets[v] = target{e.Season, []int{e.Number}}
+				}
+				if len(targets) == 0 && len(n) > 0 {
+					targets[vids[0]] = target{s, n}
+				}
+			}
+		}
+		var placed, left []string
+		for _, v := range vids {
+			tg, ok := targets[v]
+			if !ok {
+				if !named && main[v] {
+					left = append(left, v)
+				}
+				continue
+			}
+			season, numbers := tg.season, tg.numbers
 			if len(numbers) == 0 {
 				continue
 			}
@@ -197,12 +266,16 @@ func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir str
 			placed = append(placed, dest)
 		}
 		if len(placed) == 0 {
-			return "", errors.New("none of its video files, nor the release itself, are named for an episode of the show (like S01E02)")
+			return "", errors.New("none of its video files, nor the release itself, are named for an episode of the show (like S01E02), and the videos' own tags don't say which episodes they are")
 		}
-		if len(placed) == 1 {
-			return placed[0], nil
+		to := placed[0]
+		if len(placed) > 1 {
+			to = filepath.Dir(placed[0])
 		}
-		return filepath.Dir(placed[0]), nil
+		if len(left) > 0 {
+			return to, &LeftOverError{To: to, Left: left}
+		}
+		return to, nil
 	}
 	return "", errors.New("it isn't for a movie, a show, a book or an album")
 }
@@ -388,6 +461,46 @@ func copyFile(src, dest string) error {
 		return err
 	}
 	return nil
+}
+
+// matchTags reads the unnamed main videos' tags and matches them to the
+// show's episodes, in the season the release is named for when it's a
+// season pack.
+func (li *LibraryImporter) matchTags(ctx context.Context, d store.Download, dir string, vids []string, main map[string]bool, eps []store.Episode, runtime time.Duration) map[string]store.Episode {
+	read := li.Tags
+	if read == nil {
+		read = ffprobeTags
+	}
+	tags := map[string]VideoTags{}
+	for _, v := range vids {
+		if !main[v] {
+			continue
+		}
+		p := filepath.Join(dir, v)
+		if t, err := read(ctx, p); err == nil && (t.Title != "" || t.Description != "" || t.Episode > 0) {
+			if t.Duration == 0 {
+				t.Duration, _ = screen.Duration(p)
+			}
+			tags[v] = t
+		}
+	}
+	if len(tags) == 0 {
+		return nil
+	}
+	if len(d.EpisodeIDs) > 0 {
+		// Grabbed for some episodes: matched among that season's, so the
+		// others in the pack are told apart too and left be.
+		var seasons []int
+		for _, e := range eps {
+			if slices.Contains(d.EpisodeIDs, e.ID) && !slices.Contains(seasons, e.Season) {
+				seasons = append(seasons, e.Season)
+			}
+		}
+		if len(seasons) == 1 && releaseSeason(d.Name) == 0 {
+			return matchByTags(tags, eps, seasons[0], runtime)
+		}
+	}
+	return matchByTags(tags, eps, releaseSeason(d.Name), runtime)
 }
 
 // releaseEpisode is the episode a download is for, from its release name,

@@ -3,9 +3,9 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { ChevronRight, Download as DownloadIcon, File, FileVideo, Folder, FolderInput, HardDrive, Link2, LoaderCircle, RefreshCw, Search, ShieldAlert, ShieldOff, Trash2, X } from 'lucide-react'
-import { get, post, type Book, type DownloadFile, type DownloadFiles as FilesData, type Movie, type Series, type Settings as SettingsData, type TitleKind } from '../api'
-import { bytes, titleLink, when } from '../format'
-import { Badge, Button, ErrorNote, Input, Modal } from '../ui'
+import { get, post, type Book, type DownloadFile, type Episode, type DownloadFiles as FilesData, type Movie, type Series, type Settings as SettingsData, type TitleKind } from '../api'
+import { bytes, episodeCode, titleLink, when } from '../format'
+import { Badge, Button, ErrorNote, Input, Modal, Select } from '../ui'
 
 const QUARANTINE = '_quarantine'
 
@@ -369,8 +369,9 @@ function ImportDialog({ f, onClose }: { f: DownloadFile; onClose: () => void }) 
   const [kind, setKind] = useState<TitleKind>(f.download?.kind ?? (looksLikeShow ? 'series' : 'movie'))
   const [query, setQuery] = useState('')
   const [picked, setPicked] = useState<Pick>()
+  const [episode, setEpisode] = useState('')
   const move = useMutation({
-    mutationFn: (p: Pick) => post('/downloads/files/import', { path: f.path, kind: p.kind, titleId: p.id }),
+    mutationFn: (p: Pick) => post('/downloads/files/import', { path: f.path, kind: p.kind, titleId: p.id, episodeId: p.kind === 'series' && !f.dir && episode ? Number(episode) : undefined }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['download-files'] })
       qc.invalidateQueries({ queryKey: ['downloads'] })
@@ -408,6 +409,11 @@ function ImportDialog({ f, onClose }: { f: DownloadFile; onClose: () => void }) 
   const firstScore = first ? Math.max(guess(f.name, first.title, first.year), first.by ? guess(f.name, `${first.by} ${first.title}`, first.year) : 0) : 0
   const auto = !query && first && ((f.download?.kind === kind && f.download.titleId === first.id) || firstScore >= 1.5) ? first : undefined
   const choice = picked?.kind === kind ? picked : auto
+  // One video going into a show can be given its episode by hand, for
+  // when neither its name nor its tags say which it is.
+  const pickEpisode = kind === 'series' && !f.dir && !!choice
+  const show = useQuery({ queryKey: ['show', choice?.id], queryFn: () => get<{ episodes: Episode[] }>(`/series/${choice?.id}`), enabled: pickEpisode })
+  const episodes = pickEpisode ? (show.data?.episodes ?? []) : []
   return (
     <Modal title={t('files.moveIn')} onClose={onClose}>
       <p className="mb-1 break-all text-sm font-medium">{f.name}</p>
@@ -446,7 +452,10 @@ function ImportDialog({ f, onClose }: { f: DownloadFile; onClose: () => void }) 
                 <button
                   role="option"
                   aria-selected={on}
-                  onClick={() => setPicked(p)}
+                  onClick={() => {
+                    setPicked(p)
+                    setEpisode('')
+                  }}
                   className={`flex w-full items-center justify-between gap-2 px-3 py-2 text-start text-sm ${on ? 'bg-marquee/10 font-medium text-marquee' : 'hover:bg-line/60'}`}
                 >
                   <span className="min-w-0 break-words">
@@ -459,6 +468,22 @@ function ImportDialog({ f, onClose }: { f: DownloadFile; onClose: () => void }) 
             )
           })}
         </ul>
+      )}
+      {pickEpisode && episodes.length > 0 && (
+        <div className="mb-2">
+          <label htmlFor="files-episode" className="mb-1 block text-sm font-medium">
+            {t('files.episode')}
+          </label>
+          <Select
+            id="files-episode"
+            value={episode}
+            onChange={setEpisode}
+            options={[
+              { value: '', label: t('files.episodeAuto') },
+              ...episodes.map((e) => ({ value: String(e.id), label: `${episodeCode(e.season, e.number)}${e.title ? ` · ${e.title}` : ''}${e.file ? ' ✓' : ''}` })),
+            ]}
+          />
+        </div>
       )}
       {kind === 'series' && <p className="mb-2 text-xs text-muted">{t('files.episodeNote')}</p>}
       <ErrorNote error={move.error} />

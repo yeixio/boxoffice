@@ -70,6 +70,8 @@ type filePath struct {
 	Path    string `json:"path"`
 	Kind    string `json:"kind"`
 	TitleID int64  `json:"titleId"`
+	// EpisodeID is the episode one video is, chosen by hand.
+	EpisodeID int64 `json:"episodeId,omitempty"`
 }
 
 func (s *Server) deleteDownloadFile(w http.ResponseWriter, r *http.Request) error {
@@ -104,7 +106,7 @@ func (s *Server) importDownloadFile(w http.ResponseWriter, r *http.Request) erro
 	if in.TitleID <= 0 {
 		return errorf(http.StatusBadRequest, "choose the movie or show it's for")
 	}
-	if err := s.Downloads.ImportPath(r.Context(), in.Path, in.Kind, in.TitleID); err != nil {
+	if err := s.Downloads.ImportPath(r.Context(), in.Path, in.Kind, in.TitleID, in.EpisodeID); err != nil {
 		return fileError(err)
 	}
 	w.WriteHeader(http.StatusAccepted)

@@ -392,7 +392,16 @@ func (e *Engine) Import(ctx context.Context, id int64) error {
 func (e *Engine) importInto(ctx context.Context, d *store.Download, dir, lead string) string {
 	to, err := e.Importer.Import(ctx, *d, dir, listFiles(dir))
 	var ro *ReadOnlyError
+	var left *LeftOverError
 	switch {
+	case errors.As(err, &left):
+		// The episodes it could tell went in; the videos it couldn't stay
+		// in the download's folder, which is kept for them.
+		e.Log.Info("download moved into the library, some videos unmatched", "name", d.Name, "id", d.ID, "to", to, "left", len(left.Left))
+		e.Store.SetDownloadImported(ctx, d.ID, to)
+		d.ImportedTo = to
+		e.imported(ctx, *d)
+		return lead + "Moved into the library at " + to + ", but " + left.Error() + ". Use Files on the Downloads page to choose the episode for each."
 	case errors.As(err, &ro):
 		e.Log.Info("download waits to go into the library: its root folder is read-only", "name", d.Name, "id", d.ID, "root", ro.Root)
 		return lead + fmt.Sprintf("Downloaded, and waiting to go into the library: %s is read-only for Box Office for now. Nothing was moved; it's in the downloads folder until you choose Move into library.", ro.Root)

@@ -12,6 +12,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/yeixio/boxoffice/internal/quality"
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/usenet/screen"
 )
@@ -465,8 +466,10 @@ type folderMove struct {
 // ImportPath moves a folder (or one video file) in the downloads folder
 // into a title's folder in the library, the same way a finished download
 // is. A folder a download made, for the same title, goes as that download.
-// It runs in the background; Browse says how it went.
-func (e *Engine) ImportPath(ctx context.Context, p, kind string, titleID int64) error {
+// It runs in the background; Browse says how it went. episodeID, for one
+// video going into a show, is the episode it is, chosen by hand: it goes
+// in as that episode whatever its name or tags say.
+func (e *Engine) ImportPath(ctx context.Context, p, kind string, titleID, episodeID int64) error {
 	e.init()
 	rel, err := cleanRel(p)
 	if err != nil {
@@ -485,9 +488,12 @@ func (e *Engine) ImportPath(ctx context.Context, p, kind string, titleID int64) 
 	if err != nil {
 		return err
 	}
+	if episodeID > 0 && kind != "series" {
+		return errors.New("only a show's video can be given an episode")
+	}
 	// The download's own folder, for its own title, goes as the download,
 	// so its history says where it went.
-	if d, ok := state.owner[rel]; ok && d.Kind == kind && d.TitleID == titleID && e.CanImport(d) {
+	if d, ok := state.owner[rel]; ok && episodeID == 0 && d.Kind == kind && d.TitleID == titleID && e.CanImport(d) {
 		return e.Import(ctx, d.ID)
 	}
 	root, err := e.root()
@@ -512,12 +518,21 @@ func (e *Engine) ImportPath(ctx context.Context, p, kind string, titleID int64) 
 	default:
 		return errors.New("only a folder or a video file can go into the library")
 	}
+	if episodeID > 0 && info.IsDir() {
+		return errors.New("choose one video to give an episode")
+	}
 	d := store.Download{Name: strings.TrimSuffix(info.Name(), filepath.Ext(info.Name())), Kind: kind, TitleID: titleID}
 	if info.IsDir() {
 		d.Name = info.Name()
 	}
 	if o, ok := state.owner[top(rel)]; ok && o.Kind == kind && o.TitleID == titleID {
 		d.Quality, d.EpisodeIDs = o.Quality, o.EpisodeIDs
+		if d.Quality == 0 {
+			d.Quality = quality.Parse(o.Name).ID
+		}
+	}
+	if episodeID > 0 {
+		d.EpisodeIDs, d.Mode = []int64{episodeID}, ModeEpisode
 	}
 	e.mu.Lock()
 	if e.moves == nil {
@@ -534,6 +549,21 @@ func (e *Engine) ImportPath(ctx context.Context, p, kind string, titleID int64) 
 		to, err := e.Importer.Import(bg, d, dir, files)
 		msg := "Moved into the library at " + to
 		var ro *ReadOnlyError
+		var left *LeftOverError
+		if errors.As(err, &left) {
+			// What went in is in; the unmatched videos stay where they are.
+			msg += ", but " + left.Error() + ". Choose the episode for each to move it in."
+			e.Log.Info("moved into the library by hand, some videos unmatched", "path", rel, "to", to, "left", len(left.Left))
+			d.ImportedTo = to
+			e.imported(bg, d)
+			if o, ok := state.owner[rel]; ok && o.Kind == kind && o.TitleID == titleID {
+				e.Store.SetDownloadImported(bg, o.ID, to)
+			}
+			e.mu.Lock()
+			e.moves[rel] = &folderMove{message: msg}
+			e.mu.Unlock()
+			return
+		}
 		switch {
 		case errors.As(err, &ro):
 			msg = fmt.Sprintf("Couldn't move it into the library: %s is read-only for Box Office. Nothing was moved.", ro.Root)
