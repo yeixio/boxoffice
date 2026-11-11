@@ -755,7 +755,7 @@
   },
   "discover": {
     "sub": "What's popular and coming soon, and more like what you have.",
-    "find": "Find a movie or show",
+    "find": "Find a movie, show or actor",
     "needsTmdb": "Discover needs TMDB",
     "needsTmdbBody": "Box Office gets what's popular and coming soon from The Movie Database. Add a TMDB API key under <link>Settings</link> and this page fills in.",
     "seeAll": "See all",
@@ -779,7 +779,9 @@
     "networks": "Networks and services",
     "nothingHere": "Nothing here right now.",
     "showMore": "Show more",
-    "back": "← Discover"
+    "back": "← Discover",
+    "people": "People",
+    "knownFor": "Known for {{titles}}"
   },
   "scan": {
     "n": {

@@ -755,7 +755,7 @@
   },
   "discover": {
     "sub": "Mikä on suosittua ja tulossa, ja lisää samanlaista kuin mitä sinulla on.",
-    "find": "Etsi elokuva tai sarja",
+    "find": "Etsi elokuva, sarja tai näyttelijä",
     "needsTmdb": "Löydä tarvitsee TMDB:n",
     "needsTmdbBody": "Box Office hakee suositut ja tulevat The Movie Databasesta. Lisää TMDB:n API-avain kohdassa <link>Asetukset</link>, niin tämä sivu täyttyy.",
     "seeAll": "Näytä kaikki",
@@ -779,7 +779,9 @@
     "networks": "Kanavat ja palvelut",
     "nothingHere": "Täällä ei ole nyt mitään.",
     "showMore": "Näytä lisää",
-    "back": "← Löydä"
+    "back": "← Löydä",
+    "people": "Henkilöt",
+    "knownFor": "Tunnettu teoksista {{titles}}"
   },
   "scan": {
     "n": {

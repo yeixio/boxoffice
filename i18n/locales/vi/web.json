@@ -710,7 +710,7 @@
   },
   "discover": {
     "sub": "Những gì đang thịnh hành và sắp ra mắt, và thêm nhiều thứ giống những gì bạn có.",
-    "find": "Tìm phim hoặc chương trình",
+    "find": "Tìm phim, chương trình hoặc diễn viên",
     "needsTmdb": "Khám phá cần TMDB",
     "needsTmdbBody": "Box Office lấy nội dung thịnh hành và sắp ra mắt từ The Movie Database. Thêm khóa API TMDB trong <link>Cài đặt</link> và trang này sẽ có nội dung.",
     "seeAll": "Xem tất cả",
@@ -734,7 +734,9 @@
     "networks": "Kênh và dịch vụ",
     "nothingHere": "Hiện không có gì ở đây.",
     "showMore": "Hiện thêm",
-    "back": "← Khám phá"
+    "back": "← Khám phá",
+    "people": "Mọi người",
+    "knownFor": "Nổi tiếng với {{titles}}"
   },
   "scan": {
     "n": {

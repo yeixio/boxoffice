@@ -48,7 +48,7 @@
   "home": {
     "hi": "Salut, {{name}}",
     "welcome": "Găsește un film sau un serial și cere-l. Îl poți urmări la Cererile mele.",
-    "find": "Găsește un film sau un serial",
+    "find": "Găsește un film, un serial sau un actor",
     "seeAll": "Vezi tot",
     "nothing": "Nimic de arătat încă",
     "notSetUp": "Administratorul nu a terminat de configurat acest site. Încearcă din nou mai târziu.",

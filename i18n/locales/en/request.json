@@ -48,7 +48,7 @@
   "home": {
     "hi": "Hi, {{name}}",
     "welcome": "Find a movie or show and ask for it. You can follow it under My requests.",
-    "find": "Find a movie or show",
+    "find": "Find a movie, show or actor",
     "seeAll": "See all",
     "nothing": "Nothing to show yet",
     "notSetUp": "The admin hasn't finished setting this site up. Try again later.",

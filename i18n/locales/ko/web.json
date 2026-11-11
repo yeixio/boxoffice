@@ -710,7 +710,7 @@
   },
   "discover": {
     "sub": "인기 있는 작품과 곧 나올 작품, 그리고 가진 것과 비슷한 작품.",
-    "find": "영화나 프로그램 찾기",
+    "find": "영화, 프로그램 또는 배우 찾기",
     "needsTmdb": "둘러보기에는 TMDB가 필요해요",
     "needsTmdbBody": "Box Office는 인기작과 공개 예정작을 The Movie Database에서 가져와요. <link>설정</link>에서 TMDB API 키를 추가하면 이 페이지가 채워져요.",
     "seeAll": "모두 보기",
@@ -734,7 +734,9 @@
     "networks": "방송사와 서비스",
     "nothingHere": "지금은 아무것도 없어요.",
     "showMore": "더 표시",
-    "back": "← 둘러보기"
+    "back": "← 둘러보기",
+    "people": "인물",
+    "knownFor": "대표작: {{titles}}"
   },
   "scan": {
     "n": {

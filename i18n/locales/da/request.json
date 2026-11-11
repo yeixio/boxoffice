@@ -48,7 +48,7 @@
   "home": {
     "hi": "Hej {{name}}",
     "welcome": "Find en film eller serie, og ønsk den. Du kan følge den under Mine ønsker.",
-    "find": "Find en film eller serie",
+    "find": "Find en film, serie eller skuespiller",
     "seeAll": "Se alle",
     "nothing": "Intet at vise endnu",
     "notSetUp": "Administratoren er ikke færdig med at sætte dette websted op. Prøv igen senere.",

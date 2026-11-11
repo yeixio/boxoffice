@@ -48,7 +48,7 @@
   "home": {
     "hi": "Hei, {{name}}",
     "welcome": "Etsi elokuva tai sarja ja toivo sitä. Voit seurata sitä kohdassa Omat toiveet.",
-    "find": "Etsi elokuva tai sarja",
+    "find": "Etsi elokuva, sarja tai näyttelijä",
     "seeAll": "Näytä kaikki",
     "nothing": "Ei vielä mitään näytettävää",
     "notSetUp": "Ylläpitäjä ei ole saanut tämän sivuston määritystä valmiiksi. Yritä myöhemmin uudelleen.",

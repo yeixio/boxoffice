@@ -48,7 +48,7 @@
   "home": {
     "hi": "Ciao, {{name}}",
     "welcome": "Trova un film o una serie e chiedilo. Puoi seguirlo sotto Le mie richieste.",
-    "find": "Trova un film o una serie",
+    "find": "Trova un film, una serie o un attore",
     "seeAll": "Vedi tutto",
     "nothing": "Ancora niente da mostrare",
     "notSetUp": "L’amministratore non ha finito di configurare questo sito. Riprova più tardi.",

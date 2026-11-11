@@ -845,7 +845,7 @@
   },
   "discover": {
     "sub": "Co je populární a co se chystá, a další podobné tomu, co máte.",
-    "find": "Najít film nebo seriál",
+    "find": "Najít film, seriál nebo herce",
     "needsTmdb": "Objevovat potřebuje TMDB",
     "needsTmdbBody": "Box Office získává populární a připravované tituly z The Movie Database. Přidejte API klíč TMDB v <link>Nastavení</link> a tato stránka se zaplní.",
     "seeAll": "Zobrazit vše",
@@ -869,7 +869,9 @@
     "networks": "Stanice a služby",
     "nothingHere": "Teď tu nic není.",
     "showMore": "Zobrazit více",
-    "back": "← Objevovat"
+    "back": "← Objevovat",
+    "people": "Lidé",
+    "knownFor": "Známý z {{titles}}"
   },
   "scan": {
     "n": {

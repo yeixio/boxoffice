@@ -48,7 +48,7 @@
   "home": {
     "hi": "Merhaba, {{name}}",
     "welcome": "Bir film veya dizi bulun ve isteyin. İsteklerim altından takip edebilirsiniz.",
-    "find": "Bir film veya dizi bulun",
+    "find": "Bir film, dizi veya oyuncu bulun",
     "seeAll": "Tümünü gör",
     "nothing": "Henüz gösterilecek bir şey yok",
     "notSetUp": "Yönetici bu siteyi kurmayı henüz bitirmedi. Daha sonra yeniden deneyin.",

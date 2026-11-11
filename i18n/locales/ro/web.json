@@ -800,7 +800,7 @@
   },
   "discover": {
     "sub": "Ce e popular și ce urmează, plus mai multe ca ce ai deja.",
-    "find": "Găsește un film sau un serial",
+    "find": "Găsește un film, un serial sau un actor",
     "needsTmdb": "Descoperă are nevoie de TMDB",
     "needsTmdbBody": "Box Office ia ce e popular și ce urmează de la The Movie Database. Adaugă o cheie API TMDB în <link>Setări</link> și această pagină se completează.",
     "seeAll": "Vezi tot",
@@ -824,7 +824,9 @@
     "networks": "Rețele și servicii",
     "nothingHere": "Nimic aici acum.",
     "showMore": "Arată mai mult",
-    "back": "← Descoperă"
+    "back": "← Descoperă",
+    "people": "Persoane",
+    "knownFor": "Cunoscut pentru {{titles}}"
   },
   "scan": {
     "n": {

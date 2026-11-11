@@ -10,6 +10,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"unicode"
 
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/tmdb"
@@ -41,6 +42,10 @@ const (
 	forYouSeeds = 5
 	becauseRows = 2
 	forYouMax   = 40
+	// personPage is how many of someone's titles a page of their row
+	// holds, and castInSearch how many a search for their name adds.
+	personPage   = 20
+	castInSearch = 20
 )
 
 // Networks are the TV networks and streaming services to browse by, as
@@ -63,6 +68,8 @@ type DiscoverRow struct {
 	// Because is the library title a "because-" row is based on.
 	Because string          `json:"because,omitempty"`
 	Items   []DiscoverTitle `json:"items"`
+	// Person is who a person- row is the filmography of.
+	Person *tmdb.Person `json:"person,omitempty"`
 	// More says GET /discover/rows/{id} has more than the row shows.
 	More bool `json:"more,omitempty"`
 }
@@ -189,6 +196,7 @@ type source struct {
 	title     string
 	because   string
 	dropOwned bool
+	person    *tmdb.Person
 	load      func(page int) (tmdb.Page, error)
 }
 
@@ -198,7 +206,8 @@ var ErrNoRow = errors.New("there's no such row")
 // source reads a row's id. Rows: trending; popular-movies, popular-series;
 // upcoming-movies, upcoming-series; for-you; because-{movie,series}-{tmdb
 // id} (a title on the list); like-{movie,series}-{tmdb id} (any title);
-// genre-{movie,series}-{genre id}; network-{network id}.
+// genre-{movie,series}-{genre id}; network-{network id}; person-{tmdb
+// person id} (what someone is in).
 func (s *Service) source(ctx context.Context, id string, own owned, list []store.Owned) (source, error) {
 	c := s.TMDB(ctx)
 	page := func(key string, fn func(page int) (tmdb.Page, error)) func(int) (tmdb.Page, error) {
@@ -257,6 +266,20 @@ func (s *Service) source(ctx context.Context, id string, own owned, list []store
 			return source{}, ErrNoRow
 		}
 		return source{title: gs[i].Name + " " + kindName(k), load: page(id, func(p int) (tmdb.Page, error) { return c.ByGenre(ctx, k, gid, p) })}, nil
+	case len(parts) == 2 && parts[0] == "person" && num(parts[1]) > 0:
+		// Everything someone is in, such as an actor found by searching.
+		f, err := s.filmography(ctx, num(parts[1]))
+		if errors.Is(err, tmdb.ErrNotFound) {
+			return source{}, ErrNoRow
+		}
+		if err != nil {
+			return source{}, err
+		}
+		return source{title: f.Person.Name, person: &f.Person, load: func(p int) (tmdb.Page, error) {
+			pages := max((len(f.Titles)+personPage-1)/personPage, 1)
+			lo := min((p-1)*personPage, len(f.Titles))
+			return tmdb.Page{Titles: f.Titles[lo:min(lo+personPage, len(f.Titles))], Pages: pages}, nil
+		}}, nil
 	case len(parts) == 2 && parts[0] == "network" && num(parts[1]) > 0:
 		nid := num(parts[1])
 		if !slices.Contains(Networks, nid) {
@@ -469,13 +492,15 @@ func (s *Service) rowPage(ctx context.Context, id string, page int, own owned, l
 	}
 	pages := min(max(p.Pages, 1), rowPages)
 	return DiscoverPage{
-		DiscoverRow: DiscoverRow{ID: id, Title: src.title, Because: src.because, Items: items, More: pages > page},
+		DiscoverRow: DiscoverRow{ID: id, Title: src.title, Because: src.because, Person: src.person, Items: items, More: pages > page},
 		Page:        page, Pages: pages,
 	}, nil
 }
 
 // Search finds movies and shows by name on TMDB, both at once, marked
-// with where each stands here.
+// with where each stands here. A search for an actor's name finds what
+// they're in too: their best-known titles follow the ones named like it,
+// or lead when the search is their whole name.
 func (s *Service) Search(ctx context.Context, term string) ([]DiscoverTitle, error) {
 	own, _, err := s.owned(ctx)
 	if err != nil {
@@ -483,10 +508,12 @@ func (s *Service) Search(ctx context.Context, term string) ([]DiscoverTitle, err
 	}
 	var movies []LookupMovie
 	var shows []LookupShow
+	var cast Filmography
 	var merr, serr error
 	var wg sync.WaitGroup
 	wg.Go(func() { movies, merr = s.LookupMovies(ctx, term) })
 	wg.Go(func() { shows, serr = s.LookupShows(ctx, term) })
+	wg.Go(func() { cast = s.castOf(ctx, term) })
 	wg.Wait()
 	if merr != nil && serr != nil {
 		return nil, merr
@@ -500,5 +527,92 @@ func (s *Service) Search(ctx context.Context, term string) ([]DiscoverTitle, err
 		titles = append(titles, tmdb.Title{Kind: tmdb.KindSeries, TMDBID: t.TMDBID, Title: t.Title, Year: t.Year, Overview: t.Overview,
 			Poster: t.Poster, Backdrop: t.Backdrop, Rating: t.Rating})
 	}
+	if len(cast.Titles) > 0 {
+		theirs := cast.Titles[:min(len(cast.Titles), castInSearch)]
+		if cast.Whole {
+			titles = append(slices.Clone(theirs), titles...)
+		} else {
+			titles = append(titles, theirs...)
+		}
+		seen := map[string]bool{}
+		titles = slices.DeleteFunc(titles, func(t tmdb.Title) bool {
+			k := ownedKey(t.Kind, t.TMDBID)
+			if seen[k] {
+				return true
+			}
+			seen[k] = true
+			return false
+		})
+	}
 	return own.mark(titles, false), nil
+}
+
+// LookupPeople finds actors and other people by name on TMDB, for
+// searches; GET /discover/rows/person-{tmdbId} is what each is in. People
+// TMDB knows for nothing are left out.
+func (s *Service) LookupPeople(ctx context.Context, term string) ([]tmdb.Person, error) {
+	if len(strings.TrimSpace(term)) < 2 {
+		return []tmdb.Person{}, nil
+	}
+	found, err := cached(s, "people/"+strings.ToLower(strings.TrimSpace(term)), listTTL, func() ([]tmdb.Person, error) {
+		return s.TMDB(ctx).SearchPeople(ctx, term)
+	})
+	if err != nil {
+		return nil, err
+	}
+	return slices.DeleteFunc(slices.Clone(found), func(p tmdb.Person) bool { return len(p.KnownFor) == 0 }), nil
+}
+
+// Filmography is what someone found by a search is in. Whole says the
+// search was their whole name rather than part of it.
+type Filmography struct {
+	tmdb.Filmography
+	Whole bool
+}
+
+func (s *Service) filmography(ctx context.Context, personID int64) (tmdb.Filmography, error) {
+	return cached(s, fmt.Sprintf("person-%d", personID), listTTL, func() (tmdb.Filmography, error) {
+		return s.TMDB(ctx).Credits(ctx, personID)
+	})
+}
+
+// castOf is the filmography of the actor a search names, if it names one:
+// the best-known person TMDB finds whose name has every word of the
+// search (or a word starting with it). Anything going wrong just means
+// no one.
+func (s *Service) castOf(ctx context.Context, term string) Filmography {
+	people, err := s.LookupPeople(ctx, term)
+	if err != nil || len(people) == 0 {
+		return Filmography{}
+	}
+	p := people[0]
+	whole, ok := namesPerson(term, p.Name)
+	if !ok || p.Department != "Acting" && !whole {
+		return Filmography{}
+	}
+	f, err := s.filmography(ctx, p.TMDBID)
+	if err != nil {
+		s.Log.Debug("cast search", "person", p.TMDBID, "err", err)
+		return Filmography{}
+	}
+	return Filmography{Filmography: f, Whole: whole}
+}
+
+// namesPerson says whether every word of a search starts a word of
+// someone's name, and whether it's their whole name.
+func namesPerson(term, name string) (whole, ok bool) {
+	tw, nw := words(term), words(name)
+	if len(tw) == 0 {
+		return false, false
+	}
+	for _, w := range tw {
+		if !slices.ContainsFunc(nw, func(n string) bool { return strings.HasPrefix(n, w) }) {
+			return false, false
+		}
+	}
+	return slices.Equal(tw, nw), true
+}
+
+func words(s string) []string {
+	return strings.FieldsFunc(strings.ToLower(s), func(r rune) bool { return !unicode.IsLetter(r) && !unicode.IsDigit(r) })
 }

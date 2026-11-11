@@ -48,7 +48,7 @@
   "home": {
     "hi": "Hai, {{name}}",
     "welcome": "Temukan film atau acara dan mintalah. Anda dapat mengikutinya di Permintaan saya.",
-    "find": "Temukan film atau acara",
+    "find": "Temukan film, acara, atau aktor",
     "seeAll": "Lihat semua",
     "nothing": "Belum ada yang bisa ditampilkan",
     "notSetUp": "Admin belum selesai menyiapkan situs ini. Coba lagi nanti.",

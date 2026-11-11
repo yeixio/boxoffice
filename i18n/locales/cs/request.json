@@ -48,7 +48,7 @@
   "home": {
     "hi": "Ahoj, {{name}}",
     "welcome": "Najděte film nebo seriál a požádejte o něj. Sledovat ho můžete v sekci Moje žádosti.",
-    "find": "Najít film nebo seriál",
+    "find": "Najít film, seriál nebo herce",
     "seeAll": "Zobrazit vše",
     "nothing": "Zatím není co ukázat",
     "notSetUp": "Správce ještě nedokončil nastavení této stránky. Zkuste to později.",

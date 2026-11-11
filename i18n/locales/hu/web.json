@@ -755,7 +755,7 @@
   },
   "discover": {
     "sub": "Mi népszerű és mi érkezik hamarosan, és több abból, amit szeretsz.",
-    "find": "Film vagy sorozat keresése",
+    "find": "Film, sorozat vagy színész keresése",
     "needsTmdb": "A Felfedezéshez TMDB kell",
     "needsTmdbBody": "A Box Office a The Movie Database-ből kapja a népszerű és hamarosan érkező címeket. Adj meg egy TMDB API-kulcsot a <link>Beállításokban</link>, és ez az oldal megtelik.",
     "seeAll": "Összes",
@@ -779,7 +779,9 @@
     "networks": "Csatornák és szolgáltatások",
     "nothingHere": "Jelenleg nincs itt semmi.",
     "showMore": "Több megjelenítése",
-    "back": "← Felfedezés"
+    "back": "← Felfedezés",
+    "people": "Személyek",
+    "knownFor": "Ismert innen: {{titles}}"
   },
   "scan": {
     "n": {

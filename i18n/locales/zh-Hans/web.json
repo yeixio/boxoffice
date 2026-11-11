@@ -710,7 +710,7 @@
   },
   "discover": {
     "sub": "热门和即将上映的作品，以及与你已有内容相似的作品。",
-    "find": "查找电影或剧集",
+    "find": "查找电影、剧集或演员",
     "needsTmdb": "发现需要 TMDB",
     "needsTmdbBody": "Box Office 从 The Movie Database 获取热门和即将上映的内容。在<link>设置</link>中添加 TMDB API 密钥后，此页面就会填满。",
     "seeAll": "查看全部",
@@ -734,7 +734,9 @@
     "networks": "电视网和流媒体服务",
     "nothingHere": "目前这里什么也没有。",
     "showMore": "显示更多",
-    "back": "← 发现"
+    "back": "← 发现",
+    "people": "人物",
+    "knownFor": "代表作：{{titles}}"
   },
   "scan": {
     "n": {
