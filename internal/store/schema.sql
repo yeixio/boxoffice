@@ -403,7 +403,10 @@ CREATE TABLE IF NOT EXISTS authors (
 	new_audiobooks INTEGER NOT NULL DEFAULT 0,
 	locked         INTEGER NOT NULL DEFAULT 0, -- Do not touch: Box Office never searches for or changes these books' files
 	added_at       BIGINT NOT NULL,
-	refreshed_at   BIGINT NOT NULL DEFAULT 0
+	refreshed_at   BIGINT NOT NULL DEFAULT 0,
+	photo          TEXT NOT NULL DEFAULT '',   -- a picture of the author, from Open Library or Wikimedia Commons
+	wikidata       TEXT NOT NULL DEFAULT '',   -- the author's Wikidata item, Q892
+	details_at     BIGINT NOT NULL DEFAULT 0   -- when the photo and series were last looked up
 );
 
 CREATE TABLE IF NOT EXISTS books (
@@ -416,7 +419,9 @@ CREATE TABLE IF NOT EXISTS books (
 	cover_id       BIGINT NOT NULL DEFAULT 0,
 	editions       INTEGER NOT NULL DEFAULT 0,
 	want_ebook     INTEGER NOT NULL DEFAULT 0,
-	want_audiobook INTEGER NOT NULL DEFAULT 0
+	want_audiobook INTEGER NOT NULL DEFAULT 0,
+	series         TEXT NOT NULL DEFAULT '',   -- the series or collection it's part of, The Lord of the Rings
+	series_pos     TEXT NOT NULL DEFAULT ''    -- its place in it: 1, 2, 1-3 for an omnibus, or blank
 );
 CREATE INDEX IF NOT EXISTS books_author ON books (author_id);
 

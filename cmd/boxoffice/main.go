@@ -43,6 +43,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/search"
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/version"
+	"github.com/yeixio/boxoffice/internal/wikidata"
 	"github.com/yeixio/boxoffice/web"
 )
 
@@ -149,7 +150,13 @@ func run() error {
 	if cfg.OpenLibrary != "" {
 		ol.Base = cfg.OpenLibrary
 	}
-	shelf := &books.Service{Store: db, OpenLibrary: ol, Jobs: runner}
+	shelf := &books.Service{Store: db, OpenLibrary: ol, Jobs: runner, Log: log}
+	if !strings.EqualFold(cfg.Wikidata, "off") {
+		shelf.Wikidata = wikidata.New(version.Version)
+		if cfg.Wikidata != "" {
+			shelf.Wikidata.Base = cfg.Wikidata
+		}
+	}
 	// The problem files look runs daily, and on Look again.
 	finds := &problems.Service{Store: db, Log: log}
 	// The quality check looks inside new files every few minutes.
@@ -190,7 +197,7 @@ func run() error {
 	var wg sync.WaitGroup
 	for _, loop := range []func(context.Context){runner.Run, backups.Run, downloads.Run, mon.Monitor.Run, alerter.Run,
 		func(ctx context.Context) { cat.RefreshEvery(ctx, cfg.Refresh) }, func(ctx context.Context) { finder.AutoSearchEvery(ctx, runner) },
-		finder.RSSEvery, finder.PruneEvery, finds.Run, checker.Run, func(ctx context.Context) { api.RecycleSweepEvery(ctx, db, log) }} {
+		finder.RSSEvery, finder.PruneEvery, shelf.DetailsEvery, finds.Run, checker.Run, func(ctx context.Context) { api.RecycleSweepEvery(ctx, db, log) }} {
 		wg.Add(1)
 		go func() { defer wg.Done(); loop(ctx) }()
 	}

@@ -631,6 +631,8 @@ export type Author = {
   born?: string
   died?: string
   bio?: string
+  // A picture of the author, from Open Library or Wikimedia Commons.
+  photo?: string
   newEbooks: boolean
   newAudiobooks: boolean
   // Do not touch: no searches, downloads or file changes for their books.
@@ -653,6 +655,10 @@ export type Book = {
   editions: number
   wantEbook: boolean
   wantAudiobook: boolean
+  // The series or collection it's part of, and its place in it ("1",
+  // "1-3" for an omnibus, or none).
+  series?: string
+  seriesPosition?: string
   cover?: string
   // The copies in the library; an audiobook's is its folder.
   ebookFile?: BookFile

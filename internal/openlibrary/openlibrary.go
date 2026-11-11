@@ -120,6 +120,13 @@ type Author struct {
 	Works   int    `json:"works,omitempty"`
 	Bio     string `json:"bio,omitempty"`
 	Photo   string `json:"photo,omitempty"`
+	// Wikidata is the author's Wikidata item (Q892), when Open Library
+	// knows it; it's where photos and series come from when Open Library
+	// has none.
+	Wikidata string `json:"-"`
+	// HasPhoto says Photo is one Open Library has (looked up by photo id),
+	// not a guess by author key that may come back empty.
+	HasPhoto bool `json:"-"`
 }
 
 // SearchAuthors finds authors by name. An author key (OL23919A) looks
@@ -167,11 +174,67 @@ func (c *Client) Author(ctx context.Context, key string) (Author, error) {
 		BirthDate string          `json:"birth_date"`
 		DeathDate string          `json:"death_date"`
 		Bio       json.RawMessage `json:"bio"`
+		Photos    []int64         `json:"photos"`
+		RemoteIDs struct {
+			Wikidata string `json:"wikidata"`
+		} `json:"remote_ids"`
 	}
 	if err := c.get(ctx, "/authors/"+key+".json", nil, &a); err != nil {
 		return Author{}, err
 	}
-	return Author{Key: key, Name: a.Name, Born: a.BirthDate, Died: a.DeathDate, Bio: text(a.Bio), Photo: photoURL(key)}, nil
+	out := Author{Key: key, Name: a.Name, Born: a.BirthDate, Died: a.DeathDate, Bio: text(a.Bio), Photo: photoURL(key)}
+	if reWikidata.MatchString(a.RemoteIDs.Wikidata) {
+		out.Wikidata = a.RemoteIDs.Wikidata
+	}
+	// Photo ids of -1 are photos taken down.
+	for _, id := range a.Photos {
+		if id > 0 {
+			out.Photo, out.HasPhoto = fmt.Sprintf("https://covers.openlibrary.org/a/id/%d-M.jpg", id), true
+			break
+		}
+	}
+	return out, nil
+}
+
+var reWikidata = regexp.MustCompile(`^Q\d+$`)
+
+// SeriesPart is a book's place in a series.
+type SeriesPart struct {
+	Key      string // OL330052L
+	Position string // "1", "2", "1-3" for an omnibus, or ""
+}
+
+// WorkSeries lists the series a book (an Open Library work) is part of.
+func (c *Client) WorkSeries(ctx context.Context, work string) ([]SeriesPart, error) {
+	var w struct {
+		Series []struct {
+			Series struct {
+				Key string `json:"key"`
+			} `json:"series"`
+			Position string `json:"position"`
+		} `json:"series"`
+	}
+	if err := c.get(ctx, "/works/"+work+".json", nil, &w); err != nil {
+		return nil, err
+	}
+	var out []SeriesPart
+	for _, s := range w.Series {
+		if k := strings.TrimPrefix(s.Series.Key, "/series/"); k != "" && !strings.Contains(k, "/") {
+			out = append(out, SeriesPart{Key: k, Position: strings.TrimSpace(s.Position)})
+		}
+	}
+	return out, nil
+}
+
+// SeriesName is a series' name.
+func (c *Client) SeriesName(ctx context.Context, key string) (string, error) {
+	var s struct {
+		Name string `json:"name"`
+	}
+	if err := c.get(ctx, "/series/"+url.PathEscape(key)+".json", nil, &s); err != nil {
+		return "", err
+	}
+	return strings.TrimSpace(s.Name), nil
 }
 
 // text reads a field Open Library gives either as a string or as
