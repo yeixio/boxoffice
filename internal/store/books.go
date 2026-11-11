@@ -15,15 +15,22 @@ const (
 
 // Author is a writer on the list, for ebooks, audiobooks or both.
 type Author struct {
-	ID            int64  `json:"id"`
-	OLKey         string `json:"olKey"`
-	Name          string `json:"name"`
-	SortName      string `json:"sortName"`
-	Born          string `json:"born,omitempty"`
-	Died          string `json:"died,omitempty"`
-	Bio           string `json:"bio,omitempty"`
-	NewEbooks     bool   `json:"newEbooks"`
-	NewAudiobooks bool   `json:"newAudiobooks"`
+	ID       int64  `json:"id"`
+	OLKey    string `json:"olKey"`
+	Name     string `json:"name"`
+	SortName string `json:"sortName"`
+	Born     string `json:"born,omitempty"`
+	Died     string `json:"died,omitempty"`
+	Bio      string `json:"bio,omitempty"`
+	// Photo is a picture of the author, when Open Library or Wikidata has
+	// one.
+	Photo string `json:"photo,omitempty"`
+	// Wikidata is the author's Wikidata item, Q892.
+	Wikidata string `json:"-"`
+	// DetailsAt is when the photo and series were last looked up.
+	DetailsAt     time.Time `json:"-"`
+	NewEbooks     bool      `json:"newEbooks"`
+	NewAudiobooks bool      `json:"newAudiobooks"`
 	// Locked is Do not touch: Box Office never searches for, downloads or
 	// moves files for this author's books.
 	Locked      bool      `json:"locked"`
@@ -50,6 +57,11 @@ type Book struct {
 	Editions      int    `json:"editions"`
 	WantEbook     bool   `json:"wantEbook"`
 	WantAudiobook bool   `json:"wantAudiobook"`
+	// Series is the series or collection the book is part of, and
+	// SeriesPosition its place in it ("1", "2", "1-3" for an omnibus, or
+	// "" when unknown).
+	Series         string `json:"series,omitempty"`
+	SeriesPosition string `json:"seriesPosition,omitempty"`
 	// The copies in the library, once Box Office has moved them in. An
 	// audiobook's is its folder.
 	EbookFile     *File `json:"ebookFile,omitempty"`
@@ -62,7 +74,7 @@ type Book struct {
 // downloads and files.
 func IsBookKind(kind string) bool { return kind == Ebook || kind == Audiobook }
 
-const authorCols = `a.id, a.ol_key, a.name, a.sort_name, a.born, a.died, a.bio, a.new_ebooks, a.new_audiobooks, a.locked, a.added_at, a.refreshed_at,
+const authorCols = `a.id, a.ol_key, a.name, a.sort_name, a.born, a.died, a.bio, a.photo, a.wikidata, a.details_at, a.new_ebooks, a.new_audiobooks, a.locked, a.added_at, a.refreshed_at,
 	(SELECT COUNT(*) FROM books b WHERE b.author_id = a.id),
 	(SELECT COUNT(*) FROM books b WHERE b.author_id = a.id AND b.want_ebook = 1),
 	(SELECT COUNT(*) FROM books b WHERE b.author_id = a.id AND b.want_audiobook = 1),
@@ -74,8 +86,8 @@ const authorCols = `a.id, a.ol_key, a.name, a.sort_name, a.born, a.died, a.bio, 
 func scanAuthor(r interface{ Scan(...any) error }) (Author, error) {
 	var a Author
 	var ne, na, locked int
-	var added, refreshed int64
-	err := r.Scan(&a.ID, &a.OLKey, &a.Name, &a.SortName, &a.Born, &a.Died, &a.Bio, &ne, &na, &locked, &added, &refreshed,
+	var added, refreshed, details int64
+	err := r.Scan(&a.ID, &a.OLKey, &a.Name, &a.SortName, &a.Born, &a.Died, &a.Bio, &a.Photo, &a.Wikidata, &details, &ne, &na, &locked, &added, &refreshed,
 		&a.Books, &a.WantedEbooks, &a.WantedAudiobooks, &a.HaveEbooks, &a.HaveAudiobooks)
 	if errors.Is(err, sql.ErrNoRows) {
 		return a, ErrNotFound
@@ -87,6 +99,9 @@ func scanAuthor(r interface{ Scan(...any) error }) (Author, error) {
 	a.AddedAt = time.Unix(added, 0).UTC()
 	if refreshed > 0 {
 		a.RefreshedAt = time.Unix(refreshed, 0).UTC()
+	}
+	if details > 0 {
+		a.DetailsAt = time.Unix(details, 0).UTC()
 	}
 	return a, nil
 }
@@ -124,8 +139,8 @@ func (s *Store) AddAuthor(ctx context.Context, a Author) (Author, error) {
 	if a.SortName == "" {
 		a.SortName = SortTitle(a.Name)
 	}
-	id, err := s.insert(ctx, `INSERT INTO authors (ol_key, name, sort_name, born, died, bio, new_ebooks, new_audiobooks, added_at)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`, a.OLKey, a.Name, a.SortName, a.Born, a.Died, a.Bio, b2i(a.NewEbooks), b2i(a.NewAudiobooks), now())
+	id, err := s.insert(ctx, `INSERT INTO authors (ol_key, name, sort_name, born, died, bio, photo, wikidata, new_ebooks, new_audiobooks, added_at)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, a.OLKey, a.Name, a.SortName, a.Born, a.Died, a.Bio, a.Photo, a.Wikidata, b2i(a.NewEbooks), b2i(a.NewAudiobooks), now())
 	if err != nil {
 		return Author{}, err
 	}
@@ -137,6 +152,75 @@ func (s *Store) UpdateAuthor(ctx context.Context, a Author) error {
 	_, err := s.exec(ctx, "UPDATE authors SET name = ?, sort_name = ?, born = ?, died = ?, bio = ?, new_ebooks = ?, new_audiobooks = ?, locked = ? WHERE id = ?",
 		a.Name, a.SortName, a.Born, a.Died, a.Bio, b2i(a.NewEbooks), b2i(a.NewAudiobooks), b2i(a.Locked), a.ID)
 	return err
+}
+
+// SetAuthorDetails saves an author's photo and Wikidata item, and notes
+// they (and the author's series) were just looked up.
+func (s *Store) SetAuthorDetails(ctx context.Context, id int64, photo, wikidata string) error {
+	_, err := s.exec(ctx, "UPDATE authors SET photo = ?, wikidata = ?, details_at = ? WHERE id = ?", photo, wikidata, now(), id)
+	return err
+}
+
+// RedoAuthorDetails keeps a photo for an author and has their photo and
+// series looked up again.
+func (s *Store) RedoAuthorDetails(ctx context.Context, id int64, photo string) error {
+	_, err := s.exec(ctx, "UPDATE authors SET photo = ?, details_at = 0 WHERE id = ?", photo, id)
+	return err
+}
+
+// AuthorsToDetail lists the authors whose photo and series haven't been
+// looked up since before.
+func (s *Store) AuthorsToDetail(ctx context.Context, before time.Time) ([]Author, error) {
+	rows, err := s.query(ctx, "SELECT "+authorCols+" FROM authors a WHERE a.details_at < ? ORDER BY a.details_at, a.id", before.Unix())
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	out := []Author{}
+	for rows.Next() {
+		a, err := scanAuthor(rows)
+		if err != nil {
+			return nil, err
+		}
+		out = append(out, a)
+	}
+	return out, rows.Err()
+}
+
+// SeriesPlace is a book's place in a series.
+type SeriesPlace struct{ Series, Position string }
+
+// SetAuthorSeries saves which of an author's books are part of a series,
+// by book id; the author's other books are part of none.
+func (s *Store) SetAuthorSeries(ctx context.Context, authorID int64, places map[int64]SeriesPlace) error {
+	tx, err := s.db.BeginTx(ctx, nil)
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+	if _, err := tx.ExecContext(ctx, s.q("UPDATE books SET series = '', series_pos = '' WHERE author_id = ?"), authorID); err != nil {
+		return err
+	}
+	for id, p := range places {
+		if _, err := tx.ExecContext(ctx, s.q("UPDATE books SET series = ?, series_pos = ? WHERE id = ? AND author_id = ?"), p.Series, p.Position, id, authorID); err != nil {
+			return err
+		}
+	}
+	return tx.Commit()
+}
+
+// SetSeriesWanted says whether every book of an author's series is
+// wanted in a format.
+func (s *Store) SetSeriesWanted(ctx context.Context, authorID int64, series, format string, on bool) (int64, error) {
+	col := "want_ebook"
+	if format == Audiobook {
+		col = "want_audiobook"
+	}
+	res, err := s.exec(ctx, "UPDATE books SET "+col+" = ? WHERE author_id = ? AND series = ? AND series <> ''", b2i(on), authorID, series)
+	if err != nil {
+		return 0, err
+	}
+	return res.RowsAffected()
 }
 
 // AuthorRefreshed notes that an author's books were just brought up to
@@ -165,12 +249,12 @@ func (s *Store) DeleteAuthor(ctx context.Context, id int64) error {
 	return nil
 }
 
-const bookCols = "id, author_id, ol_key, title, subtitle, year, cover_id, editions, want_ebook, want_audiobook"
+const bookCols = "id, author_id, ol_key, title, subtitle, year, cover_id, editions, want_ebook, want_audiobook, series, series_pos"
 
 func scanBook(r interface{ Scan(...any) error }) (Book, error) {
 	var b Book
 	var we, wa int
-	err := r.Scan(&b.ID, &b.AuthorID, &b.OLKey, &b.Title, &b.Subtitle, &b.Year, &b.CoverID, &b.Editions, &we, &wa)
+	err := r.Scan(&b.ID, &b.AuthorID, &b.OLKey, &b.Title, &b.Subtitle, &b.Year, &b.CoverID, &b.Editions, &we, &wa, &b.Series, &b.SeriesPosition)
 	if errors.Is(err, sql.ErrNoRows) {
 		return b, ErrNotFound
 	}

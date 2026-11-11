@@ -172,6 +172,33 @@ func (s *Server) wantAllBooks(w http.ResponseWriter, r *http.Request) error {
 	return s.writeAuthor(w, r, a)
 }
 
+// wantSeries wants, or stops wanting, every book of one of an author's
+// series in one format.
+func (s *Server) wantSeries(w http.ResponseWriter, r *http.Request) error {
+	id, err := pathID(r, "id")
+	if err != nil {
+		return err
+	}
+	var in struct {
+		wantInput
+		Series string `json:"series"`
+	}
+	if err := readJSON(r, &in); err != nil {
+		return err
+	}
+	if err := in.check(); err != nil {
+		return err
+	}
+	if err := s.Books.WantSeries(r.Context(), id, in.Series, in.Format, *in.Wanted); err != nil {
+		return booksErr(err)
+	}
+	a, err := s.Store.Author(r.Context(), id)
+	if err != nil {
+		return err
+	}
+	return s.writeAuthor(w, r, a)
+}
+
 func (s *Server) wantBook(w http.ResponseWriter, r *http.Request) error {
 	id, err := pathID(r, "id")
 	if err != nil {
