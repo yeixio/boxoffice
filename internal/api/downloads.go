@@ -95,10 +95,36 @@ func (s *Server) removeDownload(ctx context.Context, id int64, deleteFiles, bloc
 	if err := s.Downloads.Remove(ctx, id, deleteFiles && d.Quarantined == ""); err != nil {
 		return err
 	}
+	if !block && !d.Finished() {
+		// Taken off the queue without blocking it: whatever a better or
+		// replacement copy was being looked for (one Matinee reported as
+		// damaged, say) isn't wanted any more, so searches don't grab
+		// another one. Blocking means the release was wrong, so the search
+		// goes on.
+		if err := s.stopWanting(context.WithoutCancel(ctx), d); err != nil {
+			return fmt.Errorf("it was removed, but its title is still being looked for: %w", err)
+		}
+	}
 	if block && d.Kind != "" {
 		if err := s.Store.Block(context.WithoutCancel(ctx), store.Blocked{Kind: d.Kind, TitleID: d.TitleID, SourceTitle: d.Name, Quality: d.Quality,
 			Protocol: "usenet", Indexer: d.Indexer, Reason: "Removed from the downloads by hand", At: time.Now()}); err != nil {
 			return fmt.Errorf("it was removed, but couldn't go on the blocklist: %w", err)
+		}
+	}
+	return nil
+}
+
+// stopWanting forgets the better or replacement copy asked for the
+// movie or episodes a download was for.
+func (s *Server) stopWanting(ctx context.Context, d store.Download) error {
+	switch d.Kind {
+	case "movie":
+		return s.Store.ClearWant(ctx, "movie", d.TitleID)
+	case "series":
+		for _, id := range d.EpisodeIDs {
+			if err := s.Store.ClearWant(ctx, "episode", id); err != nil {
+				return err
+			}
 		}
 	}
 	return nil
