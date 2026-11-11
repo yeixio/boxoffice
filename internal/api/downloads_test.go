@@ -120,12 +120,33 @@ func TestRemoveDownloadBlock(t *testing.T) {
 		}
 		return d.ID
 	}
+	// Matinee reported the movie's copy: a replacement is wanted.
+	if err := s.Store.SetTitleWant(ctx, store.TitleWant{Kind: "movie", OwnerID: 7, Want: store.WantReplace, Problem: store.ProblemVideo}); err != nil {
+		t.Fatal(err)
+	}
+	wanted := func() string {
+		w, err := s.Store.TitleWant(ctx, "movie", 7)
+		if err != nil {
+			t.Fatal(err)
+		}
+		return w.Want
+	}
 	a, b, c := add("Keep.Looking"), add("Bad.Release"), add("Also.Bad")
+	// Blocking one says the release was wrong: the replacement is still
+	// wanted.
+	if code := call(t, hs, "DELETE", fmt.Sprintf("/api/v1/downloads/%d?block=true", b), "", nil); code != 204 {
+		t.Fatal(code)
+	}
+	if w := wanted(); w != store.WantReplace {
+		t.Fatalf("after removing with a block, want %q", w)
+	}
+	// Removing one without a block stops looking for the replacement, so
+	// a search doesn't grab another.
 	if code := call(t, hs, "DELETE", fmt.Sprintf("/api/v1/downloads/%d", a), "", nil); code != 204 {
 		t.Fatal(code)
 	}
-	if code := call(t, hs, "DELETE", fmt.Sprintf("/api/v1/downloads/%d?block=true", b), "", nil); code != 204 {
-		t.Fatal(code)
+	if w := wanted(); w != "" {
+		t.Fatalf("after removing without a block, want %q", w)
 	}
 	if code := call(t, hs, "POST", "/api/v1/downloads/bulk", fmt.Sprintf(`{"action":"remove","ids":[%d],"block":true}`, c), nil); code != 200 {
 		t.Fatal(code)
