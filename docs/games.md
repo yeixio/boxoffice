@@ -6,7 +6,9 @@ Office finds each system's folder, works out what every file is, checks whether
 each game is complete, and shows them with box art, year, maker and players.
 
 Box Office only reads your game files. It never moves, renames, rebuilds or
-deletes one, and it doesn't download games.
+deletes one, and it doesn't download games. The one time it writes there is when
+you import games yourself: **Import games** copies new ones into their system's
+folder (see [Importing files](import.md)).
 
 ## Turning it on
 

@@ -1035,3 +1035,12 @@ func (s *Service) Link(ctx context.Context, rootID int, path string) (Scan, erro
 	out.Found = slices.Clone(sc.Found)
 	return out, nil
 }
+
+// Match looks up what a name is, the way a scan does a folder's: a movie
+// or show on TMDB, an artist on MusicBrainz, or an author on Open Library
+// (kind ebook or audiobook).
+func (s *Service) Match(ctx context.Context, kind, name string) Found {
+	f := Found{Name: name, Guess: ParseName(name)}
+	s.match(ctx, kind, &f)
+	return f
+}

@@ -21,6 +21,7 @@ import {
   PanelLeftOpen,
   Settings as Cog,
   Truck,
+  Upload,
   Tv,
 } from 'lucide-react'
 import { get, type MediaTypeKey, type Settings as SettingsData, type Status } from './api'
@@ -48,6 +49,7 @@ const allGroups: Group[] = [
       { to: '/audiobooks', label: 'nav.audiobooks', icon: Headphones, type: 'audiobook' },
       { to: '/games', label: 'nav.games', icon: Gamepad2, type: 'game' },
       { to: '/calendar', label: 'nav.calendar', icon: CalendarDays },
+      { to: '/import-files', label: 'nav.importFiles', icon: Upload },
     ],
   },
   {

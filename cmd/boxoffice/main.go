@@ -28,6 +28,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/downloader"
 	"github.com/yeixio/boxoffice/internal/ereader"
 	"github.com/yeixio/boxoffice/internal/games"
+	"github.com/yeixio/boxoffice/internal/importer"
 	"github.com/yeixio/boxoffice/internal/jobs"
 	"github.com/yeixio/boxoffice/internal/kube"
 	"github.com/yeixio/boxoffice/internal/library"
@@ -188,10 +189,14 @@ func run() error {
 	finds := &problems.Service{Store: db, Log: log}
 	// The quality check looks inside new files every few minutes.
 	checker := &qualitycheck.Service{Store: db, Log: log}
+	scanner := &libscan.Service{Store: db, Catalog: cat, Music: tunes, Books: shelf, Log: log}
 	srv := &api.Server{
-		Store: db, Catalog: cat, Music: tunes, LibScan: &libscan.Service{Store: db, Catalog: cat, Music: tunes, Books: shelf, Log: log}, Problems: finds, QualityCheck: checker, Backups: backups, Migrator: &migrate.Migrator{Catalog: cat, Books: shelf, Backups: backups, Log: log, DataDir: cfg.DataDir}, Log: log,
-		Books:     shelf,
-		Games:     gameShelf,
+		Store: db, Catalog: cat, Music: tunes, LibScan: scanner, Problems: finds, QualityCheck: checker, Backups: backups, Migrator: &migrate.Migrator{Catalog: cat, Books: shelf, Backups: backups, Log: log, DataDir: cfg.DataDir}, Log: log,
+		Books: shelf,
+		Games: gameShelf,
+		// Files brought in by hand wait in the downloads folder's imports
+		// folder until they're filed in the library.
+		Imports:   &importer.Service{Store: db, Downloads: downloads, Scan: scanner, Catalog: cat, Music: tunes, Books: shelf, Games: gameShelf, Log: log},
 		Portal:    &portal.Service{Store: db, Catalog: cat, Notify: notes, Log: log},
 		Downloads: downloads, Search: finder,
 		Version: version.Version, Database: dbKind, DataDir: cfg.DataDir, EnvAPIKey: cfg.APIKey, Web: web.FS(),

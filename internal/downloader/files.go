@@ -470,40 +470,64 @@ type folderMove struct {
 // video going into a show, is the episode it is, chosen by hand: it goes
 // in as that episode whatever its name or tags say.
 func (e *Engine) ImportPath(ctx context.Context, p, kind string, titleID, episodeID int64) error {
+	run, err := e.startMove(ctx, p, kind, titleID, episodeID)
+	if err != nil || run == nil {
+		return err
+	}
+	go run()
+	return nil
+}
+
+// MovePath is ImportPath, waiting for the move to finish: it says where in
+// the library it went, or why it didn't.
+func (e *Engine) MovePath(ctx context.Context, p, kind string, titleID, episodeID int64) (string, error) {
+	run, err := e.startMove(ctx, p, kind, titleID, episodeID)
+	if err != nil {
+		return "", err
+	}
+	if run == nil {
+		return "", nil
+	}
+	return run()
+}
+
+// startMove checks a move into the library can go ahead, and gives what
+// makes it. It's nil when the folder went as its download instead.
+func (e *Engine) startMove(ctx context.Context, p, kind string, titleID, episodeID int64) (func() (string, error), error) {
 	e.init()
 	rel, err := cleanRel(p)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if inQuarantine(rel) {
-		return errors.New("what's in quarantine can't go into the library; release it first if you're sure it's safe")
+		return nil, errors.New("what's in quarantine can't go into the library; release it first if you're sure it's safe")
 	}
 	if e.Importer == nil {
-		return errors.New("moving into the library isn't set up")
+		return nil, errors.New("moving into the library isn't set up")
 	}
 	if kind != "movie" && kind != "series" && !store.IsBookKind(kind) && kind != store.AlbumKind {
-		return errors.New("choose the movie, show, book or album it's for")
+		return nil, errors.New("choose the movie, show, book or album it's for")
 	}
 	state, err := e.changeable(ctx, rel)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if episodeID > 0 && kind != "series" {
-		return errors.New("only a show's video can be given an episode")
+		return nil, errors.New("only a show's video can be given an episode")
 	}
 	// The download's own folder, for its own title, goes as the download,
 	// so its history says where it went.
 	if d, ok := state.owner[rel]; ok && episodeID == 0 && d.Kind == kind && d.TitleID == titleID && e.CanImport(d) {
-		return e.Import(ctx, d.ID)
+		return nil, e.Import(ctx, d.ID)
 	}
 	root, err := e.root()
 	if err != nil {
-		return err
+		return nil, err
 	}
 	info, err := root.Lstat(rel)
 	root.Close()
 	if err != nil {
-		return fmt.Errorf("%s isn't in the downloads folder any more", p)
+		return nil, fmt.Errorf("%s isn't in the downloads folder any more", p)
 	}
 	dir, files := filepath.Join(e.Dir, filepath.FromSlash(rel)), []string(nil)
 	switch {
@@ -512,14 +536,14 @@ func (e *Engine) ImportPath(ctx context.Context, p, kind string, titleID, episod
 	case info.Mode().IsRegular() && (isVideo(info.Name()) || kind == store.Ebook && screen.IsEbook(info.Name()) || (kind == store.Audiobook || kind == store.AlbumKind) && screen.IsAudio(info.Name())):
 		dir, files = filepath.Dir(dir), []string{info.Name()}
 	case store.IsBookKind(kind):
-		return errors.New("only a folder, or an ebook or audio file, can go into the library as a book")
+		return nil, errors.New("only a folder, or an ebook or audio file, can go into the library as a book")
 	case kind == store.AlbumKind:
-		return errors.New("only a folder or an audio file can go into the library as an album")
+		return nil, errors.New("only a folder or an audio file can go into the library as an album")
 	default:
-		return errors.New("only a folder or a video file can go into the library")
+		return nil, errors.New("only a folder or a video file can go into the library")
 	}
 	if episodeID > 0 && info.IsDir() {
-		return errors.New("choose one video to give an episode")
+		return nil, errors.New("choose one video to give an episode")
 	}
 	d := store.Download{Name: strings.TrimSuffix(info.Name(), filepath.Ext(info.Name())), Kind: kind, TitleID: titleID}
 	if info.IsDir() {
@@ -540,11 +564,11 @@ func (e *Engine) ImportPath(ctx context.Context, p, kind string, titleID, episod
 	}
 	if j := e.moves[rel]; j != nil && j.running {
 		e.mu.Unlock()
-		return errors.New("it's already being moved into the library")
+		return nil, errors.New("it's already being moved into the library")
 	}
 	e.moves[rel] = &folderMove{running: true}
 	e.mu.Unlock()
-	go func() {
+	return func() (string, error) {
 		bg := context.WithoutCancel(ctx)
 		to, err := e.Importer.Import(bg, d, dir, files)
 		msg := "Moved into the library at " + to
@@ -562,7 +586,7 @@ func (e *Engine) ImportPath(ctx context.Context, p, kind string, titleID, episod
 			e.mu.Lock()
 			e.moves[rel] = &folderMove{message: msg}
 			e.mu.Unlock()
-			return
+			return to, left
 		}
 		switch {
 		case errors.As(err, &ro):
@@ -591,6 +615,6 @@ func (e *Engine) ImportPath(ctx context.Context, p, kind string, titleID, episod
 		e.mu.Lock()
 		e.moves[rel] = &folderMove{message: msg}
 		e.mu.Unlock()
-	}()
-	return nil
+		return to, err
+	}, nil
 }

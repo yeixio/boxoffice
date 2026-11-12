@@ -252,6 +252,12 @@ func (e *Engine) download(ctx context.Context, r *running, d *store.Download, sr
 	}()
 	var mu sync.Mutex
 	lastSave := time.Now()
+	// Each copy is numbered as it's taken. Two workers can take copies one
+	// after the other and then write them out of order, and an older copy
+	// written last would lose files the newer one had; so only a copy newer
+	// than the last one written is saved.
+	var saveMu sync.Mutex
+	var taken, written int
 	finishFile := func(st *fileState) error {
 		st.mu.Lock()
 		name := st.nf.name
@@ -303,16 +309,24 @@ func (e *Engine) download(ctx context.Context, r *running, d *store.Download, sr
 		// while it's written out, and reading a map while it's written
 		// to stops Box Office dead.
 		var snap store.Download
+		var n int
 		save := time.Since(lastSave) > progressEvery
 		if save {
 			lastSave = time.Now()
+			taken++
+			n = taken
 			snap = *d
 			snap.DoneFiles = slices.Clone(d.DoneFiles)
 			snap.DoneNames = maps.Clone(d.DoneNames)
 		}
 		mu.Unlock()
 		if save {
-			e.Store.SaveDownloadProgress(context.WithoutCancel(ctx), snap)
+			saveMu.Lock()
+			if n > written {
+				written = n
+				e.Store.SaveDownloadProgress(context.WithoutCancel(ctx), snap)
+			}
+			saveMu.Unlock()
 		}
 		return nil
 	}

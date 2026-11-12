@@ -31,6 +31,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/downloader"
 	"github.com/yeixio/boxoffice/internal/ereader"
 	"github.com/yeixio/boxoffice/internal/games"
+	"github.com/yeixio/boxoffice/internal/importer"
 	"github.com/yeixio/boxoffice/internal/libscan"
 	"github.com/yeixio/boxoffice/internal/migrate"
 	"github.com/yeixio/boxoffice/internal/music"
@@ -59,7 +60,9 @@ type Server struct {
 	// Books is the list of books, for ebooks and audiobooks.
 	Books *books.Service
 	// Games is the Games section, used while games are turned on.
-	Games    *games.Service
+	Games *games.Service
+	// Imports is the Import page's imports folder.
+	Imports  *importer.Service
 	Backups  *backup.Manager
 	Migrator *migrate.Migrator
 	// Downloads is the downloader, and Search finds releases for it.
@@ -282,6 +285,7 @@ func (s *Server) Handler() http.Handler {
 	routes = append(routes, s.qualityCheckRoutes()...)
 	routes = append(routes, s.portalRoutes()...)
 	routes = append(routes, s.gameRoutes()...)
+	routes = append(routes, s.importRoutes()...)
 	for _, r := range routes {
 		mux.Handle(r.pattern, s.wrap(r))
 	}

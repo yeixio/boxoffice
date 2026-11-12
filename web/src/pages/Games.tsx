@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next'
 import { useEffect, useState, type ReactNode } from 'react'
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, useParams } from 'react-router-dom'
-import { ChevronRight, FolderOpen, Gamepad2, Lock, RefreshCw } from 'lucide-react'
+import { ChevronRight, FolderOpen, Gamepad2, Lock, RefreshCw, Upload } from 'lucide-react'
 import { get, patch, post, put, type Game, type GameCheck, type GameDetail, type GamePage as GamePageData, type GameSettings, type GameStatus, type GameSystem } from '../api'
 import { bytes, day, when } from '../format'
 import { useRootFolders } from '../hooks'
@@ -140,9 +140,14 @@ export function Games() {
         sub={systems.data?.length ? t('games.sub', { games: t('games.games', { count: total }), systems: t('games.systems', { count: systems.data.length }) }) : undefined}
         actions={
           !!roots.data?.length && (
-            <Button busy={start.isPending} disabled={running} onClick={() => start.mutate()}>
-              <RefreshCw className="size-4" aria-hidden /> {t('games.checkAgain')}
-            </Button>
+            <>
+              <Link to="/import-files" className="inline-flex items-center gap-2 rounded-md border border-line bg-card px-3.5 py-2 text-sm font-medium hover:border-ink/40">
+                <Upload className="size-4" aria-hidden /> {t('games.import')}
+              </Link>
+              <Button busy={start.isPending} disabled={running} onClick={() => start.mutate()}>
+                <RefreshCw className="size-4" aria-hidden /> {t('games.checkAgain')}
+              </Button>
+            </>
           )
         }
       />
