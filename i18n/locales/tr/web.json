@@ -27,7 +27,8 @@
     "signedInAs": "{{name}} olarak oturum açıldı",
     "showNames": "Adları göster",
     "iconsOnly": "Yalnızca simgeler",
-    "version": "Box Office {{version}}"
+    "version": "Box Office {{version}}",
+    "games": "Oyunlar"
   },
   "app": {
     "notAnswering": "Box Office yanıt vermiyor: {{error}}",
@@ -1037,7 +1038,8 @@
       "movie": "Tara, bir klasörde zaten bulunan ama listede olmayan filmleri arar, böylece onları oldukları yerde ekleyebilirsiniz.",
       "series": "Tara, bir klasörde zaten bulunan ama listede olmayan dizileri arar, böylece onları oldukları yerde ekleyebilirsiniz.",
       "music": "Tara, bir klasörde zaten bulunan ama listede olmayan sanatçıları arar, böylece onları oldukları yerde ekleyebilirsiniz.",
-      "books": "Tara, bir klasörde zaten bulunan ama listede olmayan yazarları arar, böylece onları oldukları yerde ekleyebilirsiniz."
+      "books": "Tara, bir klasörde zaten bulunan ama listede olmayan yazarları arar, böylece onları oldukları yerde ekleyebilirsiniz.",
+      "game": "Kontrol et, bu klasörde roms/mame ve roms/snes gibi her sistemin oyunlarını arar ve onları MAME ile No-Intro listelerine göre kontrol eder. Dosyalarını asla değiştirmez."
     },
     "newShows": "Yeni diziler",
     "newShowsSub": "Bir dizi burada veya Matinee'den bir istekle eklendiğinde Box Office'in hangi bölümleri izleyeceği. Uzun soluklu bir dizinin yüzlerce eski bölümü olabilir; yalnızca son birkaç sezonu izlemek kütüphane devriyesini ve yükseltmeleri muhtemelen izleyeceğiniz şeylerde tutar. Dizi eklerken yine başka bir şey seçebilir ve sezonları dizinin sayfasından açıp kapatabilirsiniz. Listede zaten bulunan diziler mevcut ayarlarını korur.",
@@ -1130,7 +1132,8 @@
     },
     "openPage": "{{page}} sayfasını aç",
     "ereadersOff": "E-kitapları e-postayla Kindle, PocketBook veya başka bir okuyucuya gönderin. Kurmak için {{ebooks}} özelliğini açın.",
-    "turnOnType": "{{name}} özelliğini aç"
+    "turnOnType": "{{name}} özelliğini aç",
+    "gameLayout": "Oyunlarının bulunduğu klasörü seç: tek bir sistemin klasörünü ya da her sistem için bir klasör içeren bir klasörü (mame, snes, n64 vb.). Box Office sistemleri kendisi bulur."
   },
   "mediaTypes": {
     "music": {
@@ -1148,6 +1151,10 @@
     "comic": {
       "name": "Çizgi roman ve manga",
       "summary": "Serileri takip edin ve yeni sayıları ve ciltleri alın."
+    },
+    "game": {
+      "name": "Oyunlar",
+      "summary": "Video oyunu koleksiyonunu gör: MAME'den atari salonu setleri ve konsol oyunları, kontrol edilmiş ve kutu resimleriyle."
     }
   },
   "conn": {
@@ -2035,5 +2042,120 @@
     "other": "Başka bir sürüm",
     "otherHint": "Listede yok mu? Birini seçin, Box Office hemen arasın.",
     "pick": "Bir sürüm seçin"
+  },
+  "games": {
+    "sub": "{{systems}} üzerinde {{games}}",
+    "games_one": "{{count}} oyun",
+    "games_other": "{{count}} oyun",
+    "systems_one": "{{count}} sistem",
+    "systems_other": "{{count}} sistem",
+    "versions_one": "{{count}} sürüm",
+    "versions_other": "{{count}} sürüm",
+    "systemSub": "{{games}}, toplam {{versions}}",
+    "support_one": "{{count}} BIOS veya cihaz seti",
+    "support_other": "{{count}} BIOS ve cihaz seti",
+    "withProblems_one": "{{count}} sorunlu",
+    "withProblems_other": "{{count}} sorunlu",
+    "allComplete": "Hepsi eksiksiz",
+    "checkAgain": "Yeniden kontrol et",
+    "check": "Kontrol et",
+    "checking": "Kontrol ediliyor…",
+    "seeGames": "Oyunlarını gör",
+    "checked": "kontrol edildi {{when}}",
+    "none": "Henüz oyun yok",
+    "noneBody": "Box Office zaten sahip olduğun oyunları gösterir: MAME için atari salonu setleri ve Super Nintendo, Game Boy gibi konsol oyunları. Onları okur ve kontrol eder, asla değiştirmez.",
+    "addRoot": "Oyunlarının bulunduğu klasörü <link>Ayarlar → Oyun kök klasörleri</link> altına ekle.",
+    "noSystems": "Henüz sistem bulunamadı",
+    "noSystemsBody": "Box Office oyun kök klasörlerinde hiç oyun sistemi bulamadı. Her sistemin oyunlarını mame veya snes gibi o sistemin adını taşıyan bir klasöre koy, sonra yeniden kontrol et.",
+    "unsure_one": "Box Office bu klasörün hangi sistem için olduğunu anlayamadı",
+    "unsure_other": "Box Office bu klasörlerin hangi sistemler için olduğunu anlayamadı",
+    "unsureHint": "Her birini mame, snes, n64 veya gba gibi sistemin adıyla yeniden adlandır, sonra yeniden kontrol et.",
+    "step": {
+      "finding": "Oyun klasörlerin taranıyor…",
+      "list": "{{system}} oyun listesi alınıyor…",
+      "reading": "{{system}} oyunları okunuyor…",
+      "checking": "{{system}} oyunları listeyle karşılaştırılıyor…"
+    },
+    "stepCount": "{{done}} / {{total}}",
+    "locked": "Dokunma",
+    "lockedHint": "Bunu kapatana kadar Box Office {{name}} oyunlarına yeniden bakmaz ve son bulduklarını saklar. Klasörü yeniden düzenlerken kullan.",
+    "format": {
+      "non-merged": "non-merged setler",
+      "split": "split setler",
+      "merged": "merged setler"
+    },
+    "mameVersion": "MAME sürümü",
+    "mameVersionSub": "MAME'nin setleri her sürümde değişir, bu yüzden birinde çalışan bir set diğerinde çalışmayabilir.",
+    "mameVersionPick": "Setleri şuna göre kontrol et",
+    "mameVersionHint": "Oynadığın MAME sürümünü seç. Box Office o sürümün listesini GitHub'daki MAME sürümlerinden indirir ve her seti yeniden kontrol eder.",
+    "newest": "En yeni MAME ({{version}})",
+    "newestUnknown": "En yeni MAME",
+    "noGames": "Bu klasörde oyun yok",
+    "noGamesBody": "Box Office {{path}} içinde hiç oyun bulamadı.",
+    "filter": "Başlığa veya üreticiye göre filtrele",
+    "allGenres": "Tüm türler",
+    "allYears": "Tüm yıllar",
+    "sort": {
+      "title": "Başlığa göre",
+      "year": "Yıla göre",
+      "added": "Son bulunanlar"
+    },
+    "hasProblems": "Sorunlu",
+    "noMatch": "Eşleşen oyun yok.",
+    "status": {
+      "complete": "Eksiksiz",
+      "missing": "Eksik dosyalar",
+      "wrong": "Yanlış sürüm",
+      "wrongFor": "{{list}} için yanlış sürüm",
+      "badCopy": "Kötü kopya",
+      "bios": "BIOS gerekli",
+      "unknown": "Listede yok",
+      "unreadable": "Okunamıyor"
+    },
+    "whatsWrong": "Sorun ne",
+    "explain": {
+      "missingArcade": "Bu setin ihtiyaç duyduğu bazı dosyalar yok, bu yüzden MAME onu başlatmayabilir.",
+      "wrongArcade": "Bazı dosyalar {{list}} yerine başka bir MAME sürümünden. MAME sürümü altından oynadığın sürümü seç ya da seti güncelle.",
+      "biosArcade": "Setin kendisi eksiksiz, ancak klasörde olmayan bir BIOS veya cihaz setine ihtiyacı var.",
+      "unknownArcade": "{{list}} içinde {{name}} adında bir set yok. Sonradan yeniden adlandırılmış ya da başka bir emülatör için olabilir.",
+      "unreadableArcade": "Dosya açılamıyor. Hasarlı olabilir veya hâlâ kopyalanıyor olabilir.",
+      "missing": "Oyunun ihtiyaç duyduğu bazı dosyalar yok.",
+      "wrong": "Dosya No-Intro listesindeki bir oyun gibi adlandırılmış ama aynı değil: kötü bir kopya ya da sonradan değiştirilmiş.",
+      "bios": "Oyunun, olmayan bir BIOS'a ihtiyacı var.",
+      "unknown": "No-Intro listesinde böyle bir kopya yok. Bir hack, çeviri ya da ev yapımı bir oyun olabilir; bunda sorun yok.",
+      "unreadable": "Dosya açılamıyor. Hasarlı olabilir veya hâlâ kopyalanıyor olabilir."
+    },
+    "problem": {
+      "missing": "<code>{{name}}</code> eksik",
+      "wrong": "<code>{{name}}</code> başka bir sürümden",
+      "wrongCopy": "<code>{{name}}</code> No-Intro kopyasıyla eşleşmiyor",
+      "bios": "<code>{{name}}</code> BIOS seti gerekli",
+      "device": "<code>{{name}}</code> cihaz seti gerekli",
+      "parent": "Ana seti <code>{{name}}</code> gerekli",
+      "disk": "<code>{{name}}</code> CHD'si eksik",
+      "diskWrong": "<code>{{name}}</code> CHD'si başka bir sürümden",
+      "unreadable": "Okunamıyor: {{name}}"
+    },
+    "inParent": "Ana setin içinde",
+    "fact": {
+      "system": "Sistem",
+      "set": "Set",
+      "name": "No-Intro adı",
+      "year": "Yıl",
+      "manufacturer": "Üretici",
+      "publisher": "Yayıncı",
+      "players": "Oyuncular",
+      "genre": "Tür",
+      "parent": "Klonu olduğu oyun",
+      "crc": "CRC",
+      "found": "Bulundu"
+    },
+    "files": "Dosyalar",
+    "noFiles": "Dosyaları artık yok. Listeyi güncellemek için yeniden kontrol et.",
+    "parentSet": "Ana set",
+    "readOnly": "Box Office bu dosyaları yalnızca okur. Onları asla taşımaz, yeniden adlandırmaz veya silmez.",
+    "clones": "Klonlar",
+    "otherVersions": "Diğer sürümler",
+    "theParent": "ana oyun"
   }
 }

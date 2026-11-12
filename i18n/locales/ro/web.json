@@ -29,7 +29,8 @@
     "signedInAs": "Conectat ca {{name}}",
     "showNames": "Arată numele",
     "iconsOnly": "Doar pictograme",
-    "version": "Box Office {{version}}"
+    "version": "Box Office {{version}}",
+    "games": "Jocuri"
   },
   "app": {
     "notAnswering": "Box Office nu răspunde: {{error}}",
@@ -1111,7 +1112,8 @@
       "movie": "Scanarea caută filme aflate deja într-un dosar care nu sunt în listă, ca să le poți adăuga acolo unde sunt.",
       "series": "Scanarea caută seriale aflate deja într-un dosar care nu sunt în listă, ca să le poți adăuga acolo unde sunt.",
       "music": "Scanarea caută artiști aflați deja într-un dosar care nu sunt în listă, ca să-i poți adăuga acolo unde sunt.",
-      "books": "Scanarea caută autori aflați deja într-un dosar care nu sunt în listă, ca să-i poți adăuga acolo unde sunt."
+      "books": "Scanarea caută autori aflați deja într-un dosar care nu sunt în listă, ca să-i poți adăuga acolo unde sunt.",
+      "game": "Verificarea caută în acest dosar jocurile fiecărui sistem, cum ar fi roms/mame și roms/snes, și le compară cu listele MAME și No-Intro. Nu îți modifică niciodată fișierele."
     },
     "newShows": "Seriale noi",
     "newShowsSub": "Ce episoade urmărește Box Office când se adaugă un serial, aici sau printr-o cerere din Matinee. Un serial de lungă durată poate avea sute de episoade vechi; urmărirea doar a ultimelor sezoane ține patrula bibliotecii și îmbunătățirile pe ce probabil vei urmări. Poți alege altceva când adaugi un serial și poți porni sau opri sezoane din pagina serialului. Serialele aflate deja în listă își păstrează setările.",
@@ -1207,7 +1209,8 @@
     },
     "openPage": "Deschide {{page}}",
     "ereadersOff": "Trimite cărți electronice prin e-mail pe un Kindle, PocketBook sau alt cititor. Activează {{ebooks}} ca să configurezi.",
-    "turnOnType": "Activează {{name}}"
+    "turnOnType": "Activează {{name}}",
+    "gameLayout": "Alege dosarul în care sunt jocurile: dosarul unui sistem sau un dosar cu câte un dosar pentru fiecare sistem (mame, snes, n64 și așa mai departe). Box Office găsește singur sistemele."
   },
   "mediaTypes": {
     "music": {
@@ -1225,6 +1228,10 @@
     "comic": {
       "name": "Benzi desenate și manga",
       "summary": "Urmărește serii și obține numerele și volumele noi."
+    },
+    "game": {
+      "name": "Jocuri",
+      "summary": "Vezi colecția ta de jocuri video: seturi arcade din MAME și jocuri de consolă, verificate și cu coperți."
     }
   },
   "conn": {
@@ -2130,5 +2137,126 @@
     "other": "Altă ediție",
     "otherHint": "Nu e în listă? Alege una și Box Office o caută acum.",
     "pick": "Alege o ediție"
+  },
+  "games": {
+    "sub": "{{games}} pe {{systems}}",
+    "games_few": "{{count}} jocuri",
+    "games_one": "{{count}} joc",
+    "games_other": "{{count}} de jocuri",
+    "systems_few": "{{count}} sisteme",
+    "systems_one": "{{count}} sistem",
+    "systems_other": "{{count}} de sisteme",
+    "versions_few": "{{count}} versiuni",
+    "versions_one": "{{count}} versiune",
+    "versions_other": "{{count}} de versiuni",
+    "systemSub": "{{games}}, {{versions}} în total",
+    "support_few": "{{count}} seturi BIOS și de dispozitiv",
+    "support_one": "{{count}} set BIOS sau de dispozitiv",
+    "support_other": "{{count}} de seturi BIOS și de dispozitiv",
+    "withProblems_few": "{{count}} cu probleme",
+    "withProblems_one": "{{count}} cu probleme",
+    "withProblems_other": "{{count}} cu probleme",
+    "allComplete": "Toate complete",
+    "checkAgain": "Verifică din nou",
+    "check": "Verifică",
+    "checking": "Se verifică…",
+    "seeGames": "Vezi jocurile",
+    "checked": "verificat {{when}}",
+    "none": "Încă nu sunt jocuri",
+    "noneBody": "Box Office arată jocurile pe care le ai deja: seturi arcade pentru MAME și jocuri de consolă precum Super Nintendo și Game Boy. Le citește și le verifică, dar nu le modifică niciodată.",
+    "addRoot": "Adaugă dosarul cu jocurile tale în <link>Setări → Dosare rădăcină pentru jocuri</link>.",
+    "noSystems": "Încă nu s-au găsit sisteme",
+    "noSystemsBody": "Box Office nu a găsit niciun sistem de jocuri în dosarele rădăcină pentru jocuri. Pune jocurile fiecărui sistem într-un dosar cu numele lui, cum ar fi mame sau snes, apoi verifică din nou.",
+    "unsure_few": "Box Office nu și-a dat seama pentru ce sisteme sunt aceste dosare",
+    "unsure_one": "Box Office nu și-a dat seama pentru ce sistem este acest dosar",
+    "unsure_other": "Box Office nu și-a dat seama pentru ce sisteme sunt aceste dosare",
+    "unsureHint": "Redenumește-l pe fiecare cu numele sistemului, cum ar fi mame, snes, n64 sau gba, apoi verifică din nou.",
+    "step": {
+      "finding": "Se caută prin dosarele cu jocuri…",
+      "list": "Se obține lista jocurilor {{system}}…",
+      "reading": "Se citesc jocurile {{system}}…",
+      "checking": "Se compară jocurile {{system}} cu lista…"
+    },
+    "stepCount": "{{done}} din {{total}}",
+    "locked": "Nu atinge",
+    "lockedHint": "Box Office nu se va mai uita la jocurile {{name}} până nu dezactivezi asta și păstrează ce a găsit ultima dată. Folosește-l cât timp reorganizezi dosarul.",
+    "format": {
+      "non-merged": "seturi non-merged",
+      "split": "seturi split",
+      "merged": "seturi merged"
+    },
+    "mameVersion": "Versiunea MAME",
+    "mameVersionSub": "Seturile MAME se schimbă cu fiecare versiune, așa că un set care merge într-una poate să nu meargă în alta.",
+    "mameVersionPick": "Verifică seturile față de",
+    "mameVersionHint": "Alege versiunea MAME cu care joci. Box Office descarcă lista acelei versiuni din lansările MAME de pe GitHub și verifică din nou fiecare set.",
+    "newest": "Cel mai nou MAME ({{version}})",
+    "newestUnknown": "Cel mai nou MAME",
+    "noGames": "Niciun joc în acest dosar",
+    "noGamesBody": "Box Office nu a găsit niciun joc în {{path}}.",
+    "filter": "Filtrează după titlu sau producător",
+    "allGenres": "Toate genurile",
+    "allYears": "Toți anii",
+    "sort": {
+      "title": "După titlu",
+      "year": "După an",
+      "added": "Găsite recent"
+    },
+    "hasProblems": "Are probleme",
+    "noMatch": "Niciun joc nu se potrivește.",
+    "status": {
+      "complete": "Complet",
+      "missing": "Lipsesc fișiere",
+      "wrong": "Versiune greșită",
+      "wrongFor": "Versiune greșită pentru {{list}}",
+      "badCopy": "Copie proastă",
+      "bios": "Necesită un BIOS",
+      "unknown": "Nu e pe listă",
+      "unreadable": "Nu poate fi citit"
+    },
+    "whatsWrong": "Ce nu e în regulă",
+    "explain": {
+      "missingArcade": "Lipsesc unele fișiere de care are nevoie setul, așa că MAME s-ar putea să nu-l pornească.",
+      "wrongArcade": "Unele fișiere sunt din altă versiune de MAME decât {{list}}. Alege versiunea cu care joci la Versiunea MAME sau actualizează setul.",
+      "biosArcade": "Setul în sine este complet, dar are nevoie de un set BIOS sau de dispozitiv care nu e în dosar.",
+      "unknownArcade": "{{list}} nu are niciun set numit {{name}}. Poate a fost redenumit între timp sau e pentru alt emulator.",
+      "unreadableArcade": "Fișierul nu poate fi deschis. Poate fi deteriorat sau încă se copiază.",
+      "missing": "Lipsesc unele fișiere de care are nevoie jocul.",
+      "wrong": "Fișierul are numele unui joc de pe lista No-Intro, dar nu este același: o copie proastă sau una modificată între timp.",
+      "bios": "Jocul are nevoie de un BIOS care lipsește.",
+      "unknown": "Lista No-Intro nu are nicio copie ca aceasta. Poate fi un hack, o traducere sau un joc făcut acasă, ceea ce e în regulă.",
+      "unreadable": "Fișierul nu poate fi deschis. Poate fi deteriorat sau încă se copiază."
+    },
+    "problem": {
+      "missing": "Lipsește <code>{{name}}</code>",
+      "wrong": "<code>{{name}}</code> este din altă versiune",
+      "wrongCopy": "<code>{{name}}</code> nu corespunde copiei No-Intro",
+      "bios": "Necesită setul BIOS <code>{{name}}</code>",
+      "device": "Necesită setul de dispozitiv <code>{{name}}</code>",
+      "parent": "Necesită setul părinte, <code>{{name}}</code>",
+      "disk": "Lipsește CHD-ul <code>{{name}}</code>",
+      "diskWrong": "CHD-ul <code>{{name}}</code> este din altă versiune",
+      "unreadable": "Nu poate fi citit: {{name}}"
+    },
+    "inParent": "În setul părintelui",
+    "fact": {
+      "system": "Sistem",
+      "set": "Set",
+      "name": "Nume No-Intro",
+      "year": "An",
+      "manufacturer": "Producător",
+      "publisher": "Editor",
+      "players": "Jucători",
+      "genre": "Gen",
+      "parent": "Clonă a",
+      "crc": "CRC",
+      "found": "Găsit"
+    },
+    "files": "Fișiere",
+    "noFiles": "Fișierele lui nu mai sunt aici. Verifică din nou ca să actualizezi lista.",
+    "parentSet": "Setul părintelui",
+    "readOnly": "Box Office doar citește aceste fișiere. Nu le mută, nu le redenumește și nu le șterge niciodată.",
+    "clones": "Clone",
+    "otherVersions": "Alte versiuni",
+    "theParent": "părintele"
   }
 }

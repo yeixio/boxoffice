@@ -35,7 +35,8 @@
     "signedInAs": "تم تسجيل الدخول باسم {{name}}",
     "showNames": "إظهار الأسماء",
     "iconsOnly": "الأيقونات فقط",
-    "version": "Box Office {{version}}"
+    "version": "Box Office {{version}}",
+    "games": "الألعاب"
   },
   "app": {
     "notAnswering": "Box Office لا يستجيب: {{error}}",
@@ -1333,7 +1334,8 @@
       "movie": "يبحث الفحص عن أفلام موجودة في مجلد وليست في القائمة، لتتمكن من إضافتها في مكانها.",
       "series": "يبحث الفحص عن مسلسلات موجودة في مجلد وليست في القائمة، لتتمكن من إضافتها في مكانها.",
       "music": "يبحث الفحص عن فنانين موجودين في مجلد وليسوا في القائمة، لتتمكن من إضافتهم في مكانهم.",
-      "books": "يبحث الفحص عن مؤلفين موجودين في مجلد وليسوا في القائمة، لتتمكن من إضافتهم في مكانهم."
+      "books": "يبحث الفحص عن مؤلفين موجودين في مجلد وليسوا في القائمة، لتتمكن من إضافتهم في مكانهم.",
+      "game": "يبحث الفحص في هذا المجلد عن ألعاب كل نظام، مثل roms/mame وroms/snes، ويطابقها مع قوائم MAME وNo-Intro. لا يغيّر ملفاتك أبدًا."
     },
     "newShows": "المسلسلات الجديدة",
     "newShowsSub": "الحلقات التي يراقبها Box Office عند إضافة مسلسل، هنا أو عبر طلب من Matinee. قد يكون للمسلسل الطويل مئات الحلقات القديمة؛ مراقبة آخر بضعة مواسم فقط تُبقي دورية المكتبة والترقيات على ما يُرجّح أن تشاهده. لا يزال بإمكانك اختيار شيء آخر عند إضافة مسلسل، وتفعيل المواسم أو تعطيلها من صفحة المسلسل. تحتفظ المسلسلات الموجودة في القائمة بما لديها.",
@@ -1438,7 +1440,8 @@
     },
     "openPage": "فتح {{page}}",
     "ereadersOff": "أرسل الكتب الإلكترونية بالبريد الإلكتروني إلى Kindle أو PocketBook أو قارئ آخر. شغّل {{ebooks}} لإعداد ذلك.",
-    "turnOnType": "تشغيل {{name}}"
+    "turnOnType": "تشغيل {{name}}",
+    "gameLayout": "اختر المجلد الذي فيه ألعابك: مجلد نظام واحد، أو مجلدًا فيه مجلد لكل نظام (mame وsnes وn64 وهكذا). يتعرّف Box Office على الأنظمة بنفسه."
   },
   "mediaTypes": {
     "music": {
@@ -1456,6 +1459,10 @@
     "comic": {
       "name": "القصص المصوّرة والمانغا",
       "summary": "تابع السلاسل واحصل على الأعداد والمجلدات الجديدة."
+    },
+    "game": {
+      "name": "الألعاب",
+      "summary": "شاهد مجموعتك من ألعاب الفيديو: مجموعات الآركيد من MAME وألعاب أجهزة الكونسول، بعد فحصها ومع صور أغلفتها."
     }
   },
   "conn": {
@@ -2415,5 +2422,144 @@
     "other": "إصدار آخر",
     "otherHint": "غير موجود؟ اختر واحدًا وسيبحث عنه Box Office الآن بالطريقة نفسها.",
     "pick": "اختر إصدارًا"
+  },
+  "games": {
+    "sub": "{{games}} على {{systems}}",
+    "games_few": "{{count}} لعبة",
+    "games_many": "{{count}} لعبة",
+    "games_one": "لعبة واحدة",
+    "games_other": "{{count}} لعبة",
+    "games_two": "{{count}} لعبة",
+    "games_zero": "{{count}} لعبة",
+    "systems_few": "{{count}} نظام",
+    "systems_many": "{{count}} نظام",
+    "systems_one": "نظام واحد",
+    "systems_other": "{{count}} نظام",
+    "systems_two": "{{count}} نظام",
+    "systems_zero": "{{count}} نظام",
+    "versions_few": "{{count}} إصدار",
+    "versions_many": "{{count}} إصدار",
+    "versions_one": "إصدار واحد",
+    "versions_other": "{{count}} إصدار",
+    "versions_two": "{{count}} إصدار",
+    "versions_zero": "{{count}} إصدار",
+    "systemSub": "{{games}}، {{versions}} إجمالًا",
+    "support_few": "{{count}} مجموعة BIOS وأجهزة",
+    "support_many": "{{count}} مجموعة BIOS وأجهزة",
+    "support_one": "مجموعة BIOS أو جهاز واحدة",
+    "support_other": "{{count}} مجموعة BIOS وأجهزة",
+    "support_two": "{{count}} مجموعة BIOS وأجهزة",
+    "support_zero": "{{count}} مجموعة BIOS وأجهزة",
+    "withProblems_few": "{{count}} بها مشكلات",
+    "withProblems_many": "{{count}} بها مشكلات",
+    "withProblems_one": "{{count}} بها مشكلات",
+    "withProblems_other": "{{count}} بها مشكلات",
+    "withProblems_two": "{{count}} بها مشكلات",
+    "withProblems_zero": "{{count}} بها مشكلات",
+    "allComplete": "كلها مكتملة",
+    "checkAgain": "افحص مجددًا",
+    "check": "افحص",
+    "checking": "جارٍ الفحص…",
+    "seeGames": "شاهد ألعابك",
+    "checked": "فُحص {{when}}",
+    "none": "لا توجد ألعاب بعد",
+    "noneBody": "يعرض Box Office الألعاب التي لديك بالفعل: مجموعات آركيد لـ MAME وألعاب كونسول مثل Super Nintendo وGame Boy. يقرؤها ويفحصها ولا يغيّرها أبدًا.",
+    "addRoot": "أضف المجلد الذي فيه ألعابك من <link>الإعدادات ← مجلدات الألعاب الجذرية</link>.",
+    "noSystems": "لم يُعثر على أنظمة بعد",
+    "noSystemsBody": "لم يعثر Box Office على أي أنظمة ألعاب في مجلدات الألعاب الجذرية. ضع ألعاب كل نظام في مجلد باسمه، مثل mame أو snes، ثم افحص مجددًا.",
+    "unsure_few": "لم يتمكن Box Office من معرفة الأنظمة التي تخصها هذه المجلدات",
+    "unsure_many": "لم يتمكن Box Office من معرفة الأنظمة التي تخصها هذه المجلدات",
+    "unsure_one": "لم يتمكن Box Office من معرفة النظام الذي يخصه هذا المجلد",
+    "unsure_other": "لم يتمكن Box Office من معرفة الأنظمة التي تخصها هذه المجلدات",
+    "unsure_two": "لم يتمكن Box Office من معرفة الأنظمة التي تخصها هذه المجلدات",
+    "unsure_zero": "لم يتمكن Box Office من معرفة الأنظمة التي تخصها هذه المجلدات",
+    "unsureHint": "أعد تسمية كل واحد باسم النظام، مثل mame أو snes أو n64 أو gba، ثم افحص مجددًا.",
+    "step": {
+      "finding": "جارٍ البحث في مجلدات ألعابك…",
+      "list": "جارٍ جلب قائمة ألعاب {{system}}…",
+      "reading": "جارٍ قراءة ألعاب {{system}}…",
+      "checking": "جارٍ مطابقة ألعاب {{system}} مع القائمة…"
+    },
+    "stepCount": "{{done}} من {{total}}",
+    "locked": "لا تلمس",
+    "lockedHint": "لن ينظر Box Office في ألعاب {{name}} مجددًا حتى توقف هذا الخيار، ويحتفظ بما وجده آخر مرة. استخدمه أثناء إعادة ترتيب المجلد.",
+    "format": {
+      "non-merged": "مجموعات non-merged",
+      "split": "مجموعات split",
+      "merged": "مجموعات merged"
+    },
+    "mameVersion": "إصدار MAME",
+    "mameVersionSub": "تتغير مجموعات MAME مع كل إصدار، فالمجموعة التي تعمل في إصدار قد لا تعمل في آخر.",
+    "mameVersionPick": "افحص المجموعات وفق",
+    "mameVersionHint": "اختر إصدار MAME الذي تلعب به. ينزّل Box Office قائمة ذلك الإصدار من إصدارات MAME على GitHub ويفحص كل مجموعة مجددًا.",
+    "newest": "أحدث MAME ({{version}})",
+    "newestUnknown": "أحدث MAME",
+    "noGames": "لا ألعاب في هذا المجلد",
+    "noGamesBody": "لم يعثر Box Office على أي ألعاب في {{path}}.",
+    "filter": "تصفية حسب العنوان أو الصانع",
+    "allGenres": "كل الأنواع",
+    "allYears": "كل السنوات",
+    "sort": {
+      "title": "حسب العنوان",
+      "year": "حسب السنة",
+      "added": "وُجدت مؤخرًا"
+    },
+    "hasProblems": "بها مشكلات",
+    "noMatch": "لا توجد ألعاب مطابقة.",
+    "status": {
+      "complete": "مكتملة",
+      "missing": "ملفات ناقصة",
+      "wrong": "إصدار خاطئ",
+      "wrongFor": "إصدار خاطئ لـ {{list}}",
+      "badCopy": "نسخة تالفة",
+      "bios": "تحتاج BIOS",
+      "unknown": "ليست في القائمة",
+      "unreadable": "تتعذر قراءتها"
+    },
+    "whatsWrong": "ما المشكلة",
+    "explain": {
+      "missingArcade": "بعض الملفات التي تحتاجها هذه المجموعة غير موجودة، لذا قد لا يشغّلها MAME.",
+      "wrongArcade": "بعض الملفات من إصدار MAME غير {{list}}. اختر الإصدار الذي تلعب به من إصدار MAME، أو حدّث المجموعة.",
+      "biosArcade": "المجموعة نفسها مكتملة، لكنها تحتاج مجموعة BIOS أو جهاز غير موجودة في المجلد.",
+      "unknownArcade": "لا توجد في {{list}} مجموعة باسم {{name}}. ربما أُعيدت تسميتها، أو هي لمحاكٍ آخر.",
+      "unreadableArcade": "يتعذر فتح الملف. ربما هو تالف، أو ما زال يُنسخ.",
+      "missing": "بعض الملفات التي تحتاجها هذه اللعبة غير موجودة.",
+      "wrong": "اسم الملف مثل لعبة في قائمة No-Intro، لكنه ليس مطابقًا: نسخة تالفة، أو عُدّلت لاحقًا.",
+      "bios": "تحتاج اللعبة BIOS غير موجود.",
+      "unknown": "لا توجد في قائمة No-Intro نسخة كهذه. قد تكون تعديلًا أو ترجمة أو لعبة منزلية الصنع، ولا بأس بذلك.",
+      "unreadable": "يتعذر فتح الملف. ربما هو تالف، أو ما زال يُنسخ."
+    },
+    "problem": {
+      "missing": "<code>{{name}}</code> مفقود",
+      "wrong": "<code>{{name}}</code> من إصدار آخر",
+      "wrongCopy": "<code>{{name}}</code> لا يطابق نسخة No-Intro",
+      "bios": "تحتاج مجموعة BIOS <code>{{name}}</code>",
+      "device": "تحتاج مجموعة الجهاز <code>{{name}}</code>",
+      "parent": "تحتاج مجموعتها الأم، <code>{{name}}</code>",
+      "disk": "ملف CHD <code>{{name}}</code> مفقود",
+      "diskWrong": "ملف CHD <code>{{name}}</code> من إصدار آخر",
+      "unreadable": "تتعذر قراءته: {{name}}"
+    },
+    "inParent": "في مجموعة الأصل",
+    "fact": {
+      "system": "النظام",
+      "set": "المجموعة",
+      "name": "اسم No-Intro",
+      "year": "السنة",
+      "manufacturer": "الصانع",
+      "publisher": "الناشر",
+      "players": "اللاعبون",
+      "genre": "النوع",
+      "parent": "نسخة من",
+      "crc": "CRC",
+      "found": "وُجدت"
+    },
+    "files": "الملفات",
+    "noFiles": "لم تعد ملفاتها موجودة. افحص مجددًا لتحديث القائمة.",
+    "parentSet": "مجموعة الأصل",
+    "readOnly": "يقرأ Box Office هذه الملفات فقط. لا ينقلها ولا يعيد تسميتها ولا يحذفها أبدًا.",
+    "clones": "النسخ",
+    "otherVersions": "إصدارات أخرى",
+    "theParent": "الأصل"
   }
 }

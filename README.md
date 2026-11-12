@@ -257,6 +257,7 @@ Most settings live in the web UI under **Settings**. The server itself takes a f
 | `BOXOFFICE_MUSICBRAINZ_URL` | | `https://musicbrainz.org/ws/2` | A MusicBrainz mirror to look music up on, if you run one |
 | `BOXOFFICE_OPENLIBRARY_URL` | | `https://openlibrary.org` | Another Open Library to look books up on, if you run one |
 | `BOXOFFICE_WIKIDATA_URL` | | `https://query.wikidata.org` | Another Wikidata query service for author photos and book series, or `off` to use Open Library's only |
+| `BOXOFFICE_MAME_RELEASES_URL`, `BOXOFFICE_LIBRETRO_DB_URL`, `BOXOFFICE_GAME_ART_URL` | | MAME's releases on GitHub, libretro's database and thumbnails | Other copies of the game lists and box art the Games section uses. See [Games](docs/games.md) |
 | `BOXOFFICE_EBOOK_CONVERT` | | `ebook-convert` on the `PATH`, if there | Calibre's `ebook-convert`, so ebooks a Kindle won't take by email (AZW3, MOBI) are turned into EPUB before they're sent. See [Sending ebooks to e-readers](docs/ereaders.md) |
 | `BOXOFFICE_LOG_FORMAT` | `-log-format` | `text` | `text` or `json` |
 | `BOXOFFICE_DEBUG` | `-debug` | off | Log more. The Health page can also switch debug logging on and off while it runs |
@@ -338,9 +339,9 @@ Yes. The image is built for `linux/amd64` and `linux/arm64` and uses little memo
 </details>
 
 <details>
-<summary><b>Is there music, books or a request page of its own?</b></summary>
+<summary><b>Is there music, books, games or a request page of its own?</b></summary>
 
-Yes. Music (in place of Lidarr), ebooks and audiobooks (in place of Readarr) each turn on in Settings, and the request site at `/request` is for people who don't use Matinee. Lidarr's artists and Readarr's authors come across with Move in.
+Yes. Music (in place of Lidarr), ebooks and audiobooks (in place of Readarr) each turn on in Settings, and the request site at `/request` is for people who don't use Matinee. Lidarr's artists and Readarr's authors come across with Move in. **Games** shows the MAME sets and console games you already have, checked against MAME's and No-Intro's lists, with box art; see [Games](docs/games.md).
 </details>
 
 <details>

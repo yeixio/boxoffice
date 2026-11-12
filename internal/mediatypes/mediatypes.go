@@ -1,5 +1,5 @@
 // Package mediatypes lists the kinds of media Box Office looks after beyond
-// movies and TV (music, audiobooks, ebooks and comics) and says which of
+// movies and TV (music, audiobooks, ebooks, comics and games) and says which of
 // them an admin has turned on. Each one is off until it's turned on in
 // Settings; while it's off, Box Office takes no root folders for it, shows
 // no pages for it and searches for nothing of it.
@@ -34,6 +34,7 @@ const (
 	Audiobook = "audiobook"
 	Ebook     = "ebook"
 	Comic     = "comic"
+	Game      = "game"
 )
 
 // All lists the types in the order Settings shows them.
@@ -50,6 +51,9 @@ var All = []Type{
 	{Key: Comic, Name: "Comics and manga",
 		Summary: "Follow series and get new issues and volumes.",
 		Folders: []string{"/media/comics", "/data/media/comics", "/comics"}},
+	{Key: Game, Name: "Games",
+		Summary: "See your video game collection: arcade sets from MAME and console games, checked and with box art.",
+		Folders: []string{"/media/games", "/data/media/games", "/media/roms", "/data/media/roms", "/games", "/roms"}},
 }
 
 // Lookup finds a type by its key.

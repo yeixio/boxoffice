@@ -27,7 +27,8 @@
     "signedInAs": "Ingelogd als {{name}}",
     "showNames": "Namen tonen",
     "iconsOnly": "Alleen pictogrammen",
-    "version": "Box Office {{version}}"
+    "version": "Box Office {{version}}",
+    "games": "Games"
   },
   "app": {
     "notAnswering": "Box Office reageert niet: {{error}}",
@@ -1037,7 +1038,8 @@
       "movie": "Scannen zoekt naar films die al in een map staan maar niet op de lijst, zodat je ze kunt toevoegen waar ze staan.",
       "series": "Scannen zoekt naar series die al in een map staan maar niet op de lijst, zodat je ze kunt toevoegen waar ze staan.",
       "music": "Scannen zoekt naar artiesten die al in een map staan maar niet op de lijst, zodat je ze kunt toevoegen waar ze staan.",
-      "books": "Scannen zoekt naar auteurs die al in een map staan maar niet op de lijst, zodat je ze kunt toevoegen waar ze staan."
+      "books": "Scannen zoekt naar auteurs die al in een map staan maar niet op de lijst, zodat je ze kunt toevoegen waar ze staan.",
+      "game": "Controleren zoekt in deze map naar de games van elk systeem, zoals roms/mame en roms/snes, en vergelijkt ze met de lijsten van MAME en No-Intro. Je bestanden worden nooit gewijzigd."
     },
     "newShows": "Nieuwe series",
     "newShowsSub": "Naar welke afleveringen Box Office uitkijkt als een serie wordt toegevoegd, hier of via een verzoek uit Matinee. Een langlopende serie kan honderden oude afleveringen hebben; alleen naar de laatste paar seizoenen uitkijken houdt de bibliotheekpatrouille en upgrades bij wat je waarschijnlijk gaat kijken. Je kunt nog steeds iets anders kiezen bij het toevoegen van een serie, en seizoenen aan- of uitzetten op de pagina van de serie. Series die al op de lijst staan, houden wat ze hebben.",
@@ -1130,7 +1132,8 @@
     },
     "openPage": "{{page}} openen",
     "ereadersOff": "Stuur e-books per e-mail naar een Kindle, PocketBook of andere e-reader. Zet {{ebooks}} aan om het in te stellen.",
-    "turnOnType": "{{name}} aanzetten"
+    "turnOnType": "{{name}} aanzetten",
+    "gameLayout": "Kies de map met je games: de map van één systeem, of een map met een map per systeem (mame, snes, n64 enzovoort). Box Office vindt de systemen zelf."
   },
   "mediaTypes": {
     "music": {
@@ -1148,6 +1151,10 @@
     "comic": {
       "name": "Strips en manga",
       "summary": "Volg reeksen en krijg nieuwe nummers en delen."
+    },
+    "game": {
+      "name": "Games",
+      "summary": "Bekijk je verzameling videogames: arcadesets uit MAME en consolegames, gecontroleerd en met hoesafbeelding."
     }
   },
   "conn": {
@@ -2035,5 +2042,120 @@
     "other": "Andere editie",
     "otherHint": "Staat hij er niet bij? Kies er een en Box Office zoekt er nu naar.",
     "pick": "Kies een editie"
+  },
+  "games": {
+    "sub": "{{games}} op {{systems}}",
+    "games_one": "{{count}} game",
+    "games_other": "{{count}} games",
+    "systems_one": "{{count}} systeem",
+    "systems_other": "{{count}} systemen",
+    "versions_one": "{{count}} versie",
+    "versions_other": "{{count}} versies",
+    "systemSub": "{{games}}, {{versions}} in totaal",
+    "support_one": "{{count}} BIOS- of apparaatset",
+    "support_other": "{{count}} BIOS- en apparaatsets",
+    "withProblems_one": "{{count}} met problemen",
+    "withProblems_other": "{{count}} met problemen",
+    "allComplete": "Allemaal compleet",
+    "checkAgain": "Opnieuw controleren",
+    "check": "Controleren",
+    "checking": "Bezig met controleren…",
+    "seeGames": "Naar je games",
+    "checked": "gecontroleerd {{when}}",
+    "none": "Nog geen games",
+    "noneBody": "Box Office toont de games die je al hebt: arcadesets voor MAME en consolegames zoals Super Nintendo en Game Boy. Het leest en controleert ze, en verandert ze nooit.",
+    "addRoot": "Voeg de map met je games toe onder <link>Instellingen → Hoofdmappen voor games</link>.",
+    "noSystems": "Nog geen systemen gevonden",
+    "noSystemsBody": "Box Office vond geen gamesystemen in je hoofdmappen voor games. Zet de games van elk systeem in een map met zijn naam, zoals mame of snes, en controleer opnieuw.",
+    "unsure_one": "Box Office kon niet zien voor welk systeem deze map is",
+    "unsure_other": "Box Office kon niet zien voor welke systemen deze mappen zijn",
+    "unsureHint": "Geef elke map de naam van het systeem, zoals mame, snes, n64 of gba, en controleer opnieuw.",
+    "step": {
+      "finding": "Je gamemappen worden doorzocht…",
+      "list": "De lijst met {{system}}-games wordt opgehaald…",
+      "reading": "{{system}}-games worden gelezen…",
+      "checking": "{{system}}-games worden met de lijst vergeleken…"
+    },
+    "stepCount": "{{done}} van {{total}}",
+    "locked": "Niet aankomen",
+    "lockedHint": "Box Office kijkt pas weer naar de games van {{name}} als je dit uitzet, en houdt wat het de vorige keer vond. Gebruik het terwijl je de map opnieuw indeelt.",
+    "format": {
+      "non-merged": "niet-samengevoegde sets",
+      "split": "gesplitste sets",
+      "merged": "samengevoegde sets"
+    },
+    "mameVersion": "MAME-versie",
+    "mameVersionSub": "De sets van MAME veranderen met elke versie, dus een set die in de ene werkt, werkt misschien niet in een andere.",
+    "mameVersionPick": "Sets controleren met",
+    "mameVersionHint": "Kies de MAME-versie waarmee je speelt. Box Office downloadt de lijst van die versie uit de MAME-releases op GitHub en controleert elke set opnieuw.",
+    "newest": "De nieuwste MAME ({{version}})",
+    "newestUnknown": "De nieuwste MAME",
+    "noGames": "Geen games in deze map",
+    "noGamesBody": "Box Office vond geen games in {{path}}.",
+    "filter": "Filteren op titel of maker",
+    "allGenres": "Alle genres",
+    "allYears": "Alle jaren",
+    "sort": {
+      "title": "Op titel",
+      "year": "Op jaar",
+      "added": "Onlangs gevonden"
+    },
+    "hasProblems": "Met problemen",
+    "noMatch": "Geen games die passen.",
+    "status": {
+      "complete": "Compleet",
+      "missing": "Bestanden ontbreken",
+      "wrong": "Verkeerde versie",
+      "wrongFor": "Verkeerde versie voor {{list}}",
+      "badCopy": "Slechte kopie",
+      "bios": "Heeft een BIOS nodig",
+      "unknown": "Niet op de lijst",
+      "unreadable": "Niet leesbaar"
+    },
+    "whatsWrong": "Wat er mis is",
+    "explain": {
+      "missingArcade": "Sommige bestanden die deze set nodig heeft ontbreken, dus MAME start hem misschien niet.",
+      "wrongArcade": "Sommige bestanden zijn van een andere MAME-versie dan {{list}}. Kies onder MAME-versie de versie waarmee je speelt, of werk de set bij.",
+      "biosArcade": "De set zelf is compleet, maar heeft een BIOS- of apparaatset nodig die niet in de map staat.",
+      "unknownArcade": "{{list}} heeft geen set met de naam {{name}}. Hij is misschien sindsdien hernoemd, of is voor een andere emulator.",
+      "unreadableArcade": "Het bestand kan niet worden geopend. Het is misschien beschadigd, of wordt nog gekopieerd.",
+      "missing": "Sommige bestanden die deze game nodig heeft ontbreken.",
+      "wrong": "Het bestand heet als een game op de lijst van No-Intro, maar is niet hetzelfde: een slechte kopie, of sindsdien gewijzigd.",
+      "bios": "De game heeft een BIOS nodig dat ontbreekt.",
+      "unknown": "De lijst van No-Intro kent geen kopie zoals deze. Het is misschien een hack, een vertaling of een zelfgemaakte game, en dat is prima.",
+      "unreadable": "Het bestand kan niet worden geopend. Het is misschien beschadigd, of wordt nog gekopieerd."
+    },
+    "problem": {
+      "missing": "<code>{{name}}</code> ontbreekt",
+      "wrong": "<code>{{name}}</code> is van een andere versie",
+      "wrongCopy": "<code>{{name}}</code> komt niet overeen met de kopie van No-Intro",
+      "bios": "Heeft de BIOS-set <code>{{name}}</code> nodig",
+      "device": "Heeft de apparaatset <code>{{name}}</code> nodig",
+      "parent": "Heeft zijn ouderset nodig, <code>{{name}}</code>",
+      "disk": "De CHD <code>{{name}}</code> ontbreekt",
+      "diskWrong": "De CHD <code>{{name}}</code> is van een andere versie",
+      "unreadable": "Niet leesbaar: {{name}}"
+    },
+    "inParent": "In de set van zijn ouder",
+    "fact": {
+      "system": "Systeem",
+      "set": "Set",
+      "name": "Naam bij No-Intro",
+      "year": "Jaar",
+      "manufacturer": "Fabrikant",
+      "publisher": "Uitgever",
+      "players": "Spelers",
+      "genre": "Genre",
+      "parent": "Kloon van",
+      "crc": "CRC",
+      "found": "Gevonden"
+    },
+    "files": "Bestanden",
+    "noFiles": "De bestanden zijn er niet meer. Controleer opnieuw om de lijst bij te werken.",
+    "parentSet": "Set van de ouder",
+    "readOnly": "Box Office leest deze bestanden alleen. Het verplaatst, hernoemt of verwijdert ze nooit.",
+    "clones": "Klonen",
+    "otherVersions": "Andere versies",
+    "theParent": "de ouder"
   }
 }

@@ -216,7 +216,7 @@ export type Job = { id: number; kind: string; subject: string; status: string; m
 export type ShowDefaults = { monitor: string; recent: number }
 
 // A kind of media beyond movies and TV that an admin can turn on.
-export type MediaTypeKey = 'music' | 'audiobook' | 'ebook' | 'comic'
+export type MediaTypeKey = 'music' | 'audiobook' | 'ebook' | 'comic' | 'game'
 export type MediaType = { key: MediaTypeKey; name: string; summary: string; replaces?: string; enabled: boolean; suggested: string[] }
 export type RootKind = 'movie' | 'series' | MediaTypeKey
 export type Settings = { apiKey: string; apiKeyFromEnv: boolean; hasTmdbKey: boolean; tmdbKeyFromEnv: boolean; tmdbKeyBuiltIn: boolean; mediaTypes: MediaType[] }
@@ -732,3 +732,65 @@ export type ProblemsState = {
   report: { roots: ProblemRoot[]; problems: LibProblem[] } | null
   fixes: ProblemFix[]
 }
+
+// Games: each system's folder in the games root folders, and the games in
+// it, checked against MAME's list or No-Intro's.
+export type GameSystem = {
+  id: number
+  system: string
+  name: string
+  short: string
+  maker: string
+  arcade: boolean
+  path: string
+  rootFolder: string
+  locked: boolean
+  format?: string
+  list?: string
+  support: number
+  note?: string
+  addedAt: string
+  checkedAt?: string
+  games: number
+  groups: number
+  problems: number
+}
+export type GameStatus = 'complete' | 'missing' | 'wrong' | 'bios' | 'unknown' | 'unreadable'
+export type GameProblem = { kind: string; name: string }
+export type Game = {
+  id: number
+  systemId: number
+  name: string
+  title: string
+  parent?: string
+  parentTitle?: string
+  year?: string
+  maker?: string
+  players?: number
+  genre?: string
+  path: string
+  inParent?: boolean
+  size: number
+  crc?: string
+  status: GameStatus
+  problems: GameProblem[]
+  addedAt: string
+}
+export type GameGroup = { game: Game; versions: number; problems: number }
+export type GamePage = { system: GameSystem; groups: GameGroup[]; total: number; all: number; genres: string[]; decades: string[] }
+export type GameFile = { path: string; size: number; parent?: boolean }
+export type GameDetail = Game & { system: GameSystem; files: GameFile[]; versions: Game[] }
+export type GameCheck = {
+  running: boolean
+  step?: 'finding' | 'list' | 'reading' | 'checking'
+  system?: string
+  done: number
+  total: number
+  systems: number
+  games: number
+  unsure: string[]
+  error?: string
+  started?: string
+  finished?: string
+}
+export type GameSettings = { mameVersion: string; newest?: string; versions: string[] }

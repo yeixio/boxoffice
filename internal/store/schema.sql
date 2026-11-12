@@ -425,6 +425,47 @@ CREATE TABLE IF NOT EXISTS books (
 );
 CREATE INDEX IF NOT EXISTS books_author ON books (author_id);
 
+-- Games, once they're turned on in Settings: each system's folder found in
+-- a games root folder, and the games in it, checked against MAME's list or
+-- No-Intro's. Box Office only reads these files: it never changes, moves
+-- or deletes them.
+CREATE TABLE IF NOT EXISTS game_systems (
+	id          INTEGER PRIMARY KEY AUTOINCREMENT,
+	system      TEXT NOT NULL,              -- mame, snes, ...
+	path        TEXT NOT NULL UNIQUE,
+	root_folder TEXT NOT NULL,
+	locked      INTEGER NOT NULL DEFAULT 0, -- Do not touch: not looked at again until it's turned off
+	format      TEXT NOT NULL DEFAULT '',   -- MAME: non-merged, split or merged
+	list        TEXT NOT NULL DEFAULT '',   -- the list games were checked against: MAME 0.289, or No-Intro's date
+	support     INTEGER NOT NULL DEFAULT 0, -- MAME: BIOS and device sets, which aren't games
+	note        TEXT NOT NULL DEFAULT '',   -- why the last check couldn't finish
+	added_at    BIGINT NOT NULL,
+	checked_at  BIGINT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS games (
+	id           INTEGER PRIMARY KEY AUTOINCREMENT,
+	system_id    BIGINT NOT NULL REFERENCES game_systems(id) ON DELETE CASCADE,
+	name         TEXT NOT NULL,              -- MAME's short name (pacman), or the name in No-Intro's list
+	title        TEXT NOT NULL,
+	parent       TEXT NOT NULL DEFAULT '',   -- what it's grouped under: MAME's parent set, or the console game's title
+	parent_title TEXT NOT NULL DEFAULT '',
+	year         TEXT NOT NULL DEFAULT '',
+	maker        TEXT NOT NULL DEFAULT '',
+	players      INTEGER NOT NULL DEFAULT 0,
+	genre        TEXT NOT NULL DEFAULT '',
+	path         TEXT NOT NULL,              -- its file: for a clone in a merged set, its parent's
+	in_parent    INTEGER NOT NULL DEFAULT 0,
+	size         BIGINT NOT NULL DEFAULT 0,
+	mtime        BIGINT NOT NULL DEFAULT 0,
+	crc          TEXT NOT NULL DEFAULT '',   -- consoles: the CRC that matched, so an unchanged file isn't read again
+	status       TEXT NOT NULL DEFAULT '',   -- complete, missing, wrong, bios, unknown or unreadable
+	problems     TEXT NOT NULL DEFAULT '[]', -- JSON list of {kind, name}
+	art          TEXT NOT NULL DEFAULT '',   -- the name libretro's thumbnails have it under
+	added_at     BIGINT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS games_system ON games (system_id);
+
 -- The request site: the people who use it, what they ask for, and the
 -- problems they report. Members are not admins: they sign in to the
 -- request site only, never to the admin UI, and have their own sessions.

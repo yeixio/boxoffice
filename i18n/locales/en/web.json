@@ -27,7 +27,8 @@
     "signedInAs": "Signed in as {{name}}",
     "showNames": "Show names",
     "iconsOnly": "Icons only",
-    "version": "Box Office {{version}}"
+    "version": "Box Office {{version}}",
+    "games": "Games"
   },
   "app": {
     "notAnswering": "Box Office isn't answering: {{error}}",
@@ -1037,7 +1038,8 @@
       "movie": "Scan looks for movies already in a folder that aren't on the list, so you can add them where they are.",
       "series": "Scan looks for shows already in a folder that aren't on the list, so you can add them where they are.",
       "music": "Scan looks for artists already in a folder that aren't on the list, so you can add them where they are.",
-      "books": "Scan looks for authors already in a folder that aren't on the list, so you can add them where they are."
+      "books": "Scan looks for authors already in a folder that aren't on the list, so you can add them where they are.",
+      "game": "Check looks through this folder for each system's games, such as roms/mame and roms/snes, and checks them against MAME's and No-Intro's lists. It never changes your files."
     },
     "newShows": "New shows",
     "newShowsSub": "Which episodes Box Office watches for when a show is added, here or by a request from Matinee. A long-running show can have hundreds of old episodes; watching only the last few seasons keeps the library patrol and upgrades on what you're likely to watch. You can still pick something else when adding a show, and switch seasons on or off from the show's page. Shows already on the list keep what they have.",
@@ -1130,7 +1132,8 @@
     },
     "openPage": "Open {{page}}",
     "ereadersOff": "Send ebooks to a Kindle, PocketBook or other e-reader by email. Turn on {{ebooks}} to set it up.",
-    "turnOnType": "Turn on {{name}}"
+    "turnOnType": "Turn on {{name}}",
+    "gameLayout": "Pick the folder your games are in: one system's folder, or a folder with a folder for each system (mame, snes, n64 and so on). Box Office finds the systems itself."
   },
   "mediaTypes": {
     "music": {
@@ -1148,6 +1151,10 @@
     "comic": {
       "name": "Comics and manga",
       "summary": "Follow series and get new issues and volumes."
+    },
+    "game": {
+      "name": "Games",
+      "summary": "See your video game collection: arcade sets from MAME and console games, checked and with box art."
     }
   },
   "conn": {
@@ -2035,5 +2042,120 @@
     "other": "Another edition",
     "otherHint": "Not listed? Pick one and Box Office looks for it now, the same way.",
     "pick": "Pick an edition"
+  },
+  "games": {
+    "sub": "{{games}} on {{systems}}",
+    "games_one": "{{count}} game",
+    "games_other": "{{count}} games",
+    "systems_one": "{{count}} system",
+    "systems_other": "{{count}} systems",
+    "versions_one": "{{count}} version",
+    "versions_other": "{{count}} versions",
+    "systemSub": "{{games}}, {{versions}} in all",
+    "support_one": "{{count}} BIOS or device set",
+    "support_other": "{{count}} BIOS and device sets",
+    "withProblems_one": "{{count}} with problems",
+    "withProblems_other": "{{count}} with problems",
+    "allComplete": "All complete",
+    "checkAgain": "Check again",
+    "check": "Check",
+    "checking": "Checking…",
+    "seeGames": "See your games",
+    "checked": "checked {{when}}",
+    "none": "No games yet",
+    "noneBody": "Box Office shows the games you already have: arcade sets for MAME, and console games such as Super Nintendo and Game Boy. It reads them and checks them, and never changes them.",
+    "addRoot": "Add the folder your games are in under <link>Settings → Games root folders</link>.",
+    "noSystems": "No systems found yet",
+    "noSystemsBody": "Box Office didn't find any game systems in your games root folders. Put each system's games in a folder named for it, such as mame or snes, then Check again.",
+    "unsure_one": "Box Office couldn't tell which system this folder is for",
+    "unsure_other": "Box Office couldn't tell which system these folders are for",
+    "unsureHint": "Rename each one to the system's name, such as mame, snes, n64 or gba, then Check again.",
+    "step": {
+      "finding": "Looking through your games folders…",
+      "list": "Getting the list of {{system}} games…",
+      "reading": "Reading {{system}} games…",
+      "checking": "Checking {{system}} games against the list…"
+    },
+    "stepCount": "{{done}} of {{total}}",
+    "locked": "Do not touch",
+    "lockedHint": "Box Office won't look at {{name}}'s games again until you turn this off, and keeps what it found last time. Use it while you're reorganizing the folder.",
+    "format": {
+      "non-merged": "non-merged sets",
+      "split": "split sets",
+      "merged": "merged sets"
+    },
+    "mameVersion": "MAME version",
+    "mameVersionSub": "MAME's sets change with each version, so a set that works in one may not in another.",
+    "mameVersionPick": "Check sets against",
+    "mameVersionHint": "Pick the MAME version you play with. Box Office downloads that version's list from MAME's releases on GitHub and checks every set again.",
+    "newest": "The newest MAME ({{version}})",
+    "newestUnknown": "The newest MAME",
+    "noGames": "No games in this folder",
+    "noGamesBody": "Box Office didn't find any games in {{path}}.",
+    "filter": "Filter by title or maker",
+    "allGenres": "All genres",
+    "allYears": "All years",
+    "sort": {
+      "title": "By title",
+      "year": "By year",
+      "added": "Found lately"
+    },
+    "hasProblems": "Has problems",
+    "noMatch": "No games match.",
+    "status": {
+      "complete": "Complete",
+      "missing": "Missing files",
+      "wrong": "Wrong version",
+      "wrongFor": "Wrong version for {{list}}",
+      "badCopy": "Bad copy",
+      "bios": "Needs a BIOS",
+      "unknown": "Not on the list",
+      "unreadable": "Can't be read"
+    },
+    "whatsWrong": "What's wrong",
+    "explain": {
+      "missingArcade": "Some files this set needs aren't there, so MAME may not start it.",
+      "wrongArcade": "Some files are from another version of MAME than {{list}}. Pick the version you play with under MAME version, or update the set.",
+      "biosArcade": "The set itself is complete, but it needs a BIOS or device set that isn't in the folder.",
+      "unknownArcade": "{{list}} has no set called {{name}}. It may have been renamed since, or be for another emulator.",
+      "unreadableArcade": "The file can't be opened. It may be damaged, or still being copied.",
+      "missing": "Some files this game needs aren't there.",
+      "wrong": "The file is named like a game on No-Intro's list, but isn't the same: a bad copy, or one changed since.",
+      "bios": "The game needs a BIOS that isn't there.",
+      "unknown": "No-Intro's list has no copy like this one. It may be a hack, a translation or a homemade game, which is fine.",
+      "unreadable": "The file can't be opened. It may be damaged, or still being copied."
+    },
+    "problem": {
+      "missing": "<code>{{name}}</code> is missing",
+      "wrong": "<code>{{name}}</code> is from another version",
+      "wrongCopy": "<code>{{name}}</code> doesn't match No-Intro's copy",
+      "bios": "Needs the <code>{{name}}</code> BIOS set",
+      "device": "Needs the <code>{{name}}</code> device set",
+      "parent": "Needs its parent set, <code>{{name}}</code>",
+      "disk": "The <code>{{name}}</code> CHD is missing",
+      "diskWrong": "The <code>{{name}}</code> CHD is from another version",
+      "unreadable": "Can't be read: {{name}}"
+    },
+    "inParent": "In its parent's set",
+    "fact": {
+      "system": "System",
+      "set": "Set",
+      "name": "No-Intro name",
+      "year": "Year",
+      "manufacturer": "Manufacturer",
+      "publisher": "Publisher",
+      "players": "Players",
+      "genre": "Genre",
+      "parent": "Clone of",
+      "crc": "CRC",
+      "found": "Found"
+    },
+    "files": "Files",
+    "noFiles": "Its files aren't there any more. Check again to update the list.",
+    "parentSet": "Parent's set",
+    "readOnly": "Box Office only reads these files. It never moves, renames or deletes them.",
+    "clones": "Clones",
+    "otherVersions": "Other versions",
+    "theParent": "the parent"
   }
 }

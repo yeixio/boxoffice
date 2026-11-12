@@ -31,7 +31,8 @@
     "signedInAs": "Přihlášeno jako {{name}}",
     "showNames": "Zobrazit názvy",
     "iconsOnly": "Jen ikony",
-    "version": "Box Office {{version}}"
+    "version": "Box Office {{version}}",
+    "games": "Hry"
   },
   "app": {
     "notAnswering": "Box Office neodpovídá: {{error}}",
@@ -1185,7 +1186,8 @@
       "movie": "Prohledání hledá filmy, které už jsou ve složce, ale ne na seznamu, abyste je mohli přidat tam, kde jsou.",
       "series": "Prohledání hledá seriály, které už jsou ve složce, ale ne na seznamu, abyste je mohli přidat tam, kde jsou.",
       "music": "Prohledání hledá interprety, kteří už jsou ve složce, ale ne na seznamu, abyste je mohli přidat tam, kde jsou.",
-      "books": "Prohledání hledá autory, kteří už jsou ve složce, ale ne na seznamu, abyste je mohli přidat tam, kde jsou."
+      "books": "Prohledání hledá autory, kteří už jsou ve složce, ale ne na seznamu, abyste je mohli přidat tam, kde jsou.",
+      "game": "Kontrola projde tuto složku a najde hry každého systému, například roms/mame a roms/snes, a porovná je se seznamy MAME a No-Intro. Vaše soubory nikdy nemění."
     },
     "newShows": "Nové seriály",
     "newShowsSub": "Které díly Box Office sleduje, když se přidá seriál, zde nebo žádostí z Matinee. Dlouho běžící seriál může mít stovky starých dílů; sledování jen posledních pár řad drží hlídku knihovny a vylepšení u toho, na co se nejspíš budete dívat. Při přidávání seriálu můžete stále zvolit něco jiného a řady zapínat nebo vypínat na stránce seriálu. Seriály, které už jsou na seznamu, si ponechají, co mají.",
@@ -1284,7 +1286,8 @@
     },
     "openPage": "Otevřít: {{page}}",
     "ereadersOff": "Posílejte e-knihy e-mailem do Kindlu, PocketBooku nebo jiné čtečky. Pro nastavení zapněte {{ebooks}}.",
-    "turnOnType": "Zapnout: {{name}}"
+    "turnOnType": "Zapnout: {{name}}",
+    "gameLayout": "Vyberte složku s hrami: složku jednoho systému, nebo složku se složkou pro každý systém (mame, snes, n64 a tak dále). Box Office systémy rozpozná sám."
   },
   "mediaTypes": {
     "music": {
@@ -1302,6 +1305,10 @@
     "comic": {
       "name": "Komiksy a manga",
       "summary": "Sledujte série a získávejte nová čísla a svazky."
+    },
+    "game": {
+      "name": "Hry",
+      "summary": "Prohlédněte si svou sbírku videoher: arkádové sady z MAME a konzolové hry, zkontrolované a s obaly."
     }
   },
   "conn": {
@@ -2225,5 +2232,132 @@
     "other": "Jiná edice",
     "otherHint": "Není v seznamu? Vyberte ji a Box Office ji hned začne hledat.",
     "pick": "Vyberte edici"
+  },
+  "games": {
+    "sub": "{{games}} na {{systems}}",
+    "games_few": "{{count}} hry",
+    "games_many": "{{count}} hry",
+    "games_one": "{{count}} hra",
+    "games_other": "{{count}} her",
+    "systems_few": "{{count}} systémech",
+    "systems_many": "{{count}} systému",
+    "systems_one": "{{count}} systému",
+    "systems_other": "{{count}} systémech",
+    "versions_few": "{{count}} verze",
+    "versions_many": "{{count}} verze",
+    "versions_one": "{{count}} verze",
+    "versions_other": "{{count}} verzí",
+    "systemSub": "{{games}}, celkem {{versions}}",
+    "support_few": "{{count}} sady BIOS a zařízení",
+    "support_many": "{{count}} sady BIOS a zařízení",
+    "support_one": "{{count}} sada BIOS nebo zařízení",
+    "support_other": "{{count}} sad BIOS a zařízení",
+    "withProblems_few": "{{count}} s problémy",
+    "withProblems_many": "{{count}} s problémy",
+    "withProblems_one": "{{count}} s problémy",
+    "withProblems_other": "{{count}} s problémy",
+    "allComplete": "Vše kompletní",
+    "checkAgain": "Zkontrolovat znovu",
+    "check": "Zkontrolovat",
+    "checking": "Kontroluje se…",
+    "seeGames": "Zobrazit hry",
+    "checked": "zkontrolováno {{when}}",
+    "none": "Zatím žádné hry",
+    "noneBody": "Box Office zobrazuje hry, které už máte: arkádové sady pro MAME a konzolové hry jako Super Nintendo a Game Boy. Čte je a kontroluje, nikdy je nemění.",
+    "addRoot": "Přidejte složku s hrami v <link>Nastavení → Kořenové složky her</link>.",
+    "noSystems": "Zatím nebyly nalezeny žádné systémy",
+    "noSystemsBody": "Box Office v kořenových složkách her nenašel žádné herní systémy. Dejte hry každého systému do složky pojmenované podle něj, například mame nebo snes, a zkontrolujte znovu.",
+    "unsure_few": "Box Office nepoznal, pro jaké systémy jsou tyto složky",
+    "unsure_many": "Box Office nepoznal, pro jaké systémy jsou tyto složky",
+    "unsure_one": "Box Office nepoznal, pro jaký systém je tato složka",
+    "unsure_other": "Box Office nepoznal, pro jaké systémy jsou tyto složky",
+    "unsureHint": "Přejmenujte každou na název systému, například mame, snes, n64 nebo gba, a zkontrolujte znovu.",
+    "step": {
+      "finding": "Prochází se vaše složky s hrami…",
+      "list": "Stahuje se seznam her pro {{system}}…",
+      "reading": "Čtou se hry pro {{system}}…",
+      "checking": "Hry pro {{system}} se porovnávají se seznamem…"
+    },
+    "stepCount": "{{done}} z {{total}}",
+    "locked": "Nesahat",
+    "lockedHint": "Box Office se na hry systému {{name}} znovu nepodívá, dokud tuto volbu nevypnete, a ponechá si, co našel naposledy. Použijte ji, když složku přeorganizováváte.",
+    "format": {
+      "non-merged": "sady non-merged",
+      "split": "sady split",
+      "merged": "sady merged"
+    },
+    "mameVersion": "Verze MAME",
+    "mameVersionSub": "Sady MAME se s každou verzí mění, takže sada, která funguje v jedné, nemusí fungovat v jiné.",
+    "mameVersionPick": "Kontrolovat sady proti",
+    "mameVersionHint": "Vyberte verzi MAME, se kterou hrajete. Box Office stáhne seznam této verze z vydání MAME na GitHubu a znovu zkontroluje všechny sady.",
+    "newest": "Nejnovější MAME ({{version}})",
+    "newestUnknown": "Nejnovější MAME",
+    "noGames": "V této složce nejsou žádné hry",
+    "noGamesBody": "Box Office v {{path}} nenašel žádné hry.",
+    "filter": "Filtrovat podle názvu nebo výrobce",
+    "allGenres": "Všechny žánry",
+    "allYears": "Všechny roky",
+    "sort": {
+      "title": "Podle názvu",
+      "year": "Podle roku",
+      "added": "Nedávno nalezené"
+    },
+    "hasProblems": "Má problémy",
+    "noMatch": "Žádné hry neodpovídají.",
+    "status": {
+      "complete": "Kompletní",
+      "missing": "Chybí soubory",
+      "wrong": "Špatná verze",
+      "wrongFor": "Špatná verze pro {{list}}",
+      "badCopy": "Špatná kopie",
+      "bios": "Potřebuje BIOS",
+      "unknown": "Není na seznamu",
+      "unreadable": "Nelze přečíst"
+    },
+    "whatsWrong": "Co je špatně",
+    "explain": {
+      "missingArcade": "Některé soubory, které sada potřebuje, chybí, takže ji MAME možná nespustí.",
+      "wrongArcade": "Některé soubory jsou z jiné verze MAME než {{list}}. Vyberte verzi, se kterou hrajete, v části Verze MAME, nebo sadu aktualizujte.",
+      "biosArcade": "Sada samotná je kompletní, ale potřebuje sadu BIOS nebo zařízení, která ve složce není.",
+      "unknownArcade": "{{list}} nemá žádnou sadu s názvem {{name}}. Mohla být mezitím přejmenována, nebo je pro jiný emulátor.",
+      "unreadableArcade": "Soubor nelze otevřít. Může být poškozený, nebo se ještě kopíruje.",
+      "missing": "Některé soubory, které hra potřebuje, chybí.",
+      "wrong": "Soubor se jmenuje jako hra na seznamu No-Intro, ale není stejný: špatná kopie, nebo mezitím změněná.",
+      "bios": "Hra potřebuje BIOS, který chybí.",
+      "unknown": "Seznam No-Intro žádnou takovou kopii nemá. Může jít o hack, překlad nebo domácí hru, což je v pořádku.",
+      "unreadable": "Soubor nelze otevřít. Může být poškozený, nebo se ještě kopíruje."
+    },
+    "problem": {
+      "missing": "<code>{{name}}</code> chybí",
+      "wrong": "<code>{{name}}</code> je z jiné verze",
+      "wrongCopy": "<code>{{name}}</code> neodpovídá kopii No-Intro",
+      "bios": "Potřebuje sadu BIOS <code>{{name}}</code>",
+      "device": "Potřebuje sadu zařízení <code>{{name}}</code>",
+      "parent": "Potřebuje rodičovskou sadu <code>{{name}}</code>",
+      "disk": "CHD <code>{{name}}</code> chybí",
+      "diskWrong": "CHD <code>{{name}}</code> je z jiné verze",
+      "unreadable": "Nelze přečíst: {{name}}"
+    },
+    "inParent": "V rodičovské sadě",
+    "fact": {
+      "system": "Systém",
+      "set": "Sada",
+      "name": "Název v No-Intro",
+      "year": "Rok",
+      "manufacturer": "Výrobce",
+      "publisher": "Vydavatel",
+      "players": "Hráči",
+      "genre": "Žánr",
+      "parent": "Klon hry",
+      "crc": "CRC",
+      "found": "Nalezeno"
+    },
+    "files": "Soubory",
+    "noFiles": "Její soubory už tu nejsou. Zkontrolujte znovu a seznam se aktualizuje.",
+    "parentSet": "Rodičovská sada",
+    "readOnly": "Box Office tyto soubory jen čte. Nikdy je nepřesouvá, nepřejmenovává ani nemaže.",
+    "clones": "Klony",
+    "otherVersions": "Další verze",
+    "theParent": "rodiče"
   }
 }

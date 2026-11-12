@@ -25,7 +25,8 @@
     "signedInAs": "已登入為 {{name}}",
     "showNames": "顯示名稱",
     "iconsOnly": "僅圖示",
-    "version": "Box Office {{version}}"
+    "version": "Box Office {{version}}",
+    "games": "遊戲"
   },
   "app": {
     "notAnswering": "Box Office 沒有響應：{{error}}",
@@ -963,7 +964,8 @@
       "movie": "掃描會尋找資料夾中已有但不在列表中的電影，讓你原地新增。",
       "series": "掃描會尋找資料夾中已有但不在列表中的劇集，讓你原地新增。",
       "music": "掃描會尋找資料夾中已有但不在列表中的藝人，讓你原地新增。",
-      "books": "掃描會尋找資料夾中已有但不在列表中的作者，讓你原地新增。"
+      "books": "掃描會尋找資料夾中已有但不在列表中的作者，讓你原地新增。",
+      "game": "檢查會在這個資料夾裡尋找每個系統的遊戲，例如 roms/mame 和 roms/snes，並與 MAME 和 No-Intro 的清單核對。它從不更改你的檔案。"
     },
     "newShows": "新劇集",
     "newShowsSub": "新增劇集時（在這裡或透過 Matinee 的請求）Box Office 關注哪些集。長期連載的劇集可能有數百集舊內容；只關注最近幾季，可讓媒體庫巡檢和升級集中在你可能會看的內容上。新增劇集時仍可另選，也可以在劇集頁面開關各季。已在列表中的劇集保持不變。",
@@ -1053,7 +1055,8 @@
     },
     "openPage": "開啟{{page}}",
     "ereadersOff": "透過電子郵件把電子書傳送到 Kindle、PocketBook 或其他閱讀器。開啟{{ebooks}}即可設定。",
-    "turnOnType": "開啟{{name}}"
+    "turnOnType": "開啟{{name}}",
+    "gameLayout": "選擇存放遊戲的資料夾：某個系統的資料夾，或每個系統各有一個資料夾的資料夾（mame、snes、n64 等）。Box Office 會自己辨識系統。"
   },
   "mediaTypes": {
     "music": {
@@ -1071,6 +1074,10 @@
     "comic": {
       "name": "漫畫",
       "summary": "關注系列，獲取新的期數和卷。"
+    },
+    "game": {
+      "name": "遊戲",
+      "summary": "查看你的電玩收藏：MAME 大型電玩組合和家用主機遊戲，經過檢查並附有封面。"
     }
   },
   "conn": {
@@ -1940,5 +1947,114 @@
     "other": "其他版本",
     "otherHint": "清單裡沒有？選一個，Box Office 會立即尋找。",
     "pick": "選擇版本"
+  },
+  "games": {
+    "sub": "{{systems}}上的{{games}}",
+    "games_other": "{{count}} 款遊戲",
+    "systems_other": "{{count}} 個系統",
+    "versions_other": "{{count}} 個版本",
+    "systemSub": "{{games}}，共 {{versions}}",
+    "support_other": "{{count}} 個 BIOS 和裝置組合",
+    "withProblems_other": "{{count}} 個有問題",
+    "allComplete": "全部完整",
+    "checkAgain": "重新檢查",
+    "check": "檢查",
+    "checking": "正在檢查…",
+    "seeGames": "查看你的遊戲",
+    "checked": "{{when}}檢查",
+    "none": "還沒有遊戲",
+    "noneBody": "Box Office 顯示你已有的遊戲：MAME 的大型電玩組合，以及超級任天堂、Game Boy 等主機遊戲。它只讀取和檢查，從不更改。",
+    "addRoot": "在<link>設定 → 遊戲根資料夾</link>中新增存放遊戲的資料夾。",
+    "noSystems": "還沒有找到系統",
+    "noSystemsBody": "Box Office 沒有在遊戲根資料夾中找到任何遊戲系統。把每個系統的遊戲放進以它命名的資料夾，例如 mame 或 snes，然後重新檢查。",
+    "unsure_other": "Box Office 無法判斷這些資料夾屬於哪些系統",
+    "unsureHint": "把每個資料夾重新命名為系統名稱，例如 mame、snes、n64 或 gba，然後重新檢查。",
+    "step": {
+      "finding": "正在查看你的遊戲資料夾…",
+      "list": "正在取得 {{system}} 遊戲清單…",
+      "reading": "正在讀取 {{system}} 遊戲…",
+      "checking": "正在將 {{system}} 遊戲與清單核對…"
+    },
+    "stepCount": "{{done}} / {{total}}",
+    "locked": "不要動",
+    "lockedHint": "在你關閉此項之前，Box Office 不會再查看 {{name}} 的遊戲，並保留上次找到的結果。整理資料夾時可以開啟它。",
+    "format": {
+      "non-merged": "non-merged 組合",
+      "split": "split 組合",
+      "merged": "merged 組合"
+    },
+    "mameVersion": "MAME 版本",
+    "mameVersionSub": "MAME 的組合每個版本都會改變，所以在一個版本能用的組合，在另一個版本可能不行。",
+    "mameVersionPick": "核對組合所用版本",
+    "mameVersionHint": "選擇你玩的 MAME 版本。Box Office 會從 GitHub 上的 MAME 發行版下載該版本的清單，並重新檢查所有組合。",
+    "newest": "最新的 MAME（{{version}}）",
+    "newestUnknown": "最新的 MAME",
+    "noGames": "這個資料夾裡沒有遊戲",
+    "noGamesBody": "Box Office 在 {{path}} 中沒有找到遊戲。",
+    "filter": "依名稱或廠商篩選",
+    "allGenres": "所有類型",
+    "allYears": "所有年份",
+    "sort": {
+      "title": "依名稱",
+      "year": "依年份",
+      "added": "最近找到"
+    },
+    "hasProblems": "有問題",
+    "noMatch": "沒有符合的遊戲。",
+    "status": {
+      "complete": "完整",
+      "missing": "缺少檔案",
+      "wrong": "版本不對",
+      "wrongFor": "與 {{list}} 版本不符",
+      "badCopy": "壞副本",
+      "bios": "需要 BIOS",
+      "unknown": "不在清單中",
+      "unreadable": "無法讀取"
+    },
+    "whatsWrong": "問題在哪",
+    "explain": {
+      "missingArcade": "這個組合需要的一些檔案不在，MAME 可能無法啟動它。",
+      "wrongArcade": "一些檔案來自 {{list}} 以外的 MAME 版本。請在 MAME 版本中選擇你玩的版本，或更新這個組合。",
+      "biosArcade": "組合本身是完整的，但它需要的 BIOS 或裝置組合不在資料夾裡。",
+      "unknownArcade": "{{list}} 中沒有名為 {{name}} 的組合。它可能已經改名，或是給其他模擬器用的。",
+      "unreadableArcade": "無法開啟該檔案。它可能已損壞，或仍在複製中。",
+      "missing": "這款遊戲需要的一些檔案不在。",
+      "wrong": "檔名與 No-Intro 清單中的遊戲相同，但內容不同：是壞副本，或之後被改過。",
+      "bios": "這款遊戲需要的 BIOS 不在。",
+      "unknown": "No-Intro 清單中沒有這樣的副本。它可能是修改版、翻譯版或自製遊戲，這沒關係。",
+      "unreadable": "無法開啟該檔案。它可能已損壞，或仍在複製中。"
+    },
+    "problem": {
+      "missing": "缺少 <code>{{name}}</code>",
+      "wrong": "<code>{{name}}</code> 來自其他版本",
+      "wrongCopy": "<code>{{name}}</code> 與 No-Intro 的副本不符",
+      "bios": "需要 BIOS 組合 <code>{{name}}</code>",
+      "device": "需要裝置組合 <code>{{name}}</code>",
+      "parent": "需要它的父組合 <code>{{name}}</code>",
+      "disk": "缺少 CHD <code>{{name}}</code>",
+      "diskWrong": "CHD <code>{{name}}</code> 來自其他版本",
+      "unreadable": "無法讀取：{{name}}"
+    },
+    "inParent": "在父組合中",
+    "fact": {
+      "system": "系統",
+      "set": "組合",
+      "name": "No-Intro 名稱",
+      "year": "年份",
+      "manufacturer": "廠商",
+      "publisher": "發行商",
+      "players": "玩家人數",
+      "genre": "類型",
+      "parent": "複製自",
+      "crc": "CRC",
+      "found": "找到時間"
+    },
+    "files": "檔案",
+    "noFiles": "它的檔案已經不在了。重新檢查以更新清單。",
+    "parentSet": "父組合",
+    "readOnly": "Box Office 只讀取這些檔案，從不移動、重新命名或刪除它們。",
+    "clones": "衍生版",
+    "otherVersions": "其他版本",
+    "theParent": "父遊戲"
   }
 }

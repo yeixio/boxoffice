@@ -264,6 +264,13 @@ func (s *Server) addRootFolder(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
+	// Games need nothing picked: their folder is looked through, and the
+	// games in it checked, as soon as it's added.
+	if in.Kind == mediatypes.Game && s.Games != nil {
+		if _, err := s.Games.Start(r.Context(), f.ID, ""); err != nil {
+			s.Log.Info("not checking a new games folder now", "path", f.Path, "err", err)
+		}
+	}
 	return writeJSON(w, http.StatusCreated, f)
 }
 

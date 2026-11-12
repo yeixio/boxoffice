@@ -29,7 +29,7 @@ func TestMediaTypesOffUntilTurnedOn(t *testing.T) {
 	if code := call(t, hs, "GET", "/api/v1/settings", "", &got); code != 200 {
 		t.Fatal(code)
 	}
-	if len(got.MediaTypes) != 4 {
+	if len(got.MediaTypes) != 5 {
 		t.Fatalf("types %+v", got.MediaTypes)
 	}
 	for k, on := range enabled(got) {

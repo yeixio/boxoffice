@@ -27,7 +27,8 @@
     "signedInAs": "Inloggad som {{name}}",
     "showNames": "Visa namn",
     "iconsOnly": "Bara ikoner",
-    "version": "Box Office {{version}}"
+    "version": "Box Office {{version}}",
+    "games": "Spel"
   },
   "app": {
     "notAnswering": "Box Office svarar inte: {{error}}",
@@ -1037,7 +1038,8 @@
       "movie": "Skanning letar efter filmer som redan finns i en mapp men inte på listan, så att du kan lägga till dem där de är.",
       "series": "Skanning letar efter serier som redan finns i en mapp men inte på listan, så att du kan lägga till dem där de är.",
       "music": "Skanning letar efter artister som redan finns i en mapp men inte på listan, så att du kan lägga till dem där de är.",
-      "books": "Skanning letar efter författare som redan finns i en mapp men inte på listan, så att du kan lägga till dem där de är."
+      "books": "Skanning letar efter författare som redan finns i en mapp men inte på listan, så att du kan lägga till dem där de är.",
+      "game": "Kontrollera går igenom den här mappen efter varje systems spel, till exempel roms/mame och roms/snes, och kontrollerar dem mot MAME:s och No-Intros listor. Dina filer ändras aldrig."
     },
     "newShows": "Nya serier",
     "newShowsSub": "Vilka avsnitt Box Office bevakar när en serie läggs till, här eller genom ett önskemål från Matinee. En långvarig serie kan ha hundratals gamla avsnitt; att bara bevaka de senaste säsongerna håller bibliotekspatrullen och uppgraderingarna till det du troligen kommer att titta på. Du kan fortfarande välja något annat när du lägger till en serie, och slå på eller av säsonger från seriens sida. Serier som redan finns på listan behåller det de har.",
@@ -1130,7 +1132,8 @@
     },
     "openPage": "Öppna {{page}}",
     "ereadersOff": "Skicka e-böcker med e-post till en Kindle, PocketBook eller annan läsplatta. Slå på {{ebooks}} för att ställa in det.",
-    "turnOnType": "Slå på {{name}}"
+    "turnOnType": "Slå på {{name}}",
+    "gameLayout": "Välj mappen med dina spel: ett systems mapp, eller en mapp med en mapp för varje system (mame, snes, n64 och så vidare). Box Office hittar systemen själv."
   },
   "mediaTypes": {
     "music": {
@@ -1148,6 +1151,10 @@
     "comic": {
       "name": "Serier och manga",
       "summary": "Följ serier och få nya nummer och volymer."
+    },
+    "game": {
+      "name": "Spel",
+      "summary": "Se din samling av tv-spel: arkadset från MAME och konsolspel, kontrollerade och med omslag."
     }
   },
   "conn": {
@@ -2035,5 +2042,120 @@
     "other": "En annan utgåva",
     "otherHint": "Inte med? Välj en så letar Box Office efter den nu.",
     "pick": "Välj en utgåva"
+  },
+  "games": {
+    "sub": "{{games}} på {{systems}}",
+    "games_one": "{{count}} spel",
+    "games_other": "{{count}} spel",
+    "systems_one": "{{count}} system",
+    "systems_other": "{{count}} system",
+    "versions_one": "{{count}} version",
+    "versions_other": "{{count}} versioner",
+    "systemSub": "{{games}}, {{versions}} totalt",
+    "support_one": "{{count}} BIOS- eller enhetsset",
+    "support_other": "{{count}} BIOS- och enhetsset",
+    "withProblems_one": "{{count}} med problem",
+    "withProblems_other": "{{count}} med problem",
+    "allComplete": "Alla kompletta",
+    "checkAgain": "Kontrollera igen",
+    "check": "Kontrollera",
+    "checking": "Kontrollerar…",
+    "seeGames": "Se dina spel",
+    "checked": "kontrollerad {{when}}",
+    "none": "Inga spel än",
+    "noneBody": "Box Office visar spelen du redan har: arkadset för MAME och konsolspel som Super Nintendo och Game Boy. Det läser och kontrollerar dem och ändrar dem aldrig.",
+    "addRoot": "Lägg till mappen med dina spel under <link>Inställningar → Rotmappar för spel</link>.",
+    "noSystems": "Inga system hittade än",
+    "noSystemsBody": "Box Office hittade inga spelsystem i dina rotmappar för spel. Lägg varje systems spel i en mapp med dess namn, till exempel mame eller snes, och kontrollera igen.",
+    "unsure_one": "Box Office kunde inte avgöra vilket system den här mappen är för",
+    "unsure_other": "Box Office kunde inte avgöra vilka system de här mapparna är för",
+    "unsureHint": "Byt namn på var och en till systemets namn, till exempel mame, snes, n64 eller gba, och kontrollera igen.",
+    "step": {
+      "finding": "Går igenom dina spelmappar…",
+      "list": "Hämtar listan över {{system}}-spel…",
+      "reading": "Läser {{system}}-spel…",
+      "checking": "Kontrollerar {{system}}-spel mot listan…"
+    },
+    "stepCount": "{{done}} av {{total}}",
+    "locked": "Rör inte",
+    "lockedHint": "Box Office tittar inte på spelen i {{name}} igen förrän du stänger av det här, och behåller det som hittades senast. Använd det medan du organiserar om mappen.",
+    "format": {
+      "non-merged": "non-merged-set",
+      "split": "split-set",
+      "merged": "merged-set"
+    },
+    "mameVersion": "MAME-version",
+    "mameVersionSub": "MAME:s set ändras med varje version, så ett set som fungerar i en kanske inte gör det i en annan.",
+    "mameVersionPick": "Kontrollera set mot",
+    "mameVersionHint": "Välj den MAME-version du spelar med. Box Office laddar ner den versionens lista från MAME:s utgåvor på GitHub och kontrollerar alla set igen.",
+    "newest": "Senaste MAME ({{version}})",
+    "newestUnknown": "Senaste MAME",
+    "noGames": "Inga spel i den här mappen",
+    "noGamesBody": "Box Office hittade inga spel i {{path}}.",
+    "filter": "Filtrera på titel eller tillverkare",
+    "allGenres": "Alla genrer",
+    "allYears": "Alla år",
+    "sort": {
+      "title": "Efter titel",
+      "year": "Efter år",
+      "added": "Hittade nyligen"
+    },
+    "hasProblems": "Har problem",
+    "noMatch": "Inga spel matchar.",
+    "status": {
+      "complete": "Komplett",
+      "missing": "Filer saknas",
+      "wrong": "Fel version",
+      "wrongFor": "Fel version för {{list}}",
+      "badCopy": "Dålig kopia",
+      "bios": "Behöver ett BIOS",
+      "unknown": "Inte på listan",
+      "unreadable": "Kan inte läsas"
+    },
+    "whatsWrong": "Vad som är fel",
+    "explain": {
+      "missingArcade": "Några filer som setet behöver saknas, så MAME kanske inte startar det.",
+      "wrongArcade": "Några filer kommer från en annan version av MAME än {{list}}. Välj versionen du spelar med under MAME-version, eller uppdatera setet.",
+      "biosArcade": "Själva setet är komplett, men det behöver ett BIOS- eller enhetsset som inte finns i mappen.",
+      "unknownArcade": "{{list}} har inget set som heter {{name}}. Det kan ha bytt namn sedan dess eller vara för en annan emulator.",
+      "unreadableArcade": "Filen kan inte öppnas. Den kan vara skadad eller håller fortfarande på att kopieras.",
+      "missing": "Några filer som spelet behöver saknas.",
+      "wrong": "Filen heter som ett spel på No-Intros lista men är inte densamma: en dålig kopia eller en som ändrats sedan dess.",
+      "bios": "Spelet behöver ett BIOS som saknas.",
+      "unknown": "No-Intros lista har ingen kopia som den här. Det kan vara ett hack, en översättning eller ett hemmagjort spel, och det är helt okej.",
+      "unreadable": "Filen kan inte öppnas. Den kan vara skadad eller håller fortfarande på att kopieras."
+    },
+    "problem": {
+      "missing": "<code>{{name}}</code> saknas",
+      "wrong": "<code>{{name}}</code> kommer från en annan version",
+      "wrongCopy": "<code>{{name}}</code> stämmer inte med No-Intros kopia",
+      "bios": "Behöver BIOS-setet <code>{{name}}</code>",
+      "device": "Behöver enhetssetet <code>{{name}}</code>",
+      "parent": "Behöver sitt föräldraset, <code>{{name}}</code>",
+      "disk": "CHD-filen <code>{{name}}</code> saknas",
+      "diskWrong": "CHD-filen <code>{{name}}</code> kommer från en annan version",
+      "unreadable": "Kan inte läsas: {{name}}"
+    },
+    "inParent": "I föräldrasetet",
+    "fact": {
+      "system": "System",
+      "set": "Set",
+      "name": "No-Intro-namn",
+      "year": "År",
+      "manufacturer": "Tillverkare",
+      "publisher": "Utgivare",
+      "players": "Spelare",
+      "genre": "Genre",
+      "parent": "Klon av",
+      "crc": "CRC",
+      "found": "Hittad"
+    },
+    "files": "Filer",
+    "noFiles": "Filerna finns inte kvar. Kontrollera igen för att uppdatera listan.",
+    "parentSet": "Föräldraset",
+    "readOnly": "Box Office läser bara de här filerna. Det flyttar, byter namn på eller raderar dem aldrig.",
+    "clones": "Kloner",
+    "otherVersions": "Andra versioner",
+    "theParent": "föräldern"
   }
 }

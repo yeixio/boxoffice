@@ -40,6 +40,16 @@ type Config struct {
 	// and series up on, in place of query.wikidata.org, or "off" not to
 	// ask Wikidata at all; BOXOFFICE_WIKIDATA_URL.
 	Wikidata string
+	// MAMEReleases is where MAME's lists are downloaded from, in place of
+	// MAME's releases on GitHub; BOXOFFICE_MAME_RELEASES_URL.
+	MAMEReleases string
+	// LibretroDB is another copy of libretro's database to download
+	// No-Intro's lists and game facts from; BOXOFFICE_LIBRETRO_DB_URL.
+	LibretroDB string
+	// GameArt are where game pictures are looked for, comma separated,
+	// in place of libretro's thumbnails; BOXOFFICE_GAME_ART_URL. See
+	// games.DefaultArt for how they're written.
+	GameArt []string
 	// EbookConvert is Calibre's ebook-convert, to turn ebooks an e-reader
 	// won't take by email into EPUB; BOXOFFICE_EBOOK_CONVERT. Empty looks
 	// for it on the PATH.
@@ -70,6 +80,13 @@ func load(args []string, env func(string) string) (Config, error) {
 		OpenLibrary:  strings.TrimRight(env("BOXOFFICE_OPENLIBRARY_URL"), "/"),
 		Wikidata:     strings.TrimRight(env("BOXOFFICE_WIKIDATA_URL"), "/"),
 		EbookConvert: env("BOXOFFICE_EBOOK_CONVERT"),
+		MAMEReleases: strings.TrimRight(env("BOXOFFICE_MAME_RELEASES_URL"), "/"),
+		LibretroDB:   strings.TrimRight(env("BOXOFFICE_LIBRETRO_DB_URL"), "/"),
+	}
+	for _, u := range strings.Split(env("BOXOFFICE_GAME_ART_URL"), ",") {
+		if u = strings.TrimSpace(u); u != "" {
+			c.GameArt = append(c.GameArt, u)
+		}
 	}
 	if v := env("BOXOFFICE_REFRESH_EVERY"); v != "" {
 		d, err := time.ParseDuration(v)
