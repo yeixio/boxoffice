@@ -27,6 +27,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/config"
 	"github.com/yeixio/boxoffice/internal/downloader"
 	"github.com/yeixio/boxoffice/internal/ereader"
+	"github.com/yeixio/boxoffice/internal/games"
 	"github.com/yeixio/boxoffice/internal/jobs"
 	"github.com/yeixio/boxoffice/internal/kube"
 	"github.com/yeixio/boxoffice/internal/library"
@@ -179,6 +180,10 @@ func run() error {
 			shelf.Wikidata.Base = cfg.Wikidata
 		}
 	}
+	// Games are checked when a games root folder is added, on Check
+	// again, and weekly.
+	gameShelf := &games.Service{Store: db, Log: log, Dir: filepath.Join(cfg.DataDir, "games"),
+		MAMEReleases: cfg.MAMEReleases, LibretroDB: cfg.LibretroDB, Art: cfg.GameArt, UserAgent: "BoxOffice/" + version.Version}
 	// The problem files look runs daily, and on Look again.
 	finds := &problems.Service{Store: db, Log: log}
 	// The quality check looks inside new files every few minutes.
@@ -186,6 +191,7 @@ func run() error {
 	srv := &api.Server{
 		Store: db, Catalog: cat, Music: tunes, LibScan: &libscan.Service{Store: db, Catalog: cat, Music: tunes, Books: shelf, Log: log}, Problems: finds, QualityCheck: checker, Backups: backups, Migrator: &migrate.Migrator{Catalog: cat, Books: shelf, Backups: backups, Log: log, DataDir: cfg.DataDir}, Log: log,
 		Books:     shelf,
+		Games:     gameShelf,
 		Portal:    &portal.Service{Store: db, Catalog: cat, Notify: notes, Log: log},
 		Downloads: downloads, Search: finder,
 		Version: version.Version, Database: dbKind, DataDir: cfg.DataDir, EnvAPIKey: cfg.APIKey, Web: web.FS(),
@@ -221,7 +227,7 @@ func run() error {
 	var wg sync.WaitGroup
 	for _, loop := range []func(context.Context){runner.Run, backups.Run, downloads.Run, mon.Monitor.Run, alerter.Run,
 		func(ctx context.Context) { cat.RefreshEvery(ctx, cfg.Refresh) }, func(ctx context.Context) { finder.AutoSearchEvery(ctx, runner) },
-		finder.RSSEvery, finder.PruneEvery, shelf.DetailsEvery, finds.Run, checker.Run, func(ctx context.Context) { api.RecycleSweepEvery(ctx, db, log) },
+		finder.RSSEvery, finder.PruneEvery, shelf.DetailsEvery, finds.Run, checker.Run, gameShelf.Run, func(ctx context.Context) { api.RecycleSweepEvery(ctx, db, log) },
 		func(ctx context.Context) { retryImports(ctx, downloads, log) }} {
 		wg.Add(1)
 		go func() { defer wg.Done(); loop(ctx) }()

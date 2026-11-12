@@ -25,7 +25,8 @@
     "signedInAs": "Masuk sebagai {{name}}",
     "showNames": "Tampilkan nama",
     "iconsOnly": "Ikon saja",
-    "version": "Box Office {{version}}"
+    "version": "Box Office {{version}}",
+    "games": "Game"
   },
   "app": {
     "notAnswering": "Box Office tidak menjawab: {{error}}",
@@ -963,7 +964,8 @@
       "movie": "Pindai mencari film yang sudah ada di folder tetapi belum ada di daftar, agar Anda dapat menambahkannya di tempatnya.",
       "series": "Pindai mencari acara yang sudah ada di folder tetapi belum ada di daftar, agar Anda dapat menambahkannya di tempatnya.",
       "music": "Pindai mencari artis yang sudah ada di folder tetapi belum ada di daftar, agar Anda dapat menambahkannya di tempatnya.",
-      "books": "Pindai mencari penulis yang sudah ada di folder tetapi belum ada di daftar, agar Anda dapat menambahkannya di tempatnya."
+      "books": "Pindai mencari penulis yang sudah ada di folder tetapi belum ada di daftar, agar Anda dapat menambahkannya di tempatnya.",
+      "game": "Periksa menelusuri folder ini untuk mencari game setiap sistem, seperti roms/mame dan roms/snes, lalu memeriksanya dengan daftar MAME dan No-Intro. File Anda tidak pernah diubah."
     },
     "newShows": "Acara baru",
     "newShowsSub": "Episode mana yang dipantau Box Office saat sebuah acara ditambahkan, di sini atau lewat permintaan dari Matinee. Acara yang sudah lama tayang bisa punya ratusan episode lama; memantau hanya beberapa musim terakhir membuat patroli perpustakaan dan peningkatan fokus pada yang kemungkinan Anda tonton. Anda tetap dapat memilih yang lain saat menambahkan acara, dan mengaktifkan atau menonaktifkan musim dari halaman acara. Acara yang sudah ada di daftar tetap seperti semula.",
@@ -1053,7 +1055,8 @@
     },
     "openPage": "Buka {{page}}",
     "ereadersOff": "Kirim ebook lewat email ke Kindle, PocketBook, atau e-reader lain. Aktifkan {{ebooks}} untuk mengaturnya.",
-    "turnOnType": "Aktifkan {{name}}"
+    "turnOnType": "Aktifkan {{name}}",
+    "gameLayout": "Pilih folder tempat game Anda: folder satu sistem, atau folder yang berisi satu folder untuk tiap sistem (mame, snes, n64, dan seterusnya). Box Office menemukan sistemnya sendiri."
   },
   "mediaTypes": {
     "music": {
@@ -1071,6 +1074,10 @@
     "comic": {
       "name": "Komik dan manga",
       "summary": "Ikuti seri dan dapatkan edisi dan volume baru."
+    },
+    "game": {
+      "name": "Game",
+      "summary": "Lihat koleksi video game Anda: set arcade dari MAME dan game konsol, sudah diperiksa dan lengkap dengan sampul."
     }
   },
   "conn": {
@@ -1940,5 +1947,114 @@
     "other": "Edisi lain",
     "otherHint": "Tidak ada di daftar? Pilih satu dan Box Office mencarinya sekarang.",
     "pick": "Pilih edisi"
+  },
+  "games": {
+    "sub": "{{games}} di {{systems}}",
+    "games_other": "{{count}} game",
+    "systems_other": "{{count}} sistem",
+    "versions_other": "{{count}} versi",
+    "systemSub": "{{games}}, total {{versions}}",
+    "support_other": "{{count}} set BIOS dan perangkat",
+    "withProblems_other": "{{count}} bermasalah",
+    "allComplete": "Semua lengkap",
+    "checkAgain": "Periksa lagi",
+    "check": "Periksa",
+    "checking": "Memeriksa…",
+    "seeGames": "Lihat game Anda",
+    "checked": "diperiksa {{when}}",
+    "none": "Belum ada game",
+    "noneBody": "Box Office menampilkan game yang sudah Anda miliki: set arcade untuk MAME dan game konsol seperti Super Nintendo dan Game Boy. Box Office membaca dan memeriksanya, tanpa pernah mengubahnya.",
+    "addRoot": "Tambahkan folder game Anda di <link>Pengaturan → Folder akar game</link>.",
+    "noSystems": "Belum ada sistem yang ditemukan",
+    "noSystemsBody": "Box Office tidak menemukan sistem game di folder akar game Anda. Taruh game setiap sistem di folder dengan namanya, seperti mame atau snes, lalu periksa lagi.",
+    "unsure_other": "Box Office tidak bisa mengetahui untuk sistem apa folder-folder ini",
+    "unsureHint": "Ganti nama masing-masing menjadi nama sistemnya, seperti mame, snes, n64 atau gba, lalu periksa lagi.",
+    "step": {
+      "finding": "Menelusuri folder game Anda…",
+      "list": "Mengambil daftar game {{system}}…",
+      "reading": "Membaca game {{system}}…",
+      "checking": "Mencocokkan game {{system}} dengan daftar…"
+    },
+    "stepCount": "{{done}} dari {{total}}",
+    "locked": "Jangan diubah",
+    "lockedHint": "Box Office tidak akan melihat game {{name}} lagi sampai Anda mematikan ini, dan menyimpan hasil terakhirnya. Gunakan saat Anda menata ulang folder.",
+    "format": {
+      "non-merged": "set non-merged",
+      "split": "set split",
+      "merged": "set merged"
+    },
+    "mameVersion": "Versi MAME",
+    "mameVersionSub": "Set MAME berubah di setiap versi, jadi set yang berjalan di satu versi mungkin tidak berjalan di versi lain.",
+    "mameVersionPick": "Periksa set dengan",
+    "mameVersionHint": "Pilih versi MAME yang Anda gunakan. Box Office mengunduh daftar versi itu dari rilis MAME di GitHub dan memeriksa ulang setiap set.",
+    "newest": "MAME terbaru ({{version}})",
+    "newestUnknown": "MAME terbaru",
+    "noGames": "Tidak ada game di folder ini",
+    "noGamesBody": "Box Office tidak menemukan game di {{path}}.",
+    "filter": "Saring menurut judul atau pembuat",
+    "allGenres": "Semua genre",
+    "allYears": "Semua tahun",
+    "sort": {
+      "title": "Menurut judul",
+      "year": "Menurut tahun",
+      "added": "Baru ditemukan"
+    },
+    "hasProblems": "Bermasalah",
+    "noMatch": "Tidak ada game yang cocok.",
+    "status": {
+      "complete": "Lengkap",
+      "missing": "File hilang",
+      "wrong": "Versi salah",
+      "wrongFor": "Versi salah untuk {{list}}",
+      "badCopy": "Salinan rusak",
+      "bios": "Perlu BIOS",
+      "unknown": "Tidak ada di daftar",
+      "unreadable": "Tidak bisa dibaca"
+    },
+    "whatsWrong": "Apa yang salah",
+    "explain": {
+      "missingArcade": "Beberapa file yang dibutuhkan set ini tidak ada, jadi MAME mungkin tidak bisa menjalankannya.",
+      "wrongArcade": "Beberapa file berasal dari versi MAME selain {{list}}. Pilih versi yang Anda gunakan di Versi MAME, atau perbarui set-nya.",
+      "biosArcade": "Set-nya sendiri lengkap, tetapi butuh set BIOS atau perangkat yang tidak ada di folder.",
+      "unknownArcade": "{{list}} tidak punya set bernama {{name}}. Mungkin sudah diganti namanya, atau untuk emulator lain.",
+      "unreadableArcade": "File tidak bisa dibuka. Mungkin rusak, atau masih disalin.",
+      "missing": "Beberapa file yang dibutuhkan game ini tidak ada.",
+      "wrong": "File diberi nama seperti game di daftar No-Intro, tetapi tidak sama: salinan rusak, atau sudah diubah.",
+      "bios": "Game ini butuh BIOS yang tidak ada.",
+      "unknown": "Daftar No-Intro tidak punya salinan seperti ini. Mungkin ini hack, terjemahan atau game buatan sendiri, dan itu tidak apa-apa.",
+      "unreadable": "File tidak bisa dibuka. Mungkin rusak, atau masih disalin."
+    },
+    "problem": {
+      "missing": "<code>{{name}}</code> hilang",
+      "wrong": "<code>{{name}}</code> dari versi lain",
+      "wrongCopy": "<code>{{name}}</code> tidak cocok dengan salinan No-Intro",
+      "bios": "Perlu set BIOS <code>{{name}}</code>",
+      "device": "Perlu set perangkat <code>{{name}}</code>",
+      "parent": "Perlu set induknya, <code>{{name}}</code>",
+      "disk": "CHD <code>{{name}}</code> hilang",
+      "diskWrong": "CHD <code>{{name}}</code> dari versi lain",
+      "unreadable": "Tidak bisa dibaca: {{name}}"
+    },
+    "inParent": "Di set induknya",
+    "fact": {
+      "system": "Sistem",
+      "set": "Set",
+      "name": "Nama No-Intro",
+      "year": "Tahun",
+      "manufacturer": "Pembuat",
+      "publisher": "Penerbit",
+      "players": "Pemain",
+      "genre": "Genre",
+      "parent": "Klon dari",
+      "crc": "CRC",
+      "found": "Ditemukan"
+    },
+    "files": "File",
+    "noFiles": "File-nya sudah tidak ada. Periksa lagi untuk memperbarui daftar.",
+    "parentSet": "Set induk",
+    "readOnly": "Box Office hanya membaca file ini. Box Office tidak pernah memindahkan, mengganti nama, atau menghapusnya.",
+    "clones": "Klon",
+    "otherVersions": "Versi lain",
+    "theParent": "induknya"
   }
 }

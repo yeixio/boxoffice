@@ -25,7 +25,8 @@
     "signedInAs": "{{name}} としてサインイン中",
     "showNames": "名前を表示",
     "iconsOnly": "アイコンのみ",
-    "version": "Box Office {{version}}"
+    "version": "Box Office {{version}}",
+    "games": "ゲーム"
   },
   "app": {
     "notAnswering": "Box Office が応答しません: {{error}}",
@@ -963,7 +964,8 @@
       "movie": "スキャンは、フォルダーにすでにあってリストにない映画を探し、その場所のまま追加できるようにします。",
       "series": "スキャンは、フォルダーにすでにあってリストにない番組を探し、その場所のまま追加できるようにします。",
       "music": "スキャンは、フォルダーにすでにあってリストにないアーティストを探し、その場所のまま追加できるようにします。",
-      "books": "スキャンは、フォルダーにすでにあってリストにない著者を探し、その場所のまま追加できるようにします。"
+      "books": "スキャンは、フォルダーにすでにあってリストにない著者を探し、その場所のまま追加できるようにします。",
+      "game": "チェックはこのフォルダー内で roms/mame や roms/snes のようにシステムごとのゲームを探し、MAME と No-Intro のリストと照合します。ファイルは一切変更しません。"
     },
     "newShows": "新しい番組",
     "newShowsSub": "番組を追加したとき（ここでも、Matinee からのリクエストでも）に Box Office が監視するエピソード。長寿番組には古いエピソードが何百もあることがあります。直近の数シーズンだけを監視すると、ライブラリ巡回とアップグレードが観そうなものに集中します。番組を追加するときに別の選択もでき、シーズンのオン・オフは番組のページで切り替えられます。すでにリストにある番組は今のままです。",
@@ -1053,7 +1055,8 @@
     },
     "openPage": "{{page}}を開く",
     "ereadersOff": "電子書籍をメールで Kindle、PocketBook などのリーダーに送れます。設定するには{{ebooks}}をオンにしてください。",
-    "turnOnType": "{{name}}をオンにする"
+    "turnOnType": "{{name}}をオンにする",
+    "gameLayout": "ゲームのあるフォルダーを選んでください。1 つのシステムのフォルダーか、システムごとのフォルダー（mame、snes、n64 など）を含むフォルダーです。システムは Box Office が自動で見つけます。"
   },
   "mediaTypes": {
     "music": {
@@ -1071,6 +1074,10 @@
     "comic": {
       "name": "コミック・マンガ",
       "summary": "シリーズをフォローして、新しい号や巻を取得します。"
+    },
+    "game": {
+      "name": "ゲーム",
+      "summary": "ビデオゲームのコレクションを表示します。MAME のアーケードセットとコンソールゲームを、チェックしてパッケージ画像付きで。"
     }
   },
   "conn": {
@@ -1940,5 +1947,114 @@
     "other": "ほかのエディション",
     "otherHint": "一覧にない場合は選ぶと、Box Office がすぐに探します。",
     "pick": "エディションを選択"
+  },
+  "games": {
+    "sub": "{{systems}}・{{games}}",
+    "games_other": "{{count}} 本のゲーム",
+    "systems_other": "{{count}} システム",
+    "versions_other": "{{count}} バージョン",
+    "systemSub": "{{games}}、合計 {{versions}}",
+    "support_other": "BIOS・デバイスセット {{count}} 個",
+    "withProblems_other": "問題あり {{count}} 件",
+    "allComplete": "すべて揃っています",
+    "checkAgain": "再チェック",
+    "check": "チェック",
+    "checking": "チェック中…",
+    "seeGames": "ゲームを見る",
+    "checked": "{{when}}にチェック",
+    "none": "まだゲームがありません",
+    "noneBody": "Box Office は、お持ちのゲームを表示します。MAME 用のアーケードセットと、スーパーファミコンやゲームボーイなどのコンソールゲームです。読み取ってチェックするだけで、変更はしません。",
+    "addRoot": "<link>設定 → ゲームのルートフォルダー</link>でゲームのあるフォルダーを追加してください。",
+    "noSystems": "まだシステムが見つかりません",
+    "noSystemsBody": "ゲームのルートフォルダーにゲームシステムが見つかりませんでした。各システムのゲームを mame や snes のようにシステム名のフォルダーに入れて、再チェックしてください。",
+    "unsure_other": "Box Office はこれらのフォルダーがどのシステム用か判別できませんでした",
+    "unsureHint": "それぞれを mame、snes、n64、gba のようにシステム名に変更して、再チェックしてください。",
+    "step": {
+      "finding": "ゲームフォルダーを調べています…",
+      "list": "{{system}} のゲームリストを取得しています…",
+      "reading": "{{system}} のゲームを読み込んでいます…",
+      "checking": "{{system}} のゲームをリストと照合しています…"
+    },
+    "stepCount": "{{done}} / {{total}}",
+    "locked": "触らない",
+    "lockedHint": "これをオフにするまで、Box Office は {{name}} のゲームを再び調べず、前回見つけた内容を保持します。フォルダーを整理している間に使ってください。",
+    "format": {
+      "non-merged": "non-merged セット",
+      "split": "split セット",
+      "merged": "merged セット"
+    },
+    "mameVersion": "MAME のバージョン",
+    "mameVersionSub": "MAME のセットはバージョンごとに変わるため、あるバージョンで動くセットが別のバージョンでは動かないことがあります。",
+    "mameVersionPick": "セットの照合先",
+    "mameVersionHint": "プレイに使う MAME のバージョンを選んでください。Box Office はそのバージョンのリストを GitHub の MAME リリースからダウンロードし、すべてのセットを再チェックします。",
+    "newest": "最新の MAME（{{version}}）",
+    "newestUnknown": "最新の MAME",
+    "noGames": "このフォルダーにゲームがありません",
+    "noGamesBody": "{{path}} にゲームが見つかりませんでした。",
+    "filter": "タイトルやメーカーで絞り込む",
+    "allGenres": "すべてのジャンル",
+    "allYears": "すべての年",
+    "sort": {
+      "title": "タイトル順",
+      "year": "年順",
+      "added": "最近見つかった順"
+    },
+    "hasProblems": "問題あり",
+    "noMatch": "一致するゲームはありません。",
+    "status": {
+      "complete": "完全",
+      "missing": "ファイル不足",
+      "wrong": "バージョン違い",
+      "wrongFor": "{{list}} とバージョン違い",
+      "badCopy": "不良コピー",
+      "bios": "BIOS が必要",
+      "unknown": "リストにない",
+      "unreadable": "読み取れません"
+    },
+    "whatsWrong": "問題点",
+    "explain": {
+      "missingArcade": "このセットに必要なファイルの一部がないため、MAME で起動できない可能性があります。",
+      "wrongArcade": "一部のファイルが {{list}} ではない別の MAME バージョンのものです。MAME のバージョンでプレイに使うバージョンを選ぶか、セットを更新してください。",
+      "biosArcade": "セット自体は揃っていますが、フォルダーにない BIOS またはデバイスセットが必要です。",
+      "unknownArcade": "{{list}} に {{name}} という名前のセットはありません。名前が変わったか、別のエミュレーター用の可能性があります。",
+      "unreadableArcade": "ファイルを開けません。破損しているか、まだコピー中の可能性があります。",
+      "missing": "このゲームに必要なファイルの一部がありません。",
+      "wrong": "No-Intro のリストにあるゲームと同じ名前ですが、内容が異なります。不良コピーか、後から変更されたものです。",
+      "bios": "このゲームには、見つからない BIOS が必要です。",
+      "unknown": "No-Intro のリストにはこのようなコピーはありません。ハック、翻訳、自作ゲームなどの可能性があり、それで問題ありません。",
+      "unreadable": "ファイルを開けません。破損しているか、まだコピー中の可能性があります。"
+    },
+    "problem": {
+      "missing": "<code>{{name}}</code> がありません",
+      "wrong": "<code>{{name}}</code> は別のバージョンのものです",
+      "wrongCopy": "<code>{{name}}</code> が No-Intro のコピーと一致しません",
+      "bios": "BIOS セット <code>{{name}}</code> が必要です",
+      "device": "デバイスセット <code>{{name}}</code> が必要です",
+      "parent": "親セット <code>{{name}}</code> が必要です",
+      "disk": "CHD <code>{{name}}</code> がありません",
+      "diskWrong": "CHD <code>{{name}}</code> は別のバージョンのものです",
+      "unreadable": "読み取れません：{{name}}"
+    },
+    "inParent": "親のセット内",
+    "fact": {
+      "system": "システム",
+      "set": "セット",
+      "name": "No-Intro 名",
+      "year": "年",
+      "manufacturer": "メーカー",
+      "publisher": "発売元",
+      "players": "プレイ人数",
+      "genre": "ジャンル",
+      "parent": "クローン元",
+      "crc": "CRC",
+      "found": "発見日"
+    },
+    "files": "ファイル",
+    "noFiles": "ファイルが見つからなくなりました。再チェックしてリストを更新してください。",
+    "parentSet": "親のセット",
+    "readOnly": "Box Office はこれらのファイルを読み取るだけです。移動、名前変更、削除は一切しません。",
+    "clones": "クローン",
+    "otherVersions": "その他のバージョン",
+    "theParent": "親"
   }
 }

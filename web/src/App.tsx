@@ -17,6 +17,7 @@ import { ShowDetail } from './pages/ShowDetail'
 import { Music } from './pages/Music'
 import { AuthorPage, BookLink, Books } from './pages/Books'
 import { AlbumLink, ArtistDetail } from './pages/ArtistDetail'
+import { GamePage, Games, GameSystemPage } from './pages/Games'
 import { Calendar } from './pages/Calendar'
 import { Activity } from './pages/Activity'
 import { Downloads } from './pages/Downloads'
@@ -100,6 +101,9 @@ function Shell({ status }: { status: Status }) {
           <Route path="/audiobooks/book/:id" element={<BookLink format="audiobook" />} />
           <Route path="/audiobooks" element={<Books key="audiobook" format="audiobook" />} />
           <Route path="/audiobooks/:id" element={<AuthorPage key="audiobook" format="audiobook" />} />
+          <Route path="/games" element={<Games />} />
+          <Route path="/games/:id" element={<GameSystemPage />} />
+          <Route path="/games/game/:id" element={<GamePage />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/requests" element={<Requests />} />
           <Route path="/downloads" element={<Downloads />} />

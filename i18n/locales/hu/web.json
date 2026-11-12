@@ -27,7 +27,8 @@
     "signedInAs": "Bejelentkezve: {{name}}",
     "showNames": "Nevek mutatása",
     "iconsOnly": "Csak ikonok",
-    "version": "Box Office {{version}}"
+    "version": "Box Office {{version}}",
+    "games": "Játékok"
   },
   "app": {
     "notAnswering": "A Box Office nem válaszol: {{error}}",
@@ -1037,7 +1038,8 @@
       "movie": "A keresés olyan filmeket keres egy mappában, amelyek még nincsenek a listán, hogy ott helyben hozzáadhasd őket.",
       "series": "A keresés olyan sorozatokat keres egy mappában, amelyek még nincsenek a listán, hogy ott helyben hozzáadhasd őket.",
       "music": "A keresés olyan előadókat keres egy mappában, akik még nincsenek a listán, hogy ott helyben hozzáadhasd őket.",
-      "books": "A keresés olyan szerzőket keres egy mappában, akik még nincsenek a listán, hogy ott helyben hozzáadhasd őket."
+      "books": "A keresés olyan szerzőket keres egy mappában, akik még nincsenek a listán, hogy ott helyben hozzáadhasd őket.",
+      "game": "Az Ellenőrzés átnézi ezt a mappát minden rendszer játékaiért, például roms/mame és roms/snes, és összeveti őket a MAME és a No-Intro listáival. A fájljaidat soha nem módosítja."
     },
     "newShows": "Új sorozatok",
     "newShowsSub": "Mely epizódokat figyeli a Box Office, amikor egy sorozat bekerül, itt vagy egy Matinee-kérés révén. Egy régóta futó sorozatnak több száz régi epizódja lehet; ha csak az utolsó néhány évadot figyeli, a könyvtárőrjárat és a minőségjavítás arra összpontosít, amit valószínűleg megnézel. Sorozat hozzáadásakor továbbra is választhatsz mást, és az évadokat a sorozat oldalán be- vagy kikapcsolhatod. A listán már szereplő sorozatok megtartják, amijük van.",
@@ -1130,7 +1132,8 @@
     },
     "openPage": "Megnyitás: {{page}}",
     "ereadersOff": "Küldj e-könyveket e-mailben Kindle-re, PocketBookra vagy más olvasóra. A beállításhoz kapcsold be ezt: {{ebooks}}.",
-    "turnOnType": "Bekapcsolás: {{name}}"
+    "turnOnType": "Bekapcsolás: {{name}}",
+    "gameLayout": "Válaszd ki a játékaidat tartalmazó mappát: egy rendszer mappáját, vagy egy mappát, amelyben minden rendszernek saját mappája van (mame, snes, n64 stb.). A Box Office maga ismeri fel a rendszereket."
   },
   "mediaTypes": {
     "music": {
@@ -1148,6 +1151,10 @@
     "comic": {
       "name": "Képregények és mangák",
       "summary": "Kövess sorozatokat, és kapd meg az új számokat és köteteket."
+    },
+    "game": {
+      "name": "Játékok",
+      "summary": "Nézd meg a videojáték-gyűjteményedet: MAME-es játéktermi készleteket és konzolos játékokat, ellenőrizve és borítóval."
     }
   },
   "conn": {
@@ -2035,5 +2042,120 @@
     "other": "Másik változat",
     "otherHint": "Nincs a listán? Válassz egyet, és a Box Office most megkeresi.",
     "pick": "Válassz változatot"
+  },
+  "games": {
+    "sub": "{{games}}, {{systems}}",
+    "games_one": "{{count}} játék",
+    "games_other": "{{count}} játék",
+    "systems_one": "{{count}} rendszeren",
+    "systems_other": "{{count}} rendszeren",
+    "versions_one": "{{count}} verzió",
+    "versions_other": "{{count}} verzió",
+    "systemSub": "{{games}}, összesen {{versions}}",
+    "support_one": "{{count}} BIOS- vagy eszközkészlet",
+    "support_other": "{{count}} BIOS- és eszközkészlet",
+    "withProblems_one": "{{count}} hibás",
+    "withProblems_other": "{{count}} hibás",
+    "allComplete": "Mind teljes",
+    "checkAgain": "Újraellenőrzés",
+    "check": "Ellenőrzés",
+    "checking": "Ellenőrzés…",
+    "seeGames": "Játékaid megtekintése",
+    "checked": "ellenőrizve: {{when}}",
+    "none": "Még nincsenek játékok",
+    "noneBody": "A Box Office a már meglévő játékaidat mutatja: MAME-es játéktermi készleteket és konzolos játékokat, például Super Nintendóra és Game Boyra. Olvassa és ellenőrzi őket, de soha nem módosítja.",
+    "addRoot": "Add hozzá a játékaid mappáját itt: <link>Beállítások → Játékok gyökérmappái</link>.",
+    "noSystems": "Még nem található rendszer",
+    "noSystemsBody": "A Box Office nem talált játékrendszert a játékok gyökérmappáiban. Tedd minden rendszer játékait egy róla elnevezett mappába, például mame vagy snes, majd ellenőrizd újra.",
+    "unsure_one": "A Box Office nem tudta megállapítani, melyik rendszerhez tartozik ez a mappa",
+    "unsure_other": "A Box Office nem tudta megállapítani, melyik rendszerhez tartoznak ezek a mappák",
+    "unsureHint": "Nevezd át mindegyiket a rendszer nevére, például mame, snes, n64 vagy gba, majd ellenőrizd újra.",
+    "step": {
+      "finding": "Játékmappák átnézése…",
+      "list": "A(z) {{system}} játéklistájának letöltése…",
+      "reading": "A(z) {{system}} játékainak beolvasása…",
+      "checking": "A(z) {{system}} játékainak összevetése a listával…"
+    },
+    "stepCount": "{{done}} / {{total}}",
+    "locked": "Ne nyúlj hozzá",
+    "lockedHint": "A Box Office nem nézi meg újra a(z) {{name}} játékait, amíg ezt ki nem kapcsolod, és megtartja, amit legutóbb talált. Használd, amíg átrendezed a mappát.",
+    "format": {
+      "non-merged": "non-merged készletek",
+      "split": "split készletek",
+      "merged": "merged készletek"
+    },
+    "mameVersion": "MAME-verzió",
+    "mameVersionSub": "A MAME készletei minden verzióval változnak, így ami az egyikben működik, a másikban talán nem.",
+    "mameVersionPick": "Készletek ellenőrzése ehhez",
+    "mameVersionHint": "Válaszd ki a MAME-verziót, amellyel játszol. A Box Office letölti annak a verziónak a listáját a MAME GitHubos kiadásaiból, és minden készletet újra ellenőriz.",
+    "newest": "A legújabb MAME ({{version}})",
+    "newestUnknown": "A legújabb MAME",
+    "noGames": "Ebben a mappában nincsenek játékok",
+    "noGamesBody": "A Box Office nem talált játékot itt: {{path}}.",
+    "filter": "Szűrés cím vagy gyártó szerint",
+    "allGenres": "Minden műfaj",
+    "allYears": "Minden év",
+    "sort": {
+      "title": "Cím szerint",
+      "year": "Év szerint",
+      "added": "Nemrég találtak"
+    },
+    "hasProblems": "Hibás",
+    "noMatch": "Nincs egyező játék.",
+    "status": {
+      "complete": "Teljes",
+      "missing": "Hiányzó fájlok",
+      "wrong": "Rossz verzió",
+      "wrongFor": "Rossz verzió ehhez: {{list}}",
+      "badCopy": "Rossz másolat",
+      "bios": "BIOS kell hozzá",
+      "unknown": "Nincs a listán",
+      "unreadable": "Nem olvasható"
+    },
+    "whatsWrong": "Mi a baj",
+    "explain": {
+      "missingArcade": "Hiányzik néhány fájl, amely a készlethez kell, így a MAME lehet, hogy nem indítja el.",
+      "wrongArcade": "Néhány fájl a MAME egy másik verziójából való, nem ebből: {{list}}. Válaszd ki a verziót, amellyel játszol, a MAME-verzió résznél, vagy frissítsd a készletet.",
+      "biosArcade": "Maga a készlet teljes, de kell hozzá egy BIOS- vagy eszközkészlet, amely nincs a mappában.",
+      "unknownArcade": "A(z) {{list}} listán nincs {{name}} nevű készlet. Lehet, hogy azóta átnevezték, vagy másik emulátorhoz való.",
+      "unreadableArcade": "A fájl nem nyitható meg. Lehet, hogy sérült, vagy még másolódik.",
+      "missing": "Hiányzik néhány fájl, amely a játékhoz kell.",
+      "wrong": "A fájl neve egy No-Intro-listás játéké, de nem ugyanaz: rossz másolat, vagy azóta módosították.",
+      "bios": "A játékhoz egy hiányzó BIOS kell.",
+      "unknown": "A No-Intro listáján nincs ilyen másolat. Lehet hack, fordítás vagy házi készítésű játék, és ez rendben van.",
+      "unreadable": "A fájl nem nyitható meg. Lehet, hogy sérült, vagy még másolódik."
+    },
+    "problem": {
+      "missing": "Hiányzik: <code>{{name}}</code>",
+      "wrong": "A(z) <code>{{name}}</code> másik verzióból való",
+      "wrongCopy": "A(z) <code>{{name}}</code> nem egyezik a No-Intro másolatával",
+      "bios": "Kell hozzá a(z) <code>{{name}}</code> BIOS-készlet",
+      "device": "Kell hozzá a(z) <code>{{name}}</code> eszközkészlet",
+      "parent": "Kell hozzá a szülőkészlete: <code>{{name}}</code>",
+      "disk": "Hiányzik a(z) <code>{{name}}</code> CHD",
+      "diskWrong": "A(z) <code>{{name}}</code> CHD másik verzióból való",
+      "unreadable": "Nem olvasható: {{name}}"
+    },
+    "inParent": "A szülő készletében",
+    "fact": {
+      "system": "Rendszer",
+      "set": "Készlet",
+      "name": "No-Intro-név",
+      "year": "Év",
+      "manufacturer": "Gyártó",
+      "publisher": "Kiadó",
+      "players": "Játékosok",
+      "genre": "Műfaj",
+      "parent": "Klónja ennek",
+      "crc": "CRC",
+      "found": "Megtalálva"
+    },
+    "files": "Fájlok",
+    "noFiles": "A fájljai már nincsenek meg. Ellenőrizd újra a lista frissítéséhez.",
+    "parentSet": "A szülő készlete",
+    "readOnly": "A Box Office csak olvassa ezeket a fájlokat. Soha nem helyezi át, nevezi át vagy törli őket.",
+    "clones": "Klónok",
+    "otherVersions": "Más verziók",
+    "theParent": "a szülő"
   }
 }

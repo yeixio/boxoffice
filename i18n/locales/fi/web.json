@@ -27,7 +27,8 @@
     "signedInAs": "Kirjautunut: {{name}}",
     "showNames": "Näytä nimet",
     "iconsOnly": "Vain kuvakkeet",
-    "version": "Box Office {{version}}"
+    "version": "Box Office {{version}}",
+    "games": "Pelit"
   },
   "app": {
     "notAnswering": "Box Office ei vastaa: {{error}}",
@@ -1037,7 +1038,8 @@
       "movie": "Skannaus etsii elokuvia, jotka ovat jo kansiossa mutta eivät listalla, jotta voit lisätä ne paikoilleen.",
       "series": "Skannaus etsii sarjoja, jotka ovat jo kansiossa mutta eivät listalla, jotta voit lisätä ne paikoilleen.",
       "music": "Skannaus etsii artisteja, jotka ovat jo kansiossa mutta eivät listalla, jotta voit lisätä ne paikoilleen.",
-      "books": "Skannaus etsii kirjailijoita, jotka ovat jo kansiossa mutta eivät listalla, jotta voit lisätä ne paikoilleen."
+      "books": "Skannaus etsii kirjailijoita, jotka ovat jo kansiossa mutta eivät listalla, jotta voit lisätä ne paikoilleen.",
+      "game": "Tarkista käy tämän kansion läpi ja etsii kunkin järjestelmän pelit, esimerkiksi roms/mame ja roms/snes, ja tarkistaa ne MAMEn ja No-Intron listoja vasten. Tiedostojasi ei koskaan muuteta."
     },
     "newShows": "Uudet sarjat",
     "newShowsSub": "Mitä jaksoja Box Office seuraa, kun sarja lisätään, täällä tai Matineen toiveesta. Pitkään jatkuneella sarjalla voi olla satoja vanhoja jaksoja; vain viimeisimpien kausien seuraaminen pitää kirjastopartion ja päivitykset siinä, mitä todennäköisesti katsot. Voit silti valita jotain muuta sarjaa lisätessäsi ja kytkeä kausia päälle tai pois sarjan sivulta. Listalla jo olevat sarjat säilyttävät sen, mitä niillä on.",
@@ -1130,7 +1132,8 @@
     },
     "openPage": "Avaa: {{page}}",
     "ereadersOff": "Lähetä e-kirjoja sähköpostilla Kindleen, PocketBookiin tai muuhun lukulaitteeseen. Ota {{ebooks}} käyttöön asettaaksesi sen.",
-    "turnOnType": "Ota käyttöön: {{name}}"
+    "turnOnType": "Ota käyttöön: {{name}}",
+    "gameLayout": "Valitse kansio, jossa pelisi ovat: yhden järjestelmän kansio tai kansio, jossa on oma kansio kullekin järjestelmälle (mame, snes, n64 ja niin edelleen). Box Office tunnistaa järjestelmät itse."
   },
   "mediaTypes": {
     "music": {
@@ -1148,6 +1151,10 @@
     "comic": {
       "name": "Sarjakuvat ja manga",
       "summary": "Seuraa sarjoja ja saa uudet numerot ja osat."
+    },
+    "game": {
+      "name": "Pelit",
+      "summary": "Katso videopelikokoelmaasi: MAMEn pelihallisarjat ja konsolipelit tarkistettuina ja kansikuvineen."
     }
   },
   "conn": {
@@ -2035,5 +2042,120 @@
     "other": "Muu versio",
     "otherHint": "Eikö listalla? Valitse yksi, niin Box Office etsii sitä nyt.",
     "pick": "Valitse versio"
+  },
+  "games": {
+    "sub": "{{games}}, {{systems}}",
+    "games_one": "{{count}} peli",
+    "games_other": "{{count}} peliä",
+    "systems_one": "{{count}} järjestelmä",
+    "systems_other": "{{count}} järjestelmää",
+    "versions_one": "{{count}} versio",
+    "versions_other": "{{count}} versiota",
+    "systemSub": "{{games}}, yhteensä {{versions}}",
+    "support_one": "{{count}} BIOS- tai laitesarja",
+    "support_other": "{{count}} BIOS- ja laitesarjaa",
+    "withProblems_one": "{{count}} ongelmallinen",
+    "withProblems_other": "{{count}} ongelmallista",
+    "allComplete": "Kaikki täydellisiä",
+    "checkAgain": "Tarkista uudelleen",
+    "check": "Tarkista",
+    "checking": "Tarkistetaan…",
+    "seeGames": "Katso pelisi",
+    "checked": "tarkistettu {{when}}",
+    "none": "Ei vielä pelejä",
+    "noneBody": "Box Office näyttää pelit, jotka sinulla jo on: MAMEn pelihallisarjat ja konsolipelit, kuten Super Nintendo ja Game Boy. Se lukee ja tarkistaa ne eikä koskaan muuta niitä.",
+    "addRoot": "Lisää pelikansiosi kohdassa <link>Asetukset → Pelien juurikansiot</link>.",
+    "noSystems": "Järjestelmiä ei ole vielä löytynyt",
+    "noSystemsBody": "Box Office ei löytänyt pelijärjestelmiä pelien juurikansioistasi. Laita kunkin järjestelmän pelit sen mukaan nimettyyn kansioon, esimerkiksi mame tai snes, ja tarkista uudelleen.",
+    "unsure_one": "Box Office ei tunnistanut, mille järjestelmälle tämä kansio on",
+    "unsure_other": "Box Office ei tunnistanut, mille järjestelmille nämä kansiot ovat",
+    "unsureHint": "Nimeä kukin järjestelmän nimelle, esimerkiksi mame, snes, n64 tai gba, ja tarkista uudelleen.",
+    "step": {
+      "finding": "Käydään läpi pelikansioitasi…",
+      "list": "Haetaan järjestelmän {{system}} pelilistaa…",
+      "reading": "Luetaan järjestelmän {{system}} pelejä…",
+      "checking": "Verrataan järjestelmän {{system}} pelejä listaan…"
+    },
+    "stepCount": "{{done}}/{{total}}",
+    "locked": "Älä koske",
+    "lockedHint": "Box Office ei katso järjestelmän {{name}} pelejä uudelleen ennen kuin poistat tämän käytöstä, ja se säilyttää viimeksi löytämänsä. Käytä tätä, kun järjestelet kansiota.",
+    "format": {
+      "non-merged": "non-merged-sarjat",
+      "split": "split-sarjat",
+      "merged": "merged-sarjat"
+    },
+    "mameVersion": "MAME-versio",
+    "mameVersionSub": "MAMEn sarjat muuttuvat joka versiossa, joten yhdessä toimiva sarja ei välttämättä toimi toisessa.",
+    "mameVersionPick": "Tarkista sarjat vasten",
+    "mameVersionHint": "Valitse MAME-versio, jolla pelaat. Box Office lataa version listan MAMEn julkaisuista GitHubista ja tarkistaa kaikki sarjat uudelleen.",
+    "newest": "Uusin MAME ({{version}})",
+    "newestUnknown": "Uusin MAME",
+    "noGames": "Tässä kansiossa ei ole pelejä",
+    "noGamesBody": "Box Office ei löytänyt pelejä kansiosta {{path}}.",
+    "filter": "Suodata nimen tai valmistajan mukaan",
+    "allGenres": "Kaikki lajityypit",
+    "allYears": "Kaikki vuodet",
+    "sort": {
+      "title": "Nimen mukaan",
+      "year": "Vuoden mukaan",
+      "added": "Viimeksi löydetyt"
+    },
+    "hasProblems": "Ongelmallisia",
+    "noMatch": "Yksikään peli ei vastaa hakua.",
+    "status": {
+      "complete": "Täydellinen",
+      "missing": "Tiedostoja puuttuu",
+      "wrong": "Väärä versio",
+      "wrongFor": "Väärä versio: {{list}}",
+      "badCopy": "Huono kopio",
+      "bios": "Tarvitsee BIOSin",
+      "unknown": "Ei listalla",
+      "unreadable": "Ei voi lukea"
+    },
+    "whatsWrong": "Mikä on vialla",
+    "explain": {
+      "missingArcade": "Osa sarjan tarvitsemista tiedostoista puuttuu, joten MAME ei ehkä käynnistä sitä.",
+      "wrongArcade": "Osa tiedostoista on eri MAME-versiosta kuin {{list}}. Valitse versio, jolla pelaat, kohdasta MAME-versio, tai päivitä sarja.",
+      "biosArcade": "Sarja itsessään on täydellinen, mutta se tarvitsee BIOS- tai laitesarjan, jota ei ole kansiossa.",
+      "unknownArcade": "Listalla {{list}} ei ole sarjaa nimeltä {{name}}. Se on ehkä nimetty uudelleen tai tarkoitettu toiselle emulaattorille.",
+      "unreadableArcade": "Tiedostoa ei voi avata. Se voi olla vioittunut tai vielä kopioitumassa.",
+      "missing": "Osa pelin tarvitsemista tiedostoista puuttuu.",
+      "wrong": "Tiedosto on nimetty kuten No-Intron listan peli, mutta se ei ole sama: huono kopio tai myöhemmin muutettu.",
+      "bios": "Peli tarvitsee BIOSin, jota ei ole.",
+      "unknown": "No-Intron listalla ei ole tällaista kopiota. Se voi olla hakkerointi, käännös tai kotitekoinen peli, ja se on ihan hyvä.",
+      "unreadable": "Tiedostoa ei voi avata. Se voi olla vioittunut tai vielä kopioitumassa."
+    },
+    "problem": {
+      "missing": "<code>{{name}}</code> puuttuu",
+      "wrong": "<code>{{name}}</code> on eri versiosta",
+      "wrongCopy": "<code>{{name}}</code> ei vastaa No-Intron kopiota",
+      "bios": "Tarvitsee BIOS-sarjan <code>{{name}}</code>",
+      "device": "Tarvitsee laitesarjan <code>{{name}}</code>",
+      "parent": "Tarvitsee emosarjansa, <code>{{name}}</code>",
+      "disk": "CHD <code>{{name}}</code> puuttuu",
+      "diskWrong": "CHD <code>{{name}}</code> on eri versiosta",
+      "unreadable": "Ei voi lukea: {{name}}"
+    },
+    "inParent": "Emosarjassa",
+    "fact": {
+      "system": "Järjestelmä",
+      "set": "Sarja",
+      "name": "No-Intro-nimi",
+      "year": "Vuosi",
+      "manufacturer": "Valmistaja",
+      "publisher": "Julkaisija",
+      "players": "Pelaajat",
+      "genre": "Lajityyppi",
+      "parent": "Klooni pelistä",
+      "crc": "CRC",
+      "found": "Löydetty"
+    },
+    "files": "Tiedostot",
+    "noFiles": "Sen tiedostoja ei enää ole. Tarkista uudelleen päivittääksesi listan.",
+    "parentSet": "Emosarja",
+    "readOnly": "Box Office vain lukee näitä tiedostoja. Se ei koskaan siirrä, nimeä uudelleen tai poista niitä.",
+    "clones": "Kloonit",
+    "otherVersions": "Muut versiot",
+    "theParent": "emopeli"
   }
 }

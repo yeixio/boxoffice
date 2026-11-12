@@ -29,7 +29,8 @@
     "signedInAs": "Sesión iniciada como {{name}}",
     "showNames": "Mostrar nombres",
     "iconsOnly": "Solo iconos",
-    "version": "Box Office {{version}}"
+    "version": "Box Office {{version}}",
+    "games": "Juegos"
   },
   "app": {
     "notAnswering": "Box Office no responde: {{error}}",
@@ -1111,7 +1112,8 @@
       "movie": "Escanear busca películas que ya están en una carpeta pero no en la lista, para que puedas añadirlas donde están.",
       "series": "Escanear busca series que ya están en una carpeta pero no en la lista, para que puedas añadirlas donde están.",
       "music": "Escanear busca artistas que ya están en una carpeta pero no en la lista, para que puedas añadirlos donde están.",
-      "books": "Escanear busca autores que ya están en una carpeta pero no en la lista, para que puedas añadirlos donde están."
+      "books": "Escanear busca autores que ya están en una carpeta pero no en la lista, para que puedas añadirlos donde están.",
+      "game": "Comprobar busca en esta carpeta los juegos de cada sistema, como roms/mame y roms/snes, y los compara con las listas de MAME y No-Intro. Nunca cambia tus archivos."
     },
     "newShows": "Series nuevas",
     "newShowsSub": "Qué episodios vigila Box Office cuando se añade una serie, aquí o por una petición desde Matinee. Una serie larga puede tener cientos de episodios antiguos; vigilar solo las últimas temporadas mantiene la patrulla de la biblioteca y las mejoras en lo que probablemente verás. Al añadir una serie puedes elegir otra cosa, y activar o desactivar temporadas desde su página. Las series que ya están en la lista conservan lo que tienen.",
@@ -1207,7 +1209,8 @@
     },
     "openPage": "Abrir {{page}}",
     "ereadersOff": "Envía libros electrónicos por correo a un Kindle, PocketBook u otro lector. Activa {{ebooks}} para configurarlo.",
-    "turnOnType": "Activar {{name}}"
+    "turnOnType": "Activar {{name}}",
+    "gameLayout": "Elige la carpeta donde están tus juegos: la carpeta de un sistema, o una carpeta con una carpeta por sistema (mame, snes, n64, etc.). Box Office encuentra los sistemas por sí solo."
   },
   "mediaTypes": {
     "music": {
@@ -1225,6 +1228,10 @@
     "comic": {
       "name": "Cómics y manga",
       "summary": "Sigue series y obtén números y tomos nuevos."
+    },
+    "game": {
+      "name": "Juegos",
+      "summary": "Mira tu colección de videojuegos: sets arcade de MAME y juegos de consola, comprobados y con su carátula."
     }
   },
   "conn": {
@@ -2130,5 +2137,126 @@
     "other": "Otra edición",
     "otherHint": "¿No aparece? Elige una y Box Office la busca ahora.",
     "pick": "Elige una edición"
+  },
+  "games": {
+    "sub": "{{games}} en {{systems}}",
+    "games_many": "{{count}} juegos",
+    "games_one": "{{count}} juego",
+    "games_other": "{{count}} juegos",
+    "systems_many": "{{count}} sistemas",
+    "systems_one": "{{count}} sistema",
+    "systems_other": "{{count}} sistemas",
+    "versions_many": "{{count}} versiones",
+    "versions_one": "{{count}} versión",
+    "versions_other": "{{count}} versiones",
+    "systemSub": "{{games}}, {{versions}} en total",
+    "support_many": "{{count}} sets de BIOS y dispositivos",
+    "support_one": "{{count}} set de BIOS o dispositivo",
+    "support_other": "{{count}} sets de BIOS y dispositivos",
+    "withProblems_many": "{{count}} con problemas",
+    "withProblems_one": "{{count}} con problemas",
+    "withProblems_other": "{{count}} con problemas",
+    "allComplete": "Todos completos",
+    "checkAgain": "Comprobar de nuevo",
+    "check": "Comprobar",
+    "checking": "Comprobando…",
+    "seeGames": "Ver tus juegos",
+    "checked": "comprobado {{when}}",
+    "none": "Aún no hay juegos",
+    "noneBody": "Box Office muestra los juegos que ya tienes: sets arcade para MAME y juegos de consola como Super Nintendo y Game Boy. Los lee y los comprueba, y nunca los cambia.",
+    "addRoot": "Añade la carpeta de tus juegos en <link>Ajustes → Carpetas raíz de juegos</link>.",
+    "noSystems": "Aún no se ha encontrado ningún sistema",
+    "noSystemsBody": "Box Office no encontró ningún sistema de juegos en tus carpetas raíz de juegos. Pon los juegos de cada sistema en una carpeta con su nombre, como mame o snes, y comprueba de nuevo.",
+    "unsure_many": "Box Office no pudo saber de qué sistemas son estas carpetas",
+    "unsure_one": "Box Office no pudo saber de qué sistema es esta carpeta",
+    "unsure_other": "Box Office no pudo saber de qué sistemas son estas carpetas",
+    "unsureHint": "Cambia el nombre de cada una por el del sistema, como mame, snes, n64 o gba, y comprueba de nuevo.",
+    "step": {
+      "finding": "Buscando en tus carpetas de juegos…",
+      "list": "Obteniendo la lista de juegos de {{system}}…",
+      "reading": "Leyendo los juegos de {{system}}…",
+      "checking": "Comparando los juegos de {{system}} con la lista…"
+    },
+    "stepCount": "{{done}} de {{total}}",
+    "locked": "No tocar",
+    "lockedHint": "Box Office no volverá a mirar los juegos de {{name}} hasta que lo desactives, y conserva lo que encontró la última vez. Úsalo mientras reorganizas la carpeta.",
+    "format": {
+      "non-merged": "sets no fusionados",
+      "split": "sets divididos",
+      "merged": "sets fusionados"
+    },
+    "mameVersion": "Versión de MAME",
+    "mameVersionSub": "Los sets de MAME cambian con cada versión, así que un set que funciona en una puede no funcionar en otra.",
+    "mameVersionPick": "Comprobar los sets con",
+    "mameVersionHint": "Elige la versión de MAME con la que juegas. Box Office descarga la lista de esa versión de las versiones de MAME en GitHub y vuelve a comprobar cada set.",
+    "newest": "El MAME más reciente ({{version}})",
+    "newestUnknown": "El MAME más reciente",
+    "noGames": "No hay juegos en esta carpeta",
+    "noGamesBody": "Box Office no encontró juegos en {{path}}.",
+    "filter": "Filtrar por título o fabricante",
+    "allGenres": "Todos los géneros",
+    "allYears": "Todos los años",
+    "sort": {
+      "title": "Por título",
+      "year": "Por año",
+      "added": "Encontrados hace poco"
+    },
+    "hasProblems": "Con problemas",
+    "noMatch": "Ningún juego coincide.",
+    "status": {
+      "complete": "Completo",
+      "missing": "Faltan archivos",
+      "wrong": "Versión equivocada",
+      "wrongFor": "Versión equivocada para {{list}}",
+      "badCopy": "Copia mala",
+      "bios": "Necesita una BIOS",
+      "unknown": "No está en la lista",
+      "unreadable": "No se puede leer"
+    },
+    "whatsWrong": "Qué falla",
+    "explain": {
+      "missingArcade": "Faltan algunos archivos que necesita este set, así que puede que MAME no lo arranque.",
+      "wrongArcade": "Algunos archivos son de otra versión de MAME distinta de {{list}}. Elige en Versión de MAME la versión con la que juegas, o actualiza el set.",
+      "biosArcade": "El set en sí está completo, pero necesita un set de BIOS o de dispositivo que no está en la carpeta.",
+      "unknownArcade": "{{list}} no tiene ningún set llamado {{name}}. Puede que se haya renombrado desde entonces o que sea de otro emulador.",
+      "unreadableArcade": "No se puede abrir el archivo. Puede que esté dañado o que aún se esté copiando.",
+      "missing": "Faltan algunos archivos que necesita este juego.",
+      "wrong": "El archivo se llama como un juego de la lista de No-Intro, pero no es el mismo: una copia mala, o cambiada desde entonces.",
+      "bios": "El juego necesita una BIOS que no está.",
+      "unknown": "La lista de No-Intro no tiene ninguna copia como esta. Puede ser un hack, una traducción o un juego casero, y no pasa nada.",
+      "unreadable": "No se puede abrir el archivo. Puede que esté dañado o que aún se esté copiando."
+    },
+    "problem": {
+      "missing": "Falta <code>{{name}}</code>",
+      "wrong": "<code>{{name}}</code> es de otra versión",
+      "wrongCopy": "<code>{{name}}</code> no coincide con la copia de No-Intro",
+      "bios": "Necesita el set de BIOS <code>{{name}}</code>",
+      "device": "Necesita el set de dispositivo <code>{{name}}</code>",
+      "parent": "Necesita su set padre, <code>{{name}}</code>",
+      "disk": "Falta el CHD <code>{{name}}</code>",
+      "diskWrong": "El CHD <code>{{name}}</code> es de otra versión",
+      "unreadable": "No se puede leer: {{name}}"
+    },
+    "inParent": "En el set de su padre",
+    "fact": {
+      "system": "Sistema",
+      "set": "Set",
+      "name": "Nombre en No-Intro",
+      "year": "Año",
+      "manufacturer": "Fabricante",
+      "publisher": "Distribuidora",
+      "players": "Jugadores",
+      "genre": "Género",
+      "parent": "Clon de",
+      "crc": "CRC",
+      "found": "Encontrado"
+    },
+    "files": "Archivos",
+    "noFiles": "Sus archivos ya no están. Comprueba de nuevo para actualizar la lista.",
+    "parentSet": "Set del padre",
+    "readOnly": "Box Office solo lee estos archivos. Nunca los mueve, renombra ni borra.",
+    "clones": "Clones",
+    "otherVersions": "Otras versiones",
+    "theParent": "el padre"
   }
 }

@@ -25,7 +25,8 @@
     "signedInAs": "Log masuk sebagai {{name}}",
     "showNames": "Tunjukkan nama",
     "iconsOnly": "Ikon sahaja",
-    "version": "Box Office {{version}}"
+    "version": "Box Office {{version}}",
+    "games": "Permainan"
   },
   "app": {
     "notAnswering": "Box Office tidak menjawab: {{error}}",
@@ -963,7 +964,8 @@
       "movie": "Imbas mencari filem yang sudah ada dalam folder tetapi belum dalam senarai, supaya anda boleh menambahnya di tempatnya.",
       "series": "Imbas mencari rancangan yang sudah ada dalam folder tetapi belum dalam senarai, supaya anda boleh menambahnya di tempatnya.",
       "music": "Imbas mencari artis yang sudah ada dalam folder tetapi belum dalam senarai, supaya anda boleh menambahnya di tempatnya.",
-      "books": "Imbas mencari pengarang yang sudah ada dalam folder tetapi belum dalam senarai, supaya anda boleh menambahnya di tempatnya."
+      "books": "Imbas mencari pengarang yang sudah ada dalam folder tetapi belum dalam senarai, supaya anda boleh menambahnya di tempatnya.",
+      "game": "Semak meneliti folder ini untuk permainan setiap sistem, seperti roms/mame dan roms/snes, dan menyemaknya dengan senarai MAME dan No-Intro. Fail anda tidak sekali-kali diubah."
     },
     "newShows": "Rancangan baharu",
     "newShowsSub": "Episod mana yang dipantau Box Office apabila rancangan ditambah, di sini atau melalui permintaan dari Matinee. Rancangan yang lama bersiaran boleh mempunyai ratusan episod lama; memantau hanya beberapa musim terakhir mengekalkan rondaan pustaka dan naik taraf pada yang mungkin anda tonton. Anda masih boleh memilih yang lain semasa menambah rancangan, dan menghidupkan atau mematikan musim dari halaman rancangan. Rancangan yang sudah dalam senarai kekal seperti asal.",
@@ -1053,7 +1055,8 @@
     },
     "openPage": "Buka {{page}}",
     "ereadersOff": "Hantar e-buku melalui e-mel ke Kindle, PocketBook atau e-pembaca lain. Hidupkan {{ebooks}} untuk menyediakannya.",
-    "turnOnType": "Hidupkan {{name}}"
+    "turnOnType": "Hidupkan {{name}}",
+    "gameLayout": "Pilih folder permainan anda: folder satu sistem, atau folder yang mengandungi satu folder untuk setiap sistem (mame, snes, n64 dan seterusnya). Box Office mengenal pasti sistem sendiri."
   },
   "mediaTypes": {
     "music": {
@@ -1071,6 +1074,10 @@
     "comic": {
       "name": "Komik dan manga",
       "summary": "Ikuti siri dan dapatkan keluaran dan jilid baharu."
+    },
+    "game": {
+      "name": "Permainan",
+      "summary": "Lihat koleksi permainan video anda: set arked daripada MAME dan permainan konsol, sudah disemak dan dengan seni kotak."
     }
   },
   "conn": {
@@ -1940,5 +1947,114 @@
     "other": "Edisi lain",
     "otherHint": "Tiada dalam senarai? Pilih satu dan Box Office mencarinya sekarang.",
     "pick": "Pilih edisi"
+  },
+  "games": {
+    "sub": "{{games}} pada {{systems}}",
+    "games_other": "{{count}} permainan",
+    "systems_other": "{{count}} sistem",
+    "versions_other": "{{count}} versi",
+    "systemSub": "{{games}}, {{versions}} kesemuanya",
+    "support_other": "{{count}} set BIOS dan peranti",
+    "withProblems_other": "{{count}} bermasalah",
+    "allComplete": "Semua lengkap",
+    "checkAgain": "Semak semula",
+    "check": "Semak",
+    "checking": "Menyemak…",
+    "seeGames": "Lihat permainan anda",
+    "checked": "disemak {{when}}",
+    "none": "Belum ada permainan",
+    "noneBody": "Box Office menunjukkan permainan yang anda sudah ada: set arked untuk MAME dan permainan konsol seperti Super Nintendo dan Game Boy. Ia membaca dan menyemaknya, dan tidak sekali-kali mengubahnya.",
+    "addRoot": "Tambah folder permainan anda di <link>Tetapan → Folder akar permainan</link>.",
+    "noSystems": "Belum ada sistem ditemui",
+    "noSystemsBody": "Box Office tidak menemui sebarang sistem permainan dalam folder akar permainan anda. Letakkan permainan setiap sistem dalam folder yang dinamakan sempena sistem itu, seperti mame atau snes, kemudian semak semula.",
+    "unsure_other": "Box Office tidak dapat mengenal pasti sistem untuk folder-folder ini",
+    "unsureHint": "Namakan semula setiap satu dengan nama sistemnya, seperti mame, snes, n64 atau gba, kemudian semak semula.",
+    "step": {
+      "finding": "Meneliti folder permainan anda…",
+      "list": "Mendapatkan senarai permainan {{system}}…",
+      "reading": "Membaca permainan {{system}}…",
+      "checking": "Menyemak permainan {{system}} dengan senarai…"
+    },
+    "stepCount": "{{done}} daripada {{total}}",
+    "locked": "Jangan sentuh",
+    "lockedHint": "Box Office tidak akan melihat permainan {{name}} lagi sehingga anda mematikan ini, dan menyimpan apa yang ditemui kali terakhir. Gunakannya semasa anda menyusun semula folder.",
+    "format": {
+      "non-merged": "set non-merged",
+      "split": "set split",
+      "merged": "set merged"
+    },
+    "mameVersion": "Versi MAME",
+    "mameVersionSub": "Set MAME berubah dengan setiap versi, jadi set yang berfungsi dalam satu versi mungkin tidak dalam versi lain.",
+    "mameVersionPick": "Semak set dengan",
+    "mameVersionHint": "Pilih versi MAME yang anda gunakan. Box Office memuat turun senarai versi itu daripada keluaran MAME di GitHub dan menyemak setiap set semula.",
+    "newest": "MAME terbaharu ({{version}})",
+    "newestUnknown": "MAME terbaharu",
+    "noGames": "Tiada permainan dalam folder ini",
+    "noGamesBody": "Box Office tidak menemui sebarang permainan dalam {{path}}.",
+    "filter": "Tapis mengikut tajuk atau pembuat",
+    "allGenres": "Semua genre",
+    "allYears": "Semua tahun",
+    "sort": {
+      "title": "Mengikut tajuk",
+      "year": "Mengikut tahun",
+      "added": "Baru ditemui"
+    },
+    "hasProblems": "Ada masalah",
+    "noMatch": "Tiada permainan yang sepadan.",
+    "status": {
+      "complete": "Lengkap",
+      "missing": "Fail hilang",
+      "wrong": "Versi salah",
+      "wrongFor": "Versi salah untuk {{list}}",
+      "badCopy": "Salinan rosak",
+      "bios": "Perlukan BIOS",
+      "unknown": "Tiada dalam senarai",
+      "unreadable": "Tidak boleh dibaca"
+    },
+    "whatsWrong": "Apa yang salah",
+    "explain": {
+      "missingArcade": "Beberapa fail yang diperlukan set ini tiada, jadi MAME mungkin tidak dapat memulakannya.",
+      "wrongArcade": "Beberapa fail adalah daripada versi MAME selain {{list}}. Pilih versi yang anda gunakan di Versi MAME, atau kemas kini set itu.",
+      "biosArcade": "Set itu sendiri lengkap, tetapi ia memerlukan set BIOS atau peranti yang tiada dalam folder.",
+      "unknownArcade": "{{list}} tiada set bernama {{name}}. Ia mungkin telah dinamakan semula, atau untuk emulator lain.",
+      "unreadableArcade": "Fail tidak boleh dibuka. Ia mungkin rosak, atau masih sedang disalin.",
+      "missing": "Beberapa fail yang diperlukan permainan ini tiada.",
+      "wrong": "Fail ini dinamakan seperti permainan dalam senarai No-Intro, tetapi tidak sama: salinan rosak, atau telah diubah.",
+      "bios": "Permainan ini memerlukan BIOS yang tiada.",
+      "unknown": "Senarai No-Intro tiada salinan seperti ini. Ia mungkin hack, terjemahan atau permainan buatan sendiri, dan itu tidak mengapa.",
+      "unreadable": "Fail tidak boleh dibuka. Ia mungkin rosak, atau masih sedang disalin."
+    },
+    "problem": {
+      "missing": "<code>{{name}}</code> hilang",
+      "wrong": "<code>{{name}}</code> daripada versi lain",
+      "wrongCopy": "<code>{{name}}</code> tidak sepadan dengan salinan No-Intro",
+      "bios": "Perlukan set BIOS <code>{{name}}</code>",
+      "device": "Perlukan set peranti <code>{{name}}</code>",
+      "parent": "Perlukan set induknya, <code>{{name}}</code>",
+      "disk": "CHD <code>{{name}}</code> hilang",
+      "diskWrong": "CHD <code>{{name}}</code> daripada versi lain",
+      "unreadable": "Tidak boleh dibaca: {{name}}"
+    },
+    "inParent": "Dalam set induknya",
+    "fact": {
+      "system": "Sistem",
+      "set": "Set",
+      "name": "Nama No-Intro",
+      "year": "Tahun",
+      "manufacturer": "Pengeluar",
+      "publisher": "Penerbit",
+      "players": "Pemain",
+      "genre": "Genre",
+      "parent": "Klon bagi",
+      "crc": "CRC",
+      "found": "Ditemui"
+    },
+    "files": "Fail",
+    "noFiles": "Failnya sudah tiada. Semak semula untuk mengemas kini senarai.",
+    "parentSet": "Set induk",
+    "readOnly": "Box Office hanya membaca fail ini. Ia tidak sekali-kali memindahkan, menamakan semula atau memadamkannya.",
+    "clones": "Klon",
+    "otherVersions": "Versi lain",
+    "theParent": "induknya"
   }
 }

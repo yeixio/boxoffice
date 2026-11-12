@@ -25,7 +25,8 @@
     "signedInAs": "Đã đăng nhập: {{name}}",
     "showNames": "Hiện tên",
     "iconsOnly": "Chỉ biểu tượng",
-    "version": "Box Office {{version}}"
+    "version": "Box Office {{version}}",
+    "games": "Trò chơi"
   },
   "app": {
     "notAnswering": "Box Office không phản hồi: {{error}}",
@@ -963,7 +964,8 @@
       "movie": "Quét tìm các phim đã có trong thư mục nhưng chưa có trong danh sách, để bạn có thể thêm chúng tại chỗ.",
       "series": "Quét tìm các chương trình đã có trong thư mục nhưng chưa có trong danh sách, để bạn có thể thêm chúng tại chỗ.",
       "music": "Quét tìm các nghệ sĩ đã có trong thư mục nhưng chưa có trong danh sách, để bạn có thể thêm họ tại chỗ.",
-      "books": "Quét tìm các tác giả đã có trong thư mục nhưng chưa có trong danh sách, để bạn có thể thêm họ tại chỗ."
+      "books": "Quét tìm các tác giả đã có trong thư mục nhưng chưa có trong danh sách, để bạn có thể thêm họ tại chỗ.",
+      "game": "Kiểm tra sẽ tìm trong thư mục này trò chơi của từng hệ máy, chẳng hạn roms/mame và roms/snes, rồi đối chiếu với danh sách của MAME và No-Intro. Tệp của bạn không bao giờ bị thay đổi."
     },
     "newShows": "Chương trình mới",
     "newShowsSub": "Box Office theo dõi những tập nào khi một chương trình được thêm, ở đây hoặc qua yêu cầu từ Matinee. Chương trình chiếu lâu có thể có hàng trăm tập cũ; chỉ theo dõi vài mùa gần nhất giúp tuần tra thư viện và nâng cấp tập trung vào những gì bạn có thể sẽ xem. Bạn vẫn có thể chọn khác khi thêm chương trình, và bật hoặc tắt mùa từ trang của chương trình. Chương trình đã có trong danh sách giữ nguyên thiết lập.",
@@ -1053,7 +1055,8 @@
     },
     "openPage": "Mở {{page}}",
     "ereadersOff": "Gửi sách điện tử qua email tới Kindle, PocketBook hoặc máy đọc sách khác. Bật {{ebooks}} để thiết lập.",
-    "turnOnType": "Bật {{name}}"
+    "turnOnType": "Bật {{name}}",
+    "gameLayout": "Chọn thư mục chứa trò chơi của bạn: thư mục của một hệ máy, hoặc thư mục có một thư mục cho mỗi hệ máy (mame, snes, n64, v.v.). Box Office tự nhận ra các hệ máy."
   },
   "mediaTypes": {
     "music": {
@@ -1071,6 +1074,10 @@
     "comic": {
       "name": "Truyện tranh và manga",
       "summary": "Theo dõi bộ truyện và lấy số mới và tập mới."
+    },
+    "game": {
+      "name": "Trò chơi",
+      "summary": "Xem bộ sưu tập trò chơi điện tử của bạn: các bộ arcade từ MAME và trò chơi máy console, đã được kiểm tra và có ảnh bìa."
     }
   },
   "conn": {
@@ -1940,5 +1947,114 @@
     "other": "Phiên bản khác",
     "otherHint": "Không có trong danh sách? Chọn một và Box Office sẽ tìm ngay.",
     "pick": "Chọn phiên bản"
+  },
+  "games": {
+    "sub": "{{games}} trên {{systems}}",
+    "games_other": "{{count}} trò chơi",
+    "systems_other": "{{count}} hệ máy",
+    "versions_other": "{{count}} phiên bản",
+    "systemSub": "{{games}}, tổng cộng {{versions}}",
+    "support_other": "{{count}} bộ BIOS và thiết bị",
+    "withProblems_other": "{{count}} có vấn đề",
+    "allComplete": "Tất cả đều đầy đủ",
+    "checkAgain": "Kiểm tra lại",
+    "check": "Kiểm tra",
+    "checking": "Đang kiểm tra…",
+    "seeGames": "Xem trò chơi của bạn",
+    "checked": "đã kiểm tra {{when}}",
+    "none": "Chưa có trò chơi nào",
+    "noneBody": "Box Office hiển thị những trò chơi bạn đã có: các bộ arcade cho MAME và trò chơi console như Super Nintendo và Game Boy. Nó đọc và kiểm tra chúng, và không bao giờ thay đổi chúng.",
+    "addRoot": "Thêm thư mục chứa trò chơi của bạn trong <link>Cài đặt → Thư mục gốc trò chơi</link>.",
+    "noSystems": "Chưa tìm thấy hệ máy nào",
+    "noSystemsBody": "Box Office không tìm thấy hệ máy nào trong các thư mục gốc trò chơi. Hãy đặt trò chơi của mỗi hệ máy vào một thư mục mang tên hệ máy đó, như mame hoặc snes, rồi Kiểm tra lại.",
+    "unsure_other": "Box Office không xác định được các thư mục này dành cho hệ máy nào",
+    "unsureHint": "Đổi tên mỗi thư mục thành tên hệ máy, như mame, snes, n64 hoặc gba, rồi Kiểm tra lại.",
+    "step": {
+      "finding": "Đang xem các thư mục trò chơi…",
+      "list": "Đang lấy danh sách trò chơi {{system}}…",
+      "reading": "Đang đọc trò chơi {{system}}…",
+      "checking": "Đang đối chiếu trò chơi {{system}} với danh sách…"
+    },
+    "stepCount": "{{done}} / {{total}}",
+    "locked": "Đừng động vào",
+    "lockedHint": "Box Office sẽ không xem lại trò chơi của {{name}} cho đến khi bạn tắt mục này, và giữ những gì đã tìm thấy lần trước. Hãy dùng khi bạn đang sắp xếp lại thư mục.",
+    "format": {
+      "non-merged": "bộ non-merged",
+      "split": "bộ split",
+      "merged": "bộ merged"
+    },
+    "mameVersion": "Phiên bản MAME",
+    "mameVersionSub": "Các bộ của MAME thay đổi theo từng phiên bản, nên bộ chạy được ở phiên bản này có thể không chạy ở phiên bản khác.",
+    "mameVersionPick": "Đối chiếu các bộ với",
+    "mameVersionHint": "Chọn phiên bản MAME bạn chơi. Box Office tải danh sách của phiên bản đó từ các bản phát hành MAME trên GitHub và kiểm tra lại mọi bộ.",
+    "newest": "MAME mới nhất ({{version}})",
+    "newestUnknown": "MAME mới nhất",
+    "noGames": "Không có trò chơi trong thư mục này",
+    "noGamesBody": "Box Office không tìm thấy trò chơi nào trong {{path}}.",
+    "filter": "Lọc theo tên hoặc hãng",
+    "allGenres": "Mọi thể loại",
+    "allYears": "Mọi năm",
+    "sort": {
+      "title": "Theo tên",
+      "year": "Theo năm",
+      "added": "Mới tìm thấy"
+    },
+    "hasProblems": "Có vấn đề",
+    "noMatch": "Không có trò chơi nào khớp.",
+    "status": {
+      "complete": "Đầy đủ",
+      "missing": "Thiếu tệp",
+      "wrong": "Sai phiên bản",
+      "wrongFor": "Sai phiên bản cho {{list}}",
+      "badCopy": "Bản sao lỗi",
+      "bios": "Cần BIOS",
+      "unknown": "Không có trong danh sách",
+      "unreadable": "Không đọc được"
+    },
+    "whatsWrong": "Có gì không ổn",
+    "explain": {
+      "missingArcade": "Một số tệp bộ này cần không có ở đó, nên MAME có thể không chạy được.",
+      "wrongArcade": "Một số tệp thuộc phiên bản MAME khác với {{list}}. Hãy chọn phiên bản bạn chơi ở mục Phiên bản MAME, hoặc cập nhật bộ.",
+      "biosArcade": "Bản thân bộ đã đầy đủ, nhưng cần một bộ BIOS hoặc thiết bị không có trong thư mục.",
+      "unknownArcade": "{{list}} không có bộ nào tên {{name}}. Có thể nó đã được đổi tên, hoặc dành cho trình giả lập khác.",
+      "unreadableArcade": "Không mở được tệp. Có thể tệp bị hỏng, hoặc vẫn đang được sao chép.",
+      "missing": "Một số tệp trò chơi này cần không có ở đó.",
+      "wrong": "Tệp được đặt tên như một trò chơi trong danh sách No-Intro nhưng không giống: bản sao lỗi, hoặc đã bị thay đổi.",
+      "bios": "Trò chơi cần một BIOS không có ở đó.",
+      "unknown": "Danh sách No-Intro không có bản nào như thế này. Có thể đây là bản hack, bản dịch hoặc trò chơi tự làm, và điều đó không sao cả.",
+      "unreadable": "Không mở được tệp. Có thể tệp bị hỏng, hoặc vẫn đang được sao chép."
+    },
+    "problem": {
+      "missing": "Thiếu <code>{{name}}</code>",
+      "wrong": "<code>{{name}}</code> thuộc phiên bản khác",
+      "wrongCopy": "<code>{{name}}</code> không khớp với bản của No-Intro",
+      "bios": "Cần bộ BIOS <code>{{name}}</code>",
+      "device": "Cần bộ thiết bị <code>{{name}}</code>",
+      "parent": "Cần bộ gốc của nó, <code>{{name}}</code>",
+      "disk": "Thiếu CHD <code>{{name}}</code>",
+      "diskWrong": "CHD <code>{{name}}</code> thuộc phiên bản khác",
+      "unreadable": "Không đọc được: {{name}}"
+    },
+    "inParent": "Trong bộ gốc",
+    "fact": {
+      "system": "Hệ máy",
+      "set": "Bộ",
+      "name": "Tên No-Intro",
+      "year": "Năm",
+      "manufacturer": "Nhà sản xuất",
+      "publisher": "Nhà phát hành",
+      "players": "Người chơi",
+      "genre": "Thể loại",
+      "parent": "Bản sao của",
+      "crc": "CRC",
+      "found": "Tìm thấy"
+    },
+    "files": "Tệp",
+    "noFiles": "Các tệp của nó không còn nữa. Kiểm tra lại để cập nhật danh sách.",
+    "parentSet": "Bộ gốc",
+    "readOnly": "Box Office chỉ đọc các tệp này. Nó không bao giờ di chuyển, đổi tên hay xóa chúng.",
+    "clones": "Bản sao",
+    "otherVersions": "Phiên bản khác",
+    "theParent": "bản gốc"
   }
 }

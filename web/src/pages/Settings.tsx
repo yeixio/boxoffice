@@ -10,6 +10,7 @@ import { bytes, day } from '../format'
 import { monitorOptions, useProfiles, useQualities, useRootFolders, useShowDefaults } from '../hooks'
 import { AutoSearchSettings, Connections, DataCapSettingsCard, DownloadSettings, NumberField } from './Connections'
 import { ScanButton, scannable } from './LibraryScan'
+import { GameCheckButton } from './Games'
 import { EreaderSettingsCard } from './Ereaders'
 import { ProblemsCard } from './Problems'
 import { QualityCheckCard } from './QualityCheck'
@@ -29,7 +30,7 @@ const isSection = (s: string | null | undefined): s is SectionId => sectionIds.i
 type CardDef = { id: string; el: ReactNode; keys?: string[]; terms?: string[]; inner?: boolean }
 type SectionDef = { id: SectionId | 'elsewhere'; cards: CardDef[] }
 
-const mediaKinds: MediaTypeKey[] = ['music', 'audiobook', 'ebook', 'comic']
+const mediaKinds: MediaTypeKey[] = ['music', 'audiobook', 'ebook', 'comic', 'game']
 
 const sections: SectionDef[] = [
   {
@@ -594,12 +595,15 @@ function RootFolders({ kind, type }: { kind: RootKind; type?: MediaType }) {
             <code className="min-w-48 flex-1 break-all">{f.path}</code>
             {f.accessible ? <span className="text-xs text-muted">{t('settings.free', { size: bytes(f.freeSpace) })}</span> : <Badge tone="bad">{t('settings.cantSee')}</Badge>}
             {f.accessible && scannable(kind) && <ScanButton folder={f} />}
+            {f.accessible && kind === 'game' && <GameCheckButton rootId={f.id} />}
             <button onClick={() => remove.mutate(f)} aria-label={t('settings.removePath', { path: f.path })} className="rounded p-1 text-muted hover:bg-line hover:text-bad">
               <Trash2 className="size-4" />
             </button>
           </li>
         ))}
       </ul>
+      {kind === 'game' && !!folders.data?.length && <p className="mt-2 text-xs text-muted">{t('settings.scanFor.game')}</p>}
+      {kind === 'game' && !folders.data?.length && <p className="mt-2 text-xs text-muted">{t('settings.gameLayout')}</p>}
       {scannable(kind) && !!folders.data?.length && (
         <p className="mt-2 text-xs text-muted">{t(`settings.scanFor.${kind === 'movie' || kind === 'series' || kind === 'music' ? kind : 'books'}`)}</p>
       )}

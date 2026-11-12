@@ -9,6 +9,7 @@ import {
   DatabaseBackup,
   Download as DownloadIcon,
   Film,
+  Gamepad2,
   HeartPulse,
   History,
   Inbox,
@@ -34,7 +35,7 @@ type Group = { label: string; items: Item[] }
 
 // The sections, grouped so a long list still reads at a glance. A section
 // with a media type shows only once that type is turned on in Settings, so
-// audiobooks, ebooks and comics slot in here the same way as music.
+// audiobooks, ebooks, comics and games slot in here the same way as music.
 const allGroups: Group[] = [
   {
     label: 'nav.library',
@@ -45,6 +46,7 @@ const allGroups: Group[] = [
       { to: '/music', label: 'nav.music', icon: MusicIcon, type: 'music' },
       { to: '/books', label: 'nav.books', icon: BookOpen, type: 'ebook' },
       { to: '/audiobooks', label: 'nav.audiobooks', icon: Headphones, type: 'audiobook' },
+      { to: '/games', label: 'nav.games', icon: Gamepad2, type: 'game' },
       { to: '/calendar', label: 'nav.calendar', icon: CalendarDays },
     ],
   },
