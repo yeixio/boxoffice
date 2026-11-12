@@ -22,6 +22,7 @@ import { Calendar } from './pages/Calendar'
 import { Activity } from './pages/Activity'
 import { Downloads } from './pages/Downloads'
 import { Import } from './pages/Import'
+import { ImportFiles } from './pages/ImportFiles'
 import { Backups } from './pages/Backups'
 import { Settings } from './pages/Settings'
 import { Problems } from './pages/Problems'
@@ -110,6 +111,7 @@ function Shell({ status }: { status: Status }) {
           <Route path="/activity" element={<Activity />} />
           <Route path="/health" element={<Health />} />
           <Route path="/import" element={<Import />} />
+          <Route path="/import-files" element={<ImportFiles />} />
           <Route path="/backups" element={<Backups />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/problems" element={<Problems />} />

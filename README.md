@@ -92,6 +92,7 @@ Open http://localhost:7272 and make the admin account. To have it file things in
   <img src="docs/images/problem-files-copies.webp" width="70%" alt="Two disc files that each run as long as the movie, shown as likely copies with their length, picture, sound and cut, and Keep one suggested">
 
 - **Sorts and filters** movies and shows by title, rating, size on disk, date added, and for shows by the next or last episode, remembered per list.
+- **Import files you already have.** **Import files** takes uploads from your browser (files or whole folders) or files picked from a folder on the server, works out whether each is a movie, an episode or season, an album, a book or games, and files it in the library, adding the title first if it isn't on your list. Any guess can be changed before it goes in. See [Importing files](docs/import.md).
 - **Ebooks straight to your e-reader.** Each ebook Box Office downloads can be emailed to your Kindle, PocketBook or any reader with an email address, as soon as it's in the library. See [Sending ebooks to e-readers](docs/ereaders.md).
 - **Health.** A check-up of the things that stop Box Office working (disks, folders it can't write to, indexers, news servers), live charts of the processor, memory, requests and download speed, the log with a debug switch, and alerts. Prometheus metrics are at `/metrics` once you make a token.
 - **Backups** of its database on a schedule, to its own disk and optionally to another folder (such as a NAS share) or S3-compatible storage (AWS S3, Backblaze B2, Cloudflare R2, MinIO). A passphrase encrypts them. Restore from the Backups page.
@@ -341,7 +342,7 @@ Yes. The image is built for `linux/amd64` and `linux/arm64` and uses little memo
 <details>
 <summary><b>Is there music, books, games or a request page of its own?</b></summary>
 
-Yes. Music (in place of Lidarr), ebooks and audiobooks (in place of Readarr) each turn on in Settings, and the request site at `/request` is for people who don't use Matinee. Lidarr's artists and Readarr's authors come across with Move in. **Games** shows the MAME sets and console games you already have, checked against MAME's and No-Intro's lists, with box art; see [Games](docs/games.md).
+Yes. Music (in place of Lidarr), ebooks and audiobooks (in place of Readarr) each turn on in Settings, and the request site at `/request` is for people who don't use Matinee. Lidarr's artists and Readarr's authors come across with Move in. **Games** shows the MAME sets and console games you already have, checked against MAME's and No-Intro's lists, with box art; see [Games](docs/games.md). Anything you already have, games included, can be brought in with **Import files**; see [Importing files](docs/import.md).
 </details>
 
 <details>

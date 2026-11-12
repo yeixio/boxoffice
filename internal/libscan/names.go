@@ -105,3 +105,10 @@ func episodeCode(name string) (season, episode int, ok bool) {
 	}
 	return season, episode, true
 }
+
+// Same says two titles are the same but for case, accents, punctuation,
+// "and" for "&" and a leading "The".
+func Same(a, b string) bool { return same(a, b) }
+
+// EpisodeCode reads the season and episode a file's name says it is.
+func EpisodeCode(name string) (season, episode int, ok bool) { return episodeCode(name) }
