@@ -4,8 +4,10 @@
 // hash against No-Intro's, with facts and box art from libretro's
 // database. None of these sources needs an account.
 //
-// It only reads game files. Nothing here moves, renames, rebuilds or
-// deletes one, and it never downloads games.
+// It only reads the game files already there. Nothing here moves, renames,
+// rebuilds or deletes one. Games are only ever added: brought in on the
+// Import files page, or wanted (picked from a system's list), downloaded
+// and checked to be the game wanted before they're copied in.
 package games
 
 import (
@@ -73,9 +75,15 @@ type Service struct {
 	Art          []string
 	HTTP         *http.Client
 	UserAgent    string
+	// Search queues a search for a game just wanted, or asked for.
+	Search Searcher
 
 	mu       sync.Mutex
 	progress Progress
+	queued   map[string]bool // checks asked for while one ran
+
+	catMu    sync.Mutex
+	catalogs map[string]*catalog
 	listMu   sync.Mutex
 	artSem   chan struct{}
 	artOnce  sync.Once

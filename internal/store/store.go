@@ -383,6 +383,8 @@ func (s *Store) TitleLocked(ctx context.Context, kind string, id int64) (bool, e
 		"episode": "SELECT p.locked FROM episodes e JOIN series t ON t.id = e.series_id JOIN quality_profiles p ON p.id = t.profile_id WHERE e.id = ?",
 		"author":  "SELECT locked FROM authors WHERE id = ?",
 		AlbumKind: "SELECT 0 FROM albums WHERE id = ?",
+		// A game is left alone when every folder of its system is.
+		GameKind:  "SELECT COALESCE((SELECT MIN(s.locked) FROM game_systems s WHERE s.system = w.system), 0) FROM game_wants w WHERE w.id = ?",
 		Ebook:     "SELECT a.locked FROM books b JOIN authors a ON a.id = b.author_id WHERE b.id = ?",
 		Audiobook: "SELECT a.locked FROM books b JOIN authors a ON a.id = b.author_id WHERE b.id = ?",
 	}[kind]
@@ -400,7 +402,7 @@ func (s *Store) TitleLocked(ctx context.Context, kind string, id int64) (bool, e
 // TitleExists says whether a movie, show, album or book is still on the
 // list. kind is a download's: movie, series, album, ebook or audiobook.
 func (s *Store) TitleExists(ctx context.Context, kind string, id int64) (bool, error) {
-	table := map[string]string{"movie": "movies", "series": "series", AlbumKind: "albums", Ebook: "books", Audiobook: "books"}[kind]
+	table := map[string]string{"movie": "movies", "series": "series", AlbumKind: "albums", Ebook: "books", Audiobook: "books", GameKind: "game_wants"}[kind]
 	if table == "" {
 		return false, fmt.Errorf("no such kind of title %q", kind)
 	}
@@ -423,6 +425,17 @@ func (authorLocked) Error() string {
 }
 func (authorLocked) Is(target error) bool { return target == ErrLocked }
 
+// ErrGameSystemLocked is ErrLocked for a game: its system's folder is set
+// to Do not touch. errors.Is(ErrGameSystemLocked, ErrLocked) holds.
+var ErrGameSystemLocked error = gameSystemLocked{}
+
+type gameSystemLocked struct{}
+
+func (gameSystemLocked) Error() string {
+	return "its system's folder is set to Do not touch, so Box Office adds no games to it; turn that off on the system's page first"
+}
+func (gameSystemLocked) Is(target error) bool { return target == ErrLocked }
+
 // CheckUnlocked is ErrLocked when the title is on Do not touch
 // (ErrAuthorLocked for a book).
 func (s *Store) CheckUnlocked(ctx context.Context, kind string, id int64) error {
@@ -431,6 +444,9 @@ func (s *Store) CheckUnlocked(ctx context.Context, kind string, id int64) error 
 	} else if locked {
 		if IsBookKind(kind) || kind == "author" {
 			return ErrAuthorLocked
+		}
+		if kind == GameKind {
+			return ErrGameSystemLocked
 		}
 		return ErrLocked
 	}

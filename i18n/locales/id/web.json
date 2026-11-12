@@ -1664,7 +1664,8 @@
   "kind": {
     "ebook": "Ebook",
     "audiobook": "Buku audio",
-    "album": "Album"
+    "album": "Album",
+    "game": "Game"
   },
   "problems": {
     "title": "File bermasalah",
@@ -1964,7 +1965,7 @@
     "seeGames": "Lihat game Anda",
     "checked": "diperiksa {{when}}",
     "none": "Belum ada game",
-    "noneBody": "Box Office menampilkan game yang sudah Anda miliki: set arcade untuk MAME dan game konsol seperti Super Nintendo dan Game Boy. Box Office membaca dan memeriksanya, tanpa pernah mengubahnya.",
+    "noneBody": "Box Office menampilkan game Anda, set arcade untuk MAME dan game konsol seperti Super Nintendo dan Game Boy, dan memeriksa masing-masing tanpa mengubahnya. Box Office juga bisa menemukan game yang Anda inginkan dan mengunduhnya.",
     "addRoot": "Tambahkan folder game Anda di <link>Pengaturan → Folder akar game</link>.",
     "noSystems": "Belum ada sistem yang ditemukan",
     "noSystemsBody": "Box Office tidak menemukan sistem game di folder akar game Anda. Taruh game setiap sistem di folder dengan namanya, seperti mame atau snes, lalu periksa lagi.",
@@ -2058,7 +2059,37 @@
     "otherVersions": "Versi lain",
     "theParent": "induknya",
     "import": "Impor game",
-    "iconCredit": "Gambar sistem dari <link>RetroArch</link>, CC BY 4.0."
+    "iconCredit": "Gambar sistem dari <link>RetroArch</link>, CC BY 4.0.",
+    "add": {
+      "title": "Tambah game",
+      "sub": "Temukan game di daftar sistemnya. Box Office mencarinya di indexer Anda, mengunduhnya, memeriksa bahwa itu game yang benar, lalu menaruhnya di folder game Anda.",
+      "placeholder": "Cari game, misalnya Super Metroid",
+      "yourSystems": "Sistem Anda",
+      "allSystems": "Semua sistem",
+      "notYours": "{{name}} (belum ada folder)",
+      "looking": "Mencari di daftar… Pencarian pertama di suatu sistem mengunduh daftarnya, yang bisa makan waktu semenit.",
+      "hint": "Cari berdasarkan judul. Box Office mencari di daftar game konsol No-Intro dan daftar game arcade MAME, untuk sistem yang punya folder. Pilih sistem untuk melihat yang lain.",
+      "nothing": "Tidak ada game di daftar yang cocok.",
+      "more": "Menampilkan 60 pertama. Tambahkan kata untuk mempersempit.",
+      "version": "Versi",
+      "versionOf": "Versi {{title}}",
+      "have": "Di game Anda",
+      "wanted": "Diinginkan",
+      "want": "Mau ini",
+      "cardTitle": "Tambah game",
+      "cardSub": "Cari di daftar semua game suatu sistem, dan Box Office mengunduh yang Anda inginkan."
+    },
+    "wanted": {
+      "title": "Diinginkan",
+      "sub": "Box Office mencari ini di indexer Anda setiap jam, dan mencocokkan setiap unduhan dengan daftar sistem sebelum masuk ke folder game Anda.",
+      "movedIn": "Sudah dipindahkan. Memeriksa folder sistem…",
+      "waiting": "Sudah diunduh dan menunggu masuk ke folder game Anda; lihat Unduhan.",
+      "notYet": "Belum dicari.",
+      "nothing": "Dicari {{when}}, belum ada hasil. Box Office terus mencari.",
+      "looked": "Terakhir dicari {{when}}.",
+      "lookingNow": "Sedang dicari; lihat Aktivitas.",
+      "remove": "Tidak menginginkan {{title}} lagi"
+    }
   },
   "importFiles": {
     "title": "Impor file",

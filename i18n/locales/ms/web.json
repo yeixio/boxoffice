@@ -1664,7 +1664,8 @@
   "kind": {
     "ebook": "E-buku",
     "audiobook": "Buku audio",
-    "album": "Album"
+    "album": "Album",
+    "game": "Permainan"
   },
   "problems": {
     "title": "Fail bermasalah",
@@ -1964,7 +1965,7 @@
     "seeGames": "Lihat permainan anda",
     "checked": "disemak {{when}}",
     "none": "Belum ada permainan",
-    "noneBody": "Box Office menunjukkan permainan yang anda sudah ada: set arked untuk MAME dan permainan konsol seperti Super Nintendo dan Game Boy. Ia membaca dan menyemaknya, dan tidak sekali-kali mengubahnya.",
+    "noneBody": "Box Office menunjukkan permainan anda, set arked untuk MAME dan permainan konsol seperti Super Nintendo dan Game Boy, dan memeriksa setiap satu tanpa mengubahnya. Ia juga boleh mencari permainan yang anda mahu dan memuat turunnya.",
     "addRoot": "Tambah folder permainan anda di <link>Tetapan → Folder akar permainan</link>.",
     "noSystems": "Belum ada sistem ditemui",
     "noSystemsBody": "Box Office tidak menemui sebarang sistem permainan dalam folder akar permainan anda. Letakkan permainan setiap sistem dalam folder yang dinamakan sempena sistem itu, seperti mame atau snes, kemudian semak semula.",
@@ -2058,7 +2059,37 @@
     "otherVersions": "Versi lain",
     "theParent": "induknya",
     "import": "Import permainan",
-    "iconCredit": "Gambar sistem daripada <link>RetroArch</link>, CC BY 4.0."
+    "iconCredit": "Gambar sistem daripada <link>RetroArch</link>, CC BY 4.0.",
+    "add": {
+      "title": "Tambah permainan",
+      "sub": "Cari permainan dalam senarai sistemnya. Box Office mencarinya pada pengindeks anda, memuat turunnya, memeriksa ia permainan yang betul dan meletakkannya dalam folder permainan anda.",
+      "placeholder": "Cari permainan, contohnya Super Metroid",
+      "yourSystems": "Sistem anda",
+      "allSystems": "Semua sistem",
+      "notYours": "{{name}} (belum ada folder)",
+      "looking": "Mencari dalam senarai… Carian pertama pada sesuatu sistem memuat turun senarainya, yang mungkin mengambil masa seminit.",
+      "hint": "Cari mengikut tajuk. Box Office mencari dalam senarai permainan konsol No-Intro dan senarai permainan arked MAME, untuk sistem yang anda ada folder. Pilih sistem untuk melihat yang lain.",
+      "nothing": "Tiada permainan dalam senarai yang sepadan.",
+      "more": "Menunjukkan 60 yang pertama. Tambah perkataan untuk mengecilkan.",
+      "version": "Versi",
+      "versionOf": "Versi {{title}}",
+      "have": "Dalam permainan anda",
+      "wanted": "Dikehendaki",
+      "want": "Saya mahu",
+      "cardTitle": "Tambah permainan",
+      "cardSub": "Cari dalam senarai semua permainan bagi sesuatu sistem, dan Box Office memuat turun yang anda mahu."
+    },
+    "wanted": {
+      "title": "Dikehendaki",
+      "sub": "Box Office mencari ini pada pengindeks anda setiap jam, dan menyemak setiap muat turun dengan senarai sistem sebelum ia masuk ke folder permainan anda.",
+      "movedIn": "Sudah dipindahkan. Menyemak folder sistem…",
+      "waiting": "Sudah dimuat turun dan menunggu untuk masuk ke folder permainan anda; lihat Muat Turun.",
+      "notYet": "Belum dicari.",
+      "nothing": "Dicari {{when}}, belum jumpa apa-apa. Box Office terus mencari.",
+      "looked": "Kali terakhir dicari {{when}}.",
+      "lookingNow": "Sedang dicari; lihat Aktiviti.",
+      "remove": "Tidak mahu {{title}} lagi"
+    }
   },
   "importFiles": {
     "title": "Import fail",

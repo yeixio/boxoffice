@@ -1854,7 +1854,8 @@
   "kind": {
     "ebook": "Ebook",
     "audiobook": "Audiolibro",
-    "album": "Álbum"
+    "album": "Álbum",
+    "game": "Juego"
   },
   "problems": {
     "title": "Archivos con problemas",
@@ -2164,7 +2165,7 @@
     "seeGames": "Ver tus juegos",
     "checked": "comprobado {{when}}",
     "none": "Aún no hay juegos",
-    "noneBody": "Box Office muestra los juegos que ya tienes: sets arcade para MAME y juegos de consola como Super Nintendo y Game Boy. Los lee y los comprueba, y nunca los cambia.",
+    "noneBody": "Box Office muestra tus juegos, sets de arcade para MAME y juegos de consola como Super Nintendo y Game Boy, y revisa cada uno sin cambiarlo. También puede encontrar los juegos que quieras y descargarlos.",
     "addRoot": "Añade la carpeta de tus juegos en <link>Ajustes → Carpetas raíz de juegos</link>.",
     "noSystems": "Aún no se ha encontrado ningún sistema",
     "noSystemsBody": "Box Office no encontró ningún sistema de juegos en tus carpetas raíz de juegos. Pon los juegos de cada sistema en una carpeta con su nombre, como mame o snes, y comprueba de nuevo.",
@@ -2260,7 +2261,37 @@
     "otherVersions": "Otras versiones",
     "theParent": "el padre",
     "import": "Importar juegos",
-    "iconCredit": "Imágenes de sistemas de <link>RetroArch</link>, CC BY 4.0."
+    "iconCredit": "Imágenes de sistemas de <link>RetroArch</link>, CC BY 4.0.",
+    "add": {
+      "title": "Añadir un juego",
+      "sub": "Busca un juego en la lista de su sistema. Box Office lo busca en tus indexadores, lo descarga, comprueba que es el juego correcto y lo guarda en tu carpeta de juegos.",
+      "placeholder": "Busca un juego, como Super Metroid",
+      "yourSystems": "Tus sistemas",
+      "allSystems": "Todos los sistemas",
+      "notYours": "{{name}} (aún sin carpeta)",
+      "looking": "Buscando en las listas… La primera búsqueda en un sistema descarga su lista, lo que puede tardar un minuto.",
+      "hint": "Busca por título. Box Office revisa la lista No-Intro de juegos de consola y la lista MAME de juegos de arcade, para los sistemas de los que tienes carpeta. Elige un sistema para buscar en otro.",
+      "nothing": "Ningún juego de la lista coincide.",
+      "more": "Se muestran los primeros 60. Añade una palabra para afinar.",
+      "version": "Versión",
+      "versionOf": "Versión de {{title}}",
+      "have": "En tus juegos",
+      "wanted": "Deseado",
+      "want": "Lo quiero",
+      "cardTitle": "Añadir un juego",
+      "cardSub": "Busca en la lista de todos los juegos de un sistema y Box Office descarga los que quieras."
+    },
+    "wanted": {
+      "title": "Deseados",
+      "sub": "Box Office los busca en tus indexadores cada hora y comprueba cada descarga con la lista del sistema antes de guardarla en tu carpeta de juegos.",
+      "movedIn": "Guardado. Revisando la carpeta del sistema…",
+      "waiting": "Descargado y esperando a ir a tu carpeta de juegos; mira Descargas.",
+      "notYet": "Aún no se ha buscado.",
+      "nothing": "Buscado {{when}} sin encontrar nada aún. Box Office sigue buscando.",
+      "looked": "Última búsqueda {{when}}.",
+      "lookingNow": "Buscándolo ahora; mira Actividad.",
+      "remove": "Dejar de querer {{title}}"
+    }
   },
   "importFiles": {
     "title": "Importar archivos",

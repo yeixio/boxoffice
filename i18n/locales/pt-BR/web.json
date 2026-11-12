@@ -1854,7 +1854,8 @@
   "kind": {
     "ebook": "E-book",
     "audiobook": "Audiolivro",
-    "album": "Álbum"
+    "album": "Álbum",
+    "game": "Jogo"
   },
   "problems": {
     "title": "Arquivos com problemas",
@@ -2164,7 +2165,7 @@
     "seeGames": "Ver seus jogos",
     "checked": "verificado {{when}}",
     "none": "Nenhum jogo ainda",
-    "noneBody": "O Box Office mostra os jogos que você já tem: sets de arcade para o MAME e jogos de console como Super Nintendo e Game Boy. Ele os lê e verifica, e nunca os altera.",
+    "noneBody": "O Box Office mostra seus jogos, sets de arcade para MAME e jogos de console como Super Nintendo e Game Boy, e verifica cada um sem alterá-lo. Ele também pode encontrar os jogos que você quer e baixá-los.",
     "addRoot": "Adicione a pasta dos seus jogos em <link>Configurações → Pastas raiz de jogos</link>.",
     "noSystems": "Nenhum sistema encontrado ainda",
     "noSystemsBody": "O Box Office não encontrou nenhum sistema de jogos nas suas pastas raiz de jogos. Coloque os jogos de cada sistema numa pasta com o nome dele, como mame ou snes, e verifique de novo.",
@@ -2260,7 +2261,37 @@
     "otherVersions": "Outras versões",
     "theParent": "o pai",
     "import": "Importar jogos",
-    "iconCredit": "Imagens dos sistemas do <link>RetroArch</link>, CC BY 4.0."
+    "iconCredit": "Imagens dos sistemas do <link>RetroArch</link>, CC BY 4.0.",
+    "add": {
+      "title": "Adicionar um jogo",
+      "sub": "Encontre um jogo na lista do sistema dele. O Box Office procura nos seus indexadores, baixa, confere se é o jogo certo e coloca na sua pasta de jogos.",
+      "placeholder": "Procure um jogo, como Super Metroid",
+      "yourSystems": "Seus sistemas",
+      "allSystems": "Todos os sistemas",
+      "notYours": "{{name}} (ainda sem pasta)",
+      "looking": "Procurando nas listas… A primeira busca em um sistema baixa a lista dele, o que pode levar um minuto.",
+      "hint": "Busque pelo título. O Box Office procura na lista No-Intro de jogos de console e na lista MAME de jogos de arcade, para os sistemas de que você tem pasta. Escolha um sistema para ver outro.",
+      "nothing": "Nenhum jogo da lista corresponde.",
+      "more": "Mostrando os primeiros 60. Adicione uma palavra para refinar.",
+      "version": "Versão",
+      "versionOf": "Versão de {{title}}",
+      "have": "Nos seus jogos",
+      "wanted": "Desejado",
+      "want": "Quero",
+      "cardTitle": "Adicionar um jogo",
+      "cardSub": "Busque na lista de todos os jogos de um sistema, e o Box Office baixa os que você quiser."
+    },
+    "wanted": {
+      "title": "Desejados",
+      "sub": "O Box Office procura por eles nos seus indexadores a cada hora e confere cada download com a lista do sistema antes de colocá-lo na sua pasta de jogos.",
+      "movedIn": "Movido. Verificando a pasta do sistema…",
+      "waiting": "Baixado e aguardando ir para a sua pasta de jogos; veja Downloads.",
+      "notYet": "Ainda não procurado.",
+      "nothing": "Procurado {{when}}, nada encontrado ainda. O Box Office continua procurando.",
+      "looked": "Última busca {{when}}.",
+      "lookingNow": "Procurando agora; veja Atividade.",
+      "remove": "Deixar de querer {{title}}"
+    }
   },
   "importFiles": {
     "title": "Importar arquivos",

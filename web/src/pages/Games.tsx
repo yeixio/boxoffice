@@ -3,11 +3,12 @@ import { Trans, useTranslation } from 'react-i18next'
 import { useEffect, useState, type ReactNode } from 'react'
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, useParams } from 'react-router-dom'
-import { ChevronRight, FolderOpen, Gamepad2, Lock, RefreshCw, Upload } from 'lucide-react'
+import { ChevronRight, FolderOpen, Gamepad2, Lock, Plus, RefreshCw, Upload } from 'lucide-react'
 import { get, patch, post, put, type Game, type GameCheck, type GameDetail, type GamePage as GamePageData, type GameSettings, type GameStatus, type GameSystem } from '../api'
 import { bytes, day, when } from '../format'
 import { useRootFolders } from '../hooks'
 import { Badge, Button, Card, Empty, ErrorNote, Field, Heading, Input, Select, Spinner, Toggle } from '../ui'
+import { AddGameCard, useGameWants, WantedGames } from './GameAdd'
 import { Pager, usePageSize } from './Pager'
 
 // useGameCheck is the last check of the games folders, asked for again
@@ -131,6 +132,7 @@ export function Games() {
   const roots = useRootFolders('game')
   const check = useGameCheck()
   const start = useStartCheck()
+  const wants = useGameWants()
   const total = systems.data?.reduce((n, s) => n + s.groups, 0) ?? 0
   const running = !!check.data?.running
   return (
@@ -141,6 +143,9 @@ export function Games() {
         actions={
           !!roots.data?.length && (
             <>
+              <Link to="/games/add" className="inline-flex items-center gap-2 rounded-md border border-transparent bg-marquee px-3.5 py-2 text-sm font-medium text-marquee-ink hover:brightness-110">
+                <Plus className="size-4" aria-hidden /> {t('games.add.title')}
+              </Link>
               <Link to="/import-files" className="inline-flex items-center gap-2 rounded-md border border-line bg-card px-3.5 py-2 text-sm font-medium hover:border-ink/40">
                 <Upload className="size-4" aria-hidden /> {t('games.import')}
               </Link>
@@ -196,6 +201,8 @@ export function Games() {
           ))}
         </ul>
       )}
+      <WantedGames />
+      {!!roots.data?.length && wants.data?.length === 0 && <AddGameCard />}
       {systems.data?.some((s) => s.arcade) && <MAMEVersion />}
       {!!systems.data?.length && (
         <p className="mt-8 text-xs text-muted">
@@ -248,7 +255,7 @@ const sorts = ['title', 'year', 'added'] as const
 
 // SystemIcon is a picture of a system's console, or its short name where
 // there's none. The pictures are RetroArch's (CC BY 4.0), in web/public/systems.
-function SystemIcon({ system, short, className = '' }: { system: string; short: string; className?: string }) {
+export function SystemIcon({ system, short, className = '' }: { system: string; short: string; className?: string }) {
   const [failed, setFailed] = useState(false)
   if (failed) {
     return (

@@ -60,6 +60,9 @@ const (
 	WantEbook   = "ebook"
 	WantAudio   = "audio" // an audiobook
 	WantMusic   = "music" // an album
+	// WantGame is a game: what it must hold is checked against its
+	// system's list after screening, so only programs are caught here.
+	WantGame = "game"
 )
 
 // Check looks over files (names in dir). wantVideo is set when the release
@@ -135,7 +138,7 @@ func CheckFor(dir string, files []string, want string) []Finding {
 			}
 		}
 	}
-	if want != WantNothing && found == 0 && len(out) == 0 {
+	if want != WantNothing && want != WantGame && found == 0 && len(out) == 0 {
 		out = append(out, Finding{"", map[string]string{
 			WantVideo: "there's no video in it, so it isn't the release it said it was",
 			WantEbook: "there's no ebook in it (such as an EPUB, AZW3, MOBI or PDF), so it isn't the release it said it was",
@@ -154,6 +157,8 @@ func releaseOf(want string) string {
 		return "audiobook release"
 	case WantMusic:
 		return "music release"
+	case WantGame:
+		return "game release"
 	}
 	return "movie or TV release"
 }

@@ -84,6 +84,8 @@ export function titleLink(kind?: string, id?: number): { to: string; label: stri
       return { to: `/audiobooks/book/${id}`, label: i18n.t('web:kind.audiobook') }
     case 'album':
       return { to: `/music/album/${id}`, label: i18n.t('web:kind.album') }
+    case 'game':
+      return { to: '/games#wanted', label: i18n.t('web:kind.game') }
   }
   return null
 }

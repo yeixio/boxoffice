@@ -1949,7 +1949,8 @@
   "kind": {
     "ebook": "E-kniha",
     "audiobook": "Audiokniha",
-    "album": "Album"
+    "album": "Album",
+    "game": "Hra"
   },
   "problems": {
     "title": "Problémové soubory",
@@ -2264,7 +2265,7 @@
     "seeGames": "Zobrazit hry",
     "checked": "zkontrolováno {{when}}",
     "none": "Zatím žádné hry",
-    "noneBody": "Box Office zobrazuje hry, které už máte: arkádové sady pro MAME a konzolové hry jako Super Nintendo a Game Boy. Čte je a kontroluje, nikdy je nemění.",
+    "noneBody": "Box Office ukazuje tvé hry, arkádové sady pro MAME a konzolové hry jako Super Nintendo a Game Boy, a každou kontroluje, aniž by ji měnil. Umí také najít hry, které chceš, a stáhnout je.",
     "addRoot": "Přidejte složku s hrami v <link>Nastavení → Kořenové složky her</link>.",
     "noSystems": "Zatím nebyly nalezeny žádné systémy",
     "noSystemsBody": "Box Office v kořenových složkách her nenašel žádné herní systémy. Dejte hry každého systému do složky pojmenované podle něj, například mame nebo snes, a zkontrolujte znovu.",
@@ -2361,7 +2362,37 @@
     "otherVersions": "Další verze",
     "theParent": "rodiče",
     "import": "Importovat hry",
-    "iconCredit": "Obrázky systémů z <link>RetroArch</link>, CC BY 4.0."
+    "iconCredit": "Obrázky systémů z <link>RetroArch</link>, CC BY 4.0.",
+    "add": {
+      "title": "Přidat hru",
+      "sub": "Najdi hru na seznamu jejího systému. Box Office ji hledá u tvých indexerů, stáhne ji, zkontroluje, že jde o správnou hru, a uloží ji do složky s hrami.",
+      "placeholder": "Hledej hru, např. Super Metroid",
+      "yourSystems": "Tvé systémy",
+      "allSystems": "Všechny systémy",
+      "notYours": "{{name}} (zatím bez složky)",
+      "looking": "Prohledávám seznamy… První hledání v systému stáhne jeho seznam, což může trvat minutu.",
+      "hint": "Hledej podle názvu. Box Office prochází seznam No-Intro konzolových her a seznam MAME arkádových her pro systémy, pro které máš složky. Vyber systém a podívej se do jiného.",
+      "nothing": "Žádná hra ze seznamu neodpovídá.",
+      "more": "Zobrazeno prvních 60. Přidej slovo pro zúžení.",
+      "version": "Verze",
+      "versionOf": "Verze hry {{title}}",
+      "have": "Ve tvých hrách",
+      "wanted": "Chtěná",
+      "want": "Chci",
+      "cardTitle": "Přidat hru",
+      "cardSub": "Prohledej seznam všech her systému a Box Office stáhne ty, které chceš."
+    },
+    "wanted": {
+      "title": "Chtěné",
+      "sub": "Box Office je každou hodinu hledá u tvých indexerů a každé stažení porovná se seznamem systému, než ho uloží do složky s hrami.",
+      "movedIn": "Přesunuto. Kontroluji složku systému…",
+      "waiting": "Staženo, čeká na přesun do složky s hrami; viz Stahování.",
+      "notYet": "Zatím nehledáno.",
+      "nothing": "Hledáno {{when}}, zatím nic. Box Office hledá dál.",
+      "looked": "Naposledy hledáno {{when}}.",
+      "lookingNow": "Hledám teď; viz Aktivita.",
+      "remove": "Už nechtít {{title}}"
+    }
   },
   "importFiles": {
     "title": "Importovat soubory",

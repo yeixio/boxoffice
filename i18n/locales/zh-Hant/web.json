@@ -1664,7 +1664,8 @@
   "kind": {
     "ebook": "電子書",
     "audiobook": "有聲書",
-    "album": "專輯"
+    "album": "專輯",
+    "game": "遊戲"
   },
   "problems": {
     "title": "問題檔案",
@@ -1964,7 +1965,7 @@
     "seeGames": "查看你的遊戲",
     "checked": "{{when}}檢查",
     "none": "還沒有遊戲",
-    "noneBody": "Box Office 顯示你已有的遊戲：MAME 的大型電玩組合，以及超級任天堂、Game Boy 等主機遊戲。它只讀取和檢查，從不更改。",
+    "noneBody": "Box Office 會顯示你已有的遊戲，包括 MAME 街機合集和超級任天堂、Game Boy 等主機遊戲，並逐一檢查而不做變更。它也能找到你想要的遊戲並下載。",
     "addRoot": "在<link>設定 → 遊戲根資料夾</link>中新增存放遊戲的資料夾。",
     "noSystems": "還沒有找到系統",
     "noSystemsBody": "Box Office 沒有在遊戲根資料夾中找到任何遊戲系統。把每個系統的遊戲放進以它命名的資料夾，例如 mame 或 snes，然後重新檢查。",
@@ -2058,7 +2059,37 @@
     "otherVersions": "其他版本",
     "theParent": "父遊戲",
     "import": "匯入遊戲",
-    "iconCredit": "系統圖片來自 <link>RetroArch</link>，採用 CC BY 4.0 授權。"
+    "iconCredit": "系統圖片來自 <link>RetroArch</link>，採用 CC BY 4.0 授權。",
+    "add": {
+      "title": "新增遊戲",
+      "sub": "在系統的清單中找到遊戲。Box Office 會在你的索引器上搜尋、下載，確認是正確的遊戲後放入你的遊戲資料夾。",
+      "placeholder": "搜尋遊戲，例如 Super Metroid",
+      "yourSystems": "你的系統",
+      "allSystems": "所有系統",
+      "notYours": "{{name}}（尚無資料夾）",
+      "looking": "正在查找清單… 第一次搜尋某個系統時會下載它的清單，可能需要一分鐘。",
+      "hint": "依標題搜尋。Box Office 會為你有資料夾的系統查找 No-Intro 主機遊戲清單和 MAME 街機遊戲清單。選擇一個系統以查看其他系統。",
+      "nothing": "清單中沒有相符的遊戲。",
+      "more": "顯示前 60 個。加一個詞來縮小範圍。",
+      "version": "版本",
+      "versionOf": "{{title}} 的版本",
+      "have": "已在你的遊戲中",
+      "wanted": "想要",
+      "want": "想要",
+      "cardTitle": "新增遊戲",
+      "cardSub": "在某個系統的全部遊戲清單中搜尋，Box Office 會下載你想要的遊戲。"
+    },
+    "wanted": {
+      "title": "想要的遊戲",
+      "sub": "Box Office 每小時在你的索引器上搜尋這些遊戲，並在放入遊戲資料夾前將每個下載與系統清單核對。",
+      "movedIn": "已移入。正在檢查系統資料夾…",
+      "waiting": "已下載，等待放入遊戲資料夾；請查看下載。",
+      "notYet": "尚未搜尋。",
+      "nothing": "已於{{when}}搜尋，暫未找到。Box Office 會繼續尋找。",
+      "looked": "上次搜尋：{{when}}。",
+      "lookingNow": "正在搜尋；請查看活動。",
+      "remove": "不再想要 {{title}}"
+    }
   },
   "importFiles": {
     "title": "匯入檔案",

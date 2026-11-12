@@ -1759,7 +1759,8 @@
   "kind": {
     "ebook": "Ebook",
     "audiobook": "Audiobook",
-    "album": "Album"
+    "album": "Album",
+    "game": "Game"
   },
   "problems": {
     "title": "Problem files",
@@ -2064,7 +2065,7 @@
     "seeGames": "See your games",
     "checked": "checked {{when}}",
     "none": "No games yet",
-    "noneBody": "Box Office shows the games you already have: arcade sets for MAME, and console games such as Super Nintendo and Game Boy. It reads them and checks them, and never changes them.",
+    "noneBody": "Box Office shows the games you have, arcade sets for MAME and console games such as Super Nintendo and Game Boy, and checks each one without changing it. It can also find games you want and download them.",
     "addRoot": "Add the folder your games are in under <link>Settings → Games root folders</link>.",
     "noSystems": "No systems found yet",
     "noSystemsBody": "Box Office didn't find any game systems in your games root folders. Put each system's games in a folder named for it, such as mame or snes, then Check again.",
@@ -2159,7 +2160,37 @@
     "otherVersions": "Other versions",
     "theParent": "the parent",
     "import": "Import games",
-    "iconCredit": "System pictures from <link>RetroArch</link>, CC BY 4.0."
+    "iconCredit": "System pictures from <link>RetroArch</link>, CC BY 4.0.",
+    "add": {
+      "title": "Add a game",
+      "sub": "Find a game on its system's list. Box Office looks for it on your indexers, downloads it, checks it's the right game and puts it in your games folder.",
+      "placeholder": "Search for a game, such as Super Metroid",
+      "yourSystems": "Your systems",
+      "allSystems": "All systems",
+      "notYours": "{{name}} (no folder yet)",
+      "looking": "Looking through the lists… The first search on a system downloads its list, which can take a minute.",
+      "hint": "Search by title. Box Office looks through No-Intro's list of console games and MAME's list of arcade games, for the systems you have folders for. Pick a system to look at another.",
+      "nothing": "No games on the list match.",
+      "more": "Showing the first 60. Add a word to narrow it down.",
+      "version": "Version",
+      "versionOf": "Version of {{title}}",
+      "have": "In your games",
+      "wanted": "Wanted",
+      "want": "Want it",
+      "cardTitle": "Add a game",
+      "cardSub": "Search the list of every game for a system, and Box Office downloads the ones you want."
+    },
+    "wanted": {
+      "title": "Wanted",
+      "sub": "Box Office looks for these on your indexers every hour, and checks each download against the system's list before it goes in your games folder.",
+      "movedIn": "Moved in. Checking the system's folder…",
+      "waiting": "Downloaded, and waiting to go in your games folder; see Downloads.",
+      "notYet": "Not looked for yet.",
+      "nothing": "Looked {{when}} and found nothing yet. Box Office keeps looking.",
+      "looked": "Last looked {{when}}.",
+      "lookingNow": "Looking for it now; see Activity.",
+      "remove": "Stop wanting {{title}}"
+    }
   },
   "importFiles": {
     "title": "Import files",

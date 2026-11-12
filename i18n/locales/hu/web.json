@@ -1759,7 +1759,8 @@
   "kind": {
     "ebook": "E-könyv",
     "audiobook": "Hangoskönyv",
-    "album": "Album"
+    "album": "Album",
+    "game": "Játék"
   },
   "problems": {
     "title": "Problémás fájlok",
@@ -2064,7 +2065,7 @@
     "seeGames": "Játékaid megtekintése",
     "checked": "ellenőrizve: {{when}}",
     "none": "Még nincsenek játékok",
-    "noneBody": "A Box Office a már meglévő játékaidat mutatja: MAME-es játéktermi készleteket és konzolos játékokat, például Super Nintendóra és Game Boyra. Olvassa és ellenőrzi őket, de soha nem módosítja.",
+    "noneBody": "A Box Office megmutatja a játékaidat, a MAME arcade szetteket és a konzoljátékokat, például Super Nintendo és Game Boy, és mindegyiket ellenőrzi anélkül, hogy megváltoztatná. Meg is találja a kívánt játékokat, és letölti őket.",
     "addRoot": "Add hozzá a játékaid mappáját itt: <link>Beállítások → Játékok gyökérmappái</link>.",
     "noSystems": "Még nem található rendszer",
     "noSystemsBody": "A Box Office nem talált játékrendszert a játékok gyökérmappáiban. Tedd minden rendszer játékait egy róla elnevezett mappába, például mame vagy snes, majd ellenőrizd újra.",
@@ -2159,7 +2160,37 @@
     "otherVersions": "Más verziók",
     "theParent": "a szülő",
     "import": "Játékok importálása",
-    "iconCredit": "A rendszerképek forrása: <link>RetroArch</link>, CC BY 4.0."
+    "iconCredit": "A rendszerképek forrása: <link>RetroArch</link>, CC BY 4.0.",
+    "add": {
+      "title": "Játék hozzáadása",
+      "sub": "Keress egy játékot a rendszere listáján. A Box Office megkeresi az indexelőiden, letölti, ellenőrzi, hogy a jó játék-e, és a játékmappádba teszi.",
+      "placeholder": "Keress egy játékot, például Super Metroid",
+      "yourSystems": "A rendszereid",
+      "allSystems": "Minden rendszer",
+      "notYours": "{{name}} (még nincs mappa)",
+      "looking": "Keresés a listákban… Egy rendszer első keresésekor letöltődik a listája, ez egy percig is tarthat.",
+      "hint": "Keress cím alapján. A Box Office a No-Intro konzoljáték-listában és a MAME arcade listában keres azokhoz a rendszerekhez, amelyekhez van mappád. Válassz rendszert, hogy egy másikat nézz meg.",
+      "nothing": "Egy játék sem egyezik a listán.",
+      "more": "Az első 60 látható. Adj hozzá egy szót a szűkítéshez.",
+      "version": "Verzió",
+      "versionOf": "{{title}} verziója",
+      "have": "A játékaid között",
+      "wanted": "Kívánt",
+      "want": "Kérem",
+      "cardTitle": "Játék hozzáadása",
+      "cardSub": "Keress egy rendszer összes játékának listájában, és a Box Office letölti, amit kérsz."
+    },
+    "wanted": {
+      "title": "Kívánt játékok",
+      "sub": "A Box Office óránként keresi ezeket az indexelőidnél, és minden letöltést összevet a rendszer listájával, mielőtt a játékmappádba kerül.",
+      "movedIn": "Beköltözött. A rendszer mappájának ellenőrzése…",
+      "waiting": "Letöltve, és vár, hogy a játékmappádba kerüljön; lásd Letöltések.",
+      "notYet": "Még nem kerestük.",
+      "nothing": "Keresve {{when}}, még semmi. A Box Office tovább keres.",
+      "looked": "Utoljára keresve {{when}}.",
+      "lookingNow": "Most keressük; lásd Tevékenység.",
+      "remove": "{{title}} törlése a kívánt játékok közül"
+    }
   },
   "importFiles": {
     "title": "Fájlok importálása",

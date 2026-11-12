@@ -11,6 +11,7 @@ package notify
 import (
 	"context"
 	"fmt"
+	"github.com/yeixio/boxoffice/internal/gamedat"
 	"log/slog"
 	"slices"
 	"strings"
@@ -107,6 +108,9 @@ func (r *Recorder) Download(ctx context.Context, d store.Download, event, why st
 func (r *Recorder) bookName(ctx context.Context, d store.Download) string {
 	if d.Kind == store.AlbumKind {
 		return r.albumName(ctx, d)
+	}
+	if d.Kind == store.GameKind {
+		return r.gameName(ctx, d)
 	}
 	if !store.IsBookKind(d.Kind) {
 		return ""
@@ -207,4 +211,18 @@ func (r *Recorder) albumName(ctx context.Context, d store.Download) string {
 		return ""
 	}
 	return fmt.Sprintf("%s by %s", b.Title, a.Name)
+}
+
+// gameName names the game a download is for: "Super Metroid (SNES)".
+// Games go to admins only, like books.
+func (r *Recorder) gameName(ctx context.Context, d store.Download) string {
+	w, err := r.Store.GameWant(ctx, d.TitleID)
+	if err != nil {
+		return ""
+	}
+	short := w.System
+	if sys, ok := gamedat.LookupSystem(w.System); ok {
+		short = sys.Short
+	}
+	return fmt.Sprintf("%s (%s)", w.Title, short)
 }

@@ -1854,7 +1854,8 @@
   "kind": {
     "ebook": "Ebook",
     "audiobook": "Audiobook",
-    "album": "Album"
+    "album": "Album",
+    "game": "Joc"
   },
   "problems": {
     "title": "Fișiere cu probleme",
@@ -2164,7 +2165,7 @@
     "seeGames": "Vezi jocurile",
     "checked": "verificat {{when}}",
     "none": "Încă nu sunt jocuri",
-    "noneBody": "Box Office arată jocurile pe care le ai deja: seturi arcade pentru MAME și jocuri de consolă precum Super Nintendo și Game Boy. Le citește și le verifică, dar nu le modifică niciodată.",
+    "noneBody": "Box Office arată jocurile tale, seturi arcade pentru MAME și jocuri de consolă precum Super Nintendo și Game Boy, și verifică fiecare fără să-l schimbe. Poate și să găsească jocurile pe care le vrei și să le descarce.",
     "addRoot": "Adaugă dosarul cu jocurile tale în <link>Setări → Dosare rădăcină pentru jocuri</link>.",
     "noSystems": "Încă nu s-au găsit sisteme",
     "noSystemsBody": "Box Office nu a găsit niciun sistem de jocuri în dosarele rădăcină pentru jocuri. Pune jocurile fiecărui sistem într-un dosar cu numele lui, cum ar fi mame sau snes, apoi verifică din nou.",
@@ -2260,7 +2261,37 @@
     "otherVersions": "Alte versiuni",
     "theParent": "părintele",
     "import": "Importă jocuri",
-    "iconCredit": "Imaginile sistemelor sunt de la <link>RetroArch</link>, CC BY 4.0."
+    "iconCredit": "Imaginile sistemelor sunt de la <link>RetroArch</link>, CC BY 4.0.",
+    "add": {
+      "title": "Adaugă un joc",
+      "sub": "Găsește un joc pe lista sistemului său. Box Office îl caută la indexerii tăi, îl descarcă, verifică dacă e jocul corect și îl pune în dosarul de jocuri.",
+      "placeholder": "Caută un joc, de exemplu Super Metroid",
+      "yourSystems": "Sistemele tale",
+      "allSystems": "Toate sistemele",
+      "notYours": "{{name}} (încă fără dosar)",
+      "looking": "Caut în liste… Prima căutare pe un sistem îi descarcă lista, ceea ce poate dura un minut.",
+      "hint": "Caută după titlu. Box Office caută în lista No-Intro a jocurilor de consolă și în lista MAME a jocurilor arcade, pentru sistemele pentru care ai dosare. Alege un sistem ca să vezi altul.",
+      "nothing": "Niciun joc de pe listă nu se potrivește.",
+      "more": "Se arată primele 60. Adaugă un cuvânt pentru a restrânge.",
+      "version": "Versiune",
+      "versionOf": "Versiunea {{title}}",
+      "have": "În jocurile tale",
+      "wanted": "Dorit",
+      "want": "Îl vreau",
+      "cardTitle": "Adaugă un joc",
+      "cardSub": "Caută în lista tuturor jocurilor unui sistem, iar Box Office le descarcă pe cele pe care le vrei."
+    },
+    "wanted": {
+      "title": "Dorite",
+      "sub": "Box Office le caută la indexerii tăi în fiecare oră și verifică fiecare descărcare cu lista sistemului înainte să ajungă în dosarul de jocuri.",
+      "movedIn": "Mutat. Se verifică dosarul sistemului…",
+      "waiting": "Descărcat și așteaptă să ajungă în dosarul de jocuri; vezi Descărcări.",
+      "notYet": "Încă necăutat.",
+      "nothing": "Căutat {{when}}, încă nimic. Box Office caută în continuare.",
+      "looked": "Ultima căutare {{when}}.",
+      "lookingNow": "Se caută acum; vezi Activitate.",
+      "remove": "Nu mai vreau {{title}}"
+    }
   },
   "importFiles": {
     "title": "Importă fișiere",

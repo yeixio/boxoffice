@@ -45,6 +45,9 @@ func (e *Engine) postProcess(ctx context.Context, r *running, d *store.Download,
 	if len(found) == 0 {
 		found = e.checkLength(ctx, d, job.dir, files)
 	}
+	if len(found) == 0 {
+		found = e.checkGame(ctx, d, job.dir, files)
+	}
 	if len(found) > 0 {
 		return e.quarantine(ctx, d, job, found)
 	}
@@ -100,6 +103,8 @@ func wants(kind string) string {
 		return screen.WantAudio
 	case store.AlbumKind:
 		return screen.WantMusic
+	case store.GameKind:
+		return screen.WantGame
 	}
 	return screen.WantVideo
 }
@@ -314,4 +319,26 @@ func plural(n int, one, many string) string {
 		return one
 	}
 	return many
+}
+
+// checkGame finds a release for a game that isn't that game, going by
+// its system's list: a console game by hash, a MAME set by name and CRCs.
+func (e *Engine) checkGame(ctx context.Context, d *store.Download, dir string, files []string) []screen.Finding {
+	if d.Kind != store.GameKind {
+		return nil
+	}
+	li, ok := e.Importer.(*LibraryImporter)
+	if !ok || li.Games == nil {
+		return nil
+	}
+	why, err := li.Games.MatchDownload(ctx, d.TitleID, dir, files)
+	if err != nil {
+		// Moving it in says what went wrong, and it can be tried again.
+		e.Log.Warn("couldn't check a game download", "name", d.Name, "id", d.ID, "err", err)
+		return nil
+	}
+	if why == "" {
+		return nil
+	}
+	return []screen.Finding{{Why: why + ", so it isn't the game it said it was"}}
 }
