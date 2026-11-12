@@ -2268,6 +2268,11 @@
       "ebook": "Ebook",
       "audiobook": "Audiobook",
       "game": "Game"
-    }
+    },
+    "gameName": "Which game is it?",
+    "gamePlaceholder": "The game's name, such as Myst",
+    "gameHint": "Box Office looks for it on the list of {{system}} games, when there is one. If the list hasn't got it, or there's none (as for PC games), use the name you typed: it goes in under that name.",
+    "noGames": "No game on the list matches. You can still use the name you typed.",
+    "useName": "Use “{{name}}”"
   }
 }

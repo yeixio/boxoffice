@@ -269,7 +269,7 @@ func TestCheckDiscsAndDownloads(t *testing.T) {
 	// Imported by hand: a folder that's one game goes in whole.
 	imp := t.TempDir()
 	touch(t, filepath.Join(imp, "NPUB30024", "PS3_GAME", "PARAM.SFO"), sfo("TITLE_ID", "NPUB30024", "TITLE", "flOw"))
-	placed, skipped, err := s.ImportGames(ctx, "", filepath.Join(imp, "NPUB30024"))
+	placed, skipped, err := s.ImportGames(ctx, "", filepath.Join(imp, "NPUB30024"), "")
 	if err != nil || len(skipped) != 0 || len(placed) != 1 || placed[0].To != filepath.Join(root, "PS3 Games", "NPUB30024") {
 		t.Fatalf("import %+v %v %v", placed, skipped, err)
 	}
@@ -292,5 +292,45 @@ func TestTitleFromName(t *testing.T) {
 	}
 	if !nintendoArt("https://img-eshop.cdn.nintendo.net/i/x.jpg") || nintendoArt("https://example.com/x.jpg") || nintendoArt("http://img-eshop.cdn.nintendo.net/x.jpg") {
 		t.Error("nintendoArt")
+	}
+}
+
+// A game imported by hand is filed under the name it's given or found
+// by: a Switch download by its title ID keeps it in its name, and a PC
+// game on several discs goes in whole, as one game.
+func TestImportGamesNamed(t *testing.T) {
+	ctx := context.Background()
+	st := storetest.Open(t)
+	hs := discSources(t)
+	s := &Service{Store: st, Dir: t.TempDir(), LibretroDB: hs.URL + "/db", TitleDB: hs.URL + "/titledb"}
+	mediatypes.SetEnabled(ctx, st, mediatypes.Game, true)
+	root := t.TempDir()
+	if _, err := st.AddRootFolder(ctx, mediatypes.Game, root); err != nil {
+		t.Fatal(err)
+	}
+	imp := t.TempDir()
+	nsp := filepath.Join(imp, "celeste[01002B30028F6000][v0].nsp")
+	touch(t, nsp, []byte("PFS0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"))
+	if got := s.GuessName(ctx, "switch", nsp); got != "Celeste" {
+		t.Fatalf("switch name %q", got)
+	}
+	placed, _, err := s.ImportGames(ctx, "switch", nsp, "Celeste")
+	if err != nil || len(placed) != 1 || filepath.Base(placed[0].To) != "Celeste [01002B30028F6000].nsp" {
+		t.Fatalf("switch %+v %v", placed, err)
+	}
+
+	discs := filepath.Join(imp, "XF")
+	for _, d := range []string{"Disc 1.iso", "Disc 2.iso", "Disc 3.iso"} {
+		touch(t, filepath.Join(discs, d), make([]byte, 4096))
+	}
+	if got := s.GuessName(ctx, "pc", discs); got != "XF" {
+		t.Fatalf("pc name %q", got)
+	}
+	placed, skipped, err := s.ImportGames(ctx, "pc", discs, "The X-Files: Game")
+	if err != nil || len(skipped) != 0 || len(placed) != 1 || placed[0].To != filepath.Join(root, "pc", "The X-Files - Game") || placed[0].From[0] != discs {
+		t.Fatalf("pc %+v %v %v", placed, skipped, err)
+	}
+	if _, err := os.Stat(filepath.Join(root, "pc", "The X-Files - Game", "Disc 3.iso")); err != nil {
+		t.Error("a disc didn't come along")
 	}
 }

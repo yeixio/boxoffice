@@ -2160,6 +2160,11 @@
       "ebook": "電子書",
       "audiobook": "有聲書",
       "game": "遊戲"
-    }
+    },
+    "gameName": "這是哪款遊戲？",
+    "gamePlaceholder": "遊戲名稱，例如 Myst",
+    "gameHint": "Box Office 會在 {{system}} 的清單中尋找。如果清單裡沒有，或沒有清單（例如 PC 遊戲），請使用你輸入的名稱，遊戲會以該名稱儲存。",
+    "noGames": "清單中沒有相符的遊戲。你仍然可以使用輸入的名稱。",
+    "useName": "使用「{{name}}」"
   }
 }

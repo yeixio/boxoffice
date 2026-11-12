@@ -2268,6 +2268,11 @@
       "ebook": "E-kitap",
       "audiobook": "Sesli kitap",
       "game": "Oyun"
-    }
+    },
+    "gameName": "Hangi oyun bu?",
+    "gamePlaceholder": "Oyunun adı, örneğin Myst",
+    "gameHint": "Box Office onu {{system}} listesinde arar. Listede yoksa ya da liste hiç yoksa (PC oyunlarında olduğu gibi) yazdığınız adı kullanın: oyun bu adla eklenir.",
+    "noGames": "Listede eşleşen oyun yok. Yine de yazdığınız adı kullanabilirsiniz.",
+    "useName": "“{{name}}” kullan"
   }
 }

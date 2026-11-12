@@ -269,7 +269,80 @@ func probeISO(fs *isoFS) (Ident, error) {
 	if fs.system == "CD-RTOS CD-BRIDGE" || strings.HasPrefix(fs.system, "CD-RTOS") {
 		return Ident{System: "cdi"}, nil
 	}
+	if pcDisc(fs.rootNames()) {
+		id := Ident{System: "pc"}
+		if b, err := fs.readFile("AUTORUN.INF", 16<<10); err == nil {
+			id.Title = autorunLabel(b)
+		}
+		return id, nil
+	}
 	return Ident{Title: fs.volume}, ErrUnknown
+}
+
+// pcDisc says whether a disc's top folder is a Windows game's: one that
+// starts by itself (AUTORUN.INF) or has a program to set it up.
+func pcDisc(names []string) bool {
+	for _, n := range names {
+		switch u := strings.ToUpper(n); {
+		case u == "AUTORUN.INF", strings.HasSuffix(u, ".EXE"), strings.HasSuffix(u, ".MSI"):
+			return true
+		}
+	}
+	return false
+}
+
+// autorunLabel is the name an AUTORUN.INF gives its disc (label=…), with
+// a disc number taken off: "The X-Files Game Disc 1" is The X-Files Game.
+func autorunLabel(b []byte) string {
+	for _, line := range strings.Split(string(b), "\n") {
+		k, v, ok := strings.Cut(line, "=")
+		if ok && strings.EqualFold(strings.TrimSpace(k), "label") {
+			v = strings.Trim(strings.TrimSpace(v), `"`)
+			return strings.TrimSpace(reDiscNo.ReplaceAllString(v, ""))
+		}
+	}
+	return ""
+}
+
+var reDiscNo = regexp.MustCompile(`(?i)[\s,:-]*[\[(]?\b(?:disc|disk|cd)\s*\d+(?:\s*of\s*\d+)?[\])]?\s*$`)
+
+// discImageExts are disc images a PC game's discs come as.
+var discImageExts = []string{".iso", ".cue", ".bin", ".img", ".mdf", ".nrg"}
+
+// probeDiscs reads the disc images in a folder, a game on several discs:
+// it's a PC game's when one of them is. Discs of a console's game aren't
+// taken as one here: each is told on its own.
+func probeDiscs(p string) (Ident, bool) {
+	ents, err := os.ReadDir(p)
+	if err != nil {
+		return Ident{}, false
+	}
+	var files []string
+	cues := false
+	for _, e := range ents {
+		ext := strings.ToLower(filepath.Ext(e.Name()))
+		if e.Type().IsRegular() && containsString(discImageExts, ext) {
+			files = append(files, filepath.Join(p, e.Name()))
+			cues = cues || ext == ".cue"
+		}
+	}
+	tried := 0
+	for _, f := range files {
+		ext := strings.ToLower(filepath.Ext(f))
+		// A cue sheet reads its own tracks.
+		if cues && ext == ".bin" {
+			continue
+		}
+		if tried++; tried > 8 {
+			break
+		}
+		// The folder's name names the game, not the disc's label, which
+		// is often one disc's ("XFILES_1").
+		if id, err := probeFile(f); err == nil && id.System == "pc" {
+			return Ident{System: "pc"}, true
+		}
+	}
+	return Ident{}, false
 }
 
 var reBoot = regexp.MustCompile(`([A-Za-z]{4})[_-]?(\d{3})\.?(\d{2})`)
@@ -809,6 +882,9 @@ func probeFolder(p string) (Ident, error) {
 		if st, err := os.Stat(filepath.Join(p, "00007000")); err == nil && st.IsDir() {
 			return Ident{System: "xbox360", Serial: strings.ToUpper(filepath.Base(p))}, nil
 		}
+	}
+	if id, ok := probeDiscs(p); ok {
+		return id, nil
 	}
 	return Ident{}, ErrUnknown
 }

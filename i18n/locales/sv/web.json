@@ -2268,6 +2268,11 @@
       "ebook": "E-bok",
       "audiobook": "Ljudbok",
       "game": "Spel"
-    }
+    },
+    "gameName": "Vilket spel är det?",
+    "gamePlaceholder": "Spelets namn, till exempel Myst",
+    "gameHint": "Box Office letar efter det i listan för {{system}}. Om listan inte har det, eller om det inte finns någon lista (som för PC-spel), använd namnet du skrev: det läggs in under det namnet.",
+    "noGames": "Inget spel i listan matchar. Du kan ändå använda namnet du skrev.",
+    "useName": "Använd ”{{name}}”"
   }
 }

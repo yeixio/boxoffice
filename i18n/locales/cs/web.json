@@ -2484,6 +2484,11 @@
       "ebook": "E-kniha",
       "audiobook": "Audiokniha",
       "game": "Hra"
-    }
+    },
+    "gameName": "Která hra to je?",
+    "gamePlaceholder": "Název hry, například Myst",
+    "gameHint": "Box Office ji hledá na seznamu pro {{system}}. Pokud ji seznam nemá nebo seznam neexistuje (jako u her pro PC), použijte zadaný název: hra se uloží pod ním.",
+    "noGames": "Žádná hra na seznamu neodpovídá. Zadaný název můžete použít i tak.",
+    "useName": "Použít „{{name}}“"
   }
 }

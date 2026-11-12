@@ -2268,6 +2268,11 @@
       "ebook": "E-book",
       "audiobook": "Luisterboek",
       "game": "Game"
-    }
+    },
+    "gameName": "Welk spel is het?",
+    "gamePlaceholder": "De naam van het spel, zoals Myst",
+    "gameHint": "Box Office zoekt het op de lijst van {{system}}. Staat het er niet op, of is er geen lijst (zoals bij pc-spellen), gebruik dan de getypte naam: het wordt onder die naam opgeslagen.",
+    "noGames": "Geen spel op de lijst past. Je kunt de getypte naam toch gebruiken.",
+    "useName": "„{{name}}” gebruiken"
   }
 }

@@ -129,6 +129,37 @@ func (fs *isoFS) find(p string) (lba, size int64, dir bool, err error) {
 	return lba, size, dir, nil
 }
 
+// rootNames are the names of the files and folders in the disc's top
+// folder, as written (upper case on most discs).
+func (fs *isoFS) rootNames() []string {
+	size := min(fs.rootSize, 1<<20)
+	b, err := fs.s.read(fs.root, (size+2047)/2048)
+	if err != nil {
+		return nil
+	}
+	var names []string
+	for i := 0; i < len(b); {
+		n := int(b[i])
+		if n == 0 {
+			i = (i/2048 + 1) * 2048
+			continue
+		}
+		if i+n > len(b) || n < 34 {
+			break
+		}
+		rec := b[i : i+n]
+		if l := int(rec[32]); 33+l <= len(rec) && !(l == 1 && rec[33] <= 1) {
+			name := string(rec[33 : 33+l])
+			if j := strings.IndexByte(name, ';'); j >= 0 {
+				name = name[:j]
+			}
+			names = append(names, strings.TrimSuffix(name, "."))
+		}
+		i += n
+	}
+	return names
+}
+
 // readFile reads a small file off the disc, up to max bytes.
 func (fs *isoFS) readFile(p string, max int64) ([]byte, error) {
 	lba, size, dir, err := fs.find(p)

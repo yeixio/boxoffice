@@ -137,12 +137,13 @@ name written inside the game, then the file's name. A game found this way is
 | Xbox, Xbox 360 | Redump | The title in `default.xbe` / `default.xex`, in a folder, `.iso` or a 360 download folder |
 | Xbox One / Series | none | The game folder's name |
 | PC Engine CD, PC-FX, Neo Geo CD, 3DO, CD-i, Jaguar CD, Amiga CD32 and CDTV, PC-98, FM Towns | Redump | The disc's own header, where it has one |
-| DOS, Windows PC | none | The game folder's name |
+| DOS, Windows PC | none | The game folder's name; a disc image (`.iso`, `.bin`/`.cue`, `.img`, `.mdf`, `.nrg`) with `AUTORUN.INF` or a setup program is a PC game's |
 
 A disc in several files (a `.cue` and its `.bin` tracks, a `.gdi`, a `.m3u` of
 discs) is one game. A game that's a folder, such as a dumped PS3 game, a Wii U
 game or a PC game, is one game too: put each in its own folder in the system's
-folder. CHD files and Switch `.xci` cartridges can't be read inside (CHDs are
+folder. A PC game on several CDs is one game: keep its disc images together in
+its folder. CHD files and Switch `.xci` cartridges can't be read inside (CHDs are
 compressed, cartridges are locked), so they're known by their names: name them
 as the list does.
 

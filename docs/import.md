@@ -38,7 +38,14 @@ Each file or folder gets a guess from its name and what's inside:
 A guess that doesn't quite agree with the name says **Check this**. Press
 **Change** on any item to pick what it is yourself: choose the kind, then find
 the movie, show, artist or author; for an album or a book, type its title too.
-For games, pick the system.
+For games, pick the system, then say which game it is: type its name to find
+it on the system's list and **Pick** it, or, when the list hasn't got it or the
+system has none (PC games), **Use** the name you typed. The game goes in under
+that name. Box Office fills this in itself when it can: a Switch download by
+the title ID in it, a PlayStation disc by its serial. A folder of disc images,
+such as an old Windows game on seven CDs, is one game, and goes in whole; discs
+that start by themselves or have a setup program on them are told to be a PC
+game's.
 
 Music, ebooks, audiobooks and games can only be imported once they're turned on
 in **Settings → Library**, and each needs a root folder.

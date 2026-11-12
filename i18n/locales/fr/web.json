@@ -2376,6 +2376,11 @@
       "ebook": "Livre numérique",
       "audiobook": "Livre audio",
       "game": "Jeu"
-    }
+    },
+    "gameName": "De quel jeu s'agit-il ?",
+    "gamePlaceholder": "Le nom du jeu, par exemple Myst",
+    "gameHint": "Box Office le cherche dans la liste de {{system}}. Si la liste ne l'a pas, ou s'il n'y a pas de liste (comme pour les jeux PC), utilisez le nom tapé : il sera rangé sous ce nom.",
+    "noGames": "Aucun jeu de la liste ne correspond. Vous pouvez quand même utiliser le nom tapé.",
+    "useName": "Utiliser « {{name}} »"
   }
 }

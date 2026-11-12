@@ -4,6 +4,7 @@ import (
 	"archive/zip"
 	"bytes"
 	"context"
+	"fmt"
 	"io"
 	"log/slog"
 	"os"
@@ -288,5 +289,47 @@ func TestImportGamesKeepsWhatItCantPlace(t *testing.T) {
 	}
 	if _, err := os.Stat(filepath.Join(dir, "Mixed", "gridlee.zip")); err == nil {
 		t.Fatal("a placed game was left in the imports folder")
+	}
+}
+
+// A folder of disc images Box Office can't tell is still games; picking
+// the system and typing the game's name files it whole under that name.
+func TestImportGameByName(t *testing.T) {
+	s := newService(t)
+	ctx := context.Background()
+	roots := t.TempDir()
+	if _, err := s.Store.AddRootFolder(ctx, mediatypes.Game, roots); err != nil {
+		t.Fatal(err)
+	}
+	mediatypes.SetEnabled(ctx, s.Store, mediatypes.Game, true)
+	src := t.TempDir()
+	for i := 1; i <= 7; i++ {
+		write(t, filepath.Join(src, "X-Files", fmt.Sprintf("XFILES%d.bin", i)), 4096)
+	}
+	if err := s.CopyIn(ctx, []string{filepath.Join(src, "X-Files")}); err != nil {
+		t.Fatal(err)
+	}
+	st := settled(t, s)
+	if x := item(t, st, "X-Files"); x.Kind != Game || x.System != "" || x.Problem == "" {
+		t.Fatalf("discs %+v", x)
+	}
+	if _, err := s.Set(ctx, "imports/X-Files", Pick{Kind: Game, System: "pc", Game: "The X-Files Game"}); err != nil {
+		t.Fatal(err)
+	}
+	st = settled(t, s)
+	if x := item(t, st, "X-Files"); x.Problem != "" || x.System != "pc" || x.Game != "The X-Files Game" || x.Title != "The X-Files Game" {
+		t.Fatalf("picked %+v", x)
+	}
+	if err := s.Run(ctx, nil); err != nil {
+		t.Fatal(err)
+	}
+	st = settled(t, s)
+	if x := item(t, st, "X-Files"); x.Status != Done {
+		t.Fatalf("%+v", x)
+	}
+	for i := 1; i <= 7; i++ {
+		if _, err := os.Stat(filepath.Join(roots, "pc", "The X-Files Game", fmt.Sprintf("XFILES%d.bin", i))); err != nil {
+			t.Errorf("disc %d isn't in the game's folder", i)
+		}
 	}
 }

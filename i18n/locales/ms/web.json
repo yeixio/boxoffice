@@ -2160,6 +2160,11 @@
       "ebook": "E-buku",
       "audiobook": "Buku audio",
       "game": "Permainan"
-    }
+    },
+    "gameName": "Permainan apakah ini?",
+    "gamePlaceholder": "Nama permainan, contohnya Myst",
+    "gameHint": "Box Office mencarinya dalam senarai {{system}}. Jika tiada dalam senarai, atau tiada senarai (seperti permainan PC), gunakan nama yang anda taip: permainan akan disimpan dengan nama itu.",
+    "noGames": "Tiada permainan dalam senarai yang sepadan. Anda masih boleh guna nama yang anda taip.",
+    "useName": "Guna “{{name}}”"
   }
 }
