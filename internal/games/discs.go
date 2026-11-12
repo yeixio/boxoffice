@@ -106,6 +106,9 @@ func collectUnits(root string, takes func(name string, top bool) bool, folder fu
 			return nil
 		}
 		if d.IsDir() {
+			if emulatorFolder(d.Name()) {
+				return filepath.SkipDir
+			}
 			if folder(p, depth) {
 				out = append(out, unit{path: p, dir: true})
 				return filepath.SkipDir
@@ -145,6 +148,22 @@ func collectUnits(root string, takes func(name string, top bool) bool, folder fu
 	}
 	slices.SortFunc(out, func(a, b unit) int { return strings.Compare(a.path, b.path) })
 	return out
+}
+
+// emulatorFolder says whether a folder is one an emulator keeps beside
+// its games, whose zips aren't games: MAME's samples and artwork (a
+// game's sounds, in a zip named for the game), saved states, settings,
+// screenshots. Games are looked for everywhere else, so a whole MAME or
+// AAE install can be brought in and only its roms go in.
+func emulatorFolder(name string) bool {
+	switch strings.ToLower(name) {
+	case "samples", "artwork", "artwork_preview", "snap", "snaps", "titles", "flyers", "marquees", "cabinets", "cpanel", "pcb", "bezels",
+		"overlays", "icons", "cheat", "cheats", "cfg", "nvram", "hi", "hiscore", "inp", "sta", "memcard", "diff", "comments",
+		"ctrlr", "hash", "hlsl", "bgfx", "plugins", "language", "docs", "web", "ini", "dips", "keycfg", "shaders", "screenshots",
+		"saves", "savestates", "states", "manuals", "boxart", "covers", "videos", "media", "downloaded_images":
+		return true
+	}
+	return false
 }
 
 // gameFolder says whether a folder is one game: one that says so (a
