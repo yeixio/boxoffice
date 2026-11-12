@@ -682,6 +682,11 @@ func (s *Service) checkConsole(ctx context.Context, sys store.GameSystem, def ga
 				} else {
 					g.Status = gamedat.Unknown
 					g.Art = gamedat.ThumbName(stem)
+					if e, ok := ix.ByTitle(stem); ok {
+						// Not a version on the list, but the same game: its
+						// picture will do.
+						g.Art = gamedat.ThumbName(e.Name())
+					}
 				}
 			}
 			g.Parent, g.ParentTitle = groupKey(g.Title), g.Title

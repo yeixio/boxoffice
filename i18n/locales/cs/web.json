@@ -2360,7 +2360,8 @@
     "clones": "Klony",
     "otherVersions": "Další verze",
     "theParent": "rodiče",
-    "import": "Importovat hry"
+    "import": "Importovat hry",
+    "iconCredit": "Obrázky systémů z <link>RetroArch</link>, CC BY 4.0."
   },
   "importFiles": {
     "title": "Importovat soubory",

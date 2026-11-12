@@ -2158,7 +2158,8 @@
     "clones": "کلون‌ها",
     "otherVersions": "نسخه‌های دیگر",
     "theParent": "والد",
-    "import": "وارد کردن بازی‌ها"
+    "import": "وارد کردن بازی‌ها",
+    "iconCredit": "تصاویر سیستم‌ها از <link>RetroArch</link>، با مجوز CC BY 4.0."
   },
   "importFiles": {
     "title": "وارد کردن فایل‌ها",

@@ -2158,7 +2158,8 @@
     "clones": "Klónok",
     "otherVersions": "Más verziók",
     "theParent": "a szülő",
-    "import": "Játékok importálása"
+    "import": "Játékok importálása",
+    "iconCredit": "A rendszerképek forrása: <link>RetroArch</link>, CC BY 4.0."
   },
   "importFiles": {
     "title": "Fájlok importálása",

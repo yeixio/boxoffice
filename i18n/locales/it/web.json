@@ -2259,7 +2259,8 @@
     "clones": "Cloni",
     "otherVersions": "Altre versioni",
     "theParent": "il padre",
-    "import": "Importa giochi"
+    "import": "Importa giochi",
+    "iconCredit": "Immagini dei sistemi da <link>RetroArch</link>, CC BY 4.0."
   },
   "importFiles": {
     "title": "Importa file",

@@ -2057,7 +2057,8 @@
     "clones": "クローン",
     "otherVersions": "その他のバージョン",
     "theParent": "親",
-    "import": "ゲームを取り込む"
+    "import": "ゲームを取り込む",
+    "iconCredit": "システムの画像は <link>RetroArch</link> のものです（CC BY 4.0）。"
   },
   "importFiles": {
     "title": "ファイルを取り込む",

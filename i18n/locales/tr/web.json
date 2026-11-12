@@ -2158,7 +2158,8 @@
     "clones": "Klonlar",
     "otherVersions": "Diğer sürümler",
     "theParent": "ana oyun",
-    "import": "Oyun içe aktar"
+    "import": "Oyun içe aktar",
+    "iconCredit": "Sistem görselleri <link>RetroArch</link> kaynaklıdır, CC BY 4.0."
   },
   "importFiles": {
     "title": "Dosya içe aktar",

@@ -2057,7 +2057,8 @@
     "clones": "Bản sao",
     "otherVersions": "Phiên bản khác",
     "theParent": "bản gốc",
-    "import": "Nhập trò chơi"
+    "import": "Nhập trò chơi",
+    "iconCredit": "Hình hệ máy từ <link>RetroArch</link>, CC BY 4.0."
   },
   "importFiles": {
     "title": "Nhập tệp",

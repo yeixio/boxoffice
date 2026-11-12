@@ -2360,7 +2360,8 @@
     "clones": "Клони",
     "otherVersions": "Інші версії",
     "theParent": "батька",
-    "import": "Імпортувати ігри"
+    "import": "Імпортувати ігри",
+    "iconCredit": "Зображення систем: <link>RetroArch</link>, CC BY 4.0."
   },
   "importFiles": {
     "title": "Імпорт файлів",

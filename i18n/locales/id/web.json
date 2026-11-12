@@ -2057,7 +2057,8 @@
     "clones": "Klon",
     "otherVersions": "Versi lain",
     "theParent": "induknya",
-    "import": "Impor game"
+    "import": "Impor game",
+    "iconCredit": "Gambar sistem dari <link>RetroArch</link>, CC BY 4.0."
   },
   "importFiles": {
     "title": "Impor file",

@@ -56,7 +56,8 @@ func (s *Service) ArtFile(ctx context.Context, g store.Game, system string) (str
 	if _, err := os.Stat(p); err == nil {
 		return p, nil
 	}
-	none := p + ".none"
+	// ".none2": pictures behind links weren't found before.
+	none := p + ".none2"
 	if st, err := os.Stat(none); err == nil && time.Since(st.ModTime()) < artRetry {
 		return "", ErrNoArt
 	}
@@ -114,6 +115,10 @@ func (s *Service) ArtFile(ctx context.Context, g store.Game, system string) (str
 }
 
 func (s *Service) fetchImage(ctx context.Context, u string) (image.Image, error) {
+	return s.fetchImageOnce(ctx, u, false)
+}
+
+func (s *Service) fetchImageOnce(ctx context.Context, u string, followed bool) (image.Image, error) {
 	ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
 	defer cancel()
 	resp, err := s.get(ctx, u)
@@ -127,10 +132,26 @@ func (s *Service) fetchImage(ctx context.Context, u string) (image.Image, error)
 	}
 	img, _, err := image.Decode(bytes.NewReader(b))
 	if err != nil {
+		// libretro's thumbnails on GitHub keep another name for a picture
+		// as a link, which comes back as the name it links to.
+		if to := linkTarget(b); to != "" && !followed {
+			if i := strings.LastIndexByte(u, '/'); i >= 0 {
+				return s.fetchImageOnce(ctx, u[:i+1]+url.PathEscape(to), true)
+			}
+		}
 		// Not a picture: as good as none.
 		return nil, os.ErrNotExist
 	}
 	return img, nil
+}
+
+// linkTarget is the picture a link's body names, if it's one.
+func linkTarget(b []byte) string {
+	t := strings.TrimSpace(string(b))
+	if len(b) > 512 || !strings.HasSuffix(strings.ToLower(t), ".png") || strings.ContainsAny(t, "/\\\n\x00") {
+		return ""
+	}
+	return t
 }
 
 func writeJPEG(p string, img image.Image) error {

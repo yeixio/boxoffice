@@ -2158,7 +2158,8 @@
     "clones": "Kloner",
     "otherVersions": "Andra versioner",
     "theParent": "föräldern",
-    "import": "Importera spel"
+    "import": "Importera spel",
+    "iconCredit": "Systembilder från <link>RetroArch</link>, CC BY 4.0."
   },
   "importFiles": {
     "title": "Importera filer",

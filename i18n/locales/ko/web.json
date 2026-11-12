@@ -2057,7 +2057,8 @@
     "clones": "클론",
     "otherVersions": "다른 버전",
     "theParent": "부모",
-    "import": "게임 가져오기"
+    "import": "게임 가져오기",
+    "iconCredit": "시스템 이미지 출처: <link>RetroArch</link>, CC BY 4.0."
   },
   "importFiles": {
     "title": "파일 가져오기",
