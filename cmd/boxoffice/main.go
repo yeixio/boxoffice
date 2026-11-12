@@ -187,7 +187,7 @@ func run() error {
 	// Games are checked when a games root folder is added, on Check
 	// again, and weekly.
 	gameShelf := &games.Service{Store: db, Log: log, Dir: filepath.Join(cfg.DataDir, "games"),
-		MAMEReleases: cfg.MAMEReleases, LibretroDB: cfg.LibretroDB, Art: cfg.GameArt, UserAgent: "BoxOffice/" + version.Version,
+		MAMEReleases: cfg.MAMEReleases, LibretroDB: cfg.LibretroDB, TitleDB: cfg.TitleDB, Art: cfg.GameArt, UserAgent: "BoxOffice/" + version.Version,
 		Search: search.QueueGame(runner)}
 	// Games wanted are downloaded, checked against their system's list and
 	// copied into its folder.

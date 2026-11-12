@@ -2114,9 +2114,11 @@
       "badCopy": "Dårlig kopi",
       "bios": "Trenger en BIOS",
       "unknown": "Ikke på listen",
-      "unreadable": "Kan ikke leses"
+      "unreadable": "Kan ikke leses",
+      "identified": "Gjenkjent"
     },
     "whatsWrong": "Hva er galt",
+    "goodToKnow": "Greit å vite",
     "explain": {
       "missingArcade": "Noen filer settet trenger, mangler, så MAME starter det kanskje ikke.",
       "wrongArcade": "Noen filer er fra en annen versjon av MAME enn {{list}}. Velg versjonen du spiller med under MAME-versjon, eller oppdater settet.",
@@ -2127,7 +2129,9 @@
       "wrong": "Filen heter det samme som et spill på No-Intros liste, men er ikke lik: en dårlig kopi, eller en som er endret siden.",
       "bios": "Spillet trenger en BIOS som mangler.",
       "unknown": "No-Intros liste har ingen kopi som denne. Det kan være et hack, en oversettelse eller et hjemmelaget spill, og det er helt greit.",
-      "unreadable": "Filen kan ikke åpnes. Den kan være skadet, eller fortsatt holde på å bli kopiert."
+      "unreadable": "Filen kan ikke åpnes. Den kan være skadet, eller fortsatt holde på å bli kopiert.",
+      "identified": "Box Office kjenner igjen spillet på serienummeret eller tittel-ID-en som står i det, eller på navnet. Så store spill sjekkes ikke byte for byte.",
+      "unknownDisc": "Ingenting Box Office kan lese i det, sier hvilket spill det er, og {{list}} har ikke noe spill med det navnet. Det hjelper å gi det nytt navn slik listen kaller det."
     },
     "problem": {
       "missing": "<code>{{name}}</code> mangler",
@@ -2138,7 +2142,10 @@
       "parent": "Trenger foreldresettet sitt, <code>{{name}}</code>",
       "disk": "CHD-en <code>{{name}}</code> mangler",
       "diskWrong": "CHD-en <code>{{name}}</code> er fra en annen versjon",
-      "unreadable": "Kan ikke leses: {{name}}"
+      "unreadable": "Kan ikke leses: {{name}}",
+      "otherSystem": "Innholdet sier at det er et {{name}}-spill",
+      "update": "<code>{{name}}</code> er en oppdatering til spillet, ikke selve spillet",
+      "dlc": "<code>{{name}}</code> er ekstrainnhold til spillet, ikke selve spillet"
     },
     "inParent": "I foreldresettet",
     "fact": {
@@ -2152,7 +2159,9 @@
       "genre": "Sjanger",
       "parent": "Klone av",
       "crc": "CRC",
-      "found": "Funnet"
+      "found": "Funnet",
+      "serial": "Serienummer",
+      "listName": "Navn på listen"
     },
     "files": "Filer",
     "noFiles": "Filene er ikke her lenger. Sjekk igjen for å oppdatere listen.",
@@ -2171,7 +2180,6 @@
       "allSystems": "Alle systemer",
       "notYours": "{{name}} (ingen mappe ennå)",
       "looking": "Leter i listene… Første søk på et system laster ned listen, noe som kan ta et minutt.",
-      "hint": "Søk på tittel. Box Office leter i No-Intros liste over konsollspill og MAMEs liste over arkadespill, for systemene du har mapper for. Velg et system for å se et annet.",
       "nothing": "Ingen spill på listen passer.",
       "more": "Viser de første 60. Legg til et ord for å snevre inn.",
       "version": "Versjon",
@@ -2180,7 +2188,9 @@
       "wanted": "Ønsket",
       "want": "Vil ha",
       "cardTitle": "Legg til et spill",
-      "cardSub": "Søk i listen over alle spill for et system, så laster Box Office ned dem du vil ha."
+      "cardSub": "Søk i listen over alle spill for et system, så laster Box Office ned dem du vil ha.",
+      "hintAll": "Søk på tittel. Box Office ser i listen over alle spill for systemene du har mapper for: No-Intros for kassetter, Redumps for plater, eShopens for Switch og MAMEs for arkadespill. Systemer uten liste, som PC eller PlayStation 4, bruker navnet du skriver. Velg et system for å se på et annet.",
+      "free": "Ingen liste å sjekke: Box Office ser etter utgivelser med dette navnet."
     },
     "wanted": {
       "title": "Ønsket",

@@ -187,7 +187,7 @@ export function AddGame() {
       {q.length < 2 && !results.data && (
         <div className="rounded-xl border border-dashed border-line px-6 py-12 text-center text-sm text-muted">
           <Gamepad2 className="mx-auto mb-3 size-8" aria-hidden />
-          <p className="mx-auto max-w-md">{t("games.add.hint")}</p>
+          <p className="mx-auto max-w-md">{t("games.add.hintAll")}</p>
         </div>
       )}
       {results.data?.length === 0 && !results.isFetching && (
@@ -256,6 +256,9 @@ function LookupCard({
           <span className="text-xs text-muted">{bytes(picked.size)}</span>
         )}
       </div>
+      {l.free && (
+        <p className="mt-1 text-xs text-muted">{t("games.add.free")}</p>
+      )}
       {l.versions.length > 1 && !wanted && !l.onDisk && (
         <label className="mt-2 block text-xs text-muted">
           <span className="sr-only">{t("games.add.version")}</span>

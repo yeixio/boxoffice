@@ -2114,9 +2114,11 @@
       "badCopy": "Huono kopio",
       "bios": "Tarvitsee BIOSin",
       "unknown": "Ei listalla",
-      "unreadable": "Ei voi lukea"
+      "unreadable": "Ei voi lukea",
+      "identified": "Tunnistettu"
     },
     "whatsWrong": "Mikä on vialla",
+    "goodToKnow": "Hyvä tietää",
     "explain": {
       "missingArcade": "Osa sarjan tarvitsemista tiedostoista puuttuu, joten MAME ei ehkä käynnistä sitä.",
       "wrongArcade": "Osa tiedostoista on eri MAME-versiosta kuin {{list}}. Valitse versio, jolla pelaat, kohdasta MAME-versio, tai päivitä sarja.",
@@ -2127,7 +2129,9 @@
       "wrong": "Tiedosto on nimetty kuten No-Intron listan peli, mutta se ei ole sama: huono kopio tai myöhemmin muutettu.",
       "bios": "Peli tarvitsee BIOSin, jota ei ole.",
       "unknown": "No-Intron listalla ei ole tällaista kopiota. Se voi olla hakkerointi, käännös tai kotitekoinen peli, ja se on ihan hyvä.",
-      "unreadable": "Tiedostoa ei voi avata. Se voi olla vioittunut tai vielä kopioitumassa."
+      "unreadable": "Tiedostoa ei voi avata. Se voi olla vioittunut tai vielä kopioitumassa.",
+      "identified": "Box Office tunnistaa pelin sen sisältämästä sarjanumerosta tai nimike-ID:stä tai sen nimestä. Näin suuria pelejä ei tarkisteta tavu tavulta.",
+      "unknownDisc": "Mikään, mitä Box Office pystyy siitä lukemaan, ei kerro mikä peli se on, eikä listalla {{list}} ole sen nimistä peliä. Nimeäminen listan mukaan auttaa."
     },
     "problem": {
       "missing": "<code>{{name}}</code> puuttuu",
@@ -2138,7 +2142,10 @@
       "parent": "Tarvitsee emosarjansa, <code>{{name}}</code>",
       "disk": "CHD <code>{{name}}</code> puuttuu",
       "diskWrong": "CHD <code>{{name}}</code> on eri versiosta",
-      "unreadable": "Ei voi lukea: {{name}}"
+      "unreadable": "Ei voi lukea: {{name}}",
+      "otherSystem": "Sisällön mukaan se on {{name}}-peli",
+      "update": "<code>{{name}}</code> on pelin päivitys, ei itse peli",
+      "dlc": "<code>{{name}}</code> on pelin lisäsisältöä, ei itse peli"
     },
     "inParent": "Emosarjassa",
     "fact": {
@@ -2152,7 +2159,9 @@
       "genre": "Lajityyppi",
       "parent": "Klooni pelistä",
       "crc": "CRC",
-      "found": "Löydetty"
+      "found": "Löydetty",
+      "serial": "Sarjanumero",
+      "listName": "Nimi listalla"
     },
     "files": "Tiedostot",
     "noFiles": "Sen tiedostoja ei enää ole. Tarkista uudelleen päivittääksesi listan.",
@@ -2171,7 +2180,6 @@
       "allSystems": "Kaikki järjestelmät",
       "notYours": "{{name}} (ei vielä kansiota)",
       "looking": "Käydään listoja läpi… Ensimmäinen haku järjestelmästä lataa sen listan, mikä voi kestää minuutin.",
-      "hint": "Hae nimellä. Box Office käy läpi No-Intron konsolipelilistan ja MAMEn arcadepelilistan niille järjestelmille, joille sinulla on kansio. Valitse järjestelmä katsoaksesi toista.",
       "nothing": "Mikään listan peli ei vastaa.",
       "more": "Näytetään ensimmäiset 60. Lisää sana rajataksesi.",
       "version": "Versio",
@@ -2180,7 +2188,9 @@
       "wanted": "Haluttu",
       "want": "Haluan",
       "cardTitle": "Lisää peli",
-      "cardSub": "Hae järjestelmän kaikkien pelien listalta, ja Box Office lataa haluamasi."
+      "cardSub": "Hae järjestelmän kaikkien pelien listalta, ja Box Office lataa haluamasi.",
+      "hintAll": "Hae nimellä. Box Office käy läpi kaikkien pelien listan niille järjestelmille, joille sinulla on kansio: No-Intron kaseteille, Redumpin levyille, eShopin Switchille ja MAMEn arcade-peleille. Järjestelmät ilman listaa, kuten PC tai PlayStation 4, käyttävät kirjoittamaasi nimeä. Valitse järjestelmä nähdäksesi toisen.",
+      "free": "Ei listaa tarkistettavaksi: Box Office etsii julkaisuja tällä nimellä."
     },
     "wanted": {
       "title": "Halutut",

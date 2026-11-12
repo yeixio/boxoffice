@@ -239,10 +239,13 @@ func (s *Service) check(ctx context.Context, rootID int, only string) error {
 		}
 		s.set(func(p *Progress) { p.Systems++; p.System, p.Step, p.Done, p.Total = x.sys.Name, "reading", 0, 0 })
 		var c store.GameCheck
-		if x.sys.Arcade {
+		switch {
+		case x.sys.Arcade:
 			c, err = s.checkMAME(ctx, sys)
-		} else {
+		case x.sys.Hash:
 			c, err = s.checkConsole(ctx, sys, x.sys)
+		default:
+			c, err = s.checkDiscs(ctx, sys, x.sys)
 		}
 		if err != nil {
 			if ctx.Err() != nil {
@@ -300,7 +303,7 @@ func Detect(root string) (systems []found, unsure []string, err error) {
 				systems = append(systems, found{p, sys})
 				continue
 			}
-			if hasGames(sub) {
+			if hasGames(sub) || hasGameFolders(p, sub) {
 				if sys, ok := systemOf(p, sub); ok {
 					systems = append(systems, found{p, sys})
 				} else {
@@ -327,21 +330,58 @@ func hasGames(entries []os.DirEntry) bool {
 	return false
 }
 
+// hasGameFolders says whether a few of a folder's folders are games kept
+// as folders, such as PlayStation 3 games dumped whole.
+func hasGameFolders(dir string, entries []os.DirEntry) bool {
+	n := 0
+	for _, e := range entries {
+		if !e.IsDir() || strings.HasPrefix(e.Name(), ".") {
+			continue
+		}
+		if n++; n > 10 {
+			break
+		}
+		if id, err := gamedat.Probe(filepath.Join(dir, e.Name())); err == nil && id.System != "" {
+			return true
+		}
+	}
+	return false
+}
+
 // systemOf tells a folder's system by its name, or else by its games:
-// console files by their extension, and archives by what's in a few of
-// them. Archives holding no console's files are MAME's sets.
+// files by their extension, or by what's written in them (a disc's
+// serial, a download's header), folders by what's in them, and archives
+// by what's in a few of them. Archives holding no console's files are
+// MAME's sets.
 func systemOf(dir string, entries []os.DirEntry) (gamedat.System, bool) {
 	if sys, ok := gamedat.SystemByFolder(filepath.Base(dir)); ok {
 		return sys, true
 	}
 	count := map[string]int{}
-	archives, peeked := 0, 0
+	archives, peeked, probed := 0, 0, 0
 	for _, e := range entries {
+		p := filepath.Join(dir, e.Name())
 		if e.IsDir() {
+			if probed < 20 && !strings.HasPrefix(e.Name(), ".") {
+				probed++
+				if id, err := gamedat.Probe(p); err == nil && id.System != "" {
+					count[id.System]++
+				}
+			}
 			continue
 		}
 		if sys, ok := gamedat.SystemByExt(e.Name()); ok {
 			count[sys.Key]++
+			continue
+		}
+		if gamedat.SharedExt(e.Name()) || strings.EqualFold(filepath.Ext(e.Name()), ".cue") {
+			if probed >= 20 {
+				continue
+			}
+			probed++
+			if sys, ok := Identify(p); ok {
+				count[sys.Key]++
+			}
 			continue
 		}
 		if !gamedat.IsArchive(e.Name()) {
@@ -352,7 +392,7 @@ func systemOf(dir string, entries []os.DirEntry) (gamedat.System, bool) {
 			continue
 		}
 		peeked++
-		files, err := gamedat.ListArchive(filepath.Join(dir, e.Name()))
+		files, err := gamedat.ListArchive(p)
 		if err != nil {
 			continue
 		}
@@ -618,7 +658,7 @@ func (s *Service) checkConsole(ctx context.Context, sys store.GameSystem, def ga
 			}
 			return nil
 		}
-		if gamedat.IsArchive(d.Name()) || slices.Contains(def.Exts, strings.ToLower(filepath.Ext(d.Name()))) {
+		if gamedat.IsArchive(d.Name()) || def.Takes(d.Name()) {
 			files = append(files, p)
 		}
 		return nil
@@ -649,8 +689,7 @@ func (s *Service) checkConsole(ctx context.Context, sys store.GameSystem, def ga
 				parts = append(parts, part{error: err})
 			}
 			for _, f := range inside {
-				ext := strings.ToLower(filepath.Ext(f.Name))
-				if !slices.Contains(def.Exts, ext) && len(inside) > 1 {
+				if !def.Takes(f.Name) && len(inside) > 1 {
 					continue
 				}
 				pt := part{name: f.Name, size: f.Size, crcs: []uint32{f.CRC}}
@@ -748,27 +787,6 @@ func groupKey(title string) string {
 		}
 		return -1
 	}, title)
-}
-
-// noIntro is No-Intro's list for a console, from libretro's database.
-func (s *Service) noIntro(ctx context.Context, sys gamedat.System) (*gamedat.Index, string, error) {
-	p, err := s.libretroDAT(ctx, "no-intro", sys.Libretro)
-	if err != nil {
-		return nil, "", fmt.Errorf("couldn't download No-Intro's list of %s games: %w", sys.Name, err)
-	}
-	if p == "" {
-		return nil, "", fmt.Errorf("libretro's database has no No-Intro list of %s games", sys.Name)
-	}
-	f, err := os.Open(p)
-	if err != nil {
-		return nil, "", err
-	}
-	defer f.Close()
-	dat, err := gamedat.ParseClrMame(f)
-	if err != nil {
-		return nil, "", fmt.Errorf("couldn't read No-Intro's list of %s games: %w", sys.Name, err)
-	}
-	return gamedat.NewIndex(dat), dat.Header["version"], nil
 }
 
 // facts are what libretro's database knows about a console's games, by

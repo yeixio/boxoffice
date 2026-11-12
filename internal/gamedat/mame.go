@@ -61,6 +61,9 @@ const (
 	Unknown = "unknown"
 	// The file can't be read.
 	Unreadable = "unreadable"
+	// Known by the serial, title ID or name in it, or by its name: too
+	// big to hash, so not checked byte for byte.
+	Identified = "identified"
 )
 
 // Set formats, as ROM managers call them.

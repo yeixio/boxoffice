@@ -2114,9 +2114,11 @@
       "badCopy": "Schlechte Kopie",
       "bios": "Braucht ein BIOS",
       "unknown": "Nicht auf der Liste",
-      "unreadable": "Nicht lesbar"
+      "unreadable": "Nicht lesbar",
+      "identified": "Erkannt"
     },
     "whatsWrong": "Was nicht stimmt",
+    "goodToKnow": "Gut zu wissen",
     "explain": {
       "missingArcade": "Einige Dateien, die dieses Set braucht, fehlen, daher startet MAME es vielleicht nicht.",
       "wrongArcade": "Einige Dateien stammen aus einer anderen MAME-Version als {{list}}. Wähle unter MAME-Version die Version, mit der du spielst, oder aktualisiere das Set.",
@@ -2127,7 +2129,9 @@
       "wrong": "Die Datei heißt wie ein Spiel auf der Liste von No-Intro, ist aber nicht dasselbe: eine schlechte Kopie oder seitdem verändert.",
       "bios": "Das Spiel braucht ein BIOS, das fehlt.",
       "unknown": "Die Liste von No-Intro kennt keine Kopie wie diese. Es ist vielleicht ein Hack, eine Übersetzung oder ein selbst gemachtes Spiel, und das ist in Ordnung.",
-      "unreadable": "Die Datei lässt sich nicht öffnen. Sie ist vielleicht beschädigt oder wird noch kopiert."
+      "unreadable": "Die Datei lässt sich nicht öffnen. Sie ist vielleicht beschädigt oder wird noch kopiert.",
+      "identified": "Box Office erkennt dieses Spiel an der Seriennummer oder Title-ID darin oder an seinem Namen. So große Spiele werden nicht Byte für Byte geprüft.",
+      "unknownDisc": "Nichts, was Box Office darin lesen kann, sagt, welches Spiel es ist, und {{list}} kennt kein Spiel mit diesem Namen. Es so umzubenennen, wie die Liste es nennt, hilft."
     },
     "problem": {
       "missing": "<code>{{name}}</code> fehlt",
@@ -2138,7 +2142,10 @@
       "parent": "Braucht sein Eltern-Set, <code>{{name}}</code>",
       "disk": "Die CHD <code>{{name}}</code> fehlt",
       "diskWrong": "Die CHD <code>{{name}}</code> stammt aus einer anderen Version",
-      "unreadable": "Nicht lesbar: {{name}}"
+      "unreadable": "Nicht lesbar: {{name}}",
+      "otherSystem": "Laut Inhalt ist es ein {{name}}-Spiel",
+      "update": "<code>{{name}}</code> ist ein Update für das Spiel, nicht das Spiel selbst",
+      "dlc": "<code>{{name}}</code> ist Zusatzinhalt für das Spiel, nicht das Spiel selbst"
     },
     "inParent": "Im Set seines Eltern-Spiels",
     "fact": {
@@ -2152,7 +2159,9 @@
       "genre": "Genre",
       "parent": "Klon von",
       "crc": "CRC",
-      "found": "Gefunden"
+      "found": "Gefunden",
+      "serial": "Seriennummer",
+      "listName": "Name auf der Liste"
     },
     "files": "Dateien",
     "noFiles": "Seine Dateien sind nicht mehr da. Prüfe erneut, um die Liste zu aktualisieren.",
@@ -2171,7 +2180,6 @@
       "allSystems": "Alle Systeme",
       "notYours": "{{name}} (noch kein Ordner)",
       "looking": "Durchsuche die Listen… Bei der ersten Suche auf einem System wird seine Liste heruntergeladen, das kann eine Minute dauern.",
-      "hint": "Suche nach Titel. Box Office durchsucht die No-Intro-Liste der Konsolenspiele und die MAME-Liste der Arcade-Spiele für die Systeme, für die du Ordner hast. Wähle ein System, um bei einem anderen zu suchen.",
       "nothing": "Kein Spiel auf der Liste passt.",
       "more": "Die ersten 60 werden gezeigt. Füge ein Wort hinzu, um einzugrenzen.",
       "version": "Version",
@@ -2180,7 +2188,9 @@
       "wanted": "Gewünscht",
       "want": "Will ich",
       "cardTitle": "Spiel hinzufügen",
-      "cardSub": "Durchsuche die Liste aller Spiele eines Systems, und Box Office lädt die herunter, die du willst."
+      "cardSub": "Durchsuche die Liste aller Spiele eines Systems, und Box Office lädt die herunter, die du willst.",
+      "hintAll": "Suche nach Titel. Box Office durchsucht die Liste aller Spiele für die Systeme, für die du Ordner hast: die von No-Intro für Module, die von Redump für Discs, die des eShops für die Switch und die von MAME für Arcade-Spiele. Systeme ohne Liste, etwa PC oder PlayStation 4, nehmen den Namen, den du eingibst. Wähle ein System, um bei einem anderen zu suchen.",
+      "free": "Keine Liste zum Prüfen: Box Office sucht nach Releases mit diesem Namen."
     },
     "wanted": {
       "title": "Gewünscht",

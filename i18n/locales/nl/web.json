@@ -2114,9 +2114,11 @@
       "badCopy": "Slechte kopie",
       "bios": "Heeft een BIOS nodig",
       "unknown": "Niet op de lijst",
-      "unreadable": "Niet leesbaar"
+      "unreadable": "Niet leesbaar",
+      "identified": "Herkend"
     },
     "whatsWrong": "Wat er mis is",
+    "goodToKnow": "Goed om te weten",
     "explain": {
       "missingArcade": "Sommige bestanden die deze set nodig heeft ontbreken, dus MAME start hem misschien niet.",
       "wrongArcade": "Sommige bestanden zijn van een andere MAME-versie dan {{list}}. Kies onder MAME-versie de versie waarmee je speelt, of werk de set bij.",
@@ -2127,7 +2129,9 @@
       "wrong": "Het bestand heet als een game op de lijst van No-Intro, maar is niet hetzelfde: een slechte kopie, of sindsdien gewijzigd.",
       "bios": "De game heeft een BIOS nodig dat ontbreekt.",
       "unknown": "De lijst van No-Intro kent geen kopie zoals deze. Het is misschien een hack, een vertaling of een zelfgemaakte game, en dat is prima.",
-      "unreadable": "Het bestand kan niet worden geopend. Het is misschien beschadigd, of wordt nog gekopieerd."
+      "unreadable": "Het bestand kan niet worden geopend. Het is misschien beschadigd, of wordt nog gekopieerd.",
+      "identified": "Box Office herkent dit spel aan het serienummer of title-ID dat erin staat, of aan de naam. Zulke grote spellen worden niet byte voor byte gecontroleerd.",
+      "unknownDisc": "Niets wat Box Office erin kan lezen zegt welk spel het is, en {{list}} heeft geen spel met die naam. Het hernoemen zoals de lijst het noemt helpt."
     },
     "problem": {
       "missing": "<code>{{name}}</code> ontbreekt",
@@ -2138,7 +2142,10 @@
       "parent": "Heeft zijn ouderset nodig, <code>{{name}}</code>",
       "disk": "De CHD <code>{{name}}</code> ontbreekt",
       "diskWrong": "De CHD <code>{{name}}</code> is van een andere versie",
-      "unreadable": "Niet leesbaar: {{name}}"
+      "unreadable": "Niet leesbaar: {{name}}",
+      "otherSystem": "Volgens de inhoud is het een {{name}}-spel",
+      "update": "<code>{{name}}</code> is een update voor het spel, niet het spel zelf",
+      "dlc": "<code>{{name}}</code> is extra content voor het spel, niet het spel zelf"
     },
     "inParent": "In de set van zijn ouder",
     "fact": {
@@ -2152,7 +2159,9 @@
       "genre": "Genre",
       "parent": "Kloon van",
       "crc": "CRC",
-      "found": "Gevonden"
+      "found": "Gevonden",
+      "serial": "Serienummer",
+      "listName": "Naam op de lijst"
     },
     "files": "Bestanden",
     "noFiles": "De bestanden zijn er niet meer. Controleer opnieuw om de lijst bij te werken.",
@@ -2171,7 +2180,6 @@
       "allSystems": "Alle systemen",
       "notYours": "{{name}} (nog geen map)",
       "looking": "Lijsten doorzoeken… De eerste zoekopdracht op een systeem downloadt zijn lijst; dat kan een minuut duren.",
-      "hint": "Zoek op titel. Box Office doorzoekt de No-Intro-lijst van consolegames en de MAME-lijst van arcadegames, voor de systemen waarvoor je een map hebt. Kies een systeem om een ander te bekijken.",
       "nothing": "Geen game op de lijst komt overeen.",
       "more": "De eerste 60 worden getoond. Voeg een woord toe om te verfijnen.",
       "version": "Versie",
@@ -2180,7 +2188,9 @@
       "wanted": "Gewenst",
       "want": "Wil ik",
       "cardTitle": "Game toevoegen",
-      "cardSub": "Doorzoek de lijst van alle games voor een systeem, en Box Office downloadt de games die je wilt."
+      "cardSub": "Doorzoek de lijst van alle games voor een systeem, en Box Office downloadt de games die je wilt.",
+      "hintAll": "Zoek op titel. Box Office kijkt in de lijst van alle spellen voor de systemen waarvoor je een map hebt: die van No-Intro voor cartridges, die van Redump voor discs, die van de eShop voor de Switch en die van MAME voor arcade. Systemen zonder lijst, zoals pc of PlayStation 4, nemen de naam die je typt. Kies een systeem om een ander te bekijken.",
+      "free": "Geen lijst om te controleren: Box Office zoekt naar releases met deze naam."
     },
     "wanted": {
       "title": "Gewenst",

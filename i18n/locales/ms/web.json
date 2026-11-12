@@ -2013,9 +2013,11 @@
       "badCopy": "Salinan rosak",
       "bios": "Perlukan BIOS",
       "unknown": "Tiada dalam senarai",
-      "unreadable": "Tidak boleh dibaca"
+      "unreadable": "Tidak boleh dibaca",
+      "identified": "Dikenal pasti"
     },
     "whatsWrong": "Apa yang salah",
+    "goodToKnow": "Baik untuk diketahui",
     "explain": {
       "missingArcade": "Beberapa fail yang diperlukan set ini tiada, jadi MAME mungkin tidak dapat memulakannya.",
       "wrongArcade": "Beberapa fail adalah daripada versi MAME selain {{list}}. Pilih versi yang anda gunakan di Versi MAME, atau kemas kini set itu.",
@@ -2026,7 +2028,9 @@
       "wrong": "Fail ini dinamakan seperti permainan dalam senarai No-Intro, tetapi tidak sama: salinan rosak, atau telah diubah.",
       "bios": "Permainan ini memerlukan BIOS yang tiada.",
       "unknown": "Senarai No-Intro tiada salinan seperti ini. Ia mungkin hack, terjemahan atau permainan buatan sendiri, dan itu tidak mengapa.",
-      "unreadable": "Fail tidak boleh dibuka. Ia mungkin rosak, atau masih sedang disalin."
+      "unreadable": "Fail tidak boleh dibuka. Ia mungkin rosak, atau masih sedang disalin.",
+      "identified": "Box Office mengenal pasti permainan ini melalui nombor siri atau ID tajuk yang tertulis di dalamnya, atau melalui namanya. Permainan sebesar ini tidak disemak bait demi bait.",
+      "unknownDisc": "Tiada apa yang boleh dibaca oleh Box Office di dalamnya menyatakan permainan apa ini, dan {{list}} tiada permainan bernama begitu. Menamakannya semula seperti dalam senarai membantu."
     },
     "problem": {
       "missing": "<code>{{name}}</code> hilang",
@@ -2037,7 +2041,10 @@
       "parent": "Perlukan set induknya, <code>{{name}}</code>",
       "disk": "CHD <code>{{name}}</code> hilang",
       "diskWrong": "CHD <code>{{name}}</code> daripada versi lain",
-      "unreadable": "Tidak boleh dibaca: {{name}}"
+      "unreadable": "Tidak boleh dibaca: {{name}}",
+      "otherSystem": "Kandungannya menyatakan ini permainan {{name}}",
+      "update": "<code>{{name}}</code> ialah kemas kini untuk permainan, bukan permainan itu sendiri",
+      "dlc": "<code>{{name}}</code> ialah kandungan tambahan untuk permainan, bukan permainan itu sendiri"
     },
     "inParent": "Dalam set induknya",
     "fact": {
@@ -2051,7 +2058,9 @@
       "genre": "Genre",
       "parent": "Klon bagi",
       "crc": "CRC",
-      "found": "Ditemui"
+      "found": "Ditemui",
+      "serial": "Nombor siri",
+      "listName": "Nama dalam senarai"
     },
     "files": "Fail",
     "noFiles": "Failnya sudah tiada. Semak semula untuk mengemas kini senarai.",
@@ -2070,7 +2079,6 @@
       "allSystems": "Semua sistem",
       "notYours": "{{name}} (belum ada folder)",
       "looking": "Mencari dalam senarai… Carian pertama pada sesuatu sistem memuat turun senarainya, yang mungkin mengambil masa seminit.",
-      "hint": "Cari mengikut tajuk. Box Office mencari dalam senarai permainan konsol No-Intro dan senarai permainan arked MAME, untuk sistem yang anda ada folder. Pilih sistem untuk melihat yang lain.",
       "nothing": "Tiada permainan dalam senarai yang sepadan.",
       "more": "Menunjukkan 60 yang pertama. Tambah perkataan untuk mengecilkan.",
       "version": "Versi",
@@ -2079,7 +2087,9 @@
       "wanted": "Dikehendaki",
       "want": "Saya mahu",
       "cardTitle": "Tambah permainan",
-      "cardSub": "Cari dalam senarai semua permainan bagi sesuatu sistem, dan Box Office memuat turun yang anda mahu."
+      "cardSub": "Cari dalam senarai semua permainan bagi sesuatu sistem, dan Box Office memuat turun yang anda mahu.",
+      "hintAll": "Cari mengikut tajuk. Box Office melihat senarai semua permainan bagi sistem yang anda ada folder: senarai No-Intro untuk kartrij, Redump untuk cakera, eShop untuk Switch dan MAME untuk arked. Sistem tanpa senarai, seperti PC atau PlayStation 4, menggunakan nama yang anda taip. Pilih sistem untuk melihat yang lain.",
+      "free": "Tiada senarai untuk disemak: Box Office mencari keluaran dengan nama ini."
     },
     "wanted": {
       "title": "Dikehendaki",

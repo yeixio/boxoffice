@@ -76,11 +76,13 @@ type gameSystemView struct {
 	Short  string `json:"short"`
 	Maker  string `json:"maker"`
 	Arcade bool   `json:"arcade"`
+	// Hash says its games are checked byte for byte against their list.
+	Hash bool `json:"hash"`
 }
 
 func systemView(g store.GameSystem) gameSystemView {
 	sys, _ := gamedat.LookupSystem(g.System)
-	return gameSystemView{GameSystem: g, Name: cmp.Or(sys.Name, g.System), Short: cmp.Or(sys.Short, g.System), Maker: sys.Maker, Arcade: sys.Arcade}
+	return gameSystemView{GameSystem: g, Name: cmp.Or(sys.Name, g.System), Short: cmp.Or(sys.Short, g.System), Maker: sys.Maker, Arcade: sys.Arcade, Hash: sys.Hash}
 }
 
 func (s *Server) gameSystems(w http.ResponseWriter, r *http.Request) error {
@@ -271,7 +273,7 @@ func (s *Server) gameList(w http.ResponseWriter, r *http.Request) error {
 		v := gameGroup{Game: main, Versions: len(gr.games)}
 		match := text == ""
 		for _, g := range gr.games {
-			if g.Status != gamedat.Complete {
+			if g.Status != gamedat.Complete && g.Status != gamedat.Identified {
 				v.Problems++
 			}
 			if !match && (strings.Contains(strings.ToLower(g.Title), text) || strings.Contains(strings.ToLower(g.Name), text) || strings.Contains(strings.ToLower(g.Maker), text)) {
@@ -321,8 +323,12 @@ func mainVersion(key string, versions []store.Game) store.Game {
 		if g.Name == key {
 			n += 100
 		}
-		if g.Status == gamedat.Complete {
+		if g.Status == gamedat.Complete || g.Status == gamedat.Identified {
 			n += 10
+		}
+		// An update or DLC isn't the game.
+		if slices.ContainsFunc(g.Problems, func(p store.GameProblem) bool { return p.Kind == "update" || p.Kind == "dlc" }) {
+			n -= 50
 		}
 		tags := strings.Join(gamedat.Tags(g.Name), ",")
 		switch {
@@ -432,8 +438,18 @@ func (s *Server) game(w http.ResponseWriter, r *http.Request) error {
 		// The parent first.
 		return cmp.Or(cmp.Compare(b2n(a.Name != key), b2n(b.Name != key)), cmp.Compare(a.Title, b.Title))
 	})
-	if st, err := os.Stat(g.Path); err == nil && !st.IsDir() {
-		v.Files = append(v.Files, gameFile{Path: g.Path, Size: st.Size(), Parent: g.InParent})
+	if st, err := os.Stat(g.Path); err == nil {
+		if st.IsDir() {
+			// A game kept as a folder.
+			v.Files = append(v.Files, gameFile{Path: g.Path + string(filepath.Separator), Size: g.Size})
+		} else {
+			v.Files = append(v.Files, gameFile{Path: g.Path, Size: st.Size(), Parent: g.InParent})
+		}
+	}
+	for _, p := range games.Parts(g.Path) {
+		if st, err := os.Stat(p); err == nil {
+			v.Files = append(v.Files, gameFile{Path: p, Size: st.Size()})
+		}
 	}
 	if sys.System == "mame" {
 		// The CHDs in the folder named for the set.

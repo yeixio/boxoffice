@@ -40,10 +40,12 @@ var artLocks sync.Map // cache file -> *sync.Mutex
 
 // ArtFile is the picture of a game, as a JPEG file kept in the data
 // folder: its box art, or else its title screen or a screenshot, from
-// libretro's thumbnails. The first time, it's downloaded and made small.
+// libretro's thumbnails (or for a Switch game, the eShop's picture); or
+// else the icon a PlayStation game carries of itself. The first time,
+// it's downloaded and made small.
 func (s *Service) ArtFile(ctx context.Context, g store.Game, system string) (string, error) {
 	sys, ok := gamedat.LookupSystem(system)
-	if !ok || g.Art == "" {
+	if !ok || g.Art == "" && g.Path == "" {
 		return "", ErrNoArt
 	}
 	names := []string{g.Art}
@@ -51,7 +53,11 @@ func (s *Service) ArtFile(ctx context.Context, g store.Game, system string) (str
 	if sys.Arcade && g.ParentTitle != "" && g.ParentTitle != g.Title {
 		names = append(names, gamedat.ThumbName(g.ParentTitle))
 	}
-	sum := sha256.Sum256([]byte(strings.Join(names, "\x00")))
+	key := strings.Join(names, "\x00")
+	if g.Art == "" {
+		key = "path:" + g.Path
+	}
+	sum := sha256.Sum256([]byte(key))
 	p := filepath.Join(s.Dir, "art", sys.Key, hex.EncodeToString(sum[:12])+".jpg")
 	if _, err := os.Stat(p); err == nil {
 		return p, nil
@@ -59,7 +65,7 @@ func (s *Service) ArtFile(ctx context.Context, g store.Game, system string) (str
 	// ".none2": pictures behind links weren't found before.
 	none := p + ".none2"
 	if st, err := os.Stat(none); err == nil && time.Since(st.ModTime()) < artRetry {
-		return "", ErrNoArt
+		return s.iconArt(g, p)
 	}
 	l, _ := artLocks.LoadOrStore(p, &sync.Mutex{})
 	mu := l.(*sync.Mutex)
@@ -79,39 +85,76 @@ func (s *Service) ArtFile(ctx context.Context, g store.Game, system string) (str
 	if len(bases) == 0 {
 		bases = DefaultArt
 	}
-	var lastErr error
+	var urls []string
 	for _, name := range names {
+		if name == "" {
+			continue
+		}
+		if strings.HasPrefix(name, "https://") {
+			urls = append(urls, name)
+			continue
+		}
 		for _, kind := range artKinds {
 			for _, base := range bases {
-				u := strings.NewReplacer(
+				urls = append(urls, strings.NewReplacer(
 					"{system}", url.PathEscape(sys.Libretro),
 					"{repo}", url.PathEscape(strings.ReplaceAll(sys.Libretro, " ", "_")),
 					"{kind}", kind,
 					"{name}", url.PathEscape(name),
-				).Replace(base)
-				img, err := s.fetchImage(ctx, u)
-				if errors.Is(err, os.ErrNotExist) {
-					continue
-				}
-				if err != nil {
-					lastErr = err
-					continue
-				}
-				if err := writeJPEG(p, shrink(img, artWidth)); err != nil {
-					return "", err
-				}
-				os.Remove(none)
-				return p, nil
+				).Replace(base))
 			}
 		}
 	}
+	var lastErr error
+	for _, u := range urls {
+		img, err := s.fetchImage(ctx, u)
+		if errors.Is(err, os.ErrNotExist) {
+			continue
+		}
+		if err != nil {
+			lastErr = err
+			continue
+		}
+		if err := writeJPEG(p, shrink(img, artWidth)); err != nil {
+			return "", err
+		}
+		os.Remove(none)
+		return p, nil
+	}
 	if lastErr != nil {
-		// Not found for want of an answer: look again next time.
+		// Not found for want of an answer: the game's own icon for now,
+		// and look again next time.
+		if q, err := s.iconArt(g, p+".icon.jpg"); err == nil {
+			return q, nil
+		}
 		return "", lastErr
 	}
 	os.MkdirAll(filepath.Dir(none), 0o750)
 	os.WriteFile(none, nil, 0o640)
-	return "", ErrNoArt
+	return s.iconArt(g, p)
+}
+
+// iconArt is the icon a game carries of itself (PlayStation games do),
+// kept at p.
+func (s *Service) iconArt(g store.Game, p string) (string, error) {
+	if g.Path == "" {
+		return "", ErrNoArt
+	}
+	if _, err := os.Stat(p); err == nil {
+		return p, nil
+	}
+	b, err := gamedat.Icon(g.Path)
+	if err != nil {
+		return "", ErrNoArt
+	}
+	img, _, err := image.Decode(bytes.NewReader(b))
+	if err != nil {
+		return "", ErrNoArt
+	}
+	if err := writeJPEG(p, shrink(img, artWidth)); err != nil {
+		return "", err
+	}
+	return p, nil
 }
 
 func (s *Service) fetchImage(ctx context.Context, u string) (image.Image, error) {
