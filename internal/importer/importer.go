@@ -850,6 +850,11 @@ func (s *Service) Run(ctx context.Context, paths []string) error {
 				if errors.As(err, &left) && to != "" {
 					cur.Status, cur.To, cur.Problem = Done, to, "some files didn't go in: "+left.Error()
 				}
+				if it.Kind == Game && to != "" {
+					// Some games went in; the rest are still in the imports folder.
+					cur.Status, cur.To = Done, to
+					gamesIn = true
+				}
 			} else {
 				cur.Status, cur.To = Done, to
 				gamesIn = gamesIn || it.Kind == Game
@@ -980,7 +985,8 @@ func (s *Service) show(ctx context.Context, tmdbID int64) (int64, error) {
 }
 
 // importGames copies an item's games into their systems' folders, then
-// takes them out of the imports folder.
+// takes the ones it placed out of the imports folder. A file it can't
+// place stays there, and the item says which.
 func (s *Service) importGames(ctx context.Context, it Item, full string) (string, error) {
 	var files []string
 	if it.Dir {
@@ -993,27 +999,58 @@ func (s *Service) importGames(ctx context.Context, it Item, full string) (string
 	} else {
 		files = []string{full}
 	}
-	var to []string
+	var to, placed, skipped []string
 	for _, f := range files {
 		key := it.System
 		if it.Dir {
 			sys, ok := games.Identify(f)
 			if !ok {
+				skipped = append(skipped, f)
 				continue
 			}
 			key = sys.Key
 		}
 		dst, err := s.Games.Add(ctx, key, f)
 		if err != nil && !errors.Is(err, games.ErrHave) {
+			s.unimport(full, placed)
 			return strings.Join(to, ", "), err
 		}
+		placed = append(placed, f)
 		if d := filepath.Dir(dst); !slices.Contains(to, d) {
 			to = append(to, d)
 		}
 	}
-	if len(to) == 0 {
+	if len(skipped) == 0 && len(to) > 0 {
+		os.RemoveAll(full)
+		return strings.Join(to, ", "), nil
+	}
+	s.unimport(full, placed)
+	if len(to) == 0 && len(skipped) == 0 {
 		return "", badf("there are no games in it")
 	}
-	os.RemoveAll(full)
-	return strings.Join(to, ", "), nil
+	names := make([]string, len(skipped))
+	for i, f := range skipped {
+		if r, err := filepath.Rel(full, f); err == nil {
+			names[i] = r
+		} else {
+			names[i] = filepath.Base(f)
+		}
+	}
+	if len(to) == 0 {
+		return "", badf("Box Office couldn't tell which system these are for, so they're still in the imports folder: %s", strings.Join(names, ", "))
+	}
+	return strings.Join(to, ", "), badf("added games to %s, but couldn't tell which system these are for, so they're still in the imports folder: %s", strings.Join(to, ", "), strings.Join(names, ", "))
+}
+
+// unimport takes the files an import placed out of a folder item, and the
+// folders that leaves empty, keeping everything else.
+func (s *Service) unimport(full string, placed []string) {
+	for _, f := range placed {
+		os.Remove(f)
+		for d := filepath.Dir(f); d != full && strings.HasPrefix(d, full+string(filepath.Separator)); d = filepath.Dir(d) {
+			if os.Remove(d) != nil {
+				break
+			}
+		}
+	}
 }
