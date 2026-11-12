@@ -20,38 +20,66 @@ import (
 const JobSearchGame = "search-game"
 
 // Newznab's console categories, and Other/Misc, where indexers often put
-// games for older systems.
+// games for older systems; and its PC games.
 const (
 	catConsole     = 1000
 	catConsoleLast = 1999
 	catMisc        = 8010
+	catPC          = 4000
+	catPCGames     = 4050
+	catPCLast      = 4999
 )
 
 // ErrGamesOff means Games isn't turned on in Settings.
 var ErrGamesOff = errors.New("turn on Games in Settings first")
 
-// gameCats are the categories to search an indexer in for a game.
-func gameCats(ix store.Indexer) []int {
+// gameCats are the categories to search an indexer in for a game: PC
+// games' for a PC or DOS game, the consoles' and Other for the rest.
+func gameCats(ix store.Indexer, sys gamedat.System) []int {
+	if sys.Key == "pc" || sys.Key == "dos" {
+		return append(cats(ix, catPC, catPCLast, catPCGames), catMisc)
+	}
 	return append(cats(ix, catConsole, catConsoleLast, catConsole), catMisc)
 }
 
 var (
 	// rePack is a release of many games: a whole system's set.
-	rePack = regexp.MustCompile(`(?i)\b(rom ?sets?|full ?sets?|complete ?(set|collection|romset)|collection|compilation|\d{2,} ?(games|roms)|all ?games|no ?intro|redump|tosec|goodsets?|merged|non ?merged|split ?set)\b`)
-	// reNotROM is a release of something else: a PC or modern console
-	// game, a soundtrack, a guide or a film.
-	reNotROM = regexp.MustCompile(`(?i)\b(ost|soundtrack|flac|mp3|guide|walkthrough|artbook|1080p|720p|2160p|x264|x265|bluray|web ?dl|repack|fitgirl|codex|gog|steam|nsp|xci|pkg|iso)\b`)
+	rePack = regexp.MustCompile(`(?i)\b(rom ?sets?|full ?sets?|complete ?(set|collection|romset)|collection|compilation|\d{2,} ?(games|roms|isos)|all ?games|no ?intro|redump|tosec|goodsets?|merged|non ?merged|split ?set)\b`)
+	// rePackDisc is rePack for a disc's release, which may say it's
+	// Redump's copy.
+	rePackDisc = regexp.MustCompile(`(?i)\b(rom ?sets?|full ?sets?|complete ?(set|collection)|compilation|\d{2,} ?(games|isos)|all ?games|tosec|goodsets?)\b`)
+	// reNotGame is a release of something else: a soundtrack, a guide or
+	// a film.
+	reNotGame = regexp.MustCompile(`(?i)\b(ost|soundtrack|flac|mp3|guide|walkthrough|artbook|1080p|720p|2160p|x264|x265|bluray|web ?dl)\b`)
+	// reModern is a release of a PC or modern console game, not an old
+	// system's ROM.
+	reModern = regexp.MustCompile(`(?i)\b(repack|fitgirl|codex|gog|steam|nsp|nsz|xci|pkg|iso|chd|cso|rvz|wbfs)\b`)
+	// rePC is a PC game's release.
+	rePC = regexp.MustCompile(`(?i)\b(fitgirl|codex|gog|steam|plaza|skidrow|reloaded|razor1911|tenoke|empress|rune|dodi|elamigos|flt|tinyiso|hoodlum|prophet|darksiders|cpy)\b`)
+	// reConsoleFile is a modern console's download.
+	reConsoleFile = regexp.MustCompile(`(?i)\b(nsp|nsz|xci|xcz|pkg|vpk|wbfs|rvz|xex)\b`)
 )
 
 // gameMaxSize is the most a release of one game can be: a little over
-// twice its file on the list, or 8 GB for a MAME set (its CHDs aren't
-// sized on the list).
-func gameMaxSize(w store.GameWant, arcade bool) int64 {
-	if arcade || w.Size <= 0 {
+// twice its file on the list, 8 GB for a MAME set (its CHDs aren't sized
+// on the list), or for a disc or PC game not on a list, 200 GB.
+func gameMaxSize(w store.GameWant, sys gamedat.System) int64 {
+	switch {
+	case sys.Arcade:
 		return 8 << 30
+	case w.Size > 0:
+		return 2*w.Size + 64<<20
+	case sys.Disc():
+		return 200 << 30
 	}
-	return 2*w.Size + 8<<20
+	return 8 << 30
 }
+
+// notSystemWords are folder names too common in titles, or naming
+// emulators, to say what system a release is for.
+var notSystemWords = []string{"roms", "arcade", "arcades", "nintendo", "sega", "atari", "towns", "win", "windows", "apple", "steam", "gog",
+	"dolphin", "cemu", "xemu", "yuzu", "ryujinx", "citra", "rpcs3", "pcsx2", "ppsspp", "vita3k", "xenia", "dosbox", "exodos", "steamlibrary",
+	"odyssey", "coleco", "fairchild", "watara", "spectrum", "amstrad"}
 
 // systemWords are the words a release name gives a system by: its key,
 // short name and usual folder names, long enough not to be other words.
@@ -59,7 +87,7 @@ func systemWords(sys gamedat.System) []string {
 	out := []string{sys.Key}
 	add := func(w string) {
 		w = strings.ToLower(w)
-		if len(w) >= 3 && !slices.Contains(out, w) && !slices.Contains([]string{"roms", "arcade", "arcades", "nintendo", "sega", "atari"}, w) {
+		if len(w) >= 3 && !slices.Contains(out, w) && !slices.Contains(notSystemWords, w) {
 			out = append(out, w)
 		}
 	}
@@ -137,7 +165,7 @@ func (s *Service) Game(ctx context.Context, id int64) (Results, error) {
 	}
 	text := gameQuery(w)
 	rs, notes, n, err := s.ask(ctx, func(ix store.Indexer) Query {
-		return Query{Type: "search", Text: text, Cats: gameCats(ix)}
+		return Query{Type: "search", Text: text, Cats: gameCats(ix, sys)}
 	})
 	if err != nil {
 		return Results{}, err
@@ -184,13 +212,31 @@ func (s *Service) judgeGame(r Release, w store.GameWant, sys gamedat.System, blo
 		other, _ := gamedat.LookupSystem(named[0])
 		c.reject(fmt.Sprintf("it's for %s, not %s", other.Name, sys.Name))
 	}
-	if rePack.MatchString(r.Title) && !rePack.MatchString(w.Title) {
+	pack := rePack
+	if sys.Disc() {
+		pack = rePackDisc
+	}
+	if pack.MatchString(r.Title) && !pack.MatchString(w.Title) {
 		c.reject("it's a set of many games, not this one")
 	}
-	if reNotROM.MatchString(r.Title) && !reNotROM.MatchString(w.Title) {
+	if reNotGame.MatchString(r.Title) && !reNotGame.MatchString(w.Title) {
 		c.reject(fmt.Sprintf("it isn't a %s game", sys.Short))
 	}
-	if limit := gameMaxSize(w, sys.Arcade); r.Size > limit {
+	switch pc := sys.Key == "pc" || sys.Key == "dos"; {
+	case !sys.Disc():
+		if reModern.MatchString(r.Title) && !reModern.MatchString(w.Title) {
+			c.reject(fmt.Sprintf("it isn't a %s game", sys.Short))
+		}
+	case pc:
+		if reConsoleFile.MatchString(r.Title) {
+			c.reject("it's a console game, not a PC one")
+		}
+	default:
+		if rePC.MatchString(r.Title) && !rePC.MatchString(w.Title) {
+			c.reject(fmt.Sprintf("it's a PC game, not a %s one", sys.Short))
+		}
+	}
+	if limit := gameMaxSize(w, sys); r.Size > limit {
 		c.reject(fmt.Sprintf("at %s it's too big to be one %s game", humanSize(r.Size), sys.Short))
 	}
 	return c

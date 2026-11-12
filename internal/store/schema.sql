@@ -459,7 +459,8 @@ CREATE TABLE IF NOT EXISTS games (
 	size         BIGINT NOT NULL DEFAULT 0,
 	mtime        BIGINT NOT NULL DEFAULT 0,
 	crc          TEXT NOT NULL DEFAULT '',   -- consoles: the CRC that matched, so an unchanged file isn't read again
-	status       TEXT NOT NULL DEFAULT '',   -- complete, missing, wrong, bios, unknown or unreadable
+	serial       TEXT NOT NULL DEFAULT '',   -- discs and downloads: the serial or title ID read from the game
+	status       TEXT NOT NULL DEFAULT '',   -- complete, identified, missing, wrong, bios, unknown or unreadable
 	problems     TEXT NOT NULL DEFAULT '[]', -- JSON list of {kind, name}
 	art          TEXT NOT NULL DEFAULT '',   -- the name libretro's thumbnails have it under
 	added_at     BIGINT NOT NULL
@@ -478,6 +479,7 @@ CREATE TABLE IF NOT EXISTS game_wants (
 	year     TEXT NOT NULL DEFAULT '',
 	maker    TEXT NOT NULL DEFAULT '',
 	crc      TEXT NOT NULL DEFAULT '',   -- consoles: the version's CRC
+	serial   TEXT NOT NULL DEFAULT '',   -- discs and downloads: the version's serial or title ID
 	size     BIGINT NOT NULL DEFAULT 0,  -- consoles: the version's file size
 	art      TEXT NOT NULL DEFAULT '',   -- the name libretro's thumbnails have it under
 	got_at   BIGINT NOT NULL DEFAULT 0,  -- when a download of it was moved in, before a check has seen it

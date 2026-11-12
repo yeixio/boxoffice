@@ -742,6 +742,9 @@ export type GameSystem = {
   short: string
   maker: string
   arcade: boolean
+  // hash: games are checked byte for byte; otherwise they're known by the
+  // serial, title ID or name in them (discs, downloads, PC games).
+  hash: boolean
   path: string
   rootFolder: string
   locked: boolean
@@ -755,7 +758,7 @@ export type GameSystem = {
   groups: number
   problems: number
 }
-export type GameStatus = 'complete' | 'missing' | 'wrong' | 'bios' | 'unknown' | 'unreadable'
+export type GameStatus = 'complete' | 'identified' | 'missing' | 'wrong' | 'bios' | 'unknown' | 'unreadable'
 export type GameProblem = { kind: string; name: string }
 export type Game = {
   id: number
@@ -772,6 +775,7 @@ export type Game = {
   inParent?: boolean
   size: number
   crc?: string
+  serial?: string
   status: GameStatus
   problems: GameProblem[]
   addedAt: string
@@ -795,7 +799,7 @@ export type GameCheck = {
 }
 export type GameSettings = { mameVersion: string; newest?: string; versions: string[] }
 // A system Box Office knows, wanted games come from its list.
-export type GameSystemInfo = { key: string; name: string; short: string; maker: string; arcade: boolean }
+export type GameSystemInfo = { key: string; name: string; short: string; maker: string; arcade: boolean; hash: boolean }
 // One version of a game on a system's list (No-Intro's or MAME's).
 export type CatalogGame = {
   system: string
@@ -807,9 +811,11 @@ export type CatalogGame = {
   genre?: string
   parent?: string
   crc?: string
+  serial?: string
   size?: number
 }
-export type GameLookup = { system: string; title: string; best: CatalogGame; versions: CatalogGame[]; onDisk: boolean; wantId?: number; wantName?: string }
+// free: the system has no list, so this is the name asked for.
+export type GameLookup = { system: string; title: string; best: CatalogGame; versions: CatalogGame[]; free?: boolean; onDisk: boolean; wantId?: number; wantName?: string }
 export type GameWant = {
   id: number
   system: string

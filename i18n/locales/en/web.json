@@ -2112,9 +2112,11 @@
       "badCopy": "Bad copy",
       "bios": "Needs a BIOS",
       "unknown": "Not on the list",
-      "unreadable": "Can't be read"
+      "unreadable": "Can't be read",
+      "identified": "Recognized"
     },
     "whatsWrong": "What's wrong",
+    "goodToKnow": "Good to know",
     "explain": {
       "missingArcade": "Some files this set needs aren't there, so MAME may not start it.",
       "wrongArcade": "Some files are from another version of MAME than {{list}}. Pick the version you play with under MAME version, or update the set.",
@@ -2125,7 +2127,9 @@
       "wrong": "The file is named like a game on No-Intro's list, but isn't the same: a bad copy, or one changed since.",
       "bios": "The game needs a BIOS that isn't there.",
       "unknown": "No-Intro's list has no copy like this one. It may be a hack, a translation or a homemade game, which is fine.",
-      "unreadable": "The file can't be opened. It may be damaged, or still being copied."
+      "unreadable": "The file can't be opened. It may be damaged, or still being copied.",
+      "identified": "Box Office knows this game by the serial or title ID written in it, or by its name. Games this big aren't checked byte for byte.",
+      "unknownDisc": "Nothing in it Box Office can read says which game it is, and {{list}} has no game named like it. Renaming it as the list names it helps."
     },
     "problem": {
       "missing": "<code>{{name}}</code> is missing",
@@ -2136,7 +2140,10 @@
       "parent": "Needs its parent set, <code>{{name}}</code>",
       "disk": "The <code>{{name}}</code> CHD is missing",
       "diskWrong": "The <code>{{name}}</code> CHD is from another version",
-      "unreadable": "Can't be read: {{name}}"
+      "unreadable": "Can't be read: {{name}}",
+      "otherSystem": "What's in it says it's a {{name}} game",
+      "update": "<code>{{name}}</code> is an update for the game, not the game itself",
+      "dlc": "<code>{{name}}</code> is extra content for the game, not the game itself"
     },
     "inParent": "In its parent's set",
     "fact": {
@@ -2150,7 +2157,9 @@
       "genre": "Genre",
       "parent": "Clone of",
       "crc": "CRC",
-      "found": "Found"
+      "found": "Found",
+      "serial": "Serial",
+      "listName": "Name on the list"
     },
     "files": "Files",
     "noFiles": "Its files aren't there any more. Check again to update the list.",
@@ -2169,7 +2178,6 @@
       "allSystems": "All systems",
       "notYours": "{{name}} (no folder yet)",
       "looking": "Looking through the lists… The first search on a system downloads its list, which can take a minute.",
-      "hint": "Search by title. Box Office looks through No-Intro's list of console games and MAME's list of arcade games, for the systems you have folders for. Pick a system to look at another.",
       "nothing": "No games on the list match.",
       "more": "Showing the first 60. Add a word to narrow it down.",
       "version": "Version",
@@ -2178,7 +2186,9 @@
       "wanted": "Wanted",
       "want": "Want it",
       "cardTitle": "Add a game",
-      "cardSub": "Search the list of every game for a system, and Box Office downloads the ones you want."
+      "cardSub": "Search the list of every game for a system, and Box Office downloads the ones you want.",
+      "hintAll": "Search by title. Box Office looks through the list of every game for the systems you have folders for: No-Intro's for cartridges, Redump's for discs, the eShop's for the Switch and MAME's for arcade games. Systems with no list, such as PC or PlayStation 4, take the name you type. Pick a system to look at another.",
+      "free": "No list to check: Box Office looks for releases with this name."
     },
     "wanted": {
       "title": "Wanted",

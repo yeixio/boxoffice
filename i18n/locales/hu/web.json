@@ -2112,9 +2112,11 @@
       "badCopy": "Rossz másolat",
       "bios": "BIOS kell hozzá",
       "unknown": "Nincs a listán",
-      "unreadable": "Nem olvasható"
+      "unreadable": "Nem olvasható",
+      "identified": "Felismerve"
     },
     "whatsWrong": "Mi a baj",
+    "goodToKnow": "Jó tudni",
     "explain": {
       "missingArcade": "Hiányzik néhány fájl, amely a készlethez kell, így a MAME lehet, hogy nem indítja el.",
       "wrongArcade": "Néhány fájl a MAME egy másik verziójából való, nem ebből: {{list}}. Válaszd ki a verziót, amellyel játszol, a MAME-verzió résznél, vagy frissítsd a készletet.",
@@ -2125,7 +2127,9 @@
       "wrong": "A fájl neve egy No-Intro-listás játéké, de nem ugyanaz: rossz másolat, vagy azóta módosították.",
       "bios": "A játékhoz egy hiányzó BIOS kell.",
       "unknown": "A No-Intro listáján nincs ilyen másolat. Lehet hack, fordítás vagy házi készítésű játék, és ez rendben van.",
-      "unreadable": "A fájl nem nyitható meg. Lehet, hogy sérült, vagy még másolódik."
+      "unreadable": "A fájl nem nyitható meg. Lehet, hogy sérült, vagy még másolódik.",
+      "identified": "A Box Office a benne lévő sorozatszám vagy címazonosító, illetve a neve alapján ismeri fel a játékot. Ilyen nagy játékokat nem ellenőriz bájtról bájtra.",
+      "unknownDisc": "Semmi, amit a Box Office ki tud olvasni belőle, nem mondja meg, melyik játék ez, és a(z) {{list}} listán nincs ilyen nevű játék. Segít, ha a lista szerinti névre nevezed át."
     },
     "problem": {
       "missing": "Hiányzik: <code>{{name}}</code>",
@@ -2136,7 +2140,10 @@
       "parent": "Kell hozzá a szülőkészlete: <code>{{name}}</code>",
       "disk": "Hiányzik a(z) <code>{{name}}</code> CHD",
       "diskWrong": "A(z) <code>{{name}}</code> CHD másik verzióból való",
-      "unreadable": "Nem olvasható: {{name}}"
+      "unreadable": "Nem olvasható: {{name}}",
+      "otherSystem": "A tartalma szerint ez egy {{name}}-játék",
+      "update": "A(z) <code>{{name}}</code> a játék frissítése, nem maga a játék",
+      "dlc": "A(z) <code>{{name}}</code> a játék kiegészítő tartalma, nem maga a játék"
     },
     "inParent": "A szülő készletében",
     "fact": {
@@ -2150,7 +2157,9 @@
       "genre": "Műfaj",
       "parent": "Klónja ennek",
       "crc": "CRC",
-      "found": "Megtalálva"
+      "found": "Megtalálva",
+      "serial": "Sorozatszám",
+      "listName": "Név a listán"
     },
     "files": "Fájlok",
     "noFiles": "A fájljai már nincsenek meg. Ellenőrizd újra a lista frissítéséhez.",
@@ -2169,7 +2178,6 @@
       "allSystems": "Minden rendszer",
       "notYours": "{{name}} (még nincs mappa)",
       "looking": "Keresés a listákban… Egy rendszer első keresésekor letöltődik a listája, ez egy percig is tarthat.",
-      "hint": "Keress cím alapján. A Box Office a No-Intro konzoljáték-listában és a MAME arcade listában keres azokhoz a rendszerekhez, amelyekhez van mappád. Válassz rendszert, hogy egy másikat nézz meg.",
       "nothing": "Egy játék sem egyezik a listán.",
       "more": "Az első 60 látható. Adj hozzá egy szót a szűkítéshez.",
       "version": "Verzió",
@@ -2178,7 +2186,9 @@
       "wanted": "Kívánt",
       "want": "Kérem",
       "cardTitle": "Játék hozzáadása",
-      "cardSub": "Keress egy rendszer összes játékának listájában, és a Box Office letölti, amit kérsz."
+      "cardSub": "Keress egy rendszer összes játékának listájában, és a Box Office letölti, amit kérsz.",
+      "hintAll": "Keress cím alapján. A Box Office azoknak a rendszereknek a teljes játéklistáját nézi át, amelyekhez van mappád: kazettákhoz a No-Intro, lemezekhez a Redump, a Switchhez az eShop, arcade-játékokhoz a MAME listáját. A lista nélküli rendszerek, mint a PC vagy a PlayStation 4, a beírt nevet használják. Válassz rendszert egy másik megnézéséhez.",
+      "free": "Nincs ellenőrizhető lista: a Box Office ilyen nevű kiadásokat keres."
     },
     "wanted": {
       "title": "Kívánt játékok",

@@ -2011,9 +2011,11 @@
       "badCopy": "Salinan rusak",
       "bios": "Perlu BIOS",
       "unknown": "Tidak ada di daftar",
-      "unreadable": "Tidak bisa dibaca"
+      "unreadable": "Tidak bisa dibaca",
+      "identified": "Dikenali"
     },
     "whatsWrong": "Apa yang salah",
+    "goodToKnow": "Perlu diketahui",
     "explain": {
       "missingArcade": "Beberapa file yang dibutuhkan set ini tidak ada, jadi MAME mungkin tidak bisa menjalankannya.",
       "wrongArcade": "Beberapa file berasal dari versi MAME selain {{list}}. Pilih versi yang Anda gunakan di Versi MAME, atau perbarui set-nya.",
@@ -2024,7 +2026,9 @@
       "wrong": "File diberi nama seperti game di daftar No-Intro, tetapi tidak sama: salinan rusak, atau sudah diubah.",
       "bios": "Game ini butuh BIOS yang tidak ada.",
       "unknown": "Daftar No-Intro tidak punya salinan seperti ini. Mungkin ini hack, terjemahan atau game buatan sendiri, dan itu tidak apa-apa.",
-      "unreadable": "File tidak bisa dibuka. Mungkin rusak, atau masih disalin."
+      "unreadable": "File tidak bisa dibuka. Mungkin rusak, atau masih disalin.",
+      "identified": "Box Office mengenali game ini dari nomor seri atau ID judul yang tertulis di dalamnya, atau dari namanya. Game sebesar ini tidak diperiksa byte demi byte.",
+      "unknownDisc": "Tidak ada yang bisa dibaca Box Office di dalamnya yang menyebutkan game apa ini, dan {{list}} tidak punya game bernama seperti itu. Mengganti namanya seperti di daftar akan membantu."
     },
     "problem": {
       "missing": "<code>{{name}}</code> hilang",
@@ -2035,7 +2039,10 @@
       "parent": "Perlu set induknya, <code>{{name}}</code>",
       "disk": "CHD <code>{{name}}</code> hilang",
       "diskWrong": "CHD <code>{{name}}</code> dari versi lain",
-      "unreadable": "Tidak bisa dibaca: {{name}}"
+      "unreadable": "Tidak bisa dibaca: {{name}}",
+      "otherSystem": "Isinya menyebutkan ini game {{name}}",
+      "update": "<code>{{name}}</code> adalah pembaruan untuk game, bukan game itu sendiri",
+      "dlc": "<code>{{name}}</code> adalah konten tambahan untuk game, bukan game itu sendiri"
     },
     "inParent": "Di set induknya",
     "fact": {
@@ -2049,7 +2056,9 @@
       "genre": "Genre",
       "parent": "Klon dari",
       "crc": "CRC",
-      "found": "Ditemukan"
+      "found": "Ditemukan",
+      "serial": "Nomor seri",
+      "listName": "Nama di daftar"
     },
     "files": "File",
     "noFiles": "File-nya sudah tidak ada. Periksa lagi untuk memperbarui daftar.",
@@ -2068,7 +2077,6 @@
       "allSystems": "Semua sistem",
       "notYours": "{{name}} (belum ada folder)",
       "looking": "Mencari di daftar… Pencarian pertama di suatu sistem mengunduh daftarnya, yang bisa makan waktu semenit.",
-      "hint": "Cari berdasarkan judul. Box Office mencari di daftar game konsol No-Intro dan daftar game arcade MAME, untuk sistem yang punya folder. Pilih sistem untuk melihat yang lain.",
       "nothing": "Tidak ada game di daftar yang cocok.",
       "more": "Menampilkan 60 pertama. Tambahkan kata untuk mempersempit.",
       "version": "Versi",
@@ -2077,7 +2085,9 @@
       "wanted": "Diinginkan",
       "want": "Mau ini",
       "cardTitle": "Tambah game",
-      "cardSub": "Cari di daftar semua game suatu sistem, dan Box Office mengunduh yang Anda inginkan."
+      "cardSub": "Cari di daftar semua game suatu sistem, dan Box Office mengunduh yang Anda inginkan.",
+      "hintAll": "Cari berdasarkan judul. Box Office melihat daftar semua game untuk sistem yang foldernya kamu punya: milik No-Intro untuk kartrid, Redump untuk disk, eShop untuk Switch, dan MAME untuk arcade. Sistem tanpa daftar, seperti PC atau PlayStation 4, memakai nama yang kamu ketik. Pilih sistem untuk melihat yang lain.",
+      "free": "Tidak ada daftar untuk diperiksa: Box Office mencari rilis dengan nama ini."
     },
     "wanted": {
       "title": "Diinginkan",

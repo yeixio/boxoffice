@@ -53,6 +53,7 @@ type Game struct {
 	Size        int64         `json:"size"`
 	MTime       int64         `json:"-"`
 	CRC         string        `json:"crc,omitempty"`
+	Serial      string        `json:"serial,omitempty"`
 	Status      string        `json:"status"`
 	Problems    []GameProblem `json:"problems"`
 	Art         string        `json:"-"`
@@ -62,7 +63,7 @@ type Game struct {
 const gameSystemCols = `s.id, s.system, s.path, s.root_folder, s.locked, s.format, s.list, s.support, s.note, s.added_at, s.checked_at,
 	(SELECT COUNT(*) FROM games g WHERE g.system_id = s.id),
 	(SELECT COUNT(DISTINCT CASE WHEN g.parent <> '' THEN g.parent ELSE g.name END) FROM games g WHERE g.system_id = s.id),
-	(SELECT COUNT(*) FROM games g WHERE g.system_id = s.id AND g.status <> 'complete')`
+	(SELECT COUNT(*) FROM games g WHERE g.system_id = s.id AND g.status NOT IN ('complete', 'identified'))`
 
 func scanGameSystem(r interface{ Scan(...any) error }) (GameSystem, error) {
 	var g GameSystem
@@ -194,8 +195,8 @@ func (s *Store) SaveGameCheck(ctx context.Context, systemID int64, c GameCheck) 
 	if _, err := tx.ExecContext(ctx, s.q("DELETE FROM games WHERE system_id = ?"), systemID); err != nil {
 		return err
 	}
-	ins, err := tx.PrepareContext(ctx, s.q(`INSERT INTO games (system_id, name, title, parent, parent_title, year, maker, players, genre, path, in_parent, size, mtime, crc, status, problems, art, added_at)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`))
+	ins, err := tx.PrepareContext(ctx, s.q(`INSERT INTO games (system_id, name, title, parent, parent_title, year, maker, players, genre, path, in_parent, size, mtime, crc, serial, status, problems, art, added_at)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`))
 	if err != nil {
 		return err
 	}
@@ -211,7 +212,7 @@ func (s *Store) SaveGameCheck(ctx context.Context, systemID int64, c GameCheck) 
 		}
 		probs, _ := json.Marshal(g.Problems)
 		if _, err := ins.ExecContext(ctx, systemID, g.Name, g.Title, g.Parent, g.ParentTitle, g.Year, g.Maker, g.Players, g.Genre, g.Path, b2i(g.InParent),
-			g.Size, g.MTime, g.CRC, g.Status, string(probs), g.Art, at); err != nil {
+			g.Size, g.MTime, g.CRC, g.Serial, g.Status, string(probs), g.Art, at); err != nil {
 			return err
 		}
 	}
@@ -222,7 +223,7 @@ func (s *Store) SaveGameCheck(ctx context.Context, systemID int64, c GameCheck) 
 	return tx.Commit()
 }
 
-const gameCols = `id, system_id, name, title, parent, parent_title, year, maker, players, genre, path, in_parent, size, mtime, crc, status, problems, art, added_at`
+const gameCols = `id, system_id, name, title, parent, parent_title, year, maker, players, genre, path, in_parent, size, mtime, crc, serial, status, problems, art, added_at`
 
 func scanGame(r interface{ Scan(...any) error }) (Game, error) {
 	var g Game
@@ -230,7 +231,7 @@ func scanGame(r interface{ Scan(...any) error }) (Game, error) {
 	var probs string
 	var added int64
 	err := r.Scan(&g.ID, &g.SystemID, &g.Name, &g.Title, &g.Parent, &g.ParentTitle, &g.Year, &g.Maker, &g.Players, &g.Genre, &g.Path, &inParent,
-		&g.Size, &g.MTime, &g.CRC, &g.Status, &probs, &g.Art, &added)
+		&g.Size, &g.MTime, &g.CRC, &g.Serial, &g.Status, &probs, &g.Art, &added)
 	if errors.Is(err, sql.ErrNoRows) {
 		return g, ErrNotFound
 	}

@@ -2,6 +2,8 @@ package gamedat
 
 import (
 	"path"
+	"regexp"
+	"slices"
 	"strconv"
 	"strings"
 	"unicode"
@@ -9,9 +11,11 @@ import (
 
 // Index finds a game in a No-Intro DAT by a file's CRC or name.
 type Index struct {
-	byCRC   map[uint32][]hit
-	byName  map[string]*Entry
-	byTitle map[string]*Entry
+	byCRC    map[uint32][]hit
+	byName   map[string]*Entry
+	byTitle  map[string]*Entry
+	bySerial map[string][]*Entry
+	games    int
 }
 
 type hit struct {
@@ -21,9 +25,22 @@ type hit struct {
 
 // NewIndex indexes a DAT's games.
 func NewIndex(dat *DAT) *Index {
-	ix := &Index{byCRC: map[uint32][]hit{}, byName: map[string]*Entry{}, byTitle: map[string]*Entry{}}
+	ix := &Index{byCRC: map[uint32][]hit{}, byName: map[string]*Entry{}, byTitle: map[string]*Entry{}, bySerial: map[string][]*Entry{}}
+	ix.Add(dat)
+	return ix
+}
+
+// Add takes in another list's games, such as a system's downloads after
+// its discs.
+func (ix *Index) Add(dat *DAT) {
 	for i := range dat.Games {
 		e := &dat.Games[i]
+		ix.games++
+		for _, k := range SerialKeys(e.Fields["serial"]) {
+			if !slices.Contains(ix.bySerial[k], e) {
+				ix.bySerial[k] = append(ix.bySerial[k], e)
+			}
+		}
 		ix.byName[nameKey(e.Name())] = e
 		if k := TitleKey(Title(e.Name())); k != "" {
 			if have, ok := ix.byTitle[k]; !ok || betterVersion(e.Name(), have.Name()) {
@@ -37,7 +54,57 @@ func NewIndex(dat *DAT) *Index {
 			ix.byName[nameKey(strings.TrimSuffix(r.Name, path.Ext(r.Name)))] = e
 		}
 	}
-	return ix
+}
+
+var reNintendoCode = regexp.MustCompile(`(?:DOL|RVL)-([A-Z0-9]{4})`)
+
+// SerialKeys are the ways a list's serial, or one read from a game, is
+// looked up: in capitals with only its letters and digits (SLUS-00067 is
+// SLUS00067), each of a list of them, without a disc's -0 on the end, and
+// for a GameCube or Wii game its four-letter ID (DL-DOL-GW7E-USA is GW7E).
+func SerialKeys(serial string) []string {
+	var out []string
+	add := func(s string) {
+		k := strings.Map(func(r rune) rune {
+			if r >= 'a' && r <= 'z' {
+				return r - 32
+			}
+			if r >= 'A' && r <= 'Z' || r >= '0' && r <= '9' {
+				return r
+			}
+			return -1
+		}, s)
+		if len(k) >= 4 && !slices.Contains(out, k) {
+			out = append(out, k)
+		}
+	}
+	for _, s := range strings.FieldsFunc(serial, func(r rune) bool { return r == ',' || r == ';' }) {
+		s = strings.TrimSpace(s)
+		up := strings.ToUpper(s)
+		if m := reNintendoCode.FindStringSubmatch(up); m != nil {
+			add(m[1])
+			continue
+		}
+		add(s)
+		// SLPM-65002-0: the first disc of SLPM-65002.
+		if i := strings.LastIndexByte(s, '-'); i > 0 && len(s)-i <= 2 {
+			add(s[:i])
+		}
+	}
+	return out
+}
+
+// BySerial finds the versions of a game a serial or title ID is for.
+func (ix *Index) BySerial(serial string) []*Entry {
+	if ix == nil {
+		return nil
+	}
+	for _, k := range SerialKeys(serial) {
+		if es := ix.bySerial[k]; len(es) > 0 {
+			return es
+		}
+	}
+	return nil
 }
 
 // Len is how many games the index knows.
@@ -45,7 +112,7 @@ func (ix *Index) Len() int {
 	if ix == nil {
 		return 0
 	}
-	return len(ix.byCRC)
+	return ix.games
 }
 
 // ByCRC finds the game a file is from any of its CRCs (see CRCs), and the

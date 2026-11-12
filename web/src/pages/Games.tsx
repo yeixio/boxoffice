@@ -67,6 +67,7 @@ export function GameCheckButton({ rootId }: { rootId: number }) {
 
 const statusTone: Record<GameStatus, 'ok' | 'bad' | 'gold' | 'plain'> = {
   complete: 'ok',
+  identified: 'ok',
   missing: 'bad',
   wrong: 'bad',
   bios: 'gold',
@@ -175,7 +176,7 @@ export function Games() {
       {!!systems.data?.length && (
         <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {systems.data.map((s) => (
-            <li key={s.id}>
+            <li key={s.id} className="min-w-0">
               <Link to={`/games/${s.id}`} className="group flex h-full flex-col rounded-xl border border-line bg-card p-5 transition hover:border-marquee">
                 <div className="flex items-start gap-3">
                   <SystemIcon system={s.system} short={s.short} className="size-14" />
@@ -412,6 +413,13 @@ export function GameSystemPage() {
   )
 }
 
+// explainKey is the words for what a status means, for a system's kind.
+function explainKey(status: GameStatus, s: GameSystem): string {
+  if (s.arcade) return `games.explain.${status}Arcade`
+  if (!s.hash && status === 'unknown') return 'games.explain.unknownDisc'
+  return `games.explain.${status}`
+}
+
 // problemText says what's wrong, in words.
 function ProblemText({ kind, name, arcade }: { kind: string; name: string; arcade: boolean }) {
   const key = !arcade && kind === 'wrong' ? 'games.problem.wrongCopy' : `games.problem.${kind}`
@@ -459,9 +467,16 @@ export function GamePage() {
           </div>
           <dl className="mt-4 divide-y divide-line">
             <Fact label={t('games.fact.system')}>{s.name}</Fact>
-            <Fact label={s.arcade ? t('games.fact.set') : t('games.fact.name')}>
-              <code className="break-all">{g.name}</code>
-            </Fact>
+            {(s.arcade || s.hash || (s.list && g.status !== 'unknown')) && (
+              <Fact label={s.arcade ? t('games.fact.set') : s.hash ? t('games.fact.name') : t('games.fact.listName')}>
+                <code className="break-all">{g.name}</code>
+              </Fact>
+            )}
+            {g.serial && (
+              <Fact label={t('games.fact.serial')}>
+                <code>{g.serial}</code>
+              </Fact>
+            )}
             {g.year && <Fact label={t('games.fact.year')}>{g.year}</Fact>}
             {g.maker && <Fact label={s.arcade ? t('games.fact.manufacturer') : t('games.fact.publisher')}>{g.maker}</Fact>}
             {!!g.players && <Fact label={t('games.fact.players')}>{g.players}</Fact>}
@@ -475,10 +490,10 @@ export function GamePage() {
         </div>
       </div>
 
-      {g.status !== 'complete' && (
+      {(g.status !== 'complete' && g.status !== 'identified' || g.problems.length > 0) && (
         <Card className="mt-6">
-          <h2 className="mb-1 font-display text-lg font-semibold">{t('games.whatsWrong')}</h2>
-          <p className="mb-3 text-sm text-muted">{t(`games.explain.${g.status}${s.arcade ? 'Arcade' : ''}`, { list: s.list ?? '', name: g.name })}</p>
+          <h2 className="mb-1 font-display text-lg font-semibold">{g.status === 'identified' ? t('games.goodToKnow') : t('games.whatsWrong')}</h2>
+          <p className="mb-3 text-sm text-muted">{t(explainKey(g.status, s), { list: s.list ?? '', name: g.name })}</p>
           {g.problems.length > 0 && (
             <ul className="flex list-disc flex-col gap-1 ps-5 text-sm">
               {g.problems.map((p) => (

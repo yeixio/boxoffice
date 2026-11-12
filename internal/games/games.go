@@ -68,10 +68,11 @@ type Service struct {
 	Log   *slog.Logger
 	// Dir keeps the lists and art downloaded: data/games.
 	Dir string
-	// MAMEReleases, LibretroDB and Art override where lists and art come
-	// from, such as for a mirror; empty uses the defaults.
+	// MAMEReleases, LibretroDB, TitleDB and Art override where lists and
+	// art come from, such as for a mirror; empty uses the defaults.
 	MAMEReleases string
 	LibretroDB   string
+	TitleDB      string
 	Art          []string
 	HTTP         *http.Client
 	UserAgent    string

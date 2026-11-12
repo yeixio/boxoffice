@@ -2314,9 +2314,11 @@
       "badCopy": "Špatná kopie",
       "bios": "Potřebuje BIOS",
       "unknown": "Není na seznamu",
-      "unreadable": "Nelze přečíst"
+      "unreadable": "Nelze přečíst",
+      "identified": "Rozpoznáno"
     },
     "whatsWrong": "Co je špatně",
+    "goodToKnow": "Dobré vědět",
     "explain": {
       "missingArcade": "Některé soubory, které sada potřebuje, chybí, takže ji MAME možná nespustí.",
       "wrongArcade": "Některé soubory jsou z jiné verze MAME než {{list}}. Vyberte verzi, se kterou hrajete, v části Verze MAME, nebo sadu aktualizujte.",
@@ -2327,7 +2329,9 @@
       "wrong": "Soubor se jmenuje jako hra na seznamu No-Intro, ale není stejný: špatná kopie, nebo mezitím změněná.",
       "bios": "Hra potřebuje BIOS, který chybí.",
       "unknown": "Seznam No-Intro žádnou takovou kopii nemá. Může jít o hack, překlad nebo domácí hru, což je v pořádku.",
-      "unreadable": "Soubor nelze otevřít. Může být poškozený, nebo se ještě kopíruje."
+      "unreadable": "Soubor nelze otevřít. Může být poškozený, nebo se ještě kopíruje.",
+      "identified": "Box Office tuto hru pozná podle sériového čísla nebo ID titulu, které je v ní zapsané, nebo podle názvu. Takto velké hry se nekontrolují bajt po bajtu.",
+      "unknownDisc": "Nic, co Box Office v ní dokáže přečíst, neříká, o jakou hru jde, a {{list}} žádnou hru s tímto názvem nemá. Pomůže ji přejmenovat podle seznamu."
     },
     "problem": {
       "missing": "<code>{{name}}</code> chybí",
@@ -2338,7 +2342,10 @@
       "parent": "Potřebuje rodičovskou sadu <code>{{name}}</code>",
       "disk": "CHD <code>{{name}}</code> chybí",
       "diskWrong": "CHD <code>{{name}}</code> je z jiné verze",
-      "unreadable": "Nelze přečíst: {{name}}"
+      "unreadable": "Nelze přečíst: {{name}}",
+      "otherSystem": "Podle obsahu jde o hru pro {{name}}",
+      "update": "<code>{{name}}</code> je aktualizace hry, ne hra samotná",
+      "dlc": "<code>{{name}}</code> je doplňkový obsah ke hře, ne hra samotná"
     },
     "inParent": "V rodičovské sadě",
     "fact": {
@@ -2352,7 +2359,9 @@
       "genre": "Žánr",
       "parent": "Klon hry",
       "crc": "CRC",
-      "found": "Nalezeno"
+      "found": "Nalezeno",
+      "serial": "Sériové číslo",
+      "listName": "Název na seznamu"
     },
     "files": "Soubory",
     "noFiles": "Její soubory už tu nejsou. Zkontrolujte znovu a seznam se aktualizuje.",
@@ -2371,7 +2380,6 @@
       "allSystems": "Všechny systémy",
       "notYours": "{{name}} (zatím bez složky)",
       "looking": "Prohledávám seznamy… První hledání v systému stáhne jeho seznam, což může trvat minutu.",
-      "hint": "Hledej podle názvu. Box Office prochází seznam No-Intro konzolových her a seznam MAME arkádových her pro systémy, pro které máš složky. Vyber systém a podívej se do jiného.",
       "nothing": "Žádná hra ze seznamu neodpovídá.",
       "more": "Zobrazeno prvních 60. Přidej slovo pro zúžení.",
       "version": "Verze",
@@ -2380,7 +2388,9 @@
       "wanted": "Chtěná",
       "want": "Chci",
       "cardTitle": "Přidat hru",
-      "cardSub": "Prohledej seznam všech her systému a Box Office stáhne ty, které chceš."
+      "cardSub": "Prohledej seznam všech her systému a Box Office stáhne ty, které chceš.",
+      "hintAll": "Hledejte podle názvu. Box Office prochází seznam všech her pro systémy, pro které máte složky: No-Intro pro cartridge, Redump pro disky, eShop pro Switch a MAME pro arkády. Systémy bez seznamu, jako PC nebo PlayStation 4, použijí název, který napíšete. Vyberte systém a podívejte se na jiný.",
+      "free": "Není co kontrolovat: Box Office hledá vydání s tímto názvem."
     },
     "wanted": {
       "title": "Chtěné",

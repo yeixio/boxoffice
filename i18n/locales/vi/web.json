@@ -2011,9 +2011,11 @@
       "badCopy": "Bản sao lỗi",
       "bios": "Cần BIOS",
       "unknown": "Không có trong danh sách",
-      "unreadable": "Không đọc được"
+      "unreadable": "Không đọc được",
+      "identified": "Đã nhận ra"
     },
     "whatsWrong": "Có gì không ổn",
+    "goodToKnow": "Nên biết",
     "explain": {
       "missingArcade": "Một số tệp bộ này cần không có ở đó, nên MAME có thể không chạy được.",
       "wrongArcade": "Một số tệp thuộc phiên bản MAME khác với {{list}}. Hãy chọn phiên bản bạn chơi ở mục Phiên bản MAME, hoặc cập nhật bộ.",
@@ -2024,7 +2026,9 @@
       "wrong": "Tệp được đặt tên như một trò chơi trong danh sách No-Intro nhưng không giống: bản sao lỗi, hoặc đã bị thay đổi.",
       "bios": "Trò chơi cần một BIOS không có ở đó.",
       "unknown": "Danh sách No-Intro không có bản nào như thế này. Có thể đây là bản hack, bản dịch hoặc trò chơi tự làm, và điều đó không sao cả.",
-      "unreadable": "Không mở được tệp. Có thể tệp bị hỏng, hoặc vẫn đang được sao chép."
+      "unreadable": "Không mở được tệp. Có thể tệp bị hỏng, hoặc vẫn đang được sao chép.",
+      "identified": "Box Office nhận ra trò chơi này qua số sê-ri hoặc ID tựa game ghi bên trong, hoặc qua tên của nó. Trò chơi lớn như vậy không được kiểm tra từng byte.",
+      "unknownDisc": "Không có gì Box Office đọc được bên trong cho biết đây là trò chơi nào, và {{list}} không có trò chơi nào tên như vậy. Đổi tên theo cách danh sách gọi sẽ giúp ích."
     },
     "problem": {
       "missing": "Thiếu <code>{{name}}</code>",
@@ -2035,7 +2039,10 @@
       "parent": "Cần bộ gốc của nó, <code>{{name}}</code>",
       "disk": "Thiếu CHD <code>{{name}}</code>",
       "diskWrong": "CHD <code>{{name}}</code> thuộc phiên bản khác",
-      "unreadable": "Không đọc được: {{name}}"
+      "unreadable": "Không đọc được: {{name}}",
+      "otherSystem": "Nội dung bên trong cho biết đây là trò chơi {{name}}",
+      "update": "<code>{{name}}</code> là bản cập nhật của trò chơi, không phải bản thân trò chơi",
+      "dlc": "<code>{{name}}</code> là nội dung bổ sung của trò chơi, không phải bản thân trò chơi"
     },
     "inParent": "Trong bộ gốc",
     "fact": {
@@ -2049,7 +2056,9 @@
       "genre": "Thể loại",
       "parent": "Bản sao của",
       "crc": "CRC",
-      "found": "Tìm thấy"
+      "found": "Tìm thấy",
+      "serial": "Số sê-ri",
+      "listName": "Tên trong danh sách"
     },
     "files": "Tệp",
     "noFiles": "Các tệp của nó không còn nữa. Kiểm tra lại để cập nhật danh sách.",
@@ -2068,7 +2077,6 @@
       "allSystems": "Tất cả hệ máy",
       "notYours": "{{name}} (chưa có thư mục)",
       "looking": "Đang tìm trong danh sách… Lần tìm đầu tiên trên một hệ máy sẽ tải danh sách của nó, có thể mất một phút.",
-      "hint": "Tìm theo tên. Box Office tìm trong danh sách trò chơi console của No-Intro và danh sách arcade của MAME, cho các hệ máy bạn có thư mục. Chọn một hệ máy để xem hệ khác.",
       "nothing": "Không có trò chơi nào trong danh sách khớp.",
       "more": "Đang hiện 60 kết quả đầu. Thêm một từ để thu hẹp.",
       "version": "Phiên bản",
@@ -2077,7 +2085,9 @@
       "wanted": "Đang muốn",
       "want": "Tôi muốn",
       "cardTitle": "Thêm trò chơi",
-      "cardSub": "Tìm trong danh sách mọi trò chơi của một hệ máy, và Box Office sẽ tải những trò bạn muốn."
+      "cardSub": "Tìm trong danh sách mọi trò chơi của một hệ máy, và Box Office sẽ tải những trò bạn muốn.",
+      "hintAll": "Tìm theo tên. Box Office xem danh sách mọi trò chơi của các hệ máy bạn có thư mục: của No-Intro cho băng, của Redump cho đĩa, của eShop cho Switch và của MAME cho arcade. Hệ máy không có danh sách, như PC hay PlayStation 4, dùng tên bạn gõ. Chọn một hệ máy để xem hệ khác.",
+      "free": "Không có danh sách để kiểm tra: Box Office tìm các bản phát hành có tên này."
     },
     "wanted": {
       "title": "Đang muốn",

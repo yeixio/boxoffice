@@ -2213,9 +2213,11 @@
       "badCopy": "Copia difettosa",
       "bios": "Serve un BIOS",
       "unknown": "Non nell'elenco",
-      "unreadable": "Illeggibile"
+      "unreadable": "Illeggibile",
+      "identified": "Riconosciuto"
     },
     "whatsWrong": "Cosa non va",
+    "goodToKnow": "Buono a sapersi",
     "explain": {
       "missingArcade": "Mancano alcuni file che servono a questo set, quindi MAME potrebbe non avviarlo.",
       "wrongArcade": "Alcuni file sono di una versione di MAME diversa da {{list}}. Scegli la versione con cui giochi in Versione di MAME, o aggiorna il set.",
@@ -2226,7 +2228,9 @@
       "wrong": "Il file ha il nome di un gioco dell'elenco di No-Intro, ma non è lo stesso: una copia difettosa, o modificata nel frattempo.",
       "bios": "Al gioco serve un BIOS che manca.",
       "unknown": "L'elenco di No-Intro non ha nessuna copia come questa. Può essere un hack, una traduzione o un gioco amatoriale, e va bene così.",
-      "unreadable": "Il file non si apre. Forse è danneggiato, o lo si sta ancora copiando."
+      "unreadable": "Il file non si apre. Forse è danneggiato, o lo si sta ancora copiando.",
+      "identified": "Box Office riconosce questo gioco dal numero di serie o dall'ID titolo scritto al suo interno, o dal nome. Giochi così grandi non vengono controllati byte per byte.",
+      "unknownDisc": "Niente di ciò che Box Office riesce a leggere dice di quale gioco si tratti, e {{list}} non ha giochi con questo nome. Rinominarlo come lo chiama la lista aiuta."
     },
     "problem": {
       "missing": "Manca <code>{{name}}</code>",
@@ -2237,7 +2241,10 @@
       "parent": "Serve il suo set padre, <code>{{name}}</code>",
       "disk": "Manca il CHD <code>{{name}}</code>",
       "diskWrong": "Il CHD <code>{{name}}</code> è di un'altra versione",
-      "unreadable": "Illeggibile: {{name}}"
+      "unreadable": "Illeggibile: {{name}}",
+      "otherSystem": "Il contenuto dice che è un gioco per {{name}}",
+      "update": "<code>{{name}}</code> è un aggiornamento del gioco, non il gioco stesso",
+      "dlc": "<code>{{name}}</code> è un contenuto aggiuntivo del gioco, non il gioco stesso"
     },
     "inParent": "Nel set del padre",
     "fact": {
@@ -2251,7 +2258,9 @@
       "genre": "Genere",
       "parent": "Clone di",
       "crc": "CRC",
-      "found": "Trovato"
+      "found": "Trovato",
+      "serial": "Numero di serie",
+      "listName": "Nome nella lista"
     },
     "files": "File",
     "noFiles": "I suoi file non ci sono più. Controlla di nuovo per aggiornare l'elenco.",
@@ -2270,7 +2279,6 @@
       "allSystems": "Tutti i sistemi",
       "notYours": "{{name}} (ancora senza cartella)",
       "looking": "Cerco nelle liste… La prima ricerca su un sistema scarica la sua lista, e può richiedere un minuto.",
-      "hint": "Cerca per titolo. Box Office scorre la lista No-Intro dei giochi per console e la lista MAME dei giochi arcade, per i sistemi di cui hai una cartella. Scegli un sistema per cercarne un altro.",
       "nothing": "Nessun gioco della lista corrisponde.",
       "more": "Sono mostrati i primi 60. Aggiungi una parola per restringere.",
       "version": "Versione",
@@ -2279,7 +2287,9 @@
       "wanted": "Voluto",
       "want": "Lo voglio",
       "cardTitle": "Aggiungi un gioco",
-      "cardSub": "Cerca nella lista di tutti i giochi di un sistema e Box Office scarica quelli che vuoi."
+      "cardSub": "Cerca nella lista di tutti i giochi di un sistema e Box Office scarica quelli che vuoi.",
+      "hintAll": "Cerca per titolo. Box Office consulta la lista di tutti i giochi dei sistemi per cui hai una cartella: quella di No-Intro per le cartucce, quella di Redump per i dischi, quella dell'eShop per Switch e quella di MAME per l'arcade. I sistemi senza lista, come PC o PlayStation 4, usano il nome che scrivi. Scegli un sistema per vederne un altro.",
+      "free": "Nessuna lista da controllare: Box Office cerca release con questo nome."
     },
     "wanted": {
       "title": "Voluti",

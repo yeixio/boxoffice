@@ -2011,9 +2011,11 @@
       "badCopy": "불량 사본",
       "bios": "BIOS 필요",
       "unknown": "목록에 없음",
-      "unreadable": "읽을 수 없음"
+      "unreadable": "읽을 수 없음",
+      "identified": "인식됨"
     },
     "whatsWrong": "무엇이 문제인가요",
+    "goodToKnow": "알아 두세요",
     "explain": {
       "missingArcade": "이 세트에 필요한 파일 일부가 없어 MAME에서 실행되지 않을 수 있습니다.",
       "wrongArcade": "일부 파일이 {{list}}가 아닌 다른 MAME 버전의 것입니다. MAME 버전에서 플레이하는 버전을 고르거나 세트를 업데이트하세요.",
@@ -2024,7 +2026,9 @@
       "wrong": "No-Intro 목록의 게임과 이름은 같지만 내용이 다릅니다: 불량 사본이거나 나중에 바뀐 것입니다.",
       "bios": "이 게임에는 없는 BIOS가 필요합니다.",
       "unknown": "No-Intro 목록에 이런 사본이 없습니다. 핵, 번역판 또는 직접 만든 게임일 수 있으며 괜찮습니다.",
-      "unreadable": "파일을 열 수 없습니다. 손상되었거나 아직 복사 중일 수 있습니다."
+      "unreadable": "파일을 열 수 없습니다. 손상되었거나 아직 복사 중일 수 있습니다.",
+      "identified": "Box Office는 이 게임 안에 적힌 시리얼 번호나 타이틀 ID, 또는 이름으로 게임을 알아봅니다. 이렇게 큰 게임은 바이트 단위로 확인하지 않습니다.",
+      "unknownDisc": "Box Office가 안에서 읽을 수 있는 정보로는 어떤 게임인지 알 수 없고, {{list}}에도 이런 이름의 게임이 없습니다. 목록의 이름대로 이름을 바꾸면 도움이 됩니다."
     },
     "problem": {
       "missing": "<code>{{name}}</code> 없음",
@@ -2035,7 +2039,10 @@
       "parent": "부모 세트 <code>{{name}}</code> 필요",
       "disk": "CHD <code>{{name}}</code> 없음",
       "diskWrong": "CHD <code>{{name}}</code>은(는) 다른 버전의 것입니다",
-      "unreadable": "읽을 수 없음: {{name}}"
+      "unreadable": "읽을 수 없음: {{name}}",
+      "otherSystem": "내용상 {{name}} 게임입니다",
+      "update": "<code>{{name}}</code>은(는) 게임 자체가 아니라 업데이트입니다",
+      "dlc": "<code>{{name}}</code>은(는) 게임 자체가 아니라 추가 콘텐츠입니다"
     },
     "inParent": "부모 세트에 있음",
     "fact": {
@@ -2049,7 +2056,9 @@
       "genre": "장르",
       "parent": "원본",
       "crc": "CRC",
-      "found": "찾은 날짜"
+      "found": "찾은 날짜",
+      "serial": "시리얼",
+      "listName": "목록상 이름"
     },
     "files": "파일",
     "noFiles": "파일이 더 이상 없습니다. 다시 확인해 목록을 업데이트하세요.",
@@ -2068,7 +2077,6 @@
       "allSystems": "모든 시스템",
       "notYours": "{{name}} (아직 폴더 없음)",
       "looking": "목록을 찾는 중… 시스템에서 처음 검색할 때 목록을 다운로드하므로 1분쯤 걸릴 수 있습니다.",
-      "hint": "제목으로 검색하세요. 폴더가 있는 시스템에 대해 No-Intro 콘솔 게임 목록과 MAME 아케이드 게임 목록을 찾습니다. 다른 시스템을 보려면 시스템을 고르세요.",
       "nothing": "목록에 맞는 게임이 없습니다.",
       "more": "처음 60개를 보여줍니다. 단어를 더해 좁혀 보세요.",
       "version": "버전",
@@ -2077,7 +2085,9 @@
       "wanted": "원함",
       "want": "원해요",
       "cardTitle": "게임 추가",
-      "cardSub": "시스템의 전체 게임 목록에서 찾으면 Box Office가 원하는 게임을 다운로드합니다."
+      "cardSub": "시스템의 전체 게임 목록에서 찾으면 Box Office가 원하는 게임을 다운로드합니다.",
+      "hintAll": "제목으로 검색하세요. Box Office는 폴더가 있는 시스템의 전체 게임 목록을 찾아봅니다. 카트리지는 No-Intro, 디스크는 Redump, Switch는 eShop, 아케이드는 MAME 목록입니다. PC나 PlayStation 4처럼 목록이 없는 시스템은 입력한 이름을 사용합니다. 다른 시스템을 보려면 시스템을 고르세요.",
+      "free": "확인할 목록이 없습니다. Box Office가 이 이름의 릴리스를 찾습니다."
     },
     "wanted": {
       "title": "원하는 게임",

@@ -46,6 +46,9 @@ type Config struct {
 	// LibretroDB is another copy of libretro's database to download
 	// No-Intro's lists and game facts from; BOXOFFICE_LIBRETRO_DB_URL.
 	LibretroDB string
+	// TitleDB is another copy of titledb, the Switch's list of games;
+	// BOXOFFICE_TITLEDB_URL.
+	TitleDB string
 	// GameArt are where game pictures are looked for, comma separated,
 	// in place of libretro's thumbnails; BOXOFFICE_GAME_ART_URL. See
 	// games.DefaultArt for how they're written.
@@ -82,6 +85,7 @@ func load(args []string, env func(string) string) (Config, error) {
 		EbookConvert: env("BOXOFFICE_EBOOK_CONVERT"),
 		MAMEReleases: strings.TrimRight(env("BOXOFFICE_MAME_RELEASES_URL"), "/"),
 		LibretroDB:   strings.TrimRight(env("BOXOFFICE_LIBRETRO_DB_URL"), "/"),
+		TitleDB:      strings.TrimRight(env("BOXOFFICE_TITLEDB_URL"), "/"),
 	}
 	for _, u := range strings.Split(env("BOXOFFICE_GAME_ART_URL"), ",") {
 		if u = strings.TrimSpace(u); u != "" {

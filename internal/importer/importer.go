@@ -350,6 +350,12 @@ func look(full string, dir bool) what {
 		}
 		return w
 	}
+	// A folder that's one game: a PlayStation 3 game dumped whole, say.
+	if sys, ok := games.Identify(full); ok {
+		w.games, w.system, w.firstGame = 1, sys.Key, filepath.Base(full)
+		w.files, w.size = 1, dirSize(full)
+		return w
+	}
 	n := 0
 	filepath.WalkDir(full, func(p string, d fs.DirEntry, err error) error {
 		n++
@@ -368,6 +374,20 @@ func look(full string, dir bool) what {
 		return nil
 	})
 	return w
+}
+
+// dirSize is how big everything in a folder is.
+func dirSize(dir string) int64 {
+	var n int64
+	filepath.WalkDir(dir, func(p string, d fs.DirEntry, err error) error {
+		if err == nil && d.Type().IsRegular() {
+			if i, err := d.Info(); err == nil {
+				n += i.Size()
+			}
+		}
+		return nil
+	})
+	return n
 }
 
 // kindOf says what an item most likely is from what's in it.
@@ -988,37 +1008,28 @@ func (s *Service) show(ctx context.Context, tmdbID int64) (int64, error) {
 // takes the ones it placed out of the imports folder. A file it can't
 // place stays there, and the item says which.
 func (s *Service) importGames(ctx context.Context, it Item, full string) (string, error) {
-	var files []string
-	if it.Dir {
-		filepath.WalkDir(full, func(p string, d fs.DirEntry, err error) error {
-			if err == nil && d.Type().IsRegular() && !strings.HasPrefix(d.Name(), ".") {
-				files = append(files, p)
-			}
-			return nil
-		})
-	} else {
-		files = []string{full}
+	system := it.System
+	if it.Dir && !it.Picked {
+		// A folder of games: each is told by what it is.
+		system = ""
 	}
-	var to, placed, skipped []string
-	for _, f := range files {
-		key := it.System
-		if it.Dir {
-			sys, ok := games.Identify(f)
-			if !ok {
-				skipped = append(skipped, f)
-				continue
-			}
-			key = sys.Key
-		}
-		dst, err := s.Games.Add(ctx, key, f)
-		if err != nil && !errors.Is(err, games.ErrHave) {
-			s.unimport(full, placed)
-			return strings.Join(to, ", "), err
-		}
-		placed = append(placed, f)
-		if d := filepath.Dir(dst); !slices.Contains(to, d) {
+	got, skipped, err := s.Games.ImportGames(ctx, system, full)
+	var to, placed []string
+	for _, g := range got {
+		placed = append(placed, g.From...)
+		if d := filepath.Dir(g.To); !slices.Contains(to, d) {
 			to = append(to, d)
 		}
+	}
+	if err != nil {
+		s.unimport(full, placed)
+		return strings.Join(to, ", "), err
+	}
+	if !it.Dir {
+		if len(to) > 0 {
+			os.RemoveAll(full)
+		}
+		return strings.Join(to, ", "), nil
 	}
 	if len(skipped) == 0 && len(to) > 0 {
 		os.RemoveAll(full)

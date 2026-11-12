@@ -2213,9 +2213,11 @@
       "badCopy": "Copie proastă",
       "bios": "Necesită un BIOS",
       "unknown": "Nu e pe listă",
-      "unreadable": "Nu poate fi citit"
+      "unreadable": "Nu poate fi citit",
+      "identified": "Recunoscut"
     },
     "whatsWrong": "Ce nu e în regulă",
+    "goodToKnow": "Bine de știut",
     "explain": {
       "missingArcade": "Lipsesc unele fișiere de care are nevoie setul, așa că MAME s-ar putea să nu-l pornească.",
       "wrongArcade": "Unele fișiere sunt din altă versiune de MAME decât {{list}}. Alege versiunea cu care joci la Versiunea MAME sau actualizează setul.",
@@ -2226,7 +2228,9 @@
       "wrong": "Fișierul are numele unui joc de pe lista No-Intro, dar nu este același: o copie proastă sau una modificată între timp.",
       "bios": "Jocul are nevoie de un BIOS care lipsește.",
       "unknown": "Lista No-Intro nu are nicio copie ca aceasta. Poate fi un hack, o traducere sau un joc făcut acasă, ceea ce e în regulă.",
-      "unreadable": "Fișierul nu poate fi deschis. Poate fi deteriorat sau încă se copiază."
+      "unreadable": "Fișierul nu poate fi deschis. Poate fi deteriorat sau încă se copiază.",
+      "identified": "Box Office recunoaște acest joc după numărul de serie sau ID-ul de titlu scris în el, ori după nume. Jocurile atât de mari nu sunt verificate octet cu octet.",
+      "unknownDisc": "Nimic din ce poate citi Box Office în el nu spune ce joc este, iar {{list}} nu are niciun joc cu acest nume. Ajută să-l redenumești cum îl numește lista."
     },
     "problem": {
       "missing": "Lipsește <code>{{name}}</code>",
@@ -2237,7 +2241,10 @@
       "parent": "Necesită setul părinte, <code>{{name}}</code>",
       "disk": "Lipsește CHD-ul <code>{{name}}</code>",
       "diskWrong": "CHD-ul <code>{{name}}</code> este din altă versiune",
-      "unreadable": "Nu poate fi citit: {{name}}"
+      "unreadable": "Nu poate fi citit: {{name}}",
+      "otherSystem": "Conținutul spune că este un joc {{name}}",
+      "update": "<code>{{name}}</code> este o actualizare a jocului, nu jocul în sine",
+      "dlc": "<code>{{name}}</code> este conținut suplimentar al jocului, nu jocul în sine"
     },
     "inParent": "În setul părintelui",
     "fact": {
@@ -2251,7 +2258,9 @@
       "genre": "Gen",
       "parent": "Clonă a",
       "crc": "CRC",
-      "found": "Găsit"
+      "found": "Găsit",
+      "serial": "Număr de serie",
+      "listName": "Nume pe listă"
     },
     "files": "Fișiere",
     "noFiles": "Fișierele lui nu mai sunt aici. Verifică din nou ca să actualizezi lista.",
@@ -2270,7 +2279,6 @@
       "allSystems": "Toate sistemele",
       "notYours": "{{name}} (încă fără dosar)",
       "looking": "Caut în liste… Prima căutare pe un sistem îi descarcă lista, ceea ce poate dura un minut.",
-      "hint": "Caută după titlu. Box Office caută în lista No-Intro a jocurilor de consolă și în lista MAME a jocurilor arcade, pentru sistemele pentru care ai dosare. Alege un sistem ca să vezi altul.",
       "nothing": "Niciun joc de pe listă nu se potrivește.",
       "more": "Se arată primele 60. Adaugă un cuvânt pentru a restrânge.",
       "version": "Versiune",
@@ -2279,7 +2287,9 @@
       "wanted": "Dorit",
       "want": "Îl vreau",
       "cardTitle": "Adaugă un joc",
-      "cardSub": "Caută în lista tuturor jocurilor unui sistem, iar Box Office le descarcă pe cele pe care le vrei."
+      "cardSub": "Caută în lista tuturor jocurilor unui sistem, iar Box Office le descarcă pe cele pe care le vrei.",
+      "hintAll": "Caută după titlu. Box Office se uită în lista tuturor jocurilor pentru sistemele pentru care ai dosare: a No-Intro pentru cartușe, a Redump pentru discuri, a eShop pentru Switch și a MAME pentru arcade. Sistemele fără listă, precum PC sau PlayStation 4, folosesc numele pe care îl scrii. Alege un sistem ca să vezi altul.",
+      "free": "Nicio listă de verificat: Box Office caută lansări cu acest nume."
     },
     "wanted": {
       "title": "Dorite",

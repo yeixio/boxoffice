@@ -50,6 +50,10 @@ func (s *Service) MatchDownload(ctx context.Context, wantID int64, dir string, f
 		}
 		return "", nil
 	}
+	if sys.Disc() {
+		_, why, err := s.findDisc(ctx, w, sys, dir)
+		return why, err
+	}
 	got, checked, err := s.findConsole(ctx, w, sys, dir, files)
 	if err != nil {
 		return "", err
@@ -96,7 +100,7 @@ func (s *Service) findConsole(ctx context.Context, w store.GameWant, sys gamedat
 		p := filepath.Join(dir, f)
 		ext := strings.ToLower(filepath.Ext(f))
 		switch {
-		case slices.Contains(sys.Exts, ext):
+		case sys.Takes(f):
 			st, err := os.Stat(p)
 			if err != nil || st.Size() > gamedat.MaxHashSize {
 				continue
@@ -121,7 +125,7 @@ func (s *Service) findConsole(ctx context.Context, w store.GameWant, sys gamedat
 			}
 			var games []gamedat.File
 			for _, x := range inside {
-				if slices.Contains(sys.Exts, strings.ToLower(filepath.Ext(x.Name))) {
+				if sys.Takes(x.Name) {
 					games = append(games, x)
 				}
 			}
@@ -274,9 +278,12 @@ func (s *Service) ImportDownload(ctx context.Context, wantID int64, dir string, 
 		return "", fmt.Errorf("Box Office doesn't know a system called %q", w.System)
 	}
 	var to string
-	if sys.Arcade {
+	switch {
+	case sys.Arcade:
 		to, err = s.importSet(ctx, w, dir, files)
-	} else {
+	case sys.Disc():
+		to, err = s.importDisc(ctx, w, sys, dir)
+	default:
 		to, err = s.importConsole(ctx, w, sys, dir, files)
 	}
 	if err != nil {
@@ -394,4 +401,132 @@ func (s *Service) importSet(ctx context.Context, w store.GameWant, dir string, f
 		}
 	}
 	return first, nil
+}
+
+// discFound is a game in a download that's the one wanted.
+type discFound struct {
+	unit  unit
+	name  string // its name on the system's list, or the name wanted
+	exact bool   // the very version wanted
+}
+
+// findDisc finds the game wanted in a download for a disc or download
+// system: each game in it is known by the serial or title ID written in
+// it, or the name written in it or on it, and must be a version of the
+// game wanted. A PC game's download is the game whole.
+func (s *Service) findDisc(ctx context.Context, w store.GameWant, sys gamedat.System, dir string) ([]discFound, string, error) {
+	ix, _, err := s.listIndex(ctx, sys)
+	if err != nil {
+		return nil, "", err
+	}
+	var units []unit
+	if folderPerGame(sys) {
+		units = []unit{{path: dir, dir: true}}
+	} else {
+		units = findUnits(dir, sys)
+	}
+	var out []discFound
+	var whys []string
+	for _, u := range units {
+		if ctx.Err() != nil {
+			return nil, "", ctx.Err()
+		}
+		stem := stemOf(u)
+		if u.path == dir {
+			stem = w.Title
+		}
+		id, err := gamedat.Probe(u.path)
+		if err != nil && !errors.Is(err, gamedat.ErrUnknown) {
+			whys = append(whys, fmt.Sprintf("%s can't be read: %v", filepath.Base(u.path), err))
+			continue
+		}
+		switch {
+		case id.System != "" && id.System != sys.Key && !(sys.Key == "psp" && id.System == "psx"):
+			whys = append(whys, fmt.Sprintf("%s is a %s game", filepath.Base(u.path), systemName(id.System)))
+			continue
+		case id.Update:
+			whys = append(whys, fmt.Sprintf("%s is an update, not the game", filepath.Base(u.path)))
+			continue
+		case id.DLC:
+			whys = append(whys, fmt.Sprintf("%s is added content, not the game", filepath.Base(u.path)))
+			continue
+		}
+		if e := match(ix, id, stem); e != nil {
+			if e.Name() == w.Name || w.Serial != "" && id.Serial != "" && sameSerial(w.Serial, id.Serial) {
+				out = append(out, discFound{unit: u, name: e.Name(), exact: true})
+			} else if w.Group != "" && gamedat.TitleKey(gamedat.Title(e.Name())) == w.Group {
+				out = append(out, discFound{unit: u, name: e.Name()})
+			} else {
+				whys = append(whys, fmt.Sprintf("%s is %s", filepath.Base(u.path), gamedat.Title(e.Name())))
+			}
+			continue
+		}
+		if ix.Len() > 0 {
+			whys = append(whys, fmt.Sprintf("%s isn't on %s's list", filepath.Base(u.path), sys.Name))
+			continue
+		}
+		// No list: the name in it, or on it, must be the game's.
+		for _, t := range []string{id.Title, TitleFromName(stem)} {
+			if t != "" && w.Group != "" && strings.HasPrefix(gamedat.TitleKey(t), w.Group) {
+				out = append(out, discFound{unit: u, name: w.Name, exact: true})
+				break
+			}
+		}
+	}
+	if len(out) == 0 {
+		switch {
+		case len(units) == 0:
+			return nil, fmt.Sprintf("there's no %s game in it", sys.Name), nil
+		case len(whys) > 0:
+			return nil, fmt.Sprintf("none of the %d %s games in it is %s: %s", len(units), sys.Short, w.Title, strings.Join(whys[:min(len(whys), 3)], "; ")), nil
+		}
+		return nil, fmt.Sprintf("none of the %d %s games in it is %s", len(units), sys.Short, w.Title), nil
+	}
+	slices.SortStableFunc(out, func(a, b discFound) int {
+		switch {
+		case a.exact != b.exact:
+			if a.exact {
+				return -1
+			}
+			return 1
+		case gamedat.BetterVersion(a.name, b.name):
+			return -1
+		case gamedat.BetterVersion(b.name, a.name):
+			return 1
+		}
+		return 0
+	})
+	return out, "", nil
+}
+
+func sameSerial(a, b string) bool {
+	ka, kb := gamedat.SerialKeys(a), gamedat.SerialKeys(b)
+	return slices.ContainsFunc(ka, func(k string) bool { return slices.Contains(kb, k) })
+}
+
+// importDisc copies the game wanted from a download into its system's
+// folder, named as its list names it: a file as Name.ext, a cue sheet
+// with its tracks in a folder of that name, a folder whole.
+func (s *Service) importDisc(ctx context.Context, w store.GameWant, sys gamedat.System, dir string) (string, error) {
+	got, why, err := s.findDisc(ctx, w, sys, dir)
+	if err != nil {
+		return "", err
+	}
+	if len(got) == 0 {
+		return "", errors.New(why)
+	}
+	g := got[0]
+	name := g.name
+	if !g.unit.dir && len(g.unit.parts) == 0 {
+		ext := strings.ToLower(filepath.Ext(g.unit.path))
+		if strings.HasSuffix(strings.ToLower(g.unit.path), ".nkit.iso") {
+			ext = ".nkit.iso"
+		}
+		name += ext
+	}
+	dst, err := s.placeUnit(ctx, sys.Key, g.unit, name)
+	if err != nil && !errors.Is(err, ErrHave) {
+		return "", err
+	}
+	return dst, nil
 }

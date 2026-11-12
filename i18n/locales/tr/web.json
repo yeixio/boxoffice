@@ -2112,9 +2112,11 @@
       "badCopy": "Kötü kopya",
       "bios": "BIOS gerekli",
       "unknown": "Listede yok",
-      "unreadable": "Okunamıyor"
+      "unreadable": "Okunamıyor",
+      "identified": "Tanındı"
     },
     "whatsWrong": "Sorun ne",
+    "goodToKnow": "Bilmekte fayda var",
     "explain": {
       "missingArcade": "Bu setin ihtiyaç duyduğu bazı dosyalar yok, bu yüzden MAME onu başlatmayabilir.",
       "wrongArcade": "Bazı dosyalar {{list}} yerine başka bir MAME sürümünden. MAME sürümü altından oynadığın sürümü seç ya da seti güncelle.",
@@ -2125,7 +2127,9 @@
       "wrong": "Dosya No-Intro listesindeki bir oyun gibi adlandırılmış ama aynı değil: kötü bir kopya ya da sonradan değiştirilmiş.",
       "bios": "Oyunun, olmayan bir BIOS'a ihtiyacı var.",
       "unknown": "No-Intro listesinde böyle bir kopya yok. Bir hack, çeviri ya da ev yapımı bir oyun olabilir; bunda sorun yok.",
-      "unreadable": "Dosya açılamıyor. Hasarlı olabilir veya hâlâ kopyalanıyor olabilir."
+      "unreadable": "Dosya açılamıyor. Hasarlı olabilir veya hâlâ kopyalanıyor olabilir.",
+      "identified": "Box Office bu oyunu içinde yazan seri numarası veya başlık kimliğinden ya da adından tanır. Bu kadar büyük oyunlar bayt bayt denetlenmez.",
+      "unknownDisc": "Box Office'in içinde okuyabildiği hiçbir şey bunun hangi oyun olduğunu söylemiyor ve {{list}} listesinde bu adla bir oyun yok. Listedeki adıyla yeniden adlandırmak yardımcı olur."
     },
     "problem": {
       "missing": "<code>{{name}}</code> eksik",
@@ -2136,7 +2140,10 @@
       "parent": "Ana seti <code>{{name}}</code> gerekli",
       "disk": "<code>{{name}}</code> CHD'si eksik",
       "diskWrong": "<code>{{name}}</code> CHD'si başka bir sürümden",
-      "unreadable": "Okunamıyor: {{name}}"
+      "unreadable": "Okunamıyor: {{name}}",
+      "otherSystem": "İçeriğine göre bu bir {{name}} oyunu",
+      "update": "<code>{{name}}</code> oyunun kendisi değil, bir güncellemesi",
+      "dlc": "<code>{{name}}</code> oyunun kendisi değil, ek içeriği"
     },
     "inParent": "Ana setin içinde",
     "fact": {
@@ -2150,7 +2157,9 @@
       "genre": "Tür",
       "parent": "Klonu olduğu oyun",
       "crc": "CRC",
-      "found": "Bulundu"
+      "found": "Bulundu",
+      "serial": "Seri numarası",
+      "listName": "Listedeki adı"
     },
     "files": "Dosyalar",
     "noFiles": "Dosyaları artık yok. Listeyi güncellemek için yeniden kontrol et.",
@@ -2169,7 +2178,6 @@
       "allSystems": "Tüm sistemler",
       "notYours": "{{name}} (henüz klasör yok)",
       "looking": "Listelerde aranıyor… Bir sistemdeki ilk arama listesini indirir; bu bir dakika sürebilir.",
-      "hint": "Başlığa göre ara. Box Office, klasörü olan sistemler için No-Intro konsol oyunları listesine ve MAME arcade oyunları listesine bakar. Başkasına bakmak için bir sistem seç.",
       "nothing": "Listede eşleşen oyun yok.",
       "more": "İlk 60 gösteriliyor. Daraltmak için bir kelime ekle.",
       "version": "Sürüm",
@@ -2178,7 +2186,9 @@
       "wanted": "İstendi",
       "want": "İstiyorum",
       "cardTitle": "Oyun ekle",
-      "cardSub": "Bir sistemin tüm oyunlarının listesinde ara; Box Office istediklerini indirir."
+      "cardSub": "Bir sistemin tüm oyunlarının listesinde ara; Box Office istediklerini indirir.",
+      "hintAll": "Başlığa göre arayın. Box Office klasörünüz olan sistemler için tüm oyunların listesine bakar: kartuşlar için No-Intro'nunkine, diskler için Redump'ınkine, Switch için eShop'unkine ve atari oyunları için MAME'ninkine. PC veya PlayStation 4 gibi listesi olmayan sistemler yazdığınız adı kullanır. Başka birine bakmak için bir sistem seçin.",
+      "free": "Denetlenecek liste yok: Box Office bu adla yayınlanmış sürümleri arar."
     },
     "wanted": {
       "title": "İstenenler",

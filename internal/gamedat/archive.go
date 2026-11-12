@@ -114,9 +114,12 @@ type closeBoth struct {
 
 func (c closeBoth) Close() error { return errors.Join(c.ReadCloser.Close(), c.outer.Close()) }
 
-// MaxHashSize is the biggest loose game file hashed; bigger ones (disc
-// images) are listed by name only.
-const MaxHashSize = 256 << 20
+// MaxHashSize is the biggest game file hashed: a Nintendo DS game can be
+// 512 MB. Bigger ones are known by what's written in them, or their names.
+const MaxHashSize = 1 << 30
+
+// maxHeaderSize is the biggest file read whole to hash without its header.
+const maxHeaderSize = 256 << 20
 
 // Header says how a system's files may start with a copier header that the
 // lists leave out, or come in another byte order than theirs.
@@ -135,6 +138,8 @@ const (
 	Lynx
 	// A7800 is the 128-byte header Atari 7800 files start with.
 	A7800
+	// FDS is the 16-byte header Famicom Disk System files start with.
+	FDS
 )
 
 // CRCs hashes a game file the ways its system's list might know it: as
@@ -148,10 +153,10 @@ func CRCs(r io.Reader, size int64, h Header) ([]uint32, error) {
 		}
 		return []uint32{c.Sum32()}, nil
 	}
-	if size > MaxHashSize {
+	if size > maxHeaderSize {
 		return nil, errors.New("too big to check")
 	}
-	b, err := io.ReadAll(io.LimitReader(r, MaxHashSize+1))
+	b, err := io.ReadAll(io.LimitReader(r, maxHeaderSize+1))
 	if err != nil {
 		return nil, err
 	}
@@ -173,6 +178,10 @@ func CRCs(r io.Reader, size int64, h Header) ([]uint32, error) {
 	case A7800:
 		if len(b) > 128 && string(b[1:10]) == "ATARI7800" {
 			skip = 128
+		}
+	case FDS:
+		if len(b) > 16 && string(b[:4]) == "FDS\x1a" {
+			skip = 16
 		}
 	case N64Order:
 		if len(b) >= 4 && len(b)%4 == 0 {

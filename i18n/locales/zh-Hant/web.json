@@ -2011,9 +2011,11 @@
       "badCopy": "壞副本",
       "bios": "需要 BIOS",
       "unknown": "不在清單中",
-      "unreadable": "無法讀取"
+      "unreadable": "無法讀取",
+      "identified": "已辨識"
     },
     "whatsWrong": "問題在哪",
+    "goodToKnow": "須知",
     "explain": {
       "missingArcade": "這個組合需要的一些檔案不在，MAME 可能無法啟動它。",
       "wrongArcade": "一些檔案來自 {{list}} 以外的 MAME 版本。請在 MAME 版本中選擇你玩的版本，或更新這個組合。",
@@ -2024,7 +2026,9 @@
       "wrong": "檔名與 No-Intro 清單中的遊戲相同，但內容不同：是壞副本，或之後被改過。",
       "bios": "這款遊戲需要的 BIOS 不在。",
       "unknown": "No-Intro 清單中沒有這樣的副本。它可能是修改版、翻譯版或自製遊戲，這沒關係。",
-      "unreadable": "無法開啟該檔案。它可能已損壞，或仍在複製中。"
+      "unreadable": "無法開啟該檔案。它可能已損壞，或仍在複製中。",
+      "identified": "Box Office 透過遊戲內寫入的序號或標題 ID，或透過名稱辨識了這款遊戲。這麼大的遊戲不會逐位元組檢查。",
+      "unknownDisc": "Box Office 能從中讀到的內容無法說明這是哪款遊戲，{{list}} 中也沒有這個名稱的遊戲。依清單中的名稱重新命名會有幫助。"
     },
     "problem": {
       "missing": "缺少 <code>{{name}}</code>",
@@ -2035,7 +2039,10 @@
       "parent": "需要它的父組合 <code>{{name}}</code>",
       "disk": "缺少 CHD <code>{{name}}</code>",
       "diskWrong": "CHD <code>{{name}}</code> 來自其他版本",
-      "unreadable": "無法讀取：{{name}}"
+      "unreadable": "無法讀取：{{name}}",
+      "otherSystem": "內容顯示這是 {{name}} 遊戲",
+      "update": "<code>{{name}}</code> 是遊戲的更新，不是遊戲本身",
+      "dlc": "<code>{{name}}</code> 是遊戲的追加內容，不是遊戲本身"
     },
     "inParent": "在父組合中",
     "fact": {
@@ -2049,7 +2056,9 @@
       "genre": "類型",
       "parent": "複製自",
       "crc": "CRC",
-      "found": "找到時間"
+      "found": "找到時間",
+      "serial": "序號",
+      "listName": "清單中的名稱"
     },
     "files": "檔案",
     "noFiles": "它的檔案已經不在了。重新檢查以更新清單。",
@@ -2068,7 +2077,6 @@
       "allSystems": "所有系統",
       "notYours": "{{name}}（尚無資料夾）",
       "looking": "正在查找清單… 第一次搜尋某個系統時會下載它的清單，可能需要一分鐘。",
-      "hint": "依標題搜尋。Box Office 會為你有資料夾的系統查找 No-Intro 主機遊戲清單和 MAME 街機遊戲清單。選擇一個系統以查看其他系統。",
       "nothing": "清單中沒有相符的遊戲。",
       "more": "顯示前 60 個。加一個詞來縮小範圍。",
       "version": "版本",
@@ -2077,7 +2085,9 @@
       "wanted": "想要",
       "want": "想要",
       "cardTitle": "新增遊戲",
-      "cardSub": "在某個系統的全部遊戲清單中搜尋，Box Office 會下載你想要的遊戲。"
+      "cardSub": "在某個系統的全部遊戲清單中搜尋，Box Office 會下載你想要的遊戲。",
+      "hintAll": "依標題搜尋。Box Office 會查找你有資料夾的系統的全部遊戲清單：卡匣用 No-Intro 的，光碟用 Redump 的，Switch 用 eShop 的，街機用 MAME 的。沒有清單的系統（如 PC 或 PlayStation 4）會使用你輸入的名稱。選擇一個系統可查看其他系統。",
+      "free": "沒有可核對的清單：Box Office 會尋找這個名稱的發行。"
     },
     "wanted": {
       "title": "想要的遊戲",

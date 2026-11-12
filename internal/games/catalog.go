@@ -5,8 +5,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net/url"
 	"os"
 	"slices"
+	"strconv"
 	"strings"
 	"time"
 	"unicode"
@@ -32,6 +34,8 @@ type CatalogGame struct {
 	// Parent is the MAME set a clone is a version of.
 	Parent string `json:"parent,omitempty"`
 	CRC    string `json:"crc,omitempty"`
+	// Serial is a disc's serial, or a download's title ID.
+	Serial string `json:"serial,omitempty"`
 	Size   int64  `json:"size,omitempty"`
 	Art    string `json:"-"`
 
@@ -103,38 +107,57 @@ func (s *Service) catalogFor(ctx context.Context, system string) (*catalog, erro
 }
 
 func (s *Service) consoleCatalog(ctx context.Context, sys gamedat.System) (*catalog, error) {
-	p, err := s.libretroDAT(ctx, "no-intro", sys.Libretro)
+	dats, _, err := s.systemLists(ctx, sys)
 	if err != nil {
-		return nil, fmt.Errorf("couldn't download No-Intro's list of %s games: %w", sys.Name, err)
+		return nil, err
 	}
-	if p == "" {
-		return nil, fmt.Errorf("libretro's database has no No-Intro list of %s games", sys.Name)
-	}
-	dat, err := readDAT(p)
-	if err != nil {
-		return nil, fmt.Errorf("couldn't read No-Intro's list of %s games: %w", sys.Name, err)
+	if len(dats) == 0 {
+		return &catalog{}, nil
 	}
 	facts := s.facts(ctx, sys)
-	c := &catalog{games: make([]CatalogGame, 0, len(dat.Games))}
-	for _, e := range dat.Games {
-		name := e.Name()
-		// BIOS files aren't games.
-		if name == "" || strings.HasPrefix(name, "[BIOS]") || len(e.Roms) == 0 {
-			continue
-		}
-		g := CatalogGame{System: sys.Key, Name: name, Title: gamedat.Title(name), Tags: gamedat.Tags(name), Art: gamedat.ThumbName(name)}
-		for _, r := range e.Roms {
-			g.Size += r.Size
-		}
-		if r := e.Roms[0]; r.HasCRC {
-			g.CRC = fmt.Sprintf("%08X", r.CRC)
-			if f := facts[r.CRC]; f != nil {
-				g.Year, g.Genre, g.Maker = f.Year, f.Genre, cmp.Or(f.Publisher, f.Developer)
+	c := &catalog{}
+	seen := map[string]bool{}
+	for _, dat := range dats {
+		for i := range dat.Games {
+			e := &dat.Games[i]
+			name := e.Name()
+			// BIOS files aren't games.
+			if name == "" || seen[name] || strings.HasPrefix(name, "[BIOS]") || len(e.Roms) == 0 && e.Fields["serial"] == "" {
+				continue
 			}
+			seen[name] = true
+			g := CatalogGame{System: sys.Key, Name: name, Title: gamedat.Title(name), Tags: gamedat.Tags(name), Art: entryArt(e), Serial: e.Fields["serial"]}
+			for _, r := range e.Roms {
+				g.Size += r.Size
+			}
+			if g.Size == 0 {
+				g.Size, _ = strconv.ParseInt(e.Fields["size"], 10, 64)
+			}
+			if len(e.Roms) > 0 && e.Roms[0].HasCRC {
+				g.CRC = fmt.Sprintf("%08X", e.Roms[0].CRC)
+			}
+			f := entryFacts(facts, e)
+			g.Year, g.Genre, g.Maker = f.Year, f.Genre, cmp.Or(f.Publisher, f.Developer)
+			c.games = append(c.games, g)
 		}
-		c.games = append(c.games, g)
 	}
 	return c, nil
+}
+
+// entryArt is where a list's game's picture is: the eShop's picture of
+// it, or else its name in libretro's thumbnails.
+func entryArt(e *gamedat.Entry) string {
+	if a := e.Fields["art"]; nintendoArt(a) {
+		return a
+	}
+	return gamedat.ThumbName(e.Name())
+}
+
+// nintendoArt says whether a picture's address is Nintendo's: the only
+// pictures fetched from an address a list gives.
+func nintendoArt(a string) bool {
+	u, err := url.Parse(a)
+	return err == nil && u.Scheme == "https" && (strings.HasSuffix(u.Host, ".nintendo.net") || strings.HasSuffix(u.Host, ".nintendo.com"))
 }
 
 func (s *Service) mameCatalog(ctx context.Context, version string) (*catalog, error) {
@@ -188,6 +211,9 @@ type Lookup struct {
 	// the parent set.
 	Best     CatalogGame   `json:"best"`
 	Versions []CatalogGame `json:"versions"`
+	// Free says the system has no list of its games (the PlayStation 4,
+	// PC games): this is the name asked for, which is what's looked for.
+	Free bool `json:"free,omitempty"`
 	// OnDisk says a version of it is in the system's folder already, and
 	// WantID which version is wanted, if one is.
 	OnDisk   bool   `json:"onDisk"`
@@ -222,9 +248,17 @@ func (s *Service) LookupGames(ctx context.Context, q string, systems []string) (
 		}
 	}
 	if len(systems) == 0 {
+		// No folders yet: the systems with small lists. Pick one to look
+		// through a disc system's.
 		for _, sys := range gamedat.Systems {
-			systems = append(systems, sys.Key)
+			if sys.Arcade || sys.Hash {
+				systems = append(systems, sys.Key)
+			}
 		}
+	}
+	mine := map[string]bool{}
+	for _, k := range known {
+		mine[k.System] = true
 	}
 	type scored struct {
 		l     Lookup
@@ -240,6 +274,13 @@ func (s *Service) LookupGames(ctx context.Context, q string, systems []string) (
 				return nil, ctx.Err()
 			}
 			errs = append(errs, err)
+			continue
+		}
+		if len(c.games) == 0 && (len(systems) == 1 || mine[system]) {
+			// No list: the game is the name asked for.
+			title := strings.Join(strings.Fields(q), " ")
+			g := CatalogGame{System: system, Name: title, Title: title, Art: gamedat.ThumbName(title)}
+			found = append(found, scored{Lookup{System: system, Title: title, Best: g, Versions: []CatalogGame{g}, Free: true}, 0})
 			continue
 		}
 		groups := map[string]*Lookup{}
@@ -354,7 +395,8 @@ func (s *Service) markLookups(ctx context.Context, ls []Lookup) error {
 			have[sys.System] = m
 		}
 		for _, g := range gs {
-			if g.Status == gamedat.Complete || g.Status == gamedat.NeedsBIOS {
+			addOn := slices.ContainsFunc(g.Problems, func(p store.GameProblem) bool { return p.Kind == ProblemUpdate || p.Kind == ProblemDLC })
+			if (g.Status == gamedat.Complete || g.Status == gamedat.NeedsBIOS || g.Status == gamedat.Identified) && !addOn {
 				m[g.Name] = true
 				if sys.System != "mame" {
 					m["\x00"+g.Parent] = true

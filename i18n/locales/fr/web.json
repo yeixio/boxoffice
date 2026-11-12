@@ -2213,9 +2213,11 @@
       "badCopy": "Mauvaise copie",
       "bios": "Il faut un BIOS",
       "unknown": "Absent de la liste",
-      "unreadable": "Illisible"
+      "unreadable": "Illisible",
+      "identified": "Reconnu"
     },
     "whatsWrong": "Ce qui ne va pas",
+    "goodToKnow": "Bon à savoir",
     "explain": {
       "missingArcade": "Certains fichiers dont ce set a besoin sont absents, MAME risque donc de ne pas le lancer.",
       "wrongArcade": "Certains fichiers viennent d'une autre version de MAME que {{list}}. Choisissez la version avec laquelle vous jouez sous Version de MAME, ou mettez le set à jour.",
@@ -2226,7 +2228,9 @@
       "wrong": "Le fichier porte le nom d'un jeu de la liste de No-Intro, mais ce n'est pas le même : une mauvaise copie, ou modifiée depuis.",
       "bios": "Le jeu a besoin d'un BIOS qui est absent.",
       "unknown": "La liste de No-Intro n'a aucune copie comme celle-ci. C'est peut-être un hack, une traduction ou un jeu amateur, ce qui ne pose pas de problème.",
-      "unreadable": "Impossible d'ouvrir le fichier. Il est peut-être abîmé, ou encore en cours de copie."
+      "unreadable": "Impossible d'ouvrir le fichier. Il est peut-être abîmé, ou encore en cours de copie.",
+      "identified": "Box Office reconnaît ce jeu au numéro de série ou à l'ID de titre écrit dedans, ou à son nom. Les jeux aussi gros ne sont pas vérifiés octet par octet.",
+      "unknownDisc": "Rien de ce que Box Office peut y lire ne dit de quel jeu il s'agit, et {{list}} n'a aucun jeu nommé ainsi. Le renommer comme la liste le nomme aide."
     },
     "problem": {
       "missing": "<code>{{name}}</code> est absent",
@@ -2237,7 +2241,10 @@
       "parent": "Il faut son set parent, <code>{{name}}</code>",
       "disk": "Le CHD <code>{{name}}</code> est absent",
       "diskWrong": "Le CHD <code>{{name}}</code> vient d'une autre version",
-      "unreadable": "Illisible : {{name}}"
+      "unreadable": "Illisible : {{name}}",
+      "otherSystem": "Son contenu indique un jeu {{name}}",
+      "update": "<code>{{name}}</code> est une mise à jour du jeu, pas le jeu lui-même",
+      "dlc": "<code>{{name}}</code> est un contenu supplémentaire du jeu, pas le jeu lui-même"
     },
     "inParent": "Dans le set de son parent",
     "fact": {
@@ -2251,7 +2258,9 @@
       "genre": "Genre",
       "parent": "Clone de",
       "crc": "CRC",
-      "found": "Trouvé"
+      "found": "Trouvé",
+      "serial": "Numéro de série",
+      "listName": "Nom sur la liste"
     },
     "files": "Fichiers",
     "noFiles": "Ses fichiers ne sont plus là. Vérifiez à nouveau pour mettre la liste à jour.",
@@ -2270,7 +2279,6 @@
       "allSystems": "Tous les systèmes",
       "notYours": "{{name}} (pas encore de dossier)",
       "looking": "Recherche dans les listes… La première recherche sur un système télécharge sa liste, ce qui peut prendre une minute.",
-      "hint": "Cherchez par titre. Box Office parcourt la liste No-Intro des jeux de console et la liste MAME des jeux d'arcade, pour les systèmes dont vous avez un dossier. Choisissez un système pour en voir un autre.",
       "nothing": "Aucun jeu de la liste ne correspond.",
       "more": "Les 60 premiers sont affichés. Ajoutez un mot pour affiner.",
       "version": "Version",
@@ -2279,7 +2287,9 @@
       "wanted": "Voulu",
       "want": "Je le veux",
       "cardTitle": "Ajouter un jeu",
-      "cardSub": "Parcourez la liste de tous les jeux d'un système, et Box Office télécharge ceux que vous voulez."
+      "cardSub": "Parcourez la liste de tous les jeux d'un système, et Box Office télécharge ceux que vous voulez.",
+      "hintAll": "Cherchez par titre. Box Office parcourt la liste de tous les jeux des systèmes pour lesquels vous avez un dossier : celle de No-Intro pour les cartouches, celle de Redump pour les disques, celle de l'eShop pour la Switch et celle de MAME pour l'arcade. Les systèmes sans liste, comme le PC ou la PlayStation 4, prennent le nom que vous tapez. Choisissez un système pour en voir un autre.",
+      "free": "Pas de liste à vérifier : Box Office cherche des sorties portant ce nom."
     },
     "wanted": {
       "title": "Voulus",

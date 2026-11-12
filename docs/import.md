@@ -33,7 +33,7 @@ Each file or folder gets a guess from its name and what's inside:
 | Music files | An album, named `Artist - Album` | MusicBrainz |
 | `.m4b` files, long audio files, or a name saying *audiobook* | An audiobook, named `Author - Title` | Open Library |
 | `.epub`, `.mobi`, `.azw3`, `.pdf` and the like | An ebook, named `Author - Title` | Open Library |
-| Game files (`.sfc`, `.gba`, `.nes`…), CHDs, and zips holding them | Games, by system | Their extension, or what's in the zip |
+| Game files (`.sfc`, `.gba`, `.nsp`, `.iso`, `.cue`…), CHDs, zips holding them, and game folders (a PS3 or PC game) | Games, by system | Their extension, what's in the zip, or the serial or title ID written inside |
 
 A guess that doesn't quite agree with the name says **Check this**. Press
 **Change** on any item to pick what it is yourself: choose the kind, then find
@@ -54,8 +54,10 @@ in **Settings → Library**, and each needs a root folder.
 - The file is then moved into the title's folder and named as the library names
   it, just as **Move into library** does for a download.
 - Games are copied into their system's folder in your games root folder
-  (`snes/`, `gba/`, `mame/`…), then Games checks them. A game that's already
-  there with the same size is skipped.
+  (`snes/`, `gba/`, `mame/`…), then Games checks them. A disc's tracks (a
+  `.cue` and its `.bin` files) go together in a folder named for the game, and a
+  game that's a folder is copied whole. A game that's already there with the
+  same size is skipped.
 
 Each item says where it went. **Remove** deletes an item's copy from the imports
 folder without importing it.

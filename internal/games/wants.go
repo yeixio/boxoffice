@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/yeixio/boxoffice/internal/gamedat"
@@ -40,10 +41,18 @@ func (s *Service) Want(ctx context.Context, system, name string) (store.GameWant
 		return store.GameWant{}, err
 	}
 	g, err := s.CatalogGameByName(ctx, system, name)
+	if len(sys.Lists) == 0 && !sys.Arcade {
+		// No list: the game is known by the name asked for.
+		name = strings.Join(strings.Fields(name), " ")
+		if name == "" {
+			return store.GameWant{}, errors.New("give the game's name")
+		}
+		g, err = CatalogGame{System: sys.Key, Name: name, Title: name, Art: gamedat.ThumbName(name)}, nil
+	}
 	if err != nil {
 		return store.GameWant{}, err
 	}
-	w := store.GameWant{System: sys.Key, Name: g.Name, Title: g.Title, Year: g.Year, Maker: g.Maker, CRC: g.CRC, Size: g.Size, Art: g.Art}
+	w := store.GameWant{System: sys.Key, Name: g.Name, Title: g.Title, Year: g.Year, Maker: g.Maker, CRC: g.CRC, Serial: g.Serial, Size: g.Size, Art: g.Art}
 	if !sys.Arcade {
 		w.Group = gamedat.TitleKey(g.Title)
 	}
