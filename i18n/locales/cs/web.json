@@ -1393,6 +1393,8 @@
       "thisMonth_many": "{{count}} staženo tento měsíc",
       "thisMonth_other": "{{count}} staženo tento měsíc",
       "perMonthHint": "0 znamená bez limitu. Počítá každé vylepšení stažené synchronizací RSS a hlídkou, i pro tituly s vylepšeními zapnutými pro sebe; ta, která stáhnete sami, se nepočítají. Začíná znovu 1. dne v měsíci.",
+      "replaceSame": "Náhrady si drží stejnou kvalitu",
+      "replaceSameHint": "Ve výchozím stavu zapnuto. Když je kopie nahlášena jako poškozená nebo ve špatném jazyce, náhrada má stejnou kvalitu, nebo nejbližší při stejném rozlišení. Nikdy nemá větší rozlišení ani není remux, takže se kopie 1080p nevrátí jako mnohonásobně větší remux 2160p. Když se v tom rozlišení nic nenajde, poslouží menší, kterou profil kvality bere. V Vybrat vydání můžete dál zvolit cokoli.",
       "usedOf": "Automatická vylepšení tento měsíc: využito {{used}} z {{limit}}",
       "usedFull": "Automatická vylepšení tento měsíc: využito všech {{limit}}, další až od 1.",
       "usedNoLimit": "Automatická vylepšení tento měsíc: {{count}} (bez limitu)",

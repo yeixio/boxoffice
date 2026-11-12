@@ -1231,6 +1231,8 @@
       "thisMonth_one": "Bu ay {{count}} indirildi",
       "thisMonth_other": "Bu ay {{count}} indirildi",
       "perMonthHint": "0, sınır yok demektir. RSS eşitleme ve devriyenin indirdiği her yükseltmeyi sayar, kendisi için yükseltmeleri açık başlıklarınkiler dahil; sizin indirdikleriniz sayılmaz. Her ayın 1'inde yeniden başlar.",
+      "replaceSame": "Yedekler aynı kaliteyi korur",
+      "replaceSameHint": "Varsayılan olarak açık. Bir kopyanın bozuk ya da yanlış dilde olduğu bildirildiğinde, yerine gelen aynı kalitede ya da aynı görüntü boyutundaki en yakın kalitede olur. Asla daha büyük görüntü ya da remux olmaz; böylece 1080p bir kopya kat kat büyük bir 2160p remux olarak geri gelmez. O boyutta bir şey bulunmazsa kalite profilinin kabul ettiği daha küçük biri olur. Bir sürüm seç ile yine istediğinizi seçebilirsiniz.",
       "usedOf": "Bu ayki otomatik yükseltmeler: {{limit}} hakkın {{used}} tanesi kullanıldı",
       "usedFull": "Bu ayki otomatik yükseltmeler: {{limit}} hakkın hepsi kullanıldı, ayın 1'ine kadar başka yok",
       "usedNoLimit": "Bu ayki otomatik yükseltmeler: {{count}} (sınır yok)",

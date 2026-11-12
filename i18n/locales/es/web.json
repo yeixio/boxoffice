@@ -1312,6 +1312,8 @@
       "thisMonth_many": "{{count}} de obtenidas este mes",
       "thisMonth_other": "{{count}} obtenidas este mes",
       "perMonthHint": "0 significa sin límite. Cuenta cada mejora que obtienen la sincronización RSS y la patrulla, incluidas las de títulos con mejoras activadas por su cuenta; las que obtienes tú no cuentan. Vuelve a empezar el día 1.",
+      "replaceSame": "Los reemplazos mantienen la misma calidad",
+      "replaceSameHint": "Activado por defecto. Cuando se informa de que una copia está dañada o en el idioma equivocado, su reemplazo tiene la misma calidad, o la más cercana con el mismo tamaño de imagen. Nunca una imagen mayor ni un remux, así que una copia 1080p no vuelve como un remux 2160p muchas veces más grande. Si no aparece nada de ese tamaño, sirve uno menor que acepte el perfil de calidad. Con Elegir un release aún puedes escoger cualquiera.",
       "usedOf": "Mejoras automáticas este mes: {{used}} de {{limit}} usadas",
       "usedFull": "Mejoras automáticas este mes: usadas las {{limit}}, así que no habrá más hasta el día 1",
       "usedNoLimit": "Mejoras automáticas este mes: {{count}} (sin límite)",

@@ -1231,6 +1231,8 @@
       "thisMonth_one": "{{count}} noudettu tässä kuussa",
       "thisMonth_other": "{{count}} noudettu tässä kuussa",
       "perMonthHint": "0 tarkoittaa, ettei rajaa ole. Laskee jokaisen RSS-synkronoinnin ja partion noutaman päivityksen, myös nimikkeille, joilla päivitykset on kytketty päälle itselleen; itse noutamiasi ei lasketa. Alkaa alusta kuun 1. päivä.",
+      "replaceSame": "Korvaavat kopiot pitävät saman laadun",
+      "replaceSameHint": "Oletuksena päällä. Kun kopio ilmoitetaan rikkinäiseksi tai väärän kieliseksi, korvaava on samaa laatua tai lähintä samalla kuvakoolla. Se ei ole koskaan isompi kuva eikä remux, joten 1080p-kopio ei palaa moninkertaisen kokoisena 2160p-remuxina. Jos siinä koossa ei löydy mitään, kelpaa pienempi, jonka laatuprofiili hyväksyy. Valitse julkaisu antaa edelleen valita minkä tahansa.",
       "usedOf": "Automaattiset päivitykset tässä kuussa: {{used}}/{{limit}} käytetty",
       "usedFull": "Automaattiset päivitykset tässä kuussa: kaikki {{limit}} käytetty, joten lisää vasta 1. päivänä",
       "usedNoLimit": "Automaattiset päivitykset tässä kuussa: {{count}} (ei rajaa)",

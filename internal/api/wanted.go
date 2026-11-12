@@ -59,7 +59,11 @@ func (s *Server) autoSearch(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (s *Server) saveAutoSearch(w http.ResponseWriter, r *http.Request) error {
-	var in search.AutoSettings
+	// Fields left out keep what's saved.
+	in, err := search.LoadAutoSettings(r.Context(), s.Store)
+	if err != nil {
+		return err
+	}
 	if err := readJSON(r, &in); err != nil {
 		return err
 	}

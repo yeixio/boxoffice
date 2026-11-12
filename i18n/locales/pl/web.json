@@ -1393,6 +1393,8 @@
       "thisMonth_many": "{{count}} pobranych w tym miesiącu",
       "thisMonth_other": "{{count}} pobranego w tym miesiącu",
       "perMonthHint": "0 oznacza brak limitu. Liczy każde ulepszenie pobrane przez synchronizację RSS i patrol, także dla tytułów z ulepszeniami włączonymi dla siebie; te pobrane przez ciebie się nie liczą. Zaczyna się od nowa 1. dnia miesiąca.",
+      "replaceSame": "Zamienniki zachowują tę samą jakość",
+      "replaceSameHint": "Domyślnie włączone. Gdy kopia zostanie zgłoszona jako uszkodzona lub w złym języku, zamiennik ma tę samą jakość albo najbliższą przy tym samym rozmiarze obrazu. Nigdy większy obraz ani remux, więc kopia 1080p nie wróci jako wielokrotnie większy remux 2160p. Jeśli w tym rozmiarze nic się nie znajdzie, wystarczy mniejsza, którą przyjmuje profil jakości. W Wybierz wydanie nadal możesz wybrać dowolne.",
       "usedOf": "Automatyczne ulepszenia w tym miesiącu: wykorzystano {{used}} z {{limit}}",
       "usedFull": "Automatyczne ulepszenia w tym miesiącu: wykorzystano wszystkie {{limit}}, więc kolejne dopiero od 1.",
       "usedNoLimit": "Automatyczne ulepszenia w tym miesiącu: {{count}} (bez limitu)",

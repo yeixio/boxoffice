@@ -1312,6 +1312,8 @@
       "thisMonth_many": "{{count}} di prelevati questo mese",
       "thisMonth_other": "{{count}} prelevati questo mese",
       "perMonthHint": "0 significa nessun limite. Conta ogni miglioramento prelevato dalla sincronizzazione RSS e dalla ronda, compresi quelli per titoli con i miglioramenti attivati per sé; quelli che prelevi tu non contano. Riparte il 1°.",
+      "replaceSame": "Le sostituzioni mantengono la stessa qualità",
+      "replaceSameHint": "Attivo per impostazione predefinita. Quando una copia viene segnalata come danneggiata o nella lingua sbagliata, la sostituta ha la stessa qualità, o la più vicina alla stessa dimensione d'immagine. Mai un'immagine più grande né un remux, così una copia 1080p non torna come remux 2160p molte volte più grande. Se a quella dimensione non si trova nulla, va bene una più piccola accettata dal profilo di qualità. Con Scegli una release puoi ancora prenderne una qualsiasi.",
       "usedOf": "Miglioramenti automatici questo mese: {{used}} su {{limit}} usati",
       "usedFull": "Miglioramenti automatici questo mese: usati tutti i {{limit}}, quindi nessun altro fino al 1°",
       "usedNoLimit": "Miglioramenti automatici questo mese: {{count}} (nessun limite)",

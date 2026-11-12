@@ -28,6 +28,10 @@ const (
 	SettingRSSMinutes = "search_rss_minutes"        // how often; DefaultRSSMinutes when unset
 	SettingUpgrades   = "search_upgrades"           // "on" lets the patrol and RSS sync grab upgrades; off otherwise
 	SettingUpgradeCap = "search_upgrades_per_month" // most automatic upgrades a month; no limit when unset
+	// SettingReplaceSameQuality is "off" to let a replacement for a bad
+	// copy be any quality the profile takes; on otherwise, holding it to
+	// the bad copy's quality (see quality.ReplacementFit).
+	SettingReplaceSameQuality = "replace_same_quality"
 )
 
 // RSS sync: every 15 minutes unless changed, and never more often than
@@ -68,6 +72,10 @@ type AutoSettings struct {
 	// UpgradesPerMonth caps the upgrades they grab in a calendar month,
 	// across all titles; 0 means no limit.
 	UpgradesPerMonth int `json:"upgradesPerMonth"`
+	// ReplaceSameQuality holds a replacement for a bad copy (reported in
+	// Matinee, or in the wrong language) to that copy's quality: never a
+	// bigger picture or a remux it wasn't. On unless turned off.
+	ReplaceSameQuality bool `json:"replaceSameQuality"`
 }
 
 // LoadAutoSettings reads the settings; automatic searches for missing
@@ -106,6 +114,10 @@ func LoadAutoSettings(ctx context.Context, st *store.Store) (AutoSettings, error
 	if n, err := strconv.Atoi(v); err == nil && n > 0 {
 		a.UpgradesPerMonth = n
 	}
+	if v, err = st.Setting(ctx, SettingReplaceSameQuality); err != nil {
+		return a, err
+	}
+	a.ReplaceSameQuality = v != "off"
 	return a, nil
 }
 
@@ -150,7 +162,14 @@ func SaveAutoSettings(ctx context.Context, st *store.Store, a AutoSettings) erro
 	if a.UpgradesPerMonth > 0 {
 		most = strconv.Itoa(a.UpgradesPerMonth)
 	}
-	return st.SetSetting(ctx, SettingUpgradeCap, most)
+	if err := st.SetSetting(ctx, SettingUpgradeCap, most); err != nil {
+		return err
+	}
+	same := ""
+	if !a.ReplaceSameQuality {
+		same = "off"
+	}
+	return st.SetSetting(ctx, SettingReplaceSameQuality, same)
 }
 
 // upgradeOn says whether Box Office looks for upgrades of a title by

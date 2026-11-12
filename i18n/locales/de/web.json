@@ -1231,6 +1231,8 @@
       "thisMonth_one": "{{count}} diesen Monat geholt",
       "thisMonth_other": "{{count}} diesen Monat geholt",
       "perMonthHint": "0 heißt kein Limit. Zählt jedes Upgrade, das RSS-Sync und die Streife holen, auch für Titel mit eigens eingeschalteten Upgrades; selbst geholte zählen nicht. Beginnt am 1. neu.",
+      "replaceSame": "Ersatz behält die gleiche Qualität",
+      "replaceSameHint": "Standardmäßig an. Wird eine Kopie als kaputt oder in der falschen Sprache gemeldet, hat der Ersatz die gleiche Qualität oder die nächstliegende in derselben Bildgröße. Nie ein größeres Bild und nie ein Remux, damit eine 1080p-Kopie nicht als vielfach größeres 2160p-Remux zurückkommt. Findet sich in dieser Größe nichts, reicht eine kleinere, die das Qualitätsprofil nimmt. Mit Ein Release wählen kannst du weiterhin jedes nehmen.",
       "usedOf": "Automatische Upgrades diesen Monat: {{used}} von {{limit}} genutzt",
       "usedFull": "Automatische Upgrades diesen Monat: alle {{limit}} genutzt, also keine weiteren bis zum 1.",
       "usedNoLimit": "Automatische Upgrades diesen Monat: {{count}} (kein Limit)",

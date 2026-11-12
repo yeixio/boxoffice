@@ -334,6 +334,17 @@ export function AutoSearchSettings() {
           onSave={(v) => save.mutate({ upgradesPerMonth: v })}
           hint={t('conn.auto.perMonthHint')}
         />
+        <Toggle
+          checked={s.replaceSameQuality}
+          onChange={(v) => save.mutate({ replaceSameQuality: v })}
+          disabled={save.isPending}
+          label={
+            <>
+              {t('conn.auto.replaceSame')}
+              <span className="block text-xs text-muted">{t('conn.auto.replaceSameHint')}</span>
+            </>
+          }
+        />
         <Field
           label={t('conn.auto.perDay')}
           hint={t('conn.auto.perDayHint')}

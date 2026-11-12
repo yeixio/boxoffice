@@ -1231,6 +1231,8 @@
       "thisMonth_one": "{{count}} letöltve ebben a hónapban",
       "thisMonth_other": "{{count}} letöltve ebben a hónapban",
       "perMonthHint": "A 0 azt jelenti, nincs korlát. Minden minőségjavítást számol, amit az RSS-szinkron és az őrjárat letölt, a saját bekapcsolt minőségjavítású címekét is; az általad letöltöttek nem számítanak. Minden hónap 1-jén újrakezdődik.",
+      "replaceSame": "A cserepéldányok megtartják a minőséget",
+      "replaceSameHint": "Alapból bekapcsolva. Ha egy példányt hibásnak vagy rossz nyelvűnek jelentenek, a csere ugyanolyan minőségű lesz, vagy a legközelebbi ugyanakkora képmérettel. Soha nem nagyobb kép és nem remux, így egy 1080p-s példány nem tér vissza sokszor nagyobb 2160p-s remuxként. Ha abban a méretben nincs semmi, megfelel egy kisebb, amit a minőségprofil elfogad. A Kiadás kiválasztása gombbal továbbra is bármelyiket választhatod.",
       "usedOf": "Automatikus frissítések ebben a hónapban: {{used}} / {{limit}} felhasználva",
       "usedFull": "Automatikus frissítések ebben a hónapban: mind a {{limit}} felhasználva, 1-jéig nincs több",
       "usedNoLimit": "Automatikus frissítések ebben a hónapban: {{count}} (nincs korlát)",

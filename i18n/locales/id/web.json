@@ -1150,6 +1150,8 @@
       "perMonth": "Peningkatan otomatis maksimum per bulan",
       "thisMonth_other": "{{count}} diambil bulan ini",
       "perMonthHint": "0 berarti tanpa batas. Menghitung setiap peningkatan yang diambil sinkronisasi RSS dan patroli, termasuk untuk judul yang peningkatannya diaktifkan sendiri; yang Anda ambil sendiri tidak dihitung. Dimulai lagi setiap tanggal 1.",
+      "replaceSame": "Pengganti tetap berkualitas sama",
+      "replaceSameHint": "Aktif secara bawaan. Saat salinan dilaporkan rusak atau berbahasa salah, penggantinya berkualitas sama, atau yang terdekat dengan ukuran gambar yang sama. Tidak pernah gambar lebih besar atau remux, jadi salinan 1080p tidak kembali sebagai remux 2160p yang berkali-kali lebih besar. Jika tidak ada di ukuran itu, yang lebih kecil dan diterima profil kualitas pun boleh. Pilih rilis tetap memungkinkan Anda memilih apa saja.",
       "usedOf": "Peningkatan otomatis bulan ini: {{used}} dari {{limit}} terpakai",
       "usedFull": "Peningkatan otomatis bulan ini: semua {{limit}} terpakai, jadi tidak ada lagi sampai tanggal 1",
       "usedNoLimit": "Peningkatan otomatis bulan ini: {{count}} (tanpa batas)",

@@ -1312,6 +1312,8 @@
       "thisMonth_many": "{{count}} de récupérées ce mois-ci",
       "thisMonth_other": "{{count}} récupérées ce mois-ci",
       "perMonthHint": "0 signifie aucune limite. Compte chaque amélioration récupérée par la synchro RSS et la patrouille, y compris pour les titres dont les améliorations sont activées pour eux-mêmes ; celles que vous récupérez vous-même ne comptent pas. Recommence le 1er.",
+      "replaceSame": "Les remplacements gardent la même qualité",
+      "replaceSameHint": "Activé par défaut. Quand une copie est signalée comme abîmée ou dans la mauvaise langue, son remplacement a la même qualité, ou la plus proche à la même taille d'image. Jamais une image plus grande ni un remux, pour qu'une copie 1080p ne revienne pas en remux 2160p plusieurs fois plus lourd. Si rien n'est trouvé à cette taille, une plus petite acceptée par le profil de qualité convient. Choisir une release permet toujours de prendre n'importe laquelle.",
       "usedOf": "Améliorations automatiques ce mois-ci : {{used}} sur {{limit}} utilisées",
       "usedFull": "Améliorations automatiques ce mois-ci : les {{limit}} sont utilisées, plus rien avant le 1er",
       "usedNoLimit": "Améliorations automatiques ce mois-ci : {{count}} (sans limite)",
