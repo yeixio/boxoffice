@@ -2484,6 +2484,11 @@
       "ebook": "E-book",
       "audiobook": "Audiobook",
       "game": "Gra"
-    }
+    },
+    "gameName": "Jaka to gra?",
+    "gamePlaceholder": "Nazwa gry, np. Myst",
+    "gameHint": "Box Office szuka jej na liście dla {{system}}. Jeśli lista jej nie ma albo listy nie ma wcale (jak dla gier na PC), użyj wpisanej nazwy: gra trafi do biblioteki pod tą nazwą.",
+    "noGames": "Żadna gra z listy nie pasuje. Nadal możesz użyć wpisanej nazwy.",
+    "useName": "Użyj „{{name}}”"
   }
 }

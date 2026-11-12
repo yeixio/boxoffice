@@ -2160,6 +2160,11 @@
       "ebook": "Sách điện tử",
       "audiobook": "Sách nói",
       "game": "Trò chơi"
-    }
+    },
+    "gameName": "Đây là trò chơi nào?",
+    "gamePlaceholder": "Tên trò chơi, ví dụ Myst",
+    "gameHint": "Box Office tìm nó trong danh sách của {{system}}. Nếu danh sách không có, hoặc không có danh sách (như trò chơi PC), hãy dùng tên bạn đã gõ: trò chơi sẽ được lưu với tên đó.",
+    "noGames": "Không có trò chơi nào trong danh sách khớp. Bạn vẫn có thể dùng tên đã gõ.",
+    "useName": "Dùng “{{name}}”"
   }
 }

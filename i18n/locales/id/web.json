@@ -2160,6 +2160,11 @@
       "ebook": "E-book",
       "audiobook": "Buku audio",
       "game": "Game"
-    }
+    },
+    "gameName": "Game apa ini?",
+    "gamePlaceholder": "Nama game, misalnya Myst",
+    "gameHint": "Box Office mencarinya di daftar {{system}}. Jika tidak ada di daftar, atau tidak ada daftar (seperti game PC), gunakan nama yang kamu ketik: game akan disimpan dengan nama itu.",
+    "noGames": "Tidak ada game di daftar yang cocok. Kamu tetap bisa memakai nama yang kamu ketik.",
+    "useName": "Pakai “{{name}}”"
   }
 }

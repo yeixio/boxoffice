@@ -101,8 +101,11 @@ type Item struct {
 	// author of an album or book, whose title is Part.
 	Match *libscan.Match `json:"match,omitempty"`
 	Part  string         `json:"part,omitempty"`
-	// System is a game's system.
+	// System is a game's system, and Game the game it is: its name on
+	// the system's list, or for a system with no list the name it goes in
+	// as.
 	System string `json:"system,omitempty"`
+	Game   string `json:"game,omitempty"`
 	// Sure says the name agrees with the match; one that isn't should be
 	// checked. Picked says it was chosen by hand.
 	Sure   bool   `json:"sure"`
@@ -300,9 +303,11 @@ func (s *Service) guessAll() {
 // what is what's inside an item.
 type what struct {
 	files, videos, episodes, audio, m4b, ebooks, games int
-	size, audioSize                                    int64
-	firstGame                                          string
-	system                                             string
+	// discs are disc images no system could be told for.
+	discs           int
+	size, audioSize int64
+	firstGame       string
+	system          string
 }
 
 // look reads what's in an item, up to a limit.
@@ -312,7 +317,28 @@ func look(full string, dir bool) what {
 		name := filepath.Base(p)
 		w.files++
 		w.size += size
+		// A disc image can be a film's DVD or a game's disc: what's on it
+		// says which.
+		isGame := func() bool {
+			if w.games >= 5 && w.system != "" {
+				w.games++
+				return true
+			}
+			sys, ok := games.Identify(p)
+			if !ok {
+				return false
+			}
+			if w.system == "" {
+				w.system = sys.Key
+			}
+			w.games++
+			if w.firstGame == "" {
+				w.firstGame = name
+			}
+			return true
+		}
 		switch {
+		case strings.EqualFold(filepath.Ext(name), ".iso") && isGame():
 		case screen.IsVideo(name):
 			if !strings.Contains(strings.ToLower(name), "sample") {
 				w.videos++
@@ -329,18 +355,8 @@ func look(full string, dir bool) what {
 		case screen.IsEbook(name):
 			w.ebooks++
 		case gamedat.IsGameFile(name) || strings.EqualFold(filepath.Ext(name), ".chd"):
-			if w.games < 5 || w.system == "" {
-				if sys, ok := games.Identify(p); ok {
-					if w.system == "" {
-						w.system = sys.Key
-					}
-					w.games++
-					if w.firstGame == "" {
-						w.firstGame = name
-					}
-				}
-			} else {
-				w.games++
+			if !isGame() && discImage(name) {
+				w.discs++
 			}
 		}
 	}
@@ -376,6 +392,15 @@ func look(full string, dir bool) what {
 	return w
 }
 
+// discImage says whether a file is a CD or DVD image.
+func discImage(name string) bool {
+	switch strings.ToLower(filepath.Ext(name)) {
+	case ".iso", ".cue", ".bin", ".img", ".mdf", ".nrg", ".chd", ".gdi", ".cso":
+		return true
+	}
+	return false
+}
+
 // dirSize is how big everything in a folder is.
 func dirSize(dir string) int64 {
 	var n int64
@@ -395,6 +420,9 @@ func kindOf(name string, w what) string {
 	lower := strings.ToLower(name)
 	switch {
 	case w.games > 0 && w.games >= w.videos+w.audio+w.ebooks:
+		return Game
+	case w.discs > 0 && w.videos+w.audio+w.ebooks == 0:
+		// Disc images, of a system Box Office can't tell.
 		return Game
 	case w.episodes > 0:
 		return Series
@@ -425,6 +453,7 @@ func (s *Service) guess(ctx context.Context, it *Item, kind string) {
 	full := filepath.Join(dir, it.Name)
 	w := look(full, it.Dir)
 	it.Files, it.Size = w.files, w.size
+	it.Game = ""
 	it.Match, it.Part, it.System, it.Sure, it.Problem, it.Title, it.Year, it.Season, it.Episode, it.off = nil, "", "", false, "", "", 0, 0, 0, false
 	it.Kind = cmp.Or(kind, kindOf(it.Name, w))
 	it.Status = Ready
@@ -452,6 +481,7 @@ func (s *Service) guess(ctx context.Context, it *Item, kind string) {
 		if t := strings.TrimSpace(gamedat.Title(base)); t != "" {
 			it.Title = t
 		}
+		s.guessGame(ctx, it, full)
 		return
 	case Movie, Series:
 		f := s.Scan.Match(ctx, it.Kind, base)
@@ -487,6 +517,23 @@ func (s *Service) guess(ctx context.Context, it *Item, kind string) {
 	}
 }
 
+// guessGame works out which game an item is, for its system: by the
+// serial or title ID in it, or its name. One on a system with a list that
+// the list doesn't have is to be checked.
+func (s *Service) guessGame(ctx context.Context, it *Item, full string) {
+	if s.Games == nil {
+		return
+	}
+	sys, _ := gamedat.LookupSystem(it.System)
+	it.Game = s.Games.GuessName(ctx, it.System, full)
+	if it.Game != "" {
+		it.Title = it.Game
+	}
+	if it.Game == "" && len(sys.Lists) > 0 && !sys.Hash && !sys.Arcade {
+		it.Sure = false
+	}
+}
+
 // Pick is what an item is, chosen by hand.
 type Pick struct {
 	Kind   string `json:"kind"`
@@ -499,6 +546,8 @@ type Pick struct {
 	// Part is the album or book's title.
 	Part   string `json:"part,omitempty"`
 	System string `json:"system,omitempty"`
+	// Game is the game it is, picked from the system's list or typed.
+	Game string `json:"game,omitempty"`
 }
 
 // Set says what an item is. A kind on its own looks it up again as that.
@@ -518,7 +567,7 @@ func (s *Service) Set(ctx context.Context, rel string, p Pick) (Item, error) {
 	if p.Kind != "" && !slices.Contains([]string{Movie, Series, Album, Ebook, Audiobook, Game}, p.Kind) {
 		return Item{}, badf("Box Office doesn't import %s", p.Kind)
 	}
-	picked := p.TMDBID != 0 || p.MBID != "" || p.OLKey != "" || p.System != ""
+	picked := p.TMDBID != 0 || p.MBID != "" || p.OLKey != "" || p.System != "" || p.Game != ""
 	if p.Kind != "" && p.Kind != it.Kind || !picked && p.Part == "" {
 		s.guess(ctx, &it, cmp.Or(p.Kind, it.Kind))
 	}
@@ -544,11 +593,22 @@ func (s *Service) Set(ctx context.Context, rel string, p Pick) (Item, error) {
 			}
 			it.Match = &libscan.Match{OLKey: p.OLKey, Title: p.Name}
 		case Game:
-			sys, ok := gamedat.LookupSystem(p.System)
+			sys, ok := gamedat.LookupSystem(cmp.Or(p.System, it.System))
 			if !ok {
-				return Item{}, badf("Box Office doesn't know a system called %s", p.System)
+				return Item{}, badf("pick the system")
 			}
+			changed := sys.Key != it.System
 			it.System = sys.Key
+			switch g := strings.TrimSpace(p.Game); {
+			case g != "":
+				it.Game, it.Title = g, g
+			case changed:
+				it.Game = ""
+				if dir, err := s.dir(); err == nil {
+					s.guessGame(ctx, &it, filepath.Join(dir, it.Name))
+				}
+				it.Sure = true
+			}
 		}
 	}
 	if (it.Kind == Album || it.Kind == Ebook || it.Kind == Audiobook) && it.Match != nil && it.Part == "" {
@@ -1013,7 +1073,7 @@ func (s *Service) importGames(ctx context.Context, it Item, full string) (string
 		// A folder of games: each is told by what it is.
 		system = ""
 	}
-	got, skipped, err := s.Games.ImportGames(ctx, system, full)
+	got, skipped, err := s.Games.ImportGames(ctx, system, full, it.Game)
 	var to, placed []string
 	for _, g := range got {
 		placed = append(placed, g.From...)

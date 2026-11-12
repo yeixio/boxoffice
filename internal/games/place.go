@@ -140,7 +140,10 @@ func (s *Service) AddAs(ctx context.Context, key, src, name string) (string, err
 
 // cleanName makes a name from a list safe as a file's name.
 func cleanName(name string) string {
-	name = strings.NewReplacer("/", "_", "\\", "_", "\x00", "").Replace(name)
+	// Windows shares, where many keep their games, can't have : ? * and
+	// the like in a name.
+	name = strings.NewReplacer("/", "_", "\\", "_", "\x00", "", ": ", " - ", ":", "-", "?", "", "*", "", "<", "", ">", "", "|", "-", "\"", "'").Replace(name)
+	name = strings.TrimRight(strings.TrimSpace(name), ".")
 	if name == "." || name == ".." {
 		return ""
 	}
@@ -313,10 +316,11 @@ type Placed struct {
 // ImportGames copies the games in a file or folder into their systems'
 // folders. system is the system they're for, when it's known; otherwise
 // each game is told by what it is. A folder that's one game (a
-// PlayStation 3 game dumped whole, a PC game) goes in whole; a cue sheet
-// goes in with its tracks. skipped are the files it couldn't tell the
-// system of.
-func (s *Service) ImportGames(ctx context.Context, system, p string) (placed []Placed, skipped []string, err error) {
+// PlayStation 3 game dumped whole, a PC game on several discs) goes in
+// whole; a cue sheet goes in with its tracks. name, when given, is the
+// game's name to file one game under (its name on the list, or one typed
+// in). skipped are the files it couldn't tell the system of.
+func (s *Service) ImportGames(ctx context.Context, system, p, name string) (placed []Placed, skipped []string, err error) {
 	st, err := os.Stat(p)
 	if err != nil {
 		return nil, nil, err
@@ -375,6 +379,14 @@ func (s *Service) ImportGames(ctx context.Context, system, p string) (placed []P
 		if !ok {
 			return placed, skipped, fmt.Errorf("Box Office doesn't know a system called %q", key)
 		}
+		if name != "" && len(units) == 1 {
+			dst, err := s.placeUnit(ctx, key, u, fileName(u, name))
+			if err != nil && !errors.Is(err, ErrHave) {
+				return placed, skipped, err
+			}
+			placed = append(placed, Placed{To: dst, From: u.files()})
+			continue
+		}
 		if sys.Disc() {
 			dst, err := s.placeUnit(ctx, key, u, filepath.Base(u.path))
 			if err != nil && !errors.Is(err, ErrHave) {
@@ -392,4 +404,56 @@ func (s *Service) ImportGames(ctx context.Context, system, p string) (placed []P
 		}
 	}
 	return placed, skipped, nil
+}
+
+// fileName is what a game is filed as when it's given a name: a folder
+// or a cue sheet's folder by the name, a file by the name and its
+// extension. A Switch file keeps its title ID, which says which game,
+// update or DLC it is.
+func fileName(u unit, name string) string {
+	name = strings.TrimSpace(name)
+	if u.dir || len(u.parts) > 0 {
+		return name
+	}
+	base := filepath.Base(u.path)
+	ext := filepath.Ext(base)
+	if e2 := filepath.Ext(strings.TrimSuffix(base, ext)); strings.EqualFold(e2, ".nkit") {
+		ext = e2 + ext
+	}
+	if tid, ok := gamedat.SwitchTitleID(base); ok && !strings.Contains(strings.ToUpper(name), tid) {
+		name += " [" + tid + "]"
+	}
+	return name + ext
+}
+
+// GuessName says which game a file or folder is, for the system it's
+// for: its name on the system's list, found by the serial or title ID
+// in it or its name, or for a system with no list the name written in
+// it or on it. Cartridges, checked by their hashes when they're in, and
+// MAME sets, named for their sets, give none.
+func (s *Service) GuessName(ctx context.Context, key, p string) string {
+	sys, ok := gamedat.LookupSystem(key)
+	if !ok || sys.Arcade || sys.Hash {
+		return ""
+	}
+	st, err := os.Stat(p)
+	if err != nil {
+		return ""
+	}
+	u := unit{path: p, dir: st.IsDir()}
+	if !u.dir {
+		u.parts = Parts(p)
+	}
+	id, _ := gamedat.Probe(p)
+	if len(sys.Lists) == 0 {
+		return cmp.Or(id.Title, TitleFromName(stemOf(u)))
+	}
+	ix, _, err := s.listIndex(ctx, sys)
+	if err != nil {
+		return ""
+	}
+	if e := match(ix, id, stemOf(u)); e != nil {
+		return e.Name()
+	}
+	return ""
 }

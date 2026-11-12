@@ -2376,6 +2376,11 @@
       "ebook": "Carte electronică",
       "audiobook": "Audiobook",
       "game": "Joc"
-    }
+    },
+    "gameName": "Ce joc este?",
+    "gamePlaceholder": "Numele jocului, de exemplu Myst",
+    "gameHint": "Box Office îl caută în lista pentru {{system}}. Dacă lista nu îl are sau nu există listă (ca la jocurile PC), folosește numele scris: va fi pus sub acest nume.",
+    "noGames": "Niciun joc din listă nu se potrivește. Poți folosi totuși numele scris.",
+    "useName": "Folosește „{{name}}”"
   }
 }

@@ -2376,6 +2376,11 @@
       "ebook": "Libro electrónico",
       "audiobook": "Audiolibro",
       "game": "Juego"
-    }
+    },
+    "gameName": "¿Qué juego es?",
+    "gamePlaceholder": "El nombre del juego, como Myst",
+    "gameHint": "Box Office lo busca en la lista de {{system}}. Si la lista no lo tiene, o no hay lista (como con los juegos de PC), usa el nombre que escribiste: se guardará con ese nombre.",
+    "noGames": "Ningún juego de la lista coincide. Aun así puedes usar el nombre que escribiste.",
+    "useName": "Usar «{{name}}»"
   }
 }

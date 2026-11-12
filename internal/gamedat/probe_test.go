@@ -424,3 +424,32 @@ game ( name "Cube (USA)" serial "DL-DOL-GW7E-USA" rom ( name "Cube (USA).iso" si
 		t.Errorf("by code: %v", es)
 	}
 }
+
+// A Windows game's discs: the ones that start by themselves or set the
+// game up, alone or a folder of them, are a PC game's.
+func TestProbePCDiscs(t *testing.T) {
+	dir := t.TempDir()
+	disc1 := makeISO("WIN32", map[string][]byte{"AUTORUN.INF": []byte("[autorun]\r\nopen=SETUP.EXE\r\nlabel=The Mystery Game Disc 1\r\n"), "SETUP.EXE": []byte("MZ")}, false)
+	if id := probe(t, write(t, dir, "one.iso", disc1)); id.System != "pc" || id.Title != "The Mystery Game" {
+		t.Errorf("autorun disc %+v", id)
+	}
+	if id := probe(t, write(t, dir, "setup.bin", makeISO("", map[string][]byte{"INSTALL.EXE": []byte("MZ")}, true))); id.System != "pc" {
+		t.Errorf("raw disc with a setup program %+v", id)
+	}
+	if _, err := Probe(write(t, dir, "data.iso", makeISO("", map[string][]byte{"README.TXT": []byte("hi")}, false))); err == nil {
+		t.Error("a disc of nothing said it was a game")
+	}
+
+	game := filepath.Join(t.TempDir(), "Mystery Game")
+	os.MkdirAll(game, 0o755)
+	write(t, game, "Disc 1.iso", disc1)
+	for i := 2; i <= 7; i++ {
+		write(t, game, "Disc "+string(rune('0'+i))+".iso", makeISO("", map[string][]byte{"DATA.CAB": []byte("x")}, false))
+	}
+	if id := probe(t, game); id.System != "pc" || id.Title != "" {
+		t.Errorf("folder of discs %+v", id)
+	}
+	if got := autorunLabel([]byte("label=\"Space Quest (CD 2 of 3)\"")); got != "Space Quest" {
+		t.Errorf("label %q", got)
+	}
+}

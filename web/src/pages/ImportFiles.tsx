@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AlertTriangle, Check, ChevronRight, File as FileIcon, Folder, FolderOpen, HardDrive, LoaderCircle, Search, Trash2, Upload, X } from 'lucide-react'
-import { ApiError, del, get, patch, post, type LookupArtist, type LookupAuthor, type LookupMovie, type LookupShow } from '../api'
+import { ApiError, del, get, patch, post, type GameLookup, type LookupArtist, type LookupAuthor, type LookupMovie, type LookupShow } from '../api'
 import { bytes } from '../format'
 import { Badge, Button, Card, Empty, ErrorNote, Heading, Input, Modal, Poster, Select, Spinner } from '../ui'
 
@@ -24,13 +24,14 @@ export type ImportItem = {
   match?: ImportMatch
   part?: string
   system?: string
+  game?: string
   sure: boolean
   picked?: boolean
   status: 'guessing' | 'ready' | 'importing' | 'done' | 'failed'
   problem?: string
   to?: string
 }
-type GameSystemInfo = { key: string; name: string; short: string }
+type GameSystemInfo = { key: string; name: string; short: string; arcade?: boolean }
 export type ImportState = {
   folder: string
   items: ImportItem[]
@@ -39,7 +40,7 @@ export type ImportState = {
   kinds: ImportKind[]
   systems: GameSystemInfo[]
 }
-type Pick = { kind?: ImportKind; tmdbId?: number; mbid?: string; olKey?: string; name?: string; year?: number; part?: string; system?: string }
+type Pick = { kind?: ImportKind; tmdbId?: number; mbid?: string; olKey?: string; name?: string; year?: number; part?: string; system?: string; game?: string }
 type Entry = { name: string; dir: boolean; size?: number }
 type Listing = { path: string; parent: string; entries: Entry[] }
 
@@ -517,7 +518,6 @@ function FixItem({ it, kinds, systems, onClose }: { it: ImportItem; kinds: Impor
   const [term, setTerm] = useState(sameKind ? (it.match?.title ?? it.title ?? '') : '')
   const [q, setQ] = useState(term)
   const [part, setPart] = useState(it.part ?? '')
-  const [system, setSystem] = useState(it.system ?? '')
   useEffect(() => {
     const timer = setTimeout(() => setQ(term.trim()), 400)
     return () => clearTimeout(timer)
@@ -579,18 +579,7 @@ function FixItem({ it, kinds, systems, onClose }: { it: ImportItem; kinds: Impor
           </div>
         )}
         {kind === 'game' ? (
-          <div className="flex flex-col gap-2">
-            <label htmlFor="import-system" className="text-sm font-medium">
-              {t('importFiles.system')}
-            </label>
-            <Select id="import-system" value={system} onChange={setSystem} options={[{ value: '', label: t('importFiles.pickSystem') }, ...systems.map((s) => ({ value: s.key, label: s.name }))]} />
-            <p className="text-xs text-muted">{t('importFiles.systemHint')}</p>
-            <div className="flex justify-end">
-              <Button variant="primary" disabled={!system} busy={save.isPending} onClick={() => save.mutate({ kind, system })}>
-                {t('importFiles.save')}
-              </Button>
-            </div>
-          </div>
+          <GameFix it={it} systems={systems} busy={save.isPending} onSave={(p) => save.mutate({ kind, ...p })} error={save.error} />
         ) : (
           <>
             {needsPart && (
@@ -656,5 +645,92 @@ function FixItem({ it, kinds, systems, onClose }: { it: ImportItem; kinds: Impor
         </div>
       </div>
     </Modal>
+  )
+}
+
+// GameFix picks a game's system, and which game it is: found on the
+// system's list, or the name it should go in as when the list hasn't got
+// it or there's no list (PC games).
+function GameFix({
+  it,
+  systems,
+  busy,
+  onSave,
+  error,
+}: {
+  it: ImportItem
+  systems: GameSystemInfo[]
+  busy: boolean
+  onSave: (p: { system: string; game?: string }) => void
+  error: unknown
+}) {
+  const { t } = useTranslation()
+  const [system, setSystem] = useState(it.system ?? '')
+  const [term, setTerm] = useState(it.game ?? it.title ?? '')
+  const [q, setQ] = useState(term.trim())
+  useEffect(() => {
+    const timer = setTimeout(() => setQ(term.trim()), 400)
+    return () => clearTimeout(timer)
+  }, [term])
+  const sys = systems.find((s) => s.key === system)
+  const found = useQuery({
+    queryKey: ['import-game-lookup', system, q],
+    queryFn: () => get<GameLookup[]>(`/games/lookup?${new URLSearchParams({ q, system })}`),
+    enabled: !!system && q.length > 1,
+  })
+  const listed = (found.data ?? []).filter((l) => !l.free)
+  const name = term.trim()
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-1.5">
+        <label htmlFor="import-system" className="text-sm font-medium">
+          {t('importFiles.system')}
+        </label>
+        <Select id="import-system" value={system} onChange={setSystem} options={[{ value: '', label: t('importFiles.pickSystem') }, ...systems.map((s) => ({ value: s.key, label: s.name }))]} />
+        <p className="text-xs text-muted">{t('importFiles.systemHint')}</p>
+      </div>
+      {system && (
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="import-game" className="text-sm font-medium">
+            {t('importFiles.gameName')}
+          </label>
+          <div className="relative">
+            <Search className="pointer-events-none absolute start-3 top-2.5 size-4 text-muted" aria-hidden />
+            <Input id="import-game" className="ps-9" value={term} onChange={(e) => setTerm(e.target.value)} placeholder={t('importFiles.gamePlaceholder')} />
+          </div>
+          <p className="text-xs text-muted">{t('importFiles.gameHint', { system: sys?.name ?? system })}</p>
+        </div>
+      )}
+      {found.isFetching && <Spinner label={t('games.add.looking')} />}
+      <ErrorNote error={found.error ?? error} />
+      {!!system && q.length > 1 && found.isSuccess && listed.length === 0 && !found.data?.some((l) => l.free) && !sys?.arcade && <p className="text-sm text-muted">{t('importFiles.noGames')}</p>}
+      {listed.length > 0 && (
+        <ul className="flex max-h-72 flex-col divide-y divide-line overflow-y-auto">
+          {listed.flatMap((l) =>
+            l.versions.slice(0, 4).map((v) => (
+              <li key={v.name} className="flex items-center gap-3 py-2">
+                <div className="min-w-0 flex-1">
+                  <div className="break-words text-sm font-medium">{v.name}</div>
+                  <div className="text-xs text-muted">{[v.year, v.maker, v.serial].filter(Boolean).join(' · ')}</div>
+                </div>
+                <Button className="shrink-0 px-2.5 py-1.5 text-xs" busy={busy} onClick={() => onSave({ system, game: v.name })}>
+                  {t('add.pick')}
+                </Button>
+              </li>
+            )),
+          )}
+        </ul>
+      )}
+      <div className="flex flex-wrap justify-end gap-2">
+        {!!system && !!name && !sys?.arcade && (
+          <Button busy={busy} onClick={() => onSave({ system, game: name })}>
+            {t('importFiles.useName', { name })}
+          </Button>
+        )}
+        <Button variant="primary" disabled={!system} busy={busy} onClick={() => onSave({ system })}>
+          {t('importFiles.save')}
+        </Button>
+      </div>
+    </div>
   )
 }

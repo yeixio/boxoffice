@@ -234,7 +234,7 @@ var Systems = []System{
 	{Key: "dos", Name: "MS-DOS", Short: "DOS", Maker: "PC", Libretro: "DOS",
 		GameFolders: true, Shared: []string{".exe", ".com", ".bat", ".zip", ".iso", ".conf"}, Folders: []string{"dos", "msdos", "dosbox", "exodos", "pcdos"}},
 	{Key: "pc", Name: "PC (Windows)", Short: "PC", Maker: "PC", Libretro: "Microsoft - Windows",
-		GameFolders: true, Shared: []string{".exe", ".iso", ".msi"}, Folders: []string{"pc", "windows", "win", "pcgames", "windowsgames", "steam", "gog", "steamlibrary"}},
+		GameFolders: true, Shared: []string{".exe", ".iso", ".msi", ".cue", ".bin", ".img", ".mdf", ".nrg"}, Folders: []string{"pc", "windows", "win", "pcgames", "windowsgames", "steam", "gog", "steamlibrary"}},
 }
 
 // LookupSystem finds a system by key.

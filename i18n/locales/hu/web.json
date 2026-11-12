@@ -2268,6 +2268,11 @@
       "ebook": "E-könyv",
       "audiobook": "Hangoskönyv",
       "game": "Játék"
-    }
+    },
+    "gameName": "Melyik játék ez?",
+    "gamePlaceholder": "A játék neve, például Myst",
+    "gameHint": "A Box Office a(z) {{system}} listáján keresi. Ha a listán nincs rajta, vagy nincs lista (mint a PC-játékoknál), használd a beírt nevet: ezen a néven kerül be.",
+    "noGames": "A listán egy játék sem egyezik. A beírt nevet így is használhatod.",
+    "useName": "„{{name}}” használata"
   }
 }

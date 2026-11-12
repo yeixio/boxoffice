@@ -2268,6 +2268,11 @@
       "ebook": "E-kirja",
       "audiobook": "Äänikirja",
       "game": "Peli"
-    }
+    },
+    "gameName": "Mikä peli se on?",
+    "gamePlaceholder": "Pelin nimi, esimerkiksi Myst",
+    "gameHint": "Box Office etsii sitä järjestelmän {{system}} listalta. Jos listalla ei ole sitä tai listaa ei ole (kuten PC-peleillä), käytä kirjoittamaasi nimeä: peli tallennetaan sillä nimellä.",
+    "noGames": "Mikään listan peli ei vastaa. Voit silti käyttää kirjoittamaasi nimeä.",
+    "useName": "Käytä nimeä ”{{name}}”"
   }
 }

@@ -2160,6 +2160,11 @@
       "ebook": "전자책",
       "audiobook": "오디오북",
       "game": "게임"
-    }
+    },
+    "gameName": "어떤 게임인가요?",
+    "gamePlaceholder": "게임 이름(예: Myst)",
+    "gameHint": "Box Office가 {{system}} 목록에서 찾습니다. 목록에 없거나 목록이 없는 경우(PC 게임 등) 입력한 이름을 사용하세요. 그 이름으로 저장됩니다.",
+    "noGames": "목록에 맞는 게임이 없습니다. 입력한 이름을 그대로 사용할 수 있습니다.",
+    "useName": "“{{name}}” 사용"
   }
 }
