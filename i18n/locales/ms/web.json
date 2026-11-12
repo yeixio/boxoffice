@@ -1150,6 +1150,8 @@
       "perMonth": "Naik taraf automatik maksimum sebulan",
       "thisMonth_other": "{{count}} diambil bulan ini",
       "perMonthHint": "0 bermaksud tiada had. Mengira setiap naik taraf yang diambil oleh penyegerakan RSS dan rondaan, termasuk untuk tajuk yang naik tarafnya dihidupkan sendiri; yang anda ambil sendiri tidak dikira. Bermula semula pada 1hb.",
+      "replaceSame": "Gantian kekal pada kualiti yang sama",
+      "replaceSameHint": "Hidup secara lalai. Apabila salinan dilaporkan rosak atau dalam bahasa yang salah, gantiannya berkualiti sama, atau yang paling hampir pada saiz gambar yang sama. Tidak sekali-kali gambar lebih besar atau remux, jadi salinan 1080p tidak kembali sebagai remux 2160p yang berkali ganda besarnya. Jika tiada apa-apa pada saiz itu, yang lebih kecil dan diterima profil kualiti pun boleh. Pilih keluaran masih membolehkan anda memilih apa-apa sahaja.",
       "usedOf": "Naik taraf automatik bulan ini: {{used}} daripada {{limit}} digunakan",
       "usedFull": "Naik taraf automatik bulan ini: kesemua {{limit}} telah digunakan, jadi tiada lagi sehingga 1 haribulan",
       "usedNoLimit": "Naik taraf automatik bulan ini: {{count}} (tiada had)",

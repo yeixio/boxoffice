@@ -1231,6 +1231,8 @@
       "thisMonth_one": "{{count}} hentet denne måned",
       "thisMonth_other": "{{count}} hentet denne måned",
       "perMonthHint": "0 betyder ingen grænse. Tæller hver opgradering, RSS-synkronisering og patruljen henter, også for titler med opgraderinger slået til for sig selv; dem, du selv henter, tæller ikke. Starter forfra den 1.",
+      "replaceSame": "Erstatninger beholder samme kvalitet",
+      "replaceSameHint": "Slået til som standard. Når en kopi meldes defekt eller på det forkerte sprog, får erstatningen samme kvalitet, eller den nærmeste i samme billedstørrelse. Den er aldrig i større billedstørrelse eller et remux, så en 1080p-kopi ikke kommer tilbage som et 2160p-remux mange gange større. Findes intet i den størrelse, duer en mindre, som kvalitetsprofilen tager. Med Vælg en udgivelse kan du stadig vælge hvad som helst.",
       "usedOf": "Automatiske opgraderinger denne måned: {{used}} af {{limit}} brugt",
       "usedFull": "Automatiske opgraderinger denne måned: alle {{limit}} brugt, så ikke flere før den 1.",
       "usedNoLimit": "Automatiske opgraderinger denne måned: {{count}} (ingen grænse)",

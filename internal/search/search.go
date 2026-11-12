@@ -78,6 +78,7 @@ type Candidate struct {
 	priority   int
 	formatRank int
 	langRank   int // 1 when its name says it's in the language asked for
+	fitRank    int // for a replacement, how near it is to the copy's quality (quality.ReplacementFit)
 }
 
 // Results are a search's releases, best first, and the indexers that
@@ -259,6 +260,7 @@ func (s *Service) MovieFor(ctx context.Context, id int64, ask Ask) (Results, err
 	}
 	ask = ask.with(tw)
 	p, has = ask.profile(p, has)
+	same := s.replaceSameQuality(ctx)
 	blocked, err := s.blocked(ctx, "movie", m.ID)
 	if err != nil {
 		return Results{}, err
@@ -277,6 +279,7 @@ func (s *Service) MovieFor(ctx context.Context, id int64, ask Ask) (Results, err
 			c.reject("its name doesn't match the movie's")
 		}
 		ask.judgeLanguage(&c)
+		ask.judgeReplacement(&c, have, same)
 		out.Releases = append(out.Releases, c)
 	}
 	s.rank(ctx, &out)
@@ -332,14 +335,20 @@ func (s *Service) EpisodeFor(ctx context.Context, id int64, ask Ask) (Results, e
 	}
 	ask = ask.with(tw)
 	ask.Edition, ask.Mode = "", ""
+	have := 0
+	if e.File != nil {
+		have = e.File.Quality
+	}
 	var has bool
 	if p, has = ask.profile(p, e.File != nil); !has {
 		e.File = nil
 	}
+	same := s.replaceSameQuality(ctx)
 	out := Results{Errors: notes, Searched: n}
 	for _, r := range rs {
 		c := s.judgeEpisodes(ctx, r, t, p, []store.Episode{e}, blocked, false, true)
 		ask.judgeLanguage(&c)
+		ask.judgeReplacement(&c, have, same)
 		out.Releases = append(out.Releases, c)
 	}
 	s.rank(ctx, &out)
@@ -462,6 +471,8 @@ func (s *Service) rank(ctx context.Context, out *Results) {
 			return 1
 		case a.langRank != b.langRank:
 			return b.langRank - a.langRank
+		case a.fitRank != b.fitRank:
+			return b.fitRank - a.fitRank
 		case a.Quality != b.Quality:
 			return quality.Rank(b.Quality) - quality.Rank(a.Quality)
 		case a.formatRank != b.formatRank:
