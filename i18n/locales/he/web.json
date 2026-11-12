@@ -2259,7 +2259,8 @@
     "clones": "שיבוטים",
     "otherVersions": "גרסאות אחרות",
     "theParent": "ההורה",
-    "import": "ייבוא משחקים"
+    "import": "ייבוא משחקים",
+    "iconCredit": "תמונות המערכות מ-<link>RetroArch</link>, ברישיון CC BY 4.0."
   },
   "importFiles": {
     "title": "ייבוא קבצים",

@@ -2562,7 +2562,8 @@
     "clones": "النسخ",
     "otherVersions": "إصدارات أخرى",
     "theParent": "الأصل",
-    "import": "استيراد الألعاب"
+    "import": "استيراد الألعاب",
+    "iconCredit": "صور الأنظمة من <link>RetroArch</link>، بترخيص CC BY 4.0."
   },
   "importFiles": {
     "title": "استيراد الملفات",

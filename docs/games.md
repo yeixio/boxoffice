@@ -106,7 +106,14 @@ systems (PlayStation, Saturn, Dreamcast) aren't yet.
 Pictures come from [libretro's thumbnails](https://thumbnails.libretro.com): the
 box art, or for a game without, its title screen or a screenshot; a MAME clone
 without its own has its parent's. Each is downloaded the first time it's shown,
-made small and kept in `<data>/games/art`.
+made small and kept in `<data>/games/art`. A game that isn't a version on the
+list (a homebrew build, say) has the picture of a version with the same title.
+A game with no picture anywhere shows its name over a picture of its system.
+
+The system pictures are RetroArch's, from
+[libretro/retroarch-assets](https://github.com/libretro/retroarch-assets), under
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); see
+`web/public/systems/CREDITS.md`.
 
 ## Checking again
 

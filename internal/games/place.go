@@ -44,8 +44,9 @@ func Identify(p string) (gamedat.System, bool) {
 	for _, f := range files {
 		switch strings.ToLower(filepath.Ext(f.Name)) {
 		case ".mkv", ".mp4", ".avi", ".m4v", ".mov", ".mp3", ".flac", ".m4a", ".m4b", ".ogg", ".epub", ".mobi", ".azw3", ".pdf", ".cbz", ".cbr",
-			".rar", ".exe", ".iso", ".bin", ".cue", ".txt", ".nfo", ".jpg", ".png":
-			// .bin and .cue are discs, which Box Office doesn't know yet.
+			".rar", ".exe", ".iso", ".cue", ".txt", ".nfo", ".jpg", ".png":
+			// A .cue is a disc, which Box Office doesn't know yet. A .bin
+			// alone isn't: plenty of MAME sets name their ROMs .bin.
 			return gamedat.System{}, false
 		}
 	}

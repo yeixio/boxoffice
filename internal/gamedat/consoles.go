@@ -4,12 +4,14 @@ import (
 	"path"
 	"strconv"
 	"strings"
+	"unicode"
 )
 
 // Index finds a game in a No-Intro DAT by a file's CRC or name.
 type Index struct {
-	byCRC  map[uint32][]hit
-	byName map[string]*Entry
+	byCRC   map[uint32][]hit
+	byName  map[string]*Entry
+	byTitle map[string]*Entry
 }
 
 type hit struct {
@@ -19,10 +21,15 @@ type hit struct {
 
 // NewIndex indexes a DAT's games.
 func NewIndex(dat *DAT) *Index {
-	ix := &Index{byCRC: map[uint32][]hit{}, byName: map[string]*Entry{}}
+	ix := &Index{byCRC: map[uint32][]hit{}, byName: map[string]*Entry{}, byTitle: map[string]*Entry{}}
 	for i := range dat.Games {
 		e := &dat.Games[i]
 		ix.byName[nameKey(e.Name())] = e
+		if k := TitleKey(Title(e.Name())); k != "" {
+			if have, ok := ix.byTitle[k]; !ok || betterVersion(e.Name(), have.Name()) {
+				ix.byTitle[k] = e
+			}
+		}
 		for _, r := range e.Roms {
 			if r.HasCRC {
 				ix.byCRC[r.CRC] = append(ix.byCRC[r.CRC], hit{e, r.Size})
@@ -65,6 +72,47 @@ func (ix *Index) ByName(name string) (*Entry, bool) {
 	}
 	e, ok := ix.byName[nameKey(name)]
 	return e, ok
+}
+
+// ByTitle finds a version of a game by its title alone, as in a file
+// named "Alter_Ego.nes": a finished one for everyone, where there is one.
+func (ix *Index) ByTitle(name string) (*Entry, bool) {
+	if ix == nil {
+		return nil, false
+	}
+	e, ok := ix.byTitle[TitleKey(Title(name))]
+	return e, ok
+}
+
+// TitleKey is a title's letters and digits, in lower case, so "Alter_Ego"
+// and "Alter Ego" are the same.
+func TitleKey(title string) string {
+	var b strings.Builder
+	for _, r := range strings.ToLower(title) {
+		if unicode.IsLetter(r) || unicode.IsDigit(r) {
+			b.WriteRune(r)
+		}
+	}
+	return b.String()
+}
+
+// betterVersion says whether a is a better version of a game to show
+// than b: not a demo, beta or prototype, then for the world or the USA.
+func betterVersion(a, b string) bool {
+	rank := func(n string) int {
+		l := strings.ToLower(n)
+		r := 0
+		for _, w := range []string{"(demo", "(beta", "(proto", "(sample", "(pirate", "(hack"} {
+			if strings.Contains(l, w) {
+				r += 4
+			}
+		}
+		if !strings.Contains(l, "(world") && !strings.Contains(l, "usa") {
+			r++
+		}
+		return r
+	}
+	return rank(a) < rank(b)
 }
 
 func nameKey(s string) string { return strings.ToLower(strings.TrimSpace(s)) }

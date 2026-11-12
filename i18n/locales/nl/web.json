@@ -2158,7 +2158,8 @@
     "clones": "Klonen",
     "otherVersions": "Andere versies",
     "theParent": "de ouder",
-    "import": "Games importeren"
+    "import": "Games importeren",
+    "iconCredit": "Systeemafbeeldingen van <link>RetroArch</link>, CC BY 4.0."
   },
   "importFiles": {
     "title": "Bestanden importeren",

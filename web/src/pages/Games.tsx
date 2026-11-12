@@ -173,9 +173,7 @@ export function Games() {
             <li key={s.id}>
               <Link to={`/games/${s.id}`} className="group flex h-full flex-col rounded-xl border border-line bg-card p-5 transition hover:border-marquee">
                 <div className="flex items-start gap-3">
-                  <span className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-marquee/10 font-display text-xs font-bold text-marquee" aria-hidden>
-                    {s.short.slice(0, 4)}
-                  </span>
+                  <SystemIcon system={s.system} short={s.short} className="size-14" />
                   <span className="min-w-0 flex-1">
                     <span className="block truncate font-display text-lg font-semibold group-hover:text-marquee">{s.name}</span>
                     <span className="block truncate text-xs text-muted">{s.path}</span>
@@ -199,6 +197,11 @@ export function Games() {
         </ul>
       )}
       {systems.data?.some((s) => s.arcade) && <MAMEVersion />}
+      {!!systems.data?.length && (
+        <p className="mt-8 text-xs text-muted">
+          <Trans i18nKey="games.iconCredit" components={{ link: <a href="https://github.com/libretro/retroarch-assets" className="underline hover:text-ink" target="_blank" rel="noreferrer" /> }} />
+        </p>
+      )}
     </>
   )
 }
@@ -243,17 +246,31 @@ function MAMEVersion() {
 
 const sorts = ['title', 'year', 'added'] as const
 
-// Art is a game's picture, or its name where there's none.
-function Art({ game, className = '' }: { game: Game; className?: string }) {
+// SystemIcon is a picture of a system's console, or its short name where
+// there's none. The pictures are RetroArch's (CC BY 4.0), in web/public/systems.
+function SystemIcon({ system, short, className = '' }: { system: string; short: string; className?: string }) {
+  const [failed, setFailed] = useState(false)
+  if (failed) {
+    return (
+      <span className={`flex shrink-0 items-center justify-center rounded-lg bg-marquee/10 font-display text-xs font-bold text-marquee ${className}`} aria-hidden>
+        {short.slice(0, 4)}
+      </span>
+    )
+  }
+  return <img src={`/systems/${system}.png`} alt="" aria-hidden className={`shrink-0 object-contain ${className}`} onError={() => setFailed(true)} />
+}
+
+// Art is a game's picture, or its name over its system's where there's none.
+function Art({ game, system, className = '' }: { game: Game; system?: GameSystem; className?: string }) {
   const [failed, setFailed] = useState(false)
   return (
     <div className={`relative aspect-[3/4] overflow-hidden rounded-lg bg-line ${className}`}>
       {!failed ? (
         <img src={`/api/v1/games/${game.id}/art`} alt="" loading="lazy" className="size-full object-contain" onError={() => setFailed(true)} />
       ) : (
-        <div className="flex size-full flex-col items-center justify-center gap-2 p-3 text-center font-display text-sm text-muted">
-          <Gamepad2 className="size-6" aria-hidden />
-          {game.title}
+        <div className="flex size-full flex-col items-center justify-center gap-3 p-3 text-center font-display text-sm text-muted">
+          {system ? <SystemIcon system={system.system} short={system.short} className="w-3/5 opacity-60" /> : <Gamepad2 className="size-6" aria-hidden />}
+          <span className="line-clamp-3 font-semibold text-ink/80">{game.title}</span>
         </div>
       )}
     </div>
@@ -357,7 +374,7 @@ export function GameSystemPage() {
             {d.groups.map(({ game: g, versions, problems }) => (
               <li key={g.id}>
                 <Link to={`/games/game/${g.id}`} className="group block">
-                  <Art game={g} className="transition group-hover:ring-2 group-hover:ring-marquee" />
+                  <Art game={g} system={s} className="transition group-hover:ring-2 group-hover:ring-marquee" />
                   <div className="mt-2 line-clamp-2 text-sm font-medium leading-snug">{g.title}</div>
                   <div className="truncate text-xs text-muted">{[g.year, g.maker].filter(Boolean).join(' · ')}</div>
                   <div className="mt-1 flex flex-wrap items-center gap-1">
@@ -426,7 +443,7 @@ export function GamePage() {
         </Link>
       </nav>
       <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
-        <Art game={g} className="w-40 shrink-0 self-center sm:w-56 sm:self-start" />
+        <Art game={g} system={s} className="w-40 shrink-0 self-center sm:w-56 sm:self-start" />
         <div className="min-w-0 flex-1">
           <h1 className="font-display text-3xl font-bold tracking-tight">{g.title}</h1>
           <div className="mt-3 flex flex-wrap gap-2">

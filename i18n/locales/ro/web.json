@@ -2259,7 +2259,8 @@
     "clones": "Clone",
     "otherVersions": "Alte versiuni",
     "theParent": "părintele",
-    "import": "Importă jocuri"
+    "import": "Importă jocuri",
+    "iconCredit": "Imaginile sistemelor sunt de la <link>RetroArch</link>, CC BY 4.0."
   },
   "importFiles": {
     "title": "Importă fișiere",

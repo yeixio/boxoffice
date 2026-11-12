@@ -1,6 +1,7 @@
 package importer
 
 import (
+	"archive/zip"
 	"bytes"
 	"context"
 	"io"
@@ -234,5 +235,58 @@ func TestCopyInAndImportGames(t *testing.T) {
 	}
 	if _, err := os.Stat(filepath.Join(src, "Carts", "Super Game (USA).sfc")); err != nil {
 		t.Fatal("the original went")
+	}
+}
+
+// A folder's games go in, and a file Box Office can't place stays in the
+// imports folder with a problem saying so.
+func TestImportGamesKeepsWhatItCantPlace(t *testing.T) {
+	s := newService(t)
+	ctx := context.Background()
+	roots := t.TempDir()
+	if _, err := s.Store.AddRootFolder(ctx, mediatypes.Game, roots); err != nil {
+		t.Fatal(err)
+	}
+	mediatypes.SetEnabled(ctx, s.Store, mediatypes.Game, true)
+	src := t.TempDir()
+	write(t, filepath.Join(src, "Mixed", "Lone (Europe).nes"), 64)
+	write(t, filepath.Join(src, "Mixed", "notes", "mystery.dat"), 32)
+	// A MAME set whose ROMs are named .bin.
+	var zb bytes.Buffer
+	zw := zip.NewWriter(&zb)
+	for _, n := range []string{"gridlee.1", "gridlee.2", "gridlee.7"} {
+		w, _ := zw.Create(n + ".bin")
+		w.Write([]byte("rom"))
+	}
+	zw.Close()
+	os.WriteFile(filepath.Join(src, "Mixed", "gridlee.zip"), zb.Bytes(), 0o644)
+
+	if err := s.CopyIn(ctx, []string{filepath.Join(src, "Mixed")}); err != nil {
+		t.Fatal(err)
+	}
+	settled(t, s)
+	if _, err := s.Set(ctx, "imports/Mixed", Pick{Kind: Game}); err != nil {
+		t.Fatal(err)
+	}
+	settled(t, s)
+	if err := s.Run(ctx, nil); err != nil {
+		t.Fatal(err)
+	}
+	st := settled(t, s)
+	m := item(t, st, "Mixed")
+	if m.Status != Done || !strings.Contains(m.Problem, "mystery.dat") {
+		t.Fatalf("mixed %+v", m)
+	}
+	for _, p := range []string{"nes/Lone (Europe).nes", "mame/gridlee.zip"} {
+		if _, err := os.Stat(filepath.Join(roots, p)); err != nil {
+			t.Errorf("%s isn't in the games folder", p)
+		}
+	}
+	dir, _ := s.dir()
+	if _, err := os.Stat(filepath.Join(dir, "Mixed", "notes", "mystery.dat")); err != nil {
+		t.Fatal("the file it couldn't place was deleted")
+	}
+	if _, err := os.Stat(filepath.Join(dir, "Mixed", "gridlee.zip")); err == nil {
+		t.Fatal("a placed game was left in the imports folder")
 	}
 }

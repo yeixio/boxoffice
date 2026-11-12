@@ -141,7 +141,15 @@ func (lx *lexer) next() (token, error) {
 					return token{}, err
 				}
 				if c == '"' {
-					return token{text: b.String()}, nil
+					// A quote ends the word only before a space, a bracket or
+					// the end: libretro leaves quotes inside some values
+					// unescaped, as in developer ""Natsume", Vicarious Visions".
+					n, err := lx.r.Peek(1)
+					if err != nil || n[0] == ' ' || n[0] == '\t' || n[0] == '\r' || n[0] == '\n' || n[0] == ')' || n[0] == '(' {
+						return token{text: b.String()}, nil
+					}
+					b.WriteByte(c)
+					continue
 				}
 				if c == '\\' {
 					// libretro escapes quotes inside names.

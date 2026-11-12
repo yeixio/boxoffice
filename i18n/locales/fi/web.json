@@ -2158,7 +2158,8 @@
     "clones": "Kloonit",
     "otherVersions": "Muut versiot",
     "theParent": "emopeli",
-    "import": "Tuo pelejä"
+    "import": "Tuo pelejä",
+    "iconCredit": "Järjestelmäkuvat: <link>RetroArch</link>, CC BY 4.0."
   },
   "importFiles": {
     "title": "Tuo tiedostoja",

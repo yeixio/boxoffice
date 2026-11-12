@@ -2158,7 +2158,8 @@
     "clones": "Kloner",
     "otherVersions": "Andre versjoner",
     "theParent": "forelderen",
-    "import": "Importer spill"
+    "import": "Importer spill",
+    "iconCredit": "Systembilder fra <link>RetroArch</link>, CC BY 4.0."
   },
   "importFiles": {
     "title": "Importer filer",

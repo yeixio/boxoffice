@@ -2158,7 +2158,8 @@
     "clones": "کلون",
     "otherVersions": "دوسرے ورژن",
     "theParent": "پیرنٹ",
-    "import": "گیمز درآمد کریں"
+    "import": "گیمز درآمد کریں",
+    "iconCredit": "سسٹم کی تصاویر <link>RetroArch</link> سے، CC BY 4.0۔"
   },
   "importFiles": {
     "title": "فائلیں درآمد کریں",

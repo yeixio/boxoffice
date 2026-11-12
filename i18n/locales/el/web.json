@@ -2158,7 +2158,8 @@
     "clones": "Κλώνοι",
     "otherVersions": "Άλλες εκδόσεις",
     "theParent": "το γονικό",
-    "import": "Εισαγωγή παιχνιδιών"
+    "import": "Εισαγωγή παιχνιδιών",
+    "iconCredit": "Εικόνες συστημάτων από το <link>RetroArch</link>, CC BY 4.0."
   },
   "importFiles": {
     "title": "Εισαγωγή αρχείων",

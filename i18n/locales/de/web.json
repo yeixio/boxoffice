@@ -2158,7 +2158,8 @@
     "clones": "Klone",
     "otherVersions": "Andere Versionen",
     "theParent": "das Eltern-Spiel",
-    "import": "Spiele importieren"
+    "import": "Spiele importieren",
+    "iconCredit": "Systembilder von <link>RetroArch</link>, CC BY 4.0."
   },
   "importFiles": {
     "title": "Dateien importieren",

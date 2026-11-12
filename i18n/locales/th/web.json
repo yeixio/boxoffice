@@ -2057,7 +2057,8 @@
     "clones": "โคลน",
     "otherVersions": "เวอร์ชันอื่น",
     "theParent": "ตัวหลัก",
-    "import": "นำเข้าเกม"
+    "import": "นำเข้าเกม",
+    "iconCredit": "ภาพระบบจาก <link>RetroArch</link> สัญญาอนุญาต CC BY 4.0"
   },
   "importFiles": {
     "title": "นำเข้าไฟล์",

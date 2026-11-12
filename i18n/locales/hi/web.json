@@ -2158,7 +2158,8 @@
     "clones": "क्लोन",
     "otherVersions": "दूसरे वर्शन",
     "theParent": "पैरेंट",
-    "import": "गेम इंपोर्ट करें"
+    "import": "गेम इंपोर्ट करें",
+    "iconCredit": "सिस्टम की तस्वीरें <link>RetroArch</link> से, CC BY 4.0."
   },
   "importFiles": {
     "title": "फ़ाइलें इंपोर्ट करें",

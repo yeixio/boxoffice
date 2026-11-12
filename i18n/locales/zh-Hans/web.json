@@ -2057,7 +2057,8 @@
     "clones": "克隆版",
     "otherVersions": "其他版本",
     "theParent": "父游戏",
-    "import": "导入游戏"
+    "import": "导入游戏",
+    "iconCredit": "系统图片来自 <link>RetroArch</link>，采用 CC BY 4.0 许可。"
   },
   "importFiles": {
     "title": "导入文件",

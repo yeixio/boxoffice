@@ -151,8 +151,12 @@ game ( comment "Super Metroid" genre "Adventure" rom ( crc ` + crcHex(snesCRC) +
 			w.Write([]byte(dat))
 		case "/db/metadat/genre/Nintendo - Super Nintendo Entertainment System.dat":
 			w.Write([]byte(genre))
-		case "/art/MAME/Named_Boxarts/Puck Man (Japan set 1).png":
+		case "/art/MAME/Named_Boxarts/Puck Man (Japan set 1).png",
+			"/art/Nintendo_-_Super_Nintendo_Entertainment_System/Named_Boxarts/Super Metroid (World).png":
 			w.Write(art.Bytes())
+		case "/art/Nintendo_-_Super_Nintendo_Entertainment_System/Named_Boxarts/Super Metroid (Japan, USA) (En,Ja).png":
+			// Another name for a picture is a link, as git keeps it.
+			w.Write([]byte("Super Metroid (World).png"))
 		default:
 			http.NotFound(w, r)
 		}
@@ -205,6 +209,7 @@ func TestCheckFindsAndChecksGames(t *testing.T) {
 	zipOf(t, filepath.Join(root, "mame", "galaxian.zip"), map[string]uint32{"7f": 1})
 	touch(t, filepath.Join(root, "snes", "metroid.sfc"), snes)
 	touch(t, filepath.Join(root, "snes", "My Hack (World).sfc"), []byte("hack"))
+	touch(t, filepath.Join(root, "snes", "super_metroid.sfc"), []byte("v2"))
 	touch(t, filepath.Join(root, "unsure", "game.zip"), nil)
 	if _, err := st.AddRootFolder(ctx, mediatypes.Game, root); err != nil {
 		t.Fatal(err)
@@ -217,7 +222,7 @@ func TestCheckFindsAndChecksGames(t *testing.T) {
 		t.Errorf("started twice: %v", err)
 	}
 	p := wait(t, s)
-	if p.Error != "" || p.Systems != 2 || p.Games != 5 {
+	if p.Error != "" || p.Systems != 2 || p.Games != 6 {
 		t.Fatalf("%+v", p)
 	}
 	systems, _ := st.GameSystems(ctx)
@@ -237,7 +242,7 @@ func TestCheckFindsAndChecksGames(t *testing.T) {
 				t.Errorf("mame %+v", sys)
 			}
 		case "snes":
-			if sys.List != "No-Intro 2026.10.07" || sys.Games != 2 || sys.Problems != 1 {
+			if sys.List != "No-Intro 2026.10.07" || sys.Games != 3 || sys.Problems != 2 {
 				t.Errorf("snes %+v", sys)
 			}
 		}
@@ -273,6 +278,13 @@ func TestCheckFindsAndChecksGames(t *testing.T) {
 	if _, err := s.ArtFile(ctx, byName["pacman"], "mame"); err != nil {
 		t.Errorf("clone's art: %v", err)
 	}
+	// A version not on the list has the listed one's picture, found
+	// through a link.
+	if g := byName["super_metroid"]; g.Status != gamedat.Unknown || g.Art != "Super Metroid (Japan, USA) (En,Ja)" {
+		t.Errorf("v2 %+v", g)
+	} else if _, err := s.ArtFile(ctx, g, "snes"); err != nil {
+		t.Errorf("v2's art: %v", err)
+	}
 	n := asked()
 	if _, err := s.ArtFile(ctx, puck, "mame"); err != nil || asked() != n {
 		t.Errorf("fetched again: %v", err)
@@ -299,7 +311,7 @@ func TestCheckFindsAndChecksGames(t *testing.T) {
 	systems, _ = st.GameSystems(ctx)
 	for _, sys := range systems {
 		games, _ := st.Games(ctx, sys.ID)
-		if sys.System == "snes" && len(games) != 2 {
+		if sys.System == "snes" && len(games) != 3 {
 			t.Errorf("a locked system changed: %d games", len(games))
 		}
 		for _, g := range games {

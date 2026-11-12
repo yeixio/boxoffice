@@ -2360,7 +2360,8 @@
     "clones": "Klony",
     "otherVersions": "Inne wersje",
     "theParent": "gry nadrzędnej",
-    "import": "Importuj gry"
+    "import": "Importuj gry",
+    "iconCredit": "Obrazy systemów: <link>RetroArch</link>, CC BY 4.0."
   },
   "importFiles": {
     "title": "Importuj pliki",
