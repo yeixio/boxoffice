@@ -429,6 +429,11 @@ func (e *Engine) Remove(ctx context.Context, id int64, deleteFiles bool) error {
 		return err
 	}
 	e.stop(id, errRemoved)
+	// A download that just started picks its folder as it goes, and saves
+	// it when it stops: read it again, so that folder is the one deleted.
+	if cur, err := e.Store.Download(ctx, id); err == nil {
+		d = cur
+	}
 	if err := e.Store.DeleteDownload(ctx, id); err != nil {
 		return err
 	}
