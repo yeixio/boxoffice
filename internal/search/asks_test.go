@@ -4,6 +4,7 @@ import (
 	"context"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/yeixio/boxoffice/internal/downloader"
 	"github.com/yeixio/boxoffice/internal/store"
@@ -133,5 +134,89 @@ func TestAskReplaceInLanguage(t *testing.T) {
 		if c.Accepted != (c.GUID == "de" || c.GUID == "w") {
 			t.Errorf("%s accepted %v %v", c.Title, c.Accepted, c.Rejections)
 		}
+	}
+}
+
+func TestReplacementKeepsQuality(t *testing.T) {
+	srv, _ := indexer(t,
+		item("The.Matrix.1999.2160p.UHD.BluRay.REMUX.HDR-GRP", "uhd-remux", 70e9),
+		item("The.Matrix.1999.2160p.WEB-DL-GRP", "uhd-web", 20e9),
+		item("The.Matrix.1999.1080p.BluRay.REMUX-GRP", "remux", 30e9),
+		item("The.Matrix.1999.1080p.BluRay.x264-GRP", "bluray", 12e9),
+		item("The.Matrix.1999.1080p.WEB-DL-GRP", "web", 6e9),
+		item("The.Matrix.1999.720p.WEB-DL-GRP", "web720", 3e9),
+	)
+	s, st, m := setup(t, srv.URL)
+	ctx := context.Background()
+	ps, _ := st.Profiles(ctx)
+	m.ProfileID = ps[0].ID // Any: takes everything up to a 2160p remux
+	if err := st.UpdateMovie(ctx, m); err != nil {
+		t.Fatal(err)
+	}
+	st.AddFile(ctx, store.File{Kind: "movie", OwnerID: m.ID, Path: m.Path + "/The Matrix (1999).mkv", Quality: 10, Size: 6e9})
+	st.SetTitleWant(ctx, store.TitleWant{Kind: "movie", OwnerID: m.ID, Want: store.WantReplace, Problem: store.ProblemVideo})
+
+	// A bad WEB 1080p copy: the same quality first, then the same picture
+	// size, then smaller; no 2160p and no remux.
+	res, _ := s.Movie(ctx, m.ID)
+	var order []string
+	for _, c := range res.Releases {
+		if c.Accepted {
+			order = append(order, c.GUID)
+		} else if !strings.Contains(strings.Join(c.Rejections, ";"), "copy it would replace") {
+			t.Errorf("%s turned down for %v", c.GUID, c.Rejections)
+		}
+	}
+	if strings.Join(order, ",") != "web,bluray,web720" {
+		t.Fatalf("took %v", order)
+	}
+
+	// Turned off, the best the profile takes comes first, as before.
+	a, _ := LoadAutoSettings(ctx, st)
+	if !a.ReplaceSameQuality {
+		t.Fatal("same-quality replacements should be on by default")
+	}
+	a.ReplaceSameQuality = false
+	SaveAutoSettings(ctx, st, a)
+	res, _ = s.Movie(ctx, m.ID)
+	if res.Releases[0].GUID != "uhd-remux" || !res.Releases[0].Accepted {
+		t.Fatalf("off: first %+v", res.Releases[0])
+	}
+	a.ReplaceSameQuality = true
+	SaveAutoSettings(ctx, st, a)
+
+	// A better copy asked for isn't held to it.
+	st.SetTitleWant(ctx, store.TitleWant{Kind: "movie", OwnerID: m.ID})
+	res, _ = s.MovieFor(ctx, m.ID, Ask{Want: store.WantBetter})
+	if res.Releases[0].GUID != "uhd-remux" || !res.Releases[0].Accepted {
+		t.Fatalf("better: first %+v", res.Releases[0])
+	}
+}
+
+func TestEpisodeReplacementKeepsQuality(t *testing.T) {
+	srv, _ := indexer(t,
+		item("Show.S01E01.2160p.WEB-DL-GRP", "uhd", 8e9),
+		item("Show.S01E01.720p.HDTV-GRP", "hdtv", 1e9),
+		item("Show.S01E01.720p.WEB-DL-GRP", "web", 1e9),
+	)
+	s, st, _ := setup(t, srv.URL)
+	ctx := context.Background()
+	ps, _ := st.Profiles(ctx)
+	show, err := st.AddSeries(ctx, store.Series{TMDBID: 1, TVDBID: 11, Title: "Show", ProfileID: ps[0].ID, RootFolder: "/tv", Path: "/tv/Show",
+		Monitored: true, Seasons: []store.Season{{Number: 1, Monitored: true}}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	aired := time.Now().AddDate(0, 0, -7)
+	st.UpsertEpisode(ctx, store.Episode{SeriesID: show.ID, Season: 1, Number: 1, AirDate: &aired, Monitored: true})
+	eps, _ := st.Episodes(ctx, show.ID)
+	st.AddFile(ctx, store.File{Kind: "episode", OwnerID: eps[0].ID, Path: "/tv/Show/Season 01/e1.mkv", Quality: 6}) // WEB 720p
+	st.SetTitleWant(ctx, store.TitleWant{Kind: "episode", OwnerID: eps[0].ID, Want: store.WantReplace, Problem: store.ProblemAudio})
+	res, err := s.Episode(ctx, eps[0].ID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if res.Releases[0].GUID != "web" || !res.Releases[0].Accepted || res.Releases[1].GUID != "hdtv" || !res.Releases[1].Accepted || res.Releases[2].Accepted {
+		t.Fatalf("releases %+v", res.Releases)
 	}
 }

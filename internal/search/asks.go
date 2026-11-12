@@ -96,6 +96,30 @@ func (a Ask) judgeLanguage(c *Candidate) {
 	}
 }
 
+// judgeReplacement keeps a replacement for a bad copy near that copy's
+// quality (have), when Settings say so (on): a release with a bigger
+// picture, or a remux for a copy that wasn't one, is turned down, and the
+// copy's own quality is put first, then its picture size, then smaller
+// ones. Better copies and other editions aren't held to it.
+func (a Ask) judgeReplacement(c *Candidate, have int, on bool) {
+	if !on || a.Want != store.WantReplace || a.Mode != "" {
+		return
+	}
+	fit, why := quality.ReplacementFit(have, c.Quality)
+	if fit == quality.FitNone {
+		c.reject(why)
+		return
+	}
+	c.fitRank = fit
+}
+
+// replaceSameQuality says whether replacements keep the quality of the
+// copy they replace (SettingReplaceSameQuality): on unless turned off.
+func (s *Service) replaceSameQuality(ctx context.Context) bool {
+	v, err := s.Store.Setting(ctx, SettingReplaceSameQuality)
+	return err != nil || v != "off"
+}
+
 // AskedJob is JobSearchAsked's payload.
 type AskedJob struct {
 	Kind string `json:"kind"` // movie or episode
