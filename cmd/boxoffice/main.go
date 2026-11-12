@@ -132,7 +132,8 @@ func run() error {
 		mb.Base = cfg.MusicBrainz
 	}
 	backups := &backup.Manager{Store: db, Dir: cfg.BackupDir(), Log: log}
-	downloads := &downloader.Engine{Store: db, Dir: cfg.Downloads, NZBDir: filepath.Join(cfg.DataDir, "nzb"), Log: log, Importer: &downloader.LibraryImporter{Store: db},
+	libImporter := &downloader.LibraryImporter{Store: db}
+	downloads := &downloader.Engine{Store: db, Dir: cfg.Downloads, NZBDir: filepath.Join(cfg.DataDir, "nzb"), Log: log, Importer: libImporter,
 		Libraries: func(ctx context.Context) ([]string, error) {
 			roots, err := db.RootFolders(ctx, "")
 			var out []string
@@ -162,6 +163,8 @@ func run() error {
 			runner.Queue(ctx, search.JobSearchBook, d.Name, search.BookJob(d.TitleID, d.Kind))
 		case d.Kind == store.AlbumKind:
 			runner.Queue(ctx, search.JobSearchAlbum, d.Name, search.AlbumJob(d.TitleID))
+		case d.Kind == store.GameKind:
+			runner.Queue(ctx, search.JobSearchGame, d.Name, search.GameJob(d.TitleID))
 		case len(d.EpisodeIDs) > 0:
 			cat.SearchEpisodes(ctx, d.EpisodeIDs...)
 		}
@@ -184,7 +187,11 @@ func run() error {
 	// Games are checked when a games root folder is added, on Check
 	// again, and weekly.
 	gameShelf := &games.Service{Store: db, Log: log, Dir: filepath.Join(cfg.DataDir, "games"),
-		MAMEReleases: cfg.MAMEReleases, LibretroDB: cfg.LibretroDB, Art: cfg.GameArt, UserAgent: "BoxOffice/" + version.Version}
+		MAMEReleases: cfg.MAMEReleases, LibretroDB: cfg.LibretroDB, Art: cfg.GameArt, UserAgent: "BoxOffice/" + version.Version,
+		Search: search.QueueGame(runner)}
+	// Games wanted are downloaded, checked against their system's list and
+	// copied into its folder.
+	libImporter.Games = gameShelf
 	// The problem files look runs daily, and on Look again.
 	finds := &problems.Service{Store: db, Log: log}
 	// The quality check looks inside new files every few minutes.

@@ -1664,7 +1664,8 @@
   "kind": {
     "ebook": "전자책",
     "audiobook": "오디오북",
-    "album": "앨범"
+    "album": "앨범",
+    "game": "게임"
   },
   "problems": {
     "title": "문제 파일",
@@ -1964,7 +1965,7 @@
     "seeGames": "게임 보기",
     "checked": "{{when}} 확인함",
     "none": "아직 게임이 없습니다",
-    "noneBody": "Box Office는 이미 가진 게임을 보여 줍니다: MAME용 아케이드 세트와 슈퍼 패미컴, 게임보이 같은 콘솔 게임입니다. 읽고 확인할 뿐 절대 바꾸지 않습니다.",
+    "noneBody": "Box Office는 가지고 있는 게임(MAME용 아케이드 세트와 슈퍼 패미컴, 게임보이 같은 콘솔 게임)을 보여주고, 바꾸지 않고 하나하나 확인합니다. 원하는 게임을 찾아 다운로드할 수도 있습니다.",
     "addRoot": "<link>설정 → 게임 루트 폴더</link>에서 게임이 있는 폴더를 추가하세요.",
     "noSystems": "아직 찾은 시스템이 없습니다",
     "noSystemsBody": "게임 루트 폴더에서 게임 시스템을 찾지 못했습니다. 각 시스템의 게임을 mame이나 snes처럼 시스템 이름의 폴더에 넣고 다시 확인하세요.",
@@ -2058,7 +2059,37 @@
     "otherVersions": "다른 버전",
     "theParent": "부모",
     "import": "게임 가져오기",
-    "iconCredit": "시스템 이미지 출처: <link>RetroArch</link>, CC BY 4.0."
+    "iconCredit": "시스템 이미지 출처: <link>RetroArch</link>, CC BY 4.0.",
+    "add": {
+      "title": "게임 추가",
+      "sub": "시스템 목록에서 게임을 찾으세요. Box Office가 인덱서에서 찾아 다운로드하고, 맞는 게임인지 확인한 뒤 게임 폴더에 넣습니다.",
+      "placeholder": "게임 검색(예: Super Metroid)",
+      "yourSystems": "내 시스템",
+      "allSystems": "모든 시스템",
+      "notYours": "{{name}} (아직 폴더 없음)",
+      "looking": "목록을 찾는 중… 시스템에서 처음 검색할 때 목록을 다운로드하므로 1분쯤 걸릴 수 있습니다.",
+      "hint": "제목으로 검색하세요. 폴더가 있는 시스템에 대해 No-Intro 콘솔 게임 목록과 MAME 아케이드 게임 목록을 찾습니다. 다른 시스템을 보려면 시스템을 고르세요.",
+      "nothing": "목록에 맞는 게임이 없습니다.",
+      "more": "처음 60개를 보여줍니다. 단어를 더해 좁혀 보세요.",
+      "version": "버전",
+      "versionOf": "{{title}} 버전",
+      "have": "내 게임에 있음",
+      "wanted": "원함",
+      "want": "원해요",
+      "cardTitle": "게임 추가",
+      "cardSub": "시스템의 전체 게임 목록에서 찾으면 Box Office가 원하는 게임을 다운로드합니다."
+    },
+    "wanted": {
+      "title": "원하는 게임",
+      "sub": "Box Office는 매시간 인덱서에서 이 게임들을 찾고, 다운로드한 것을 시스템 목록과 대조한 뒤 게임 폴더에 넣습니다.",
+      "movedIn": "옮겼습니다. 시스템 폴더를 확인하는 중…",
+      "waiting": "다운로드되었고 게임 폴더로 옮겨지기를 기다리고 있습니다. 다운로드를 보세요.",
+      "notYet": "아직 찾지 않았습니다.",
+      "nothing": "{{when}}에 찾았지만 아직 없습니다. Box Office가 계속 찾습니다.",
+      "looked": "마지막으로 찾은 시각 {{when}}.",
+      "lookingNow": "지금 찾는 중입니다. 활동을 보세요.",
+      "remove": "{{title}} 그만 원하기"
+    }
   },
   "importFiles": {
     "title": "파일 가져오기",

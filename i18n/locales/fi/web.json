@@ -1759,7 +1759,8 @@
   "kind": {
     "ebook": "E-kirja",
     "audiobook": "Äänikirja",
-    "album": "Albumi"
+    "album": "Albumi",
+    "game": "Peli"
   },
   "problems": {
     "title": "Ongelmatiedostot",
@@ -2064,7 +2065,7 @@
     "seeGames": "Katso pelisi",
     "checked": "tarkistettu {{when}}",
     "none": "Ei vielä pelejä",
-    "noneBody": "Box Office näyttää pelit, jotka sinulla jo on: MAMEn pelihallisarjat ja konsolipelit, kuten Super Nintendo ja Game Boy. Se lukee ja tarkistaa ne eikä koskaan muuta niitä.",
+    "noneBody": "Box Office näyttää pelisi, MAME-arcadesetit ja konsolipelit kuten Super Nintendon ja Game Boyn, ja tarkistaa jokaisen muuttamatta sitä. Se voi myös etsiä haluamiasi pelejä ja ladata ne.",
     "addRoot": "Lisää pelikansiosi kohdassa <link>Asetukset → Pelien juurikansiot</link>.",
     "noSystems": "Järjestelmiä ei ole vielä löytynyt",
     "noSystemsBody": "Box Office ei löytänyt pelijärjestelmiä pelien juurikansioistasi. Laita kunkin järjestelmän pelit sen mukaan nimettyyn kansioon, esimerkiksi mame tai snes, ja tarkista uudelleen.",
@@ -2159,7 +2160,37 @@
     "otherVersions": "Muut versiot",
     "theParent": "emopeli",
     "import": "Tuo pelejä",
-    "iconCredit": "Järjestelmäkuvat: <link>RetroArch</link>, CC BY 4.0."
+    "iconCredit": "Järjestelmäkuvat: <link>RetroArch</link>, CC BY 4.0.",
+    "add": {
+      "title": "Lisää peli",
+      "sub": "Etsi peli sen järjestelmän listalta. Box Office etsii sitä indeksoijiltasi, lataa sen, tarkistaa että se on oikea peli ja vie sen pelikansioosi.",
+      "placeholder": "Etsi peliä, esimerkiksi Super Metroid",
+      "yourSystems": "Omat järjestelmäsi",
+      "allSystems": "Kaikki järjestelmät",
+      "notYours": "{{name}} (ei vielä kansiota)",
+      "looking": "Käydään listoja läpi… Ensimmäinen haku järjestelmästä lataa sen listan, mikä voi kestää minuutin.",
+      "hint": "Hae nimellä. Box Office käy läpi No-Intron konsolipelilistan ja MAMEn arcadepelilistan niille järjestelmille, joille sinulla on kansio. Valitse järjestelmä katsoaksesi toista.",
+      "nothing": "Mikään listan peli ei vastaa.",
+      "more": "Näytetään ensimmäiset 60. Lisää sana rajataksesi.",
+      "version": "Versio",
+      "versionOf": "Pelin {{title}} versio",
+      "have": "Peleissäsi",
+      "wanted": "Haluttu",
+      "want": "Haluan",
+      "cardTitle": "Lisää peli",
+      "cardSub": "Hae järjestelmän kaikkien pelien listalta, ja Box Office lataa haluamasi."
+    },
+    "wanted": {
+      "title": "Halutut",
+      "sub": "Box Office etsii näitä indeksoijiltasi tunnin välein ja tarkistaa jokaisen latauksen järjestelmän listaa vasten ennen kuin se menee pelikansioosi.",
+      "movedIn": "Siirretty. Tarkistetaan järjestelmän kansiota…",
+      "waiting": "Ladattu ja odottaa pääsyä pelikansioosi; katso Lataukset.",
+      "notYet": "Ei vielä etsitty.",
+      "nothing": "Etsitty {{when}}, mitään ei vielä löytynyt. Box Office etsii edelleen.",
+      "looked": "Viimeksi etsitty {{when}}.",
+      "lookingNow": "Etsitään nyt; katso Toiminta.",
+      "remove": "Lakkaa haluamasta peliä {{title}}"
+    }
   },
   "importFiles": {
     "title": "Tuo tiedostoja",

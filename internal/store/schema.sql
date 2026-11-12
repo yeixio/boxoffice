@@ -466,6 +466,25 @@ CREATE TABLE IF NOT EXISTS games (
 );
 CREATE INDEX IF NOT EXISTS games_system ON games (system_id);
 
+-- Games wanted: picked from a system's list (No-Intro's or MAME's) to be
+-- searched for and downloaded. A want is forgotten once a check finds the
+-- game in its system's folder.
+CREATE TABLE IF NOT EXISTS game_wants (
+	id       INTEGER PRIMARY KEY AUTOINCREMENT,
+	system   TEXT NOT NULL,              -- mame, snes, ...
+	name     TEXT NOT NULL,              -- the version wanted: its name in No-Intro's list, or MAME's set name
+	title    TEXT NOT NULL,
+	grp      TEXT NOT NULL DEFAULT '',   -- consoles: the title's letters and digits, so any version of it counts
+	year     TEXT NOT NULL DEFAULT '',
+	maker    TEXT NOT NULL DEFAULT '',
+	crc      TEXT NOT NULL DEFAULT '',   -- consoles: the version's CRC
+	size     BIGINT NOT NULL DEFAULT 0,  -- consoles: the version's file size
+	art      TEXT NOT NULL DEFAULT '',   -- the name libretro's thumbnails have it under
+	got_at   BIGINT NOT NULL DEFAULT 0,  -- when a download of it was moved in, before a check has seen it
+	added_at BIGINT NOT NULL,
+	UNIQUE (system, name)
+);
+
 -- The request site: the people who use it, what they ask for, and the
 -- problems they report. Members are not admins: they sign in to the
 -- request site only, never to the admin UI, and have their own sessions.

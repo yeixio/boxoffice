@@ -1854,7 +1854,8 @@
   "kind": {
     "ebook": "Livre numérique",
     "audiobook": "Livre audio",
-    "album": "Album"
+    "album": "Album",
+    "game": "Jeu"
   },
   "problems": {
     "title": "Fichiers à problème",
@@ -2164,7 +2165,7 @@
     "seeGames": "Voir vos jeux",
     "checked": "vérifié {{when}}",
     "none": "Pas encore de jeux",
-    "noneBody": "Box Office montre les jeux que vous avez déjà : sets d'arcade pour MAME et jeux de console comme la Super Nintendo et la Game Boy. Il les lit et les vérifie, sans jamais les modifier.",
+    "noneBody": "Box Office affiche vos jeux, les sets d'arcade pour MAME et les jeux de console comme Super Nintendo et Game Boy, et vérifie chacun sans le modifier. Il peut aussi trouver les jeux que vous voulez et les télécharger.",
     "addRoot": "Ajoutez le dossier de vos jeux dans <link>Réglages → Dossiers racines des jeux</link>.",
     "noSystems": "Aucun système trouvé pour l'instant",
     "noSystemsBody": "Box Office n'a trouvé aucun système de jeu dans vos dossiers racines des jeux. Mettez les jeux de chaque système dans un dossier à son nom, comme mame ou snes, puis vérifiez à nouveau.",
@@ -2260,7 +2261,37 @@
     "otherVersions": "Autres versions",
     "theParent": "le parent",
     "import": "Importer des jeux",
-    "iconCredit": "Images des systèmes : <link>RetroArch</link>, CC BY 4.0."
+    "iconCredit": "Images des systèmes : <link>RetroArch</link>, CC BY 4.0.",
+    "add": {
+      "title": "Ajouter un jeu",
+      "sub": "Trouvez un jeu dans la liste de son système. Box Office le cherche sur vos indexeurs, le télécharge, vérifie que c'est le bon jeu et le range dans votre dossier de jeux.",
+      "placeholder": "Chercher un jeu, par exemple Super Metroid",
+      "yourSystems": "Vos systèmes",
+      "allSystems": "Tous les systèmes",
+      "notYours": "{{name}} (pas encore de dossier)",
+      "looking": "Recherche dans les listes… La première recherche sur un système télécharge sa liste, ce qui peut prendre une minute.",
+      "hint": "Cherchez par titre. Box Office parcourt la liste No-Intro des jeux de console et la liste MAME des jeux d'arcade, pour les systèmes dont vous avez un dossier. Choisissez un système pour en voir un autre.",
+      "nothing": "Aucun jeu de la liste ne correspond.",
+      "more": "Les 60 premiers sont affichés. Ajoutez un mot pour affiner.",
+      "version": "Version",
+      "versionOf": "Version de {{title}}",
+      "have": "Dans vos jeux",
+      "wanted": "Voulu",
+      "want": "Je le veux",
+      "cardTitle": "Ajouter un jeu",
+      "cardSub": "Parcourez la liste de tous les jeux d'un système, et Box Office télécharge ceux que vous voulez."
+    },
+    "wanted": {
+      "title": "Voulus",
+      "sub": "Box Office les cherche sur vos indexeurs toutes les heures et vérifie chaque téléchargement avec la liste du système avant de le ranger dans votre dossier de jeux.",
+      "movedIn": "Rangé. Vérification du dossier du système…",
+      "waiting": "Téléchargé, en attente d'aller dans votre dossier de jeux ; voir Téléchargements.",
+      "notYet": "Pas encore cherché.",
+      "nothing": "Cherché {{when}}, rien trouvé pour l'instant. Box Office continue de chercher.",
+      "looked": "Dernière recherche {{when}}.",
+      "lookingNow": "Recherche en cours ; voir Activité.",
+      "remove": "Ne plus vouloir {{title}}"
+    }
   },
   "importFiles": {
     "title": "Importer des fichiers",

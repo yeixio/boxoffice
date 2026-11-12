@@ -1,6 +1,7 @@
 package games
 
 import (
+	"cmp"
 	"context"
 	"errors"
 	"fmt"
@@ -97,12 +98,34 @@ func (s *Service) Folder(ctx context.Context, key string) (string, error) {
 // MAME CHD goes in the folder named for its set. The file it's copied
 // from is left as it is.
 func (s *Service) Add(ctx context.Context, key, src string) (string, error) {
+	return s.AddAs(ctx, key, src, filepath.Base(src))
+}
+
+// AddAs is Add, naming the copy name.
+func (s *Service) AddAs(ctx context.Context, key, src, name string) (string, error) {
+	return s.addInto(ctx, key, src, "", name)
+}
+
+// cleanName makes a name from a list safe as a file's name.
+func cleanName(name string) string {
+	name = strings.NewReplacer("/", "_", "\\", "_", "\x00", "").Replace(name)
+	if name == "." || name == ".." {
+		return ""
+	}
+	return name
+}
+
+// addInto is Add into a folder (sub) of the system's folder, naming the
+// copy name. A MAME CHD with no folder given goes in the one named for it.
+func (s *Service) addInto(ctx context.Context, key, src, sub, name string) (string, error) {
 	dir, err := s.Folder(ctx, key)
 	if err != nil {
 		return "", err
 	}
-	name := filepath.Base(src)
-	if key == "mame" && strings.EqualFold(filepath.Ext(name), ".chd") {
+	name = cmp.Or(cleanName(name), filepath.Base(src))
+	if sub = cleanName(sub); sub != "" {
+		dir = filepath.Join(dir, sub)
+	} else if key == "mame" && strings.EqualFold(filepath.Ext(name), ".chd") {
 		dir = filepath.Join(dir, strings.TrimSuffix(name, filepath.Ext(name)))
 	}
 	dst := filepath.Join(dir, name)

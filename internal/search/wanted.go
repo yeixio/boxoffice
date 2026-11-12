@@ -186,8 +186,8 @@ func (s *Service) UpgradesLeft(ctx context.Context, a AutoSettings) (left, used 
 // itself: one with no file, or one whose file is below its profile's
 // cutoff while the profile takes upgrades.
 type Wanted struct {
-	Kind     string    `json:"kind"` // movie, episode, ebook, audiobook or album
-	ID       int64     `json:"id"`   // the movie's, the episode's, the book's or the album's
+	Kind     string    `json:"kind"` // movie, episode, ebook, audiobook, album or game
+	ID       int64     `json:"id"`   // the movie's, the episode's, the book's, the album's or the game want's
 	SeriesID int64     `json:"seriesId,omitempty"`
 	Subject  string    `json:"subject"`
 	Upgrade  bool      `json:"upgrade"`
@@ -315,6 +315,11 @@ func (s *Service) WantedList(ctx context.Context) ([]Wanted, error) {
 		return nil, err
 	}
 	out = append(out, albums...)
+	gameList, err := s.wantedGames(ctx, now)
+	if err != nil {
+		return nil, err
+	}
+	out = append(out, gameList...)
 	slices.SortStableFunc(out, func(a, b Wanted) int {
 		if c := cmp.Compare(a.tier(), b.tier()); c != 0 {
 			return c
@@ -544,7 +549,7 @@ func (s *Service) jobWanted(ctx context.Context, _ string) (jobs.Result, error) 
 			}
 			continue
 		}
-		if store.IsBookKind(w.Kind) || w.Kind == store.AlbumKind {
+		if store.IsBookKind(w.Kind) || w.Kind == store.AlbumKind || w.Kind == store.GameKind {
 			if b, err := s.busy(ctx, w.Kind, w.ID, 0, ""); err != nil {
 				return jobs.Result{}, err
 			} else if b {
@@ -553,9 +558,12 @@ func (s *Service) jobWanted(ctx context.Context, _ string) (jobs.Result, error) 
 			}
 			var res Results
 			var err error
-			if w.Kind == store.AlbumKind {
+			switch w.Kind {
+			case store.AlbumKind:
 				res, err = s.Album(ctx, w.ID)
-			} else {
+			case store.GameKind:
+				res, err = s.Game(ctx, w.ID)
+			default:
 				res, err = s.Book(ctx, w.ID, w.Kind)
 			}
 			if errors.Is(err, ErrNoIndexers) {

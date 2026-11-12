@@ -28,6 +28,16 @@ type LibraryImporter struct {
 	// Tags reads what a video says about itself (its title, synopsis and
 	// episode tags); ffprobe when nil.
 	Tags func(ctx context.Context, path string) (VideoTags, error)
+	// Games puts a wanted game's download in its system's folder.
+	Games GameImporter
+}
+
+// GameImporter checks that a download is the game wanted (going by its
+// system's list) and copies it into the system's folder.
+type GameImporter interface {
+	// MatchDownload says what's wrong when the download isn't the game.
+	MatchDownload(ctx context.Context, wantID int64, dir string, files []string) (string, error)
+	ImportDownload(ctx context.Context, wantID int64, dir string, files []string) (string, error)
 }
 
 // ModeEpisode marks an import of one video as the episode in its
@@ -109,6 +119,12 @@ func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir str
 	}
 	if d.Kind == store.AlbumKind {
 		return li.importAlbum(ctx, d, dir, files)
+	}
+	if d.Kind == store.GameKind {
+		if li.Games == nil {
+			return "", errors.New("games aren't set up")
+		}
+		return li.Games.ImportDownload(ctx, d.TitleID, dir, files)
 	}
 	vids := videos(dir, files)
 	if len(vids) == 0 {
@@ -277,7 +293,7 @@ func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir str
 		}
 		return to, nil
 	}
-	return "", errors.New("it isn't for a movie, a show, a book or an album")
+	return "", errors.New("it isn't for a movie, a show, a book, an album or a game")
 }
 
 // ReadOnlyError means the library folder doesn't take writes, as when

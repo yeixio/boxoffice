@@ -794,3 +794,37 @@ export type GameCheck = {
   finished?: string
 }
 export type GameSettings = { mameVersion: string; newest?: string; versions: string[] }
+// A system Box Office knows, wanted games come from its list.
+export type GameSystemInfo = { key: string; name: string; short: string; maker: string; arcade: boolean }
+// One version of a game on a system's list (No-Intro's or MAME's).
+export type CatalogGame = {
+  system: string
+  name: string
+  title: string
+  tags?: string[]
+  year?: string
+  maker?: string
+  genre?: string
+  parent?: string
+  crc?: string
+  size?: number
+}
+export type GameLookup = { system: string; title: string; best: CatalogGame; versions: CatalogGame[]; onDisk: boolean; wantId?: number; wantName?: string }
+export type GameWant = {
+  id: number
+  system: string
+  name: string
+  title: string
+  year?: string
+  maker?: string
+  crc?: string
+  size?: number
+  gotAt?: string
+  addedAt: string
+  systemName: string
+  systemShort: string
+  arcade: boolean
+  searched?: string
+  misses?: number
+  download?: Download
+}

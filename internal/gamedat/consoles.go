@@ -207,3 +207,7 @@ func ThumbName(name string) string {
 		return r
 	}, name)
 }
+
+// BetterVersion says whether a is a better version of a game to pick than
+// b: not a demo, beta or prototype, then for the world or the USA.
+func BetterVersion(a, b string) bool { return betterVersion(a, b) }

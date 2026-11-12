@@ -1664,7 +1664,8 @@
   "kind": {
     "ebook": "Sách điện tử",
     "audiobook": "Sách nói",
-    "album": "Album"
+    "album": "Album",
+    "game": "Trò chơi"
   },
   "problems": {
     "title": "Tệp có vấn đề",
@@ -1964,7 +1965,7 @@
     "seeGames": "Xem trò chơi của bạn",
     "checked": "đã kiểm tra {{when}}",
     "none": "Chưa có trò chơi nào",
-    "noneBody": "Box Office hiển thị những trò chơi bạn đã có: các bộ arcade cho MAME và trò chơi console như Super Nintendo và Game Boy. Nó đọc và kiểm tra chúng, và không bao giờ thay đổi chúng.",
+    "noneBody": "Box Office hiển thị các trò chơi của bạn, bộ arcade cho MAME và trò chơi console như Super Nintendo và Game Boy, và kiểm tra từng trò mà không thay đổi. Nó cũng có thể tìm trò chơi bạn muốn và tải xuống.",
     "addRoot": "Thêm thư mục chứa trò chơi của bạn trong <link>Cài đặt → Thư mục gốc trò chơi</link>.",
     "noSystems": "Chưa tìm thấy hệ máy nào",
     "noSystemsBody": "Box Office không tìm thấy hệ máy nào trong các thư mục gốc trò chơi. Hãy đặt trò chơi của mỗi hệ máy vào một thư mục mang tên hệ máy đó, như mame hoặc snes, rồi Kiểm tra lại.",
@@ -2058,7 +2059,37 @@
     "otherVersions": "Phiên bản khác",
     "theParent": "bản gốc",
     "import": "Nhập trò chơi",
-    "iconCredit": "Hình hệ máy từ <link>RetroArch</link>, CC BY 4.0."
+    "iconCredit": "Hình hệ máy từ <link>RetroArch</link>, CC BY 4.0.",
+    "add": {
+      "title": "Thêm trò chơi",
+      "sub": "Tìm một trò chơi trong danh sách của hệ máy. Box Office tìm nó trên các indexer của bạn, tải xuống, kiểm tra đúng trò chơi rồi đặt vào thư mục trò chơi.",
+      "placeholder": "Tìm trò chơi, ví dụ Super Metroid",
+      "yourSystems": "Hệ máy của bạn",
+      "allSystems": "Tất cả hệ máy",
+      "notYours": "{{name}} (chưa có thư mục)",
+      "looking": "Đang tìm trong danh sách… Lần tìm đầu tiên trên một hệ máy sẽ tải danh sách của nó, có thể mất một phút.",
+      "hint": "Tìm theo tên. Box Office tìm trong danh sách trò chơi console của No-Intro và danh sách arcade của MAME, cho các hệ máy bạn có thư mục. Chọn một hệ máy để xem hệ khác.",
+      "nothing": "Không có trò chơi nào trong danh sách khớp.",
+      "more": "Đang hiện 60 kết quả đầu. Thêm một từ để thu hẹp.",
+      "version": "Phiên bản",
+      "versionOf": "Phiên bản của {{title}}",
+      "have": "Có trong trò chơi của bạn",
+      "wanted": "Đang muốn",
+      "want": "Tôi muốn",
+      "cardTitle": "Thêm trò chơi",
+      "cardSub": "Tìm trong danh sách mọi trò chơi của một hệ máy, và Box Office sẽ tải những trò bạn muốn."
+    },
+    "wanted": {
+      "title": "Đang muốn",
+      "sub": "Box Office tìm các trò này trên indexer của bạn mỗi giờ và đối chiếu mỗi bản tải với danh sách của hệ máy trước khi đưa vào thư mục trò chơi.",
+      "movedIn": "Đã chuyển vào. Đang kiểm tra thư mục hệ máy…",
+      "waiting": "Đã tải xong và đang chờ vào thư mục trò chơi; xem Tải xuống.",
+      "notYet": "Chưa tìm.",
+      "nothing": "Đã tìm {{when}}, chưa thấy gì. Box Office vẫn tiếp tục tìm.",
+      "looked": "Lần tìm gần nhất {{when}}.",
+      "lookingNow": "Đang tìm ngay; xem Hoạt động.",
+      "remove": "Thôi muốn {{title}}"
+    }
   },
   "importFiles": {
     "title": "Nhập tệp",

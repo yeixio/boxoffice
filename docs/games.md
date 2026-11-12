@@ -5,10 +5,10 @@ MAME, and console games such as the Super Nintendo, Game Boy and Mega Drive. Box
 Office finds each system's folder, works out what every file is, checks whether
 each game is complete, and shows them with box art, year, maker and players.
 
-Box Office only reads your game files. It never moves, renames, rebuilds or
-deletes one, and it doesn't download games. The one time it writes there is when
-you import games yourself: **Import games** copies new ones into their system's
-folder (see [Importing files](import.md)).
+Box Office never moves, renames, rebuilds or deletes a game file. It only adds
+new ones: games you import yourself with **Import games** (see
+[Importing files](import.md)), and games you want that it downloads for you (see
+[Adding a game](#adding-a-game)).
 
 ## Turning it on
 
@@ -100,6 +100,39 @@ Game Boy Color, Game Boy Advance, Virtual Boy, Mega Drive / Genesis, Master
 System, Game Gear, PC Engine / TurboGrafx-16, Atari 2600, 7800 and Lynx, Neo Geo
 Pocket and Pocket Color, and WonderSwan and WonderSwan Color. Disc-based
 systems (PlayStation, Saturn, Dreamcast) aren't yet.
+
+## Adding a game
+
+**Add a game** on the Games page looks a game up by name in the same lists Box
+Office checks your games against: No-Intro's for consoles and MAME's for arcade
+sets. It looks in the systems you have a folder for, or pick one under **All
+systems** (a folder named for it is made when the first game goes in). Each game
+shows its best version, usually the USA or World one, the newest revision; pick
+another under **Version**. **Want it** adds it to **Wanted** on the Games page
+and searches the indexers straight away. A game you have already says **In your
+games**.
+
+Searches look in the indexers' console categories and in Other (where older
+systems' games are often filed). A release is passed over when it names another
+system, is a set of many games (a romset, No-Intro or Redump pack), is something
+else (a soundtrack, a PC or Switch game, a film), or is too big to be one game.
+One that names the system comes first. **Choose a release** shows every release
+found and why any was passed over, and grabs the one you pick. Wanted games are
+looked for again by the hourly patrol, with everything else wanted.
+
+Every download is checked before it goes in, the same way the games in your
+folders are. A console game's file (loose, or inside a zip or 7z, even one with
+other games in it) must have the hash No-Intro gives the version you want, or
+another version of the same game; a MAME set must be named for the set and hold
+at least one of its ROMs, and its parent, BIOS and device sets come in with it.
+One that isn't the game is quarantined, its release blocked, and the next one
+looked for. The game goes into its system's folder named as the list names it
+(`snes/Super Metroid (Japan, USA) (En,Ja).sfc`, `mame/pacman.zip`), the system is
+checked, and the game leaves **Wanted**.
+
+Usenet indexers carry far fewer single retro games than films, so many searches
+find nothing; Box Office keeps looking, less often after a few misses. A system
+on **Do not touch** takes no new games.
 
 ## Box art
 

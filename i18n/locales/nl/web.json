@@ -1759,7 +1759,8 @@
   "kind": {
     "ebook": "E-book",
     "audiobook": "Luisterboek",
-    "album": "Album"
+    "album": "Album",
+    "game": "Game"
   },
   "problems": {
     "title": "Probleembestanden",
@@ -2064,7 +2065,7 @@
     "seeGames": "Naar je games",
     "checked": "gecontroleerd {{when}}",
     "none": "Nog geen games",
-    "noneBody": "Box Office toont de games die je al hebt: arcadesets voor MAME en consolegames zoals Super Nintendo en Game Boy. Het leest en controleert ze, en verandert ze nooit.",
+    "noneBody": "Box Office toont je games, arcadesets voor MAME en consolegames zoals Super Nintendo en Game Boy, en controleert ze zonder ze te wijzigen. Het kan ook games vinden die je wilt en ze downloaden.",
     "addRoot": "Voeg de map met je games toe onder <link>Instellingen → Hoofdmappen voor games</link>.",
     "noSystems": "Nog geen systemen gevonden",
     "noSystemsBody": "Box Office vond geen gamesystemen in je hoofdmappen voor games. Zet de games van elk systeem in een map met zijn naam, zoals mame of snes, en controleer opnieuw.",
@@ -2159,7 +2160,37 @@
     "otherVersions": "Andere versies",
     "theParent": "de ouder",
     "import": "Games importeren",
-    "iconCredit": "Systeemafbeeldingen van <link>RetroArch</link>, CC BY 4.0."
+    "iconCredit": "Systeemafbeeldingen van <link>RetroArch</link>, CC BY 4.0.",
+    "add": {
+      "title": "Game toevoegen",
+      "sub": "Zoek een game op de lijst van zijn systeem. Box Office zoekt hem bij je indexers, downloadt hem, controleert of het de juiste game is en zet hem in je gamesmap.",
+      "placeholder": "Zoek een game, zoals Super Metroid",
+      "yourSystems": "Jouw systemen",
+      "allSystems": "Alle systemen",
+      "notYours": "{{name}} (nog geen map)",
+      "looking": "Lijsten doorzoeken… De eerste zoekopdracht op een systeem downloadt zijn lijst; dat kan een minuut duren.",
+      "hint": "Zoek op titel. Box Office doorzoekt de No-Intro-lijst van consolegames en de MAME-lijst van arcadegames, voor de systemen waarvoor je een map hebt. Kies een systeem om een ander te bekijken.",
+      "nothing": "Geen game op de lijst komt overeen.",
+      "more": "De eerste 60 worden getoond. Voeg een woord toe om te verfijnen.",
+      "version": "Versie",
+      "versionOf": "Versie van {{title}}",
+      "have": "In je games",
+      "wanted": "Gewenst",
+      "want": "Wil ik",
+      "cardTitle": "Game toevoegen",
+      "cardSub": "Doorzoek de lijst van alle games voor een systeem, en Box Office downloadt de games die je wilt."
+    },
+    "wanted": {
+      "title": "Gewenst",
+      "sub": "Box Office zoekt hier elk uur naar bij je indexers en controleert elke download met de lijst van het systeem voordat hij in je gamesmap komt.",
+      "movedIn": "Verplaatst. De map van het systeem wordt gecontroleerd…",
+      "waiting": "Gedownload en wacht om in je gamesmap te komen; zie Downloads.",
+      "notYet": "Nog niet gezocht.",
+      "nothing": "{{when}} gezocht en nog niets gevonden. Box Office blijft zoeken.",
+      "looked": "Laatst gezocht {{when}}.",
+      "lookingNow": "Wordt nu gezocht; zie Activiteit.",
+      "remove": "{{title}} niet meer willen"
+    }
   },
   "importFiles": {
     "title": "Bestanden importeren",

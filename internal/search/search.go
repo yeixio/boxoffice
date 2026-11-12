@@ -49,6 +49,7 @@ func (s *Service) Register(r *jobs.Runner) {
 	r.Handle(JobSearchAsked, s.jobAsked)
 	r.Handle(JobSearchBook, s.jobBook)
 	r.Handle(JobSearchAlbum, s.jobAlbum)
+	r.Handle(JobSearchGame, s.jobGame)
 }
 
 // Candidate is a release and what Box Office makes of it for a title.

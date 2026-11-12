@@ -1759,7 +1759,8 @@
   "kind": {
     "ebook": "E-bog",
     "audiobook": "Lydbog",
-    "album": "Album"
+    "album": "Album",
+    "game": "Spil"
   },
   "problems": {
     "title": "Problemfiler",
@@ -2064,7 +2065,7 @@
     "seeGames": "Se dine spil",
     "checked": "tjekket {{when}}",
     "none": "Ingen spil endnu",
-    "noneBody": "Box Office viser de spil, du allerede har: arkadesæt til MAME og konsolspil som Super Nintendo og Game Boy. Det læser og tjekker dem og ændrer dem aldrig.",
+    "noneBody": "Box Office viser dine spil, arkadesæt til MAME og konsolspil som Super Nintendo og Game Boy, og tjekker hvert enkelt uden at ændre det. Det kan også finde spil, du vil have, og hente dem.",
     "addRoot": "Tilføj mappen med dine spil under <link>Indstillinger → Rodmapper til spil</link>.",
     "noSystems": "Ingen systemer fundet endnu",
     "noSystemsBody": "Box Office fandt ingen spilsystemer i dine rodmapper til spil. Læg hvert systems spil i en mappe med dets navn, fx mame eller snes, og tjek igen.",
@@ -2159,7 +2160,37 @@
     "otherVersions": "Andre versioner",
     "theParent": "forælderen",
     "import": "Importér spil",
-    "iconCredit": "Systembilleder fra <link>RetroArch</link>, CC BY 4.0."
+    "iconCredit": "Systembilleder fra <link>RetroArch</link>, CC BY 4.0.",
+    "add": {
+      "title": "Tilføj et spil",
+      "sub": "Find et spil på dets systems liste. Box Office leder efter det hos dine indeksere, henter det, tjekker at det er det rigtige spil og lægger det i din spilmappe.",
+      "placeholder": "Søg efter et spil, fx Super Metroid",
+      "yourSystems": "Dine systemer",
+      "allSystems": "Alle systemer",
+      "notYours": "{{name}} (ingen mappe endnu)",
+      "looking": "Leder i listerne… Den første søgning på et system henter dets liste, hvilket kan tage et minut.",
+      "hint": "Søg på titel. Box Office leder i No-Intros liste over konsolspil og MAMEs liste over arkadespil for de systemer, du har mapper til. Vælg et system for at se et andet.",
+      "nothing": "Ingen spil på listen passer.",
+      "more": "Viser de første 60. Tilføj et ord for at indsnævre.",
+      "version": "Version",
+      "versionOf": "Version af {{title}}",
+      "have": "I dine spil",
+      "wanted": "Ønsket",
+      "want": "Vil have",
+      "cardTitle": "Tilføj et spil",
+      "cardSub": "Søg i listen over alle spil til et system, så henter Box Office dem, du vil have."
+    },
+    "wanted": {
+      "title": "Ønskede",
+      "sub": "Box Office leder efter disse hos dine indeksere hver time og tjekker hver download mod systemets liste, før den kommer i din spilmappe.",
+      "movedIn": "Flyttet ind. Tjekker systemets mappe…",
+      "waiting": "Hentet og venter på at komme i din spilmappe; se Downloads.",
+      "notYet": "Ikke søgt efter endnu.",
+      "nothing": "Søgt {{when}} uden at finde noget endnu. Box Office bliver ved med at lede.",
+      "looked": "Sidst søgt {{when}}.",
+      "lookingNow": "Leder efter det nu; se Aktivitet.",
+      "remove": "Hold op med at ønske {{title}}"
+    }
   },
   "importFiles": {
     "title": "Importér filer",

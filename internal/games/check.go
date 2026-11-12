@@ -94,8 +94,45 @@ func (s *Service) Start(ctx context.Context, rootID int, system string) (Progres
 		if err != nil {
 			s.log().Warn("checking games", "err", err)
 		}
+		s.startQueued()
 	}()
 	return s.Progress(), nil
+}
+
+// CheckSoon checks one system's games (all of them for "") now, or as
+// soon as the check running finishes, as after a game is moved in.
+func (s *Service) CheckSoon(ctx context.Context, system string) error {
+	_, err := s.Start(ctx, 0, system)
+	if !errors.Is(err, ErrBusy) {
+		return err
+	}
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if s.queued == nil {
+		s.queued = map[string]bool{}
+	}
+	s.queued[system] = true
+	return nil
+}
+
+// startQueued starts the check asked for while another ran.
+func (s *Service) startQueued() {
+	s.mu.Lock()
+	q := s.queued
+	s.queued = nil
+	s.mu.Unlock()
+	if len(q) == 0 {
+		return
+	}
+	system := ""
+	if len(q) == 1 {
+		for k := range q {
+			system = k
+		}
+	}
+	if _, err := s.Start(context.Background(), 0, system); err != nil {
+		s.log().Warn("checking games", "err", err)
+	}
 }
 
 // Run checks every games root folder a few minutes after Box Office
@@ -218,6 +255,12 @@ func (s *Service) check(ctx context.Context, rootID int, only string) error {
 		}
 		if err := s.Store.SaveGameCheck(ctx, sys.ID, c); err != nil {
 			return err
+		}
+		// Games wanted that are here now are wanted no longer.
+		if n, err := s.Store.ForgetGamesOnDisk(ctx, x.sys.Key); err != nil {
+			s.log().Warn("forgetting games wanted that are on disk", "system", x.sys.Name, "err", err)
+		} else if n > 0 {
+			s.log().Info("games wanted are on disk now", "system", x.sys.Name, "games", n)
 		}
 		s.set(func(p *Progress) { p.Games += len(c.Games) })
 	}

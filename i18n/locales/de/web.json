@@ -1759,7 +1759,8 @@
   "kind": {
     "ebook": "E-Book",
     "audiobook": "Hörbuch",
-    "album": "Album"
+    "album": "Album",
+    "game": "Spiel"
   },
   "problems": {
     "title": "Problemdateien",
@@ -2064,7 +2065,7 @@
     "seeGames": "Zu deinen Spielen",
     "checked": "geprüft {{when}}",
     "none": "Noch keine Spiele",
-    "noneBody": "Box Office zeigt die Spiele, die du schon hast: Arcade-Sets für MAME und Konsolenspiele wie Super Nintendo und Game Boy. Es liest und prüft sie und verändert sie nie.",
+    "noneBody": "Box Office zeigt deine Spiele, Arcade-Sets für MAME und Konsolenspiele wie Super Nintendo und Game Boy, und prüft jedes, ohne es zu ändern. Es kann auch Spiele finden, die du willst, und sie herunterladen.",
     "addRoot": "Füge den Ordner mit deinen Spielen unter <link>Einstellungen → Spiele-Stammordner</link> hinzu.",
     "noSystems": "Noch keine Systeme gefunden",
     "noSystemsBody": "Box Office hat in deinen Spiele-Stammordnern keine Spielsysteme gefunden. Lege die Spiele jedes Systems in einen Ordner mit seinem Namen, etwa mame oder snes, und prüfe erneut.",
@@ -2159,7 +2160,37 @@
     "otherVersions": "Andere Versionen",
     "theParent": "das Eltern-Spiel",
     "import": "Spiele importieren",
-    "iconCredit": "Systembilder von <link>RetroArch</link>, CC BY 4.0."
+    "iconCredit": "Systembilder von <link>RetroArch</link>, CC BY 4.0.",
+    "add": {
+      "title": "Spiel hinzufügen",
+      "sub": "Finde ein Spiel auf der Liste seines Systems. Box Office sucht es bei deinen Indexern, lädt es herunter, prüft, ob es das richtige Spiel ist, und legt es in deinen Spieleordner.",
+      "placeholder": "Nach einem Spiel suchen, z. B. Super Metroid",
+      "yourSystems": "Deine Systeme",
+      "allSystems": "Alle Systeme",
+      "notYours": "{{name}} (noch kein Ordner)",
+      "looking": "Durchsuche die Listen… Bei der ersten Suche auf einem System wird seine Liste heruntergeladen, das kann eine Minute dauern.",
+      "hint": "Suche nach Titel. Box Office durchsucht die No-Intro-Liste der Konsolenspiele und die MAME-Liste der Arcade-Spiele für die Systeme, für die du Ordner hast. Wähle ein System, um bei einem anderen zu suchen.",
+      "nothing": "Kein Spiel auf der Liste passt.",
+      "more": "Die ersten 60 werden gezeigt. Füge ein Wort hinzu, um einzugrenzen.",
+      "version": "Version",
+      "versionOf": "Version von {{title}}",
+      "have": "In deinen Spielen",
+      "wanted": "Gewünscht",
+      "want": "Will ich",
+      "cardTitle": "Spiel hinzufügen",
+      "cardSub": "Durchsuche die Liste aller Spiele eines Systems, und Box Office lädt die herunter, die du willst."
+    },
+    "wanted": {
+      "title": "Gewünscht",
+      "sub": "Box Office sucht stündlich bei deinen Indexern danach und prüft jeden Download mit der Liste des Systems, bevor er in deinen Spieleordner kommt.",
+      "movedIn": "Eingezogen. Der Ordner des Systems wird geprüft…",
+      "waiting": "Heruntergeladen und wartet darauf, in deinen Spieleordner zu kommen; siehe Downloads.",
+      "notYet": "Noch nicht gesucht.",
+      "nothing": "{{when}} gesucht, noch nichts gefunden. Box Office sucht weiter.",
+      "looked": "Zuletzt gesucht {{when}}.",
+      "lookingNow": "Wird jetzt gesucht; siehe Aktivität.",
+      "remove": "{{title}} nicht mehr wollen"
+    }
   },
   "importFiles": {
     "title": "Dateien importieren",

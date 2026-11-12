@@ -1759,7 +1759,8 @@
   "kind": {
     "ebook": "E-kitap",
     "audiobook": "Sesli kitap",
-    "album": "Albüm"
+    "album": "Albüm",
+    "game": "Oyun"
   },
   "problems": {
     "title": "Sorunlu dosyalar",
@@ -2064,7 +2065,7 @@
     "seeGames": "Oyunlarını gör",
     "checked": "kontrol edildi {{when}}",
     "none": "Henüz oyun yok",
-    "noneBody": "Box Office zaten sahip olduğun oyunları gösterir: MAME için atari salonu setleri ve Super Nintendo, Game Boy gibi konsol oyunları. Onları okur ve kontrol eder, asla değiştirmez.",
+    "noneBody": "Box Office oyunlarını, MAME için arcade setlerini ve Super Nintendo ile Game Boy gibi konsol oyunlarını gösterir ve her birini değiştirmeden kontrol eder. İstediğin oyunları bulup indirebilir de.",
     "addRoot": "Oyunlarının bulunduğu klasörü <link>Ayarlar → Oyun kök klasörleri</link> altına ekle.",
     "noSystems": "Henüz sistem bulunamadı",
     "noSystemsBody": "Box Office oyun kök klasörlerinde hiç oyun sistemi bulamadı. Her sistemin oyunlarını mame veya snes gibi o sistemin adını taşıyan bir klasöre koy, sonra yeniden kontrol et.",
@@ -2159,7 +2160,37 @@
     "otherVersions": "Diğer sürümler",
     "theParent": "ana oyun",
     "import": "Oyun içe aktar",
-    "iconCredit": "Sistem görselleri <link>RetroArch</link> kaynaklıdır, CC BY 4.0."
+    "iconCredit": "Sistem görselleri <link>RetroArch</link> kaynaklıdır, CC BY 4.0.",
+    "add": {
+      "title": "Oyun ekle",
+      "sub": "Bir oyunu sisteminin listesinde bul. Box Office onu dizinleyicilerinde arar, indirir, doğru oyun olduğunu kontrol eder ve oyun klasörüne koyar.",
+      "placeholder": "Bir oyun ara, örneğin Super Metroid",
+      "yourSystems": "Sistemlerin",
+      "allSystems": "Tüm sistemler",
+      "notYours": "{{name}} (henüz klasör yok)",
+      "looking": "Listelerde aranıyor… Bir sistemdeki ilk arama listesini indirir; bu bir dakika sürebilir.",
+      "hint": "Başlığa göre ara. Box Office, klasörü olan sistemler için No-Intro konsol oyunları listesine ve MAME arcade oyunları listesine bakar. Başkasına bakmak için bir sistem seç.",
+      "nothing": "Listede eşleşen oyun yok.",
+      "more": "İlk 60 gösteriliyor. Daraltmak için bir kelime ekle.",
+      "version": "Sürüm",
+      "versionOf": "{{title}} sürümü",
+      "have": "Oyunlarında",
+      "wanted": "İstendi",
+      "want": "İstiyorum",
+      "cardTitle": "Oyun ekle",
+      "cardSub": "Bir sistemin tüm oyunlarının listesinde ara; Box Office istediklerini indirir."
+    },
+    "wanted": {
+      "title": "İstenenler",
+      "sub": "Box Office bunları her saat dizinleyicilerinde arar ve her indirmeyi oyun klasörüne koymadan önce sistemin listesiyle karşılaştırır.",
+      "movedIn": "Taşındı. Sistemin klasörü kontrol ediliyor…",
+      "waiting": "İndirildi ve oyun klasörüne girmeyi bekliyor; İndirmeler'e bak.",
+      "notYet": "Henüz aranmadı.",
+      "nothing": "{{when}} arandı, henüz bir şey bulunamadı. Box Office aramaya devam ediyor.",
+      "looked": "Son arama {{when}}.",
+      "lookingNow": "Şimdi aranıyor; Etkinlik'e bak.",
+      "remove": "{{title}} artık istenmesin"
+    }
   },
   "importFiles": {
     "title": "Dosya içe aktar",

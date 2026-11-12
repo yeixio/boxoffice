@@ -13,6 +13,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/gamedat"
 	"github.com/yeixio/boxoffice/internal/games"
 	"github.com/yeixio/boxoffice/internal/mediatypes"
+	"github.com/yeixio/boxoffice/internal/search"
 	"github.com/yeixio/boxoffice/internal/store"
 )
 
@@ -30,6 +31,15 @@ func (s *Server) gameRoutes() []route {
 		{"GET /api/v1/games", true, s.gameList},
 		{"GET /api/v1/games/{id}", true, s.game},
 		{"GET /api/v1/games/{id}/art", true, s.gameArt},
+		{"GET /api/v1/games/systems", true, s.allGameSystems},
+		{"GET /api/v1/games/lookup", true, s.lookupGames},
+		{"GET /api/v1/games/lookup/art", true, s.lookupGameArt},
+		{"GET /api/v1/gamewants", true, s.gameWants},
+		{"POST /api/v1/gamewants", true, s.wantGame},
+		{"DELETE /api/v1/gamewants/{id}", true, s.unwantGame},
+		{"POST /api/v1/gamewants/{id}/search", true, s.searchGame},
+		{"GET /api/v1/gamewants/{id}/releases", true, s.gameReleases},
+		{"GET /api/v1/gamewants/{id}/art", true, s.gameWantArt},
 	}
 }
 
@@ -49,8 +59,11 @@ func (s *Server) gamesOn(r *http.Request) error {
 
 func gamesErr(err error) error {
 	switch {
-	case errors.Is(err, games.ErrOff), errors.Is(err, games.ErrBusy):
+	case errors.Is(err, games.ErrOff), errors.Is(err, games.ErrBusy), errors.Is(err, games.ErrOnDisk),
+		errors.Is(err, search.ErrGamesOff), errors.Is(err, store.ErrLocked):
 		return errorf(http.StatusConflict, err.Error())
+	case errors.Is(err, search.ErrNoIndexers), errors.As(err, new(games.NotOnListError)):
+		return errorf(http.StatusBadRequest, err.Error())
 	}
 	return err
 }
@@ -475,4 +488,156 @@ func (s *Server) gameArt(w http.ResponseWriter, r *http.Request) error {
 	w.Header().Set("Content-Type", "image/jpeg")
 	http.ServeFile(w, r, p)
 	return nil
+}
+
+// allGameSystems are the systems Box Office knows, to pick from.
+func (s *Server) allGameSystems(w http.ResponseWriter, r *http.Request) error {
+	return writeJSON(w, http.StatusOK, gamedat.Systems)
+}
+
+// lookupGames finds games on the systems' lists to want: q is the title,
+// system one system's key, or none for the systems with folders.
+func (s *Server) lookupGames(w http.ResponseWriter, r *http.Request) error {
+	if err := s.gamesOn(r); err != nil {
+		return err
+	}
+	var systems []string
+	if sys := r.URL.Query().Get("system"); sys != "" {
+		if _, ok := gamedat.LookupSystem(sys); !ok {
+			return errorf(http.StatusBadRequest, "Box Office doesn't know a system called "+strconv.Quote(sys))
+		}
+		systems = []string{sys}
+	}
+	list, err := s.Games.LookupGames(r.Context(), r.URL.Query().Get("q"), systems)
+	if err != nil {
+		return gamesErr(err)
+	}
+	return writeJSON(w, http.StatusOK, list)
+}
+
+// sendArt serves a game's picture from ArtFile and the like.
+func (s *Server) sendArt(w http.ResponseWriter, r *http.Request, p string, err error, what string) error {
+	if errors.Is(err, games.ErrNoArt) || errors.Is(err, store.ErrNotFound) {
+		return errorf(http.StatusNotFound, games.ErrNoArt.Error())
+	}
+	if err != nil {
+		s.Log.Debug("fetching a game's picture", "game", what, "err", err)
+		return errorf(http.StatusBadGateway, "couldn't fetch the game's picture: "+err.Error())
+	}
+	w.Header().Set("Cache-Control", "private, max-age=604800")
+	w.Header().Set("Content-Type", "image/jpeg")
+	http.ServeFile(w, r, p)
+	return nil
+}
+
+func (s *Server) lookupGameArt(w http.ResponseWriter, r *http.Request) error {
+	if err := s.gamesOn(r); err != nil {
+		return err
+	}
+	system, name := r.URL.Query().Get("system"), r.URL.Query().Get("name")
+	p, err := s.Games.LookupArt(r.Context(), system, name)
+	return s.sendArt(w, r, p, err, name)
+}
+
+func (s *Server) gameWantArt(w http.ResponseWriter, r *http.Request) error {
+	if err := s.gamesOn(r); err != nil {
+		return err
+	}
+	id, err := pathID(r, "id")
+	if err != nil {
+		return err
+	}
+	p, err := s.Games.WantArt(r.Context(), id)
+	return s.sendArt(w, r, p, err, strconv.FormatInt(id, 10))
+}
+
+// gameWants lists the games wanted, and how looking for each is going.
+func (s *Server) gameWants(w http.ResponseWriter, r *http.Request) error {
+	if err := s.gamesOn(r); err != nil {
+		return err
+	}
+	list, err := s.Games.Wants(r.Context())
+	if err != nil {
+		return err
+	}
+	return writeJSON(w, http.StatusOK, list)
+}
+
+// wantGame wants a version of a game from its system's list, and looks
+// for it.
+func (s *Server) wantGame(w http.ResponseWriter, r *http.Request) error {
+	if err := s.gamesOn(r); err != nil {
+		return err
+	}
+	var in struct {
+		System string `json:"system"`
+		Name   string `json:"name"`
+	}
+	if err := readJSON(r, &in); err != nil {
+		return err
+	}
+	if in.System == "" || in.Name == "" {
+		return errorf(http.StatusBadRequest, "say which game, and for which system")
+	}
+	want, err := s.Games.Want(r.Context(), in.System, in.Name)
+	if err != nil {
+		return gamesErr(err)
+	}
+	return writeJSON(w, http.StatusCreated, want)
+}
+
+// unwantGame forgets a game wanted, and stops its downloads. A game in
+// its system's folder already stays there.
+func (s *Server) unwantGame(w http.ResponseWriter, r *http.Request) error {
+	if err := s.gamesOn(r); err != nil {
+		return err
+	}
+	id, err := pathID(r, "id")
+	if err != nil {
+		return err
+	}
+	want, err := s.Store.GameWant(r.Context(), id)
+	if err != nil {
+		return err
+	}
+	if err := s.Store.DeleteGameWant(r.Context(), id); err != nil {
+		return err
+	}
+	s.cancelDownloads(r.Context(), store.GameKind, []int64{id}, "game "+want.Name)
+	w.WriteHeader(http.StatusNoContent)
+	return nil
+}
+
+// searchGame searches for a game wanted in the background, and grabs the
+// best release.
+func (s *Server) searchGame(w http.ResponseWriter, r *http.Request) error {
+	if err := s.gamesOn(r); err != nil {
+		return err
+	}
+	id, err := pathID(r, "id")
+	if err != nil {
+		return err
+	}
+	if err := s.Games.LookFor(r.Context(), id); err != nil {
+		return gamesErr(err)
+	}
+	w.WriteHeader(http.StatusAccepted)
+	return nil
+}
+
+// gameReleases searches the indexers for a game wanted, for picking a
+// release by hand.
+func (s *Server) gameReleases(w http.ResponseWriter, r *http.Request) error {
+	if err := s.gamesOn(r); err != nil {
+		return err
+	}
+	id, err := pathID(r, "id")
+	if err != nil {
+		return err
+	}
+	res, err := s.Search.Game(r.Context(), id)
+	if err != nil {
+		return gamesErr(err)
+	}
+	return writeJSON(w, http.StatusOK, res)
 }

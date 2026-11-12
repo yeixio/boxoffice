@@ -1759,7 +1759,8 @@
   "kind": {
     "ebook": "E-bok",
     "audiobook": "Lydbok",
-    "album": "Album"
+    "album": "Album",
+    "game": "Spill"
   },
   "problems": {
     "title": "Problemfiler",
@@ -2064,7 +2065,7 @@
     "seeGames": "Se spillene dine",
     "checked": "sjekket {{when}}",
     "none": "Ingen spill ennå",
-    "noneBody": "Box Office viser spillene du allerede har: arkadesett for MAME og konsollspill som Super Nintendo og Game Boy. Det leser og sjekker dem, og endrer dem aldri.",
+    "noneBody": "Box Office viser spillene dine, arkadesett for MAME og konsollspill som Super Nintendo og Game Boy, og sjekker hvert av dem uten å endre dem. Det kan også finne spill du vil ha og laste dem ned.",
     "addRoot": "Legg til mappen med spillene dine under <link>Innstillinger → Rotmapper for spill</link>.",
     "noSystems": "Ingen systemer funnet ennå",
     "noSystemsBody": "Box Office fant ingen spillsystemer i rotmappene dine for spill. Legg hvert systems spill i en mappe med navnet til systemet, for eksempel mame eller snes, og sjekk igjen.",
@@ -2159,7 +2160,37 @@
     "otherVersions": "Andre versjoner",
     "theParent": "forelderen",
     "import": "Importer spill",
-    "iconCredit": "Systembilder fra <link>RetroArch</link>, CC BY 4.0."
+    "iconCredit": "Systembilder fra <link>RetroArch</link>, CC BY 4.0.",
+    "add": {
+      "title": "Legg til et spill",
+      "sub": "Finn et spill på systemets liste. Box Office leter etter det hos indekserne dine, laster det ned, sjekker at det er riktig spill og legger det i spillmappen din.",
+      "placeholder": "Søk etter et spill, for eksempel Super Metroid",
+      "yourSystems": "Dine systemer",
+      "allSystems": "Alle systemer",
+      "notYours": "{{name}} (ingen mappe ennå)",
+      "looking": "Leter i listene… Første søk på et system laster ned listen, noe som kan ta et minutt.",
+      "hint": "Søk på tittel. Box Office leter i No-Intros liste over konsollspill og MAMEs liste over arkadespill, for systemene du har mapper for. Velg et system for å se et annet.",
+      "nothing": "Ingen spill på listen passer.",
+      "more": "Viser de første 60. Legg til et ord for å snevre inn.",
+      "version": "Versjon",
+      "versionOf": "Versjon av {{title}}",
+      "have": "I spillene dine",
+      "wanted": "Ønsket",
+      "want": "Vil ha",
+      "cardTitle": "Legg til et spill",
+      "cardSub": "Søk i listen over alle spill for et system, så laster Box Office ned dem du vil ha."
+    },
+    "wanted": {
+      "title": "Ønsket",
+      "sub": "Box Office leter etter disse hos indekserne dine hver time og sjekker hver nedlasting mot systemets liste før den havner i spillmappen din.",
+      "movedIn": "Flyttet inn. Sjekker systemets mappe…",
+      "waiting": "Lastet ned og venter på å komme i spillmappen din; se Nedlastinger.",
+      "notYet": "Ikke søkt etter ennå.",
+      "nothing": "Søkte {{when}} og har ikke funnet noe ennå. Box Office fortsetter å lete.",
+      "looked": "Sist søkt {{when}}.",
+      "lookingNow": "Leter etter det nå; se Aktivitet.",
+      "remove": "Slutt å ønske {{title}}"
+    }
   },
   "importFiles": {
     "title": "Importer filer",
