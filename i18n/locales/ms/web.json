@@ -1537,7 +1537,8 @@
     "removeTitle": "Alih keluar muat turun",
     "staysQuarantined": "Failnya kekal dalam kuarantin di <code>{{path}}</code>; padam atau lepaskannya di bawah Kuarantin di bawah. Jangan membukanya.",
     "alsoDelete": "Padam juga failnya dalam folder muat turun",
-    "neverTouched": "Fail yang sudah dialih ke pustaka anda tidak pernah disentuh."
+    "neverTouched": "Fail yang sudah dialih ke pustaka anda tidak pernah disentuh.",
+    "checkImport": "Semak di Import fail"
   },
   "req": {
     "tabs": {
@@ -2166,5 +2167,33 @@
     "gameHint": "Box Office mencarinya dalam senarai {{system}}. Jika tiada dalam senarai, atau tiada senarai (seperti permainan PC), gunakan nama yang anda taip: permainan akan disimpan dengan nama itu.",
     "noGames": "Tiada permainan dalam senarai yang sepadan. Anda masih boleh guna nama yang anda taip.",
     "useName": "Guna “{{name}}”"
+  },
+  "nzb": {
+    "title": "Tambah NZB",
+    "titleFor": "Tambah NZB untuk {{title}}",
+    "choose": "Pilih fail NZB",
+    "drop": "atau lepaskan di sini",
+    "or": "atau",
+    "link": "Tampal pautan ke NZB",
+    "get": "Dapatkan",
+    "linkStep1": "Di halaman keluaran pada pengindeks anda, klik kanan butang muat turun NZB.",
+    "linkStep2": "Pilih Salin pautan, kemudian tampal di sini.",
+    "linkKey": "Jika pautan daripada pengindeks yang ditetapkan dalam Tetapan, Box Office menambah kunci API anda jika tiada.",
+    "reading": "Membaca NZB…",
+    "sizeFiles_other": "{{count}} fail, {{size}}",
+    "password": "Kata laluan disertakan",
+    "forBody": "Box Office memuat turunnya untuk <b>{{title}}</b>, menyemaknya dan memindahkannya ke perpustakaan seperti keluaran yang dijumpainya sendiri.",
+    "thinks": "Apa yang Box Office fikir ia",
+    "noIdea": "Tidak dapat diketahui daripada nama. Box Office akan melihat failnya selepas dimuat turun.",
+    "whenDone": "Selepas dimuat turun",
+    "fileAuto": "Fail ke perpustakaan",
+    "fileAs": "Fail sebagai: {{kind}}",
+    "leave": "Biarkan dalam folder muat turun",
+    "fileHint": "Box Office mengekstraknya, mengenal pasti apa ia daripada failnya dan memfailkannya. Jika tidak pasti, ia menunggu di <link>Import fail</link> untuk anda semak.",
+    "leaveHint": "Ia kekal dalam folder muat turun. Anda boleh memindahkannya kemudian daripada Fail di halaman ini.",
+    "back": "Kembali",
+    "download": "Muat turun",
+    "haveOne": "Sudah ada NZB untuknya?",
+    "upload": "Muat naik NZB"
   }
 }

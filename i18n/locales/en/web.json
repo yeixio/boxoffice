@@ -1630,7 +1630,8 @@
     "removeTitle": "Remove download",
     "staysQuarantined": "Its files stay in quarantine at <code>{{path}}</code>; delete or release them under Quarantine below. Don't open them.",
     "alsoDelete": "Also delete its files in the downloads folder",
-    "neverTouched": "Files already moved into your library are never touched."
+    "neverTouched": "Files already moved into your library are never touched.",
+    "checkImport": "Check it on Import files"
   },
   "req": {
     "tabs": {
@@ -2274,5 +2275,34 @@
     "gameHint": "Box Office looks for it on the list of {{system}} games, when there is one. If the list hasn't got it, or there's none (as for PC games), use the name you typed: it goes in under that name.",
     "noGames": "No game on the list matches. You can still use the name you typed.",
     "useName": "Use “{{name}}”"
+  },
+  "nzb": {
+    "title": "Add an NZB",
+    "titleFor": "Add an NZB for {{title}}",
+    "choose": "Choose an NZB file",
+    "drop": "or drop it here",
+    "or": "or",
+    "link": "Paste a link to an NZB",
+    "get": "Get it",
+    "linkStep1": "On your indexer's page for the release, right-click the NZB download button.",
+    "linkStep2": "Choose Copy link, then paste it here.",
+    "linkKey": "If the link is from an indexer you set up in Settings, Box Office adds your API key when it's missing.",
+    "reading": "Reading the NZB…",
+    "sizeFiles_one": "{{count}} file, {{size}}",
+    "sizeFiles_other": "{{count}} files, {{size}}",
+    "password": "Password included",
+    "forBody": "Box Office downloads it for <b>{{title}}</b>, checks it, and moves it into the library like a release it found itself.",
+    "thinks": "What Box Office thinks it is",
+    "noIdea": "It can't tell from the name. It looks at the files once they're downloaded.",
+    "whenDone": "When it's downloaded",
+    "fileAuto": "File it in the library",
+    "fileAs": "File it as: {{kind}}",
+    "leave": "Leave it in the downloads folder",
+    "fileHint": "Box Office unpacks it, works out what it is from its files, and files it. If it isn't sure, it waits on <link>Import files</link> for you to check.",
+    "leaveHint": "It stays in the downloads folder. You can move it in later from Files on this page.",
+    "back": "Back",
+    "download": "Download",
+    "haveOne": "Have an NZB for it already?",
+    "upload": "Upload an NZB"
   }
 }

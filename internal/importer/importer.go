@@ -313,56 +313,59 @@ type what struct {
 	system   string
 }
 
+// add counts one file in what's in an item.
+func (w *what) add(p string, size int64) {
+	name := filepath.Base(p)
+	w.files++
+	w.size += size
+	// A disc image can be a film's DVD or a game's disc: what's on it
+	// says which.
+	isGame := func() bool {
+		if w.games >= 5 && w.system != "" {
+			w.games++
+			return true
+		}
+		sys, ok := games.Identify(p)
+		if !ok {
+			return false
+		}
+		if w.system == "" {
+			w.system = sys.Key
+		}
+		w.games++
+		if w.firstGame == "" {
+			w.firstGame = name
+		}
+		return true
+	}
+	switch {
+	case strings.EqualFold(filepath.Ext(name), ".iso") && isGame():
+	case screen.IsVideo(name):
+		if !strings.Contains(strings.ToLower(name), "sample") {
+			w.videos++
+			if _, _, ok := libscan.EpisodeCode(name); ok {
+				w.episodes++
+			}
+		}
+	case screen.IsAudio(name):
+		w.audio++
+		w.audioSize += size
+		if strings.EqualFold(filepath.Ext(name), ".m4b") {
+			w.m4b++
+		}
+	case screen.IsEbook(name):
+		w.ebooks++
+	case gamedat.IsGameFile(name) || strings.EqualFold(filepath.Ext(name), ".chd"):
+		if !isGame() && discImage(name) {
+			w.discs++
+		}
+	}
+}
+
 // look reads what's in an item, up to a limit.
 func look(full string, dir bool) what {
 	var w what
-	add := func(p string, size int64) {
-		name := filepath.Base(p)
-		w.files++
-		w.size += size
-		// A disc image can be a film's DVD or a game's disc: what's on it
-		// says which.
-		isGame := func() bool {
-			if w.games >= 5 && w.system != "" {
-				w.games++
-				return true
-			}
-			sys, ok := games.Identify(p)
-			if !ok {
-				return false
-			}
-			if w.system == "" {
-				w.system = sys.Key
-			}
-			w.games++
-			if w.firstGame == "" {
-				w.firstGame = name
-			}
-			return true
-		}
-		switch {
-		case strings.EqualFold(filepath.Ext(name), ".iso") && isGame():
-		case screen.IsVideo(name):
-			if !strings.Contains(strings.ToLower(name), "sample") {
-				w.videos++
-				if _, _, ok := libscan.EpisodeCode(name); ok {
-					w.episodes++
-				}
-			}
-		case screen.IsAudio(name):
-			w.audio++
-			w.audioSize += size
-			if strings.EqualFold(filepath.Ext(name), ".m4b") {
-				w.m4b++
-			}
-		case screen.IsEbook(name):
-			w.ebooks++
-		case gamedat.IsGameFile(name) || strings.EqualFold(filepath.Ext(name), ".chd"):
-			if !isGame() && discImage(name) {
-				w.discs++
-			}
-		}
-	}
+	add := w.add
 	if !dir {
 		if st, err := os.Stat(full); err == nil {
 			add(full, st.Size())
@@ -467,6 +470,12 @@ func (s *Service) guess(ctx context.Context, it *Item, kind string) {
 	full := filepath.Join(dir, it.Name)
 	w := look(full, it.Dir)
 	it.Files, it.Size = w.files, w.size
+	s.guessWhat(ctx, it, kind, w, full)
+}
+
+// guessWhat works out what an item is from what's in it. full is where it
+// is, if it's on disk yet.
+func (s *Service) guessWhat(ctx context.Context, it *Item, kind string, w what, full string) {
 	it.Game = ""
 	it.Match, it.Part, it.System, it.Sure, it.Problem, it.Title, it.Year, it.Season, it.Episode, it.off = nil, "", "", false, "", "", 0, 0, 0, false
 	it.Kind = cmp.Or(kind, kindOf(it.Name, w))

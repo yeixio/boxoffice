@@ -1,6 +1,7 @@
 package downloader
 
 import (
+	"cmp"
 	"context"
 	"errors"
 	"fmt"
@@ -41,7 +42,7 @@ func (e *Engine) postProcess(ctx context.Context, r *running, d *store.Download,
 		return errors.New("the download finished with no files in it")
 	}
 	e.Log.Debug("download unpacked", "name", d.Name, "id", d.ID, "files", len(files), "repair notes", strings.Join(notes, "; "))
-	found := screen.CheckFor(job.dir, files, wants(d.Kind))
+	found := screen.CheckFor(job.dir, files, wants(cmp.Or(d.Kind, fileKind(d.FileAs))))
 	if len(found) == 0 {
 		found = e.checkLength(ctx, d, job.dir, files)
 	}
@@ -64,6 +65,11 @@ func (e *Engine) postProcess(ctx context.Context, r *running, d *store.Download,
 		return err
 	}
 	switch {
+	case d.Kind == "" && d.FileAs != "" && e.FileAway != nil:
+		// Added by hand, to be filed once it's here: whether or not
+		// moving downloads in by itself is on, as it was asked for.
+		status(store.DownloadImporting, "")
+		msg = e.fileAway(context.WithoutCancel(ctx), d, job.dir, lead)
 	case d.Kind == "":
 		// Added by hand: it stays in the downloads folder.
 	case !set.Import:
@@ -76,6 +82,34 @@ func (e *Engine) postProcess(ctx context.Context, r *running, d *store.Download,
 	r.setStage("")
 	e.Log.Info("download finished", "name", d.Name, "id", d.ID, "result", msg)
 	return e.Store.SetDownloadStatus(context.WithoutCancel(ctx), d.ID, store.DownloadCompleted, msg)
+}
+
+// fileKind is the kind a download added by hand is to be filed as, when
+// it was said; "" when Box Office is to work it out.
+func fileKind(fileAs string) string {
+	if fileAs == "auto" {
+		return ""
+	}
+	return fileAs
+}
+
+// fileAway hands a finished download added by hand to the Import files
+// page, which files it in the library if it can tell what it is, and
+// says what happened. Failing to doesn't fail the download.
+func (e *Engine) fileAway(ctx context.Context, d *store.Download, dir, lead string) string {
+	to, waiting, err := e.FileAway(ctx, dir, d.Name, d.FileAs)
+	switch {
+	case err != nil:
+		e.Log.Warn("couldn't file a download", "name", d.Name, "id", d.ID, "err", err)
+		return lead + "Downloaded to " + d.Folder + ", but Box Office couldn't file it: " + err.Error()
+	case waiting != "":
+		return lead + "Downloaded, and waiting on Import files: " + waiting + "."
+	}
+	if err := e.Store.SetDownloadImported(ctx, d.ID, to); err != nil {
+		e.Log.Warn("couldn't record where a download went", "id", d.ID, "err", err)
+	}
+	d.ImportedTo = to
+	return lead + "Filed in " + to
 }
 
 // vanished marks an unpack that failed as a volume it was reading went

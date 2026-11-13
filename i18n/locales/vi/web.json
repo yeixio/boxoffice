@@ -1537,7 +1537,8 @@
     "removeTitle": "Xóa bản tải",
     "staysQuarantined": "Các tệp của nó vẫn trong cách ly tại <code>{{path}}</code>; xóa hoặc thả chúng ở mục Cách ly bên dưới. Đừng mở chúng.",
     "alsoDelete": "Xóa cả các tệp của nó trong thư mục tải xuống",
-    "neverTouched": "Tệp đã chuyển vào thư viện của bạn không bao giờ bị động đến."
+    "neverTouched": "Tệp đã chuyển vào thư viện của bạn không bao giờ bị động đến.",
+    "checkImport": "Kiểm tra ở Nhập tệp"
   },
   "req": {
     "tabs": {
@@ -2166,5 +2167,33 @@
     "gameHint": "Box Office tìm nó trong danh sách của {{system}}. Nếu danh sách không có, hoặc không có danh sách (như trò chơi PC), hãy dùng tên bạn đã gõ: trò chơi sẽ được lưu với tên đó.",
     "noGames": "Không có trò chơi nào trong danh sách khớp. Bạn vẫn có thể dùng tên đã gõ.",
     "useName": "Dùng “{{name}}”"
+  },
+  "nzb": {
+    "title": "Thêm NZB",
+    "titleFor": "Thêm NZB cho {{title}}",
+    "choose": "Chọn tệp NZB",
+    "drop": "hoặc thả vào đây",
+    "or": "hoặc",
+    "link": "Dán liên kết tới NZB",
+    "get": "Lấy",
+    "linkStep1": "Trên trang bản phát hành ở indexer, nhấp chuột phải vào nút tải NZB.",
+    "linkStep2": "Chọn Sao chép liên kết rồi dán vào đây.",
+    "linkKey": "Nếu liên kết từ indexer đã thiết lập trong Cài đặt, Box Office sẽ thêm khóa API của bạn khi thiếu.",
+    "reading": "Đang đọc NZB…",
+    "sizeFiles_other": "{{count}} tệp, {{size}}",
+    "password": "Có kèm mật khẩu",
+    "forBody": "Box Office tải nó cho <b>{{title}}</b>, kiểm tra và chuyển vào thư viện như một bản phát hành tự tìm được.",
+    "thinks": "Box Office nghĩ đây là gì",
+    "noIdea": "Không thể đoán từ tên. Box Office sẽ xem các tệp sau khi tải xong.",
+    "whenDone": "Khi tải xong",
+    "fileAuto": "Xếp vào thư viện",
+    "fileAs": "Xếp vào dạng: {{kind}}",
+    "leave": "Để lại trong thư mục tải về",
+    "fileHint": "Box Office giải nén, đoán nó là gì từ các tệp và xếp vào chỗ. Nếu chưa chắc, nó chờ ở <link>Nhập tệp</link> để bạn kiểm tra.",
+    "leaveHint": "Nó ở lại thư mục tải về. Bạn có thể chuyển vào sau từ mục Tệp trên trang này.",
+    "back": "Quay lại",
+    "download": "Tải về",
+    "haveOne": "Đã có NZB cho nó?",
+    "upload": "Tải lên NZB"
   }
 }

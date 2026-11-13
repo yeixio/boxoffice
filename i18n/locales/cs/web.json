@@ -1816,7 +1816,8 @@
     "removeTitle": "Odebrat stahování",
     "staysQuarantined": "Jeho soubory zůstanou v karanténě v <code>{{path}}</code>; smažte je nebo uvolněte níže v sekci Karanténa. Neotevírejte je.",
     "alsoDelete": "Smazat i jeho soubory ve složce stahování",
-    "neverTouched": "Soubory, které už jsou přesunuté do knihovny, se nikdy nemění."
+    "neverTouched": "Soubory, které už jsou přesunuté do knihovny, se nikdy nemění.",
+    "checkImport": "Zkontrolovat v Importu souborů"
   },
   "req": {
     "tabs": {
@@ -2490,5 +2491,36 @@
     "gameHint": "Box Office ji hledá na seznamu pro {{system}}. Pokud ji seznam nemá nebo seznam neexistuje (jako u her pro PC), použijte zadaný název: hra se uloží pod ním.",
     "noGames": "Žádná hra na seznamu neodpovídá. Zadaný název můžete použít i tak.",
     "useName": "Použít „{{name}}“"
+  },
+  "nzb": {
+    "title": "Přidat NZB",
+    "titleFor": "Přidat NZB pro {{title}}",
+    "choose": "Vybrat soubor NZB",
+    "drop": "nebo ho sem přetáhněte",
+    "or": "nebo",
+    "link": "Vložte odkaz na NZB",
+    "get": "Načíst",
+    "linkStep1": "Na stránce vydání u svého indexeru klikněte pravým tlačítkem na tlačítko stažení NZB.",
+    "linkStep2": "Zvolte Kopírovat odkaz a vložte ho sem.",
+    "linkKey": "Pokud je odkaz z indexeru nastaveného v Nastavení, Box Office doplní váš klíč API, když chybí.",
+    "reading": "Čtení NZB…",
+    "sizeFiles_few": "{{count}} soubory, {{size}}",
+    "sizeFiles_many": "{{count}} souboru, {{size}}",
+    "sizeFiles_one": "{{count}} soubor, {{size}}",
+    "sizeFiles_other": "{{count}} souborů, {{size}}",
+    "password": "Heslo je součástí",
+    "forBody": "Box Office ho stáhne pro <b>{{title}}</b>, zkontroluje ho a přesune do knihovny jako vydání, které našel sám.",
+    "thinks": "Co si Box Office myslí, že to je",
+    "noIdea": "Z názvu to nejde poznat. Box Office se podívá na soubory po stažení.",
+    "whenDone": "Po stažení",
+    "fileAuto": "Zařadit do knihovny",
+    "fileAs": "Zařadit jako: {{kind}}",
+    "leave": "Nechat ve složce stahování",
+    "fileHint": "Box Office ho rozbalí, podle souborů zjistí, co to je, a zařadí ho. Pokud si není jistý, počká v <link>Importu souborů</link>, než to zkontrolujete.",
+    "leaveHint": "Zůstane ve složce stahování. Později ho můžete přesunout ze sekce Soubory na této stránce.",
+    "back": "Zpět",
+    "download": "Stáhnout",
+    "haveOne": "Už pro to máte NZB?",
+    "upload": "Nahrát NZB"
   }
 }

@@ -1537,7 +1537,8 @@
     "removeTitle": "移除下载",
     "staysQuarantined": "它的文件仍隔离在 <code>{{path}}</code>；请在下方隔离区中删除或放行。不要打开它们。",
     "alsoDelete": "同时删除下载文件夹中的文件",
-    "neverTouched": "已移入媒体库的文件绝不会被触及。"
+    "neverTouched": "已移入媒体库的文件绝不会被触及。",
+    "checkImport": "在导入文件中查看"
   },
   "req": {
     "tabs": {
@@ -2166,5 +2167,33 @@
     "gameHint": "Box Office 会在 {{system}} 的列表中查找。如果列表里没有，或者没有列表（例如 PC 游戏），请使用你输入的名称，游戏会以该名称保存。",
     "noGames": "列表中没有匹配的游戏。你仍然可以使用输入的名称。",
     "useName": "使用“{{name}}”"
+  },
+  "nzb": {
+    "title": "添加 NZB",
+    "titleFor": "为 {{title}} 添加 NZB",
+    "choose": "选择 NZB 文件",
+    "drop": "或拖放到这里",
+    "or": "或",
+    "link": "粘贴 NZB 链接",
+    "get": "获取",
+    "linkStep1": "在索引器的发布页面上，右键点击 NZB 下载按钮。",
+    "linkStep2": "选择“复制链接”，然后粘贴到这里。",
+    "linkKey": "如果链接来自你在设置中添加的索引器，缺少 API 密钥时 Box Office 会自动补上。",
+    "reading": "正在读取 NZB…",
+    "sizeFiles_other": "{{count}} 个文件,{{size}}",
+    "password": "已含密码",
+    "forBody": "Box Office 会为 <b>{{title}}</b> 下载它、检查它，并像自己找到的发布一样移入媒体库。",
+    "thinks": "Box Office 认为它是",
+    "noIdea": "无法从名称判断。下载完成后 Box Office 会查看文件。",
+    "whenDone": "下载完成后",
+    "fileAuto": "整理到媒体库",
+    "fileAs": "整理为：{{kind}}",
+    "leave": "留在下载文件夹",
+    "fileHint": "Box Office 会解压它，根据文件判断内容并整理。如果不确定，会在<link>导入文件</link>等你确认。",
+    "leaveHint": "它会留在下载文件夹。之后可以在本页的“文件”中移入。",
+    "back": "返回",
+    "download": "下载",
+    "haveOne": "已经有它的 NZB 了？",
+    "upload": "上传 NZB"
   }
 }

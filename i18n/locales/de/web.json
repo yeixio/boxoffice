@@ -1630,7 +1630,8 @@
     "removeTitle": "Download entfernen",
     "staysQuarantined": "Seine Dateien bleiben in der Quarantäne unter <code>{{path}}</code>; lösche oder gib sie unten unter Quarantäne frei. Öffne sie nicht.",
     "alsoDelete": "Auch seine Dateien im Download-Ordner löschen",
-    "neverTouched": "Dateien, die schon in deine Bibliothek verschoben wurden, werden nie angetastet."
+    "neverTouched": "Dateien, die schon in deine Bibliothek verschoben wurden, werden nie angetastet.",
+    "checkImport": "Unter „Dateien importieren“ prüfen"
   },
   "req": {
     "tabs": {
@@ -2274,5 +2275,34 @@
     "gameHint": "Box Office sucht es auf der Liste für {{system}}. Steht es nicht darauf oder gibt es keine Liste (wie bei PC-Spielen), nimm den eingegebenen Namen: Es wird unter diesem Namen abgelegt.",
     "noGames": "Kein Spiel auf der Liste passt. Du kannst trotzdem den eingegebenen Namen nehmen.",
     "useName": "„{{name}}“ verwenden"
+  },
+  "nzb": {
+    "title": "NZB hinzufügen",
+    "titleFor": "NZB für {{title}} hinzufügen",
+    "choose": "NZB-Datei auswählen",
+    "drop": "oder hier ablegen",
+    "or": "oder",
+    "link": "Link zu einer NZB einfügen",
+    "get": "Abrufen",
+    "linkStep1": "Klicke auf der Seite deines Indexers mit der rechten Maustaste auf den NZB-Download-Button.",
+    "linkStep2": "Wähle „Link kopieren“ und füge ihn hier ein.",
+    "linkKey": "Stammt der Link von einem Indexer aus den Einstellungen, ergänzt Box Office deinen API-Schlüssel, falls er fehlt.",
+    "reading": "NZB wird gelesen…",
+    "sizeFiles_one": "{{count}} Datei, {{size}}",
+    "sizeFiles_other": "{{count}} Dateien, {{size}}",
+    "password": "Passwort enthalten",
+    "forBody": "Box Office lädt sie für <b>{{title}}</b> herunter, prüft sie und verschiebt sie in die Bibliothek, wie ein selbst gefundenes Release.",
+    "thinks": "Was Box Office vermutet",
+    "noIdea": "Am Namen ist es nicht zu erkennen. Box Office sieht sich die Dateien nach dem Download an.",
+    "whenDone": "Nach dem Download",
+    "fileAuto": "In die Bibliothek einsortieren",
+    "fileAs": "Einsortieren als: {{kind}}",
+    "leave": "Im Download-Ordner lassen",
+    "fileHint": "Box Office entpackt es, erkennt anhand der Dateien, was es ist, und sortiert es ein. Ist es unsicher, wartet es unter <link>Dateien importieren</link> auf deine Prüfung.",
+    "leaveHint": "Es bleibt im Download-Ordner. Du kannst es später über „Dateien“ auf dieser Seite verschieben.",
+    "back": "Zurück",
+    "download": "Herunterladen",
+    "haveOne": "Hast du schon eine NZB dafür?",
+    "upload": "NZB hochladen"
   }
 }

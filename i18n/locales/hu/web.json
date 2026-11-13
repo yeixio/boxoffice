@@ -1630,7 +1630,8 @@
     "removeTitle": "Letöltés eltávolítása",
     "staysQuarantined": "A fájljai karanténban maradnak itt: <code>{{path}}</code>; töröld vagy engedd ki őket lent a Karanténban. Ne nyisd meg őket.",
     "alsoDelete": "A fájljait is törölje a letöltési mappából",
-    "neverTouched": "A könyvtáradba már áthelyezett fájlokhoz soha nem nyúl."
+    "neverTouched": "A könyvtáradba már áthelyezett fájlokhoz soha nem nyúl.",
+    "checkImport": "Ellenőrzés a Fájlok importálása oldalon"
   },
   "req": {
     "tabs": {
@@ -2274,5 +2275,34 @@
     "gameHint": "A Box Office a(z) {{system}} listáján keresi. Ha a listán nincs rajta, vagy nincs lista (mint a PC-játékoknál), használd a beírt nevet: ezen a néven kerül be.",
     "noGames": "A listán egy játék sem egyezik. A beírt nevet így is használhatod.",
     "useName": "„{{name}}” használata"
+  },
+  "nzb": {
+    "title": "NZB hozzáadása",
+    "titleFor": "NZB hozzáadása ehhez: {{title}}",
+    "choose": "NZB-fájl kiválasztása",
+    "drop": "vagy húzd ide",
+    "or": "vagy",
+    "link": "Illessz be egy NZB-linket",
+    "get": "Lekérés",
+    "linkStep1": "Az indexelőd kiadásoldalán kattints jobb gombbal az NZB letöltés gombra.",
+    "linkStep2": "Válaszd a Hivatkozás másolása lehetőséget, majd illeszd be ide.",
+    "linkKey": "Ha a link a Beállításokban megadott indexelőtől származik, a Box Office hozzáadja az API-kulcsodat, ha hiányzik.",
+    "reading": "NZB olvasása…",
+    "sizeFiles_one": "{{count}} fájl, {{size}}",
+    "sizeFiles_other": "{{count}} fájl, {{size}}",
+    "password": "Jelszó mellékelve",
+    "forBody": "A Box Office letölti ehhez: <b>{{title}}</b>, ellenőrzi, és a könyvtárba helyezi, mint egy maga talált kiadást.",
+    "thinks": "Mit gondol róla a Box Office",
+    "noIdea": "A névből nem derül ki. A Box Office a letöltés után megnézi a fájlokat.",
+    "whenDone": "Letöltés után",
+    "fileAuto": "Rendezés a könyvtárba",
+    "fileAs": "Rendezés mint: {{kind}}",
+    "leave": "Maradjon a letöltési mappában",
+    "fileHint": "A Box Office kicsomagolja, a fájlokból kitalálja, mi az, és a helyére teszi. Ha bizonytalan, az <link>Fájlok importálása</link> oldalon vár, hogy ellenőrizd.",
+    "leaveHint": "A letöltési mappában marad. Később áthelyezheted az oldal Fájlok részéből.",
+    "back": "Vissza",
+    "download": "Letöltés",
+    "haveOne": "Van már hozzá NZB-d?",
+    "upload": "NZB feltöltése"
   }
 }

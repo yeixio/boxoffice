@@ -1723,7 +1723,8 @@
     "removeTitle": "Elimină descărcarea",
     "staysQuarantined": "Fișierele sale rămân în carantină la <code>{{path}}</code>; șterge-le sau eliberează-le mai jos la Carantină. Nu le deschide.",
     "alsoDelete": "Șterge și fișierele sale din dosarul de descărcări",
-    "neverTouched": "Fișierele deja mutate în bibliotecă nu sunt atinse niciodată."
+    "neverTouched": "Fișierele deja mutate în bibliotecă nu sunt atinse niciodată.",
+    "checkImport": "Verifică în Importă fișiere"
   },
   "req": {
     "tabs": {
@@ -2382,5 +2383,35 @@
     "gameHint": "Box Office îl caută în lista pentru {{system}}. Dacă lista nu îl are sau nu există listă (ca la jocurile PC), folosește numele scris: va fi pus sub acest nume.",
     "noGames": "Niciun joc din listă nu se potrivește. Poți folosi totuși numele scris.",
     "useName": "Folosește „{{name}}”"
+  },
+  "nzb": {
+    "title": "Adaugă un NZB",
+    "titleFor": "Adaugă un NZB pentru {{title}}",
+    "choose": "Alege un fișier NZB",
+    "drop": "sau trage-l aici",
+    "or": "sau",
+    "link": "Lipește un link către un NZB",
+    "get": "Obține",
+    "linkStep1": "Pe pagina release-ului de la indexerul tău, dă clic dreapta pe butonul de descărcare NZB.",
+    "linkStep2": "Alege Copiază linkul, apoi lipește-l aici.",
+    "linkKey": "Dacă linkul e de la un indexer configurat în Setări, Box Office adaugă cheia ta API când lipsește.",
+    "reading": "Se citește NZB-ul…",
+    "sizeFiles_few": "{{count}} fișiere, {{size}}",
+    "sizeFiles_one": "{{count}} fișier, {{size}}",
+    "sizeFiles_other": "{{count}} de fișiere, {{size}}",
+    "password": "Parolă inclusă",
+    "forBody": "Box Office îl descarcă pentru <b>{{title}}</b>, îl verifică și îl mută în bibliotecă precum un release găsit singur.",
+    "thinks": "Ce crede Box Office că este",
+    "noIdea": "Nu se poate spune după nume. Box Office se uită la fișiere după descărcare.",
+    "whenDone": "După descărcare",
+    "fileAuto": "Pune-l în bibliotecă",
+    "fileAs": "Pune-l ca: {{kind}}",
+    "leave": "Lasă-l în folderul de descărcări",
+    "fileHint": "Box Office îl dezarhivează, își dă seama din fișiere ce este și îl pune la locul lui. Dacă nu e sigur, așteaptă în <link>Importă fișiere</link> să verifici.",
+    "leaveHint": "Rămâne în folderul de descărcări. Îl poți muta mai târziu din Fișiere, pe această pagină.",
+    "back": "Înapoi",
+    "download": "Descarcă",
+    "haveOne": "Ai deja un NZB pentru el?",
+    "upload": "Încarcă un NZB"
   }
 }

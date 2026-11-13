@@ -1630,7 +1630,8 @@
     "removeTitle": "Ta bort nedladdning",
     "staysQuarantined": "Dess filer ligger kvar i karantän i <code>{{path}}</code>; radera eller släpp dem under Karantän nedan. Öppna dem inte.",
     "alsoDelete": "Radera även dess filer i nedladdningsmappen",
-    "neverTouched": "Filer som redan flyttats till ditt bibliotek rörs aldrig."
+    "neverTouched": "Filer som redan flyttats till ditt bibliotek rörs aldrig.",
+    "checkImport": "Kolla under Importera filer"
   },
   "req": {
     "tabs": {
@@ -2274,5 +2275,34 @@
     "gameHint": "Box Office letar efter det i listan för {{system}}. Om listan inte har det, eller om det inte finns någon lista (som för PC-spel), använd namnet du skrev: det läggs in under det namnet.",
     "noGames": "Inget spel i listan matchar. Du kan ändå använda namnet du skrev.",
     "useName": "Använd ”{{name}}”"
+  },
+  "nzb": {
+    "title": "Lägg till en NZB",
+    "titleFor": "Lägg till en NZB för {{title}}",
+    "choose": "Välj en NZB-fil",
+    "drop": "eller släpp den här",
+    "or": "eller",
+    "link": "Klistra in en länk till en NZB",
+    "get": "Hämta",
+    "linkStep1": "Högerklicka på NZB-nedladdningsknappen på releasens sida hos din indexerare.",
+    "linkStep2": "Välj Kopiera länk och klistra in den här.",
+    "linkKey": "Om länken kommer från en indexerare i Inställningar lägger Box Office till din API-nyckel om den saknas.",
+    "reading": "Läser NZB…",
+    "sizeFiles_one": "{{count}} fil, {{size}}",
+    "sizeFiles_other": "{{count}} filer, {{size}}",
+    "password": "Lösenord ingår",
+    "forBody": "Box Office laddar ner den för <b>{{title}}</b>, kontrollerar den och flyttar in den i biblioteket som en release den hittat själv.",
+    "thinks": "Vad Box Office tror att det är",
+    "noIdea": "Det går inte att se på namnet. Box Office tittar på filerna när de laddats ner.",
+    "whenDone": "När den laddats ner",
+    "fileAuto": "Sortera in i biblioteket",
+    "fileAs": "Sortera in som: {{kind}}",
+    "leave": "Låt den ligga i nedladdningsmappen",
+    "fileHint": "Box Office packar upp den, listar ut vad det är från filerna och sorterar in den. Är den osäker väntar den under <link>Importera filer</link> på att du kollar.",
+    "leaveHint": "Den ligger kvar i nedladdningsmappen. Du kan flytta in den senare från Filer på den här sidan.",
+    "back": "Tillbaka",
+    "download": "Ladda ner",
+    "haveOne": "Har du redan en NZB för den?",
+    "upload": "Ladda upp en NZB"
   }
 }

@@ -1723,7 +1723,8 @@
     "removeTitle": "Rimuovi il download",
     "staysQuarantined": "I suoi file restano in quarantena in <code>{{path}}</code>; eliminali o rilasciali sotto Quarantena qui sotto. Non aprirli.",
     "alsoDelete": "Elimina anche i suoi file nella cartella dei download",
-    "neverTouched": "I file già spostati nella tua libreria non vengono mai toccati."
+    "neverTouched": "I file già spostati nella tua libreria non vengono mai toccati.",
+    "checkImport": "Controllalo in Importa file"
   },
   "req": {
     "tabs": {
@@ -2382,5 +2383,35 @@
     "gameHint": "Box Office lo cerca nella lista di {{system}}. Se la lista non ce l'ha, o non c'è una lista (come per i giochi PC), usa il nome che hai scritto: verrà archiviato con quel nome.",
     "noGames": "Nessun gioco della lista corrisponde. Puoi comunque usare il nome che hai scritto.",
     "useName": "Usa «{{name}}»"
+  },
+  "nzb": {
+    "title": "Aggiungi un NZB",
+    "titleFor": "Aggiungi un NZB per {{title}}",
+    "choose": "Scegli un file NZB",
+    "drop": "oppure trascinalo qui",
+    "or": "oppure",
+    "link": "Incolla un link a un NZB",
+    "get": "Recupera",
+    "linkStep1": "Nella pagina della release del tuo indexer, fai clic destro sul pulsante di download NZB.",
+    "linkStep2": "Scegli Copia link, poi incollalo qui.",
+    "linkKey": "Se il link è di un indexer configurato nelle Impostazioni, Box Office aggiunge la tua chiave API se manca.",
+    "reading": "Lettura dell'NZB…",
+    "sizeFiles_many": "{{count}} file, {{size}}",
+    "sizeFiles_one": "{{count}} file, {{size}}",
+    "sizeFiles_other": "{{count}} file, {{size}}",
+    "password": "Password inclusa",
+    "forBody": "Box Office lo scarica per <b>{{title}}</b>, lo controlla e lo sposta nella libreria come una release trovata da sé.",
+    "thinks": "Cosa pensa Box Office che sia",
+    "noIdea": "Dal nome non si capisce. Box Office guarderà i file una volta scaricati.",
+    "whenDone": "Una volta scaricato",
+    "fileAuto": "Archivialo nella libreria",
+    "fileAs": "Archivialo come: {{kind}}",
+    "leave": "Lascialo nella cartella dei download",
+    "fileHint": "Box Office lo estrae, capisce cos'è dai suoi file e lo archivia. Se non è sicuro, aspetta in <link>Importa file</link> che tu controlli.",
+    "leaveHint": "Resta nella cartella dei download. Puoi spostarlo più tardi da File in questa pagina.",
+    "back": "Indietro",
+    "download": "Scarica",
+    "haveOne": "Hai già un NZB per questo?",
+    "upload": "Carica un NZB"
   }
 }

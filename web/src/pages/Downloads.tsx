@@ -1,5 +1,5 @@
 import { Trans, useTranslation } from "react-i18next";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   keepPreviousData,
@@ -25,7 +25,6 @@ import {
   Upload,
 } from "lucide-react";
 import {
-  api,
   del,
   get,
   post,
@@ -59,6 +58,7 @@ import {
 import { DownloadFiles } from "./DownloadFiles";
 import { Quarantine } from "./DownloadsQuarantine";
 import { Pager, usePageSize } from "./Pager";
+import { AddNzb, isNzb } from "../AddNzb";
 
 // HistoryPage is which page of the history to fetch, sorted how; the
 // server pages and sorts it, as it can grow long.
@@ -242,12 +242,28 @@ export function Downloads() {
       put("/downloads/settings", { ...d.data!.settings, ...s }),
     onSuccess: refresh,
   });
-  const file = useRef<HTMLInputElement>(null);
-  const upload = useMutation({
-    mutationFn: async (f: File) =>
-      api("POST", `/downloads?name=${encodeURIComponent(f.name)}`, f),
-    onSuccess: refresh,
-  });
+  // Adding an NZB by hand: true opens the window, a File (dropped on the
+  // page) opens it reading that file.
+  const [adding, setAdding] = useState<boolean | File>(false);
+  useEffect(() => {
+    // An NZB dropped anywhere on the page is added.
+    const over = (e: DragEvent) => {
+      if (e.dataTransfer?.types.includes("Files")) e.preventDefault();
+    };
+    const drop = (e: DragEvent) => {
+      const f = e.dataTransfer?.files[0];
+      if (f && isNzb(f)) {
+        e.preventDefault();
+        setAdding(f);
+      }
+    };
+    window.addEventListener("dragover", over);
+    window.addEventListener("drop", drop);
+    return () => {
+      window.removeEventListener("dragover", over);
+      window.removeEventListener("drop", drop);
+    };
+  }, []);
   const clear = useMutation({
     mutationFn: () => del("/downloads/history"),
     onSuccess: refresh,
@@ -337,21 +353,7 @@ export function Downloads() {
         }
         actions={
           <>
-            <input
-              ref={file}
-              type="file"
-              accept=".nzb,application/x-nzb"
-              className="hidden"
-              onChange={(e) => {
-                const f = e.target.files?.[0];
-                if (f) upload.mutate(f);
-                e.target.value = "";
-              }}
-            />
-            <Button
-              busy={upload.isPending}
-              onClick={() => file.current?.click()}
-            >
+            <Button onClick={() => setAdding(true)}>
               <Upload className="size-4" aria-hidden /> {t("dl.addNzb")}
             </Button>
             {s.enabled && (
@@ -372,7 +374,13 @@ export function Downloads() {
         }
       />
       {s.enabled && <Stats data={data} />}
-      <ErrorNote error={upload.error || settings.error} />
+      <ErrorNote error={settings.error} />
+      {adding && (
+        <AddNzb
+          file={adding instanceof File ? adding : undefined}
+          onClose={() => setAdding(false)}
+        />
+      )}
       {!s.enabled && <TurnOn data={data} />}
       {s.enabled && data.folder.problem && (
         <p
@@ -789,6 +797,8 @@ function HistoryItem({ d, pick }: { d: Download; pick?: Pick }) {
   const ok = d.status === "completed";
   const held = !!d.quarantined;
   const waiting = ok && !!d.canImport;
+  // Added by hand to be filed, and left on Import files to check.
+  const toCheck = ok && !!d.fileAs && !d.importedTo;
   return (
     <li
       className={`flex flex-wrap items-start gap-3 px-4 py-3 ${pick?.picked ? "bg-marquee/5" : ""}`}
@@ -799,7 +809,7 @@ function HistoryItem({ d, pick }: { d: Download; pick?: Pick }) {
           className="mt-0.5 size-5 shrink-0 text-gold"
           aria-label={t("dl.quarantined")}
         />
-      ) : waiting ? (
+      ) : waiting || toCheck ? (
         <Clock
           className="mt-0.5 size-5 shrink-0 text-gold"
           aria-label={t("dl.waitingLibrary")}
@@ -828,6 +838,15 @@ function HistoryItem({ d, pick }: { d: Download; pick?: Pick }) {
           >
             {d.message}
           </p>
+        )}
+        {toCheck && !pick && (
+          <Link
+            to="/import-files"
+            className="mt-2 inline-flex items-center gap-1 rounded-md border border-line px-2.5 py-1 text-xs font-medium hover:border-ink/40"
+          >
+            <FolderInput className="size-3.5" aria-hidden />{" "}
+            {t("dl.checkImport")}
+          </Link>
         )}
         {waiting && !pick && (
           <Button

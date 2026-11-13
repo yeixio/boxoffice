@@ -1,15 +1,16 @@
 // Releases lists what the indexers have for a movie, an episode or a book, with
 // what Box Office makes of each, and grabs one by hand.
 import { useTranslation } from 'react-i18next'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
-import { CircleCheck, Download as DownloadIcon } from 'lucide-react'
+import { CircleCheck, Download as DownloadIcon, Upload } from 'lucide-react'
 import { get, post, type Candidate, type Quality, type ReleaseResults } from './api'
 import { bytes, day } from './format'
 import { useQualities } from './hooks'
 import { SortControl, sortList, useSort, words, type SortOption } from './sort'
 import { Badge, Button, ErrorNote, Modal, Spinner } from './ui'
+import { AddNzb } from './AddNzb'
 
 // Box Office sends releases best first; the other sorts are for looking
 // around.
@@ -35,6 +36,7 @@ export function Releases({ path, title, onClose }: { path: string; title: string
   const sorts = useMemo(() => releaseSorts(found, qualities.data), [found, qualities.data])
   const sort = useSort('releases', sorts)
   const releases = useMemo(() => sortList(found, sort.option, sort.dir), [found, sort.option, sort.dir])
+  const [uploading, setUploading] = useState(false)
   const grab = useMutation({
     mutationFn: (key: string) => post(`/releases/${key}/grab`),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['downloads'] }),
@@ -96,6 +98,13 @@ export function Releases({ path, title, onClose }: { path: string; title: string
         </>
       )}
       <ErrorNote error={grab.error} />
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-line pt-4 text-sm text-muted">
+        <span>{t('nzb.haveOne')}</span>
+        <Button onClick={() => setUploading(true)}>
+          <Upload className="size-4" aria-hidden /> {t('nzb.upload')}
+        </Button>
+      </div>
+      {uploading && <AddNzb forPath={path} forTitle={title} onClose={() => setUploading(false)} />}
     </Modal>
   )
 }

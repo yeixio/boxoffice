@@ -1537,7 +1537,8 @@
     "removeTitle": "다운로드 삭제",
     "staysQuarantined": "파일은 <code>{{path}}</code>에 격리된 채 남아요. 아래 격리에서 삭제하거나 해제하세요. 열지 마세요.",
     "alsoDelete": "다운로드 폴더의 파일도 삭제",
-    "neverTouched": "라이브러리로 이미 옮긴 파일은 절대 건드리지 않아요."
+    "neverTouched": "라이브러리로 이미 옮긴 파일은 절대 건드리지 않아요.",
+    "checkImport": "파일 가져오기에서 확인"
   },
   "req": {
     "tabs": {
@@ -2166,5 +2167,33 @@
     "gameHint": "Box Office가 {{system}} 목록에서 찾습니다. 목록에 없거나 목록이 없는 경우(PC 게임 등) 입력한 이름을 사용하세요. 그 이름으로 저장됩니다.",
     "noGames": "목록에 맞는 게임이 없습니다. 입력한 이름을 그대로 사용할 수 있습니다.",
     "useName": "“{{name}}” 사용"
+  },
+  "nzb": {
+    "title": "NZB 추가",
+    "titleFor": "{{title}}에 NZB 추가",
+    "choose": "NZB 파일 선택",
+    "drop": "또는 여기에 놓기",
+    "or": "또는",
+    "link": "NZB 링크 붙여넣기",
+    "get": "가져오기",
+    "linkStep1": "인덱서의 릴리스 페이지에서 NZB 다운로드 버튼을 마우스 오른쪽 버튼으로 클릭하세요.",
+    "linkStep2": "링크 복사를 선택한 다음 여기에 붙여넣으세요.",
+    "linkKey": "설정에 등록한 인덱서의 링크라면 API 키가 없을 때 Box Office가 추가합니다.",
+    "reading": "NZB 읽는 중…",
+    "sizeFiles_other": "파일 {{count}}개, {{size}}",
+    "password": "비밀번호 포함",
+    "forBody": "Box Office가 <b>{{title}}</b>용으로 다운로드하고 확인한 뒤, 직접 찾은 릴리스처럼 라이브러리로 옮깁니다.",
+    "thinks": "Box Office의 추측",
+    "noIdea": "이름으로는 알 수 없습니다. 다운로드 후 Box Office가 파일을 살펴봅니다.",
+    "whenDone": "다운로드 후",
+    "fileAuto": "라이브러리에 정리",
+    "fileAs": "다음으로 정리: {{kind}}",
+    "leave": "다운로드 폴더에 두기",
+    "fileHint": "Box Office가 압축을 풀고 파일로 무엇인지 알아내 정리합니다. 확실하지 않으면 <link>파일 가져오기</link>에서 확인을 기다립니다.",
+    "leaveHint": "다운로드 폴더에 남습니다. 나중에 이 페이지의 파일에서 옮길 수 있습니다.",
+    "back": "뒤로",
+    "download": "다운로드",
+    "haveOne": "이미 NZB가 있나요?",
+    "upload": "NZB 업로드"
   }
 }

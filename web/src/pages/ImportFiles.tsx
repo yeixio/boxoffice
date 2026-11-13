@@ -339,7 +339,7 @@ function Uploads({ list }: { list: Upload[] }) {
 }
 
 // what says what Box Office thinks an item is, in a line.
-function What({ it, systems }: { it: ImportItem; systems: GameSystemInfo[] }) {
+export function What({ it, systems }: { it: ImportItem; systems: GameSystemInfo[] }) {
   const { t } = useTranslation()
   const m = it.match
   let text: ReactNode = null

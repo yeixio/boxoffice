@@ -1630,7 +1630,8 @@
     "removeTitle": "Download verwijderen",
     "staysQuarantined": "De bestanden blijven in quarantaine in <code>{{path}}</code>; verwijder ze of geef ze vrij onder Quarantaine hieronder. Open ze niet.",
     "alsoDelete": "Ook de bestanden in de downloadmap verwijderen",
-    "neverTouched": "Bestanden die al naar je bibliotheek zijn verplaatst, worden nooit aangeraakt."
+    "neverTouched": "Bestanden die al naar je bibliotheek zijn verplaatst, worden nooit aangeraakt.",
+    "checkImport": "Nakijken bij Bestanden importeren"
   },
   "req": {
     "tabs": {
@@ -2274,5 +2275,34 @@
     "gameHint": "Box Office zoekt het op de lijst van {{system}}. Staat het er niet op, of is er geen lijst (zoals bij pc-spellen), gebruik dan de getypte naam: het wordt onder die naam opgeslagen.",
     "noGames": "Geen spel op de lijst past. Je kunt de getypte naam toch gebruiken.",
     "useName": "„{{name}}” gebruiken"
+  },
+  "nzb": {
+    "title": "NZB toevoegen",
+    "titleFor": "NZB toevoegen voor {{title}}",
+    "choose": "Kies een NZB-bestand",
+    "drop": "of zet het hier neer",
+    "or": "of",
+    "link": "Plak een link naar een NZB",
+    "get": "Ophalen",
+    "linkStep1": "Klik op de pagina van de release bij je indexer met de rechtermuisknop op de NZB-downloadknop.",
+    "linkStep2": "Kies Link kopiëren en plak hem hier.",
+    "linkKey": "Komt de link van een indexer uit Instellingen, dan voegt Box Office je API-sleutel toe als die ontbreekt.",
+    "reading": "NZB lezen…",
+    "sizeFiles_one": "{{count}} bestand, {{size}}",
+    "sizeFiles_other": "{{count}} bestanden, {{size}}",
+    "password": "Wachtwoord inbegrepen",
+    "forBody": "Box Office downloadt het voor <b>{{title}}</b>, controleert het en zet het in de bibliotheek, net als een release die het zelf vond.",
+    "thinks": "Wat Box Office denkt dat het is",
+    "noIdea": "Aan de naam is het niet te zien. Box Office kijkt naar de bestanden zodra ze gedownload zijn.",
+    "whenDone": "Na het downloaden",
+    "fileAuto": "In de bibliotheek opbergen",
+    "fileAs": "Opbergen als: {{kind}}",
+    "leave": "In de downloadmap laten",
+    "fileHint": "Box Office pakt het uit, ziet aan de bestanden wat het is en bergt het op. Twijfelt het, dan wacht het bij <link>Bestanden importeren</link> tot jij het nakijkt.",
+    "leaveHint": "Het blijft in de downloadmap. Je kunt het later verplaatsen via Bestanden op deze pagina.",
+    "back": "Terug",
+    "download": "Downloaden",
+    "haveOne": "Heb je er al een NZB voor?",
+    "upload": "NZB uploaden"
   }
 }

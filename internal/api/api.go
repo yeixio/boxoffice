@@ -94,6 +94,9 @@ type Server struct {
 	// Restart button in Settings; nil means it can't.
 	Restart func()
 
+	// nzbs holds NZBs checked on the Downloads page until they're added.
+	nzbs nzbHold
+
 	ereaderOnce sync.Once
 	started     time.Time
 	failures    sync.Map // username -> *failure
