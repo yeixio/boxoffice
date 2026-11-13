@@ -70,6 +70,12 @@ func Identify(p string) (gamedat.System, bool) {
 	if err != nil || len(files) == 0 {
 		return gamedat.System{}, false
 	}
+	// A console game's zip holds the one game. An arcade set, named
+	// short like MAME's, holds the board's many chips, and some of
+	// those are named like a console's games (u42.int, ic1.col).
+	if reSetName.MatchString(strings.TrimSuffix(name, filepath.Ext(name))) && romCount(files) > 1 {
+		return gamedat.LookupSystem("mame")
+	}
 	for _, f := range files {
 		if sys, ok := gamedat.SystemByExt(f.Name); ok {
 			return sys, true
@@ -85,6 +91,22 @@ func Identify(p string) (gamedat.System, bool) {
 		}
 	}
 	return gamedat.LookupSystem("mame")
+}
+
+// romCount is how many of an archive's files aren't notes or pictures.
+func romCount(files []gamedat.File) int {
+	n := 0
+	for _, f := range files {
+		switch strings.ToLower(filepath.Ext(f.Name)) {
+		case ".txt", ".nfo", ".diz", ".doc", ".pdf", ".htm", ".html", ".jpg", ".png", ".gif", ".url":
+			continue
+		}
+		if strings.HasSuffix(f.Name, "/") {
+			continue
+		}
+		n++
+	}
+	return n
 }
 
 // reSetName is a name like MAME's sets have: short, lower case, no spaces.
