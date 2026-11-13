@@ -1538,7 +1538,19 @@
     "staysQuarantined": "Các tệp của nó vẫn trong cách ly tại <code>{{path}}</code>; xóa hoặc thả chúng ở mục Cách ly bên dưới. Đừng mở chúng.",
     "alsoDelete": "Xóa cả các tệp của nó trong thư mục tải xuống",
     "neverTouched": "Tệp đã chuyển vào thư viện của bạn không bao giờ bị động đến.",
-    "checkImport": "Kiểm tra ở Nhập tệp"
+    "checkImport": "Kiểm tra ở Nhập tệp",
+    "filter": {
+      "all": "Tất cả",
+      "type": "Loại",
+      "state": "Trạng thái",
+      "other": "Thêm thủ công",
+      "working": "Đang giải nén hoặc di chuyển",
+      "waitingLibrary": "Chưa có trong thư viện",
+      "none": "Không có gì khớp với các bộ lọc này.",
+      "clear": "Xóa bộ lọc",
+      "pickAll_other": "Chọn tất cả ({{count}})",
+      "pickShown_other": "Chọn tất cả mục đang hiện ({{count}})"
+    }
   },
   "req": {
     "tabs": {

@@ -1538,7 +1538,19 @@
     "staysQuarantined": "它的文件仍隔离在 <code>{{path}}</code>；请在下方隔离区中删除或放行。不要打开它们。",
     "alsoDelete": "同时删除下载文件夹中的文件",
     "neverTouched": "已移入媒体库的文件绝不会被触及。",
-    "checkImport": "在导入文件中查看"
+    "checkImport": "在导入文件中查看",
+    "filter": {
+      "all": "全部",
+      "type": "类型",
+      "state": "状态",
+      "other": "手动添加",
+      "working": "正在解压或移动",
+      "waitingLibrary": "尚未入库",
+      "none": "没有符合这些筛选条件的内容。",
+      "clear": "清除筛选",
+      "pickAll_other": "全选（{{count}}）",
+      "pickShown_other": "选择所有显示的项（{{count}}）"
+    }
   },
   "req": {
     "tabs": {

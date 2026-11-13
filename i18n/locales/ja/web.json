@@ -1538,7 +1538,19 @@
     "staysQuarantined": "ファイルは <code>{{path}}</code> に隔離されたままです。下の隔離で削除または解放してください。開かないでください。",
     "alsoDelete": "ダウンロードフォルダー内のファイルも削除する",
     "neverTouched": "ライブラリに移動済みのファイルには一切触れません。",
-    "checkImport": "「ファイルを取り込む」で確認"
+    "checkImport": "「ファイルを取り込む」で確認",
+    "filter": {
+      "all": "すべて",
+      "type": "種類",
+      "state": "状態",
+      "other": "手動で追加",
+      "working": "展開中または移動中",
+      "waitingLibrary": "まだライブラリにない",
+      "none": "このフィルターに一致するものはありません。",
+      "clear": "フィルターをクリア",
+      "pickAll_other": "すべて選択（{{count}}）",
+      "pickShown_other": "表示中をすべて選択（{{count}}）"
+    }
   },
   "req": {
     "tabs": {

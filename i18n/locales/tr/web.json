@@ -1631,7 +1631,21 @@
     "staysQuarantined": "Dosyaları <code>{{path}}</code> konumunda karantinada kalır; onları aşağıda Karantina altından silin veya çıkarın. Açmayın.",
     "alsoDelete": "İndirme klasöründeki dosyalarını da sil",
     "neverTouched": "Kütüphanenize zaten taşınmış dosyalara asla dokunulmaz.",
-    "checkImport": "Dosya içe aktar'da kontrol et"
+    "checkImport": "Dosya içe aktar'da kontrol et",
+    "filter": {
+      "all": "Tümü",
+      "type": "Tür",
+      "state": "Durum",
+      "other": "Elle eklendi",
+      "working": "Açılıyor veya taşınıyor",
+      "waitingLibrary": "Henüz kitaplıkta değil",
+      "none": "Bu filtrelere uyan bir şey yok.",
+      "clear": "Filtreleri temizle",
+      "pickAll_one": "Tümünü seç ({{count}})",
+      "pickAll_other": "Tümünü seç ({{count}})",
+      "pickShown_one": "Gösterilenlerin tümünü seç ({{count}})",
+      "pickShown_other": "Gösterilenlerin tümünü seç ({{count}})"
+    }
   },
   "req": {
     "tabs": {

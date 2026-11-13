@@ -1817,7 +1817,25 @@
     "staysQuarantined": "Jego pliki zostają w kwarantannie w <code>{{path}}</code>; usuń je lub zwolnij niżej w sekcji Kwarantanna. Nie otwieraj ich.",
     "alsoDelete": "Usuń też jego pliki w folderze pobranych",
     "neverTouched": "Pliki już przeniesione do biblioteki nigdy nie są ruszane.",
-    "checkImport": "Sprawdź w Importuj pliki"
+    "checkImport": "Sprawdź w Importuj pliki",
+    "filter": {
+      "all": "Wszystko",
+      "type": "Typ",
+      "state": "Stan",
+      "other": "Dodane ręcznie",
+      "working": "Rozpakowywanie lub przenoszenie",
+      "waitingLibrary": "Jeszcze nie w bibliotece",
+      "none": "Nic nie pasuje do tych filtrów.",
+      "clear": "Wyczyść filtry",
+      "pickAll_one": "Zaznacz wszystko ({{count}})",
+      "pickAll_few": "Zaznacz wszystko ({{count}})",
+      "pickAll_many": "Zaznacz wszystko ({{count}})",
+      "pickAll_other": "Zaznacz wszystko ({{count}})",
+      "pickShown_one": "Zaznacz wszystkie widoczne ({{count}})",
+      "pickShown_few": "Zaznacz wszystkie widoczne ({{count}})",
+      "pickShown_many": "Zaznacz wszystkie widoczne ({{count}})",
+      "pickShown_other": "Zaznacz wszystkie widoczne ({{count}})"
+    }
   },
   "req": {
     "tabs": {

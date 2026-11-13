@@ -86,3 +86,64 @@ func TestDownloadHistoryPage(t *testing.T) {
 		}
 	}
 }
+
+func TestDownloadHistoryFilters(t *testing.T) {
+	st := storetest.Open(t)
+	ctx := context.Background()
+	add := func(name, kind, fileAs, status string, then func(id int64)) {
+		d, err := st.AddDownload(ctx, store.Download{Name: name, Kind: kind, TitleID: 1, FileAs: fileAs})
+		if err != nil {
+			t.Fatal(err)
+		}
+		st.SetDownloadStatus(ctx, d.ID, status, "")
+		if then != nil {
+			then(d.ID)
+		}
+	}
+	add("show in", "series", "", store.DownloadCompleted, func(id int64) { st.SetDownloadImported(ctx, id, "/media/tv/x") })
+	add("show waiting", "series", "", store.DownloadCompleted, nil)
+	add("show failed", "series", "", store.DownloadFailed, nil)
+	add("movie held", "movie", "", store.DownloadCompleted, func(id int64) { st.SetDownloadQuarantined(ctx, id, "_quarantine/x") })
+	add("by hand as game", "", "game", store.DownloadCompleted, nil)
+	add("by hand", "", "", store.DownloadCompleted, nil)
+	add("still going", "movie", "", store.DownloadQueued, nil)
+
+	types, states, err := st.HistoryCounts(ctx, store.HistoryPage{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got := fmt.Sprint(types); got != "map[game:1 movie:1 other:1 series:3]" {
+		t.Error("types", got)
+	}
+	if got := fmt.Sprint(states); got != "map[done:2 failed:1 quarantined:1 waiting:2]" {
+		t.Error("states", got)
+	}
+	// Each is counted with the other filter applied.
+	types, states, _ = st.HistoryCounts(ctx, store.HistoryPage{Type: "series", State: "failed"})
+	if fmt.Sprint(types) != "map[series:1]" || fmt.Sprint(states) != "map[done:1 failed:1 waiting:1]" {
+		t.Error(types, states)
+	}
+	names := func(p store.HistoryPage) string {
+		p.Sort, p.Asc, p.Limit = "name", true, 20
+		list, total, _, err := st.DownloadHistoryPage(ctx, p)
+		var out []string
+		for _, d := range list {
+			out = append(out, d.Name)
+		}
+		return fmt.Sprint(total, out, err)
+	}
+	for p, want := range map[store.HistoryPage]string{
+		{Type: "series"}:                      "3 [show failed show in show waiting] <nil>",
+		{State: "waiting"}:                    "2 [by hand as game show waiting] <nil>",
+		{Type: "series", State: "waiting"}:    "1 [show waiting] <nil>",
+		{State: "quarantined"}:                "1 [movie held] <nil>",
+		{Type: "other"}:                       "1 [by hand] <nil>",
+		{Type: "game"}:                        "1 [by hand as game] <nil>",
+		{Type: "movie", Query: "nothing"}:     "0 [] <nil>",
+		{Type: "x' OR 1=1 --", State: "done"}: "0 [] <nil>",
+	} {
+		if got := names(p); got != want {
+			t.Errorf("%+v: %s", p, got)
+		}
+	}
+}

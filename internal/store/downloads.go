@@ -195,27 +195,94 @@ type HistoryPage struct {
 	Missing bool
 	// Query keeps those whose name has every word of it, ignoring case
 	// and the dots and underscores release names use for spaces.
-	Query         string
+	Query string
+	// Type keeps one type of download: a kind ("series", "movie", ...),
+	// or "other" for those added by hand with nothing to file them as.
+	Type string
+	// State keeps those that ended one way: "failed", "quarantined",
+	// "waiting" (to go into the library) or "done".
+	State         string
 	Offset, Limit int
 }
 
-// DownloadHistoryPage is one page of finished downloads, how many there
-// are in all, and how many failures for missing articles were left out.
-func (s *Store) DownloadHistoryPage(ctx context.Context, p HistoryPage) (list []Download, total, hidden int, err error) {
+// historyType is what a finished download is for: its kind, what it was
+// added by hand to be filed as, or "other".
+const historyType = `COALESCE(NULLIF(kind, ''), NULLIF(NULLIF(file_as, ''), 'auto'), 'other')`
+
+// historyState is how a finished download ended, the way the page shows
+// it: failed, held in quarantine, waiting to go into the library, or done.
+const historyState = `CASE WHEN quarantined <> '' THEN 'quarantined' WHEN status = 'failed' THEN 'failed'
+	WHEN imported_to = '' AND (kind <> '' OR file_as <> '') THEN 'waiting' ELSE 'done' END`
+
+// HistoryStates are the values HistoryPage's State takes.
+var HistoryStates = []string{"failed", "quarantined", "waiting", "done"}
+
+// historyWhere is the filter for p, without its Type and State when
+// those are left out, so each can be counted with the other applied.
+func historyWhere(p HistoryPage, withType, withState bool) (string, []any) {
 	where := "status IN ('completed', 'failed')"
 	var args []any
 	for _, w := range nameWords(p.Query) {
 		where += ` AND LOWER(REPLACE(REPLACE(REPLACE(name, '.', ' '), '_', ' '), '-', ' ')) LIKE ? ESCAPE '\'`
 		args = append(args, "%"+likeEscaper.Replace(w)+"%")
 	}
-	if err := s.row(ctx, "SELECT COUNT(*) FROM downloads WHERE "+where+" AND missing <> 0", args...).Scan(&hidden); err != nil {
-		return nil, 0, 0, err
-	}
 	if !p.Missing {
 		where += " AND missing = 0"
-	} else {
-		hidden = 0
 	}
+	if withType && p.Type != "" {
+		where += " AND " + historyType + " = ?"
+		args = append(args, p.Type)
+	}
+	if withState && p.State != "" {
+		where += " AND (" + historyState + ") = ?"
+		args = append(args, p.State)
+	}
+	return where, args
+}
+
+// HistoryCounts is how many finished downloads there are of each type
+// and each state, for the filters: each counted with p's other filter,
+// search and Missing applied, so a count says what picking it shows.
+func (s *Store) HistoryCounts(ctx context.Context, p HistoryPage) (types, states map[string]int, err error) {
+	count := func(expr, where string, args []any) (map[string]int, error) {
+		rows, err := s.query(ctx, "SELECT "+expr+", COUNT(*) FROM downloads WHERE "+where+" GROUP BY 1", args...)
+		if err != nil {
+			return nil, err
+		}
+		defer rows.Close()
+		out := map[string]int{}
+		for rows.Next() {
+			var k string
+			var n int
+			if err := rows.Scan(&k, &n); err != nil {
+				return nil, err
+			}
+			out[k] = n
+		}
+		return out, rows.Err()
+	}
+	w, a := historyWhere(p, false, true)
+	if types, err = count(historyType, w, a); err != nil {
+		return nil, nil, err
+	}
+	w, a = historyWhere(p, true, false)
+	states, err = count("("+historyState+")", w, a)
+	return types, states, err
+}
+
+// DownloadHistoryPage is one page of finished downloads, how many there
+// are in all, and how many failures for missing articles were left out.
+func (s *Store) DownloadHistoryPage(ctx context.Context, p HistoryPage) (list []Download, total, hidden int, err error) {
+	// Hidden counts what Missing leaves out, with everything else applied.
+	all := p
+	all.Missing = true
+	where, args := historyWhere(all, true, true)
+	if !p.Missing {
+		if err := s.row(ctx, "SELECT COUNT(*) FROM downloads WHERE "+where+" AND missing <> 0", args...).Scan(&hidden); err != nil {
+			return nil, 0, 0, err
+		}
+	}
+	where, args = historyWhere(p, true, true)
 	if err := s.row(ctx, "SELECT COUNT(*) FROM downloads WHERE "+where, args...).Scan(&total); err != nil {
 		return nil, 0, 0, err
 	}

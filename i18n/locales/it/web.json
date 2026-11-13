@@ -1724,7 +1724,23 @@
     "staysQuarantined": "I suoi file restano in quarantena in <code>{{path}}</code>; eliminali o rilasciali sotto Quarantena qui sotto. Non aprirli.",
     "alsoDelete": "Elimina anche i suoi file nella cartella dei download",
     "neverTouched": "I file già spostati nella tua libreria non vengono mai toccati.",
-    "checkImport": "Controllalo in Importa file"
+    "checkImport": "Controllalo in Importa file",
+    "filter": {
+      "all": "Tutti",
+      "type": "Tipo",
+      "state": "Stato",
+      "other": "Aggiunto a mano",
+      "working": "Estrazione o spostamento",
+      "waitingLibrary": "Non ancora in libreria",
+      "none": "Niente corrisponde a questi filtri.",
+      "clear": "Cancella filtri",
+      "pickAll_one": "Seleziona tutto ({{count}})",
+      "pickAll_many": "Seleziona tutto ({{count}})",
+      "pickAll_other": "Seleziona tutto ({{count}})",
+      "pickShown_one": "Seleziona tutti i mostrati ({{count}})",
+      "pickShown_many": "Seleziona tutti i mostrati ({{count}})",
+      "pickShown_other": "Seleziona tutti i mostrati ({{count}})"
+    }
   },
   "req": {
     "tabs": {

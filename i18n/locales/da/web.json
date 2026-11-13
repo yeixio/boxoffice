@@ -1631,7 +1631,21 @@
     "staysQuarantined": "Dens filer bliver i karantæne i <code>{{path}}</code>; slet eller frigiv dem under Karantæne nedenfor. Åbn dem ikke.",
     "alsoDelete": "Slet også dens filer i downloadmappen",
     "neverTouched": "Filer, der allerede er flyttet ind i dit bibliotek, røres aldrig.",
-    "checkImport": "Tjek den under Importér filer"
+    "checkImport": "Tjek den under Importér filer",
+    "filter": {
+      "all": "Alle",
+      "type": "Type",
+      "state": "Status",
+      "other": "Tilføjet manuelt",
+      "working": "Udpakning eller flytning",
+      "waitingLibrary": "Ikke i biblioteket endnu",
+      "none": "Intet her matcher disse filtre.",
+      "clear": "Ryd filtre",
+      "pickAll_one": "Vælg alle ({{count}})",
+      "pickAll_other": "Vælg alle ({{count}})",
+      "pickShown_one": "Vælg alle viste ({{count}})",
+      "pickShown_other": "Vælg alle viste ({{count}})"
+    }
   },
   "req": {
     "tabs": {
