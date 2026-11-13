@@ -1630,7 +1630,8 @@
     "removeTitle": "Fjern download",
     "staysQuarantined": "Dens filer bliver i karantæne i <code>{{path}}</code>; slet eller frigiv dem under Karantæne nedenfor. Åbn dem ikke.",
     "alsoDelete": "Slet også dens filer i downloadmappen",
-    "neverTouched": "Filer, der allerede er flyttet ind i dit bibliotek, røres aldrig."
+    "neverTouched": "Filer, der allerede er flyttet ind i dit bibliotek, røres aldrig.",
+    "checkImport": "Tjek den under Importér filer"
   },
   "req": {
     "tabs": {
@@ -2274,5 +2275,34 @@
     "gameHint": "Box Office leder efter det på listen for {{system}}. Hvis listen ikke har det, eller der ikke er nogen liste (som for pc-spil), så brug navnet, du skrev: det lægges ind under det navn.",
     "noGames": "Intet spil på listen passer. Du kan stadig bruge navnet, du skrev.",
     "useName": "Brug “{{name}}”"
+  },
+  "nzb": {
+    "title": "Tilføj en NZB",
+    "titleFor": "Tilføj en NZB til {{title}}",
+    "choose": "Vælg en NZB-fil",
+    "drop": "eller slip den her",
+    "or": "eller",
+    "link": "Indsæt et link til en NZB",
+    "get": "Hent",
+    "linkStep1": "Højreklik på NZB-downloadknappen på udgivelsens side hos din indexer.",
+    "linkStep2": "Vælg Kopiér link, og indsæt det her.",
+    "linkKey": "Hvis linket er fra en indexer i Indstillinger, tilføjer Box Office din API-nøgle, hvis den mangler.",
+    "reading": "Læser NZB…",
+    "sizeFiles_one": "{{count}} fil, {{size}}",
+    "sizeFiles_other": "{{count}} filer, {{size}}",
+    "password": "Adgangskode medfølger",
+    "forBody": "Box Office downloader den til <b>{{title}}</b>, tjekker den og flytter den ind i biblioteket som en udgivelse, den selv fandt.",
+    "thinks": "Hvad Box Office tror, det er",
+    "noIdea": "Det kan ikke ses på navnet. Box Office kigger på filerne, når de er downloadet.",
+    "whenDone": "Når den er downloadet",
+    "fileAuto": "Sortér den ind i biblioteket",
+    "fileAs": "Sortér den ind som: {{kind}}",
+    "leave": "Lad den blive i download-mappen",
+    "fileHint": "Box Office pakker den ud, finder ud af, hvad det er, ud fra filerne og sorterer den ind. Er den i tvivl, venter den under <link>Importér filer</link>, til du har tjekket den.",
+    "leaveHint": "Den bliver i download-mappen. Du kan flytte den ind senere fra Filer på denne side.",
+    "back": "Tilbage",
+    "download": "Download",
+    "haveOne": "Har du allerede en NZB til den?",
+    "upload": "Upload en NZB"
   }
 }

@@ -1630,7 +1630,8 @@
     "removeTitle": "Poista lataus",
     "staysQuarantined": "Sen tiedostot pysyvät karanteenissa kansiossa <code>{{path}}</code>; poista tai vapauta ne alta kohdasta Karanteeni. Älä avaa niitä.",
     "alsoDelete": "Poista myös sen tiedostot latauskansiosta",
-    "neverTouched": "Kirjastoosi jo siirrettyihin tiedostoihin ei koskaan kosketa."
+    "neverTouched": "Kirjastoosi jo siirrettyihin tiedostoihin ei koskaan kosketa.",
+    "checkImport": "Tarkista kohdassa Tuo tiedostoja"
   },
   "req": {
     "tabs": {
@@ -2274,5 +2275,34 @@
     "gameHint": "Box Office etsii sitä järjestelmän {{system}} listalta. Jos listalla ei ole sitä tai listaa ei ole (kuten PC-peleillä), käytä kirjoittamaasi nimeä: peli tallennetaan sillä nimellä.",
     "noGames": "Mikään listan peli ei vastaa. Voit silti käyttää kirjoittamaasi nimeä.",
     "useName": "Käytä nimeä ”{{name}}”"
+  },
+  "nzb": {
+    "title": "Lisää NZB",
+    "titleFor": "Lisää NZB kohteelle {{title}}",
+    "choose": "Valitse NZB-tiedosto",
+    "drop": "tai pudota se tähän",
+    "or": "tai",
+    "link": "Liitä linkki NZB:hen",
+    "get": "Hae",
+    "linkStep1": "Napsauta indeksoijasi julkaisusivulla NZB-latauspainiketta hiiren oikealla.",
+    "linkStep2": "Valitse Kopioi linkki ja liitä se tähän.",
+    "linkKey": "Jos linkki on Asetuksissa määritetyltä indeksoijalta, Box Office lisää API-avaimesi, jos se puuttuu.",
+    "reading": "Luetaan NZB:tä…",
+    "sizeFiles_one": "{{count}} tiedosto, {{size}}",
+    "sizeFiles_other": "{{count}} tiedostoa, {{size}}",
+    "password": "Salasana mukana",
+    "forBody": "Box Office lataa sen kohteelle <b>{{title}}</b>, tarkistaa sen ja siirtää sen kirjastoon kuin itse löytämänsä julkaisun.",
+    "thinks": "Mitä Box Office arvelee sen olevan",
+    "noIdea": "Nimestä ei voi päätellä. Box Office katsoo tiedostot, kun ne on ladattu.",
+    "whenDone": "Kun se on ladattu",
+    "fileAuto": "Järjestä kirjastoon",
+    "fileAs": "Järjestä tyyppinä: {{kind}}",
+    "leave": "Jätä latauskansioon",
+    "fileHint": "Box Office purkaa sen, päättelee tiedostoista mikä se on ja järjestää sen. Jos se ei ole varma, se odottaa kohdassa <link>Tuo tiedostoja</link>, että tarkistat sen.",
+    "leaveHint": "Se jää latauskansioon. Voit siirtää sen myöhemmin tämän sivun Tiedostot-osiosta.",
+    "back": "Takaisin",
+    "download": "Lataa",
+    "haveOne": "Onko sinulla jo NZB sitä varten?",
+    "upload": "Lähetä NZB"
   }
 }

@@ -1723,7 +1723,8 @@
     "removeTitle": "Retirer le téléchargement",
     "staysQuarantined": "Ses fichiers restent en quarantaine dans <code>{{path}}</code> ; supprimez-les ou libérez-les sous Quarantaine ci-dessous. Ne les ouvrez pas.",
     "alsoDelete": "Supprimer aussi ses fichiers dans le dossier de téléchargements",
-    "neverTouched": "Les fichiers déjà emménagés dans votre bibliothèque ne sont jamais touchés."
+    "neverTouched": "Les fichiers déjà emménagés dans votre bibliothèque ne sont jamais touchés.",
+    "checkImport": "Vérifier dans Importer des fichiers"
   },
   "req": {
     "tabs": {
@@ -2382,5 +2383,35 @@
     "gameHint": "Box Office le cherche dans la liste de {{system}}. Si la liste ne l'a pas, ou s'il n'y a pas de liste (comme pour les jeux PC), utilisez le nom tapé : il sera rangé sous ce nom.",
     "noGames": "Aucun jeu de la liste ne correspond. Vous pouvez quand même utiliser le nom tapé.",
     "useName": "Utiliser « {{name}} »"
+  },
+  "nzb": {
+    "title": "Ajouter un NZB",
+    "titleFor": "Ajouter un NZB pour {{title}}",
+    "choose": "Choisir un fichier NZB",
+    "drop": "ou déposez-le ici",
+    "or": "ou",
+    "link": "Coller un lien vers un NZB",
+    "get": "Récupérer",
+    "linkStep1": "Sur la page de la release de votre indexeur, faites un clic droit sur le bouton de téléchargement NZB.",
+    "linkStep2": "Choisissez Copier le lien, puis collez-le ici.",
+    "linkKey": "Si le lien vient d'un indexeur configuré dans les Réglages, Box Office ajoute votre clé API si elle manque.",
+    "reading": "Lecture du NZB…",
+    "sizeFiles_many": "{{count}} fichiers, {{size}}",
+    "sizeFiles_one": "{{count}} fichier, {{size}}",
+    "sizeFiles_other": "{{count}} fichiers, {{size}}",
+    "password": "Mot de passe inclus",
+    "forBody": "Box Office le télécharge pour <b>{{title}}</b>, le vérifie et le range dans la bibliothèque comme une release trouvée par lui-même.",
+    "thinks": "Ce que Box Office pense que c'est",
+    "noIdea": "Le nom ne suffit pas. Box Office regardera les fichiers une fois téléchargés.",
+    "whenDone": "Une fois téléchargé",
+    "fileAuto": "Le ranger dans la bibliothèque",
+    "fileAs": "Le ranger comme : {{kind}}",
+    "leave": "Le laisser dans le dossier des téléchargements",
+    "fileHint": "Box Office le décompresse, déduit ce que c'est à partir des fichiers et le range. En cas de doute, il attend dans <link>Importer des fichiers</link> que vous vérifiiez.",
+    "leaveHint": "Il reste dans le dossier des téléchargements. Vous pourrez le déplacer plus tard depuis Fichiers sur cette page.",
+    "back": "Retour",
+    "download": "Télécharger",
+    "haveOne": "Vous avez déjà un NZB pour ça ?",
+    "upload": "Envoyer un NZB"
   }
 }

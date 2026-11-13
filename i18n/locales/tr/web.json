@@ -1630,7 +1630,8 @@
     "removeTitle": "İndirmeyi kaldır",
     "staysQuarantined": "Dosyaları <code>{{path}}</code> konumunda karantinada kalır; onları aşağıda Karantina altından silin veya çıkarın. Açmayın.",
     "alsoDelete": "İndirme klasöründeki dosyalarını da sil",
-    "neverTouched": "Kütüphanenize zaten taşınmış dosyalara asla dokunulmaz."
+    "neverTouched": "Kütüphanenize zaten taşınmış dosyalara asla dokunulmaz.",
+    "checkImport": "Dosya içe aktar'da kontrol et"
   },
   "req": {
     "tabs": {
@@ -2274,5 +2275,34 @@
     "gameHint": "Box Office onu {{system}} listesinde arar. Listede yoksa ya da liste hiç yoksa (PC oyunlarında olduğu gibi) yazdığınız adı kullanın: oyun bu adla eklenir.",
     "noGames": "Listede eşleşen oyun yok. Yine de yazdığınız adı kullanabilirsiniz.",
     "useName": "“{{name}}” kullan"
+  },
+  "nzb": {
+    "title": "NZB ekle",
+    "titleFor": "{{title}} için NZB ekle",
+    "choose": "Bir NZB dosyası seç",
+    "drop": "ya da buraya bırak",
+    "or": "ya da",
+    "link": "Bir NZB bağlantısı yapıştır",
+    "get": "Getir",
+    "linkStep1": "Indexer'ındaki sürüm sayfasında NZB indirme düğmesine sağ tıkla.",
+    "linkStep2": "Bağlantıyı kopyala'yı seç ve buraya yapıştır.",
+    "linkKey": "Bağlantı Ayarlar'da kurduğun bir indexer'dan geliyorsa Box Office eksik API anahtarını ekler.",
+    "reading": "NZB okunuyor…",
+    "sizeFiles_one": "{{count}} dosya, {{size}}",
+    "sizeFiles_other": "{{count}} dosya, {{size}}",
+    "password": "Parola dahil",
+    "forBody": "Box Office bunu <b>{{title}}</b> için indirir, kontrol eder ve kendi bulduğu bir sürüm gibi kitaplığa taşır.",
+    "thinks": "Box Office'in tahmini",
+    "noIdea": "Adından anlaşılmıyor. Box Office indirildikten sonra dosyalara bakar.",
+    "whenDone": "İndirildiğinde",
+    "fileAuto": "Kitaplığa yerleştir",
+    "fileAs": "Şu olarak yerleştir: {{kind}}",
+    "leave": "İndirme klasöründe bırak",
+    "fileHint": "Box Office dosyayı açar, dosyalarına bakarak ne olduğunu anlar ve yerleştirir. Emin değilse kontrol etmen için <link>Dosya içe aktar</link> sayfasında bekler.",
+    "leaveHint": "İndirme klasöründe kalır. Daha sonra bu sayfadaki Dosyalar bölümünden taşıyabilirsin.",
+    "back": "Geri",
+    "download": "İndir",
+    "haveOne": "Bunun için zaten bir NZB'n var mı?",
+    "upload": "NZB yükle"
   }
 }

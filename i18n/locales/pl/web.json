@@ -1816,7 +1816,8 @@
     "removeTitle": "Usuń pobieranie",
     "staysQuarantined": "Jego pliki zostają w kwarantannie w <code>{{path}}</code>; usuń je lub zwolnij niżej w sekcji Kwarantanna. Nie otwieraj ich.",
     "alsoDelete": "Usuń też jego pliki w folderze pobranych",
-    "neverTouched": "Pliki już przeniesione do biblioteki nigdy nie są ruszane."
+    "neverTouched": "Pliki już przeniesione do biblioteki nigdy nie są ruszane.",
+    "checkImport": "Sprawdź w Importuj pliki"
   },
   "req": {
     "tabs": {
@@ -2490,5 +2491,36 @@
     "gameHint": "Box Office szuka jej na liście dla {{system}}. Jeśli lista jej nie ma albo listy nie ma wcale (jak dla gier na PC), użyj wpisanej nazwy: gra trafi do biblioteki pod tą nazwą.",
     "noGames": "Żadna gra z listy nie pasuje. Nadal możesz użyć wpisanej nazwy.",
     "useName": "Użyj „{{name}}”"
+  },
+  "nzb": {
+    "title": "Dodaj NZB",
+    "titleFor": "Dodaj NZB dla {{title}}",
+    "choose": "Wybierz plik NZB",
+    "drop": "lub upuść go tutaj",
+    "or": "lub",
+    "link": "Wklej link do NZB",
+    "get": "Pobierz link",
+    "linkStep1": "Na stronie wydania u swojego indeksera kliknij prawym przyciskiem przycisk pobierania NZB.",
+    "linkStep2": "Wybierz Kopiuj link i wklej go tutaj.",
+    "linkKey": "Jeśli link pochodzi z indeksera skonfigurowanego w Ustawieniach, Box Office dopisze Twój klucz API, gdy go brakuje.",
+    "reading": "Odczytywanie NZB…",
+    "sizeFiles_few": "{{count}} pliki, {{size}}",
+    "sizeFiles_many": "{{count}} plików, {{size}}",
+    "sizeFiles_one": "{{count}} plik, {{size}}",
+    "sizeFiles_other": "{{count}} pliku, {{size}}",
+    "password": "Hasło dołączone",
+    "forBody": "Box Office pobierze go dla <b>{{title}}</b>, sprawdzi i przeniesie do biblioteki jak wydanie znalezione samodzielnie.",
+    "thinks": "Co według Box Office to jest",
+    "noIdea": "Nie da się tego poznać po nazwie. Box Office sprawdzi pliki po pobraniu.",
+    "whenDone": "Po pobraniu",
+    "fileAuto": "Umieść w bibliotece",
+    "fileAs": "Umieść jako: {{kind}}",
+    "leave": "Zostaw w folderze pobranych",
+    "fileHint": "Box Office rozpakuje go, rozpozna po plikach, co to jest, i umieści w bibliotece. Jeśli nie jest pewny, poczeka w <link>Importuj pliki</link>, aż to sprawdzisz.",
+    "leaveHint": "Zostanie w folderze pobranych. Możesz przenieść go później z sekcji Pliki na tej stronie.",
+    "back": "Wstecz",
+    "download": "Pobierz",
+    "haveOne": "Masz już do tego NZB?",
+    "upload": "Prześlij NZB"
   }
 }

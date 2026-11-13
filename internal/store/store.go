@@ -118,6 +118,7 @@ func (s *Store) migrate(ctx context.Context) error {
 		{"downloads", "missing", "INTEGER NOT NULL DEFAULT 0"},
 		{"downloads", "fetched", "INTEGER NOT NULL DEFAULT 0"},
 		{"downloads", "done_names", "TEXT NOT NULL DEFAULT '{}'"},
+		{"downloads", "file_as", "TEXT NOT NULL DEFAULT ''"},
 		{"media_files", "media", "TEXT NOT NULL DEFAULT ''"},
 		{"media_files", "probed_at", "BIGINT NOT NULL DEFAULT 0"},
 		{"media_files", "probed_size", "BIGINT NOT NULL DEFAULT 0"},

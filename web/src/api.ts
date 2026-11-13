@@ -438,6 +438,9 @@ export type Download = {
   canReprocess?: boolean
   // It's done, and waiting to be moved into the library.
   canImport?: boolean
+  // Added by hand for no title: what to file it as once it's downloaded
+  // ("auto" works it out).
+  fileAs?: string
   // How far checking, repairing or unpacking has got.
   stepDone?: number
   stepTotal?: number

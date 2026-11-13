@@ -202,6 +202,9 @@ func run() error {
 	// restart cut off carries on.
 	imports := &importer.Service{Store: db, Downloads: downloads, Scan: scanner, Catalog: cat, Music: tunes, Books: shelf, Games: gameShelf, Log: log}
 	go imports.Resume()
+	// An NZB added by hand for no title is filed through it once it's
+	// downloaded.
+	downloads.FileAway = imports.Adopt
 	srv := &api.Server{
 		Store: db, Catalog: cat, Music: tunes, LibScan: scanner, Problems: finds, QualityCheck: checker, Backups: backups, Migrator: &migrate.Migrator{Catalog: cat, Books: shelf, Backups: backups, Log: log, DataDir: cfg.DataDir}, Log: log,
 		Books:     shelf,

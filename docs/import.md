@@ -100,3 +100,32 @@ Uploads go straight to disk, so there's no size limit in Box Office itself. A
 reverse proxy in front of it may have one: for nginx, set
 `client_max_body_size 0;` on Box Office's location. For very large collections
 on the same server, **From the server** is quicker than uploading.
+
+## Downloading from an NZB of your own
+
+On the **Downloads** page, **Add NZB** takes an NZB file (choose it, or drop
+it anywhere on the page) or a link to one. For a link from your indexer,
+right-click the NZB download button on the release's page and copy the link;
+if the indexer is one you set up in Settings, Box Office adds your API key
+when the link doesn't have it.
+
+Box Office reads the NZB first and says what it thinks the release is. Then
+choose what happens once it's downloaded:
+
+- **File it in the library** (the default): once it's unpacked and checked,
+  it goes to the imports folder and is filed the way Import files does it,
+  worked out from its files. If Box Office isn't sure what it is, it waits on
+  the Import files page for you to check, and the download's history links
+  there.
+- **File it as** a movie, show, album, ebook, audiobook or game: the same,
+  but it's checked and looked up as that. A release that doesn't hold what it
+  was said to be (no ebook in an "ebook") is quarantined.
+- **Leave it in the downloads folder**: nothing is moved.
+
+Filing happens even when moving downloads into the library by itself is off,
+since you asked for it.
+
+To download an NZB for a title already on your list, open **Choose a
+release** on the movie, season, episode, album, book or wanted game, and use
+**Upload an NZB** at the bottom. It's downloaded for that title and moved in
+like a release Box Office found itself.

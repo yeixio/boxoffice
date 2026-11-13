@@ -46,6 +46,12 @@ type Engine struct {
 	// Notify hears what happened to a download (store.EventGrabbed and the
 	// rest), to tell people about it; why is what went wrong, if anything.
 	Notify func(ctx context.Context, d store.Download, event, why string)
+	// FileAway files a finished download added by hand for no title
+	// (store.Download.FileAs): it takes the folder src out of the
+	// downloads folder into the Import files page's, and files it in the
+	// library if it can tell what it is. It says where it went or, when it
+	// waits for someone to say what it is, why.
+	FileAway func(ctx context.Context, src, name, kind string) (to, waiting string, err error)
 	// Imported hears of a download, or a file picked in the downloads
 	// folder, that went into the library: on its own or by hand.
 	Imported func(ctx context.Context, d store.Download)

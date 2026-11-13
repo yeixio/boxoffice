@@ -35,6 +35,8 @@ func (s *Server) downloadRoutes() []route {
 	return []route{
 		{"GET /api/v1/downloads", true, s.downloads},
 		{"POST /api/v1/downloads", true, s.addNZB},
+		{"POST /api/v1/downloads/nzb/check", true, s.checkNZB},
+		{"POST /api/v1/downloads/nzb/add", true, s.addCheckedNZB},
 		{"PUT /api/v1/downloads/settings", true, s.saveDownloadSettings},
 		{"PUT /api/v1/downloads/cap", true, s.saveDataCap},
 		{"DELETE /api/v1/downloads/history", true, func(w http.ResponseWriter, r *http.Request) error {

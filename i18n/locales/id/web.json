@@ -1537,7 +1537,8 @@
     "removeTitle": "Hapus unduhan",
     "staysQuarantined": "File-nya tetap di karantina di <code>{{path}}</code>; hapus atau lepaskan di bagian Karantina di bawah. Jangan membukanya.",
     "alsoDelete": "Hapus juga file-nya di folder unduhan",
-    "neverTouched": "File yang sudah dipindah ke perpustakaan Anda tidak pernah disentuh."
+    "neverTouched": "File yang sudah dipindah ke perpustakaan Anda tidak pernah disentuh.",
+    "checkImport": "Periksa di Impor file"
   },
   "req": {
     "tabs": {
@@ -2166,5 +2167,33 @@
     "gameHint": "Box Office mencarinya di daftar {{system}}. Jika tidak ada di daftar, atau tidak ada daftar (seperti game PC), gunakan nama yang kamu ketik: game akan disimpan dengan nama itu.",
     "noGames": "Tidak ada game di daftar yang cocok. Kamu tetap bisa memakai nama yang kamu ketik.",
     "useName": "Pakai “{{name}}”"
+  },
+  "nzb": {
+    "title": "Tambah NZB",
+    "titleFor": "Tambah NZB untuk {{title}}",
+    "choose": "Pilih file NZB",
+    "drop": "atau letakkan di sini",
+    "or": "atau",
+    "link": "Tempel tautan ke NZB",
+    "get": "Ambil",
+    "linkStep1": "Di halaman rilis pada indexer Anda, klik kanan tombol unduh NZB.",
+    "linkStep2": "Pilih Salin tautan, lalu tempel di sini.",
+    "linkKey": "Jika tautan dari indexer yang diatur di Pengaturan, Box Office menambahkan kunci API Anda bila tidak ada.",
+    "reading": "Membaca NZB…",
+    "sizeFiles_other": "{{count}} file, {{size}}",
+    "password": "Kata sandi disertakan",
+    "forBody": "Box Office mengunduhnya untuk <b>{{title}}</b>, memeriksanya, dan memindahkannya ke pustaka seperti rilis yang ditemukannya sendiri.",
+    "thinks": "Menurut Box Office ini apa",
+    "noIdea": "Tidak bisa diketahui dari namanya. Box Office akan melihat filenya setelah diunduh.",
+    "whenDone": "Setelah diunduh",
+    "fileAuto": "Simpan ke pustaka",
+    "fileAs": "Simpan sebagai: {{kind}}",
+    "leave": "Biarkan di folder unduhan",
+    "fileHint": "Box Office mengekstraknya, mengenali isinya dari file-filenya, lalu menyimpannya. Jika ragu, ia menunggu di <link>Impor file</link> agar Anda periksa.",
+    "leaveHint": "Tetap di folder unduhan. Anda bisa memindahkannya nanti dari File di halaman ini.",
+    "back": "Kembali",
+    "download": "Unduh",
+    "haveOne": "Sudah punya NZB untuk ini?",
+    "upload": "Unggah NZB"
   }
 }
