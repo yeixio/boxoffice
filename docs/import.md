@@ -75,8 +75,8 @@ in **Settings → Library**, and each needs a root folder.
   `nvram/`, `hiscore/`…) are left out, since their zips share the games' names.
 - A game that's named like a different file already in the games folder isn't
   put over it. The rest of the folder still goes in, and the item lists the
-  games left in the imports folder for that reason, and any files that aren't
-  games, so you can look at them and **Remove** the item when you're done.
+  games left in the imports folder for that reason, and any files it couldn't
+  tell (an emulator's programs, settings and notes aren't listed), so you can look at them and **Remove** the item when you're done.
 
 Each item says where it went. **Remove** deletes an item's copy from the imports
 folder without importing it.
