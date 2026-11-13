@@ -208,7 +208,7 @@ func (e *Engine) repair(ctx context.Context, r *running, d *store.Download, job 
 		e.mu.Lock()
 		srv := e.srv
 		e.mu.Unlock()
-		if err := e.download(ctx, r, d, srv, job, pick); err != nil {
+		if err := e.download(ctx, r, d, srv, job, pick, nil); err != nil {
 			return nil, err
 		}
 		status(store.DownloadVerifying, "")
