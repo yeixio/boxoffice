@@ -21,6 +21,10 @@ import (
 // ErrHave says a game being added is in its system's folder already.
 var ErrHave = errors.New("it's in the games folder already")
 
+// ErrClash says a different file of the same name is in the games folder:
+// the game being added isn't put in, and what's there is left as it is.
+var ErrClash = errors.New("a different file of that name is in the games folder")
+
 // Identify says which system a file or folder is a game for: a file by
 // its extension where only one system's games have it, or else by what's
 // written in it (a disc's serial or header, a download's), an archive by
@@ -177,7 +181,7 @@ func (s *Service) addInto(ctx context.Context, key, src, sub, name string) (stri
 		if have.Size() == st.Size() {
 			return dst, ErrHave
 		}
-		return dst, fmt.Errorf("another file called %s is in %s already", name, dir)
+		return dst, fmt.Errorf("another file called %s is in %s already: %w", name, dir, ErrClash)
 	}
 	if err := os.MkdirAll(dir, 0o775); err != nil {
 		return "", writeErr(err, dir)
@@ -307,6 +311,14 @@ func (s *Service) placeUnit(ctx context.Context, key string, u unit, name string
 	return s.AddAs(ctx, key, u.path, name)
 }
 
+// Skipped is a file ImportGames didn't put in: Clash is where a different
+// file of its name is already; with none, Box Office couldn't tell the
+// system it's for, or it isn't a game.
+type Skipped struct {
+	Path  string
+	Clash string
+}
+
 // Placed is a game copied in, and the files it was copied from.
 type Placed struct {
 	To   string
@@ -320,7 +332,7 @@ type Placed struct {
 // whole; a cue sheet goes in with its tracks. name, when given, is the
 // game's name to file one game under (its name on the list, or one typed
 // in). skipped are the files it couldn't tell the system of.
-func (s *Service) ImportGames(ctx context.Context, system, p, name string) (placed []Placed, skipped []string, err error) {
+func (s *Service) ImportGames(ctx context.Context, system, p, name string) (placed []Placed, skipped []Skipped, err error) {
 	st, err := os.Stat(p)
 	if err != nil {
 		return nil, nil, err
@@ -359,8 +371,11 @@ func (s *Service) ImportGames(ctx context.Context, system, p, name string) (plac
 				}
 				return nil
 			}
+			if d.IsDir() && f != p && emulatorFolder(d.Name()) {
+				return filepath.SkipDir // an emulator's own files, not games
+			}
 			if d.Type().IsRegular() && !in[f] && !slices.ContainsFunc(dirs, func(x string) bool { return strings.HasPrefix(f, x) }) {
-				skipped = append(skipped, f)
+				skipped = append(skipped, Skipped{Path: f})
 			}
 			return nil
 		})
@@ -370,7 +385,9 @@ func (s *Service) ImportGames(ctx context.Context, system, p, name string) (plac
 		if key == "" {
 			sys, ok := Identify(u.path)
 			if !ok {
-				skipped = append(skipped, u.files()...)
+				for _, f := range u.files() {
+					skipped = append(skipped, Skipped{Path: f})
+				}
 				continue
 			}
 			key = sys.Key
@@ -381,6 +398,10 @@ func (s *Service) ImportGames(ctx context.Context, system, p, name string) (plac
 		}
 		if name != "" && len(units) == 1 {
 			dst, err := s.placeUnit(ctx, key, u, fileName(u, name))
+			if errors.Is(err, ErrClash) {
+				skipped = append(skipped, Skipped{Path: u.path, Clash: dst})
+				continue
+			}
 			if err != nil && !errors.Is(err, ErrHave) {
 				return placed, skipped, err
 			}
@@ -389,6 +410,10 @@ func (s *Service) ImportGames(ctx context.Context, system, p, name string) (plac
 		}
 		if sys.Disc() {
 			dst, err := s.placeUnit(ctx, key, u, filepath.Base(u.path))
+			if errors.Is(err, ErrClash) {
+				skipped = append(skipped, Skipped{Path: u.path, Clash: dst})
+				continue
+			}
 			if err != nil && !errors.Is(err, ErrHave) {
 				return placed, skipped, err
 			}
@@ -397,6 +422,10 @@ func (s *Service) ImportGames(ctx context.Context, system, p, name string) (plac
 		}
 		for _, f := range u.files() {
 			dst, err := s.Add(ctx, key, f)
+			if errors.Is(err, ErrClash) {
+				skipped = append(skipped, Skipped{Path: u.path, Clash: dst})
+				continue
+			}
 			if err != nil && !errors.Is(err, ErrHave) {
 				return placed, skipped, err
 			}

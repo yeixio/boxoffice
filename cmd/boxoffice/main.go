@@ -197,13 +197,16 @@ func run() error {
 	// The quality check looks inside new files every few minutes.
 	checker := &qualitycheck.Service{Store: db, Log: log}
 	scanner := &libscan.Service{Store: db, Catalog: cat, Music: tunes, Books: shelf, Log: log}
+	// Files brought in by hand wait in the downloads folder's imports
+	// folder until they're filed in the library. A copy into it that a
+	// restart cut off carries on.
+	imports := &importer.Service{Store: db, Downloads: downloads, Scan: scanner, Catalog: cat, Music: tunes, Books: shelf, Games: gameShelf, Log: log}
+	go imports.Resume()
 	srv := &api.Server{
 		Store: db, Catalog: cat, Music: tunes, LibScan: scanner, Problems: finds, QualityCheck: checker, Backups: backups, Migrator: &migrate.Migrator{Catalog: cat, Books: shelf, Backups: backups, Log: log, DataDir: cfg.DataDir}, Log: log,
-		Books: shelf,
-		Games: gameShelf,
-		// Files brought in by hand wait in the downloads folder's imports
-		// folder until they're filed in the library.
-		Imports:   &importer.Service{Store: db, Downloads: downloads, Scan: scanner, Catalog: cat, Music: tunes, Books: shelf, Games: gameShelf, Log: log},
+		Books:     shelf,
+		Games:     gameShelf,
+		Imports:   imports,
 		Portal:    &portal.Service{Store: db, Catalog: cat, Notify: notes, Log: log},
 		Downloads: downloads, Search: finder,
 		Version: version.Version, Database: dbKind, DataDir: cfg.DataDir, EnvAPIKey: cfg.APIKey, Web: web.FS(),

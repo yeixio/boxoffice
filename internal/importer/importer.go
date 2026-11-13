@@ -14,6 +14,7 @@ package importer
 import (
 	"cmp"
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -711,30 +712,125 @@ func (s *Service) CopyIn(ctx context.Context, paths []string) error {
 	}
 	s.copying = Copying{Running: true, Total: total, Started: time.Now().UTC()}
 	s.mu.Unlock()
-	go func() {
-		ctx, cancel := context.WithTimeout(context.Background(), 24*time.Hour)
-		defer cancel()
-		var failed error
-		for _, p := range paths {
-			name := unique(dir, filepath.Base(p))
-			s.mu.Lock()
-			s.copying.Current = name
-			s.mu.Unlock()
-			if err := s.copyTree(ctx, filepath.Clean(p), filepath.Join(dir, name)); err != nil {
-				s.log().Warn("copying into the imports folder", "path", p, "err", err)
-				failed = fmt.Errorf("couldn't copy %s: %w", p, writeErr(err, dir))
-				os.RemoveAll(filepath.Join(dir, name))
-				break
-			}
+	var jobs []copyJob
+	for _, p := range paths {
+		name := unique(dir, filepath.Base(p))
+		for slices.ContainsFunc(jobs, func(j copyJob) bool { return j.Name == name }) {
+			name = unique(dir, name+" ")
+		}
+		jobs = append(jobs, copyJob{From: filepath.Clean(p), Name: name})
+	}
+	// Written down, so a restart part way through carries on after.
+	if b, err := json.Marshal(jobs); err == nil {
+		os.WriteFile(filepath.Join(dir, copyingFile), b, 0o664)
+	}
+	go s.copyJobs(dir, jobs)
+	return nil
+}
+
+// copyingFile, in the imports folder, lists a copy from the server that
+// hasn't finished, so that one cut off by a restart is carried on.
+const copyingFile = ".copying.json"
+
+// copyJob is one file or folder being copied in, and its name there.
+type copyJob struct {
+	From string `json:"from"`
+	Name string `json:"name"`
+}
+
+// copyJobs copies files and folders in from the server, one at a time.
+// dropHalfMade removes the hidden .part items in the imports folder that
+// none of jobs will finish.
+func (s *Service) dropHalfMade(dir string, jobs []copyJob) {
+	keep := map[string]bool{}
+	for _, j := range jobs {
+		keep["."+j.Name+".part"] = true
+	}
+	entries, _ := os.ReadDir(dir)
+	for _, e := range entries {
+		n := e.Name()
+		if !strings.HasPrefix(n, ".") || !strings.HasSuffix(n, ".part") || keep[n] {
+			continue
+		}
+		s.log().Info("removing a half-made item from the imports folder", "name", n)
+		os.RemoveAll(filepath.Join(dir, n))
+	}
+}
+
+func (s *Service) copyJobs(dir string, jobs []copyJob) {
+	ctx, cancel := context.WithTimeout(context.Background(), 24*time.Hour)
+	defer cancel()
+	var failed error
+	for _, j := range jobs {
+		if _, err := os.Lstat(filepath.Join(dir, j.Name)); err == nil {
+			continue // copied whole before a restart
 		}
 		s.mu.Lock()
-		s.copying.Running, s.copying.Current = false, ""
-		if failed != nil {
-			s.copying.Error = failed.Error()
-		}
+		s.copying.Current = j.Name
 		s.mu.Unlock()
-	}()
-	return nil
+		if err := s.copyTree(ctx, j.From, filepath.Join(dir, j.Name)); err != nil {
+			s.log().Warn("copying into the imports folder", "path", j.From, "err", err)
+			failed = fmt.Errorf("couldn't copy %s: %w", j.From, writeErr(err, dir))
+			os.RemoveAll(filepath.Join(dir, j.Name))
+			break
+		}
+	}
+	os.Remove(filepath.Join(dir, copyingFile))
+	s.mu.Lock()
+	s.copying.Running, s.copying.Current = false, ""
+	if failed != nil {
+		s.copying.Error = failed.Error()
+	}
+	s.mu.Unlock()
+}
+
+// Resume carries on a copy from the server that a restart cut off, from
+// where it got to. One whose files have gone from the server is given up,
+// and says so.
+// Resume runs once at startup. A copy into the imports folder that a
+// restart cut off carries on from where it got to. Half-made items that
+// no copy will finish (an upload cut off, or a copy from before copies
+// were written down) are removed, since nothing would ever show them.
+func (s *Service) Resume() {
+	dir, err := s.dir()
+	if err != nil {
+		return
+	}
+	var jobs []copyJob
+	if b, err := os.ReadFile(filepath.Join(dir, copyingFile)); err == nil {
+		if json.Unmarshal(b, &jobs) != nil {
+			jobs = nil
+		}
+	}
+	s.dropHalfMade(dir, jobs)
+	if len(jobs) == 0 {
+		os.Remove(filepath.Join(dir, copyingFile))
+		return
+	}
+	var total int64
+	for _, j := range jobs {
+		n, err := sizeOf(j.From)
+		if err != nil {
+			os.Remove(filepath.Join(dir, copyingFile))
+			for _, j := range jobs {
+				os.RemoveAll(filepath.Join(dir, "."+j.Name+".part"))
+			}
+			s.mu.Lock()
+			s.copying.Error = fmt.Sprintf("a copy from %s stopped when Box Office restarted, and can't carry on: %s can't be read now", filepath.Dir(j.From), j.From)
+			s.mu.Unlock()
+			return
+		}
+		total += n
+	}
+	s.mu.Lock()
+	if s.copying.Running {
+		s.mu.Unlock()
+		return
+	}
+	s.copying = Copying{Running: true, Total: total, Started: time.Now().UTC()}
+	s.mu.Unlock()
+	s.log().Info("carrying on a copy into the imports folder that a restart cut off", "files", len(jobs))
+	go s.copyJobs(dir, jobs)
 }
 
 func sizeOf(p string) (int64, error) {
@@ -788,8 +884,9 @@ func (s *Service) copyTree(ctx context.Context, src, dst string) error {
 	if !st.IsDir() {
 		return s.copyFile(ctx, src, dst)
 	}
+	// What's there from a copy a restart cut off is kept, and only what's
+	// missing or short is copied.
 	tmp := filepath.Join(filepath.Dir(dst), "."+filepath.Base(dst)+".part")
-	os.RemoveAll(tmp)
 	err = filepath.WalkDir(src, func(p string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
@@ -800,6 +897,14 @@ func (s *Service) copyTree(ctx context.Context, src, dst string) error {
 		case d.IsDir():
 			return os.MkdirAll(to, 0o775)
 		case d.Type().IsRegular():
+			if have, err := os.Stat(to); err == nil {
+				if src, err := d.Info(); err == nil && src.Size() == have.Size() {
+					s.mu.Lock()
+					s.copying.Done += have.Size()
+					s.mu.Unlock()
+					return nil
+				}
+			}
 			return s.copyFile(ctx, p, to)
 		}
 		return nil
@@ -1085,32 +1190,50 @@ func (s *Service) importGames(ctx context.Context, it Item, full string) (string
 		s.unimport(full, placed)
 		return strings.Join(to, ", "), err
 	}
-	if !it.Dir {
-		if len(to) > 0 {
-			os.RemoveAll(full)
+	var clashes, unknown []string
+	for _, f := range skipped {
+		name := filepath.Base(f.Path)
+		if r, err := filepath.Rel(full, f.Path); err == nil && it.Dir {
+			name = r
 		}
-		return strings.Join(to, ", "), nil
+		if f.Clash != "" {
+			clashes = append(clashes, name)
+		} else {
+			unknown = append(unknown, name)
+		}
 	}
 	if len(skipped) == 0 && len(to) > 0 {
 		os.RemoveAll(full)
 		return strings.Join(to, ", "), nil
 	}
-	s.unimport(full, placed)
+	if it.Dir {
+		s.unimport(full, placed)
+	} else if len(to) > 0 {
+		os.RemoveAll(full)
+	}
 	if len(to) == 0 && len(skipped) == 0 {
 		return "", badf("there are no games in it")
 	}
-	names := make([]string, len(skipped))
-	for i, f := range skipped {
-		if r, err := filepath.Rel(full, f); err == nil {
-			names[i] = r
-		} else {
-			names[i] = filepath.Base(f)
-		}
+	var why []string
+	if len(clashes) > 0 {
+		why = append(why, fmt.Sprintf("a different file of the same name is in the games folder already, so these weren't added: %s", someNames(clashes)))
 	}
+	if len(unknown) > 0 {
+		why = append(why, fmt.Sprintf("Box Office couldn't tell which system these are for, or they aren't games: %s", someNames(unknown)))
+	}
+	msg := strings.Join(why, "; ") + ". They're still in the imports folder"
 	if len(to) == 0 {
-		return "", badf("Box Office couldn't tell which system these are for, so they're still in the imports folder: %s", strings.Join(names, ", "))
+		return "", badf("%s", msg)
 	}
-	return strings.Join(to, ", "), badf("added games to %s, but couldn't tell which system these are for, so they're still in the imports folder: %s", strings.Join(to, ", "), strings.Join(names, ", "))
+	return strings.Join(to, ", "), badf("added games to %s, but %s", strings.Join(to, ", "), msg)
+}
+
+// someNames lists up to ten names, and says how many more there are.
+func someNames(names []string) string {
+	if len(names) <= 10 {
+		return strings.Join(names, ", ")
+	}
+	return fmt.Sprintf("%s and %d more", strings.Join(names[:10], ", "), len(names)-10)
 }
 
 // unimport takes the files an import placed out of a folder item, and the

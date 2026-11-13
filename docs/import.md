@@ -20,7 +20,11 @@ There are three ways in, and you can mix them:
 
 Uploads carry on while you look at other pages; closing the tab stops them.
 Everything waits in the `imports` folder inside the downloads folder until it's
-imported, so nothing is lost if Box Office restarts.
+imported, so nothing is lost if Box Office restarts. A copy **From the server**
+that a restart cuts off carries on by itself when Box Office starts again,
+skipping the files it had finished; if the folder it was copying from can't be
+read any more, the page says so and what was half copied is removed. An upload
+cut off by a restart is removed too, so send it again.
 
 ## What Box Office guesses
 
@@ -65,6 +69,14 @@ in **Settings → Library**, and each needs a root folder.
   `.cue` and its `.bin` files) go together in a folder named for the game, and a
   game that's a folder is copied whole. A game that's already there with the
   same size is skipped.
+- A folder of games can be a whole emulator, such as a MAME or AAE install:
+  every folder inside is looked through for games (`roms/` and the like), and
+  the emulator's own folders (`samples/`, `artwork/`, `snap/`, `cfg/`,
+  `nvram/`, `hiscore/`…) are left out, since their zips share the games' names.
+- A game that's named like a different file already in the games folder isn't
+  put over it. The rest of the folder still goes in, and the item lists the
+  games left in the imports folder for that reason, and any files that aren't
+  games, so you can look at them and **Remove** the item when you're done.
 
 Each item says where it went. **Remove** deletes an item's copy from the imports
 folder without importing it.

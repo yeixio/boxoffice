@@ -4,6 +4,7 @@ import (
 	"archive/zip"
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log/slog"
@@ -331,5 +332,148 @@ func TestImportGameByName(t *testing.T) {
 		if _, err := os.Stat(filepath.Join(roots, "pc", "The X-Files Game", fmt.Sprintf("XFILES%d.bin", i))); err != nil {
 			t.Errorf("disc %d isn't in the game's folder", i)
 		}
+	}
+}
+
+func gridleeZip(t *testing.T, p string) {
+	t.Helper()
+	var zb bytes.Buffer
+	zw := zip.NewWriter(&zb)
+	for _, n := range []string{"gridlee.1", "gridlee.2", "gridlee.7"} {
+		w, _ := zw.Create(n + ".bin")
+		w.Write([]byte("rom"))
+	}
+	zw.Close()
+	os.MkdirAll(filepath.Dir(p), 0o755)
+	if err := os.WriteFile(p, zb.Bytes(), 0o644); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func gamesReady(t *testing.T, s *Service) string {
+	t.Helper()
+	ctx := context.Background()
+	roots := t.TempDir()
+	if _, err := s.Store.AddRootFolder(ctx, mediatypes.Game, roots); err != nil {
+		t.Fatal(err)
+	}
+	mediatypes.SetEnabled(ctx, s.Store, mediatypes.Game, true)
+	return roots
+}
+
+func importFolder(t *testing.T, s *Service, p string) Item {
+	t.Helper()
+	ctx := context.Background()
+	if err := s.CopyIn(ctx, []string{p}); err != nil {
+		t.Fatal(err)
+	}
+	settled(t, s)
+	if _, err := s.Set(ctx, "imports/"+filepath.Base(p), Pick{Kind: Game}); err != nil {
+		t.Fatal(err)
+	}
+	settled(t, s)
+	if err := s.Run(ctx, nil); err != nil {
+		t.Fatal(err)
+	}
+	return item(t, settled(t, s), filepath.Base(p))
+}
+
+// An emulator's whole folder is imported: its ROMs go in, and its samples
+// and artwork, which share the games' names, are left alone.
+func TestImportEmulatorFolder(t *testing.T) {
+	s := newService(t)
+	roots := gamesReady(t, s)
+	src := t.TempDir()
+	gridleeZip(t, filepath.Join(src, "MAME", "roms", "gridlee.zip"))
+	write(t, filepath.Join(src, "MAME", "samples", "gridlee.zip"), 40)
+	write(t, filepath.Join(src, "MAME", "artwork", "gridlee.zip"), 50)
+	write(t, filepath.Join(src, "MAME", "roms", "Lone (Europe).nes"), 64)
+
+	m := importFolder(t, s, filepath.Join(src, "MAME"))
+	if m.Status != Done || m.Problem != "" {
+		t.Fatalf("emulator folder %+v", m)
+	}
+	for _, p := range []string{"nes/Lone (Europe).nes", "mame/gridlee.zip"} {
+		if _, err := os.Stat(filepath.Join(roots, p)); err != nil {
+			t.Errorf("%s isn't in the games folder", p)
+		}
+	}
+	if fi, _ := os.Stat(filepath.Join(roots, "mame", "gridlee.zip")); fi == nil || fi.Size() == 40 || fi.Size() == 50 {
+		t.Fatal("a sample or artwork file went in as the game")
+	}
+}
+
+// A game whose name is taken in the games folder by a different file is
+// left in the imports folder, and the rest still go in.
+func TestImportGamesSkipsAClash(t *testing.T) {
+	s := newService(t)
+	roots := gamesReady(t, s)
+	write(t, filepath.Join(roots, "mame", "gridlee.zip"), 10)
+	src := t.TempDir()
+	gridleeZip(t, filepath.Join(src, "Old", "gridlee.zip"))
+	write(t, filepath.Join(src, "Old", "Lone (Europe).nes"), 64)
+
+	m := importFolder(t, s, filepath.Join(src, "Old"))
+	if m.Status != Done || !strings.Contains(m.Problem, "gridlee.zip") || !strings.Contains(m.Problem, "same name") {
+		t.Fatalf("old %+v", m)
+	}
+	if _, err := os.Stat(filepath.Join(roots, "nes", "Lone (Europe).nes")); err != nil {
+		t.Fatal("the clash stopped the rest going in")
+	}
+	if fi, _ := os.Stat(filepath.Join(roots, "mame", "gridlee.zip")); fi == nil || fi.Size() != 10 {
+		t.Fatal("the file already in the games folder was replaced")
+	}
+	dir, _ := s.dir()
+	if _, err := os.Stat(filepath.Join(dir, "Old", "gridlee.zip")); err != nil {
+		t.Fatal("the clashing game was deleted from the imports folder")
+	}
+}
+
+// A copy that a restart cut off carries on from where it got to, and a
+// half-made item no copy will finish is removed.
+func TestResumeCopy(t *testing.T) {
+	s := newService(t)
+	src := t.TempDir()
+	write(t, filepath.Join(src, "Big", "a.nes"), 100)
+	write(t, filepath.Join(src, "Big", "sub", "b.nes"), 200)
+	dir, err := s.dir()
+	if err != nil {
+		t.Fatal(err)
+	}
+	// a.nes made it before the restart.
+	write(t, filepath.Join(dir, ".Big.part", "a.nes"), 100)
+	write(t, filepath.Join(dir, ".Stale.part", "x.nes"), 10)
+	b, _ := json.Marshal([]copyJob{{From: filepath.Join(src, "Big"), Name: "Big"}})
+	os.WriteFile(filepath.Join(dir, copyingFile), b, 0o644)
+
+	s.Resume()
+	st := settled(t, s)
+	if st.Copying.Error != "" || st.Copying.Total != 300 || st.Copying.Done != 300 {
+		t.Fatalf("copy %+v", st.Copying)
+	}
+	if _, err := os.Stat(filepath.Join(dir, "Big", "sub", "b.nes")); err != nil {
+		t.Fatal("the copy didn't finish")
+	}
+	for _, n := range []string{".Stale.part", ".Big.part", copyingFile} {
+		if _, err := os.Stat(filepath.Join(dir, n)); err == nil {
+			t.Errorf("%s is still there", n)
+		}
+	}
+}
+
+// A copy whose source has gone says so instead of carrying on.
+func TestResumeCopySourceGone(t *testing.T) {
+	s := newService(t)
+	dir, _ := s.dir()
+	write(t, filepath.Join(dir, ".Gone.part", "a.nes"), 10)
+	b, _ := json.Marshal([]copyJob{{From: filepath.Join(t.TempDir(), "Gone"), Name: "Gone"}})
+	os.WriteFile(filepath.Join(dir, copyingFile), b, 0o644)
+	s.Resume()
+	st := settled(t, s)
+	if !strings.Contains(st.Copying.Error, "restarted") {
+		t.Fatalf("copy %+v", st.Copying)
+	}
+	if _, err := os.Stat(filepath.Join(dir, ".Gone.part")); err == nil {
+		t.Fatal("the half-made copy was kept")
 	}
 }
