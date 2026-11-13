@@ -772,6 +772,13 @@ func (s *Service) checkConsole(ctx context.Context, sys store.GameSystem, def ga
 				}
 			}
 			g.Parent, g.ParentTitle = groupKey(g.Title), g.Title
+			if len(parts) > 1 {
+				// A merged archive (GoodMerged, 1G1R packs) holds one
+				// game's every version, hacks and translations: they're
+				// that game's, named for the archive.
+				t := gamedat.Title(strings.TrimSuffix(filepath.Base(p), filepath.Ext(p)))
+				g.Parent, g.ParentTitle = groupKey(t), t
+			}
 			c.Games = append(c.Games, g)
 		}
 	}

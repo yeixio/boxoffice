@@ -242,7 +242,9 @@ func TestCheckFindsAndChecksGames(t *testing.T) {
 				t.Errorf("mame %+v", sys)
 			}
 		case "snes":
-			if sys.List != "No-Intro 2026.10.07" || sys.Games != 3 || sys.Problems != 2 {
+			// The bad copy of Super Metroid is beside a good one, so only
+			// the hack, on no list, is a game with a problem.
+			if sys.List != "No-Intro 2026.10.07" || sys.Games != 3 || sys.Problems != 1 {
 				t.Errorf("snes %+v", sys)
 			}
 		}
@@ -343,5 +345,38 @@ func TestVersions(t *testing.T) {
 	}
 	if !ValidVersion("0.162") || ValidVersion("0.161") || ValidVersion("1.0") || ValidVersion("0.x") {
 		t.Error("valid")
+	}
+}
+
+// A merged archive, one game's every version with its hacks, is one game,
+// and with a good copy in it the hacks beside it aren't problems.
+func TestCheckMergedArchive(t *testing.T) {
+	ctx := context.Background()
+	st := storetest.Open(t)
+	snes := []byte("SNES")
+	hs, _ := sources(t, crc32.ChecksumIEEE(snes))
+	s := &Service{Store: st, Dir: t.TempDir(), MAMEReleases: hs.URL + "/mame", LibretroDB: hs.URL + "/db",
+		Art: []string{hs.URL + "/art/{repo}/{kind}/{name}.png"}}
+	mediatypes.SetEnabled(ctx, st, mediatypes.Game, true)
+	root := t.TempDir()
+	zipOf(t, filepath.Join(root, "snes", "Super Metroid.zip"), map[string]uint32{
+		"Super Metroid (U) [!].sfc":      crc32.ChecksumIEEE(snes),
+		"Super Metroid (U) [h1].sfc":     5,
+		"Super Metroid (U) [T+Fre].sfc":  6,
+		"Metroid Redesign (SM Hack).sfc": 7,
+	})
+	zipOf(t, filepath.Join(root, "snes", "Pirate Pack.zip"), map[string]uint32{"Pirate A (Ch).sfc": 8, "Pirate B (Ch).sfc": 9})
+	if _, err := st.AddRootFolder(ctx, mediatypes.Game, root); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := s.Start(ctx, 0, ""); err != nil {
+		t.Fatal(err)
+	}
+	if p := wait(t, s); p.Error != "" {
+		t.Fatalf("%+v", p)
+	}
+	systems, _ := st.GameSystems(ctx)
+	if len(systems) != 1 || systems[0].Games != 6 || systems[0].Groups != 2 || systems[0].Problems != 1 {
+		t.Fatalf("%+v", systems)
 	}
 }
