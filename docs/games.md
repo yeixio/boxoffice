@@ -83,7 +83,21 @@ directory (nothing is unpacked), and is:
 
 Sets are checked against the newest MAME unless you pick the version you play
 with under **MAME version** on the Games page; picking another checks every set
-again. Genres come from a `catver.ini` in the MAME folder or the games root
+again. Versions from 0.162 on can be picked, as that's where MAME's
+published lists start; an older set (a MAME 0.154 collection, say) is checked
+against the version picked, and its renamed files and the device sets newer
+versions split out show as missing.
+
+### What "with problems" counts
+
+Each system's **with problems** count is games, the same games as its **games**
+count, not files. A MAME game has a problem when any of its sets has one, as
+each clone is a game of its own. A console game has one only when none of its
+versions is good: one good copy is all it takes to play it, so bad dumps, hacks
+and translations kept beside it don't count. A merged archive (a GoodMerged
+`.7z` holding every version of one game) is one game. Pressing the count opens
+the system's games with **Has problems** on, and each game's page says what's
+wrong with each of its versions. Genres come from a `catver.ini` in the MAME folder or the games root
 folder, if you have one: MAME's list has none of its own.
 
 ## Cartridges

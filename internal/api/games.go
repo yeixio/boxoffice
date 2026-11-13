@@ -207,7 +207,8 @@ func (s *Server) saveGameSettings(w http.ResponseWriter, r *http.Request) error 
 type gameGroup struct {
 	Game     store.Game `json:"game"`
 	Versions int        `json:"versions"`
-	// Problems counts the versions with something wrong.
+	// Problems counts the versions with something wrong: for a console
+	// game, only when none of its versions is good.
 	Problems int `json:"problems"`
 }
 
@@ -271,14 +272,23 @@ func (s *Server) gameList(w http.ResponseWriter, r *http.Request) error {
 	for _, gr := range groups {
 		main := mainVersion(gr.key, gr.games)
 		v := gameGroup{Game: main, Versions: len(gr.games)}
+		good := false
 		match := text == ""
 		for _, g := range gr.games {
 			if g.Status != gamedat.Complete && g.Status != gamedat.Identified {
 				v.Problems++
+			} else {
+				good = true
 			}
 			if !match && (strings.Contains(strings.ToLower(g.Title), text) || strings.Contains(strings.ToLower(g.Name), text) || strings.Contains(strings.ToLower(g.Maker), text)) {
 				match = true
 			}
+		}
+		if good && sys.System != "mame" {
+			// A console game with a good copy is playable; a bad dump or
+			// hack beside it isn't the game's problem, and its page lists
+			// each version as it is.
+			v.Problems = 0
 		}
 		if !match || (genre != "" && !slices.ContainsFunc(gr.games, func(g store.Game) bool { return g.Genre == genre })) ||
 			(dec != "" && !slices.ContainsFunc(gr.games, func(g store.Game) bool { return decade(g.Year) == dec })) ||

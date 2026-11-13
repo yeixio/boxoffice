@@ -24,7 +24,10 @@ type GameSystem struct {
 	CheckedAt  time.Time `json:"checkedAt,omitzero"`
 	// Counted from its games when listed: all of them, how many games
 	// they are once clones and other versions are put with their game,
-	// and how many have problems.
+	// and how many of those games have problems. A MAME game has one when
+	// any of its sets has, as each clone is a game of its own to play; a
+	// console game when none of its versions is good, as one good copy
+	// (the USA's, say) is all it takes to play it.
 	Games    int `json:"games"`
 	Groups   int `json:"groups"`
 	Problems int `json:"problems"`
@@ -63,7 +66,12 @@ type Game struct {
 const gameSystemCols = `s.id, s.system, s.path, s.root_folder, s.locked, s.format, s.list, s.support, s.note, s.added_at, s.checked_at,
 	(SELECT COUNT(*) FROM games g WHERE g.system_id = s.id),
 	(SELECT COUNT(DISTINCT CASE WHEN g.parent <> '' THEN g.parent ELSE g.name END) FROM games g WHERE g.system_id = s.id),
-	(SELECT COUNT(*) FROM games g WHERE g.system_id = s.id AND g.status NOT IN ('complete', 'identified'))`
+	(SELECT COUNT(*) FROM (
+		SELECT MAX(CASE WHEN g.status IN ('complete', 'identified') THEN 1 ELSE 0 END) AS any_ok,
+			MIN(CASE WHEN g.status IN ('complete', 'identified') THEN 1 ELSE 0 END) AS all_ok
+		FROM games g WHERE g.system_id = s.id
+		GROUP BY CASE WHEN g.parent <> '' THEN g.parent ELSE g.name END) v
+		WHERE (s.system = 'mame' AND v.all_ok = 0) OR (s.system <> 'mame' AND v.any_ok = 0))`
 
 func scanGameSystem(r interface{ Scan(...any) error }) (GameSystem, error) {
 	var g GameSystem
