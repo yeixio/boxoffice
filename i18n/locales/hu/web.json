@@ -1631,7 +1631,21 @@
     "staysQuarantined": "A fájljai karanténban maradnak itt: <code>{{path}}</code>; töröld vagy engedd ki őket lent a Karanténban. Ne nyisd meg őket.",
     "alsoDelete": "A fájljait is törölje a letöltési mappából",
     "neverTouched": "A könyvtáradba már áthelyezett fájlokhoz soha nem nyúl.",
-    "checkImport": "Ellenőrzés a Fájlok importálása oldalon"
+    "checkImport": "Ellenőrzés a Fájlok importálása oldalon",
+    "filter": {
+      "all": "Mind",
+      "type": "Típus",
+      "state": "Állapot",
+      "other": "Kézzel hozzáadva",
+      "working": "Kicsomagolás vagy áthelyezés",
+      "waitingLibrary": "Még nincs a könyvtárban",
+      "none": "Semmi sem felel meg ezeknek a szűrőknek.",
+      "clear": "Szűrők törlése",
+      "pickAll_one": "Összes kijelölése ({{count}})",
+      "pickAll_other": "Összes kijelölése ({{count}})",
+      "pickShown_one": "Összes látható kijelölése ({{count}})",
+      "pickShown_other": "Összes látható kijelölése ({{count}})"
+    }
   },
   "req": {
     "tabs": {

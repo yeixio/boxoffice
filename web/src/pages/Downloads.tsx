@@ -59,6 +59,14 @@ import { DownloadFiles } from "./DownloadFiles";
 import { Quarantine } from "./DownloadsQuarantine";
 import { Pager, usePageSize } from "./Pager";
 import { AddNzb, isNzb } from "../AddNzb";
+import {
+  Chips,
+  downloadTypes,
+  filterQueue,
+  historyStates,
+  queueStates,
+  useFilter,
+} from "./DownloadsFilter";
 
 // HistoryPage is which page of the history to fetch, sorted how; the
 // server pages and sorts it, as it can grow long.
@@ -72,6 +80,9 @@ type HistoryPage = {
   missing?: boolean;
   // Only those whose name has every word of this.
   query?: string;
+  // Only those of this type, and that ended this way.
+  type?: string;
+  state?: string;
 };
 
 // nameWords splits a search, or a release name, into lowercase words: dots,
@@ -102,7 +113,7 @@ function useSettled<T>(value: T, ms = 250) {
 
 export function useDownloads(page?: HistoryPage) {
   const q = page
-    ? `?historyOffset=${page.offset}&historyLimit=${page.limit}&historySort=${page.sort}&historyDir=${page.dir}${page.missing ? "&historyMissing=true" : ""}${page.query ? `&historyQuery=${encodeURIComponent(page.query)}` : ""}`
+    ? `?historyOffset=${page.offset}&historyLimit=${page.limit}&historySort=${page.sort}&historyDir=${page.dir}${page.missing ? "&historyMissing=true" : ""}${page.query ? `&historyQuery=${encodeURIComponent(page.query)}` : ""}${page.type ? `&historyType=${encodeURIComponent(page.type)}` : ""}${page.state ? `&historyState=${encodeURIComponent(page.state)}` : ""}`
     : "";
   return useQuery({
     queryKey: ["downloads", page ?? null],
@@ -217,11 +228,24 @@ export function Downloads() {
   const [queueQuery, setQueueQuery] = useState("");
   const [historyQuery, setHistoryQuery] = useState("");
   const historySearch = useSettled(historyQuery.trim());
+  // Filters by type and state, kept in the address.
+  const [queueType, setQueueType] = useFilter("type");
+  const [queueState, setQueueState] = useFilter("state");
+  const [historyType, setHistoryType] = useFilter("htype");
+  const [historyState, setHistoryState] = useFilter("hstate");
   useEffect(
     () => setHistoryPage(0),
-    [sort.option.key, sort.dir, historySize, showMissing, historySearch],
+    [
+      sort.option.key,
+      sort.dir,
+      historySize,
+      showMissing,
+      historySearch,
+      historyType,
+      historyState,
+    ],
   );
-  useEffect(() => setQueuePage(0), [queueQuery]);
+  useEffect(() => setQueuePage(0), [queueQuery, queueType, queueState]);
   const d = useDownloads({
     offset: historyPage * historySize,
     limit: historySize,
@@ -229,6 +253,8 @@ export function Downloads() {
     dir: sort.dir,
     missing: showMissing,
     query: historySearch,
+    type: historyType,
+    state: historyState,
   });
   // A page past the end (the history got shorter) goes back to the last.
   const total = d.data?.historyTotal ?? 0;
@@ -296,19 +322,44 @@ export function Downloads() {
   const historyHidden = data.historyHidden ?? 0;
   // The queue's own pages; a page past the end (the queue got shorter)
   // shows the last one.
-  const shownQueue = queueQuery.trim()
+  const searchedQueue = queueQuery.trim()
     ? data.queue.filter((x) => matches(x.name, queueQuery))
     : data.queue;
+  const {
+    shown: shownQueue,
+    types: queueTypes,
+    states: queueStateCounts,
+  } = filterQueue(searchedQueue, queueType, queueState);
+  const queueFiltered = !!(queueType || queueState);
+  const clearQueueFilters = () => {
+    setQueueType("");
+    setQueueState("");
+  };
+  const historyTypes = data.historyTypes ?? {};
+  const historyStateCounts = data.historyStates ?? {};
+  const historyFiltered = !!(historyType || historyState);
+  const clearHistoryFilters = () => {
+    setHistoryType("");
+    setHistoryState("");
+  };
+  // A row of filters shows when it has a choice to make, or one's made.
+  const worthFilter = (counts: Record<string, number>, value: string) =>
+    !!value || Object.keys(counts).length > 1;
   const queuePages = Math.max(1, Math.ceil(shownQueue.length / queueSize));
   const qp = Math.min(queuePage, queuePages - 1);
   const queue = shownQueue.slice(qp * queueSize, (qp + 1) * queueSize);
   // Turning the page drops what was picked: Select all picks a page.
+  // Everything the queue's filters show, picked at once, stays picked.
+  const allShownPicked =
+    picking === "queue" &&
+    shownQueue.length > 0 &&
+    shownQueue.every((x) => picked.has(x.id));
   const turn = (set: (p: number) => void) => (p: number) => {
     set(p);
-    setPicked(new Set());
+    if (!allShownPicked) setPicked(new Set());
   };
   const pickedList =
-    picking === "queue" ? queue : picking === "history" ? history : [];
+    picking === "queue" ? shownQueue : picking === "history" ? history : [];
   const pickHead = (list: BulkList, items: Download[], paged: boolean) =>
     items.length > 0 &&
     (picking === list ? (
@@ -319,6 +370,19 @@ export function Downloads() {
           onChange={setPicked}
           paged={paged}
         />
+        {list === "queue" && paged && !allShownPicked && (
+          <Button
+            variant="ghost"
+            onClick={() => setPicked(new Set(shownQueue.map((x) => x.id)))}
+          >
+            {t(
+              queueFiltered || queueQuery.trim()
+                ? "dl.filter.pickShown"
+                : "dl.filter.pickAll",
+              { count: shownQueue.length },
+            )}
+          </Button>
+        )}
         <Button variant="ghost" onClick={stopPicking}>
           {t("bulk.done")}
         </Button>
@@ -420,10 +484,34 @@ export function Downloads() {
           )}
           {pickHead("queue", queue, queuePages > 1)}
         </div>
+        {data.queue.length > 1 &&
+          (worthFilter(queueTypes, queueType) ||
+            worthFilter(queueStateCounts, queueState)) && (
+            <div className="mb-3 flex flex-col gap-2">
+              <Chips
+                label={t("dl.filter.type")}
+                options={downloadTypes}
+                counts={queueTypes}
+                value={queueType}
+                onChange={setQueueType}
+              />
+              <Chips
+                label={t("dl.filter.state")}
+                options={queueStates}
+                counts={queueStateCounts}
+                value={queueState}
+                onChange={setQueueState}
+              />
+            </div>
+          )}
         {data.queue.length > 0 && shownQueue.length === 0 ? (
-          <p className="text-sm text-muted">
-            {t("dl.noMatch", { query: queueQuery.trim() })}
-          </p>
+          queueFiltered ? (
+            <NoneMatch onClear={clearQueueFilters} />
+          ) : (
+            <p className="text-sm text-muted">
+              {t("dl.noMatch", { query: queueQuery.trim() })}
+            </p>
+          )
         ) : data.queue.length === 0 ? (
           <Empty
             icon={<DownloadIcon className="size-8" />}
@@ -495,12 +583,36 @@ export function Downloads() {
             </Button>
           )}
         </div>
+        {(historyTotal > 1 || historyFiltered) &&
+          (worthFilter(historyTypes, historyType) ||
+            worthFilter(historyStateCounts, historyState)) && (
+            <div className="mb-3 flex flex-col gap-2">
+              <Chips
+                label={t("dl.filter.type")}
+                options={downloadTypes}
+                counts={historyTypes}
+                value={historyType}
+                onChange={setHistoryType}
+              />
+              <Chips
+                label={t("dl.filter.state")}
+                options={historyStates}
+                counts={historyStateCounts}
+                value={historyState}
+                onChange={setHistoryState}
+              />
+            </div>
+          )}
         {data.history.length === 0 ? (
-          <p className="text-sm text-muted">
-            {historySearch
-              ? t("dl.noMatch", { query: historySearch })
-              : t("dl.noHistory")}
-          </p>
+          historyFiltered ? (
+            <NoneMatch onClear={clearHistoryFilters} />
+          ) : (
+            <p className="text-sm text-muted">
+              {historySearch
+                ? t("dl.noMatch", { query: historySearch })
+                : t("dl.noHistory")}
+            </p>
+          )
         ) : (
           <ul className="divide-y divide-line rounded-xl border border-line bg-card">
             {history.map((x) => (
@@ -962,6 +1074,23 @@ function RemoveDialog({
         </Button>
       </div>
     </Modal>
+  );
+}
+
+// NoneMatch says the filters leave nothing, with a way to clear them.
+function NoneMatch({ onClear }: { onClear: () => void }) {
+  const { t } = useTranslation();
+  return (
+    <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted">
+      {t("dl.filter.none")}
+      <button
+        type="button"
+        className="font-medium text-marquee hover:underline"
+        onClick={onClear}
+      >
+        {t("dl.filter.clear")}
+      </button>
+    </p>
   );
 }
 

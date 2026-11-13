@@ -1538,7 +1538,19 @@
     "staysQuarantined": "Failnya kekal dalam kuarantin di <code>{{path}}</code>; padam atau lepaskannya di bawah Kuarantin di bawah. Jangan membukanya.",
     "alsoDelete": "Padam juga failnya dalam folder muat turun",
     "neverTouched": "Fail yang sudah dialih ke pustaka anda tidak pernah disentuh.",
-    "checkImport": "Semak di Import fail"
+    "checkImport": "Semak di Import fail",
+    "filter": {
+      "all": "Semua",
+      "type": "Jenis",
+      "state": "Keadaan",
+      "other": "Ditambah secara manual",
+      "working": "Mengekstrak atau memindahkan",
+      "waitingLibrary": "Belum dalam pustaka",
+      "none": "Tiada apa-apa yang sepadan dengan penapis ini.",
+      "clear": "Kosongkan penapis",
+      "pickAll_other": "Pilih semua ({{count}})",
+      "pickShown_other": "Pilih semua yang dipaparkan ({{count}})"
+    }
   },
   "req": {
     "tabs": {

@@ -2003,7 +2003,29 @@
     "staysQuarantined": "تبقى ملفاته في الحجر في <code>{{path}}</code>؛ احذفها أو أخرجها من قسم الحجر أدناه. لا تفتحها.",
     "alsoDelete": "احذف ملفاته في مجلد التنزيلات أيضًا",
     "neverTouched": "الملفات التي نُقلت إلى مكتبتك لا تُمسّ أبدًا.",
-    "checkImport": "تحقق منه في استيراد الملفات"
+    "checkImport": "تحقق منه في استيراد الملفات",
+    "filter": {
+      "all": "الكل",
+      "type": "النوع",
+      "state": "الحالة",
+      "other": "أُضيف يدويًا",
+      "working": "فك الضغط أو النقل",
+      "waitingLibrary": "ليس في المكتبة بعد",
+      "none": "لا شيء هنا يطابق هذه المرشحات.",
+      "clear": "مسح المرشحات",
+      "pickAll_zero": "تحديد الكل ({{count}})",
+      "pickAll_one": "تحديد الكل ({{count}})",
+      "pickAll_two": "تحديد الكل ({{count}})",
+      "pickAll_few": "تحديد الكل ({{count}})",
+      "pickAll_many": "تحديد الكل ({{count}})",
+      "pickAll_other": "تحديد الكل ({{count}})",
+      "pickShown_zero": "تحديد كل المعروض ({{count}})",
+      "pickShown_one": "تحديد كل المعروض ({{count}})",
+      "pickShown_two": "تحديد كل المعروض ({{count}})",
+      "pickShown_few": "تحديد كل المعروض ({{count}})",
+      "pickShown_many": "تحديد كل المعروض ({{count}})",
+      "pickShown_other": "تحديد كل المعروض ({{count}})"
+    }
   },
   "req": {
     "tabs": {

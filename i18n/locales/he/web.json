@@ -1724,7 +1724,23 @@
     "staysQuarantined": "הקבצים שלה נשארים בהסגר ב־<code>{{path}}</code>; אפשר למחוק או לשחרר אותם תחת הסגר למטה. לא לפתוח אותם.",
     "alsoDelete": "למחוק גם את הקבצים שלה בתיקיית ההורדות",
     "neverTouched": "קבצים שכבר הועברו לספרייה לעולם לא נוגעים בהם.",
-    "checkImport": "בדיקה בייבוא קבצים"
+    "checkImport": "בדיקה בייבוא קבצים",
+    "filter": {
+      "all": "הכול",
+      "type": "סוג",
+      "state": "מצב",
+      "other": "נוסף ידנית",
+      "working": "חילוץ או העברה",
+      "waitingLibrary": "עדיין לא בספרייה",
+      "none": "שום דבר לא תואם למסננים האלה.",
+      "clear": "ניקוי מסננים",
+      "pickAll_one": "בחירת הכול ({{count}})",
+      "pickAll_two": "בחירת הכול ({{count}})",
+      "pickAll_other": "בחירת הכול ({{count}})",
+      "pickShown_one": "בחירת כל המוצגים ({{count}})",
+      "pickShown_two": "בחירת כל המוצגים ({{count}})",
+      "pickShown_other": "בחירת כל המוצגים ({{count}})"
+    }
   },
   "req": {
     "tabs": {

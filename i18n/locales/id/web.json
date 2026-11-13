@@ -1538,7 +1538,19 @@
     "staysQuarantined": "File-nya tetap di karantina di <code>{{path}}</code>; hapus atau lepaskan di bagian Karantina di bawah. Jangan membukanya.",
     "alsoDelete": "Hapus juga file-nya di folder unduhan",
     "neverTouched": "File yang sudah dipindah ke perpustakaan Anda tidak pernah disentuh.",
-    "checkImport": "Periksa di Impor file"
+    "checkImport": "Periksa di Impor file",
+    "filter": {
+      "all": "Semua",
+      "type": "Jenis",
+      "state": "Status",
+      "other": "Ditambahkan manual",
+      "working": "Mengekstrak atau memindahkan",
+      "waitingLibrary": "Belum di pustaka",
+      "none": "Tidak ada yang cocok dengan filter ini.",
+      "clear": "Hapus filter",
+      "pickAll_other": "Pilih semua ({{count}})",
+      "pickShown_other": "Pilih semua yang ditampilkan ({{count}})"
+    }
   },
   "req": {
     "tabs": {

@@ -1631,7 +1631,21 @@
     "staysQuarantined": "Dess filer ligger kvar i karantän i <code>{{path}}</code>; radera eller släpp dem under Karantän nedan. Öppna dem inte.",
     "alsoDelete": "Radera även dess filer i nedladdningsmappen",
     "neverTouched": "Filer som redan flyttats till ditt bibliotek rörs aldrig.",
-    "checkImport": "Kolla under Importera filer"
+    "checkImport": "Kolla under Importera filer",
+    "filter": {
+      "all": "Alla",
+      "type": "Typ",
+      "state": "Status",
+      "other": "Tillagd manuellt",
+      "working": "Uppackning eller flytt",
+      "waitingLibrary": "Inte i biblioteket än",
+      "none": "Inget här matchar dessa filter.",
+      "clear": "Rensa filter",
+      "pickAll_one": "Markera alla ({{count}})",
+      "pickAll_other": "Markera alla ({{count}})",
+      "pickShown_one": "Markera alla som visas ({{count}})",
+      "pickShown_other": "Markera alla som visas ({{count}})"
+    }
   },
   "req": {
     "tabs": {

@@ -1631,7 +1631,21 @@
     "staysQuarantined": "Sen tiedostot pysyvät karanteenissa kansiossa <code>{{path}}</code>; poista tai vapauta ne alta kohdasta Karanteeni. Älä avaa niitä.",
     "alsoDelete": "Poista myös sen tiedostot latauskansiosta",
     "neverTouched": "Kirjastoosi jo siirrettyihin tiedostoihin ei koskaan kosketa.",
-    "checkImport": "Tarkista kohdassa Tuo tiedostoja"
+    "checkImport": "Tarkista kohdassa Tuo tiedostoja",
+    "filter": {
+      "all": "Kaikki",
+      "type": "Tyyppi",
+      "state": "Tila",
+      "other": "Lisätty käsin",
+      "working": "Purku tai siirto",
+      "waitingLibrary": "Ei vielä kirjastossa",
+      "none": "Mikään ei vastaa näitä suodattimia.",
+      "clear": "Tyhjennä suodattimet",
+      "pickAll_one": "Valitse kaikki ({{count}})",
+      "pickAll_other": "Valitse kaikki ({{count}})",
+      "pickShown_one": "Valitse kaikki näytetyt ({{count}})",
+      "pickShown_other": "Valitse kaikki näytetyt ({{count}})"
+    }
   },
   "req": {
     "tabs": {

@@ -1724,7 +1724,23 @@
     "staysQuarantined": "Ses fichiers restent en quarantaine dans <code>{{path}}</code> ; supprimez-les ou libérez-les sous Quarantaine ci-dessous. Ne les ouvrez pas.",
     "alsoDelete": "Supprimer aussi ses fichiers dans le dossier de téléchargements",
     "neverTouched": "Les fichiers déjà emménagés dans votre bibliothèque ne sont jamais touchés.",
-    "checkImport": "Vérifier dans Importer des fichiers"
+    "checkImport": "Vérifier dans Importer des fichiers",
+    "filter": {
+      "all": "Tout",
+      "type": "Type",
+      "state": "État",
+      "other": "Ajouté à la main",
+      "working": "Décompression ou déplacement",
+      "waitingLibrary": "Pas encore dans la bibliothèque",
+      "none": "Rien ne correspond à ces filtres.",
+      "clear": "Effacer les filtres",
+      "pickAll_one": "Tout sélectionner ({{count}})",
+      "pickAll_many": "Tout sélectionner ({{count}})",
+      "pickAll_other": "Tout sélectionner ({{count}})",
+      "pickShown_one": "Sélectionner tout ce qui est affiché ({{count}})",
+      "pickShown_many": "Sélectionner tout ce qui est affiché ({{count}})",
+      "pickShown_other": "Sélectionner tout ce qui est affiché ({{count}})"
+    }
   },
   "req": {
     "tabs": {

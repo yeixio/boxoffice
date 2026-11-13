@@ -205,10 +205,19 @@ func (s *Server) downloads(w http.ResponseWriter, r *http.Request) error {
 	offset, _ := strconv.Atoi(q.Get("historyOffset"))
 	// Failures for missing articles are hidden unless asked for, as NZBGet
 	// does: there's nothing to do about them.
-	history, historyTotal, historyHidden, err := s.Store.DownloadHistoryPage(ctx, store.HistoryPage{
+	page := store.HistoryPage{
 		Sort: q.Get("historySort"), Asc: q.Get("historyDir") == "asc", Missing: q.Get("historyMissing") == "true",
-		Query: q.Get("historyQuery"), Offset: offset, Limit: limit,
-	})
+		Query: q.Get("historyQuery"), Type: q.Get("historyType"), Offset: offset, Limit: limit,
+	}
+	if st := q.Get("historyState"); slices.Contains(store.HistoryStates, st) {
+		page.State = st
+	}
+	history, historyTotal, historyHidden, err := s.Store.DownloadHistoryPage(ctx, page)
+	if err != nil {
+		return err
+	}
+	// How many of each type and state, for the history's filters.
+	historyTypes, historyStates, err := s.Store.HistoryCounts(ctx, page)
 	if err != nil {
 		return err
 	}
@@ -257,6 +266,7 @@ func (s *Server) downloads(w http.ResponseWriter, r *http.Request) error {
 	out := map[string]any{
 		"settings": set, "queue": queue, "history": history, "speed": live.Speed, "servers": live.Servers,
 		"newsServers": enabled, "folder": folder, "cap": dataCap, "historyTotal": historyTotal, "historyHidden": historyHidden,
+		"historyTypes": historyTypes, "historyStates": historyStates,
 	}
 	if why := s.Downloads.Waiting(); why != "" {
 		out["waiting"] = why
