@@ -1724,7 +1724,23 @@
     "staysQuarantined": "Fișierele sale rămân în carantină la <code>{{path}}</code>; șterge-le sau eliberează-le mai jos la Carantină. Nu le deschide.",
     "alsoDelete": "Șterge și fișierele sale din dosarul de descărcări",
     "neverTouched": "Fișierele deja mutate în bibliotecă nu sunt atinse niciodată.",
-    "checkImport": "Verifică în Importă fișiere"
+    "checkImport": "Verifică în Importă fișiere",
+    "filter": {
+      "all": "Toate",
+      "type": "Tip",
+      "state": "Stare",
+      "other": "Adăugat manual",
+      "working": "Dezarhivare sau mutare",
+      "waitingLibrary": "Încă nu e în bibliotecă",
+      "none": "Nimic nu se potrivește acestor filtre.",
+      "clear": "Șterge filtrele",
+      "pickAll_one": "Selectează tot ({{count}})",
+      "pickAll_few": "Selectează tot ({{count}})",
+      "pickAll_other": "Selectează tot ({{count}})",
+      "pickShown_one": "Selectează tot ce e afișat ({{count}})",
+      "pickShown_few": "Selectează tot ce e afișat ({{count}})",
+      "pickShown_other": "Selectează tot ce e afișat ({{count}})"
+    }
   },
   "req": {
     "tabs": {

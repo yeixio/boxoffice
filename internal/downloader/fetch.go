@@ -114,6 +114,15 @@ func (e *Engine) fetch(ctx context.Context, r *running, d *store.Download, srv *
 	}
 	d.Size = size
 	r.size.Store(size)
+	// The files it was part-way through when it was paused are picked up
+	// where they were. They're trusted for this try only: the record is
+	// cleared now, and written again only if this try stops cleanly too,
+	// so a crash never leaves a half-written file taken for whole.
+	partial := d.Partial
+	if partial == nil {
+		partial = map[int]store.PartFile{}
+	}
+	d.Partial = nil
 	e.Store.SaveDownloadProgress(context.WithoutCancel(ctx), *d)
 	e.mu.Lock()
 	again := e.again[d.ID]
@@ -144,7 +153,7 @@ func (e *Engine) fetch(ctx context.Context, r *running, d *store.Download, srv *
 		return job, nil
 	}
 	start := time.Now()
-	if err := e.download(ctx, r, d, srv, job, want); err != nil {
+	if err := e.download(ctx, r, d, srv, job, want, partial); err != nil {
 		return nil, err
 	}
 	took := time.Since(start)
@@ -177,26 +186,41 @@ type fileState struct {
 	mu        sync.Mutex
 	yname     string
 	written   flush.Counter
+	// segs has a bit for each of the file's articles that's written to
+	// its part file, so a paused download carries on from there.
+	segs []byte
+}
+
+// has says whether article n is in the part file already.
+func (st *fileState) has(n int) bool {
+	return n/8 < len(st.segs) && st.segs[n/8]&(1<<(n%8)) != 0
 }
 
 type segment struct {
 	fs  *fileState
 	seg nzb.Segment
+	n   int // its place among the file's articles
 }
 
 // download fetches some of a job's files, carrying on from what an earlier
-// try fetched.
-func (e *Engine) download(ctx context.Context, r *running, d *store.Download, srv *servers, job *fetchJob, files []*nzbFile) error {
+// try fetched. partial is the files a try that was paused was part-way
+// through; with it (not nil), a try that's paused, or stopped as Box
+// Office stops, keeps its part files for the next one, in d.Partial.
+func (e *Engine) download(ctx context.Context, r *running, d *store.Download, srv *servers, job *fetchJob, files []*nzbFile, partial map[int]store.PartFile) error {
 	ctx, cancel := context.WithCancelCause(ctx)
 	defer cancel(nil)
+	keep := partial != nil
 	var states []*fileState
 	var done int64
 	// Each try writes to part files of its own. A part file an earlier try
-	// left (Box Office stopped mid-download, say) can stay locked on a
-	// network share for a while, and opening it again is refused; so old
-	// ones are cleared away if they can be, and never reused.
-	clearParts(job.dir)
+	// left without closing it (Box Office crashed mid-download, say) can
+	// stay locked on a network share for a while, and opening it again is
+	// refused; so those are cleared away if they can be, and never
+	// reused. Only the part files of a try that was paused, and closed
+	// them cleanly, are picked up again.
+	clearParts(job.dir, partial)
 	try := strconv.FormatInt(time.Now().UnixNano(), 36)
+	reused := map[int]bool{}
 	for _, f := range files {
 		if slices.Contains(d.DoneFiles, f.index) {
 			if name, ok := doneName(job.dir, d, f); ok {
@@ -207,21 +231,56 @@ func (e *Engine) download(ctx context.Context, r *running, d *store.Download, sr
 			d.DoneFiles = slices.DeleteFunc(d.DoneFiles, func(i int) bool { return i == f.index })
 			delete(d.DoneNames, f.index)
 		}
+		if p, ok := partial[f.index]; ok {
+			if st := reopenPart(job.dir, f, p); st != nil {
+				reused[f.index] = true
+				for i, s := range f.file.Segments {
+					if st.has(i) {
+						done += s.Bytes
+					}
+				}
+				states = append(states, st)
+				continue
+			}
+		}
 		tmp := filepath.Join(job.dir, fmt.Sprintf(".boxoffice-%d-%s.part", f.index, try))
 		fh, err := os.OpenFile(tmp, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0o640)
 		if err != nil {
 			return local(shareTrouble(fmt.Errorf("Box Office couldn't make a file in its download folder %s: %w", job.dir, err)))
 		}
-		st := &fileState{nf: f, fh: fh, tmp: tmp}
+		st := &fileState{nf: f, fh: fh, tmp: tmp, segs: make([]byte, (len(f.file.Segments)+7)/8)}
 		st.remaining.Store(int32(len(f.file.Segments)))
 		states = append(states, st)
 	}
-	cleanup := func() {
+	// Part files kept for files that aren't wanted now, or that couldn't
+	// be opened again, go.
+	for i, p := range partial {
+		if !reused[i] {
+			removePart(filepath.Join(job.dir, p.Part))
+		}
+	}
+	// cleanup closes the part files of files not finished. When the try
+	// was paused (or Box Office is stopping), those it got anywhere with
+	// are kept for the next try, in d.Partial; the rest are deleted.
+	cleanup := func(keep bool) {
 		for _, st := range states {
-			if st.fh != nil {
-				st.fh.Close()
-				os.Remove(st.tmp)
+			if st.fh == nil {
+				continue
 			}
+			err := closePart(st.fh)
+			st.fh = nil
+			st.mu.Lock()
+			got := slices.ContainsFunc(st.segs, func(b byte) bool { return b != 0 })
+			pf := store.PartFile{Part: filepath.Base(st.tmp), Name: st.yname, Segs: slices.Clone(st.segs)}
+			st.mu.Unlock()
+			if keep && err == nil && got {
+				if d.Partial == nil {
+					d.Partial = map[int]store.PartFile{}
+				}
+				d.Partial[st.nf.index] = pf
+				continue
+			}
+			os.Remove(st.tmp)
 		}
 	}
 	// Carrying on: what's done is the files that are here. What the part
@@ -241,9 +300,15 @@ func (e *Engine) download(ctx context.Context, r *running, d *store.Download, sr
 	go func() {
 		defer close(queue)
 		for _, st := range states {
-			for _, s := range st.nf.file.Segments {
+			for i, s := range st.nf.file.Segments {
+				st.mu.Lock()
+				had := st.has(i)
+				st.mu.Unlock()
+				if had {
+					continue
+				}
 				select {
-				case queue <- segment{st, s}:
+				case queue <- segment{st, s, i}:
 				case <-ctx.Done():
 					return
 				}
@@ -330,6 +395,15 @@ func (e *Engine) download(ctx context.Context, r *running, d *store.Download, sr
 		}
 		return nil
 	}
+	// A file all of whose articles were saved before it was paused is
+	// finished now.
+	for _, st := range states {
+		if st.remaining.Load() == 0 {
+			if err := finishFile(st); err != nil {
+				cancel(err)
+			}
+		}
+	}
 	workers := min(srv.connections(), 64)
 	var wg sync.WaitGroup
 	for range workers {
@@ -368,10 +442,10 @@ func (e *Engine) download(ctx context.Context, r *running, d *store.Download, sr
 	stuck := e.watchStall(ctx, cancel, r, waited)
 	select {
 	case <-waited:
-		cleanup()
+		cleanup(keep && stoppedCleanly(context.Cause(ctx)))
 	case <-stuck:
 		e.Log.Warn("a download's writes to the downloads folder never came back; leaving them and going on", "name", d.Name, "id", d.ID)
-		go func() { <-waited; cleanup() }()
+		go func() { <-waited; cleanup(false) }()
 	}
 	mu.Lock()
 	d.DoneBytes, d.FailedBytes = r.bytes.Load(), r.failed.Load()
@@ -380,6 +454,41 @@ func (e *Engine) download(ctx context.Context, r *running, d *store.Download, sr
 		return err
 	}
 	return nil
+}
+
+// stoppedCleanly says a download stopped for nothing wrong with it or its
+// folder (paused, made way for one moved to the top, or Box Office is
+// stopping), so what its part files hold can be trusted.
+func stoppedCleanly(cause error) bool {
+	return errors.Is(cause, errPaused) || errors.Is(cause, errPreempted) || errors.Is(cause, context.Canceled)
+}
+
+// reopenPart opens again a part file a paused try kept, and says which of
+// the file's articles it holds; nil if it can't be used, when the file is
+// fetched again from its start.
+func reopenPart(dir string, f *nzbFile, p store.PartFile) *fileState {
+	if p.Part != filepath.Base(p.Part) || !strings.HasPrefix(p.Part, ".boxoffice-") || !strings.HasSuffix(p.Part, ".part") ||
+		len(p.Segs) != (len(f.file.Segments)+7)/8 {
+		return nil
+	}
+	tmp := filepath.Join(dir, p.Part)
+	fh, err := os.OpenFile(tmp, os.O_RDWR, 0)
+	if err != nil {
+		return nil
+	}
+	if st, err := fh.Stat(); err != nil || !st.Mode().IsRegular() {
+		fh.Close()
+		return nil
+	}
+	st := &fileState{nf: f, fh: fh, tmp: tmp, yname: p.Name, segs: slices.Clone(p.Segs)}
+	left := 0
+	for i := range f.file.Segments {
+		if !st.has(i) {
+			left++
+		}
+	}
+	st.remaining.Store(int32(left))
+	return st
 }
 
 // progressEvery is how often, at most, a download's finished files are
@@ -496,6 +605,9 @@ func (e *Engine) segment(ctx context.Context, r *running, srv *servers, s segmen
 	if _, err := s.fs.fh.WriteAt(p.Data, p.Begin); err != nil {
 		return shareTrouble(fmt.Errorf("write to the downloads folder: %w", err))
 	}
+	s.fs.mu.Lock()
+	s.fs.segs[s.n/8] |= 1 << (s.n % 8)
+	s.fs.mu.Unlock()
 	// Bounded, so written data waiting to go out to a slow share doesn't
 	// fill the memory limit.
 	s.fs.written.Wrote(s.fs.fh, len(p.Data))
@@ -624,15 +736,20 @@ func doneName(dir string, d *store.Download, f *nzbFile) (string, bool) {
 // one still open can't be deleted.
 var removePart = os.Remove
 
-// clearParts deletes the part files earlier tries left in dir, as far as
-// it can; one that can't go yet is left for the folder's cleanup.
-func clearParts(dir string) {
+// clearParts deletes the part files earlier tries left in dir, but for
+// those kept by a try that was paused, as far as it can; one that can't
+// go yet is left for the folder's cleanup.
+func clearParts(dir string, keep map[int]store.PartFile) {
 	entries, err := os.ReadDir(dir)
 	if err != nil {
 		return
 	}
+	kept := map[string]bool{}
+	for _, p := range keep {
+		kept[p.Part] = true
+	}
 	for _, de := range entries {
-		if n := de.Name(); strings.HasPrefix(n, ".boxoffice-") && strings.HasSuffix(n, ".part") && de.Type().IsRegular() {
+		if n := de.Name(); strings.HasPrefix(n, ".boxoffice-") && strings.HasSuffix(n, ".part") && de.Type().IsRegular() && !kept[n] {
 			removePart(filepath.Join(dir, n))
 		}
 	}

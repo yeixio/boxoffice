@@ -1538,7 +1538,19 @@
     "staysQuarantined": "파일은 <code>{{path}}</code>에 격리된 채 남아요. 아래 격리에서 삭제하거나 해제하세요. 열지 마세요.",
     "alsoDelete": "다운로드 폴더의 파일도 삭제",
     "neverTouched": "라이브러리로 이미 옮긴 파일은 절대 건드리지 않아요.",
-    "checkImport": "파일 가져오기에서 확인"
+    "checkImport": "파일 가져오기에서 확인",
+    "filter": {
+      "all": "전체",
+      "type": "유형",
+      "state": "상태",
+      "other": "직접 추가함",
+      "working": "압축 해제 또는 이동 중",
+      "waitingLibrary": "아직 라이브러리에 없음",
+      "none": "이 필터와 일치하는 항목이 없습니다.",
+      "clear": "필터 지우기",
+      "pickAll_other": "모두 선택 ({{count}})",
+      "pickShown_other": "표시된 항목 모두 선택 ({{count}})"
+    }
   },
   "req": {
     "tabs": {

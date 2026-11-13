@@ -73,6 +73,10 @@ type Engine struct {
 	// shareTries counts, by download, the tries since the downloads
 	// folder last stopped answering mid-download.
 	shareTries map[int64]int
+	// forced holds downloads moved to the top while another was
+	// downloading: the one downloading makes way for them, and carries on
+	// once they're done.
+	forced map[int64]bool
 	// importing holds downloads being moved into the library by hand.
 	importing map[int64]bool
 	// moves holds folders picked in the file browser to move into the
@@ -120,6 +124,8 @@ func (r *running) step(done, total int64) {
 var (
 	errPaused  = errors.New("paused")
 	errRemoved = errors.New("removed")
+	// errPreempted stops a download to make way for one moved to the top.
+	errPreempted = errors.New("made way for a download moved to the top")
 )
 
 func (e *Engine) init() {
@@ -128,6 +134,7 @@ func (e *Engine) init() {
 		e.working = map[int64]*running{}
 		e.again = map[int64]bool{}
 		e.shareTries = map[int64]int{}
+		e.forced = map[int64]bool{}
 		e.post = make(chan struct{}, 1)
 	})
 }
@@ -435,6 +442,9 @@ func (e *Engine) Remove(ctx context.Context, id int64, deleteFiles bool) error {
 		return err
 	}
 	e.stop(id, errRemoved)
+	e.mu.Lock()
+	delete(e.forced, id)
+	e.mu.Unlock()
 	// A download that just started picks its folder as it goes, and saves
 	// it when it stops: read it again, so that folder is the one deleted.
 	if cur, err := e.Store.Download(ctx, id); err == nil {
@@ -446,6 +456,13 @@ func (e *Engine) Remove(ctx context.Context, id int64, deleteFiles bool) error {
 	os.Remove(e.nzbPath(id))
 	if deleteFiles {
 		e.removeFolder(d)
+	} else if dir, ok := e.inside(d.Folder); ok && d.Folder != "" {
+		// The files kept from where it was paused are of no use now.
+		for _, p := range d.Partial {
+			if p.Part == filepath.Base(p.Part) && strings.HasPrefix(p.Part, ".boxoffice-") {
+				removePart(filepath.Join(dir, p.Part))
+			}
+		}
 	}
 	return nil
 }
@@ -573,13 +590,71 @@ func (e *Engine) inside(folder string) (string, bool) {
 	return p, err == nil && rel != "." && !strings.HasPrefix(rel, "..") && !strings.ContainsRune(rel, filepath.Separator)
 }
 
-// MoveToTop puts a queued download first.
+// MoveToTop puts a queued download first. If another is downloading, it
+// makes way: it's stopped, keeping what it fetched, and carries on from
+// there once the downloads moved to the top are done.
 func (e *Engine) MoveToTop(ctx context.Context, id int64) error {
+	e.init()
 	if err := e.Store.MoveDownloadToTop(ctx, id); err != nil {
 		return err
 	}
+	if d, err := e.Store.Download(ctx, id); err == nil && d.Status == store.DownloadQueued {
+		e.mu.Lock()
+		e.forced[id] = true
+		e.mu.Unlock()
+	}
 	e.Wake()
 	return nil
+}
+
+// makeWay stops the download being fetched when one moved to the top is
+// first in the queue, so that one starts now. The one stopped goes back
+// to waiting, keeping what it fetched, below those moved to the top, so
+// it carries on once they're done. One moved to the top itself isn't
+// stopped for another: they go in turn.
+func (e *Engine) makeWay(ctx context.Context) {
+	e.mu.Lock()
+	r := e.current
+	n := len(e.forced)
+	cur := r != nil && e.forced[r.id]
+	e.mu.Unlock()
+	if r == nil || n == 0 || cur {
+		return
+	}
+	queue, err := e.Store.DownloadQueue(ctx)
+	if err != nil {
+		return
+	}
+	// Those that aren't waiting or downloading any more (paused by hand,
+	// say, or done) aren't forced any more.
+	waiting := map[int64]bool{}
+	var first int64
+	for _, d := range queue {
+		if d.Status == store.DownloadQueued || d.Status == store.DownloadDownloading {
+			waiting[d.ID] = true
+		}
+		if first == 0 && d.Status == store.DownloadQueued {
+			first = d.ID
+		}
+	}
+	e.mu.Lock()
+	for id := range e.forced {
+		if !waiting[id] {
+			delete(e.forced, id)
+		}
+	}
+	stopIt := first != 0 && e.forced[first] && e.current == r
+	e.mu.Unlock()
+	if !stopIt {
+		return
+	}
+	// With the month's data cap reached, the one on goes on: the next
+	// wouldn't start.
+	if c, err := LoadCap(ctx, e.Store); err != nil || c.Level == CapFull {
+		return
+	}
+	e.Log.Info("download makes way for one moved to the top", "id", r.id, "for", first)
+	r.cancel(errPreempted)
 }
 
 // MoveToBottom puts a queued download last.
@@ -801,6 +876,8 @@ func (e *Engine) startNext(ctx context.Context, wg *sync.WaitGroup) {
 				r.cancel(errPaused)
 			}
 			e.mu.Unlock()
+		} else if busy {
+			e.makeWay(ctx)
 		}
 		return
 	}
@@ -942,6 +1019,12 @@ func (e *Engine) process(ctx context.Context, r *running, d store.Download, srv 
 		// waiting, as it was.
 		if cur, _ := e.Store.Download(bg, d.ID); cur.Status != store.DownloadPaused {
 			e.Store.SetDownloadStatus(bg, d.ID, store.DownloadQueued, "")
+		}
+	case errors.Is(cause, errPreempted):
+		// It made way for a download moved to the top, and waits below
+		// it, carrying on from where it was once that's done.
+		if cur, _ := e.Store.Download(bg, d.ID); cur.Status != store.DownloadPaused {
+			e.Store.SetDownloadStatus(bg, d.ID, store.DownloadQueued, "Waiting for the downloads moved to the top; it carries on from where it was once they're done")
 		}
 	case errors.Is(cause, errRemoved):
 	case errors.Is(cause, context.Canceled):

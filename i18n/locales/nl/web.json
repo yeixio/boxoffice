@@ -1631,7 +1631,21 @@
     "staysQuarantined": "De bestanden blijven in quarantaine in <code>{{path}}</code>; verwijder ze of geef ze vrij onder Quarantaine hieronder. Open ze niet.",
     "alsoDelete": "Ook de bestanden in de downloadmap verwijderen",
     "neverTouched": "Bestanden die al naar je bibliotheek zijn verplaatst, worden nooit aangeraakt.",
-    "checkImport": "Nakijken bij Bestanden importeren"
+    "checkImport": "Nakijken bij Bestanden importeren",
+    "filter": {
+      "all": "Alles",
+      "type": "Type",
+      "state": "Status",
+      "other": "Handmatig toegevoegd",
+      "working": "Uitpakken of verplaatsen",
+      "waitingLibrary": "Nog niet in de bibliotheek",
+      "none": "Niets komt overeen met deze filters.",
+      "clear": "Filters wissen",
+      "pickAll_one": "Alles selecteren ({{count}})",
+      "pickAll_other": "Alles selecteren ({{count}})",
+      "pickShown_one": "Alle getoonde selecteren ({{count}})",
+      "pickShown_other": "Alle getoonde selecteren ({{count}})"
+    }
   },
   "req": {
     "tabs": {

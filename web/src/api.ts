@@ -475,6 +475,10 @@ export type Downloads = {
   historyTotal?: number
   // Failures for articles gone from the news servers left out of the history.
   historyHidden?: number
+  // How many finished downloads there are of each type and each state,
+  // for the history's filters.
+  historyTypes?: Record<string, number>
+  historyStates?: Record<string, number>
 }
 // The downloads folder's file browser.
 export type DownloadFile = {

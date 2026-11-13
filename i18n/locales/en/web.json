@@ -1631,7 +1631,21 @@
     "staysQuarantined": "Its files stay in quarantine at <code>{{path}}</code>; delete or release them under Quarantine below. Don't open them.",
     "alsoDelete": "Also delete its files in the downloads folder",
     "neverTouched": "Files already moved into your library are never touched.",
-    "checkImport": "Check it on Import files"
+    "checkImport": "Check it on Import files",
+    "filter": {
+      "all": "All",
+      "type": "Type",
+      "state": "State",
+      "other": "Added by hand",
+      "working": "Unpacking or moving",
+      "waitingLibrary": "Not in library yet",
+      "none": "Nothing here matches these filters.",
+      "clear": "Clear filters",
+      "pickAll_one": "Select all ({{count}})",
+      "pickAll_other": "Select all ({{count}})",
+      "pickShown_one": "Select all shown ({{count}})",
+      "pickShown_other": "Select all shown ({{count}})"
+    }
   },
   "req": {
     "tabs": {

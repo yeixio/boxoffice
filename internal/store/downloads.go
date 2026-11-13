@@ -46,11 +46,15 @@ type Download struct {
 	// DoneNames is what each fetched file was saved as, by its index in
 	// the NZB: the name inside the file's posts, which is often not the
 	// one in the NZB's subject (obfuscated releases).
-	DoneNames  map[int]string `json:"-"`
-	Position   int            `json:"position"`
-	Folder     string         `json:"folder,omitempty"`
-	Message    string         `json:"message,omitempty"`
-	ImportedTo string         `json:"importedTo,omitempty"`
+	DoneNames map[int]string `json:"-"`
+	// Partial is the files it was part-way through when it was paused
+	// (or Box Office stopped cleanly), by their index in the NZB, so
+	// resuming carries on from the articles already saved.
+	Partial    map[int]PartFile `json:"-"`
+	Position   int              `json:"position"`
+	Folder     string           `json:"folder,omitempty"`
+	Message    string           `json:"message,omitempty"`
+	ImportedTo string           `json:"importedTo,omitempty"`
 	// Quarantined is where the files were moved when they looked unsafe.
 	Quarantined string `json:"quarantined,omitempty"`
 	// Missing says it failed because it can't be used: too much of it is
@@ -84,18 +88,28 @@ type Download struct {
 	FinishedAt time.Time `json:"finishedAt,omitzero"`
 }
 
+// PartFile is a file a download was part-way through when it stopped:
+// its part file in the download's folder, the name its posts gave it,
+// and which of its articles (segments, in the NZB's order) are in it, a
+// bit each.
+type PartFile struct {
+	Part string `json:"part"`
+	Name string `json:"name,omitempty"`
+	Segs []byte `json:"segs"`
+}
+
 // Finished says whether the download is history.
 func (d Download) Finished() bool { return d.Status == DownloadCompleted || d.Status == DownloadFailed }
 
 const downloadCols = `id, name, status, kind, title_id, episode_ids, quality, indexer, source, password, size, done_bytes, failed_bytes,
-	done_files, position, folder, message, imported_to, quarantined, added_at, started_at, finished_at, edition, mode, missing, fetched, done_names, file_as`
+	done_files, position, folder, message, imported_to, quarantined, added_at, started_at, finished_at, edition, mode, missing, fetched, done_names, file_as, partial`
 
 func scanDownload(r interface{ Scan(...any) error }) (Download, error) {
 	var d Download
-	var eps, files, names string
+	var eps, files, names, partial string
 	var added, started, finished int64
 	err := r.Scan(&d.ID, &d.Name, &d.Status, &d.Kind, &d.TitleID, &eps, &d.Quality, &d.Indexer, &d.Source, &d.Password, &d.Size,
-		&d.DoneBytes, &d.FailedBytes, &files, &d.Position, &d.Folder, &d.Message, &d.ImportedTo, &d.Quarantined, &added, &started, &finished, &d.Edition, &d.Mode, &d.Missing, &d.Fetched, &names, &d.FileAs)
+		&d.DoneBytes, &d.FailedBytes, &files, &d.Position, &d.Folder, &d.Message, &d.ImportedTo, &d.Quarantined, &added, &started, &finished, &d.Edition, &d.Mode, &d.Missing, &d.Fetched, &names, &d.FileAs, &partial)
 	if errors.Is(err, sql.ErrNoRows) {
 		return d, ErrNotFound
 	}
@@ -105,6 +119,7 @@ func scanDownload(r interface{ Scan(...any) error }) (Download, error) {
 	json.Unmarshal([]byte(eps), &d.EpisodeIDs)
 	json.Unmarshal([]byte(files), &d.DoneFiles)
 	json.Unmarshal([]byte(names), &d.DoneNames)
+	json.Unmarshal([]byte(partial), &d.Partial)
 	d.AddedAt = time.Unix(added, 0).UTC()
 	if started > 0 {
 		d.StartedAt = time.Unix(started, 0).UTC()
@@ -195,27 +210,94 @@ type HistoryPage struct {
 	Missing bool
 	// Query keeps those whose name has every word of it, ignoring case
 	// and the dots and underscores release names use for spaces.
-	Query         string
+	Query string
+	// Type keeps one type of download: a kind ("series", "movie", ...),
+	// or "other" for those added by hand with nothing to file them as.
+	Type string
+	// State keeps those that ended one way: "failed", "quarantined",
+	// "waiting" (to go into the library) or "done".
+	State         string
 	Offset, Limit int
 }
 
-// DownloadHistoryPage is one page of finished downloads, how many there
-// are in all, and how many failures for missing articles were left out.
-func (s *Store) DownloadHistoryPage(ctx context.Context, p HistoryPage) (list []Download, total, hidden int, err error) {
+// historyType is what a finished download is for: its kind, what it was
+// added by hand to be filed as, or "other".
+const historyType = `COALESCE(NULLIF(kind, ''), NULLIF(NULLIF(file_as, ''), 'auto'), 'other')`
+
+// historyState is how a finished download ended, the way the page shows
+// it: failed, held in quarantine, waiting to go into the library, or done.
+const historyState = `CASE WHEN quarantined <> '' THEN 'quarantined' WHEN status = 'failed' THEN 'failed'
+	WHEN imported_to = '' AND (kind <> '' OR file_as <> '') THEN 'waiting' ELSE 'done' END`
+
+// HistoryStates are the values HistoryPage's State takes.
+var HistoryStates = []string{"failed", "quarantined", "waiting", "done"}
+
+// historyWhere is the filter for p, without its Type and State when
+// those are left out, so each can be counted with the other applied.
+func historyWhere(p HistoryPage, withType, withState bool) (string, []any) {
 	where := "status IN ('completed', 'failed')"
 	var args []any
 	for _, w := range nameWords(p.Query) {
 		where += ` AND LOWER(REPLACE(REPLACE(REPLACE(name, '.', ' '), '_', ' '), '-', ' ')) LIKE ? ESCAPE '\'`
 		args = append(args, "%"+likeEscaper.Replace(w)+"%")
 	}
-	if err := s.row(ctx, "SELECT COUNT(*) FROM downloads WHERE "+where+" AND missing <> 0", args...).Scan(&hidden); err != nil {
-		return nil, 0, 0, err
-	}
 	if !p.Missing {
 		where += " AND missing = 0"
-	} else {
-		hidden = 0
 	}
+	if withType && p.Type != "" {
+		where += " AND " + historyType + " = ?"
+		args = append(args, p.Type)
+	}
+	if withState && p.State != "" {
+		where += " AND (" + historyState + ") = ?"
+		args = append(args, p.State)
+	}
+	return where, args
+}
+
+// HistoryCounts is how many finished downloads there are of each type
+// and each state, for the filters: each counted with p's other filter,
+// search and Missing applied, so a count says what picking it shows.
+func (s *Store) HistoryCounts(ctx context.Context, p HistoryPage) (types, states map[string]int, err error) {
+	count := func(expr, where string, args []any) (map[string]int, error) {
+		rows, err := s.query(ctx, "SELECT "+expr+", COUNT(*) FROM downloads WHERE "+where+" GROUP BY 1", args...)
+		if err != nil {
+			return nil, err
+		}
+		defer rows.Close()
+		out := map[string]int{}
+		for rows.Next() {
+			var k string
+			var n int
+			if err := rows.Scan(&k, &n); err != nil {
+				return nil, err
+			}
+			out[k] = n
+		}
+		return out, rows.Err()
+	}
+	w, a := historyWhere(p, false, true)
+	if types, err = count(historyType, w, a); err != nil {
+		return nil, nil, err
+	}
+	w, a = historyWhere(p, true, false)
+	states, err = count("("+historyState+")", w, a)
+	return types, states, err
+}
+
+// DownloadHistoryPage is one page of finished downloads, how many there
+// are in all, and how many failures for missing articles were left out.
+func (s *Store) DownloadHistoryPage(ctx context.Context, p HistoryPage) (list []Download, total, hidden int, err error) {
+	// Hidden counts what Missing leaves out, with everything else applied.
+	all := p
+	all.Missing = true
+	where, args := historyWhere(all, true, true)
+	if !p.Missing {
+		if err := s.row(ctx, "SELECT COUNT(*) FROM downloads WHERE "+where+" AND missing <> 0", args...).Scan(&hidden); err != nil {
+			return nil, 0, 0, err
+		}
+	}
+	where, args = historyWhere(p, true, true)
 	if err := s.row(ctx, "SELECT COUNT(*) FROM downloads WHERE "+where, args...).Scan(&total); err != nil {
 		return nil, 0, 0, err
 	}
@@ -281,8 +363,13 @@ func (s *Store) SaveDownloadProgress(ctx context.Context, d Download) error {
 		b, _ := json.Marshal(d.DoneNames)
 		names = string(b)
 	}
-	_, err := s.exec(ctx, "UPDATE downloads SET done_bytes = ?, failed_bytes = ?, done_files = ?, done_names = ?, size = ?, folder = ? WHERE id = ?",
-		d.DoneBytes, d.FailedBytes, jsonText(d.DoneFiles), names, d.Size, d.Folder, d.ID)
+	partial := "{}"
+	if len(d.Partial) > 0 {
+		b, _ := json.Marshal(d.Partial)
+		partial = string(b)
+	}
+	_, err := s.exec(ctx, "UPDATE downloads SET done_bytes = ?, failed_bytes = ?, done_files = ?, done_names = ?, partial = ?, size = ?, folder = ? WHERE id = ?",
+		d.DoneBytes, d.FailedBytes, jsonText(d.DoneFiles), names, partial, d.Size, d.Folder, d.ID)
 	return err
 }
 
@@ -311,7 +398,7 @@ func (s *Store) ResetDownload(ctx context.Context, id int64) error {
 	if err := s.row(ctx, "SELECT COALESCE(MAX(position), 0) FROM downloads").Scan(&pos); err != nil {
 		return err
 	}
-	res, err := s.exec(ctx, `UPDATE downloads SET status = 'queued', message = '', done_bytes = 0, failed_bytes = 0, done_files = '[]', done_names = '{}', quarantined = '', missing = 0, fetched = 0,
+	res, err := s.exec(ctx, `UPDATE downloads SET status = 'queued', message = '', done_bytes = 0, failed_bytes = 0, done_files = '[]', done_names = '{}', partial = '{}', quarantined = '', missing = 0, fetched = 0,
 		started_at = 0, finished_at = 0, position = ? WHERE id = ?`, pos+1, id)
 	if err != nil {
 		return err

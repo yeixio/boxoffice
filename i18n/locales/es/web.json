@@ -1724,7 +1724,23 @@
     "staysQuarantined": "Sus archivos se quedan en cuarentena en <code>{{path}}</code>; bórralos o libéralos en Cuarentena, abajo. No los abras.",
     "alsoDelete": "Borrar también sus archivos en la carpeta de descargas",
     "neverTouched": "Los archivos ya movidos a tu biblioteca nunca se tocan.",
-    "checkImport": "Revisarlo en Importar archivos"
+    "checkImport": "Revisarlo en Importar archivos",
+    "filter": {
+      "all": "Todo",
+      "type": "Tipo",
+      "state": "Estado",
+      "other": "Añadido a mano",
+      "working": "Descomprimiendo o moviendo",
+      "waitingLibrary": "Aún no en la biblioteca",
+      "none": "Nada coincide con estos filtros.",
+      "clear": "Quitar filtros",
+      "pickAll_one": "Seleccionar todo ({{count}})",
+      "pickAll_many": "Seleccionar todo ({{count}})",
+      "pickAll_other": "Seleccionar todo ({{count}})",
+      "pickShown_one": "Seleccionar todo lo mostrado ({{count}})",
+      "pickShown_many": "Seleccionar todo lo mostrado ({{count}})",
+      "pickShown_other": "Seleccionar todo lo mostrado ({{count}})"
+    }
   },
   "req": {
     "tabs": {

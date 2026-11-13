@@ -1817,7 +1817,25 @@
     "staysQuarantined": "Jeho soubory zůstanou v karanténě v <code>{{path}}</code>; smažte je nebo uvolněte níže v sekci Karanténa. Neotevírejte je.",
     "alsoDelete": "Smazat i jeho soubory ve složce stahování",
     "neverTouched": "Soubory, které už jsou přesunuté do knihovny, se nikdy nemění.",
-    "checkImport": "Zkontrolovat v Importu souborů"
+    "checkImport": "Zkontrolovat v Importu souborů",
+    "filter": {
+      "all": "Vše",
+      "type": "Typ",
+      "state": "Stav",
+      "other": "Přidáno ručně",
+      "working": "Rozbalování nebo přesun",
+      "waitingLibrary": "Zatím není v knihovně",
+      "none": "Těmto filtrům nic neodpovídá.",
+      "clear": "Zrušit filtry",
+      "pickAll_one": "Vybrat vše ({{count}})",
+      "pickAll_few": "Vybrat vše ({{count}})",
+      "pickAll_many": "Vybrat vše ({{count}})",
+      "pickAll_other": "Vybrat vše ({{count}})",
+      "pickShown_one": "Vybrat vše zobrazené ({{count}})",
+      "pickShown_few": "Vybrat vše zobrazené ({{count}})",
+      "pickShown_many": "Vybrat vše zobrazené ({{count}})",
+      "pickShown_other": "Vybrat vše zobrazené ({{count}})"
+    }
   },
   "req": {
     "tabs": {
