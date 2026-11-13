@@ -61,6 +61,10 @@ var (
 var Systems = []System{
 	{Key: "mame", Name: "Arcade (MAME)", Short: "MAME", Maker: "Arcade", Arcade: true, Libretro: "MAME",
 		Folders: []string{"mame", "arcade", "arcades", "mamecurrent", "mameroms", "roms", "fbneo", "finalburn"}},
+	// AAE (Another Arcade Emulator) plays vector arcade games from sets
+	// named like MAME's but made differently, so they're kept apart from
+	// MAME's and known by name.
+	{Key: "aae", Name: "Arcade (AAE)", Short: "AAE", Maker: "Arcade", Shared: []string{".zip"}, Folders: []string{"aae"}},
 
 	// Nintendo.
 	{Key: "nes", Name: "Nintendo Entertainment System", Short: "NES", Maker: "Nintendo", Hash: true, Libretro: "Nintendo - Nintendo Entertainment System",

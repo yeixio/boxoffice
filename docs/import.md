@@ -69,14 +69,20 @@ in **Settings → Library**, and each needs a root folder.
   `.cue` and its `.bin` files) go together in a folder named for the game, and a
   game that's a folder is copied whole. A game that's already there with the
   same size is skipped.
-- A folder of games can be a whole emulator, such as a MAME or AAE install:
-  every folder inside is looked through for games (`roms/` and the like), and
-  the emulator's own folders (`samples/`, `artwork/`, `snap/`, `cfg/`,
-  `nvram/`, `hiscore/`…) are left out, since their zips share the games' names.
+- A folder of games can be a whole emulator, such as a MAME or AAE install.
+  Box Office knows one by its program (`mame.exe`, `mame0154b.exe`, `aae.exe`)
+  and shows it as the item's name, with MAME's version when the program's name
+  or its `whatsnew.txt` says. Every archive in its `roms/` folder is that
+  emulator's game, whatever is inside: MAME's go in `mame/`, AAE's in `aae/`,
+  apart from MAME's because AAE names its different sets the same. The
+  emulator's own folders (`samples/`, `artwork/`, `snap/`, `cfg/`, `nvram/`,
+  `hiscore/`…) are left out, and its programs, settings and notes are left
+  without a mention. Only files that might be games are ever listed as ones
+  Box Office couldn't tell.
 - A game that's named like a different file already in the games folder isn't
   put over it. The rest of the folder still goes in, and the item lists the
-  games left in the imports folder for that reason, and any files it couldn't
-  tell (an emulator's programs, settings and notes aren't listed), so you can look at them and **Remove** the item when you're done.
+  games left in the imports folder for that reason, and any files that might be
+  games it couldn't tell, so you can look at them and **Remove** the item when you're done.
 
 Each item says where it went. **Remove** deletes an item's copy from the imports
 folder without importing it.

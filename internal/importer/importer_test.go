@@ -252,7 +252,7 @@ func TestImportGamesKeepsWhatItCantPlace(t *testing.T) {
 	mediatypes.SetEnabled(ctx, s.Store, mediatypes.Game, true)
 	src := t.TempDir()
 	write(t, filepath.Join(src, "Mixed", "Lone (Europe).nes"), 64)
-	write(t, filepath.Join(src, "Mixed", "notes", "mystery.dat"), 32)
+	write(t, filepath.Join(src, "Mixed", "notes", "mystery.bin"), 32)
 	// A MAME set whose ROMs are named .bin.
 	var zb bytes.Buffer
 	zw := zip.NewWriter(&zb)
@@ -276,7 +276,7 @@ func TestImportGamesKeepsWhatItCantPlace(t *testing.T) {
 	}
 	st := settled(t, s)
 	m := item(t, st, "Mixed")
-	if m.Status != Done || !strings.Contains(m.Problem, "mystery.dat") {
+	if m.Status != Done || !strings.Contains(m.Problem, "mystery.bin") {
 		t.Fatalf("mixed %+v", m)
 	}
 	for _, p := range []string{"nes/Lone (Europe).nes", "mame/gridlee.zip"} {
@@ -285,7 +285,7 @@ func TestImportGamesKeepsWhatItCantPlace(t *testing.T) {
 		}
 	}
 	dir, _ := s.dir()
-	if _, err := os.Stat(filepath.Join(dir, "Mixed", "notes", "mystery.dat")); err != nil {
+	if _, err := os.Stat(filepath.Join(dir, "Mixed", "notes", "mystery.bin")); err != nil {
 		t.Fatal("the file it couldn't place was deleted")
 	}
 	if _, err := os.Stat(filepath.Join(dir, "Mixed", "gridlee.zip")); err == nil {
@@ -389,7 +389,7 @@ func TestImportEmulatorFolder(t *testing.T) {
 	write(t, filepath.Join(src, "MAME", "artwork", "gridlee.zip"), 50)
 	write(t, filepath.Join(src, "MAME", "roms", "Lone (Europe).nes"), 64)
 	// The emulator's own files aren't games, and aren't worth a mention.
-	write(t, filepath.Join(src, "MAME", "mame.exe"), 10)
+	write(t, filepath.Join(src, "MAME", "mame0154b.exe"), 10)
 	write(t, filepath.Join(src, "MAME", "mame.sym"), 10)
 	write(t, filepath.Join(src, "MAME", "nl_examples", "7400_astable.c"), 10)
 	write(t, filepath.Join(src, "MAME", "Microsoft.VC90.CRT", "msvcr90.dll"), 10)
@@ -480,5 +480,50 @@ func TestResumeCopySourceGone(t *testing.T) {
 	}
 	if _, err := os.Stat(filepath.Join(dir, ".Gone.part")); err == nil {
 		t.Fatal("the half-made copy was kept")
+	}
+}
+
+// A folder holding an AAE and a MAME install: each install's games go
+// under its own emulator, so AAE's and MAME's sets of the same name don't
+// clash, and the item says which emulator it is.
+func TestImportEmulatorsApart(t *testing.T) {
+	s := newService(t)
+	roots := gamesReady(t, s)
+	src := t.TempDir()
+	old := filepath.Join(src, "OLD Games")
+	gridleeZip(t, filepath.Join(old, "AAE", "roms", "gridlee.zip"))
+	write(t, filepath.Join(old, "AAE", "aae092808", "aae.exe"), 10)
+	write(t, filepath.Join(old, "AAE", "aae092808", "samples", "gridlee.zip"), 40)
+	gridleeZip(t, filepath.Join(old, "MAME", "roms", "gridlee.zip"))
+	write(t, filepath.Join(old, "MAME", "roms", "extra.zip"), 30) // not a real zip
+	write(t, filepath.Join(old, "MAME", "mame.exe"), 10)
+	os.WriteFile(filepath.Join(old, "MAME", "whatsnew.txt"), []byte("0.154\n-----\n"), 0o644)
+
+	ctx := context.Background()
+	if err := s.CopyIn(ctx, []string{filepath.Join(old, "MAME")}); err != nil {
+		t.Fatal(err)
+	}
+	if m := item(t, settled(t, s), "MAME"); m.System != "mame" || m.Title != "MAME 0.154" {
+		t.Fatalf("mame item %+v", m)
+	}
+	if err := s.CopyIn(ctx, []string{filepath.Join(old, "AAE")}); err != nil {
+		t.Fatal(err)
+	}
+	if a := item(t, settled(t, s), "AAE"); a.System != "aae" || a.Title != "AAE" {
+		t.Fatalf("aae item %+v", a)
+	}
+	if err := s.Run(ctx, nil); err != nil {
+		t.Fatal(err)
+	}
+	st := settled(t, s)
+	for _, n := range []string{"MAME", "AAE"} {
+		if it := item(t, st, n); it.Status != Done || it.Problem != "" {
+			t.Fatalf("%s %+v", n, it)
+		}
+	}
+	for _, p := range []string{"mame/gridlee.zip", "mame/extra.zip", "aae/gridlee.zip"} {
+		if _, err := os.Stat(filepath.Join(roots, p)); err != nil {
+			t.Errorf("%s isn't in the games folder", p)
+		}
 	}
 }
