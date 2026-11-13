@@ -388,6 +388,11 @@ func TestImportEmulatorFolder(t *testing.T) {
 	write(t, filepath.Join(src, "MAME", "samples", "gridlee.zip"), 40)
 	write(t, filepath.Join(src, "MAME", "artwork", "gridlee.zip"), 50)
 	write(t, filepath.Join(src, "MAME", "roms", "Lone (Europe).nes"), 64)
+	// The emulator's own files aren't games, and aren't worth a mention.
+	write(t, filepath.Join(src, "MAME", "mame.exe"), 10)
+	write(t, filepath.Join(src, "MAME", "mame.sym"), 10)
+	write(t, filepath.Join(src, "MAME", "nl_examples", "7400_astable.c"), 10)
+	write(t, filepath.Join(src, "MAME", "Microsoft.VC90.CRT", "msvcr90.dll"), 10)
 
 	m := importFolder(t, s, filepath.Join(src, "MAME"))
 	if m.Status != Done || m.Problem != "" {
