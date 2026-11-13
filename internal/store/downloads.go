@@ -46,11 +46,15 @@ type Download struct {
 	// DoneNames is what each fetched file was saved as, by its index in
 	// the NZB: the name inside the file's posts, which is often not the
 	// one in the NZB's subject (obfuscated releases).
-	DoneNames  map[int]string `json:"-"`
-	Position   int            `json:"position"`
-	Folder     string         `json:"folder,omitempty"`
-	Message    string         `json:"message,omitempty"`
-	ImportedTo string         `json:"importedTo,omitempty"`
+	DoneNames map[int]string `json:"-"`
+	// Partial is the files it was part-way through when it was paused
+	// (or Box Office stopped cleanly), by their index in the NZB, so
+	// resuming carries on from the articles already saved.
+	Partial    map[int]PartFile `json:"-"`
+	Position   int              `json:"position"`
+	Folder     string           `json:"folder,omitempty"`
+	Message    string           `json:"message,omitempty"`
+	ImportedTo string           `json:"importedTo,omitempty"`
 	// Quarantined is where the files were moved when they looked unsafe.
 	Quarantined string `json:"quarantined,omitempty"`
 	// Missing says it failed because it can't be used: too much of it is
@@ -84,18 +88,28 @@ type Download struct {
 	FinishedAt time.Time `json:"finishedAt,omitzero"`
 }
 
+// PartFile is a file a download was part-way through when it stopped:
+// its part file in the download's folder, the name its posts gave it,
+// and which of its articles (segments, in the NZB's order) are in it, a
+// bit each.
+type PartFile struct {
+	Part string `json:"part"`
+	Name string `json:"name,omitempty"`
+	Segs []byte `json:"segs"`
+}
+
 // Finished says whether the download is history.
 func (d Download) Finished() bool { return d.Status == DownloadCompleted || d.Status == DownloadFailed }
 
 const downloadCols = `id, name, status, kind, title_id, episode_ids, quality, indexer, source, password, size, done_bytes, failed_bytes,
-	done_files, position, folder, message, imported_to, quarantined, added_at, started_at, finished_at, edition, mode, missing, fetched, done_names, file_as`
+	done_files, position, folder, message, imported_to, quarantined, added_at, started_at, finished_at, edition, mode, missing, fetched, done_names, file_as, partial`
 
 func scanDownload(r interface{ Scan(...any) error }) (Download, error) {
 	var d Download
-	var eps, files, names string
+	var eps, files, names, partial string
 	var added, started, finished int64
 	err := r.Scan(&d.ID, &d.Name, &d.Status, &d.Kind, &d.TitleID, &eps, &d.Quality, &d.Indexer, &d.Source, &d.Password, &d.Size,
-		&d.DoneBytes, &d.FailedBytes, &files, &d.Position, &d.Folder, &d.Message, &d.ImportedTo, &d.Quarantined, &added, &started, &finished, &d.Edition, &d.Mode, &d.Missing, &d.Fetched, &names, &d.FileAs)
+		&d.DoneBytes, &d.FailedBytes, &files, &d.Position, &d.Folder, &d.Message, &d.ImportedTo, &d.Quarantined, &added, &started, &finished, &d.Edition, &d.Mode, &d.Missing, &d.Fetched, &names, &d.FileAs, &partial)
 	if errors.Is(err, sql.ErrNoRows) {
 		return d, ErrNotFound
 	}
@@ -105,6 +119,7 @@ func scanDownload(r interface{ Scan(...any) error }) (Download, error) {
 	json.Unmarshal([]byte(eps), &d.EpisodeIDs)
 	json.Unmarshal([]byte(files), &d.DoneFiles)
 	json.Unmarshal([]byte(names), &d.DoneNames)
+	json.Unmarshal([]byte(partial), &d.Partial)
 	d.AddedAt = time.Unix(added, 0).UTC()
 	if started > 0 {
 		d.StartedAt = time.Unix(started, 0).UTC()
@@ -348,8 +363,13 @@ func (s *Store) SaveDownloadProgress(ctx context.Context, d Download) error {
 		b, _ := json.Marshal(d.DoneNames)
 		names = string(b)
 	}
-	_, err := s.exec(ctx, "UPDATE downloads SET done_bytes = ?, failed_bytes = ?, done_files = ?, done_names = ?, size = ?, folder = ? WHERE id = ?",
-		d.DoneBytes, d.FailedBytes, jsonText(d.DoneFiles), names, d.Size, d.Folder, d.ID)
+	partial := "{}"
+	if len(d.Partial) > 0 {
+		b, _ := json.Marshal(d.Partial)
+		partial = string(b)
+	}
+	_, err := s.exec(ctx, "UPDATE downloads SET done_bytes = ?, failed_bytes = ?, done_files = ?, done_names = ?, partial = ?, size = ?, folder = ? WHERE id = ?",
+		d.DoneBytes, d.FailedBytes, jsonText(d.DoneFiles), names, partial, d.Size, d.Folder, d.ID)
 	return err
 }
 
@@ -378,7 +398,7 @@ func (s *Store) ResetDownload(ctx context.Context, id int64) error {
 	if err := s.row(ctx, "SELECT COALESCE(MAX(position), 0) FROM downloads").Scan(&pos); err != nil {
 		return err
 	}
-	res, err := s.exec(ctx, `UPDATE downloads SET status = 'queued', message = '', done_bytes = 0, failed_bytes = 0, done_files = '[]', done_names = '{}', quarantined = '', missing = 0, fetched = 0,
+	res, err := s.exec(ctx, `UPDATE downloads SET status = 'queued', message = '', done_bytes = 0, failed_bytes = 0, done_files = '[]', done_names = '{}', partial = '{}', quarantined = '', missing = 0, fetched = 0,
 		started_at = 0, finished_at = 0, position = ? WHERE id = ?`, pos+1, id)
 	if err != nil {
 		return err
