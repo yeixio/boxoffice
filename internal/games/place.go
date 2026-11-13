@@ -93,21 +93,6 @@ func Identify(p string) (gamedat.System, bool) {
 	return gamedat.LookupSystem("mame")
 }
 
-// programFile is a file that comes with an emulator or a game's
-// download and is plainly not a game itself: a program, a library, notes,
-// settings or source code. Left over in a folder of games, it isn't
-// worth a mention.
-func programFile(name string) bool {
-	switch strings.ToLower(filepath.Ext(name)) {
-	case ".exe", ".dll", ".so", ".dylib", ".sym", ".manifest", ".bat", ".cmd", ".sh",
-		".ini", ".cfg", ".conf", ".xml", ".json", ".lua", ".py",
-		".txt", ".nfo", ".diz", ".md", ".doc", ".pdf", ".htm", ".html", ".log", ".url",
-		".c", ".h", ".cpp", ".hpp", ".mak", ".ico", ".png", ".jpg", ".gif", ".bmp":
-		return true
-	}
-	return false
-}
-
 // romCount is how many of an archive's files aren't notes or pictures.
 func romCount(files []gamedat.File) int {
 	n := 0
@@ -375,6 +360,7 @@ func (s *Service) ImportGames(ctx context.Context, system, p, name string) (plac
 		return nil, nil, err
 	}
 	var units []unit
+	var emus []Emulator
 	switch {
 	case !st.IsDir():
 		u := unit{path: p}
@@ -390,6 +376,7 @@ func (s *Service) ImportGames(ctx context.Context, system, p, name string) (plac
 			break
 		}
 		units, system = anyUnits(p), ""
+		emus = FindEmulators(p)
 		// Files that are no game's are left, and said so.
 		in := map[string]bool{}
 		var dirs []string
@@ -411,7 +398,9 @@ func (s *Service) ImportGames(ctx context.Context, system, p, name string) (plac
 			if d.IsDir() && f != p && emulatorFolder(d.Name()) {
 				return filepath.SkipDir // an emulator's own files, not games
 			}
-			if d.Type().IsRegular() && !in[f] && !programFile(d.Name()) && !slices.ContainsFunc(dirs, func(x string) bool { return strings.HasPrefix(f, x) }) {
+			// Only what might be a game is worth a mention: an emulator's
+			// programs, notes and settings, and a game's readme, aren't.
+			if d.Type().IsRegular() && !in[f] && gamedat.IsGameFile(d.Name()) && !slices.ContainsFunc(dirs, func(x string) bool { return strings.HasPrefix(f, x) }) {
 				skipped = append(skipped, Skipped{Path: f})
 			}
 			return nil
@@ -419,6 +408,9 @@ func (s *Service) ImportGames(ctx context.Context, system, p, name string) (plac
 	}
 	for _, u := range units {
 		key := system
+		if e, ok := emulatorFor(emus, u.path); ok && key == "" && (u.dir || emulatorGame(u.path)) {
+			key = e.System // a game in an emulator's roms folder is that emulator's
+		}
 		if key == "" {
 			sys, ok := Identify(u.path)
 			if !ok {

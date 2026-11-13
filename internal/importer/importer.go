@@ -308,7 +308,9 @@ type what struct {
 	discs           int
 	size, audioSize int64
 	firstGame       string
-	system          string
+	// emulator is the emulator install the folder is, such as MAME 0.154.
+	emulator string
+	system   string
 }
 
 // look reads what's in an item, up to a limit.
@@ -372,6 +374,17 @@ func look(full string, dir bool) what {
 		w.games, w.system, w.firstGame = 1, sys.Key, filepath.Base(full)
 		w.files, w.size = 1, dirSize(full)
 		return w
+	}
+	// An emulator's install, such as an old MAME folder: its games are
+	// the emulator's whatever their files look like.
+	if emus := games.FindEmulators(full); len(emus) > 0 {
+		w.system, w.emulator = emus[0].System, emus[0].Label()
+		for _, e := range emus[1:] {
+			if e.System != w.system {
+				w.system, w.emulator = "", ""
+				break
+			}
+		}
 	}
 	n := 0
 	filepath.WalkDir(full, func(p string, d fs.DirEntry, err error) error {
@@ -483,6 +496,10 @@ func (s *Service) guess(ctx context.Context, it *Item, kind string) {
 			it.Title = t
 		}
 		s.guessGame(ctx, it, full)
+		if w.emulator != "" {
+			// Many games, not one to name.
+			it.Title, it.Game, it.Sure = w.emulator, "", true
+		}
 		return
 	case Movie, Series:
 		f := s.Scan.Match(ctx, it.Kind, base)
