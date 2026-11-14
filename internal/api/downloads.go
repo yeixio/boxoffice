@@ -39,6 +39,9 @@ func (s *Server) downloadRoutes() []route {
 		{"POST /api/v1/downloads/nzb/add", true, s.addCheckedNZB},
 		{"PUT /api/v1/downloads/settings", true, s.saveDownloadSettings},
 		{"PUT /api/v1/downloads/cap", true, s.saveDataCap},
+		{"PUT /api/v1/downloads/schedule", true, s.saveSpeedSchedule},
+		{"PUT /api/v1/downloads/speed", true, s.setSpeedOverride},
+		{"DELETE /api/v1/downloads/speed", true, s.clearSpeedOverride},
 		{"DELETE /api/v1/downloads/history", true, func(w http.ResponseWriter, r *http.Request) error {
 			if err := s.Downloads.ClearHistory(r.Context()); err != nil {
 				return err
@@ -263,7 +266,16 @@ func (s *Server) downloads(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
+	sched, err := downloader.LoadSchedule(r.Context(), s.Store)
+	if err != nil {
+		return err
+	}
+	speedNow, err := downloader.LoadSpeedNow(r.Context(), s.Store, set, time.Now())
+	if err != nil {
+		return err
+	}
 	out := map[string]any{
+		"schedule": sched, "speedNow": speedNow,
 		"settings": set, "queue": queue, "history": history, "speed": live.Speed, "servers": live.Servers,
 		"newsServers": enabled, "folder": folder, "cap": dataCap, "historyTotal": historyTotal, "historyHidden": historyHidden,
 		"historyTypes": historyTypes, "historyStates": historyStates,
@@ -292,6 +304,73 @@ func (s *Server) saveDataCap(w http.ResponseWriter, r *http.Request) error {
 		return errorf(http.StatusBadRequest, "pick the day of the month your plan's month starts, from 1 to 28")
 	}
 	if err := downloader.SaveCapSettings(r.Context(), s.Store, in); err != nil {
+		return err
+	}
+	s.Downloads.Wake()
+	return s.downloads(w, r)
+}
+
+func (s *Server) saveSpeedSchedule(w http.ResponseWriter, r *http.Request) error {
+	var in downloader.SpeedSchedule
+	if err := readJSON(r, &in); err != nil {
+		return err
+	}
+	if err := in.Check(); err != nil {
+		return errorf(http.StatusBadRequest, err.Error())
+	}
+	if err := downloader.SaveSchedule(r.Context(), s.Store, in); err != nil {
+		return err
+	}
+	s.Downloads.Wake()
+	return s.downloads(w, r)
+}
+
+// setSpeedOverride is the Downloads page's quick change of speed: full
+// speed, a limit or a pause, for some hours, until the schedule next
+// changes, or until it's undone.
+func (s *Server) setSpeedOverride(w http.ResponseWriter, r *http.Request) error {
+	var in struct {
+		Mode      string  `json:"mode"`
+		Limit     int64   `json:"limit"`     // KB/s
+		Hours     float64 `json:"hours"`     // how long; 0 with untilNext false is until undone
+		UntilNext bool    `json:"untilNext"` // until the schedule next changes
+	}
+	if err := readJSON(r, &in); err != nil {
+		return err
+	}
+	ctx := r.Context()
+	now := time.Now()
+	o := &downloader.SpeedOverride{Mode: in.Mode, Limit: in.Limit}
+	switch {
+	case in.UntilNext:
+		set, err := downloader.LoadSettings(ctx, s.Store)
+		if err != nil {
+			return err
+		}
+		sched, err := downloader.LoadSchedule(ctx, s.Store)
+		if err != nil {
+			return err
+		}
+		sp := downloader.Speed(set.SpeedLimit, sched, nil, now)
+		if sp.Until == nil {
+			return errorf(http.StatusBadRequest, "the schedule doesn't change in the next week; pick how long instead")
+		}
+		o.Until = sp.Until
+	case in.Hours < 0 || in.Hours > 24*30:
+		return errorf(http.StatusBadRequest, "pick up to 30 days")
+	case in.Hours > 0:
+		t := now.Add(time.Duration(in.Hours * float64(time.Hour))).Truncate(time.Minute)
+		o.Until = &t
+	}
+	if err := downloader.SaveOverride(ctx, s.Store, o); err != nil {
+		return errorf(http.StatusBadRequest, err.Error())
+	}
+	s.Downloads.Wake()
+	return s.downloads(w, r)
+}
+
+func (s *Server) clearSpeedOverride(w http.ResponseWriter, r *http.Request) error {
+	if err := downloader.SaveOverride(r.Context(), s.Store, nil); err != nil {
 		return err
 	}
 	s.Downloads.Wake()

@@ -1172,9 +1172,10 @@
       "quarantine": "Radera från karantän efter",
       "quarantineHint": "Dagar som en release som inte såg säker ut stannar i karantän. 0 behåller den tills du raderar den på sidan Nedladdningar.",
       "speed": "Hastighetsgräns",
-      "speedHint": "I kB/s. Lämna den på 0 för ingen gräns.",
+      "speedHint": "Lämna 0 för ingen gräns. Bredband säljs i Mbit/s: dela med 8, så 100 Mbit/s ger runt 12 MB/s.",
       "folder": "Nedladdningar hamnar i <path>{{path}}</path>. Sätt BOXOFFICE_DOWNLOADS_DIR på servern för att använda en annan mapp.",
-      "folderFree": "Nedladdningar hamnar i <path>{{path}}</path> ({{free}} ledigt). Sätt BOXOFFICE_DOWNLOADS_DIR på servern för att använda en annan mapp."
+      "folderFree": "Nedladdningar hamnar i <path>{{path}}</path> ({{free}} ledigt). Sätt BOXOFFICE_DOWNLOADS_DIR på servern för att använda en annan mapp.",
+      "speedSchedule": "Ändra den efter tid på dygnet."
     },
     "days": "dagar",
     "cap": {
@@ -2318,5 +2319,59 @@
     "download": "Ladda ner",
     "haveOne": "Har du redan en NZB för den?",
     "upload": "Ladda upp en NZB"
+  },
+  "speed": {
+    "title": "Hastighetsschema",
+    "sub": "Sakta ner nedladdningar medan hemmet streamar eller ringer, och låt dem gå i full fart på natten. Utanför de här tiderna gäller hastighetsgränsen ovan.",
+    "enable": "Ändra hastigheten efter tid på dygnet",
+    "clock": "Tiderna följer serverns klocka ({{zone}}), där den är {{time}} nu.",
+    "days": "Dagar",
+    "from": "Från",
+    "to": "Till",
+    "mode": "Hastighet",
+    "full": "Full hastighet",
+    "limit": "Begränsa till",
+    "limited": "Begränsad",
+    "pause": "Ladda inte ner",
+    "mbs": "MB/s",
+    "add": "Lägg till en tid",
+    "example": "Börja från ett exempel",
+    "exampleHint": "Exemplet begränsar vardagskvällar och helgdagar till 5 MB/s och laddar ner i full hastighet varje natt från 23:00 till 07:00. Du kan ändra allt innan du sparar.",
+    "remove": "Ta bort",
+    "rangeN": "Tid {{n}}",
+    "noDays": "Välj minst en dag.",
+    "allDay": "Samma tid i Från och Till betyder hela dagen.",
+    "overnight": "Går över midnatt, till {{time}} nästa dag.",
+    "week": "Din vecka, måndag till söndag",
+    "otherLimit": "Andra tider: {{speed}}",
+    "otherFull": "Andra tider: full hastighet",
+    "outsideLimit": "Andra tider gäller hastighetsgränsen ovan ({{speed}}).",
+    "outsideFull": "Andra tider går nedladdningar i full hastighet, eftersom gränsen ovan är 0.",
+    "button": "Hastighet",
+    "now": {
+      "full": "Full hastighet",
+      "fullUntil": "Full hastighet till {{time}}",
+      "limit": "Begränsad till {{speed}}",
+      "limitUntil": "Begränsad till {{speed}} till {{time}}",
+      "pause": "Pausad",
+      "pauseUntil": "Pausad till {{time}}",
+      "bySchedule": "{{state}} (schema)",
+      "byHand": "{{state}} (ändrad för hand)"
+    },
+    "override": {
+      "title": "Ändra hastigheten för stunden",
+      "now": "Nu:",
+      "sub": "Det här går före schemat och hastighetsgränsen tills det tar slut. Sedan blir allt som förut.",
+      "for": "Hur länge",
+      "untilNext": "Tills schemat ändras {{time}}",
+      "untilNextPlain": "Tills schemat ändras nästa gång",
+      "h1": "1 timme",
+      "h3": "3 timmar",
+      "h8": "8 timmar",
+      "ever": "Tills jag ändrar tillbaka",
+      "apply": "Ändra hastighet",
+      "backSchedule": "Tillbaka till schemat",
+      "back": "Tillbaka till det vanliga"
+    }
   }
 }

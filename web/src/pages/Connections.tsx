@@ -10,6 +10,7 @@ import { bytes, gb, when } from '../format'
 import { formatList, formatLocale } from '../i18n'
 import { Badge, Button, Card, ErrorNote, Field, Input, Modal, Select, Toggle } from '../ui'
 import { useDownloads } from './Downloads'
+import { toKB, toMB } from './SpeedSchedule'
 
 export function useConnections() {
   return useQuery({ queryKey: ['connections'], queryFn: () => get<ConnectionsData>('/connections') })
@@ -88,12 +89,20 @@ export function DownloadSettings() {
           busy={save.isPending}
           onSave={(v) => save.mutate({ quarantineDays: v })}
         />
-        <Field label={t('conn.dl.speed')} hint={t('conn.dl.speedHint')}>
+        <Field
+          label={t('conn.dl.speed')}
+          hint={
+            <>
+              {t('conn.dl.speedHint')} <a href="#speed-schedule" className="text-marquee hover:underline">{t('conn.dl.speedSchedule')}</a>
+            </>
+          }
+        >
           {(id) => (
-            <div className="flex gap-2">
-              <Input id={id} type="number" min={0} value={limit ?? String(s.speedLimit)} onChange={(e) => setLimit(e.target.value)} className="max-w-40" />
-              {limit !== null && Number(limit) !== s.speedLimit && (
-                <Button busy={save.isPending} onClick={() => save.mutate({ speedLimit: Math.max(0, Number(limit) || 0) }, { onSuccess: () => setLimit(null) })}>
+            <div className="flex flex-wrap items-center gap-2">
+              <Input id={id} type="number" min={0} step={0.1} value={limit ?? String(toMB(s.speedLimit))} onChange={(e) => setLimit(e.target.value)} className="max-w-32" />
+              <span className="text-sm text-muted">{t('speed.mbs')}</span>
+              {limit !== null && limit.trim() !== '' && toKB(Number(limit) || 0) !== s.speedLimit && (
+                <Button busy={save.isPending} onClick={() => save.mutate({ speedLimit: toKB(Number(limit) || 0) }, { onSuccess: () => setLimit(null) })}>
                   {t('common.save')}
                 </Button>
               )}

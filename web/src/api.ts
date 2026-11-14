@@ -461,8 +461,24 @@ export type QuarantineItem = {
   busy?: boolean
 }
 export type Quarantine = { items: QuarantineItem[]; size: number; days: number }
+// The speed schedule: times of the week with their own speed. Days are
+// 0 (Sunday) to 6, times "HH:MM" on the server's clock, limits in KB/s.
+export type SpeedMode = 'full' | 'limit' | 'pause'
+export type SpeedRange = { days: number[]; from: string; to: string; mode: SpeedMode; limit: number }
+export type SpeedSchedule = { enabled: boolean; ranges: SpeedRange[] }
+export type SpeedStep = { mode: SpeedMode; limit: number; source: 'setting' | 'schedule' | 'override'; range: number }
+export type SpeedNow = SpeedStep & {
+  until?: string
+  next?: SpeedStep
+  override?: { mode: SpeedMode; limit: number; until?: string }
+  // The server's time zone and its clock now, which the schedule's times are on.
+  zone: string
+  clock: string
+}
 export type Downloads = {
   settings: DownloadSettings
+  schedule: SpeedSchedule
+  speedNow: SpeedNow
   queue: Download[]
   history: Download[]
   speed: number

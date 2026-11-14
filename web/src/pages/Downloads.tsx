@@ -56,6 +56,7 @@ import {
   type BulkList,
 } from "./DownloadsBulk";
 import { DownloadFiles } from "./DownloadFiles";
+import { SpeedButton, useSpeedLine } from "./SpeedSchedule";
 import { Quarantine } from "./DownloadsQuarantine";
 import { Pager, usePageSize } from "./Pager";
 import { AddNzb, isNzb } from "../AddNzb";
@@ -217,6 +218,7 @@ const historySorts: SortOption<Download>[] = [
 
 export function Downloads() {
   const { t } = useTranslation();
+  const speedLine = useSpeedLine();
   const qc = useQueryClient();
   const sort = useSort("downloads-history", historySorts);
   // A few rows at a time on a phone, more on a bigger screen.
@@ -400,6 +402,8 @@ export function Downloads() {
           s.enabled ? (
             s.paused ? (
               t("dl.allPaused")
+            ) : data.speedNow.mode === "pause" ? (
+              speedLine(data.speedNow)
             ) : (
               <>
                 {data.speed > 0
@@ -420,6 +424,7 @@ export function Downloads() {
             <Button onClick={() => setAdding(true)}>
               <Upload className="size-4" aria-hidden /> {t("dl.addNzb")}
             </Button>
+            {s.enabled && <SpeedButton data={data} />}
             {s.enabled && (
               <Button
                 variant={s.paused ? "primary" : "plain"}
@@ -668,19 +673,24 @@ function Stats({ data }: { data: DownloadsData }) {
     (n, x) => n + Math.max(0, x.size - x.doneBytes),
     0,
   );
+  const speedLine = useSpeedLine();
   const rate = data.settings.paused ? 0 : data.speed;
   const c = data.cap;
   const tiles: [string, string, string?][] = [
     [
       t("dl.stats.speed"),
-      data.settings.paused
+      data.settings.paused || data.speedNow.mode === "pause"
         ? t("dl.status.paused")
         : rate > 0
           ? speed(rate)
           : t("dl.idle"),
-      data.settings.speedLimit > 0
-        ? t("dl.stats.limit", { speed: speed(data.settings.speedLimit * 1024) })
-        : undefined,
+      data.settings.paused
+        ? undefined
+        : data.speedNow.source !== "setting" ||
+            data.speedNow.mode !== "full" ||
+            data.speedNow.until
+          ? speedLine(data.speedNow)
+          : undefined,
     ],
     [
       t("dl.stats.queue"),

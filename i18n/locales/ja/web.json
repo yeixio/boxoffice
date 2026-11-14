@@ -1095,9 +1095,10 @@
       "quarantine": "隔離から削除するまで",
       "quarantineHint": "安全に見えなかったリリースを隔離しておく日数。0 にすると、ダウンロードページで削除するまで残します。",
       "speed": "速度制限",
-      "speedHint": "KB/s 単位。制限なしなら 0 のままにします。",
+      "speedHint": "0 のままなら制限なしです。回線速度は Mbit/s で表示されるので 8 で割ってください。100 Mbit/s の回線なら約 12 MB/s です。",
       "folder": "ダウンロード先は <path>{{path}}</path> です。別のフォルダーを使うにはサーバーで BOXOFFICE_DOWNLOADS_DIR を設定してください。",
-      "folderFree": "ダウンロード先は <path>{{path}}</path>（空き {{free}}）です。別のフォルダーを使うにはサーバーで BOXOFFICE_DOWNLOADS_DIR を設定してください。"
+      "folderFree": "ダウンロード先は <path>{{path}}</path>（空き {{free}}）です。別のフォルダーを使うにはサーバーで BOXOFFICE_DOWNLOADS_DIR を設定してください。",
+      "speedSchedule": "時間帯で変える。"
     },
     "days": "日",
     "cap": {
@@ -2207,5 +2208,59 @@
     "download": "ダウンロード",
     "haveOne": "すでに NZB をお持ちですか？",
     "upload": "NZB をアップロード"
+  },
+  "speed": {
+    "title": "速度スケジュール",
+    "sub": "家族が動画を見たり通話したりしている間はダウンロードを遅くし、夜間は全速で進めます。設定した時間帯以外は、上の速度制限が適用されます。",
+    "enable": "時間帯で速度を変える",
+    "clock": "時刻はサーバーの時計（{{zone}}）に従います。現在 {{time}} です。",
+    "days": "曜日",
+    "from": "開始",
+    "to": "終了",
+    "mode": "速度",
+    "full": "全速",
+    "limit": "制限",
+    "limited": "制限中",
+    "pause": "ダウンロードしない",
+    "mbs": "MB/s",
+    "add": "時間帯を追加",
+    "example": "例から始める",
+    "exampleHint": "この例では平日の夜と週末の日中を 5 MB/s に制限し、毎晩 23:00 から 07:00 まで全速でダウンロードします。保存する前に自由に変更できます。",
+    "remove": "削除",
+    "rangeN": "時間帯 {{n}}",
+    "noDays": "曜日を 1 つ以上選んでください。",
+    "allDay": "開始と終了が同じ時刻なら終日です。",
+    "overnight": "日付をまたぎ、翌日の {{time}} まで続きます。",
+    "week": "1 週間（月曜〜日曜）",
+    "otherLimit": "その他の時間: {{speed}}",
+    "otherFull": "その他の時間: 全速",
+    "outsideLimit": "その他の時間は上の速度制限（{{speed}}）でダウンロードします。",
+    "outsideFull": "上の制限が 0 なので、その他の時間は全速でダウンロードします。",
+    "button": "速度",
+    "now": {
+      "full": "全速",
+      "fullUntil": "{{time}} まで全速",
+      "limit": "{{speed}} に制限中",
+      "limitUntil": "{{time}} まで {{speed}} に制限中",
+      "pause": "一時停止中",
+      "pauseUntil": "{{time}} まで一時停止",
+      "bySchedule": "{{state}}（スケジュール）",
+      "byHand": "{{state}}（手動で変更）"
+    },
+    "override": {
+      "title": "今だけ速度を変える",
+      "now": "現在:",
+      "sub": "終わるまではスケジュールと速度制限より優先されます。その後は元に戻ります。",
+      "for": "期間",
+      "untilNext": "スケジュールが {{time}} に変わるまで",
+      "untilNextPlain": "スケジュールが次に変わるまで",
+      "h1": "1 時間",
+      "h3": "3 時間",
+      "h8": "8 時間",
+      "ever": "自分で戻すまで",
+      "apply": "速度を変更",
+      "backSchedule": "スケジュールに戻す",
+      "back": "通常に戻す"
+    }
   }
 }

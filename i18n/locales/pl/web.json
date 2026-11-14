@@ -1326,9 +1326,10 @@
       "quarantine": "Usuwaj z kwarantanny po",
       "quarantineHint": "Ile dni wydanie, które nie wyglądało bezpiecznie, zostaje w kwarantannie. 0 zatrzymuje je, dopóki go nie usuniesz na stronie Pobrane.",
       "speed": "Limit prędkości",
-      "speedHint": "W KB/s. Zostaw 0 dla braku limitu.",
+      "speedHint": "Zostaw 0, aby nie było limitu. Pakiety internetowe podaje się w Mbit/s: podziel przez 8, więc 100 Mbit/s to około 12 MB/s.",
       "folder": "Pobrane trafiają do <path>{{path}}</path>. Ustaw BOXOFFICE_DOWNLOADS_DIR na serwerze, aby użyć innego folderu.",
-      "folderFree": "Pobrane trafiają do <path>{{path}}</path> ({{free}} wolne). Ustaw BOXOFFICE_DOWNLOADS_DIR na serwerze, aby użyć innego folderu."
+      "folderFree": "Pobrane trafiają do <path>{{path}}</path> ({{free}} wolne). Ustaw BOXOFFICE_DOWNLOADS_DIR na serwerze, aby użyć innego folderu.",
+      "speedSchedule": "Zmieniaj ją zależnie od pory dnia."
     },
     "days": "dni",
     "cap": {
@@ -2540,5 +2541,59 @@
     "download": "Pobierz",
     "haveOne": "Masz już do tego NZB?",
     "upload": "Prześlij NZB"
+  },
+  "speed": {
+    "title": "Harmonogram prędkości",
+    "sub": "Zwalniaj pobieranie, gdy domownicy oglądają streamy lub rozmawiają, a w nocy pozwól mu działać z pełną prędkością. Poza tymi godzinami obowiązuje limit prędkości powyżej.",
+    "enable": "Zmieniaj prędkość zależnie od pory dnia",
+    "clock": "Godziny według zegara serwera ({{zone}}), gdzie jest teraz {{time}}.",
+    "days": "Dni",
+    "from": "Od",
+    "to": "Do",
+    "mode": "Prędkość",
+    "full": "Pełna prędkość",
+    "limit": "Ogranicz do",
+    "limited": "Ograniczona",
+    "pause": "Nie pobieraj",
+    "mbs": "MB/s",
+    "add": "Dodaj godziny",
+    "example": "Zacznij od przykładu",
+    "exampleHint": "Przykład ogranicza wieczory w dni robocze i dni weekendu do 5 MB/s, a każdej nocy od 23:00 do 07:00 pobiera z pełną prędkością. Możesz wszystko zmienić przed zapisaniem.",
+    "remove": "Usuń",
+    "rangeN": "Godziny {{n}}",
+    "noDays": "Wybierz co najmniej jeden dzień.",
+    "allDay": "Ta sama godzina w Od i Do oznacza cały dzień.",
+    "overnight": "Trwa po północy, do {{time}} następnego dnia.",
+    "week": "Twój tydzień, od poniedziałku do niedzieli",
+    "otherLimit": "Pozostałe godziny: {{speed}}",
+    "otherFull": "Pozostałe godziny: pełna prędkość",
+    "outsideLimit": "W pozostałych godzinach obowiązuje limit prędkości powyżej ({{speed}}).",
+    "outsideFull": "W pozostałych godzinach pobieranie idzie z pełną prędkością, bo limit powyżej to 0.",
+    "button": "Prędkość",
+    "now": {
+      "full": "Pełna prędkość",
+      "fullUntil": "Pełna prędkość do {{time}}",
+      "limit": "Ograniczona do {{speed}}",
+      "limitUntil": "Ograniczona do {{speed}} do {{time}}",
+      "pause": "Wstrzymane",
+      "pauseUntil": "Wstrzymane do {{time}}",
+      "bySchedule": "{{state}} (harmonogram)",
+      "byHand": "{{state}} (zmienione ręcznie)"
+    },
+    "override": {
+      "title": "Zmień prędkość na teraz",
+      "now": "Teraz:",
+      "sub": "To ma pierwszeństwo przed harmonogramem i limitem prędkości, dopóki się nie skończy. Potem wszystko wraca do poprzedniego stanu.",
+      "for": "Na jak długo",
+      "untilNext": "Do zmiany harmonogramu o {{time}}",
+      "untilNextPlain": "Do następnej zmiany harmonogramu",
+      "h1": "1 godzina",
+      "h3": "3 godziny",
+      "h8": "8 godzin",
+      "ever": "Dopóki tego nie cofnę",
+      "apply": "Zmień prędkość",
+      "backSchedule": "Wróć do harmonogramu",
+      "back": "Wróć do normalnej"
+    }
   }
 }

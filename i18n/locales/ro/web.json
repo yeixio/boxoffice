@@ -1249,9 +1249,10 @@
       "quarantine": "Șterge din carantină după",
       "quarantineHint": "Zilele în care o versiune care nu părea sigură rămâne în carantină. 0 o păstrează până o ștergi din pagina Descărcări.",
       "speed": "Limită de viteză",
-      "speedHint": "În KB/s. Lasă 0 pentru fără limită.",
+      "speedHint": "Lasă 0 pentru nicio limită. Abonamentele de internet sunt în Mbit/s: împarte la 8, deci 100 Mbit/s înseamnă cam 12 MB/s.",
       "folder": "Descărcările merg în <path>{{path}}</path>. Setează BOXOFFICE_DOWNLOADS_DIR pe server pentru a folosi alt dosar.",
-      "folderFree": "Descărcările merg în <path>{{path}}</path> ({{free}} liberi). Setează BOXOFFICE_DOWNLOADS_DIR pe server pentru a folosi alt dosar."
+      "folderFree": "Descărcările merg în <path>{{path}}</path> ({{free}} liberi). Setează BOXOFFICE_DOWNLOADS_DIR pe server pentru a folosi alt dosar.",
+      "speedSchedule": "Schimb-o după ora din zi."
     },
     "days": "zile",
     "cap": {
@@ -2429,5 +2430,59 @@
     "download": "Descarcă",
     "haveOne": "Ai deja un NZB pentru el?",
     "upload": "Încarcă un NZB"
+  },
+  "speed": {
+    "title": "Program de viteză",
+    "sub": "Încetinește descărcările cât timp cei de acasă se uită la streaming sau sunt în apeluri și lasă-le la viteză maximă noaptea. În afara acestor intervale se aplică limita de viteză de mai sus.",
+    "enable": "Schimbă viteza după ora din zi",
+    "clock": "Orele sunt după ceasul serverului ({{zone}}), unde acum este {{time}}.",
+    "days": "Zile",
+    "from": "De la",
+    "to": "Până la",
+    "mode": "Viteză",
+    "full": "Viteză maximă",
+    "limit": "Limitează la",
+    "limited": "Limitată",
+    "pause": "Nu descărca",
+    "mbs": "MB/s",
+    "add": "Adaugă un interval",
+    "example": "Pornește de la un exemplu",
+    "exampleHint": "Exemplul limitează serile din zilele lucrătoare și zilele de weekend la 5 MB/s și descarcă la viteză maximă în fiecare noapte de la 23:00 la 07:00. Poți schimba orice înainte de salvare.",
+    "remove": "Elimină",
+    "rangeN": "Intervalul {{n}}",
+    "noDays": "Alege cel puțin o zi.",
+    "allDay": "Aceeași oră la De la și Până la înseamnă toată ziua.",
+    "overnight": "Trece de miezul nopții, până la {{time}} a doua zi.",
+    "week": "Săptămâna ta, de luni până duminică",
+    "otherLimit": "Alte ore: {{speed}}",
+    "otherFull": "Alte ore: viteză maximă",
+    "outsideLimit": "La alte ore se aplică limita de viteză de mai sus ({{speed}}).",
+    "outsideFull": "La alte ore descărcările merg la viteză maximă, fiindcă limita de mai sus este 0.",
+    "button": "Viteză",
+    "now": {
+      "full": "Viteză maximă",
+      "fullUntil": "Viteză maximă până la {{time}}",
+      "limit": "Limitată la {{speed}}",
+      "limitUntil": "Limitată la {{speed}} până la {{time}}",
+      "pause": "În pauză",
+      "pauseUntil": "În pauză până la {{time}}",
+      "bySchedule": "{{state}} (program)",
+      "byHand": "{{state}} (schimbat manual)"
+    },
+    "override": {
+      "title": "Schimbă viteza pentru moment",
+      "now": "Acum:",
+      "sub": "Aceasta are prioritate față de program și de limita de viteză până se termină. Apoi totul revine cum era.",
+      "for": "Pentru cât timp",
+      "untilNext": "Până se schimbă programul la {{time}}",
+      "untilNextPlain": "Până la următoarea schimbare a programului",
+      "h1": "1 oră",
+      "h3": "3 ore",
+      "h8": "8 ore",
+      "ever": "Până o schimb înapoi",
+      "apply": "Schimbă viteza",
+      "backSchedule": "Înapoi la program",
+      "back": "Înapoi la normal"
+    }
   }
 }

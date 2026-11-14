@@ -1172,9 +1172,10 @@
       "quarantine": "Delete from quarantine after",
       "quarantineHint": "Days a release that didn't look safe stays in quarantine. 0 keeps it until you delete it on the Downloads page.",
       "speed": "Speed limit",
-      "speedHint": "In KB/s. Leave it at 0 for no limit.",
+      "speedHint": "Leave it at 0 for no limit. Internet plans are sold in Mbit/s: divide by 8, so a 100 Mbit/s plan tops out near 12 MB/s.",
       "folder": "Downloads go to <path>{{path}}</path>. Set BOXOFFICE_DOWNLOADS_DIR on the server to use another folder.",
-      "folderFree": "Downloads go to <path>{{path}}</path> ({{free}} free). Set BOXOFFICE_DOWNLOADS_DIR on the server to use another folder."
+      "folderFree": "Downloads go to <path>{{path}}</path> ({{free}} free). Set BOXOFFICE_DOWNLOADS_DIR on the server to use another folder.",
+      "speedSchedule": "Change it by time of day."
     },
     "days": "days",
     "cap": {
@@ -2318,5 +2319,59 @@
     "download": "Download",
     "haveOne": "Have an NZB for it already?",
     "upload": "Upload an NZB"
+  },
+  "speed": {
+    "title": "Speed schedule",
+    "sub": "Slow downloads down while people at home are streaming or on calls, and let them run at full speed overnight. Outside these times, the speed limit above holds.",
+    "enable": "Change the speed by time of day",
+    "clock": "Times are on the server's clock ({{zone}}), where it's {{time}} now.",
+    "days": "Days",
+    "from": "From",
+    "to": "To",
+    "mode": "Speed",
+    "full": "Full speed",
+    "limit": "Limit to",
+    "limited": "Limited",
+    "pause": "Don't download",
+    "mbs": "MB/s",
+    "add": "Add a time",
+    "example": "Start from an example",
+    "exampleHint": "The example limits weekday evenings and weekend days to 5 MB/s, and runs at full speed every night from 23:00 to 07:00. You can change any of it before saving.",
+    "remove": "Remove",
+    "rangeN": "Time {{n}}",
+    "noDays": "Pick at least one day.",
+    "allDay": "The same time for From and To is all day.",
+    "overnight": "Runs past midnight, until {{time}} the next day.",
+    "week": "Your week, Monday to Sunday",
+    "otherLimit": "Other times: {{speed}}",
+    "otherFull": "Other times: full speed",
+    "outsideLimit": "At other times downloads are held to the speed limit above ({{speed}}).",
+    "outsideFull": "At other times downloads run at full speed, since the speed limit above is 0.",
+    "button": "Speed",
+    "now": {
+      "full": "Full speed",
+      "fullUntil": "Full speed until {{time}}",
+      "limit": "Limited to {{speed}}",
+      "limitUntil": "Limited to {{speed}} until {{time}}",
+      "pause": "Paused",
+      "pauseUntil": "Paused until {{time}}",
+      "bySchedule": "{{state}} (schedule)",
+      "byHand": "{{state}} (changed by hand)"
+    },
+    "override": {
+      "title": "Change the speed for now",
+      "now": "Now:",
+      "sub": "This beats the schedule and the speed limit setting until it ends. Then everything goes back to how it was.",
+      "for": "For how long",
+      "untilNext": "Until the schedule changes at {{time}}",
+      "untilNextPlain": "Until the schedule next changes",
+      "h1": "1 hour",
+      "h3": "3 hours",
+      "h8": "8 hours",
+      "ever": "Until I change it back",
+      "apply": "Change speed",
+      "backSchedule": "Back to the schedule",
+      "back": "Back to normal"
+    }
   }
 }

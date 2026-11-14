@@ -1249,9 +1249,10 @@
       "quarantine": "Elimina dalla quarantena dopo",
       "quarantineHint": "I giorni in cui una release che non sembrava sicura resta in quarantena. 0 la tiene finché non la elimini nella pagina Download.",
       "speed": "Limite di velocità",
-      "speedHint": "In KB/s. Lascia 0 per nessun limite.",
+      "speedHint": "Lascia 0 per nessun limite. Le offerte internet sono in Mbit/s: dividi per 8, quindi un'offerta da 100 Mbit/s arriva a circa 12 MB/s.",
       "folder": "I download vanno in <path>{{path}}</path>. Imposta BOXOFFICE_DOWNLOADS_DIR sul server per usare un’altra cartella.",
-      "folderFree": "I download vanno in <path>{{path}}</path> ({{free}} liberi). Imposta BOXOFFICE_DOWNLOADS_DIR sul server per usare un’altra cartella."
+      "folderFree": "I download vanno in <path>{{path}}</path> ({{free}} liberi). Imposta BOXOFFICE_DOWNLOADS_DIR sul server per usare un’altra cartella.",
+      "speedSchedule": "Cambiala in base all'ora."
     },
     "days": "giorni",
     "cap": {
@@ -2429,5 +2430,59 @@
     "download": "Scarica",
     "haveOne": "Hai già un NZB per questo?",
     "upload": "Carica un NZB"
+  },
+  "speed": {
+    "title": "Programma della velocità",
+    "sub": "Rallenta i download mentre in casa si guarda in streaming o si è in chiamata, e lasciali a piena velocità di notte. Fuori da questi orari vale il limite di velocità qui sopra.",
+    "enable": "Cambia la velocità in base all'ora",
+    "clock": "Gli orari seguono l'orologio del server ({{zone}}), dove ora sono le {{time}}.",
+    "days": "Giorni",
+    "from": "Dalle",
+    "to": "Alle",
+    "mode": "Velocità",
+    "full": "Piena velocità",
+    "limit": "Limita a",
+    "limited": "Limitata",
+    "pause": "Non scaricare",
+    "mbs": "MB/s",
+    "add": "Aggiungi un orario",
+    "example": "Parti da un esempio",
+    "exampleHint": "L'esempio limita le sere dei giorni feriali e le giornate del fine settimana a 5 MB/s, e scarica a piena velocità ogni notte dalle 23:00 alle 07:00. Puoi cambiare tutto prima di salvare.",
+    "remove": "Rimuovi",
+    "rangeN": "Orario {{n}}",
+    "noDays": "Scegli almeno un giorno.",
+    "allDay": "Lo stesso orario in Dalle e Alle vale tutto il giorno.",
+    "overnight": "Supera la mezzanotte, fino alle {{time}} del giorno dopo.",
+    "week": "La tua settimana, da lunedì a domenica",
+    "otherLimit": "Altri orari: {{speed}}",
+    "otherFull": "Altri orari: piena velocità",
+    "outsideLimit": "Negli altri orari i download seguono il limite di velocità qui sopra ({{speed}}).",
+    "outsideFull": "Negli altri orari i download vanno a piena velocità, perché il limite qui sopra è 0.",
+    "button": "Velocità",
+    "now": {
+      "full": "Piena velocità",
+      "fullUntil": "Piena velocità fino alle {{time}}",
+      "limit": "Limitata a {{speed}}",
+      "limitUntil": "Limitata a {{speed}} fino alle {{time}}",
+      "pause": "In pausa",
+      "pauseUntil": "In pausa fino alle {{time}}",
+      "bySchedule": "{{state}} (programma)",
+      "byHand": "{{state}} (cambiata a mano)"
+    },
+    "override": {
+      "title": "Cambia la velocità per ora",
+      "now": "Ora:",
+      "sub": "Questo ha la precedenza sul programma e sul limite di velocità finché non finisce. Poi tutto torna com'era.",
+      "for": "Per quanto tempo",
+      "untilNext": "Finché il programma cambia alle {{time}}",
+      "untilNextPlain": "Fino al prossimo cambio del programma",
+      "h1": "1 ora",
+      "h3": "3 ore",
+      "h8": "8 ore",
+      "ever": "Finché non la rimetto io",
+      "apply": "Cambia velocità",
+      "backSchedule": "Torna al programma",
+      "back": "Torna alla normalità"
+    }
   }
 }

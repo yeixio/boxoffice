@@ -1172,9 +1172,10 @@
       "quarantine": "Uit quarantaine verwijderen na",
       "quarantineHint": "Dagen dat een release die er niet veilig uitzag in quarantaine blijft. 0 houdt hem tot je hem verwijdert op de pagina Downloads.",
       "speed": "Snelheidslimiet",
-      "speedHint": "In KB/s. Laat op 0 voor geen limiet.",
+      "speedHint": "Laat op 0 voor geen limiet. Internetabonnementen worden in Mbit/s verkocht: deel door 8, dus 100 Mbit/s haalt ongeveer 12 MB/s.",
       "folder": "Downloads gaan naar <path>{{path}}</path>. Stel BOXOFFICE_DOWNLOADS_DIR in op de server om een andere map te gebruiken.",
-      "folderFree": "Downloads gaan naar <path>{{path}}</path> ({{free}} vrij). Stel BOXOFFICE_DOWNLOADS_DIR in op de server om een andere map te gebruiken."
+      "folderFree": "Downloads gaan naar <path>{{path}}</path> ({{free}} vrij). Stel BOXOFFICE_DOWNLOADS_DIR in op de server om een andere map te gebruiken.",
+      "speedSchedule": "Pas het aan per tijdstip."
     },
     "days": "dagen",
     "cap": {
@@ -2318,5 +2319,59 @@
     "download": "Downloaden",
     "haveOne": "Heb je er al een NZB voor?",
     "upload": "NZB uploaden"
+  },
+  "speed": {
+    "title": "Snelheidsschema",
+    "sub": "Laat downloads langzamer gaan terwijl er thuis gestreamd of gebeld wordt, en op volle snelheid 's nachts. Buiten deze tijden geldt de snelheidslimiet hierboven.",
+    "enable": "Snelheid aanpassen per tijdstip",
+    "clock": "Tijden volgen de klok van de server ({{zone}}), waar het nu {{time}} is.",
+    "days": "Dagen",
+    "from": "Van",
+    "to": "Tot",
+    "mode": "Snelheid",
+    "full": "Volle snelheid",
+    "limit": "Beperken tot",
+    "limited": "Beperkt",
+    "pause": "Niet downloaden",
+    "mbs": "MB/s",
+    "add": "Tijd toevoegen",
+    "example": "Begin met een voorbeeld",
+    "exampleHint": "Het voorbeeld beperkt doordeweekse avonden en weekenddagen tot 5 MB/s en downloadt elke nacht van 23:00 tot 07:00 op volle snelheid. Je kunt alles aanpassen voordat je opslaat.",
+    "remove": "Verwijderen",
+    "rangeN": "Tijd {{n}}",
+    "noDays": "Kies minstens één dag.",
+    "allDay": "Dezelfde tijd bij Van en Tot is de hele dag.",
+    "overnight": "Loopt over middernacht, tot {{time}} de volgende dag.",
+    "week": "Je week, maandag tot zondag",
+    "otherLimit": "Andere tijden: {{speed}}",
+    "otherFull": "Andere tijden: volle snelheid",
+    "outsideLimit": "Op andere tijden geldt de snelheidslimiet hierboven ({{speed}}).",
+    "outsideFull": "Op andere tijden gaan downloads op volle snelheid, omdat de limiet hierboven 0 is.",
+    "button": "Snelheid",
+    "now": {
+      "full": "Volle snelheid",
+      "fullUntil": "Volle snelheid tot {{time}}",
+      "limit": "Beperkt tot {{speed}}",
+      "limitUntil": "Beperkt tot {{speed}} tot {{time}}",
+      "pause": "Gepauzeerd",
+      "pauseUntil": "Gepauzeerd tot {{time}}",
+      "bySchedule": "{{state}} (schema)",
+      "byHand": "{{state}} (met de hand)"
+    },
+    "override": {
+      "title": "Snelheid voorlopig aanpassen",
+      "now": "Nu:",
+      "sub": "Dit gaat voor het schema en de snelheidslimiet, tot het afloopt. Daarna is alles weer zoals het was.",
+      "for": "Hoe lang",
+      "untilNext": "Tot het schema om {{time}} verandert",
+      "untilNextPlain": "Tot het schema weer verandert",
+      "h1": "1 uur",
+      "h3": "3 uur",
+      "h8": "8 uur",
+      "ever": "Tot ik het terugzet",
+      "apply": "Snelheid aanpassen",
+      "backSchedule": "Terug naar het schema",
+      "back": "Terug naar normaal"
+    }
   }
 }

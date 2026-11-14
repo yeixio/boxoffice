@@ -864,13 +864,25 @@ func (e *Engine) startNext(ctx context.Context, wg *sync.WaitGroup) {
 	if err != nil {
 		return
 	}
-	e.limit.set(set.SpeedLimit * 1000)
+	// The speed: the speed limit setting, the schedule or a quick change
+	// from the Downloads page. A pause from either holds the queue the way
+	// Pause all does, and the download that's on carries on from where it
+	// was once it ends.
+	sp, err := LoadSpeedNow(ctx, e.Store, set, time.Now())
+	if err != nil {
+		return
+	}
+	e.limit.set(sp.Limit * 1024)
+	held := sp.Mode == SpeedPause
 	e.mu.Lock()
 	busy := e.current != nil
 	e.mu.Unlock()
 	e.waiting.Store("")
-	if !set.Enabled || set.Paused || busy {
-		if (!set.Enabled || set.Paused) && busy {
+	if held && set.Enabled && !set.Paused {
+		e.waiting.Store(sp.Why())
+	}
+	if !set.Enabled || set.Paused || held || busy {
+		if (!set.Enabled || set.Paused || held) && busy {
 			e.mu.Lock()
 			if r := e.current; r != nil {
 				r.cancel(errPaused)
