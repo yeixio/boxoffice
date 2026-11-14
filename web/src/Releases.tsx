@@ -6,7 +6,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import { CircleCheck, Download as DownloadIcon, Upload } from 'lucide-react'
 import { get, post, type Candidate, type Quality, type ReleaseResults } from './api'
-import { bytes, day } from './format'
+import { bytes, clock, day } from './format'
 import { useQualities } from './hooks'
 import { SortControl, sortList, useSort, words, type SortOption } from './sort'
 import { Badge, Button, ErrorNote, Modal, Spinner } from './ui'
@@ -69,12 +69,14 @@ export function Releases({ path, title, onClose }: { path: string; title: string
                           {r.format ? <Badge tone={r.accepted ? 'ok' : 'plain'}>{r.format}</Badge> : q && <Badge tone={r.accepted ? 'ok' : 'plain'}>{q.name}</Badge>}
                           {r.pack && <Badge tone="marquee">{t('releases.wholeSeason')}</Badge>}
                           {r.fix && <Badge tone="ok">{t('releases.fixesCopy', { word: r.fix })}</Badge>}
+                          {r.newUntil && <Badge tone="gold">{t('releases.new')}</Badge>}
                           {!r.pack && r.episodes && r.episodes.length > 1 && <Badge>{t('releases.episodes', { count: r.episodes.length })}</Badge>}
                           <span>{bytes(r.size)}</span>
                           <span>{r.indexer}</span>
                           {r.publishedAt && <span>{day(r.publishedAt)}</span>}
                           {!!r.grabs && <span>{t('releases.grabCount', { count: r.grabs })}</span>}
                         </div>
+                        {r.newUntil && <p className="mt-1 text-xs text-muted">{t('releases.newUntil', { time: clock(r.newUntil) })}</p>}
                         {r.rejections?.map((why) => (
                           <p key={why} className="mt-1 text-xs text-bad">
                             {t('releases.notPicked', { why })}

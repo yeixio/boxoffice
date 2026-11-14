@@ -151,32 +151,50 @@ func (s *Service) syncRSS(ctx context.Context) RSSResult {
 	if len(releases) == 0 || ctx.Err() != nil {
 		return res
 	}
+	got, problems, err := s.takeNew(ctx, c, releases)
+	if err != nil {
+		problems = append(problems, err.Error())
+	}
+	res.Grabbed = got
+	res.Problems = append(res.Problems, problems...)
+	return res
+}
+
+// takeNew grabs what's wanted among new releases (RSS sync's, or held
+// ones now old enough): missing titles, upgrades when they're allowed,
+// and fixes of copies on disk while the data cap allows upgrades.
+//
+// movies are missing movies the releases were held for: they're looked
+// at even if they aren't out by their dates yet, as the search that found
+// the release (when the movie was added, say) would have grabbed it.
+func (s *Service) takeNew(ctx context.Context, c downloader.CapState, releases []Release, movies ...int64) ([]string, []string, error) {
+	if len(releases) == 0 {
+		return nil, nil, nil
+	}
 	a, err := LoadAutoSettings(ctx, s.Store)
 	if err != nil {
-		return RSSResult{Skipped: err.Error()}
+		return nil, nil, err
 	}
 	left, _, err := s.UpgradesLeft(ctx, a)
 	if err != nil {
-		return RSSResult{Skipped: err.Error()}
+		return nil, nil, err
 	}
 	skip := func(w Wanted) bool {
 		return w.Upgrade && (c.Level == downloader.CapUpgrades || left == 0 || !a.upgradeOn(w.AutoUpgrade))
 	}
-	got, problems, err := s.takeFromFeed(ctx, releases, skip)
+	got, problems, err := s.takeFromFeed(ctx, releases, skip, movies...)
 	if err != nil {
-		res.Problems = append(res.Problems, err.Error())
+		problems = append(problems, err.Error())
 	}
-	res.Grabbed = got
-	res.Problems = append(res.Problems, problems...)
 	if c.Level == downloader.CapOK {
-		got, problems, err := s.takeFixes(ctx, releases)
+		more, morep, err := s.takeFixes(ctx, releases)
 		if err != nil {
-			res.Problems = append(res.Problems, err.Error())
+			morep = append(morep, err.Error())
 		}
-		res.Grabbed = append(res.Grabbed, got...)
-		res.Problems = append(res.Problems, problems...)
+		got = append(got, more...)
+		problems = append(problems, morep...)
 	}
-	return res
+	return got, problems, nil
 }
 
 // readFeed reads an indexer's releases since the last sync, newest first.
@@ -222,7 +240,9 @@ func (s *Service) readFeed(ctx context.Context, ix store.Indexer, st store.Index
 
 // takeFromFeed matches releases to the wanted movies and episodes, and
 // grabs the best for each.
-func (s *Service) takeFromFeed(ctx context.Context, releases []Release, skip func(Wanted) bool) ([]string, []string, error) {
+// Missing movies named in also are looked at too, whether out by their
+// dates or not (see takeNew).
+func (s *Service) takeFromFeed(ctx context.Context, releases []Release, skip func(Wanted) bool, also ...int64) ([]string, []string, error) {
 	list, err := s.WantedList(ctx)
 	if err != nil {
 		return nil, nil, err
@@ -271,6 +291,14 @@ func (s *Service) takeFromFeed(ctx context.Context, releases []Release, skip fun
 			}
 			sw.eps = append(sw.eps, e)
 			sw.per[e.Season]++
+		}
+	}
+	for _, id := range also {
+		if _, ok := movies[id]; ok {
+			continue
+		}
+		if m, err := s.Store.Movie(ctx, id); err == nil && m.Monitored && m.File == nil {
+			movies[m.ID] = m
 		}
 	}
 	if len(movies) == 0 && len(shows) == 0 {
@@ -342,6 +370,9 @@ func (s *Service) takeFromFeed(ctx context.Context, releases []Release, skip fun
 	for _, c := range out.Releases {
 		if ctx.Err() != nil {
 			break
+		}
+		if !c.Accepted {
+			continue // too new yet, and held back (holdYoung)
 		}
 		var keys []string
 		if c.kind == "movie" {

@@ -114,7 +114,7 @@ func (s *Service) Season(ctx context.Context, t store.Series, season int, want [
 	s.rank(ctx, &out)
 	if out.Searched > 0 {
 		for _, e := range want {
-			found := slices.ContainsFunc(out.Releases, func(c Candidate) bool { return c.Accepted && slices.Contains(c.episodes, e.ID) })
+			found := slices.ContainsFunc(out.Releases, func(c Candidate) bool { return (c.Accepted || c.held) && slices.Contains(c.episodes, e.ID) })
 			if err := s.Store.MarkSearched(ctx, "episode", e.ID, found); err != nil {
 				s.logger().Warn("couldn't note a search", "kind", "episode", "id", e.ID, "err", err)
 			}

@@ -62,14 +62,18 @@ func (s *Server) downloadRoutes() []route {
 			return badRequest(s.removeDownload(r.Context(), id, q.Get("deleteFiles") == "true", q.Get("block") == "true"))
 		})},
 
-		{"GET /api/v1/movies/{id}/releases", true, s.releases(func(r *http.Request, id int64) (search.Results, error) { return s.Search.Movie(r.Context(), id) })},
-		{"GET /api/v1/episodes/{id}/releases", true, s.releases(func(r *http.Request, id int64) (search.Results, error) { return s.Search.Episode(r.Context(), id) })},
+		{"GET /api/v1/movies/{id}/releases", true, s.releases(func(r *http.Request, id int64) (search.Results, error) {
+			return s.Search.Movie(search.Browsing(r.Context()), id)
+		})},
+		{"GET /api/v1/episodes/{id}/releases", true, s.releases(func(r *http.Request, id int64) (search.Results, error) {
+			return s.Search.Episode(search.Browsing(r.Context()), id)
+		})},
 		{"GET /api/v1/series/{id}/seasons/{season}/releases", true, s.releases(func(r *http.Request, id int64) (search.Results, error) {
 			n, err := strconv.Atoi(r.PathValue("season"))
 			if err != nil || n < 0 {
 				return search.Results{}, errorf(http.StatusBadRequest, "which season?")
 			}
-			return s.Search.SeasonReleases(r.Context(), id, n)
+			return s.Search.SeasonReleases(search.Browsing(r.Context()), id, n)
 		})},
 		{"POST /api/v1/releases/{key}/grab", true, s.grabRelease},
 

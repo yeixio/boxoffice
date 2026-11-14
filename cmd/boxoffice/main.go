@@ -245,7 +245,7 @@ func run() error {
 	var wg sync.WaitGroup
 	for _, loop := range []func(context.Context){runner.Run, backups.Run, downloads.Run, mon.Monitor.Run, alerter.Run,
 		func(ctx context.Context) { cat.RefreshEvery(ctx, cfg.Refresh) }, func(ctx context.Context) { finder.AutoSearchEvery(ctx, runner) },
-		finder.RSSEvery, finder.PruneEvery, shelf.DetailsEvery, finds.Run, checker.Run, gameShelf.Run, func(ctx context.Context) { api.RecycleSweepEvery(ctx, db, log) },
+		finder.RSSEvery, finder.HeldEvery, finder.PruneEvery, shelf.DetailsEvery, finds.Run, checker.Run, gameShelf.Run, func(ctx context.Context) { api.RecycleSweepEvery(ctx, db, log) },
 		func(ctx context.Context) { retryImports(ctx, downloads, log) }} {
 		wg.Add(1)
 		go func() { defer wg.Done(); loop(ctx) }()

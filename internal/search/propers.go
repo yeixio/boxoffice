@@ -248,6 +248,9 @@ func (s *Service) takeFixes(ctx context.Context, releases []Release) ([]string, 
 		if ctx.Err() != nil {
 			break
 		}
+		if !c.Accepted {
+			continue // too new yet, and held back (holdYoung)
+		}
 		keys := []string{fmt.Sprintf("m%d", c.titleID)}
 		episodeID := int64(0)
 		if c.kind == "series" {

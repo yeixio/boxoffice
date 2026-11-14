@@ -23,6 +23,12 @@ export function day(iso?: string): string {
   return new Date(iso).toLocaleDateString(formatLocale(), { year: 'numeric', month: 'short', day: 'numeric' })
 }
 
+// clock is a time of day, as 06:42 or 6:42 AM.
+export function clock(iso?: string): string {
+  if (!iso) return ''
+  return new Date(iso).toLocaleTimeString(formatLocale(), { hour: 'numeric', minute: '2-digit' })
+}
+
 export function when(iso?: string): string {
   if (!iso) return ''
   return new Date(iso).toLocaleString(formatLocale(), { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })

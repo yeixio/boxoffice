@@ -590,3 +590,17 @@ CREATE TABLE IF NOT EXISTS problem_fix_files (
 	quality    INTEGER NOT NULL DEFAULT 0
 );
 CREATE INDEX IF NOT EXISTS problem_fix_files_fix ON problem_fix_files (fix_id);
+
+-- Releases Box Office would have grabbed by itself but held back because
+-- they were posted only minutes ago (the minimum release age), so a broken
+-- or fake upload can be taken down first. Once old enough they're judged
+-- again, as RSS sync's releases are, and grabbed if still wanted. Not kept
+-- in backups: they're minutes old.
+CREATE TABLE IF NOT EXISTS held_releases (
+	key     TEXT NOT NULL PRIMARY KEY, -- the release's key (indexer and GUID)
+	title   TEXT NOT NULL,             -- the release name, for Settings
+	data    TEXT NOT NULL,             -- the release, as JSON
+	due_at  BIGINT NOT NULL,           -- when it's old enough
+	held_at BIGINT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS held_releases_due ON held_releases (due_at);
