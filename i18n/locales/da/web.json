@@ -1172,9 +1172,10 @@
       "quarantine": "Slet fra karantæne efter",
       "quarantineHint": "Antal dage en udgivelse, der ikke så sikker ud, bliver i karantæne. 0 beholder den, indtil du sletter den på siden Downloads.",
       "speed": "Hastighedsgrænse",
-      "speedHint": "I kB/s. Lad den stå på 0 for ingen grænse.",
+      "speedHint": "Lad den stå på 0 for ingen grænse. Internet sælges i Mbit/s: del med 8, så 100 Mbit/s giver omkring 12 MB/s.",
       "folder": "Downloads havner i <path>{{path}}</path>. Sæt BOXOFFICE_DOWNLOADS_DIR på serveren for at bruge en anden mappe.",
-      "folderFree": "Downloads havner i <path>{{path}}</path> ({{free}} ledig). Sæt BOXOFFICE_DOWNLOADS_DIR på serveren for at bruge en anden mappe."
+      "folderFree": "Downloads havner i <path>{{path}}</path> ({{free}} ledig). Sæt BOXOFFICE_DOWNLOADS_DIR på serveren for at bruge en anden mappe.",
+      "speedSchedule": "Skift den efter tid på døgnet."
     },
     "days": "dage",
     "cap": {
@@ -2318,5 +2319,59 @@
     "download": "Download",
     "haveOne": "Har du allerede en NZB til den?",
     "upload": "Upload en NZB"
+  },
+  "speed": {
+    "title": "Hastighedsplan",
+    "sub": "Sænk farten på downloads, mens folk derhjemme streamer eller er i opkald, og lad dem køre med fuld fart om natten. Uden for disse tider gælder hastighedsgrænsen ovenfor.",
+    "enable": "Skift hastighed efter tid på døgnet",
+    "clock": "Tiderne følger serverens ur ({{zone}}), hvor den er {{time}} nu.",
+    "days": "Dage",
+    "from": "Fra",
+    "to": "Til",
+    "mode": "Hastighed",
+    "full": "Fuld hastighed",
+    "limit": "Begræns til",
+    "limited": "Begrænset",
+    "pause": "Download ikke",
+    "mbs": "MB/s",
+    "add": "Tilføj en tid",
+    "example": "Start med et eksempel",
+    "exampleHint": "Eksemplet begrænser hverdagsaftener og weekenddage til 5 MB/s og downloader med fuld fart hver nat fra 23:00 til 07:00. Du kan ændre det hele, før du gemmer.",
+    "remove": "Fjern",
+    "rangeN": "Tid {{n}}",
+    "noDays": "Vælg mindst én dag.",
+    "allDay": "Samme tid i Fra og Til betyder hele dagen.",
+    "overnight": "Går over midnat, til {{time}} næste dag.",
+    "week": "Din uge, mandag til søndag",
+    "otherLimit": "Andre tider: {{speed}}",
+    "otherFull": "Andre tider: fuld hastighed",
+    "outsideLimit": "På andre tider gælder hastighedsgrænsen ovenfor ({{speed}}).",
+    "outsideFull": "På andre tider kører downloads med fuld fart, da grænsen ovenfor er 0.",
+    "button": "Hastighed",
+    "now": {
+      "full": "Fuld hastighed",
+      "fullUntil": "Fuld hastighed til {{time}}",
+      "limit": "Begrænset til {{speed}}",
+      "limitUntil": "Begrænset til {{speed}} til {{time}}",
+      "pause": "Sat på pause",
+      "pauseUntil": "Sat på pause til {{time}}",
+      "bySchedule": "{{state}} (plan)",
+      "byHand": "{{state}} (ændret i hånden)"
+    },
+    "override": {
+      "title": "Skift hastighed lige nu",
+      "now": "Nu:",
+      "sub": "Det går forud for planen og hastighedsgrænsen, til det slutter. Bagefter er alt som før.",
+      "for": "Hvor længe",
+      "untilNext": "Til planen skifter kl. {{time}}",
+      "untilNextPlain": "Til planen skifter næste gang",
+      "h1": "1 time",
+      "h3": "3 timer",
+      "h8": "8 timer",
+      "ever": "Til jeg skifter tilbage",
+      "apply": "Skift hastighed",
+      "backSchedule": "Tilbage til planen",
+      "back": "Tilbage til normalt"
+    }
   }
 }

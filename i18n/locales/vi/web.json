@@ -1095,9 +1095,10 @@
       "quarantine": "Xóa khỏi cách ly sau",
       "quarantineHint": "Số ngày một bản phát hành trông không an toàn ở lại trong cách ly. 0 giữ nó cho đến khi bạn xóa ở trang Tải xuống.",
       "speed": "Giới hạn tốc độ",
-      "speedHint": "Tính bằng KB/s. Để 0 nếu không giới hạn.",
+      "speedHint": "Để 0 nếu không giới hạn. Gói internet được bán theo Mbit/s: chia cho 8, nên gói 100 Mbit/s đạt khoảng 12 MB/s.",
       "folder": "Bản tải được đặt trong <path>{{path}}</path>. Đặt BOXOFFICE_DOWNLOADS_DIR trên máy chủ để dùng thư mục khác.",
-      "folderFree": "Bản tải được đặt trong <path>{{path}}</path> (còn trống {{free}}). Đặt BOXOFFICE_DOWNLOADS_DIR trên máy chủ để dùng thư mục khác."
+      "folderFree": "Bản tải được đặt trong <path>{{path}}</path> (còn trống {{free}}). Đặt BOXOFFICE_DOWNLOADS_DIR trên máy chủ để dùng thư mục khác.",
+      "speedSchedule": "Đổi theo giờ trong ngày."
     },
     "days": "ngày",
     "cap": {
@@ -2207,5 +2208,59 @@
     "download": "Tải về",
     "haveOne": "Đã có NZB cho nó?",
     "upload": "Tải lên NZB"
+  },
+  "speed": {
+    "title": "Lịch tốc độ",
+    "sub": "Giảm tốc độ tải khi mọi người ở nhà đang xem trực tuyến hoặc gọi điện, và để tải hết tốc độ vào ban đêm. Ngoài các khung giờ này, giới hạn tốc độ ở trên được áp dụng.",
+    "enable": "Đổi tốc độ theo giờ trong ngày",
+    "clock": "Giờ theo đồng hồ của máy chủ ({{zone}}), hiện là {{time}}.",
+    "days": "Ngày",
+    "from": "Từ",
+    "to": "Đến",
+    "mode": "Tốc độ",
+    "full": "Hết tốc độ",
+    "limit": "Giới hạn ở",
+    "limited": "Bị giới hạn",
+    "pause": "Không tải",
+    "mbs": "MB/s",
+    "add": "Thêm khung giờ",
+    "example": "Bắt đầu từ ví dụ",
+    "exampleHint": "Ví dụ giới hạn buổi tối ngày thường và ban ngày cuối tuần ở 5 MB/s, và tải hết tốc độ mỗi đêm từ 23:00 đến 07:00. Bạn có thể thay đổi mọi thứ trước khi lưu.",
+    "remove": "Xóa",
+    "rangeN": "Khung giờ {{n}}",
+    "noDays": "Chọn ít nhất một ngày.",
+    "allDay": "Cùng giờ ở Từ và Đến nghĩa là cả ngày.",
+    "overnight": "Qua nửa đêm, đến {{time}} ngày hôm sau.",
+    "week": "Tuần của bạn, thứ Hai đến Chủ nhật",
+    "otherLimit": "Giờ khác: {{speed}}",
+    "otherFull": "Giờ khác: hết tốc độ",
+    "outsideLimit": "Vào các giờ khác, lượt tải theo giới hạn tốc độ ở trên ({{speed}}).",
+    "outsideFull": "Vào các giờ khác, lượt tải chạy hết tốc độ, vì giới hạn ở trên là 0.",
+    "button": "Tốc độ",
+    "now": {
+      "full": "Hết tốc độ",
+      "fullUntil": "Hết tốc độ đến {{time}}",
+      "limit": "Giới hạn ở {{speed}}",
+      "limitUntil": "Giới hạn ở {{speed}} đến {{time}}",
+      "pause": "Đã tạm dừng",
+      "pauseUntil": "Tạm dừng đến {{time}}",
+      "bySchedule": "{{state}} (lịch)",
+      "byHand": "{{state}} (đổi thủ công)"
+    },
+    "override": {
+      "title": "Đổi tốc độ tạm thời",
+      "now": "Hiện tại:",
+      "sub": "Điều này được ưu tiên hơn lịch và giới hạn tốc độ cho đến khi hết. Sau đó mọi thứ trở lại như cũ.",
+      "for": "Trong bao lâu",
+      "untilNext": "Đến khi lịch đổi lúc {{time}}",
+      "untilNextPlain": "Đến lần đổi tiếp theo của lịch",
+      "h1": "1 giờ",
+      "h3": "3 giờ",
+      "h8": "8 giờ",
+      "ever": "Đến khi tôi đổi lại",
+      "apply": "Đổi tốc độ",
+      "backSchedule": "Quay lại lịch",
+      "back": "Quay lại bình thường"
+    }
   }
 }

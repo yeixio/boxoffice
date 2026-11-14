@@ -1172,9 +1172,10 @@
       "quarantine": "Karantinadan şu süreden sonra sil",
       "quarantineHint": "Güvenli görünmeyen bir sürümün karantinada kaldığı gün sayısı. 0, siz İndirilenler sayfasında silene kadar tutar.",
       "speed": "Hız sınırı",
-      "speedHint": "KB/sn cinsinden. Sınır olmaması için 0 bırakın.",
+      "speedHint": "Sınır olmaması için 0 bırakın. İnternet paketleri Mbit/s ile satılır: 8'e bölün, yani 100 Mbit/s yaklaşık 12 MB/s eder.",
       "folder": "İndirmeler <path>{{path}}</path> içine gider. Başka bir klasör kullanmak için sunucuda BOXOFFICE_DOWNLOADS_DIR ayarlayın.",
-      "folderFree": "İndirmeler <path>{{path}}</path> içine gider ({{free}} boş). Başka bir klasör kullanmak için sunucuda BOXOFFICE_DOWNLOADS_DIR ayarlayın."
+      "folderFree": "İndirmeler <path>{{path}}</path> içine gider ({{free}} boş). Başka bir klasör kullanmak için sunucuda BOXOFFICE_DOWNLOADS_DIR ayarlayın.",
+      "speedSchedule": "Günün saatine göre değiştirin."
     },
     "days": "gün",
     "cap": {
@@ -2318,5 +2319,59 @@
     "download": "İndir",
     "haveOne": "Bunun için zaten bir NZB'n var mı?",
     "upload": "NZB yükle"
+  },
+  "speed": {
+    "title": "Hız takvimi",
+    "sub": "Evdekiler yayın izlerken ya da görüşmedeyken indirmeleri yavaşlatın, gece ise tam hızda gitsinler. Bu saatlerin dışında yukarıdaki hız sınırı geçerlidir.",
+    "enable": "Hızı günün saatine göre değiştir",
+    "clock": "Saatler sunucunun saatine göredir ({{zone}}); orada şu an saat {{time}}.",
+    "days": "Günler",
+    "from": "Başlangıç",
+    "to": "Bitiş",
+    "mode": "Hız",
+    "full": "Tam hız",
+    "limit": "Şununla sınırla",
+    "limited": "Sınırlı",
+    "pause": "İndirme",
+    "mbs": "MB/s",
+    "add": "Saat ekle",
+    "example": "Bir örnekle başla",
+    "exampleHint": "Örnek, hafta içi akşamları ve hafta sonu gündüzleri 5 MB/s ile sınırlar ve her gece 23:00 ile 07:00 arasında tam hızda indirir. Kaydetmeden önce her şeyi değiştirebilirsiniz.",
+    "remove": "Kaldır",
+    "rangeN": "Saat {{n}}",
+    "noDays": "En az bir gün seçin.",
+    "allDay": "Başlangıç ve Bitiş aynıysa bütün gün demektir.",
+    "overnight": "Gece yarısını geçer, ertesi gün {{time}} saatine kadar.",
+    "week": "Haftanız, pazartesiden pazara",
+    "otherLimit": "Diğer saatler: {{speed}}",
+    "otherFull": "Diğer saatler: tam hız",
+    "outsideLimit": "Diğer saatlerde yukarıdaki hız sınırı geçerlidir ({{speed}}).",
+    "outsideFull": "Diğer saatlerde indirmeler tam hızda gider, çünkü yukarıdaki sınır 0.",
+    "button": "Hız",
+    "now": {
+      "full": "Tam hız",
+      "fullUntil": "{{time}} saatine kadar tam hız",
+      "limit": "{{speed}} ile sınırlı",
+      "limitUntil": "{{time}} saatine kadar {{speed}} ile sınırlı",
+      "pause": "Duraklatıldı",
+      "pauseUntil": "{{time}} saatine kadar duraklatıldı",
+      "bySchedule": "{{state}} (takvim)",
+      "byHand": "{{state}} (elle değiştirildi)"
+    },
+    "override": {
+      "title": "Hızı şimdilik değiştir",
+      "now": "Şimdi:",
+      "sub": "Bu, bitene kadar takvimin ve hız sınırının önüne geçer. Sonra her şey eskisi gibi olur.",
+      "for": "Ne kadar süre",
+      "untilNext": "Takvim {{time}} saatinde değişene kadar",
+      "untilNextPlain": "Takvim bir sonraki değişene kadar",
+      "h1": "1 saat",
+      "h3": "3 saat",
+      "h8": "8 saat",
+      "ever": "Ben geri alana kadar",
+      "apply": "Hızı değiştir",
+      "backSchedule": "Takvime dön",
+      "back": "Normale dön"
+    }
   }
 }

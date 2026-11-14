@@ -1095,9 +1095,10 @@
       "quarantine": "격리에서 삭제까지",
       "quarantineHint": "안전해 보이지 않는 릴리스가 격리되어 있는 일수예요. 0이면 다운로드 페이지에서 삭제할 때까지 남아요.",
       "speed": "속도 제한",
-      "speedHint": "KB/s 단위. 제한 없이 하려면 0으로 두세요.",
+      "speedHint": "제한이 없으면 0으로 두세요. 인터넷 요금제는 Mbit/s로 표시되니 8로 나누세요. 100 Mbit/s 요금제는 약 12 MB/s입니다.",
       "folder": "다운로드는 <path>{{path}}</path>에 저장돼요. 다른 폴더를 쓰려면 서버에서 BOXOFFICE_DOWNLOADS_DIR를 설정하세요.",
-      "folderFree": "다운로드는 <path>{{path}}</path>에 저장돼요({{free}} 남음). 다른 폴더를 쓰려면 서버에서 BOXOFFICE_DOWNLOADS_DIR를 설정하세요."
+      "folderFree": "다운로드는 <path>{{path}}</path>에 저장돼요({{free}} 남음). 다른 폴더를 쓰려면 서버에서 BOXOFFICE_DOWNLOADS_DIR를 설정하세요.",
+      "speedSchedule": "시간대에 따라 바꾸기."
     },
     "days": "일",
     "cap": {
@@ -2207,5 +2208,59 @@
     "download": "다운로드",
     "haveOne": "이미 NZB가 있나요?",
     "upload": "NZB 업로드"
+  },
+  "speed": {
+    "title": "속도 일정",
+    "sub": "집에서 스트리밍하거나 통화하는 동안에는 다운로드를 늦추고, 밤에는 최대 속도로 받게 하세요. 이 시간 밖에서는 위의 속도 제한이 적용됩니다.",
+    "enable": "시간대에 따라 속도 바꾸기",
+    "clock": "시간은 서버 시계({{zone}}) 기준이며, 지금은 {{time}}입니다.",
+    "days": "요일",
+    "from": "시작",
+    "to": "끝",
+    "mode": "속도",
+    "full": "최대 속도",
+    "limit": "제한",
+    "limited": "제한됨",
+    "pause": "다운로드 안 함",
+    "mbs": "MB/s",
+    "add": "시간 추가",
+    "example": "예시로 시작",
+    "exampleHint": "예시는 평일 저녁과 주말 낮을 5 MB/s로 제한하고, 매일 밤 23:00부터 07:00까지 최대 속도로 다운로드합니다. 저장하기 전에 무엇이든 바꿀 수 있습니다.",
+    "remove": "삭제",
+    "rangeN": "시간 {{n}}",
+    "noDays": "요일을 하나 이상 고르세요.",
+    "allDay": "시작과 끝이 같으면 하루 종일입니다.",
+    "overnight": "자정을 넘겨 다음 날 {{time}}까지 이어집니다.",
+    "week": "한 주, 월요일부터 일요일까지",
+    "otherLimit": "다른 시간: {{speed}}",
+    "otherFull": "다른 시간: 최대 속도",
+    "outsideLimit": "다른 시간에는 위의 속도 제한({{speed}})이 적용됩니다.",
+    "outsideFull": "위의 제한이 0이라 다른 시간에는 최대 속도로 다운로드합니다.",
+    "button": "속도",
+    "now": {
+      "full": "최대 속도",
+      "fullUntil": "{{time}}까지 최대 속도",
+      "limit": "{{speed}}로 제한됨",
+      "limitUntil": "{{time}}까지 {{speed}}로 제한됨",
+      "pause": "일시 정지됨",
+      "pauseUntil": "{{time}}까지 일시 정지",
+      "bySchedule": "{{state}} (일정)",
+      "byHand": "{{state}} (직접 변경)"
+    },
+    "override": {
+      "title": "지금만 속도 바꾸기",
+      "now": "지금:",
+      "sub": "끝날 때까지 일정과 속도 제한보다 우선합니다. 그 뒤에는 원래대로 돌아갑니다.",
+      "for": "기간",
+      "untilNext": "일정이 {{time}}에 바뀔 때까지",
+      "untilNextPlain": "일정이 다음에 바뀔 때까지",
+      "h1": "1시간",
+      "h3": "3시간",
+      "h8": "8시간",
+      "ever": "직접 되돌릴 때까지",
+      "apply": "속도 바꾸기",
+      "backSchedule": "일정으로 돌아가기",
+      "back": "원래대로"
+    }
   }
 }

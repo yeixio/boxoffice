@@ -182,6 +182,12 @@ func (m *Migrator) previewNZBGet(ctx context.Context, req Request) (Plan, *pendi
 	if rate := c["DownloadRate"]; rate != "" && rate != "0" {
 		plan.Warnings = append(plan.Warnings, fmt.Sprintf("NZBGet's speed limit (%s KB/s) comes across too.", rate))
 	}
+	for _, n := range c.numbered("Task") {
+		if cmd := c[fmt.Sprintf("Task%d.Command", n)]; strings.EqualFold(cmd, "DownloadRate") || strings.EqualFold(cmd, "PauseDownload") || strings.EqualFold(cmd, "UnpauseDownload") {
+			plan.Warnings = append(plan.Warnings, "NZBGet's scheduled speed changes don't come across. Set the same times in Settings, Downloads, under Speed schedule.")
+			break
+		}
+	}
 	return plan, p, nil
 }
 

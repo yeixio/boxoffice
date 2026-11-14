@@ -1172,9 +1172,10 @@
       "quarantine": "Törlés a karanténból ennyi után",
       "quarantineHint": "Hány napig marad karanténban egy nem biztonságosnak tűnő kiadás. A 0 megtartja, amíg nem törlöd a Letöltések oldalon.",
       "speed": "Sebességkorlát",
-      "speedHint": "KB/s-ban. Hagyd 0-n, ha nincs korlát.",
+      "speedHint": "Hagyd 0-n, ha nem kell korlát. Az internetet Mbit/s-ban árulják: oszd el 8-cal, így 100 Mbit/s nagyjából 12 MB/s.",
       "folder": "A letöltések ide kerülnek: <path>{{path}}</path>. Másik mappához állítsd be a BOXOFFICE_DOWNLOADS_DIR változót a szerveren.",
-      "folderFree": "A letöltések ide kerülnek: <path>{{path}}</path> ({{free}} szabad). Másik mappához állítsd be a BOXOFFICE_DOWNLOADS_DIR változót a szerveren."
+      "folderFree": "A letöltések ide kerülnek: <path>{{path}}</path> ({{free}} szabad). Másik mappához állítsd be a BOXOFFICE_DOWNLOADS_DIR változót a szerveren.",
+      "speedSchedule": "Módosítsd napszak szerint."
     },
     "days": "nap",
     "cap": {
@@ -2318,5 +2319,59 @@
     "download": "Letöltés",
     "haveOne": "Van már hozzá NZB-d?",
     "upload": "NZB feltöltése"
+  },
+  "speed": {
+    "title": "Sebességütemezés",
+    "sub": "Lassítsd a letöltéseket, amíg otthon streamelnek vagy telefonálnak, és éjjel hadd menjenek teljes sebességgel. Ezeken az időkön kívül a fenti sebességkorlát érvényes.",
+    "enable": "Sebesség módosítása napszak szerint",
+    "clock": "Az idők a szerver órája szerint értendők ({{zone}}), ahol most {{time}} van.",
+    "days": "Napok",
+    "from": "Ettől",
+    "to": "Eddig",
+    "mode": "Sebesség",
+    "full": "Teljes sebesség",
+    "limit": "Korlát",
+    "limited": "Korlátozva",
+    "pause": "Ne töltsön le",
+    "mbs": "MB/s",
+    "add": "Idő hozzáadása",
+    "example": "Kezdés egy példából",
+    "exampleHint": "A példa hétköznap esténként és hétvégén napközben 5 MB/s-ra korlátoz, és minden éjjel 23:00 és 07:00 között teljes sebességgel tölt le. Mentés előtt bármit módosíthatsz.",
+    "remove": "Eltávolítás",
+    "rangeN": "{{n}}. idő",
+    "noDays": "Válassz legalább egy napot.",
+    "allDay": "Ha az Ettől és az Eddig ugyanaz, az egész napot jelenti.",
+    "overnight": "Átnyúlik éjfélen, másnap {{time}}-ig.",
+    "week": "A heted, hétfőtől vasárnapig",
+    "otherLimit": "Más időkben: {{speed}}",
+    "otherFull": "Más időkben: teljes sebesség",
+    "outsideLimit": "Más időkben a fenti sebességkorlát érvényes ({{speed}}).",
+    "outsideFull": "Más időkben teljes sebességgel megy a letöltés, mert a fenti korlát 0.",
+    "button": "Sebesség",
+    "now": {
+      "full": "Teljes sebesség",
+      "fullUntil": "Teljes sebesség eddig: {{time}}",
+      "limit": "Korlátozva: {{speed}}",
+      "limitUntil": "Korlátozva: {{speed}}, eddig: {{time}}",
+      "pause": "Szüneteltetve",
+      "pauseUntil": "Szüneteltetve eddig: {{time}}",
+      "bySchedule": "{{state}} (ütemezés)",
+      "byHand": "{{state}} (kézzel módosítva)"
+    },
+    "override": {
+      "title": "Sebesség módosítása most",
+      "now": "Most:",
+      "sub": "Ez felülírja az ütemezést és a sebességkorlátot, amíg le nem jár. Utána minden visszaáll a régire.",
+      "for": "Meddig",
+      "untilNext": "Amíg az ütemezés {{time}}-kor vált",
+      "untilNextPlain": "Az ütemezés következő váltásáig",
+      "h1": "1 óra",
+      "h3": "3 óra",
+      "h8": "8 óra",
+      "ever": "Amíg vissza nem állítom",
+      "apply": "Sebesség módosítása",
+      "backSchedule": "Vissza az ütemezéshez",
+      "back": "Vissza a normálhoz"
+    }
   }
 }

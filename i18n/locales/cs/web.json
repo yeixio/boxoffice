@@ -1326,9 +1326,10 @@
       "quarantine": "Mazat z karantény po",
       "quarantineHint": "Počet dní, po které vydání, jež nevypadalo bezpečně, zůstává v karanténě. 0 ho ponechá, dokud ho nesmažete na stránce Stažené.",
       "speed": "Omezení rychlosti",
-      "speedHint": "V kB/s. Nechte 0 pro žádné omezení.",
+      "speedHint": "Nechte 0 pro žádný limit. Internet se prodává v Mbit/s: vydělte 8, takže 100 Mbit/s dá asi 12 MB/s.",
       "folder": "Stažené soubory jdou do <path>{{path}}</path>. Chcete-li použít jinou složku, nastavte na serveru BOXOFFICE_DOWNLOADS_DIR.",
-      "folderFree": "Stažené soubory jdou do <path>{{path}}</path> ({{free}} volné). Chcete-li použít jinou složku, nastavte na serveru BOXOFFICE_DOWNLOADS_DIR."
+      "folderFree": "Stažené soubory jdou do <path>{{path}}</path> ({{free}} volné). Chcete-li použít jinou složku, nastavte na serveru BOXOFFICE_DOWNLOADS_DIR.",
+      "speedSchedule": "Měnit ji podle denní doby."
     },
     "days": "dní",
     "cap": {
@@ -2540,5 +2541,59 @@
     "download": "Stáhnout",
     "haveOne": "Už pro to máte NZB?",
     "upload": "Nahrát NZB"
+  },
+  "speed": {
+    "title": "Rozvrh rychlosti",
+    "sub": "Zpomalte stahování, když se doma streamuje nebo telefonuje, a v noci ho nechte jet naplno. Mimo tyto časy platí limit rychlosti výše.",
+    "enable": "Měnit rychlost podle denní doby",
+    "clock": "Časy jsou podle hodin serveru ({{zone}}), kde je teď {{time}}.",
+    "days": "Dny",
+    "from": "Od",
+    "to": "Do",
+    "mode": "Rychlost",
+    "full": "Plná rychlost",
+    "limit": "Omezit na",
+    "limited": "Omezeno",
+    "pause": "Nestahovat",
+    "mbs": "MB/s",
+    "add": "Přidat čas",
+    "example": "Začít z příkladu",
+    "exampleHint": "Příklad omezí večery všedních dnů a víkendové dny na 5 MB/s a každou noc od 23:00 do 07:00 stahuje plnou rychlostí. Před uložením můžete cokoli změnit.",
+    "remove": "Odebrat",
+    "rangeN": "Čas {{n}}",
+    "noDays": "Vyberte aspoň jeden den.",
+    "allDay": "Stejný čas v Od a Do znamená celý den.",
+    "overnight": "Pokračuje přes půlnoc, do {{time}} dalšího dne.",
+    "week": "Váš týden, od pondělí do neděle",
+    "otherLimit": "Ostatní časy: {{speed}}",
+    "otherFull": "Ostatní časy: plná rychlost",
+    "outsideLimit": "V ostatních časech platí limit rychlosti výše ({{speed}}).",
+    "outsideFull": "V ostatních časech jede stahování naplno, protože limit výše je 0.",
+    "button": "Rychlost",
+    "now": {
+      "full": "Plná rychlost",
+      "fullUntil": "Plná rychlost do {{time}}",
+      "limit": "Omezeno na {{speed}}",
+      "limitUntil": "Omezeno na {{speed}} do {{time}}",
+      "pause": "Pozastaveno",
+      "pauseUntil": "Pozastaveno do {{time}}",
+      "bySchedule": "{{state}} (rozvrh)",
+      "byHand": "{{state}} (změněno ručně)"
+    },
+    "override": {
+      "title": "Změnit rychlost pro teď",
+      "now": "Teď:",
+      "sub": "Má přednost před rozvrhem i limitem rychlosti, dokud neskončí. Pak bude vše jako předtím.",
+      "for": "Na jak dlouho",
+      "untilNext": "Dokud se rozvrh nezmění v {{time}}",
+      "untilNextPlain": "Do příští změny rozvrhu",
+      "h1": "1 hodina",
+      "h3": "3 hodiny",
+      "h8": "8 hodin",
+      "ever": "Dokud to nevrátím",
+      "apply": "Změnit rychlost",
+      "backSchedule": "Zpět na rozvrh",
+      "back": "Zpět na normál"
+    }
   }
 }

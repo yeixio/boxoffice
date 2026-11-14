@@ -9,6 +9,7 @@ import { del, get, post, put, type Status, type MediaType, type MediaTypeKey, ty
 import { bytes, day } from '../format'
 import { monitorOptions, useProfiles, useQualities, useRootFolders, useShowDefaults } from '../hooks'
 import { AutoSearchSettings, Connections, DataCapSettingsCard, DownloadSettings, NumberField } from './Connections'
+import { SpeedScheduleCard } from './SpeedSchedule'
 import { ScanButton, scannable } from './LibraryScan'
 import { GameCheckButton } from './Games'
 import { EreaderSettingsCard } from './Ereaders'
@@ -59,6 +60,7 @@ const sections: SectionDef[] = [
     id: 'downloads',
     cards: [
       { id: 'downloads', el: <DownloadSettings />, inner: true, terms: ['Usenet', 'NZB'] },
+      { id: 'speed-schedule', el: <SpeedScheduleCard />, inner: true, keys: ['speed.from', 'speed.to', 'speed.full', 'speed.limit', 'speed.pause', 'speed.add', 'speed.example'], terms: ['bandwidth', 'throttle', 'speed limit', 'MB/s'] },
       {
         id: 'news-servers',
         el: <Connections section="news-servers" />,

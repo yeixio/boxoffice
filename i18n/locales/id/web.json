@@ -1095,9 +1095,10 @@
       "quarantine": "Hapus dari karantina setelah",
       "quarantineHint": "Berapa hari rilis yang tampak tidak aman tetap di karantina. 0 menyimpannya sampai Anda menghapusnya di halaman Unduhan.",
       "speed": "Batas kecepatan",
-      "speedHint": "Dalam KB/d. Biarkan 0 untuk tanpa batas.",
+      "speedHint": "Biarkan 0 untuk tanpa batas. Paket internet dijual dalam Mbit/s: bagi 8, jadi paket 100 Mbit/s mentok sekitar 12 MB/s.",
       "folder": "Unduhan disimpan di <path>{{path}}</path>. Atur BOXOFFICE_DOWNLOADS_DIR di server untuk memakai folder lain.",
-      "folderFree": "Unduhan disimpan di <path>{{path}}</path> ({{free}} kosong). Atur BOXOFFICE_DOWNLOADS_DIR di server untuk memakai folder lain."
+      "folderFree": "Unduhan disimpan di <path>{{path}}</path> ({{free}} kosong). Atur BOXOFFICE_DOWNLOADS_DIR di server untuk memakai folder lain.",
+      "speedSchedule": "Ubah menurut waktu."
     },
     "days": "hari",
     "cap": {
@@ -2207,5 +2208,59 @@
     "download": "Unduh",
     "haveOne": "Sudah punya NZB untuk ini?",
     "upload": "Unggah NZB"
+  },
+  "speed": {
+    "title": "Jadwal kecepatan",
+    "sub": "Pelankan unduhan saat orang di rumah sedang streaming atau menelepon, dan biarkan berjalan dengan kecepatan penuh pada malam hari. Di luar waktu ini, batas kecepatan di atas yang berlaku.",
+    "enable": "Ubah kecepatan menurut waktu",
+    "clock": "Waktu mengikuti jam server ({{zone}}), yang sekarang pukul {{time}}.",
+    "days": "Hari",
+    "from": "Dari",
+    "to": "Sampai",
+    "mode": "Kecepatan",
+    "full": "Kecepatan penuh",
+    "limit": "Batasi ke",
+    "limited": "Dibatasi",
+    "pause": "Jangan unduh",
+    "mbs": "MB/s",
+    "add": "Tambah waktu",
+    "example": "Mulai dari contoh",
+    "exampleHint": "Contoh ini membatasi malam hari kerja dan siang akhir pekan ke 5 MB/s, dan mengunduh dengan kecepatan penuh setiap malam pukul 23:00 sampai 07:00. Anda bisa mengubah semuanya sebelum menyimpan.",
+    "remove": "Hapus",
+    "rangeN": "Waktu {{n}}",
+    "noDays": "Pilih setidaknya satu hari.",
+    "allDay": "Waktu yang sama di Dari dan Sampai berarti sepanjang hari.",
+    "overnight": "Melewati tengah malam, sampai pukul {{time}} keesokan harinya.",
+    "week": "Minggu Anda, Senin sampai Minggu",
+    "otherLimit": "Waktu lain: {{speed}}",
+    "otherFull": "Waktu lain: kecepatan penuh",
+    "outsideLimit": "Di waktu lain, unduhan mengikuti batas kecepatan di atas ({{speed}}).",
+    "outsideFull": "Di waktu lain, unduhan berjalan dengan kecepatan penuh, karena batas di atas 0.",
+    "button": "Kecepatan",
+    "now": {
+      "full": "Kecepatan penuh",
+      "fullUntil": "Kecepatan penuh sampai {{time}}",
+      "limit": "Dibatasi ke {{speed}}",
+      "limitUntil": "Dibatasi ke {{speed}} sampai {{time}}",
+      "pause": "Dijeda",
+      "pauseUntil": "Dijeda sampai {{time}}",
+      "bySchedule": "{{state}} (jadwal)",
+      "byHand": "{{state}} (diubah manual)"
+    },
+    "override": {
+      "title": "Ubah kecepatan untuk sekarang",
+      "now": "Sekarang:",
+      "sub": "Ini mengalahkan jadwal dan batas kecepatan sampai selesai. Setelah itu semua kembali seperti semula.",
+      "for": "Berapa lama",
+      "untilNext": "Sampai jadwal berubah pukul {{time}}",
+      "untilNextPlain": "Sampai jadwal berubah berikutnya",
+      "h1": "1 jam",
+      "h3": "3 jam",
+      "h8": "8 jam",
+      "ever": "Sampai saya kembalikan",
+      "apply": "Ubah kecepatan",
+      "backSchedule": "Kembali ke jadwal",
+      "back": "Kembali normal"
+    }
   }
 }

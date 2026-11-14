@@ -1172,9 +1172,10 @@
       "quarantine": "Poista karanteenista kun on kulunut",
       "quarantineHint": "Päivät, jotka turvattomalta näyttänyt julkaisu pysyy karanteenissa. 0 pitää sen, kunnes poistat sen Lataukset-sivulla.",
       "speed": "Nopeusrajoitus",
-      "speedHint": "kt/s. Jätä 0, jos et halua rajoitusta.",
+      "speedHint": "Jätä 0, jos et halua rajaa. Liittymät myydään Mbit/s-nopeuksina: jaa 8:lla, joten 100 Mbit/s on noin 12 MB/s.",
       "folder": "Lataukset menevät kansioon <path>{{path}}</path>. Aseta palvelimella BOXOFFICE_DOWNLOADS_DIR käyttääksesi toista kansiota.",
-      "folderFree": "Lataukset menevät kansioon <path>{{path}}</path> ({{free}} vapaana). Aseta palvelimella BOXOFFICE_DOWNLOADS_DIR käyttääksesi toista kansiota."
+      "folderFree": "Lataukset menevät kansioon <path>{{path}}</path> ({{free}} vapaana). Aseta palvelimella BOXOFFICE_DOWNLOADS_DIR käyttääksesi toista kansiota.",
+      "speedSchedule": "Muuta sitä kellonajan mukaan."
     },
     "days": "päivää",
     "cap": {
@@ -2318,5 +2319,59 @@
     "download": "Lataa",
     "haveOne": "Onko sinulla jo NZB sitä varten?",
     "upload": "Lähetä NZB"
+  },
+  "speed": {
+    "title": "Nopeusaikataulu",
+    "sub": "Hidasta latauksia, kun kotona katsotaan suoratoistoa tai puhutaan puheluita, ja anna niiden kulkea täydellä nopeudella yöllä. Näiden aikojen ulkopuolella pätee yllä oleva nopeusraja.",
+    "enable": "Muuta nopeutta kellonajan mukaan",
+    "clock": "Ajat ovat palvelimen kellon mukaan ({{zone}}), jossa kello on nyt {{time}}.",
+    "days": "Päivät",
+    "from": "Alkaen",
+    "to": "Asti",
+    "mode": "Nopeus",
+    "full": "Täysi nopeus",
+    "limit": "Rajoita",
+    "limited": "Rajoitettu",
+    "pause": "Älä lataa",
+    "mbs": "MB/s",
+    "add": "Lisää aika",
+    "example": "Aloita esimerkistä",
+    "exampleHint": "Esimerkki rajoittaa arki-illat ja viikonloppupäivät 5 MB/s:iin ja lataa täydellä nopeudella joka yö klo 23:00–07:00. Voit muuttaa mitä tahansa ennen tallennusta.",
+    "remove": "Poista",
+    "rangeN": "Aika {{n}}",
+    "noDays": "Valitse vähintään yksi päivä.",
+    "allDay": "Sama aika kohdissa Alkaen ja Asti tarkoittaa koko päivää.",
+    "overnight": "Jatkuu yli keskiyön, seuraavan päivän klo {{time}} asti.",
+    "week": "Viikkosi, maanantaista sunnuntaihin",
+    "otherLimit": "Muut ajat: {{speed}}",
+    "otherFull": "Muut ajat: täysi nopeus",
+    "outsideLimit": "Muina aikoina pätee yllä oleva nopeusraja ({{speed}}).",
+    "outsideFull": "Muina aikoina lataukset kulkevat täydellä nopeudella, koska yllä oleva raja on 0.",
+    "button": "Nopeus",
+    "now": {
+      "full": "Täysi nopeus",
+      "fullUntil": "Täysi nopeus klo {{time}} asti",
+      "limit": "Rajoitettu: {{speed}}",
+      "limitUntil": "Rajoitettu: {{speed}} klo {{time}} asti",
+      "pause": "Tauolla",
+      "pauseUntil": "Tauolla klo {{time}} asti",
+      "bySchedule": "{{state}} (aikataulu)",
+      "byHand": "{{state}} (muutettu käsin)"
+    },
+    "override": {
+      "title": "Muuta nopeutta nyt",
+      "now": "Nyt:",
+      "sub": "Tämä menee aikataulun ja nopeusrajan edelle, kunnes se päättyy. Sen jälkeen kaikki palaa ennalleen.",
+      "for": "Kuinka pitkäksi aikaa",
+      "untilNext": "Kunnes aikataulu vaihtuu klo {{time}}",
+      "untilNextPlain": "Kunnes aikataulu seuraavan kerran vaihtuu",
+      "h1": "1 tunti",
+      "h3": "3 tuntia",
+      "h8": "8 tuntia",
+      "ever": "Kunnes muutan takaisin",
+      "apply": "Muuta nopeutta",
+      "backSchedule": "Takaisin aikatauluun",
+      "back": "Takaisin normaaliin"
+    }
   }
 }

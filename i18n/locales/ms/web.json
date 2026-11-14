@@ -1095,9 +1095,10 @@
       "quarantine": "Padam dari kuarantin selepas",
       "quarantineHint": "Bilangan hari keluaran yang kelihatan tidak selamat kekal dalam kuarantin. 0 menyimpannya sehingga anda memadamnya pada halaman Muat turun.",
       "speed": "Had kelajuan",
-      "speedHint": "Dalam KB/s. Biarkan 0 untuk tiada had.",
+      "speedHint": "Biarkan 0 untuk tiada had. Pelan internet dijual dalam Mbit/s: bahagi dengan 8, jadi pelan 100 Mbit/s mencapai kira-kira 12 MB/s.",
       "folder": "Muat turun pergi ke <path>{{path}}</path>. Tetapkan BOXOFFICE_DOWNLOADS_DIR pada pelayan untuk menggunakan folder lain.",
-      "folderFree": "Muat turun pergi ke <path>{{path}}</path> ({{free}} kosong). Tetapkan BOXOFFICE_DOWNLOADS_DIR pada pelayan untuk menggunakan folder lain."
+      "folderFree": "Muat turun pergi ke <path>{{path}}</path> ({{free}} kosong). Tetapkan BOXOFFICE_DOWNLOADS_DIR pada pelayan untuk menggunakan folder lain.",
+      "speedSchedule": "Tukar mengikut waktu."
     },
     "days": "hari",
     "cap": {
@@ -2207,5 +2208,59 @@
     "download": "Muat turun",
     "haveOne": "Sudah ada NZB untuknya?",
     "upload": "Muat naik NZB"
+  },
+  "speed": {
+    "title": "Jadual kelajuan",
+    "sub": "Perlahankan muat turun semasa orang di rumah sedang menstrim atau membuat panggilan, dan biarkan ia berjalan pada kelajuan penuh pada waktu malam. Di luar waktu ini, had kelajuan di atas digunakan.",
+    "enable": "Tukar kelajuan mengikut waktu",
+    "clock": "Waktu mengikut jam pelayan ({{zone}}), yang kini pukul {{time}}.",
+    "days": "Hari",
+    "from": "Dari",
+    "to": "Hingga",
+    "mode": "Kelajuan",
+    "full": "Kelajuan penuh",
+    "limit": "Hadkan kepada",
+    "limited": "Dihadkan",
+    "pause": "Jangan muat turun",
+    "mbs": "MB/s",
+    "add": "Tambah waktu",
+    "example": "Mula daripada contoh",
+    "exampleHint": "Contoh ini mengehadkan malam hari bekerja dan siang hujung minggu kepada 5 MB/s, dan memuat turun pada kelajuan penuh setiap malam dari 23:00 hingga 07:00. Anda boleh menukar apa-apa sebelum menyimpan.",
+    "remove": "Buang",
+    "rangeN": "Waktu {{n}}",
+    "noDays": "Pilih sekurang-kurangnya satu hari.",
+    "allDay": "Waktu yang sama pada Dari dan Hingga bermaksud sepanjang hari.",
+    "overnight": "Melepasi tengah malam, hingga {{time}} keesokan harinya.",
+    "week": "Minggu anda, Isnin hingga Ahad",
+    "otherLimit": "Waktu lain: {{speed}}",
+    "otherFull": "Waktu lain: kelajuan penuh",
+    "outsideLimit": "Pada waktu lain, muat turun mengikut had kelajuan di atas ({{speed}}).",
+    "outsideFull": "Pada waktu lain, muat turun berjalan pada kelajuan penuh, kerana had di atas ialah 0.",
+    "button": "Kelajuan",
+    "now": {
+      "full": "Kelajuan penuh",
+      "fullUntil": "Kelajuan penuh hingga {{time}}",
+      "limit": "Dihadkan kepada {{speed}}",
+      "limitUntil": "Dihadkan kepada {{speed}} hingga {{time}}",
+      "pause": "Dijeda",
+      "pauseUntil": "Dijeda hingga {{time}}",
+      "bySchedule": "{{state}} (jadual)",
+      "byHand": "{{state}} (ditukar secara manual)"
+    },
+    "override": {
+      "title": "Tukar kelajuan buat masa ini",
+      "now": "Sekarang:",
+      "sub": "Ini mengatasi jadual dan had kelajuan sehingga tamat. Selepas itu semuanya kembali seperti asal.",
+      "for": "Berapa lama",
+      "untilNext": "Sehingga jadual bertukar pada {{time}}",
+      "untilNextPlain": "Sehingga jadual bertukar seterusnya",
+      "h1": "1 jam",
+      "h3": "3 jam",
+      "h8": "8 jam",
+      "ever": "Sehingga saya menukarnya semula",
+      "apply": "Tukar kelajuan",
+      "backSchedule": "Kembali ke jadual",
+      "back": "Kembali seperti biasa"
+    }
   }
 }

@@ -1095,9 +1095,10 @@
       "quarantine": "多久后从隔离区删除",
       "quarantineHint": "看起来不安全的发布在隔离区中保留的天数。0 表示保留到你在下载页面删除。",
       "speed": "速度限制",
-      "speedHint": "单位 KB/s。保持 0 表示不限速。",
+      "speedHint": "留 0 表示不限速。宽带以 Mbit/s 计：除以 8，所以 100 Mbit/s 的宽带最多约 12 MB/s。",
       "folder": "下载保存到 <path>{{path}}</path>。要使用其他文件夹，请在服务器上设置 BOXOFFICE_DOWNLOADS_DIR。",
-      "folderFree": "下载保存到 <path>{{path}}</path>（可用 {{free}}）。要使用其他文件夹，请在服务器上设置 BOXOFFICE_DOWNLOADS_DIR。"
+      "folderFree": "下载保存到 <path>{{path}}</path>（可用 {{free}}）。要使用其他文件夹，请在服务器上设置 BOXOFFICE_DOWNLOADS_DIR。",
+      "speedSchedule": "按时间段更改。"
     },
     "days": "天",
     "cap": {
@@ -2207,5 +2208,59 @@
     "download": "下载",
     "haveOne": "已经有它的 NZB 了？",
     "upload": "上传 NZB"
+  },
+  "speed": {
+    "title": "速度计划",
+    "sub": "在家人看视频或通话时放慢下载，夜间则全速下载。在这些时间之外，使用上方的速度限制。",
+    "enable": "按时间段更改速度",
+    "clock": "时间以服务器时钟（{{zone}}）为准，那里现在是 {{time}}。",
+    "days": "星期",
+    "from": "开始",
+    "to": "结束",
+    "mode": "速度",
+    "full": "全速",
+    "limit": "限速为",
+    "limited": "限速",
+    "pause": "不下载",
+    "mbs": "MB/s",
+    "add": "添加时间段",
+    "example": "从示例开始",
+    "exampleHint": "示例将工作日晚上和周末白天限速为 5 MB/s，每晚 23:00 到 07:00 全速下载。保存前可以随意修改。",
+    "remove": "移除",
+    "rangeN": "时间段 {{n}}",
+    "noDays": "请至少选择一天。",
+    "allDay": "开始和结束时间相同表示全天。",
+    "overnight": "跨过午夜，持续到次日 {{time}}。",
+    "week": "你的一周，周一到周日",
+    "otherLimit": "其他时间：{{speed}}",
+    "otherFull": "其他时间：全速",
+    "outsideLimit": "其他时间按上方的速度限制（{{speed}}）下载。",
+    "outsideFull": "上方限制为 0，所以其他时间全速下载。",
+    "button": "速度",
+    "now": {
+      "full": "全速",
+      "fullUntil": "全速至 {{time}}",
+      "limit": "限速 {{speed}}",
+      "limitUntil": "限速 {{speed}} 至 {{time}}",
+      "pause": "已暂停",
+      "pauseUntil": "暂停至 {{time}}",
+      "bySchedule": "{{state}}（计划）",
+      "byHand": "{{state}}（手动更改）"
+    },
+    "override": {
+      "title": "暂时更改速度",
+      "now": "当前：",
+      "sub": "在结束前，这会优先于计划和速度限制。之后一切恢复原样。",
+      "for": "持续多久",
+      "untilNext": "直到计划在 {{time}} 变化",
+      "untilNextPlain": "直到计划下次变化",
+      "h1": "1 小时",
+      "h3": "3 小时",
+      "h8": "8 小时",
+      "ever": "直到我改回来",
+      "apply": "更改速度",
+      "backSchedule": "回到计划",
+      "back": "恢复正常"
+    }
   }
 }

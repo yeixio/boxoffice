@@ -1249,9 +1249,10 @@
       "quarantine": "Supprimer de la quarantaine après",
       "quarantineHint": "Nombre de jours pendant lesquels une release qui ne semblait pas sûre reste en quarantaine. 0 la garde jusqu’à ce que vous la supprimiez sur la page Téléchargements.",
       "speed": "Limite de vitesse",
-      "speedHint": "En Ko/s. Laissez 0 pour aucune limite.",
+      "speedHint": "Laissez 0 pour aucune limite. Les forfaits internet sont en Mbit/s : divisez par 8, un forfait à 100 Mbit/s plafonne donc vers 12 Mo/s.",
       "folder": "Les téléchargements vont dans <path>{{path}}</path>. Définissez BOXOFFICE_DOWNLOADS_DIR sur le serveur pour utiliser un autre dossier.",
-      "folderFree": "Les téléchargements vont dans <path>{{path}}</path> ({{free}} libres). Définissez BOXOFFICE_DOWNLOADS_DIR sur le serveur pour utiliser un autre dossier."
+      "folderFree": "Les téléchargements vont dans <path>{{path}}</path> ({{free}} libres). Définissez BOXOFFICE_DOWNLOADS_DIR sur le serveur pour utiliser un autre dossier.",
+      "speedSchedule": "La changer selon l'heure."
     },
     "days": "jours",
     "cap": {
@@ -2429,5 +2430,59 @@
     "download": "Télécharger",
     "haveOne": "Vous avez déjà un NZB pour ça ?",
     "upload": "Envoyer un NZB"
+  },
+  "speed": {
+    "title": "Planning de vitesse",
+    "sub": "Ralentissez les téléchargements quand on regarde des vidéos ou qu'on est en appel à la maison, et laissez-les à pleine vitesse la nuit. En dehors de ces plages, la limite de vitesse ci-dessus s'applique.",
+    "enable": "Changer la vitesse selon l'heure",
+    "clock": "Les heures suivent l'horloge du serveur ({{zone}}), où il est {{time}}.",
+    "days": "Jours",
+    "from": "De",
+    "to": "À",
+    "mode": "Vitesse",
+    "full": "Pleine vitesse",
+    "limit": "Limiter à",
+    "limited": "Limitée",
+    "pause": "Ne pas télécharger",
+    "mbs": "Mo/s",
+    "add": "Ajouter une plage",
+    "example": "Partir d'un exemple",
+    "exampleHint": "L'exemple limite les soirs de semaine et les journées du week-end à 5 Mo/s, et télécharge à pleine vitesse chaque nuit de 23:00 à 07:00. Vous pouvez tout changer avant d'enregistrer.",
+    "remove": "Retirer",
+    "rangeN": "Plage {{n}}",
+    "noDays": "Choisissez au moins un jour.",
+    "allDay": "La même heure en De et À couvre toute la journée.",
+    "overnight": "Passe minuit, jusqu'à {{time}} le lendemain.",
+    "week": "Votre semaine, du lundi au dimanche",
+    "otherLimit": "Autres heures : {{speed}}",
+    "otherFull": "Autres heures : pleine vitesse",
+    "outsideLimit": "Aux autres heures, les téléchargements suivent la limite de vitesse ci-dessus ({{speed}}).",
+    "outsideFull": "Aux autres heures, les téléchargements vont à pleine vitesse, car la limite ci-dessus est 0.",
+    "button": "Vitesse",
+    "now": {
+      "full": "Pleine vitesse",
+      "fullUntil": "Pleine vitesse jusqu'à {{time}}",
+      "limit": "Limitée à {{speed}}",
+      "limitUntil": "Limitée à {{speed}} jusqu'à {{time}}",
+      "pause": "En pause",
+      "pauseUntil": "En pause jusqu'à {{time}}",
+      "bySchedule": "{{state}} (planning)",
+      "byHand": "{{state}} (changé à la main)"
+    },
+    "override": {
+      "title": "Changer la vitesse pour l'instant",
+      "now": "Maintenant :",
+      "sub": "Ceci passe avant le planning et la limite de vitesse jusqu'à la fin. Ensuite, tout redevient comme avant.",
+      "for": "Pendant combien de temps",
+      "untilNext": "Jusqu'au changement du planning à {{time}}",
+      "untilNextPlain": "Jusqu'au prochain changement du planning",
+      "h1": "1 heure",
+      "h3": "3 heures",
+      "h8": "8 heures",
+      "ever": "Jusqu'à ce que je le remette",
+      "apply": "Changer la vitesse",
+      "backSchedule": "Revenir au planning",
+      "back": "Revenir à la normale"
+    }
   }
 }

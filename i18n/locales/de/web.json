@@ -1172,9 +1172,10 @@
       "quarantine": "Aus der Quarantäne löschen nach",
       "quarantineHint": "Tage, die ein Release, das nicht sicher aussah, in der Quarantäne bleibt. 0 behält es, bis du es auf der Download-Seite löschst.",
       "speed": "Geschwindigkeitslimit",
-      "speedHint": "In KB/s. Lass es bei 0 für kein Limit.",
+      "speedHint": "Lass es bei 0 für kein Limit. Internettarife werden in Mbit/s angegeben: durch 8 teilen, ein 100-Mbit/s-Tarif schafft also etwa 12 MB/s.",
       "folder": "Downloads kommen nach <path>{{path}}</path>. Setze BOXOFFICE_DOWNLOADS_DIR auf dem Server, um einen anderen Ordner zu verwenden.",
-      "folderFree": "Downloads kommen nach <path>{{path}}</path> ({{free}} frei). Setze BOXOFFICE_DOWNLOADS_DIR auf dem Server, um einen anderen Ordner zu verwenden."
+      "folderFree": "Downloads kommen nach <path>{{path}}</path> ({{free}} frei). Setze BOXOFFICE_DOWNLOADS_DIR auf dem Server, um einen anderen Ordner zu verwenden.",
+      "speedSchedule": "Nach Tageszeit ändern."
     },
     "days": "Tage",
     "cap": {
@@ -2318,5 +2319,59 @@
     "download": "Herunterladen",
     "haveOne": "Hast du schon eine NZB dafür?",
     "upload": "NZB hochladen"
+  },
+  "speed": {
+    "title": "Geschwindigkeitsplan",
+    "sub": "Bremse Downloads, während zu Hause gestreamt oder telefoniert wird, und lass sie nachts mit voller Geschwindigkeit laufen. Außerhalb dieser Zeiten gilt das Geschwindigkeitslimit oben.",
+    "enable": "Geschwindigkeit nach Tageszeit ändern",
+    "clock": "Die Zeiten gelten nach der Uhr des Servers ({{zone}}), dort ist es jetzt {{time}}.",
+    "days": "Tage",
+    "from": "Von",
+    "to": "Bis",
+    "mode": "Geschwindigkeit",
+    "full": "Volle Geschwindigkeit",
+    "limit": "Begrenzen auf",
+    "limited": "Begrenzt",
+    "pause": "Nicht herunterladen",
+    "mbs": "MB/s",
+    "add": "Zeit hinzufügen",
+    "example": "Mit einem Beispiel beginnen",
+    "exampleHint": "Das Beispiel begrenzt Werktagabende und Wochenendtage auf 5 MB/s und lädt jede Nacht von 23:00 bis 07:00 mit voller Geschwindigkeit. Du kannst alles vor dem Speichern ändern.",
+    "remove": "Entfernen",
+    "rangeN": "Zeit {{n}}",
+    "noDays": "Wähle mindestens einen Tag.",
+    "allDay": "Gleiche Zeit bei Von und Bis bedeutet den ganzen Tag.",
+    "overnight": "Läuft über Mitternacht, bis {{time}} am nächsten Tag.",
+    "week": "Deine Woche, Montag bis Sonntag",
+    "otherLimit": "Andere Zeiten: {{speed}}",
+    "otherFull": "Andere Zeiten: volle Geschwindigkeit",
+    "outsideLimit": "Zu anderen Zeiten gilt das Geschwindigkeitslimit oben ({{speed}}).",
+    "outsideFull": "Zu anderen Zeiten laufen Downloads mit voller Geschwindigkeit, da das Limit oben 0 ist.",
+    "button": "Geschwindigkeit",
+    "now": {
+      "full": "Volle Geschwindigkeit",
+      "fullUntil": "Volle Geschwindigkeit bis {{time}}",
+      "limit": "Begrenzt auf {{speed}}",
+      "limitUntil": "Begrenzt auf {{speed}} bis {{time}}",
+      "pause": "Pausiert",
+      "pauseUntil": "Pausiert bis {{time}}",
+      "bySchedule": "{{state}} (Plan)",
+      "byHand": "{{state}} (von Hand geändert)"
+    },
+    "override": {
+      "title": "Geschwindigkeit vorübergehend ändern",
+      "now": "Jetzt:",
+      "sub": "Das hat Vorrang vor dem Plan und dem Geschwindigkeitslimit, bis es endet. Danach ist alles wieder wie vorher.",
+      "for": "Wie lange",
+      "untilNext": "Bis sich der Plan um {{time}} ändert",
+      "untilNextPlain": "Bis sich der Plan das nächste Mal ändert",
+      "h1": "1 Stunde",
+      "h3": "3 Stunden",
+      "h8": "8 Stunden",
+      "ever": "Bis ich es zurückstelle",
+      "apply": "Geschwindigkeit ändern",
+      "backSchedule": "Zurück zum Plan",
+      "back": "Zurück zu normal"
+    }
   }
 }
