@@ -1060,7 +1060,33 @@
     "openPage": "Buka {{page}}",
     "ereadersOff": "Kirim ebook lewat email ke Kindle, PocketBook, atau e-reader lain. Aktifkan {{ebooks}} untuk mengaturnya.",
     "turnOnType": "Aktifkan {{name}}",
-    "gameLayout": "Pilih folder tempat game Anda: folder satu sistem, atau folder yang berisi satu folder untuk tiap sistem (mame, snes, n64, dan seterusnya). Box Office menemukan sistemnya sendiri."
+    "gameLayout": "Pilih folder tempat game Anda: folder satu sistem, atau folder yang berisi satu folder untuk tiap sistem (mame, snes, n64, dan seterusnya). Box Office menemukan sistemnya sendiri.",
+    "database": {
+      "title": "Database",
+      "usesSqlite": "Box Office memakai file SQLite {{where}}.",
+      "usesPostgres": "Box Office memakai database PostgreSQL {{where}}.",
+      "movedFrom": "Dipindahkan ke sini dari {{from}} pada {{time}}: {{rows}} baris disalin dan dihitung.",
+      "configured": "Pengaturan server masih menyebut database asalnya, {{old}}. Ubah ke database ini (BOXOFFICE_DATABASE_URL, atau database.url di chart Helm). Sampai saat itu, biarkan database lama tetap berjalan: database itu memberi tahu Box Office di mana yang baru.",
+      "pending": "Box Office akan memindahkan database-nya ke {{where}} saat berikutnya dimulai.",
+      "cancel": "Batalkan pemindahan",
+      "failed": "Pemindahan terakhir gagal, jadi Box Office mempertahankan database-nya tanpa perubahan: {{error}}",
+      "intro": "Pindahkan semuanya ke database lain: Box Office menyalinnya ke tabel miliknya di sana, menghitung baris setiap tabel di keduanya, lalu beralih. Database yang dipakai sekarang tetap menyimpan semua datanya.",
+      "moveTo": "Pindahkan ke",
+      "postgres": "PostgreSQL",
+      "sqlite": "File SQLite",
+      "url": "Alamat PostgreSQL",
+      "urlHint": "Database kosong di server PostgreSQL yang dimiliki pengguna Box Office. Buat dulu, misalnya dengan CREATE DATABASE boxoffice.",
+      "file": "File",
+      "fileHint": "Path lengkap file baru, di disk yang permanen.",
+      "check": "Periksa",
+      "checkOk": "Box Office bisa pindah ke {{where}}.",
+      "move": "Pindahkan database",
+      "restartByHand": "Server ini tidak bisa memulai ulang sendiri: mulai ulang Box Office untuk menyelesaikan pemindahan.",
+      "moveConfirm": "Pindahkan database ke {{where}}? Box Office dimulai ulang, menyalin semuanya, memeriksanya, lalu terbuka dengan database baru.",
+      "moving": "Memindahkan database…",
+      "movingSub": "Box Office terbuka lagi setelah semuanya disalin dan diperiksa.",
+      "moveTitle": "Pindahkan database?"
+    }
   },
   "mediaTypes": {
     "music": {

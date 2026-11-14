@@ -4,8 +4,8 @@ import { Trans, useTranslation } from 'react-i18next'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { ArrowRight, Copy, Lock, Search, Folder, FolderUp, KeyRound, LoaderCircle, Plus, RotateCcw, Trash2 } from 'lucide-react'
-import { del, get, post, put, type Status, type MediaType, type MediaTypeKey, type Profile, type Recycle, type RestartInfo, type RootFolder, type RootKind, type Settings as SettingsData, type ShowDefaults, type SystemInfo } from '../api'
+import { AlertTriangle, ArrowRight, ArrowRightLeft, CircleCheck, Copy, Database, Lock, Search, Folder, FolderUp, KeyRound, LoaderCircle, Plus, RotateCcw, Trash2 } from 'lucide-react'
+import { api, del, get, post, put, type Status, type MediaType, type MediaTypeKey, type DatabaseInfo, type Profile, type Recycle, type RestartInfo, type RootFolder, type RootKind, type Settings as SettingsData, type ShowDefaults, type SystemInfo } from '../api'
 import { bytes, day } from '../format'
 import { monitorOptions, useProfiles, useQualities, useRootFolders, useShowDefaults } from '../hooks'
 import { AutoSearchSettings, Connections, DataCapSettingsCard, DownloadSettings, NumberField } from './Connections'
@@ -42,6 +42,7 @@ const sections: SectionDef[] = [
       { id: 'tmdb', el: <General />, keys: ['settings.tmdbKey'], terms: ['API'] },
       { id: 'password', el: <Account /> },
       { id: 'restart', el: <Restart />, keys: ['settings.restartNow'], terms: ['reboot', 'Kubernetes', 'Docker'] },
+      { id: 'database', el: <DatabaseMove />, keys: ['settings.database.url', 'settings.database.file', 'settings.database.move'], terms: ['PostgreSQL', 'Postgres', 'SQLite', 'migrate', 'migration', 'database'] },
     ],
   },
   {
@@ -998,9 +999,142 @@ function Restart() {
   )
 }
 
+// DatabaseMove is Settings → General → Database: which database Box Office
+// uses, and moving it to another one (internal/store/move.go): SQLite to
+// PostgreSQL, to another PostgreSQL server, or back to a SQLite file. Box
+// Office moves it as it starts, before anything else uses it, then opens on
+// the new one; the page waits through the restart and loads again.
+function DatabaseMove() {
+  const { t } = useTranslation()
+  const qc = useQueryClient()
+  const { data } = useQuery({ queryKey: ['database'], queryFn: () => get<DatabaseInfo>('/admin/database') })
+  const [kind, setKind] = useState<'postgres' | 'sqlite'>('postgres')
+  const [to, setTo] = useState('')
+  const [confirm, setConfirm] = useState(false)
+  const [since, setSince] = useState<string>()
+  const check = useMutation({ mutationFn: () => post<{ where: string }>('/admin/database/check', { to: to.trim() }) })
+  const cancel = useMutation({ mutationFn: () => api<DatabaseInfo>('DELETE', '/admin/database/move'), onSuccess: (d) => qc.setQueryData(['database'], d) })
+  const target = to.trim() || (kind === 'sqlite' ? (data?.suggestedFile ?? '') : '')
+  const move = useMutation({
+    mutationFn: () => post<DatabaseInfo & { restarting: boolean; startedAt?: string }>('/admin/database/move', { to: target }),
+    onSuccess: (d) => {
+      setConfirm(false)
+      qc.setQueryData(['database'], d)
+      if (d.restarting && d.startedAt) setSince(d.startedAt)
+    },
+  })
+  if (!data) return null
+  const hidden = target.replace(/:[^:@/]*@/, ':•••@')
+  return (
+    <Card>
+      <h2 className="mb-1 font-display text-lg font-semibold">{t('settings.database.title')}</h2>
+      <p className="mb-4 flex items-start gap-2 text-sm text-muted">
+        <Database className="mt-0.5 size-4 shrink-0" aria-hidden />
+        <span className="min-w-0 [overflow-wrap:anywhere]">{t(data.kind === 'postgres' ? 'settings.database.usesPostgres' : 'settings.database.usesSqlite', { where: data.where })}</span>
+      </p>
+      <div className="flex flex-col gap-3">
+        {data.movedFrom && (
+          <p className="text-sm text-muted">
+            {t('settings.database.movedFrom', { from: data.movedFrom.from, time: new Date(data.movedFrom.at * 1000).toLocaleString(i18n.language, { dateStyle: 'medium', timeStyle: 'short' }), rows: data.movedFrom.rows.toLocaleString(i18n.language) })}
+          </p>
+        )}
+        {data.configured && (
+          <p role="status" className="flex items-start gap-2 rounded-md border border-gold/50 bg-gold/5 px-3 py-2 text-sm">
+            <AlertTriangle className="mt-0.5 size-4 shrink-0 text-gold" aria-hidden />
+            <span className="min-w-0 [overflow-wrap:anywhere]">{t('settings.database.configured', { old: data.configured })}</span>
+          </p>
+        )}
+        {data.pending && (
+          <div role="status" className="flex flex-wrap items-center gap-3 rounded-md border border-gold/50 bg-gold/5 px-3 py-2 text-sm">
+            <ArrowRightLeft className="size-4 shrink-0 text-gold" aria-hidden />
+            <span className="min-w-0 flex-1 [overflow-wrap:anywhere]">{t('settings.database.pending', { where: data.pending })}</span>
+            <Button busy={cancel.isPending} onClick={() => cancel.mutate()}>
+              {t('settings.database.cancel')}
+            </Button>
+          </div>
+        )}
+        {data.lastError && (
+          <p role="alert" className="flex items-start gap-2 rounded-md border border-bad/40 bg-bad/5 px-3 py-2 text-sm text-bad">
+            <AlertTriangle className="mt-0.5 size-4 shrink-0" aria-hidden />
+            <span className="min-w-0 break-words">{t('settings.database.failed', { error: data.lastError })}</span>
+          </p>
+        )}
+        <p className="text-sm text-muted">{t('settings.database.intro')}</p>
+        <fieldset className="flex flex-wrap gap-x-6 gap-y-2">
+          <legend className="sr-only">{t('settings.database.moveTo')}</legend>
+          {(['postgres', 'sqlite'] as const).map((k) => (
+            <label key={k} className="flex cursor-pointer items-center gap-2 text-sm">
+              <input
+                type="radio"
+                name="database-kind"
+                className="accent-marquee"
+                checked={kind === k}
+                onChange={() => {
+                  setKind(k)
+                  setTo('')
+                  check.reset()
+                }}
+              />
+              {t(k === 'postgres' ? 'settings.database.postgres' : 'settings.database.sqlite')}
+            </label>
+          ))}
+        </fieldset>
+        <Field label={t(kind === 'postgres' ? 'settings.database.url' : 'settings.database.file')} hint={t(kind === 'postgres' ? 'settings.database.urlHint' : 'settings.database.fileHint')}>
+          {(id) => (
+            <Input
+              id={id}
+              value={to}
+              spellCheck={false}
+              autoComplete="off"
+              placeholder={kind === 'postgres' ? 'postgres://boxoffice:password@tower.local:5432/boxoffice?sslmode=disable' : (data.suggestedFile ?? '/data/boxoffice.db')}
+              onChange={(e) => {
+                setTo(e.target.value)
+                check.reset()
+              }}
+            />
+          )}
+        </Field>
+        {check.isSuccess && (
+          <p role="status" className="flex items-start gap-2 text-sm">
+            <CircleCheck className="mt-0.5 size-4 shrink-0 text-ok" aria-hidden /> <span className="min-w-0 [overflow-wrap:anywhere]">{t('settings.database.checkOk', { where: check.data.where })}</span>
+          </p>
+        )}
+        <ErrorNote error={check.error} />
+        <div className="flex flex-wrap justify-end gap-2">
+          <Button busy={check.isPending} disabled={!to.trim()} onClick={() => check.mutate()}>
+            {t('settings.database.check')}
+          </Button>
+          <Button variant="primary" disabled={!target || !!data.pending} onClick={() => setConfirm(true)}>
+            <ArrowRightLeft className="size-4" aria-hidden /> {t('settings.database.move')}
+          </Button>
+        </div>
+        {!data.canRestart && <p className="text-xs text-muted">{t('settings.database.restartByHand')}</p>}
+      </div>
+      {confirm && (
+        <Modal title={t('settings.database.moveTitle')} onClose={() => setConfirm(false)}>
+          <div className="flex flex-col gap-3 text-sm">
+            <p className="[overflow-wrap:anywhere]">{t('settings.database.moveConfirm', { where: hidden })}</p>
+            {data.downloads > 0 && <p className="font-medium">{t('settings.restartDownloads', { n: data.downloads })}</p>}
+          </div>
+          <ErrorNote error={move.error} />
+          <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+            <Button variant="ghost" onClick={() => setConfirm(false)}>
+              {t('common.cancel')}
+            </Button>
+            <Button variant="primary" busy={move.isPending} onClick={() => move.mutate()}>
+              <ArrowRightLeft className="size-4" aria-hidden /> {t('settings.database.move')}
+            </Button>
+          </div>
+        </Modal>
+      )}
+      {since && <Restarting since={since} moving />}
+    </Card>
+  )
+}
+
 // Restarting covers the page while Box Office is away, and loads the page
 // again once a new run answers. It says so if that takes long.
-function Restarting({ since }: { since: string }) {
+function Restarting({ since, moving }: { since: string; moving?: boolean }) {
   const { t } = useTranslation()
   const [slow, setSlow] = useState(false)
   useEffect(() => {
@@ -1028,8 +1162,8 @@ function Restarting({ since }: { since: string }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
       <div role="status" aria-live="polite" className="flex w-full max-w-md flex-col items-center gap-3 rounded-xl border border-line bg-card p-6 text-center text-ink">
         <LoaderCircle className="size-8 animate-spin text-muted" aria-hidden />
-        <h2 className="font-display text-lg font-semibold">{t('settings.restarting')}</h2>
-        <p className="text-sm text-muted">{t('settings.restartingSub')}</p>
+        <h2 className="font-display text-lg font-semibold">{t(moving ? 'settings.database.moving' : 'settings.restarting')}</h2>
+        <p className="text-sm text-muted">{t(moving ? 'settings.database.movingSub' : 'settings.restartingSub')}</p>
         {slow && (
           <>
             <p className="text-sm">{t('settings.restartSlow')}</p>

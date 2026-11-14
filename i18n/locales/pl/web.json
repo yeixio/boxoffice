@@ -1291,7 +1291,33 @@
     "openPage": "Otwórz: {{page}}",
     "ereadersOff": "Wysyłaj e-booki e-mailem na Kindle, PocketBook lub inny czytnik. Włącz {{ebooks}}, aby to skonfigurować.",
     "turnOnType": "Włącz: {{name}}",
-    "gameLayout": "Wybierz folder z grami: folder jednego systemu albo folder z osobnym folderem dla każdego systemu (mame, snes, n64 itd.). Box Office sam rozpozna systemy."
+    "gameLayout": "Wybierz folder z grami: folder jednego systemu albo folder z osobnym folderem dla każdego systemu (mame, snes, n64 itd.). Box Office sam rozpozna systemy.",
+    "database": {
+      "title": "Baza danych",
+      "usesSqlite": "Box Office używa pliku SQLite {{where}}.",
+      "usesPostgres": "Box Office używa bazy danych PostgreSQL {{where}}.",
+      "movedFrom": "Przeniesiona tutaj z {{from}} dnia {{time}}: liczba skopiowanych i policzonych wierszy: {{rows}}.",
+      "configured": "Ustawienia serwera wciąż wskazują bazę, z której ją przeniesiono: {{old}}. Zmień je na tę (BOXOFFICE_DATABASE_URL lub database.url w charcie Helm). Do tego czasu nie wyłączaj starej bazy: to ona mówi Box Office, gdzie jest nowa.",
+      "pending": "Box Office przeniesie bazę danych do {{where}} przy następnym uruchomieniu.",
+      "cancel": "Anuluj przeniesienie",
+      "failed": "Ostatnie przeniesienie się nie udało, więc Box Office zachował dotychczasową bazę bez zmian: {{error}}",
+      "intro": "Przenieś wszystko do innej bazy: Box Office kopiuje dane do własnych tabel, liczy wiersze każdej tabeli w obu bazach, a potem się przełącza. Obecna baza zachowuje wszystkie dane.",
+      "moveTo": "Przenieś do",
+      "postgres": "PostgreSQL",
+      "sqlite": "Plik SQLite",
+      "url": "Adres PostgreSQL",
+      "urlHint": "Pusta baza na serwerze PostgreSQL, należąca do użytkownika Box Office. Najpierw ją utwórz, np. poleceniem CREATE DATABASE boxoffice.",
+      "file": "Plik",
+      "fileHint": "Pełna ścieżka nowego pliku na trwałym dysku.",
+      "check": "Sprawdź",
+      "checkOk": "Box Office może przenieść się do {{where}}.",
+      "move": "Przenieś bazę danych",
+      "restartByHand": "Ten serwer nie może sam się zrestartować: uruchom ponownie Box Office, aby dokończyć przeniesienie.",
+      "moveConfirm": "Przenieść bazę danych do {{where}}? Box Office uruchomi się ponownie, skopiuje wszystko, sprawdzi i otworzy nową bazę.",
+      "moving": "Przenoszenie bazy danych…",
+      "movingSub": "Box Office otworzy się, gdy wszystko zostanie skopiowane i sprawdzone.",
+      "moveTitle": "Przenieść bazę danych?"
+    }
   },
   "mediaTypes": {
     "music": {

@@ -1137,7 +1137,33 @@
     "openPage": "{{page}} openen",
     "ereadersOff": "Stuur e-books per e-mail naar een Kindle, PocketBook of andere e-reader. Zet {{ebooks}} aan om het in te stellen.",
     "turnOnType": "{{name}} aanzetten",
-    "gameLayout": "Kies de map met je games: de map van één systeem, of een map met een map per systeem (mame, snes, n64 enzovoort). Box Office vindt de systemen zelf."
+    "gameLayout": "Kies de map met je games: de map van één systeem, of een map met een map per systeem (mame, snes, n64 enzovoort). Box Office vindt de systemen zelf.",
+    "database": {
+      "title": "Database",
+      "usesSqlite": "Box Office gebruikt het SQLite-bestand {{where}}.",
+      "usesPostgres": "Box Office gebruikt de PostgreSQL-database {{where}}.",
+      "movedFrom": "Op {{time}} hierheen verhuisd van {{from}}: {{rows}} rijen gekopieerd en geteld.",
+      "configured": "De serverinstellingen noemen nog de database waaruit verhuisd is, {{old}}. Zet ze op deze (BOXOFFICE_DATABASE_URL, of database.url in de Helm-chart). Laat tot dan de oude database draaien: die vertelt Box Office waar de nieuwe is.",
+      "pending": "Box Office verhuist zijn database bij de volgende start naar {{where}}.",
+      "cancel": "Verhuizing annuleren",
+      "failed": "De laatste verhuizing lukte niet, dus Box Office hield zijn database ongewijzigd: {{error}}",
+      "intro": "Verhuis alles naar een andere database: Box Office kopieert het daar in zijn eigen tabellen, telt de rijen van elke tabel in beide en schakelt dan over. De huidige database houdt al zijn gegevens.",
+      "moveTo": "Verhuizen naar",
+      "postgres": "PostgreSQL",
+      "sqlite": "SQLite-bestand",
+      "url": "PostgreSQL-adres",
+      "urlHint": "Een lege database op de PostgreSQL-server, eigendom van de gebruiker van Box Office. Maak hem eerst aan, bijvoorbeeld met CREATE DATABASE boxoffice.",
+      "file": "Bestand",
+      "fileHint": "Het volledige pad van een nieuw bestand, op een schijf die blijft.",
+      "check": "Controleren",
+      "checkOk": "Box Office kan verhuizen naar {{where}}.",
+      "move": "Database verhuizen",
+      "restartByHand": "Deze server kan zichzelf niet herstarten: herstart Box Office om een verhuizing af te ronden.",
+      "moveConfirm": "De database naar {{where}} verhuizen? Box Office herstart, kopieert alles, controleert het en opent op de nieuwe database.",
+      "moving": "Database wordt verhuisd…",
+      "movingSub": "Box Office opent weer zodra alles gekopieerd en gecontroleerd is.",
+      "moveTitle": "De database verhuizen?"
+    }
   },
   "mediaTypes": {
     "music": {

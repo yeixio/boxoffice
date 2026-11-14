@@ -80,7 +80,9 @@ type Server struct {
 	Log      *slog.Logger
 	Version  string
 	Database string // sqlite or postgres, for the System page
-	DataDir  string
+	// DatabaseInfo is where the database is, for Settings → Database.
+	DatabaseInfo DatabaseInfo
+	DataDir      string
 	// EnvAPIKey, when set, is the API key, and can't be changed in the UI:
 	// it comes from the deployment, such as a Kubernetes Secret.
 	EnvAPIKey string
@@ -275,6 +277,10 @@ func (s *Server) Handler() http.Handler {
 		{"PUT /api/v1/admin/debug", true, s.putDebug},
 		{"GET /api/v1/admin/restart", true, s.getRestart},
 		{"POST /api/v1/admin/restart", true, s.postRestart},
+		{"GET /api/v1/admin/database", true, s.getDatabase},
+		{"POST /api/v1/admin/database/check", true, s.checkDatabaseMove},
+		{"POST /api/v1/admin/database/move", true, s.moveDatabase},
+		{"DELETE /api/v1/admin/database/move", true, s.cancelDatabaseMove},
 		{"GET /api/v1/admin/alerts", true, s.getAlerts},
 		{"PUT /api/v1/admin/alerts", true, s.putAlerts},
 		{"POST /api/v1/admin/alerts/test", true, s.testAlerts},

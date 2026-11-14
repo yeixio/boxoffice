@@ -1060,7 +1060,33 @@
     "openPage": "Buka {{page}}",
     "ereadersOff": "Hantar e-buku melalui e-mel ke Kindle, PocketBook atau e-pembaca lain. Hidupkan {{ebooks}} untuk menyediakannya.",
     "turnOnType": "Hidupkan {{name}}",
-    "gameLayout": "Pilih folder permainan anda: folder satu sistem, atau folder yang mengandungi satu folder untuk setiap sistem (mame, snes, n64 dan seterusnya). Box Office mengenal pasti sistem sendiri."
+    "gameLayout": "Pilih folder permainan anda: folder satu sistem, atau folder yang mengandungi satu folder untuk setiap sistem (mame, snes, n64 dan seterusnya). Box Office mengenal pasti sistem sendiri.",
+    "database": {
+      "title": "Pangkalan data",
+      "usesSqlite": "Box Office menggunakan fail SQLite {{where}}.",
+      "usesPostgres": "Box Office menggunakan pangkalan data PostgreSQL {{where}}.",
+      "movedFrom": "Dipindahkan ke sini dari {{from}} pada {{time}}: {{rows}} baris disalin dan dikira.",
+      "configured": "Tetapan pelayan masih menamakan pangkalan data asalnya, {{old}}. Tukarkannya kepada yang ini (BOXOFFICE_DATABASE_URL, atau database.url dalam carta Helm). Sehingga itu, biarkan pangkalan data lama berjalan: ia memberitahu Box Office di mana yang baharu.",
+      "pending": "Box Office akan memindahkan pangkalan datanya ke {{where}} apabila ia dimulakan seterusnya.",
+      "cancel": "Batalkan pemindahan",
+      "failed": "Pemindahan terakhir tidak berjaya, jadi Box Office mengekalkan pangkalan datanya tanpa perubahan: {{error}}",
+      "intro": "Pindahkan semuanya ke pangkalan data lain: Box Office menyalinnya ke dalam jadualnya sendiri di sana, mengira baris setiap jadual dalam kedua-duanya, kemudian bertukar. Pangkalan data semasa mengekalkan semua datanya.",
+      "moveTo": "Pindahkan ke",
+      "postgres": "PostgreSQL",
+      "sqlite": "Fail SQLite",
+      "url": "Alamat PostgreSQL",
+      "urlHint": "Pangkalan data kosong pada pelayan PostgreSQL yang dimiliki pengguna Box Office. Ciptanya dahulu, contohnya dengan CREATE DATABASE boxoffice.",
+      "file": "Fail",
+      "fileHint": "Laluan penuh fail baharu, pada cakera yang kekal.",
+      "check": "Semak",
+      "checkOk": "Box Office boleh berpindah ke {{where}}.",
+      "move": "Pindahkan pangkalan data",
+      "restartByHand": "Pelayan ini tidak boleh memulakan semula dirinya: mulakan semula Box Office untuk menyelesaikan pemindahan.",
+      "moveConfirm": "Pindahkan pangkalan data ke {{where}}? Box Office dimulakan semula, menyalin semuanya, menyemaknya dan dibuka pada pangkalan data baharu.",
+      "moving": "Memindahkan pangkalan data…",
+      "movingSub": "Box Office dibuka semula sebaik sahaja semuanya disalin dan disemak.",
+      "moveTitle": "Pindahkan pangkalan data?"
+    }
   },
   "mediaTypes": {
     "music": {

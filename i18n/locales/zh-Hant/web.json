@@ -1060,7 +1060,33 @@
     "openPage": "開啟{{page}}",
     "ereadersOff": "透過電子郵件把電子書傳送到 Kindle、PocketBook 或其他閱讀器。開啟{{ebooks}}即可設定。",
     "turnOnType": "開啟{{name}}",
-    "gameLayout": "選擇存放遊戲的資料夾：某個系統的資料夾，或每個系統各有一個資料夾的資料夾（mame、snes、n64 等）。Box Office 會自己辨識系統。"
+    "gameLayout": "選擇存放遊戲的資料夾：某個系統的資料夾，或每個系統各有一個資料夾的資料夾（mame、snes、n64 等）。Box Office 會自己辨識系統。",
+    "database": {
+      "title": "資料庫",
+      "usesSqlite": "Box Office 正在使用 SQLite 檔案 {{where}}。",
+      "usesPostgres": "Box Office 正在使用 PostgreSQL 資料庫 {{where}}。",
+      "movedFrom": "於 {{time}} 從 {{from}} 搬移至此:已複製並核對 {{rows}} 列。",
+      "configured": "伺服器設定中仍寫著搬移前的資料庫 {{old}}。請改成這個資料庫(BOXOFFICE_DATABASE_URL,或 Helm chart 中的 database.url)。在那之前請讓舊資料庫繼續運作:它會告訴 Box Office 新資料庫在哪裡。",
+      "pending": "Box Office 會在下次啟動時把資料庫搬移到 {{where}}。",
+      "cancel": "取消搬移",
+      "failed": "上次搬移沒有成功,因此 Box Office 繼續使用原本的資料庫,未做任何變更:{{error}}",
+      "intro": "把所有內容搬移到另一個資料庫:Box Office 會把資料複製到那裡它自己的資料表中,在兩邊逐表核對列數,然後切換。目前的資料庫會保留全部資料。",
+      "moveTo": "搬移到",
+      "postgres": "PostgreSQL",
+      "sqlite": "SQLite 檔案",
+      "url": "PostgreSQL 位址",
+      "urlHint": "PostgreSQL 伺服器上一個空的資料庫,歸 Box Office 的使用者所有。請先建立,例如使用 CREATE DATABASE boxoffice。",
+      "file": "檔案",
+      "fileHint": "新檔案的完整路徑,需位於會保留的磁碟上。",
+      "check": "檢查",
+      "checkOk": "Box Office 可以搬移到 {{where}}。",
+      "move": "搬移資料庫",
+      "restartByHand": "這台伺服器無法自行重新啟動:請重新啟動 Box Office 以完成搬移。",
+      "moveConfirm": "要把資料庫搬移到 {{where}} 嗎?Box Office 會重新啟動,複製所有內容,檢查後以新資料庫開啟。",
+      "moving": "正在搬移資料庫…",
+      "movingSub": "全部複製並檢查完畢後,Box Office 會重新開啟。",
+      "moveTitle": "要搬移資料庫嗎?"
+    }
   },
   "mediaTypes": {
     "music": {

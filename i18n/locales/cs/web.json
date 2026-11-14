@@ -1291,7 +1291,33 @@
     "openPage": "Otevřít: {{page}}",
     "ereadersOff": "Posílejte e-knihy e-mailem do Kindlu, PocketBooku nebo jiné čtečky. Pro nastavení zapněte {{ebooks}}.",
     "turnOnType": "Zapnout: {{name}}",
-    "gameLayout": "Vyberte složku s hrami: složku jednoho systému, nebo složku se složkou pro každý systém (mame, snes, n64 a tak dále). Box Office systémy rozpozná sám."
+    "gameLayout": "Vyberte složku s hrami: složku jednoho systému, nebo složku se složkou pro každý systém (mame, snes, n64 a tak dále). Box Office systémy rozpozná sám.",
+    "database": {
+      "title": "Databáze",
+      "usesSqlite": "Box Office používá soubor SQLite {{where}}.",
+      "usesPostgres": "Box Office používá databázi PostgreSQL {{where}}.",
+      "movedFrom": "Přesunuto sem z {{from}} dne {{time}}: zkopírováno a spočítáno řádků: {{rows}}.",
+      "configured": "Nastavení serveru stále uvádí databázi, ze které se přesouvalo: {{old}}. Změňte je na tuto (BOXOFFICE_DATABASE_URL nebo database.url v Helm chartu). Do té doby nechte starou databázi běžet: říká Box Office, kde je nová.",
+      "pending": "Box Office přesune svou databázi do {{where}} při příštím spuštění.",
+      "cancel": "Zrušit přesun",
+      "failed": "Poslední přesun se nepovedl, takže Box Office ponechal svou databázi beze změny: {{error}}",
+      "intro": "Přesuňte vše do jiné databáze: Box Office data zkopíruje do svých tabulek, spočítá řádky každé tabulky v obou a pak přepne. Současná databáze si ponechá všechna data.",
+      "moveTo": "Přesunout do",
+      "postgres": "PostgreSQL",
+      "sqlite": "Soubor SQLite",
+      "url": "Adresa PostgreSQL",
+      "urlHint": "Prázdná databáze na serveru PostgreSQL, kterou vlastní uživatel Box Office. Nejprve ji vytvořte, například příkazem CREATE DATABASE boxoffice.",
+      "file": "Soubor",
+      "fileHint": "Úplná cesta k novému souboru na trvalém disku.",
+      "check": "Zkontrolovat",
+      "checkOk": "Box Office se může přesunout do {{where}}.",
+      "move": "Přesunout databázi",
+      "restartByHand": "Tento server se nemůže restartovat sám: přesun dokončíte restartem Box Office.",
+      "moveConfirm": "Přesunout databázi do {{where}}? Box Office se restartuje, vše zkopíruje, zkontroluje a otevře se s novou databází.",
+      "moving": "Přesouvá se databáze…",
+      "movingSub": "Box Office se znovu otevře, až bude vše zkopírováno a zkontrolováno.",
+      "moveTitle": "Přesunout databázi?"
+    }
   },
   "mediaTypes": {
     "music": {

@@ -1137,7 +1137,33 @@
     "openPage": "Open {{page}}",
     "ereadersOff": "Send ebooks to a Kindle, PocketBook or other e-reader by email. Turn on {{ebooks}} to set it up.",
     "turnOnType": "Turn on {{name}}",
-    "gameLayout": "Pick the folder your games are in: one system's folder, or a folder with a folder for each system (mame, snes, n64 and so on). Box Office finds the systems itself."
+    "gameLayout": "Pick the folder your games are in: one system's folder, or a folder with a folder for each system (mame, snes, n64 and so on). Box Office finds the systems itself.",
+    "database": {
+      "title": "Database",
+      "usesSqlite": "Box Office uses the SQLite file {{where}}.",
+      "usesPostgres": "Box Office uses the PostgreSQL database {{where}}.",
+      "movedFrom": "Moved here from {{from}} on {{time}}: {{rows}} rows copied and counted.",
+      "configured": "The server's settings still name the database it was moved from, {{old}}. Change them to this one (BOXOFFICE_DATABASE_URL, or database.url in the Helm chart). Until then, keep the old database running: it tells Box Office where the new one is.",
+      "pending": "Box Office moves its database to {{where}} the next time it starts.",
+      "cancel": "Cancel move",
+      "failed": "The last move didn't work, so Box Office kept the database it had, unchanged: {{error}}",
+      "intro": "Move everything to another database: Box Office copies it into its own tables there, counts every table's rows in both, then switches over. The database it uses now keeps all its data.",
+      "moveTo": "Move to",
+      "postgres": "PostgreSQL",
+      "sqlite": "SQLite file",
+      "url": "PostgreSQL address",
+      "urlHint": "An empty database on the PostgreSQL server, which Box Office's user owns. Create it first, such as with CREATE DATABASE boxoffice.",
+      "file": "File",
+      "fileHint": "The full path of a new file, on a disk that lasts.",
+      "check": "Check",
+      "checkOk": "Box Office can move to {{where}}.",
+      "move": "Move database",
+      "restartByHand": "This server can't restart itself: restart Box Office to finish a move.",
+      "moveConfirm": "Move the database to {{where}}? Box Office restarts, copies everything, checks it and opens on the new database.",
+      "moving": "Moving the database…",
+      "movingSub": "Box Office opens again once everything is copied and checked.",
+      "moveTitle": "Move the database?"
+    }
   },
   "mediaTypes": {
     "music": {

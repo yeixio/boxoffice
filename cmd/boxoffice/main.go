@@ -58,6 +58,8 @@ func main() {
 			cmd = initDBSecret
 		case "healthcheck":
 			cmd = healthcheck
+		case "database":
+			cmd = databaseCommand
 		}
 	}
 	err := cmd()
@@ -107,13 +109,17 @@ func run() error {
 	if prev.Crashed() {
 		log.Warn("Box Office crashed last time; Health → Log → Previous run has what it wrote", "crash", prev.CrashSummary())
 	}
-	db, err := store.Open(cfg.Database())
+	// The database its settings name, or the one that was moved to; a move
+	// an admin asked for in Settings happens here, before anything else
+	// uses the database (see database.go).
+	opened, err := openDatabase(context.Background(), cfg, log)
 	if err != nil {
 		return fmt.Errorf("open the database: %w", err)
 	}
+	db := opened.db
 	defer db.Close()
 	dbKind := "sqlite"
-	if store.IsPostgres(cfg.Database()) {
+	if store.IsPostgres(opened.dsn) {
 		dbKind = "postgres"
 	}
 
@@ -213,7 +219,7 @@ func run() error {
 		Imports:   imports,
 		Portal:    &portal.Service{Store: db, Catalog: cat, Notify: notes, Log: log},
 		Downloads: downloads, Search: finder,
-		Version: version.Version, Database: dbKind, DataDir: cfg.DataDir, EnvAPIKey: cfg.APIKey, Web: web.FS(),
+		Version: version.Version, Database: dbKind, DatabaseInfo: api.DatabaseInfo{DSN: opened.dsn, Configured: opened.configured}, DataDir: cfg.DataDir, EnvAPIKey: cfg.APIKey, Web: web.FS(),
 		Monitoring: mon,
 		Restart:    func() { restartNow(errRestart) },
 	}

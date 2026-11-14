@@ -1060,7 +1060,33 @@
     "openPage": "Mở {{page}}",
     "ereadersOff": "Gửi sách điện tử qua email tới Kindle, PocketBook hoặc máy đọc sách khác. Bật {{ebooks}} để thiết lập.",
     "turnOnType": "Bật {{name}}",
-    "gameLayout": "Chọn thư mục chứa trò chơi của bạn: thư mục của một hệ máy, hoặc thư mục có một thư mục cho mỗi hệ máy (mame, snes, n64, v.v.). Box Office tự nhận ra các hệ máy."
+    "gameLayout": "Chọn thư mục chứa trò chơi của bạn: thư mục của một hệ máy, hoặc thư mục có một thư mục cho mỗi hệ máy (mame, snes, n64, v.v.). Box Office tự nhận ra các hệ máy.",
+    "database": {
+      "title": "Cơ sở dữ liệu",
+      "usesSqlite": "Box Office đang dùng tệp SQLite {{where}}.",
+      "usesPostgres": "Box Office đang dùng cơ sở dữ liệu PostgreSQL {{where}}.",
+      "movedFrom": "Đã chuyển đến đây từ {{from}} vào {{time}}: {{rows}} hàng đã được sao chép và đếm.",
+      "configured": "Cài đặt của máy chủ vẫn ghi cơ sở dữ liệu cũ, {{old}}. Hãy đổi sang cơ sở dữ liệu này (BOXOFFICE_DATABASE_URL, hoặc database.url trong Helm chart). Cho đến lúc đó, hãy để cơ sở dữ liệu cũ chạy: nó cho Box Office biết cơ sở dữ liệu mới ở đâu.",
+      "pending": "Box Office sẽ chuyển cơ sở dữ liệu sang {{where}} vào lần khởi động tới.",
+      "cancel": "Hủy chuyển",
+      "failed": "Lần chuyển gần nhất không thành công, nên Box Office giữ nguyên cơ sở dữ liệu của mình: {{error}}",
+      "intro": "Chuyển mọi thứ sang cơ sở dữ liệu khác: Box Office sao chép vào các bảng của chính nó ở đó, đếm số hàng của từng bảng ở cả hai nơi rồi chuyển sang. Cơ sở dữ liệu hiện tại vẫn giữ toàn bộ dữ liệu.",
+      "moveTo": "Chuyển sang",
+      "postgres": "PostgreSQL",
+      "sqlite": "Tệp SQLite",
+      "url": "Địa chỉ PostgreSQL",
+      "urlHint": "Một cơ sở dữ liệu trống trên máy chủ PostgreSQL, thuộc sở hữu của người dùng Box Office. Hãy tạo trước, ví dụ bằng CREATE DATABASE boxoffice.",
+      "file": "Tệp",
+      "fileHint": "Đường dẫn đầy đủ của một tệp mới, trên ổ đĩa lâu dài.",
+      "check": "Kiểm tra",
+      "checkOk": "Box Office có thể chuyển sang {{where}}.",
+      "move": "Chuyển cơ sở dữ liệu",
+      "restartByHand": "Máy chủ này không tự khởi động lại được: hãy khởi động lại Box Office để hoàn tất việc chuyển.",
+      "moveConfirm": "Chuyển cơ sở dữ liệu sang {{where}}? Box Office khởi động lại, sao chép mọi thứ, kiểm tra và mở trên cơ sở dữ liệu mới.",
+      "moving": "Đang chuyển cơ sở dữ liệu…",
+      "movingSub": "Box Office mở lại khi mọi thứ đã được sao chép và kiểm tra.",
+      "moveTitle": "Chuyển cơ sở dữ liệu?"
+    }
   },
   "mediaTypes": {
     "music": {

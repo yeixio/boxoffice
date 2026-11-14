@@ -1137,7 +1137,33 @@
     "openPage": "Megnyitás: {{page}}",
     "ereadersOff": "Küldj e-könyveket e-mailben Kindle-re, PocketBookra vagy más olvasóra. A beállításhoz kapcsold be ezt: {{ebooks}}.",
     "turnOnType": "Bekapcsolás: {{name}}",
-    "gameLayout": "Válaszd ki a játékaidat tartalmazó mappát: egy rendszer mappáját, vagy egy mappát, amelyben minden rendszernek saját mappája van (mame, snes, n64 stb.). A Box Office maga ismeri fel a rendszereket."
+    "gameLayout": "Válaszd ki a játékaidat tartalmazó mappát: egy rendszer mappáját, vagy egy mappát, amelyben minden rendszernek saját mappája van (mame, snes, n64 stb.). A Box Office maga ismeri fel a rendszereket.",
+    "database": {
+      "title": "Adatbázis",
+      "usesSqlite": "A Box Office a(z) {{where}} SQLite-fájlt használja.",
+      "usesPostgres": "A Box Office a(z) {{where}} PostgreSQL-adatbázist használja.",
+      "movedFrom": "Ide költöztetve innen: {{from}}, ekkor: {{time}}. Átmásolt és megszámolt sorok: {{rows}}.",
+      "configured": "A szerver beállításai még a régi adatbázist adják meg: {{old}}. Állítsd át erre (BOXOFFICE_DATABASE_URL vagy a Helm chart database.url értéke). Addig hagyd futni a régit: az mondja meg a Box Office-nek, hol az új.",
+      "pending": "A Box Office a következő indításkor ide költözteti az adatbázisát: {{where}}.",
+      "cancel": "Költöztetés megszakítása",
+      "failed": "Az utolsó költöztetés nem sikerült, így a Box Office változatlanul megtartotta az adatbázisát: {{error}}",
+      "intro": "Költöztess mindent egy másik adatbázisba: a Box Office átmásolja a saját tábláiba, mindkét helyen megszámolja minden tábla sorait, majd átvált. A mostani adatbázis megtartja minden adatát.",
+      "moveTo": "Költöztetés ide",
+      "postgres": "PostgreSQL",
+      "sqlite": "SQLite-fájl",
+      "url": "PostgreSQL-cím",
+      "urlHint": "Egy üres adatbázis a PostgreSQL-szerveren, a Box Office felhasználójának tulajdonában. Előbb hozd létre, például a CREATE DATABASE boxoffice paranccsal.",
+      "file": "Fájl",
+      "fileHint": "Egy új fájl teljes elérési útja, tartós lemezen.",
+      "check": "Ellenőrzés",
+      "checkOk": "A Box Office ide költözhet: {{where}}.",
+      "move": "Adatbázis költöztetése",
+      "restartByHand": "Ez a szerver nem tudja magát újraindítani: a költöztetés befejezéséhez indítsd újra a Box Office-t.",
+      "moveConfirm": "Költözteted az adatbázist ide: {{where}}? A Box Office újraindul, mindent átmásol, ellenőriz, és az új adatbázissal nyílik meg.",
+      "moving": "Az adatbázis költöztetése…",
+      "movingSub": "A Box Office újra megnyílik, ha minden át van másolva és ellenőrizve.",
+      "moveTitle": "Költözteted az adatbázist?"
+    }
   },
   "mediaTypes": {
     "music": {
