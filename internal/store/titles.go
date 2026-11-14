@@ -62,6 +62,9 @@ type File struct {
 	Edition         string `json:"edition,omitempty"`
 	EditionFrom     string `json:"editionFrom,omitempty"`
 	EditionByLength bool   `json:"editionByLength,omitempty"`
+	// Subtitles are its subtitles in each language Settings → Subtitles
+	// wants, when they're turned on; filled in by the API.
+	Subtitles []Subtitle `json:"subtitles,omitempty"`
 }
 
 // LabelEditions fills in the edition of the movie's copy and of each of

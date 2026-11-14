@@ -376,6 +376,13 @@ func (s *Server) movie(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 	m.LabelEditions(s.Store.ReleaseNames(r.Context()))
+	files := []*store.File{m.File}
+	for i := range m.Editions {
+		files = append(files, &m.Editions[i])
+	}
+	if err := s.fillSubtitles(r.Context(), files...); err != nil {
+		return err
+	}
 	tw, err := s.Store.TitleWant(r.Context(), "movie", m.ID)
 	if err != nil {
 		return err
@@ -550,6 +557,13 @@ func (s *Server) series(w http.ResponseWriter, r *http.Request) error {
 	}
 	eps, err := s.Store.Episodes(r.Context(), id)
 	if err != nil {
+		return err
+	}
+	files := make([]*store.File, 0, len(eps))
+	for i := range eps {
+		files = append(files, eps[i].File)
+	}
+	if err := s.fillSubtitles(r.Context(), files...); err != nil {
 		return err
 	}
 	all, err := s.Store.ReportedWants(r.Context(), "episode")

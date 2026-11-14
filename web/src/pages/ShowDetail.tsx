@@ -11,6 +11,7 @@ import { get, patch, post, type Episode, type Profile, type Reported, type Serie
 import { bytes, day, episodeCode } from '../format'
 import { qualityName, useProfiles, useQualities } from '../hooks'
 import { pictureText } from './QualityCheck'
+import { FindSubtitles, SubtitleMark } from './Subtitles'
 import { Badge, Button, Card, ErrorNote, Field, Poster, Select, Spinner, Toggle } from '../ui'
 
 type Detail = { series: Series; episodes: Episode[]; reported?: Reported[] }
@@ -48,6 +49,8 @@ export function ShowDetail() {
   const { series: s, episodes } = show.data
   const seasons = [...s.seasons].sort((a, b) => b.number - a.number)
   const locked = !!profiles.data?.find((p) => p.id === s.profileId)?.locked
+  // Episodes still short of subtitles in a language wanted.
+  const subtitlesMissing = episodes.filter((e) => e.file?.subtitles?.some((x) => x.state === 'missing' || x.state === 'waiting' || x.state === 'pending')).length
 
   return (
     <div>
@@ -87,7 +90,9 @@ export function ShowDetail() {
             <Button variant="danger" onClick={() => setConfirmDelete(true)}>
               <Trash2 className="size-4" aria-hidden /> {t('title.remove')}
             </Button>
+            {!locked && subtitlesMissing > 0 && <FindSubtitles path={`/series/${s.id}/subtitles`} onFound={() => qc.invalidateQueries({ queryKey: key })} />}
           </div>
+          {subtitlesMissing > 0 && <p className="mt-3 text-sm text-muted">{t('subtitles.episodesMissing', { count: subtitlesMissing })}</p>}
           {note && <p className="mt-3 text-sm text-muted">{note}</p>}
           <ErrorNote error={action.error || edit.error || season.error} />
         </div>
@@ -215,6 +220,7 @@ function SeasonBlock({
                   <span className="min-w-0 flex-1 basis-40 truncate">{e.title || t('show.tba')}</span>
                   <span className="w-28 text-muted">{day(e.airDate)}</span>
                   <span className="ms-auto flex flex-wrap items-center justify-end gap-2">
+                    {e.file && <SubtitleMark subs={e.file.subtitles} />}
                     {e.file ? (
                       <span title={fileTitle(e.file)}>
                         <Badge tone={upgrade ? 'gold' : 'ok'}>

@@ -131,6 +131,10 @@ type Service struct {
 	}
 	Log  *slog.Logger
 	HTTP *http.Client
+	// Subtitles, when set, looks for a title's missing subtitles at once
+	// when someone reports them missing or wrong: a season's or an
+	// episode's when they're given (0 for all).
+	Subtitles func(ctx context.Context, kind string, tmdbID int64, season, episode int)
 }
 
 // Settings reads the settings, with the defaults for what isn't saved.
@@ -602,6 +606,9 @@ func (s *Service) Report(ctx context.Context, m store.Member, in store.Issue) (s
 		if saved.Episode > 0 {
 			what += fmt.Sprintf(" episode %d", saved.Episode)
 		}
+	}
+	if saved.Problem == "subtitles" && s.Subtitles != nil {
+		s.Subtitles(context.WithoutCancel(ctx), saved.Kind, saved.TMDBID, saved.Season, saved.Episode)
 	}
 	s.tell(ctx, "issue.created", m.Name()+" reported a problem with "+what, ProblemName(saved.Problem)+sentence(saved.Message), t)
 	return saved, nil
