@@ -80,6 +80,9 @@ type AutoSettings struct {
 	// quality, to fix a flawed release (see SettingPropers). On unless
 	// turned off.
 	Propers bool `json:"propers"`
+	// MinAgeMinutes is how old a movie or episode release must be before
+	// Box Office grabs it by itself (see SettingMinAge); 0 grabs at once.
+	MinAgeMinutes int `json:"minAgeMinutes"`
 }
 
 // LoadAutoSettings reads the settings; automatic searches for missing
@@ -126,6 +129,13 @@ func LoadAutoSettings(ctx context.Context, st *store.Store) (AutoSettings, error
 		return a, err
 	}
 	a.Propers = v != "off"
+	if v, err = st.Setting(ctx, SettingMinAge); err != nil {
+		return a, err
+	}
+	a.MinAgeMinutes = DefaultMinAgeMinutes
+	if m, err := strconv.Atoi(v); err == nil && m >= 0 {
+		a.MinAgeMinutes = min(m, MaxMinAgeMinutes)
+	}
 	return a, nil
 }
 
@@ -184,7 +194,14 @@ func SaveAutoSettings(ctx context.Context, st *store.Store, a AutoSettings) erro
 	if !a.Propers {
 		propers = "off"
 	}
-	return st.SetSetting(ctx, SettingPropers, propers)
+	if err := st.SetSetting(ctx, SettingPropers, propers); err != nil {
+		return err
+	}
+	age := ""
+	if a.MinAgeMinutes != DefaultMinAgeMinutes {
+		age = strconv.Itoa(min(max(a.MinAgeMinutes, 0), MaxMinAgeMinutes))
+	}
+	return st.SetSetting(ctx, SettingMinAge, age)
 }
 
 // upgradeOn says whether Box Office looks for upgrades of a title by

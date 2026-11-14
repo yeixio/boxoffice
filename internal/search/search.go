@@ -75,6 +75,11 @@ type Candidate struct {
 	// REPACK, REAL, v2): it's taken in that copy's place at its quality.
 	Fix string `json:"fix,omitempty"`
 
+	// NewUntil is, for a release too new to grab by itself (the minimum
+	// release age), when it's old enough; set only while a person is
+	// looking at the list (Browsing), which a grab by hand doesn't wait for.
+	NewUntil time.Time `json:"newUntil,omitzero"`
+
 	mode       string // how an edition asked for goes in: replace or alongside
 	kind       string
 	titleID    int64
@@ -84,6 +89,7 @@ type Candidate struct {
 	langRank   int // 1 when its name says it's in the language asked for
 	fitRank    int // for a replacement, how near it is to the copy's quality (quality.ReplacementFit)
 	fix        bool
+	held       bool // too new to grab yet, and held back until it isn't (holdYoung)
 }
 
 // Results are a search's releases, best first, and the indexers that
@@ -385,7 +391,7 @@ func (s *Service) markSearched(ctx context.Context, kind string, id int64, res R
 	if res.Searched == 0 {
 		return
 	}
-	found := slices.ContainsFunc(res.Releases, func(c Candidate) bool { return c.Accepted })
+	found := slices.ContainsFunc(res.Releases, func(c Candidate) bool { return c.Accepted || c.held })
 	if err := s.Store.MarkSearched(ctx, kind, id, found); err != nil {
 		s.logger().Warn("couldn't note a search", "kind", kind, "id", id, "err", err)
 	}
@@ -484,6 +490,7 @@ func (s *Service) rank(ctx context.Context, out *Results) {
 	for i := range out.Releases {
 		out.Releases[i].priority = pri[out.Releases[i].IndexerID]
 	}
+	s.holdYoung(ctx, out)
 	slices.SortStableFunc(out.Releases, func(a, b Candidate) int {
 		switch {
 		case a.Accepted != b.Accepted:
@@ -763,6 +770,9 @@ func (s *Service) pick(ctx context.Context, res Results, kind string, titleID, e
 	}
 	i := slices.IndexFunc(res.Releases, func(c Candidate) bool { return c.Accepted })
 	if i < 0 {
+		if j := slices.IndexFunc(res.Releases, func(c Candidate) bool { return c.held }); j >= 0 {
+			return jobs.Done("found %s, posted only minutes ago; it's held back until it's old enough, then grabbed if it's still wanted%s", res.Releases[j].Title, note), nil
+		}
 		if len(res.Releases) == 0 {
 			return jobs.Done("found nothing on %d %s%s", res.Searched, plural(res.Searched, "indexer", "indexers"), note), nil
 		}

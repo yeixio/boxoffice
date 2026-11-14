@@ -200,7 +200,7 @@ export type Upcoming = {
 }
 
 export type AutoSearch = {
-  settings: { enabled: boolean; perDay: number; rss: boolean; rssMinutes: number; upgrades: boolean; upgradesPerMonth: number; replaceSameQuality: boolean; propers: boolean }
+  settings: { enabled: boolean; perDay: number; rss: boolean; rssMinutes: number; upgrades: boolean; upgradesPerMonth: number; replaceSameQuality: boolean; propers: boolean; minAgeMinutes: number }
   missing: number
   upgrades: number
   upgradesThisMonth: number
@@ -209,6 +209,8 @@ export type AutoSearch = {
   cap?: string
   last?: Job
   lastRss?: { at: string; releases: number; grabbed?: string[]; problems?: string[]; skipped?: string }
+  // New releases held back until they're old enough to grab by themselves.
+  held?: { key: string; title: string; dueAt: string; heldAt: string }[]
 }
 export type Job = { id: number; kind: string; subject: string; status: string; message?: string; createdAt: string; startedAt?: string; finishedAt?: string }
 
@@ -544,6 +546,8 @@ export type Candidate = {
   // Set when it's a fixed re-release of the copy there (PROPER, REPACK,
   // REAL, v2), taken in its place at its quality.
   fix?: string
+  // Too new for Box Office to grab by itself until then; a grab by hand doesn't wait.
+  newUntil?: string
 }
 export type ReleaseResults = { releases: Candidate[]; errors?: string[]; searched: number }
 export type IndexerCaps = { categories: { id: number; name: string; subs?: { id: number; name: string }[] }[]; movieSearch: boolean; tvSearch: boolean }

@@ -45,6 +45,11 @@ func (s *Server) autoSearch(w http.ResponseWriter, r *http.Request) error {
 	if l := s.Search.LastRSS(); l != nil {
 		out["lastRss"] = l
 	}
+	if held, err := s.Store.HeldReleases(ctx); err != nil {
+		return err
+	} else if len(held) > 0 {
+		out["held"] = held
+	}
 	if c, err := downloader.LoadCap(ctx, s.Store); err != nil {
 		return err
 	} else if c.Level != downloader.CapOK {
@@ -75,6 +80,9 @@ func (s *Server) saveAutoSearch(w http.ResponseWriter, r *http.Request) error {
 	}
 	if in.RSSMinutes < search.MinRSSMinutes {
 		return errorf(http.StatusBadRequest, fmt.Sprintf("RSS sync can run every %d minutes at most often", search.MinRSSMinutes))
+	}
+	if in.MinAgeMinutes < 0 || in.MinAgeMinutes > search.MaxMinAgeMinutes {
+		return errorf(http.StatusBadRequest, fmt.Sprintf("make the minimum release age between 0 (grab at once) and %d minutes", search.MaxMinAgeMinutes))
 	}
 	if err := search.SaveAutoSettings(r.Context(), s.Store, in); err != nil {
 		return err

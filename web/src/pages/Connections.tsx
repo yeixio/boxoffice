@@ -6,7 +6,7 @@ import { useState, type ReactNode } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AlertTriangle, CircleCheck, Pencil, Plus, Trash2 } from 'lucide-react'
 import { del, get, post, put, type AutoSearch, type Connections as ConnectionsData, type DataCapSettings, type DownloadClient, type IndexerCaps, type Indexer, type IndexerState, type UsenetServer } from '../api'
-import { bytes, gb, when } from '../format'
+import { bytes, clock, gb, when } from '../format'
 import { formatList, formatLocale } from '../i18n'
 import { Badge, Button, Card, ErrorNote, Field, Input, Modal, Select, Toggle } from '../ui'
 import { useDownloads } from './Downloads'
@@ -365,6 +365,28 @@ export function AutoSearchSettings() {
             </>
           }
         />
+        <NumberField
+          label={t('conn.auto.minAge')}
+          suffix={t('conn.auto.minAgeUnit')}
+          value={s.minAgeMinutes}
+          min={0}
+          max={1440}
+          busy={save.isPending}
+          onSave={(v) => save.mutate({ minAgeMinutes: v })}
+          hint={t('conn.auto.minAgeHint')}
+        />
+        {!!a.data.held?.length && (
+          <div className="text-xs text-muted">
+            <p>{t('conn.auto.heldTitle')}</p>
+            <ul className="mt-1 flex flex-col gap-0.5">
+              {a.data.held.map((h) => (
+                <li key={h.key} className="break-all">
+                  {t('conn.auto.heldItem', { title: h.title, time: clock(h.dueAt) })}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
         <Field
           label={t('conn.auto.perDay')}
           hint={t('conn.auto.perDayHint')}

@@ -57,6 +57,7 @@ func TestRSSTakesFixes(t *testing.T) {
 	})
 	s, st, m := setup(t, srv.URL)
 	ctx := context.Background()
+	st.SetSetting(ctx, SettingMinAge, "0") // they're posted just now
 	ix := testIndexer(t, st)
 	ix.EnableRSS = true
 	st.UpdateIndexer(ctx, ix)
@@ -137,6 +138,7 @@ func TestSearchTakesFix(t *testing.T) {
 	)
 	s, st, m := setup(t, srv.URL)
 	ctx := context.Background()
+	st.SetSetting(ctx, SettingMinAge, "0") // they're posted just now
 	moviePath := m.Path + "/The Matrix (1999).mkv"
 	st.AddFile(ctx, store.File{Kind: "movie", OwnerID: m.ID, Path: moviePath, Quality: 11})
 	fromRelease(t, st, "movie", m.ID, nil, "The.Matrix.1999.1080p.BluRay.x264-GRP", moviePath)
