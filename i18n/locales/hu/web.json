@@ -1239,6 +1239,18 @@
       "replaceSameHint": "Alapból bekapcsolva. Ha egy példányt hibásnak vagy rossz nyelvűnek jelentenek, a csere ugyanolyan minőségű lesz, vagy a legközelebbi ugyanakkora képmérettel. Soha nem nagyobb kép és nem remux, így egy 1080p-s példány nem tér vissza sokszor nagyobb 2160p-s remuxként. Ha abban a méretben nincs semmi, megfelel egy kisebb, amit a minőségprofil elfogad. A Kiadás kiválasztása gombbal továbbra is bármelyiket választhatod.",
       "propers": "Javított kiadások letöltése (PROPER, REPACK)",
       "propersHint": "Alapból be van kapcsolva. Néha egy kiadás hibásan jelenik meg, például elcsúszott hanggal vagy hiányzó jelenettel, és újra kiadják PROPER, REPACK vagy v2 néven. Ha az RSS-szinkronizálás meglátja egy meglévő másolatod javított kiadását, a Box Office ugyanabban a minőségben letölti, a régi másolat pedig a lomtár mappába kerül. Nem keres pluszban, nem számít frissítésnek, és vár, amíg az adatkeret szünetelteti a frissítéseket. Azokhoz a címekhez, amelyeknél ki vannak kapcsolva az automatikus frissítések, nem nyúl.",
+      "regrabs": "Legfeljebb ennyi csere naponta",
+      "regrabsToday_one": "ma: {{count}}",
+      "regrabsToday_other": "ma: {{count}}",
+      "regrabsHint": "10, hacsak nem módosítod; a 0 azt jelenti, nincs korlát. A csere egy új letöltés olyasmiből, ami már megvan: automatikus frissítés, javított kiadás (PROPER, REPACK) vagy a Matinee-ben jelentett példány, a sérült videók ellenőrzése által jelentett is. Ha a napiak elfogytak, a többi vár, és holnap újra keresi, a legrégebbit először, hogy egy hullámnyi ne egye meg a havi adatkeretet. A példány nélküli címek és a Box Office-ban saját magad indított letöltések soha nem számítanak és nem várnak.",
+      "regrabsWaitingTitle_one": "Holnapra vár ({{count}}):",
+      "regrabsWaitingTitle_other": "Holnapra vár ({{count}}):",
+      "regrabsWaitingItem": "{{subject}} · {{why}}",
+      "regrabWhy": {
+        "upgrade": "frissítés",
+        "fix": "javított kiadás",
+        "replace": "jelentett példány"
+      },
       "minAge": "Várakozás új kiadás letöltése előtt",
       "minAgeUnit": "perc",
       "minAgeHint": "30 perc, ha nem módosítod; 0 azonnal letölt. A hibás feltöltések, hamisítványok és a szerzői jog miatt eltávolítottak többnyire az első fél órában eltűnnek. A Box Office visszatartja az új film- vagy epizódkiadást, amíg ilyen régi nem lesz, majd letölti, ha még mindig kell és még mindig a legjobb. Ez nem jár plusz kereséssel. Amit te magad töltesz le, és a Matinee-ben kért példányok soha nem várnak.",

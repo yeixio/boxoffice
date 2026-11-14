@@ -1158,6 +1158,16 @@
       "replaceSameHint": "Hidup secara lalai. Apabila salinan dilaporkan rosak atau dalam bahasa yang salah, gantiannya berkualiti sama, atau yang paling hampir pada saiz gambar yang sama. Tidak sekali-kali gambar lebih besar atau remux, jadi salinan 1080p tidak kembali sebagai remux 2160p yang berkali ganda besarnya. Jika tiada apa-apa pada saiz itu, yang lebih kecil dan diterima profil kualiti pun boleh. Pilih keluaran masih membolehkan anda memilih apa-apa sahaja.",
       "propers": "Ambil keluaran yang dibaiki (PROPER, REPACK)",
       "propersHint": "Dihidupkan secara lalai. Kadangkala sesuatu keluaran ada kecacatan, seperti bunyi tidak segerak atau babak yang hilang, lalu dikeluarkan semula sebagai PROPER, REPACK atau v2. Apabila penyegerakan RSS melihat keluaran yang dibaiki untuk salinan yang anda ada, Box Office mengambilnya pada kualiti yang sama, dan salinan lama dipindahkan ke folder kitar semula. Tiada carian tambahan, tidak dikira sebagai naik taraf, dan ia menunggu selagi had data menjeda naik taraf. Tajuk yang naik taraf automatiknya dimatikan tidak disentuh.",
+      "regrabs": "Penggantian paling banyak sehari",
+      "regrabsToday_other": "hari ini: {{count}}",
+      "regrabsHint": "10 melainkan diubah; 0 bermaksud tiada had. Penggantian ialah muat turun baharu bagi sesuatu yang sudah anda miliki: naik taraf automatik, keluaran yang dibaiki (PROPER, REPACK), atau salinan yang dilaporkan dalam Matinee, termasuk oleh semakan video rosaknya. Apabila kuota hari itu habis, selebihnya menunggu dan dicari semula esok, yang paling lama dahulu, supaya lonjakannya tidak menghabiskan had data bulan ini. Tajuk tanpa salinan dan muat turun yang anda buat sendiri dalam Box Office tidak pernah dikira atau menunggu.",
+      "regrabsWaitingTitle_other": "Menunggu esok ({{count}}):",
+      "regrabsWaitingItem": "{{subject}} · {{why}}",
+      "regrabWhy": {
+        "upgrade": "naik taraf",
+        "fix": "keluaran dibaiki",
+        "replace": "salinan dilaporkan"
+      },
       "minAge": "Tunggu sebelum mengambil keluaran baharu",
       "minAgeUnit": "minit",
       "minAgeHint": "30 minit melainkan diubah; 0 mengambil serta-merta. Muat naik rosak, palsu dan yang diturunkan kerana hak cipta kebanyakannya ditarik dalam setengah jam pertama. Box Office menahan keluaran filem atau episod baharu sehingga ia berusia sebegini, kemudian mengambilnya jika masih dikehendaki dan masih yang terbaik. Ia tidak memakan carian tambahan. Ambilan yang anda buat sendiri, dan salinan yang diminta dalam Matinee, tidak pernah menunggu.",

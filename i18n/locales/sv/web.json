@@ -1239,6 +1239,18 @@
       "replaceSameHint": "På som standard. När en kopia rapporteras som trasig eller på fel språk får ersättningen samma kvalitet, eller den närmaste i samma bildstorlek. Aldrig en större bild eller en remux, så en 1080p-kopia kommer inte tillbaka som en många gånger större 2160p-remux. Finns inget i den storleken duger en mindre som kvalitetsprofilen tar. Med Välj en release kan du fortfarande välja vad som helst.",
       "propers": "Hämta rättade utgåvor (PROPER, REPACK)",
       "propersHint": "På som standard. Ibland kommer en utgåva ut med fel, som osynkat ljud eller en saknad scen, och släpps igen som PROPER, REPACK eller v2. När RSS-synkningen ser den rättade versionen av en kopia du har hämtar Box Office den i samma kvalitet, och den gamla kopian flyttas till papperskorgsmappen. Det gör inga extra sökningar, räknas inte som en uppgradering och väntar medan datataket har pausat uppgraderingar. Titlar med automatiska uppgraderingar avstängda lämnas i fred.",
+      "regrabs": "Högst så många ersättningar per dag",
+      "regrabsToday_one": "i dag: {{count}}",
+      "regrabsToday_other": "i dag: {{count}}",
+      "regrabsHint": "10 om inget ändras; 0 betyder ingen gräns. En ersättning är en ny nedladdning av något du redan har: en automatisk uppgradering, en rättad utgåva (PROPER, REPACK) eller en kopia som rapporterats i Matinee, även av dess kontroll av skadade videor. När dagens är slut väntar resten och söks igen i morgon, äldst först, så att en våg av dem inte äter upp månadens datatak. Titlar utan kopia och hämtningar du gör själv i Box Office räknas aldrig och väntar aldrig.",
+      "regrabsWaitingTitle_one": "Väntar på i morgon ({{count}}):",
+      "regrabsWaitingTitle_other": "Väntar på i morgon ({{count}}):",
+      "regrabsWaitingItem": "{{subject}} · {{why}}",
+      "regrabWhy": {
+        "upgrade": "uppgradering",
+        "fix": "rättad utgåva",
+        "replace": "rapporterad kopia"
+      },
       "minAge": "Vänta innan en ny utgåva hämtas",
       "minAgeUnit": "minuter",
       "minAgeHint": "30 minuter om inget ändras; 0 hämtar direkt. Trasiga uppladdningar, fejk och sådana som tas ner för upphovsrätt försvinner oftast inom den första halvtimmen. Box Office håller tillbaka en ny film- eller avsnittsutgåva tills den är så här gammal och hämtar den sedan om den fortfarande önskas och fortfarande är bäst. Det kostar inga extra sökningar. Det du hämtar själv, och kopior som begärs i Matinee, väntar aldrig.",

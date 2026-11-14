@@ -83,6 +83,10 @@ type AutoSettings struct {
 	// MinAgeMinutes is how old a movie or episode release must be before
 	// Box Office grabs it by itself (see SettingMinAge); 0 grabs at once.
 	MinAgeMinutes int `json:"minAgeMinutes"`
+	// RegrabsPerDay is the most replacements of copies on disk Box Office
+	// grabs by itself in a day (see SettingRegrabsPerDay); 0 means no
+	// limit.
+	RegrabsPerDay int `json:"regrabsPerDay"`
 }
 
 // LoadAutoSettings reads the settings; automatic searches for missing
@@ -135,6 +139,9 @@ func LoadAutoSettings(ctx context.Context, st *store.Store) (AutoSettings, error
 	a.MinAgeMinutes = DefaultMinAgeMinutes
 	if m, err := strconv.Atoi(v); err == nil && m >= 0 {
 		a.MinAgeMinutes = min(m, MaxMinAgeMinutes)
+	}
+	if a.RegrabsPerDay, err = regrabsPerDay(ctx, st); err != nil {
+		return a, err
 	}
 	return a, nil
 }
@@ -201,7 +208,14 @@ func SaveAutoSettings(ctx context.Context, st *store.Store, a AutoSettings) erro
 	if a.MinAgeMinutes != DefaultMinAgeMinutes {
 		age = strconv.Itoa(min(max(a.MinAgeMinutes, 0), MaxMinAgeMinutes))
 	}
-	return st.SetSetting(ctx, SettingMinAge, age)
+	if err := st.SetSetting(ctx, SettingMinAge, age); err != nil {
+		return err
+	}
+	regrabs := ""
+	if a.RegrabsPerDay != DefaultRegrabsPerDay {
+		regrabs = strconv.Itoa(min(max(a.RegrabsPerDay, 0), MaxRegrabsPerDay))
+	}
+	return st.SetSetting(ctx, SettingRegrabsPerDay, regrabs)
 }
 
 // upgradeOn says whether Box Office looks for upgrades of a title by
@@ -510,13 +524,23 @@ func (s *Service) jobWanted(ctx context.Context, _ string) (jobs.Result, error) 
 	if err != nil {
 		return jobs.Result{}, err
 	}
+	// Replacements left today: once they're used up, upgrades aren't
+	// searched for, as they couldn't be grabbed.
+	_, regrabsLeft, err := s.RegrabsToday(ctx)
+	if err != nil {
+		return jobs.Result{}, err
+	}
 	var due []Wanted
-	held := 0
+	held, regrabsHeld := 0, 0
 	for _, w := range list {
 		if !w.due(now) {
 			continue
 		}
 		if w.Upgrade && !a.upgradeOn(w.AutoUpgrade) {
+			continue
+		}
+		if w.Upgrade && regrabsLeft == 0 {
+			regrabsHeld++
 			continue
 		}
 		if w.Upgrade && left >= 0 {
@@ -680,6 +704,9 @@ func (s *Service) jobWanted(ctx context.Context, _ string) (jobs.Result, error) 
 	heldNote := ""
 	if held > 0 {
 		heldNote = fmt.Sprintf("; %s waiting: %s", count(held, "upgrade", "upgrades"), c.Why())
+	}
+	if regrabsHeld > 0 {
+		heldNote += fmt.Sprintf("; %s not looked for: today's replacements are used up", count(regrabsHeld, "upgrade", "upgrades"))
 	}
 	if !searchedAny {
 		if len(list) == 0 {

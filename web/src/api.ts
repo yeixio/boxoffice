@@ -200,7 +200,7 @@ export type Upcoming = {
 }
 
 export type AutoSearch = {
-  settings: { enabled: boolean; perDay: number; rss: boolean; rssMinutes: number; upgrades: boolean; upgradesPerMonth: number; replaceSameQuality: boolean; propers: boolean; minAgeMinutes: number }
+  settings: { enabled: boolean; perDay: number; rss: boolean; rssMinutes: number; upgrades: boolean; upgradesPerMonth: number; replaceSameQuality: boolean; propers: boolean; minAgeMinutes: number; regrabsPerDay: number }
   missing: number
   upgrades: number
   upgradesThisMonth: number
@@ -211,6 +211,10 @@ export type AutoSearch = {
   lastRss?: { at: string; releases: number; grabbed?: string[]; problems?: string[]; skipped?: string }
   // New releases held back until they're old enough to grab by themselves.
   held?: { key: string; title: string; dueAt: string; heldAt: string }[]
+  // Replacements of copies on disk grabbed by Box Office itself today, and
+  // those waiting for a day with room (why: upgrade, fix or replace).
+  regrabsToday: number
+  regrabsWaiting?: { key: string; subject: string; why: 'upgrade' | 'fix' | 'replace'; release: string; since: string }[]
 }
 export type Job = { id: number; kind: string; subject: string; status: string; message?: string; createdAt: string; startedAt?: string; finishedAt?: string }
 

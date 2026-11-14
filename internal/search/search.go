@@ -33,6 +33,8 @@ type Service struct {
 	mu    sync.Mutex
 	found map[string]cached // releases shown in a search, by key, to grab by hand
 	rss   rssState
+	// regrabMu keeps two replacements from both taking the day's last room.
+	regrabMu sync.Mutex
 }
 
 type cached struct {
@@ -644,6 +646,14 @@ func (s *Service) grab(ctx context.Context, c Candidate) (store.Download, error)
 			return store.Download{}, err
 		}
 	}
+	regrab := s.regrabOf(ctx, c, upgrade)
+	if regrab != "" {
+		s.regrabMu.Lock()
+		defer s.regrabMu.Unlock()
+		if err := s.regrabRoom(ctx, c, regrab); err != nil {
+			return store.Download{}, err
+		}
+	}
 	data, err := s.Client.FetchNZB(ctx, ix, c.Release)
 	if ctx.Err() == nil {
 		var ie *IndexerError
@@ -667,6 +677,11 @@ func (s *Service) grab(ctx context.Context, c Candidate) (store.Download, error)
 	if err == nil && upgrade {
 		if e := s.Store.CountAutoUpgrade(context.WithoutCancel(ctx)); e != nil {
 			s.logger().Warn("couldn't count an automatic upgrade", "release", c.Title, "err", e)
+		}
+	}
+	if err == nil && regrab != "" {
+		if e := s.Store.CountRegrab(context.WithoutCancel(ctx)); e != nil {
+			s.logger().Warn("couldn't count a replacement", "release", c.Title, "err", e)
 		}
 	}
 	return d, err
@@ -787,6 +802,8 @@ func (s *Service) pick(ctx context.Context, res Results, kind string, titleID, e
 	q, _ := quality.ByID(best.Quality)
 	if _, err := s.grab(ctx, best); errors.Is(err, ErrOff) {
 		return jobs.Skipped("found %s (%s) on %s, but downloading is off, so it wasn't grabbed", best.Title, q.Name, best.Indexer), nil
+	} else if errors.Is(err, ErrRegrabsUsedUp) {
+		return jobs.Done("found %s (%s) on %s, but %v", best.Title, q.Name, best.Indexer, err), nil
 	} else if err != nil {
 		return jobs.Result{}, err
 	}

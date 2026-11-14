@@ -1239,6 +1239,18 @@
       "replaceSameHint": "Oletuksena päällä. Kun kopio ilmoitetaan rikkinäiseksi tai väärän kieliseksi, korvaava on samaa laatua tai lähintä samalla kuvakoolla. Se ei ole koskaan isompi kuva eikä remux, joten 1080p-kopio ei palaa moninkertaisen kokoisena 2160p-remuxina. Jos siinä koossa ei löydy mitään, kelpaa pienempi, jonka laatuprofiili hyväksyy. Valitse julkaisu antaa edelleen valita minkä tahansa.",
       "propers": "Hae korjatut julkaisut (PROPER, REPACK)",
       "propersHint": "Oletuksena päällä. Joskus julkaisu tulee virheellisenä, esimerkiksi ääni on epätahdissa tai kohtaus puuttuu, ja se julkaistaan uudelleen nimellä PROPER, REPACK tai v2. Kun RSS-synkronointi näkee korjatun version kopiosta, joka sinulla on, Box Office hakee sen samassa laadussa ja vanha kopio siirtyy roskakorikansioon. Se ei tee ylimääräisiä hakuja, ei laske päivitykseksi ja odottaa, kun datakatto on keskeyttänyt päivitykset. Nimikkeisiin, joiden automaattiset päivitykset on poistettu käytöstä, ei kosketa.",
+      "regrabs": "Korvauksia enintään päivässä",
+      "regrabsToday_one": "tänään: {{count}}",
+      "regrabsToday_other": "tänään: {{count}}",
+      "regrabsHint": "10, ellei muuteta; 0 tarkoittaa ei rajaa. Korvaus on uusi lataus jostakin, mikä sinulla jo on: automaattinen päivitys, korjattu julkaisu (PROPER, REPACK) tai Matineessa ilmoitettu kopio, myös sen vaurioituneiden videoiden tarkistuksen ilmoittama. Kun päivän korvaukset on käytetty, loput odottavat ja niitä haetaan uudelleen huomenna vanhimmasta alkaen, jotta niiden ryöppy ei syö kuukauden datakattoa. Nimikkeet, joista ei ole kopiota, ja Box Officessa itse tekemäsi lataukset eivät koskaan laske eivätkä odota.",
+      "regrabsWaitingTitle_one": "Odottaa huomista ({{count}}):",
+      "regrabsWaitingTitle_other": "Odottaa huomista ({{count}}):",
+      "regrabsWaitingItem": "{{subject}} · {{why}}",
+      "regrabWhy": {
+        "upgrade": "päivitys",
+        "fix": "korjattu julkaisu",
+        "replace": "ilmoitettu kopio"
+      },
       "minAge": "Odota ennen uuden julkaisun noutamista",
       "minAgeUnit": "minuuttia",
       "minAgeHint": "30 minuuttia, ellei muuteta; 0 noutaa heti. Rikkinäiset lataukset, väärennökset ja tekijänoikeussyistä poistetut katoavat useimmiten ensimmäisen puolen tunnin aikana. Box Office pidättää uuden elokuva- tai jaksojulkaisun, kunnes se on näin vanha, ja noutaa sen sitten, jos sitä yhä halutaan ja se on yhä paras. Se ei maksa ylimääräisiä hakuja. Itse tekemäsi noudot ja Matineessa pyydetyt kopiot eivät koskaan odota.",

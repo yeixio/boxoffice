@@ -141,6 +141,11 @@ func (s *Service) jobAsked(ctx context.Context, payload string) (jobs.Result, er
 	// Someone asked for this copy in Matinee: it's theirs, like a grab by
 	// hand.
 	ctx = byHand(ctx)
+	if j.Want == store.WantReplace {
+		// A copy reported as bad: it counts toward the day's
+		// replacements, as reports can come in bursts.
+		ctx = reported(ctx)
+	}
 	var res Results
 	var err error
 	switch j.Kind {
