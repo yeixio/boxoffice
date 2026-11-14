@@ -1239,6 +1239,18 @@
       "replaceSameHint": "Varsayılan olarak açık. Bir kopyanın bozuk ya da yanlış dilde olduğu bildirildiğinde, yerine gelen aynı kalitede ya da aynı görüntü boyutundaki en yakın kalitede olur. Asla daha büyük görüntü ya da remux olmaz; böylece 1080p bir kopya kat kat büyük bir 2160p remux olarak geri gelmez. O boyutta bir şey bulunmazsa kalite profilinin kabul ettiği daha küçük biri olur. Bir sürüm seç ile yine istediğinizi seçebilirsiniz.",
       "propers": "Düzeltilmiş sürümleri indir (PROPER, REPACK)",
       "propersHint": "Varsayılan olarak açık. Bazen bir sürüm, sesi kaymış ya da bir sahnesi eksik olarak hatalı çıkar ve PROPER, REPACK veya v2 olarak yeniden yayımlanır. RSS eşitlemesi elindeki bir kopyanın düzeltilmiş sürümünü görünce Box Office onu aynı kalitede indirir ve eski kopya geri dönüşüm klasörüne gider. Fazladan arama yapmaz, yükseltme sayılmaz ve veri sınırı yükseltmeleri duraklattığı sürece bekler. Otomatik yükseltmeleri kapalı olan başlıklara dokunulmaz.",
+      "regrabs": "Günde en çok değiştirme",
+      "regrabsToday_one": "bugün: {{count}}",
+      "regrabsToday_other": "bugün: {{count}}",
+      "regrabsHint": "Değiştirilmedikçe 10; 0 sınır yok demektir. Değiştirme, zaten sahip olduğunuz bir şeyin yeniden indirilmesidir: otomatik yükseltme, düzeltilmiş sürüm (PROPER, REPACK) ya da Matinee'de bildirilen bir kopya (hasarlı video denetiminin bildirdikleri dahil). Günün hakkı bitince geri kalanlar bekler ve yarın en eskisinden başlayarak yeniden aranır; böylece bir dalga ayın veri sınırını tüketemez. Kopyası olmayan başlıklar ve Box Office'te kendi yaptığınız indirmeler hiçbir zaman sayılmaz ve beklemez.",
+      "regrabsWaitingTitle_one": "Yarını bekliyor ({{count}}):",
+      "regrabsWaitingTitle_other": "Yarını bekliyor ({{count}}):",
+      "regrabsWaitingItem": "{{subject}} · {{why}}",
+      "regrabWhy": {
+        "upgrade": "yükseltme",
+        "fix": "düzeltilmiş sürüm",
+        "replace": "bildirilen kopya"
+      },
       "minAge": "Yeni bir sürümü indirmeden önce bekle",
       "minAgeUnit": "dakika",
       "minAgeHint": "Değiştirilmezse 30 dakika; 0 hemen indirir. Bozuk yüklemeler, sahteler ve telif nedeniyle kaldırılanlar çoğunlukla ilk yarım saat içinde kaldırılır. Box Office yeni bir film veya bölüm sürümünü bu yaşa gelene kadar bekletir, sonra hâlâ isteniyorsa ve hâlâ en iyisiyse indirir. Ek arama gerektirmez. Kendi yaptığınız indirmeler ve Matinee'de istenen kopyalar asla beklemez.",

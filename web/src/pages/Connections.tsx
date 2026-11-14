@@ -366,6 +366,29 @@ export function AutoSearchSettings() {
           }
         />
         <NumberField
+          label={t('conn.auto.regrabs')}
+          suffix={t('conn.auto.regrabsToday', { count: a.data.regrabsToday })}
+          value={s.regrabsPerDay}
+          min={0}
+          max={1000}
+          busy={save.isPending}
+          onSave={(v) => save.mutate({ regrabsPerDay: v })}
+          hint={t('conn.auto.regrabsHint')}
+        />
+        {!!a.data.regrabsWaiting?.length && (
+          <div className="text-xs text-muted">
+            <p className="text-gold">{t('conn.auto.regrabsWaitingTitle', { count: a.data.regrabsWaiting.length })}</p>
+            <ul className="mt-1 flex flex-col gap-0.5">
+              {a.data.regrabsWaiting.map((w) => (
+                <li key={w.key} className="break-words">
+                  {t('conn.auto.regrabsWaitingItem', { subject: w.subject, why: t(`conn.auto.regrabWhy.${w.why}`) })}
+                  <span className="block break-all opacity-80">{w.release}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <NumberField
           label={t('conn.auto.minAge')}
           suffix={t('conn.auto.minAgeUnit')}
           value={s.minAgeMinutes}

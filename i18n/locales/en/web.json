@@ -1239,6 +1239,18 @@
       "replaceSameHint": "On by default. When a copy is reported as broken or in the wrong language, its replacement is the same quality, or the closest one at the same picture size. It's never a bigger picture or a remux, so a 1080p copy doesn't come back as a 2160p remux many times its size. If nothing at that size turns up, a smaller one the quality profile takes will do. Choose a release still lets you pick any.",
       "propers": "Grab fixed releases (PROPER, REPACK)",
       "propersHint": "On by default. A release sometimes comes out flawed, with the sound out of sync or a scene missing, and is put out again as a PROPER, REPACK or v2. When RSS sync sees the fixed one for a copy you have, Box Office grabs it at the same quality, and the old copy goes to the recycle folder. It makes no extra searches, isn't counted as an upgrade, and waits while the data cap has paused upgrades. Titles with automatic upgrades turned off are left alone.",
+      "regrabs": "Most replacements a day",
+      "regrabsToday_one": "{{count}} grabbed today",
+      "regrabsToday_other": "{{count}} grabbed today",
+      "regrabsHint": "10 unless changed; 0 means no limit. A replacement is a new download of something you already have: an automatic upgrade, a fixed release (PROPER, REPACK), or a copy reported in Matinee, including by its check for damaged videos. Once the day's are used up, the rest wait and are looked for again tomorrow, oldest first, so a burst of them can't eat the month's data cap. Titles with no copy yet, and grabs you make yourself in Box Office, never count or wait.",
+      "regrabsWaitingTitle_one": "Waiting for tomorrow ({{count}}):",
+      "regrabsWaitingTitle_other": "Waiting for tomorrow ({{count}}):",
+      "regrabsWaitingItem": "{{subject}} · {{why}}",
+      "regrabWhy": {
+        "upgrade": "upgrade",
+        "fix": "fixed release",
+        "replace": "reported copy"
+      },
       "minAge": "Wait before grabbing a new release",
       "minAgeUnit": "minutes",
       "minAgeHint": "30 minutes unless changed; 0 grabs at once. Broken uploads, fakes and ones taken down for copyright are mostly pulled within the first half hour. Box Office holds back a new movie or episode release until it's this old, then grabs it if it's still wanted and still the best one. That costs no extra searches. Grabs you make yourself, and replacements or editions asked for in Matinee, never wait.",

@@ -604,3 +604,25 @@ CREATE TABLE IF NOT EXISTS held_releases (
 	held_at BIGINT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS held_releases_due ON held_releases (due_at);
+
+-- Replacements Box Office grabbed by itself, by local day, for the daily
+-- limit on them: automatic upgrades, fixed releases (PROPER, REPACK) and
+-- copies reported in Matinee. Each takes the place of a copy on disk, so
+-- a burst of them can't eat the month's data cap.
+CREATE TABLE IF NOT EXISTS regrabs (
+	day TEXT NOT NULL PRIMARY KEY,
+	n   INTEGER NOT NULL DEFAULT 0
+);
+
+-- Replacements that were turned down because the day's were used up. The
+-- next day (or once the limit is raised) each is searched for again, oldest
+-- first, and grabbed if it's still wanted. Not kept in backups.
+CREATE TABLE IF NOT EXISTS regrab_waiting (
+	key       TEXT NOT NULL PRIMARY KEY, -- kind, title and episodes
+	subject   TEXT NOT NULL,             -- the movie or episodes, for Settings
+	why       TEXT NOT NULL,             -- upgrade, fix or replace
+	release   TEXT NOT NULL,             -- the release it would have grabbed
+	data      TEXT NOT NULL,             -- what to search for again, as JSON
+	waiting_since BIGINT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS regrab_waiting_since ON regrab_waiting (waiting_since);

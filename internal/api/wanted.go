@@ -35,7 +35,16 @@ func (s *Server) autoSearch(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
-	out := map[string]any{"settings": set, "missing": missing, "upgrades": upgrades, "upgradesThisMonth": used}
+	regrabs, _, err := s.Search.RegrabsToday(ctx)
+	if err != nil {
+		return err
+	}
+	out := map[string]any{"settings": set, "missing": missing, "upgrades": upgrades, "upgradesThisMonth": used, "regrabsToday": regrabs}
+	if waiting, err := s.Store.RegrabsWaiting(ctx); err != nil {
+		return err
+	} else if len(waiting) > 0 {
+		out["regrabsWaiting"] = waiting
+	}
 	if ok, why := s.Search.AutoDue(ctx); !ok {
 		out["paused"] = why
 	}
@@ -83,6 +92,9 @@ func (s *Server) saveAutoSearch(w http.ResponseWriter, r *http.Request) error {
 	}
 	if in.MinAgeMinutes < 0 || in.MinAgeMinutes > search.MaxMinAgeMinutes {
 		return errorf(http.StatusBadRequest, fmt.Sprintf("make the minimum release age between 0 (grab at once) and %d minutes", search.MaxMinAgeMinutes))
+	}
+	if in.RegrabsPerDay < 0 || in.RegrabsPerDay > search.MaxRegrabsPerDay {
+		return errorf(http.StatusBadRequest, fmt.Sprintf("make the most replacements a day between 0 (no limit) and %d", search.MaxRegrabsPerDay))
 	}
 	if err := search.SaveAutoSettings(r.Context(), s.Store, in); err != nil {
 		return err

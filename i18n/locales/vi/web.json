@@ -1158,6 +1158,16 @@
       "replaceSameHint": "Bật theo mặc định. Khi một bản bị báo là hỏng hoặc sai ngôn ngữ, bản thay thế sẽ cùng chất lượng, hoặc gần nhất ở cùng kích thước hình. Không bao giờ là hình lớn hơn hay bản remux, nên bản 1080p sẽ không quay lại thành bản remux 2160p lớn gấp nhiều lần. Nếu không có gì ở kích thước đó, một bản nhỏ hơn mà hồ sơ chất lượng nhận cũng được. Với Chọn bản phát hành bạn vẫn chọn được bất kỳ bản nào.",
       "propers": "Tải bản phát hành đã sửa (PROPER, REPACK)",
       "propersHint": "Bật theo mặc định. Đôi khi một bản phát hành bị lỗi, như âm thanh lệch hoặc thiếu một cảnh, và được phát hành lại dưới dạng PROPER, REPACK hoặc v2. Khi đồng bộ RSS thấy bản đã sửa của một bản bạn đang có, Box Office tải nó ở cùng chất lượng, còn bản cũ được chuyển vào thư mục tái chế. Không tốn thêm lượt tìm kiếm, không tính là nâng cấp và sẽ chờ khi giới hạn dữ liệu đang tạm dừng nâng cấp. Các tựa đã tắt nâng cấp tự động sẽ được giữ nguyên.",
+      "regrabs": "Số lần thay thế tối đa mỗi ngày",
+      "regrabsToday_other": "hôm nay: {{count}}",
+      "regrabsHint": "10 trừ khi thay đổi; 0 nghĩa là không giới hạn. Thay thế là một lượt tải mới cho thứ bạn đã có: nâng cấp tự động, bản phát hành đã sửa (PROPER, REPACK) hoặc bản sao bị báo lỗi trong Matinee, kể cả do Matinee tự kiểm tra video hỏng. Khi hết lượt trong ngày, phần còn lại sẽ chờ và được tìm lại vào ngày mai, cũ nhất trước, để một đợt dồn dập không ngốn hết hạn mức dữ liệu của tháng. Tựa chưa có bản sao và lượt tải bạn tự làm trong Box Office không bao giờ bị tính hay phải chờ.",
+      "regrabsWaitingTitle_other": "Chờ đến ngày mai ({{count}}):",
+      "regrabsWaitingItem": "{{subject}} · {{why}}",
+      "regrabWhy": {
+        "upgrade": "nâng cấp",
+        "fix": "bản đã sửa",
+        "replace": "bản sao bị báo lỗi"
+      },
       "minAge": "Chờ trước khi tải bản phát hành mới",
       "minAgeUnit": "phút",
       "minAgeHint": "30 phút nếu không đổi; 0 là tải ngay. Bản tải lên bị hỏng, bản giả và bản bị gỡ vì bản quyền thường bị gỡ trong nửa giờ đầu. Box Office giữ lại bản phát hành phim hoặc tập mới cho đến khi đủ cũ như vậy, rồi tải nếu vẫn cần và vẫn là bản tốt nhất. Việc này không tốn thêm lượt tìm kiếm. Những gì bạn tự tải và các bản sao được yêu cầu trong Matinee không bao giờ phải chờ.",

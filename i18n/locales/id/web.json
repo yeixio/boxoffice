@@ -1158,6 +1158,16 @@
       "replaceSameHint": "Aktif secara bawaan. Saat salinan dilaporkan rusak atau berbahasa salah, penggantinya berkualitas sama, atau yang terdekat dengan ukuran gambar yang sama. Tidak pernah gambar lebih besar atau remux, jadi salinan 1080p tidak kembali sebagai remux 2160p yang berkali-kali lebih besar. Jika tidak ada di ukuran itu, yang lebih kecil dan diterima profil kualitas pun boleh. Pilih rilis tetap memungkinkan Anda memilih apa saja.",
       "propers": "Ambil rilis yang diperbaiki (PROPER, REPACK)",
       "propersHint": "Aktif secara bawaan. Kadang sebuah rilis keluar dengan cacat, misalnya suara tidak sinkron atau ada adegan yang hilang, lalu dirilis ulang sebagai PROPER, REPACK, atau v2. Saat sinkronisasi RSS melihat versi perbaikan dari salinan yang kamu punya, Box Office mengambilnya dengan kualitas yang sama, dan salinan lama dipindah ke folder daur ulang. Tidak ada pencarian tambahan, tidak dihitung sebagai peningkatan, dan menunggu selama batas data menjeda peningkatan. Judul yang peningkatan otomatisnya dimatikan dibiarkan.",
+      "regrabs": "Penggantian terbanyak per hari",
+      "regrabsToday_other": "hari ini: {{count}}",
+      "regrabsHint": "10 kecuali diubah; 0 berarti tanpa batas. Penggantian adalah unduhan baru untuk sesuatu yang sudah Anda punya: peningkatan otomatis, rilis perbaikan (PROPER, REPACK), atau salinan yang dilaporkan di Matinee, termasuk oleh pemeriksaan video rusaknya. Setelah jatah hari itu habis, sisanya menunggu dan dicari lagi besok, yang terlama dulu, agar lonjakannya tidak menghabiskan batas data bulan ini. Judul tanpa salinan dan unduhan yang Anda lakukan sendiri di Box Office tidak pernah dihitung atau menunggu.",
+      "regrabsWaitingTitle_other": "Menunggu besok ({{count}}):",
+      "regrabsWaitingItem": "{{subject}} · {{why}}",
+      "regrabWhy": {
+        "upgrade": "peningkatan",
+        "fix": "rilis perbaikan",
+        "replace": "salinan dilaporkan"
+      },
       "minAge": "Tunggu sebelum mengambil rilis baru",
       "minAgeUnit": "menit",
       "minAgeHint": "30 menit kecuali diubah; 0 langsung mengambil. Unggahan rusak, palsu, dan yang diturunkan karena hak cipta kebanyakan ditarik dalam setengah jam pertama. Box Office menahan rilis film atau episode baru sampai berumur sepanjang ini, lalu mengambilnya jika masih diinginkan dan masih yang terbaik. Ini tidak memakan pencarian tambahan. Ambilan yang Anda lakukan sendiri, dan salinan yang diminta di Matinee, tidak pernah menunggu.",

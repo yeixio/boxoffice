@@ -1239,6 +1239,18 @@
       "replaceSameHint": "Standaard aan. Als een kopie als kapot of in de verkeerde taal wordt gemeld, krijgt de vervanging dezelfde kwaliteit, of de dichtstbijzijnde bij dezelfde beeldgrootte. Nooit een groter beeld of een remux, zodat een 1080p-kopie niet terugkomt als een veel grotere 2160p-remux. Is er in die grootte niets, dan volstaat een kleinere die het kwaliteitsprofiel neemt. Met Een release kiezen kun je nog steeds alles kiezen.",
       "propers": "Herstelde releases ophalen (PROPER, REPACK)",
       "propersHint": "Standaard aan. Soms verschijnt een release met een fout, zoals geluid dat niet synchroon loopt of een ontbrekende scène, en wordt hij opnieuw uitgebracht als PROPER, REPACK of v2. Als RSS-synchronisatie de herstelde versie ziet van een kopie die je hebt, haalt Box Office die op in dezelfde kwaliteit en gaat de oude kopie naar de prullenbakmap. Het kost geen extra zoekopdrachten, telt niet als upgrade en wacht zolang de datalimiet upgrades heeft gepauzeerd. Titels met automatische upgrades uit blijven ongemoeid.",
+      "regrabs": "Hoogstens zoveel vervangingen per dag",
+      "regrabsToday_one": "vandaag: {{count}}",
+      "regrabsToday_other": "vandaag: {{count}}",
+      "regrabsHint": "10 tenzij gewijzigd; 0 betekent geen limiet. Een vervanging is een nieuwe download van iets dat je al hebt: een automatische upgrade, een gecorrigeerde release (PROPER, REPACK) of een kopie die in Matinee is gemeld, ook door de controle op beschadigde video's. Zijn die van de dag op, dan wachten de rest en worden ze morgen opnieuw gezocht, de oudste eerst, zodat een golf ervan de datalimiet van de maand niet opmaakt. Titels zonder kopie en downloads die je zelf in Box Office doet, tellen nooit mee en wachten nooit.",
+      "regrabsWaitingTitle_one": "Wacht op morgen ({{count}}):",
+      "regrabsWaitingTitle_other": "Wacht op morgen ({{count}}):",
+      "regrabsWaitingItem": "{{subject}} · {{why}}",
+      "regrabWhy": {
+        "upgrade": "upgrade",
+        "fix": "gecorrigeerde release",
+        "replace": "gemelde kopie"
+      },
       "minAge": "Wachten voordat een nieuwe release wordt gegrabd",
       "minAgeUnit": "minuten",
       "minAgeHint": "30 minuten tenzij gewijzigd; 0 grabt meteen. Kapotte uploads, nepreleases en releases die om auteursrecht worden verwijderd, verdwijnen meestal binnen het eerste halfuur. Box Office houdt een nieuwe film- of afleveringsrelease vast tot hij zo oud is, en grabt hem dan als hij nog gewenst is en nog de beste. Dat kost geen extra zoekopdrachten. Wat je zelf grabt en kopieën die in Matinee zijn gevraagd, wachten nooit.",
