@@ -15,6 +15,7 @@ import { GameCheckButton } from './Games'
 import { EreaderSettingsCard } from './Ereaders'
 import { ProblemsCard } from './Problems'
 import { QualityCheckCard } from './QualityCheck'
+import { SubtitleSettingsCard } from './Subtitles'
 import { matches, spans, words } from './settingsSearch'
 import { Badge, Button, Card, ErrorNote, Field, Input, Modal, Select, Spinner, Toggle } from '../ui'
 
@@ -53,6 +54,7 @@ const sections: SectionDef[] = [
       { id: 'new-shows', el: <NewShows /> },
       { id: 'problems', el: <ProblemsCard /> },
       { id: 'quality-check', el: <QualityCheckCard />, keys: ['title.quality', 'qualityCheck.corrections'], terms: ['ffprobe', 'FFmpeg', 'HDR', 'Dolby Vision', 'MediaInfo', '4K', '1080p'] },
+      { id: 'subtitles', el: <SubtitleSettingsCard />, keys: ['subtitles.languages', 'subtitles.preferSdh', 'subtitles.dailyLimit', 'subtitles.apiKey'], terms: ['Bazarr', 'OpenSubtitles', 'Podnapisi', 'SRT', 'SDH', 'captions', 'CC'] },
       { id: 'recycle', el: <RecycleFolders /> },
     ],
   },

@@ -626,3 +626,34 @@ CREATE TABLE IF NOT EXISTS regrab_waiting (
 	waiting_since BIGINT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS regrab_waiting_since ON regrab_waiting (waiting_since);
+
+-- Subtitles for movie and episode files, one row per file and language
+-- (Settings → Subtitles): found inside the file, already beside it,
+-- downloaded by Box Office, or looked for and not found yet. Not kept in
+-- backups: a restored server looks again, which only reads the library.
+CREATE TABLE IF NOT EXISTS subtitles (
+	file_id    BIGINT NOT NULL,          -- media_files id
+	language   TEXT NOT NULL,            -- ISO 639-1, such as en
+	state      TEXT NOT NULL,            -- embedded, on_disk, fetched, missing or waiting
+	provider   TEXT NOT NULL DEFAULT '', -- where a downloaded one came from
+	path       TEXT NOT NULL DEFAULT '', -- the file Box Office wrote
+	release    TEXT NOT NULL DEFAULT '', -- the subtitle's release name
+	matches_file INTEGER NOT NULL DEFAULT 0, -- made for this very file, so its timing fits
+	sdh        INTEGER NOT NULL DEFAULT 0,
+	tries      INTEGER NOT NULL DEFAULT 0, -- looks that found nothing
+	note       TEXT NOT NULL DEFAULT '', -- why it's waiting, in words
+	checked_at BIGINT NOT NULL,
+	next_at    BIGINT NOT NULL DEFAULT 0, -- when to look again for a missing one
+	PRIMARY KEY (file_id, language)
+);
+CREATE INDEX IF NOT EXISTS subtitles_next ON subtitles (state, next_at);
+
+-- Subtitle lookups by local day and provider, for the daily limit. The
+-- provider '' counts files looked up.
+CREATE TABLE IF NOT EXISTS subtitle_usage (
+	day       TEXT NOT NULL,
+	provider  TEXT NOT NULL,
+	searches  INTEGER NOT NULL DEFAULT 0,
+	downloads INTEGER NOT NULL DEFAULT 0,
+	PRIMARY KEY (day, provider)
+);

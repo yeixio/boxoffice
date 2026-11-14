@@ -44,6 +44,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/qualitycheck"
 	"github.com/yeixio/boxoffice/internal/search"
 	"github.com/yeixio/boxoffice/internal/store"
+	"github.com/yeixio/boxoffice/internal/subtitles"
 	"github.com/yeixio/boxoffice/internal/version"
 	"github.com/yeixio/boxoffice/internal/wikidata"
 	"github.com/yeixio/boxoffice/web"
@@ -225,9 +226,17 @@ func run() error {
 			return c.Email, err
 		}}
 	srv.Ereaders = readers
+	// Subtitles are fetched for each movie and episode as it comes in, and
+	// slowly for the rest of the library.
+	subs := &subtitles.Service{Store: db, Log: log, UserAgent: "BoxOffice/" + version.Version}
+	srv.Subtitles = subs
+	srv.Portal.Subtitles = subs.Reported
 	downloads.Imported = func(ctx context.Context, d store.Download) {
-		if d.Kind == store.Ebook {
+		switch d.Kind {
+		case store.Ebook:
 			go readers.Imported(ctx, d)
+		case "movie", "series":
+			go subs.Imported(ctx, d)
 		}
 	}
 	// Admin alerts reach Matinee's admins too, with download news.
@@ -245,7 +254,7 @@ func run() error {
 	var wg sync.WaitGroup
 	for _, loop := range []func(context.Context){runner.Run, backups.Run, downloads.Run, mon.Monitor.Run, alerter.Run,
 		func(ctx context.Context) { cat.RefreshEvery(ctx, cfg.Refresh) }, func(ctx context.Context) { finder.AutoSearchEvery(ctx, runner) },
-		finder.RSSEvery, finder.HeldEvery, finder.RegrabsEvery, finder.PruneEvery, shelf.DetailsEvery, finds.Run, checker.Run, gameShelf.Run, func(ctx context.Context) { api.RecycleSweepEvery(ctx, db, log) },
+		finder.RSSEvery, finder.HeldEvery, finder.RegrabsEvery, finder.PruneEvery, shelf.DetailsEvery, finds.Run, checker.Run, subs.Run, gameShelf.Run, func(ctx context.Context) { api.RecycleSweepEvery(ctx, db, log) },
 		func(ctx context.Context) { retryImports(ctx, downloads, log) }} {
 		wg.Add(1)
 		go func() { defer wg.Done(); loop(ctx) }()

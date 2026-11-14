@@ -12,6 +12,7 @@ import { get, patch, post, type MediaFile, type Movie } from '../api'
 import { bytes, day, runtime } from '../format'
 import { qualityName, useProfiles, useQualities } from '../hooks'
 import { pictureText } from './QualityCheck'
+import { FindSubtitles, SubtitleBadges } from './Subtitles'
 import { Badge, Button, Card, ErrorNote, Field, Poster, Select, Spinner, Toggle } from '../ui'
 
 // FileFacts are what's known of one copy of the movie: its cut, path,
@@ -48,6 +49,14 @@ function FileFacts({ f }: { f: MediaFile }) {
         <>
           <dt className="text-muted">{t('title.runs')}</dt>
           <dd>{runtime(length)}</dd>
+        </>
+      )}
+      {f.subtitles && f.subtitles.length > 0 && (
+        <>
+          <dt className="text-muted">{t('subtitles.title')}</dt>
+          <dd>
+            <SubtitleBadges subs={f.subtitles} />
+          </dd>
         </>
       )}
       <dt className="text-muted">{t('title.size')}</dt>
@@ -181,10 +190,13 @@ export function MovieDetail() {
             <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">
               <FileFacts f={m.file} />
               {!locked && (
-                <dd className="col-span-2 mt-2">
+                <dd className="col-span-2 mt-2 flex flex-wrap items-start gap-2">
                   <Button variant="danger" onClick={() => setDeleteFile(true)}>
                     <Trash2 className="size-4" aria-hidden /> {t('title.deleteFile')}
                   </Button>
+                  {[m.file, ...(m.editions ?? [])].some((f) => f.subtitles?.some((s) => s.state === 'missing' || s.state === 'waiting' || s.state === 'pending')) && (
+                    <FindSubtitles path={`/movies/${m.id}/subtitles`} onFound={() => qc.invalidateQueries({ queryKey: ['movie', id] })} />
+                  )}
                 </dd>
               )}
             </dl>

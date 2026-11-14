@@ -40,6 +40,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/qualitycheck"
 	"github.com/yeixio/boxoffice/internal/search"
 	"github.com/yeixio/boxoffice/internal/store"
+	"github.com/yeixio/boxoffice/internal/subtitles"
 	"github.com/yeixio/boxoffice/internal/tmdb"
 )
 
@@ -90,6 +91,8 @@ type Server struct {
 	Monitoring *Monitoring
 	// Ereaders sends ebooks to e-readers; nil makes one.
 	Ereaders *ereader.Service
+	// Subtitles fetches subtitles; nil makes one that only answers.
+	Subtitles *subtitles.Service
 	// Restart stops Box Office cleanly and starts it again, for the
 	// Restart button in Settings; nil means it can't.
 	Restart func()
@@ -97,10 +100,11 @@ type Server struct {
 	// nzbs holds NZBs checked on the Downloads page until they're added.
 	nzbs nzbHold
 
-	ereaderOnce sync.Once
-	started     time.Time
-	failures    sync.Map // username -> *failure
-	healthCount healthCount
+	ereaderOnce  sync.Once
+	subtitleOnce sync.Once
+	started      time.Time
+	failures     sync.Map // username -> *failure
+	healthCount  healthCount
 }
 
 type failure struct {
@@ -286,6 +290,7 @@ func (s *Server) Handler() http.Handler {
 	routes = append(routes, s.libScanRoutes()...)
 	routes = append(routes, s.problemRoutes()...)
 	routes = append(routes, s.qualityCheckRoutes()...)
+	routes = append(routes, s.subtitleRoutes()...)
 	routes = append(routes, s.portalRoutes()...)
 	routes = append(routes, s.gameRoutes()...)
 	routes = append(routes, s.importRoutes()...)

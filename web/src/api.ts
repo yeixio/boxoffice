@@ -76,6 +76,47 @@ export type MediaFile = {
   // Where the edition was told from; length is a guess.
   editionFrom?: 'name' | 'release' | 'file' | 'length'
   editionByLength?: boolean
+  // Its subtitles in each language wanted, while subtitles are on.
+  subtitles?: FileSubtitle[]
+}
+
+// A file's subtitles in one language (Settings → Subtitles): inside it,
+// beside it, downloaded, looked for and not found yet, waiting on a
+// provider, or not looked at yet.
+export type SubtitleState = 'embedded' | 'on_disk' | 'fetched' | 'missing' | 'waiting' | 'pending'
+export type FileSubtitle = {
+  language: string
+  state: SubtitleState
+  provider?: string
+  release?: string
+  matchesFile?: boolean
+  sdh?: boolean
+  tries?: number
+  note?: string
+  checkedAt?: string
+  nextAt?: string
+}
+
+export type SubtitleSettings = {
+  config: {
+    on: boolean
+    languages: string[]
+    preferSdh: boolean
+    dailyLimit: number
+    podnapisi: boolean
+    openSubtitles: { username: string; hasApiKey: boolean; hasPassword: boolean }
+  }
+  status: {
+    running: boolean
+    done: number
+    error?: string
+    ffprobe: boolean
+    counts: { files: number; complete: number; missing: number; waiting: number; pending: number; fetched: number }
+    today: { looked: number; limit: number; providers: Record<string, { searches: number; downloads: number; usedUp?: boolean }> }
+    recent: { kind: 'movie' | 'series'; titleId: number; title: string; season?: number; episode?: number; language: string; provider: string; at: string }[]
+  }
+  languages: { code: string; name: string }[]
+  suggested: string[]
 }
 
 export type QualityCheckState = {
