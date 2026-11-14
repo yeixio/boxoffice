@@ -1137,7 +1137,33 @@
     "openPage": "Avaa: {{page}}",
     "ereadersOff": "Lähetä e-kirjoja sähköpostilla Kindleen, PocketBookiin tai muuhun lukulaitteeseen. Ota {{ebooks}} käyttöön asettaaksesi sen.",
     "turnOnType": "Ota käyttöön: {{name}}",
-    "gameLayout": "Valitse kansio, jossa pelisi ovat: yhden järjestelmän kansio tai kansio, jossa on oma kansio kullekin järjestelmälle (mame, snes, n64 ja niin edelleen). Box Office tunnistaa järjestelmät itse."
+    "gameLayout": "Valitse kansio, jossa pelisi ovat: yhden järjestelmän kansio tai kansio, jossa on oma kansio kullekin järjestelmälle (mame, snes, n64 ja niin edelleen). Box Office tunnistaa järjestelmät itse.",
+    "database": {
+      "title": "Tietokanta",
+      "usesSqlite": "Box Office käyttää SQLite-tiedostoa {{where}}.",
+      "usesPostgres": "Box Office käyttää PostgreSQL-tietokantaa {{where}}.",
+      "movedFrom": "Siirretty tänne kohteesta {{from}} {{time}}: {{rows}} riviä kopioitu ja laskettu.",
+      "configured": "Palvelimen asetukset osoittavat yhä tietokantaan, josta se siirrettiin: {{old}}. Vaihda ne tähän (BOXOFFICE_DATABASE_URL tai Helm-kaavion database.url). Pidä vanha tietokanta siihen asti käynnissä: se kertoo Box Officelle, missä uusi on.",
+      "pending": "Box Office siirtää tietokantansa kohteeseen {{where}} seuraavalla käynnistyskerralla.",
+      "cancel": "Peru siirto",
+      "failed": "Viimeisin siirto ei onnistunut, joten Box Office piti tietokantansa muuttamattomana: {{error}}",
+      "intro": "Siirrä kaikki toiseen tietokantaan: Box Office kopioi tiedot sinne omiin tauluihinsa, laskee jokaisen taulun rivit molemmissa ja vaihtaa sitten. Nykyinen tietokanta säilyttää kaikki tietonsa.",
+      "moveTo": "Siirrä kohteeseen",
+      "postgres": "PostgreSQL",
+      "sqlite": "SQLite-tiedosto",
+      "url": "PostgreSQL-osoite",
+      "urlHint": "Tyhjä tietokanta PostgreSQL-palvelimella, jonka omistaa Box Officen käyttäjä. Luo se ensin, esimerkiksi komennolla CREATE DATABASE boxoffice.",
+      "file": "Tiedosto",
+      "fileHint": "Uuden tiedoston koko polku levyllä, joka säilyy.",
+      "check": "Tarkista",
+      "checkOk": "Box Office voi siirtyä kohteeseen {{where}}.",
+      "move": "Siirrä tietokanta",
+      "restartByHand": "Tämä palvelin ei voi käynnistää itseään uudelleen: käynnistä Box Office uudelleen siirron viimeistelemiseksi.",
+      "moveConfirm": "Siirretäänkö tietokanta kohteeseen {{where}}? Box Office käynnistyy uudelleen, kopioi kaiken, tarkistaa sen ja avautuu uudella tietokannalla.",
+      "moving": "Siirretään tietokantaa…",
+      "movingSub": "Box Office avautuu taas, kun kaikki on kopioitu ja tarkistettu.",
+      "moveTitle": "Siirretäänkö tietokanta?"
+    }
   },
   "mediaTypes": {
     "music": {

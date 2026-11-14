@@ -1214,7 +1214,33 @@
     "openPage": "Abrir {{page}}",
     "ereadersOff": "Envía libros electrónicos por correo a un Kindle, PocketBook u otro lector. Activa {{ebooks}} para configurarlo.",
     "turnOnType": "Activar {{name}}",
-    "gameLayout": "Elige la carpeta donde están tus juegos: la carpeta de un sistema, o una carpeta con una carpeta por sistema (mame, snes, n64, etc.). Box Office encuentra los sistemas por sí solo."
+    "gameLayout": "Elige la carpeta donde están tus juegos: la carpeta de un sistema, o una carpeta con una carpeta por sistema (mame, snes, n64, etc.). Box Office encuentra los sistemas por sí solo.",
+    "database": {
+      "title": "Base de datos",
+      "usesSqlite": "Box Office usa el archivo SQLite {{where}}.",
+      "usesPostgres": "Box Office usa la base de datos PostgreSQL {{where}}.",
+      "movedFrom": "Trasladada aquí desde {{from}} el {{time}}: {{rows}} filas copiadas y contadas.",
+      "configured": "La configuración del servidor aún indica la base de datos de la que se trasladó, {{old}}. Cámbiala a esta (BOXOFFICE_DATABASE_URL, o database.url en el chart de Helm). Hasta entonces, mantén la antigua en marcha: le dice a Box Office dónde está la nueva.",
+      "pending": "Box Office trasladará su base de datos a {{where}} la próxima vez que se inicie.",
+      "cancel": "Cancelar traslado",
+      "failed": "El último traslado no funcionó, así que Box Office mantuvo su base de datos sin cambios: {{error}}",
+      "intro": "Traslada todo a otra base de datos: Box Office lo copia en sus propias tablas allí, cuenta las filas de cada tabla en ambas y luego cambia. La base de datos actual conserva todos sus datos.",
+      "moveTo": "Trasladar a",
+      "postgres": "PostgreSQL",
+      "sqlite": "Archivo SQLite",
+      "url": "Dirección de PostgreSQL",
+      "urlHint": "Una base de datos vacía en el servidor PostgreSQL, propiedad del usuario de Box Office. Créala antes, por ejemplo con CREATE DATABASE boxoffice.",
+      "file": "Archivo",
+      "fileHint": "La ruta completa de un archivo nuevo, en un disco que perdure.",
+      "check": "Comprobar",
+      "checkOk": "Box Office puede trasladarse a {{where}}.",
+      "move": "Trasladar base de datos",
+      "restartByHand": "Este servidor no puede reiniciarse solo: reinicia Box Office para terminar un traslado.",
+      "moveConfirm": "¿Trasladar la base de datos a {{where}}? Box Office se reinicia, copia todo, lo comprueba y abre con la nueva base de datos.",
+      "moving": "Trasladando la base de datos…",
+      "movingSub": "Box Office vuelve a abrirse cuando todo esté copiado y comprobado.",
+      "moveTitle": "¿Trasladar la base de datos?"
+    }
   },
   "mediaTypes": {
     "music": {

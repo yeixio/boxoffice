@@ -1137,7 +1137,33 @@
     "openPage": "{{page}} sayfasını aç",
     "ereadersOff": "E-kitapları e-postayla Kindle, PocketBook veya başka bir okuyucuya gönderin. Kurmak için {{ebooks}} özelliğini açın.",
     "turnOnType": "{{name}} özelliğini aç",
-    "gameLayout": "Oyunlarının bulunduğu klasörü seç: tek bir sistemin klasörünü ya da her sistem için bir klasör içeren bir klasörü (mame, snes, n64 vb.). Box Office sistemleri kendisi bulur."
+    "gameLayout": "Oyunlarının bulunduğu klasörü seç: tek bir sistemin klasörünü ya da her sistem için bir klasör içeren bir klasörü (mame, snes, n64 vb.). Box Office sistemleri kendisi bulur.",
+    "database": {
+      "title": "Veritabanı",
+      "usesSqlite": "Box Office {{where}} SQLite dosyasını kullanıyor.",
+      "usesPostgres": "Box Office {{where}} PostgreSQL veritabanını kullanıyor.",
+      "movedFrom": "{{time}} tarihinde {{from}} konumundan buraya taşındı: {{rows}} satır kopyalandı ve sayıldı.",
+      "configured": "Sunucunun ayarları hâlâ taşındığı eski veritabanını gösteriyor: {{old}}. Bunu bu veritabanıyla değiştirin (BOXOFFICE_DATABASE_URL veya Helm chart'ında database.url). O zamana kadar eski veritabanını çalışır tutun: Box Office'ye yenisinin nerede olduğunu o söyler.",
+      "pending": "Box Office bir sonraki açılışta veritabanını {{where}} konumuna taşıyacak.",
+      "cancel": "Taşımayı iptal et",
+      "failed": "Son taşıma başarısız oldu, bu yüzden Box Office veritabanını değiştirmeden korudu: {{error}}",
+      "intro": "Her şeyi başka bir veritabanına taşıyın: Box Office verileri oradaki kendi tablolarına kopyalar, her tablonun satırlarını iki tarafta da sayar ve sonra geçiş yapar. Şu anki veritabanı tüm verilerini korur.",
+      "moveTo": "Şuraya taşı",
+      "postgres": "PostgreSQL",
+      "sqlite": "SQLite dosyası",
+      "url": "PostgreSQL adresi",
+      "urlHint": "PostgreSQL sunucusunda Box Office kullanıcısına ait boş bir veritabanı. Önce oluşturun, örneğin CREATE DATABASE boxoffice ile.",
+      "file": "Dosya",
+      "fileHint": "Kalıcı bir diskteki yeni bir dosyanın tam yolu.",
+      "check": "Denetle",
+      "checkOk": "Box Office {{where}} konumuna taşınabilir.",
+      "move": "Veritabanını taşı",
+      "restartByHand": "Bu sunucu kendini yeniden başlatamıyor: taşımayı bitirmek için Box Office'yi yeniden başlatın.",
+      "moveConfirm": "Veritabanı {{where}} konumuna taşınsın mı? Box Office yeniden başlar, her şeyi kopyalar, denetler ve yeni veritabanıyla açılır.",
+      "moving": "Veritabanı taşınıyor…",
+      "movingSub": "Her şey kopyalanıp denetlenince Box Office yeniden açılır.",
+      "moveTitle": "Veritabanı taşınsın mı?"
+    }
   },
   "mediaTypes": {
     "music": {

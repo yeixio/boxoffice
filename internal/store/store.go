@@ -82,9 +82,26 @@ var backfill = map[string]string{
 	"downloads.missing": "UPDATE downloads SET missing = 1 WHERE status = 'failed' AND quarantined = '' AND (message LIKE '%gone from your news servers%' OR message LIKE '%missing from your news servers%' OR message LIKE '%blocks are damaged%')",
 }
 
+// schemaRunner runs the schema's statements: the database itself, or a
+// transaction in the database a move copies into (move.go).
+type schemaRunner interface {
+	ExecContext(ctx context.Context, query string, args ...any) (sql.Result, error)
+	QueryRowContext(ctx context.Context, query string, args ...any) *sql.Row
+}
+
 func (s *Store) migrate(ctx context.Context) error {
+	if err := migrateSchema(ctx, s.db, s.postgres); err != nil {
+		return err
+	}
+	return s.migrateData(ctx)
+}
+
+// migrateSchema makes Box Office's tables and adds the columns added since
+// they were first made. It only looks (it never runs a query that fails),
+// so it can run in a PostgreSQL transaction.
+func migrateSchema(ctx context.Context, db schemaRunner, postgres bool) error {
 	ddl := schema
-	if s.postgres {
+	if postgres {
 		ddl = strings.ReplaceAll(ddl, "INTEGER PRIMARY KEY AUTOINCREMENT", "BIGSERIAL PRIMARY KEY")
 		ddl = strings.ReplaceAll(ddl, "BLOB", "BYTEA")
 	}
@@ -93,7 +110,7 @@ func (s *Store) migrate(ctx context.Context) error {
 		if strings.TrimSpace(stmt) == "" {
 			continue
 		}
-		if _, err := s.db.ExecContext(ctx, stmt); err != nil {
+		if _, err := db.ExecContext(ctx, stmt); err != nil {
 			return err
 		}
 	}
@@ -137,17 +154,37 @@ func (s *Store) migrate(ctx context.Context) error {
 		{"games", "serial", "TEXT NOT NULL DEFAULT ''"},
 		{"game_wants", "serial", "TEXT NOT NULL DEFAULT ''"},
 	} {
-		if _, err := s.db.ExecContext(ctx, "SELECT "+c.column+" FROM "+c.table+" WHERE 1 = 0"); err != nil {
-			if _, err := s.db.ExecContext(ctx, "ALTER TABLE "+c.table+" ADD COLUMN "+c.column+" "+c.def); err != nil {
+		has, err := hasColumn(ctx, db, postgres, c.table, c.column)
+		if err != nil {
+			return fmt.Errorf("look for %s.%s: %w", c.table, c.column, err)
+		}
+		if !has {
+			if _, err := db.ExecContext(ctx, "ALTER TABLE "+c.table+" ADD COLUMN "+c.column+" "+c.def); err != nil {
 				return fmt.Errorf("add %s.%s: %w", c.table, c.column, err)
 			}
 			if fill := backfill[c.table+"."+c.column]; fill != "" {
-				if _, err := s.db.ExecContext(ctx, fill); err != nil {
+				if _, err := db.ExecContext(ctx, fill); err != nil {
 					return fmt.Errorf("fill in %s.%s: %w", c.table, c.column, err)
 				}
 			}
 		}
 	}
+	return nil
+}
+
+func hasColumn(ctx context.Context, db schemaRunner, postgres bool, table, column string) (bool, error) {
+	q := "SELECT COUNT(*) FROM pragma_table_info(?) WHERE name = ?"
+	if postgres {
+		q = "SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = current_schema() AND table_name = $1 AND column_name = $2"
+	}
+	var n int
+	err := db.QueryRowContext(ctx, q, table, column).Scan(&n)
+	return n > 0, err
+}
+
+// migrateData brings the rows up to date and gives a new server what it
+// starts with.
+func (s *Store) migrateData(ctx context.Context) error {
 	// Radarr's and Sonarr's copies of one download client become one.
 	if err := s.MergeDuplicateDownloadClients(ctx); err != nil {
 		return err

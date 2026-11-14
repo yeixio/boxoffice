@@ -215,7 +215,7 @@ ingress:
       paths: [{ path: /, pathType: Prefix }]
 ```
 
-The chart runs one pod with SQLite on its own volume by default. Set `postgresql.enabled=true` for a bundled PostgreSQL (its password is made into a Secret on first install, so it works the same under Argo CD or Flux), or `database.url` for your own. Set `apiKey.existingSecret` and `tmdb.existingSecret` to manage keys with the cluster. Mount the same volumes Matinee reads, at the same paths. Everything else is in [`values.yaml`](deploy/helm/boxoffice/values.yaml).
+The chart runs one pod with SQLite on its own volume by default. Set `postgresql.enabled=true` for a bundled PostgreSQL (its password is made into a Secret on first install, so it works the same under Argo CD or Flux), or `database.url` for your own. An install on SQLite moves to PostgreSQL (or back) from **Settings → General → Database**; see [Moving the database](docs/database.md). Set `apiKey.existingSecret` and `tmdb.existingSecret` to manage keys with the cluster. Mount the same volumes Matinee reads, at the same paths. Everything else is in [`values.yaml`](deploy/helm/boxoffice/values.yaml).
 
 Set `image.tag=main` to follow `main` instead. A reverse proxy or ingress in front of Box Office should allow long requests (an hour is plenty), because a big Move in preview takes a while.
 

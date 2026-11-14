@@ -369,6 +369,24 @@ export type Connections = {
 // What the Restart button needs to know first.
 export type RestartInfo = { downloads: number; how: 'kubernetes' | 'self'; available: boolean }
 
+/** Which database Box Office uses, and moving it (Settings → General → Database). */
+export type DatabaseInfo = {
+  kind: 'sqlite' | 'postgres'
+  /** The database in use: a PostgreSQL URL without its password, or a SQLite file. */
+  where: string
+  /** Set when the server's settings still name the database it was moved from. */
+  configured?: string
+  movedFrom?: { from: string; at: number; rows: number }
+  /** A move waiting for the next start. */
+  pending?: string
+  lastError?: string
+  canRestart: boolean
+  /** Where a new SQLite file could go, when that place is free. */
+  suggestedFile?: string
+  /** Downloads running now, which the move's restart pauses. */
+  downloads: number
+}
+
 export type SystemInfo = { version: string; database: string; dataDir: string; go: string; os: string; startedAt: string; movies: number; series: number }
 
 // A problem Box Office found in itself, and how to fix it.

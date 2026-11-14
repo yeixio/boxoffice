@@ -1137,7 +1137,33 @@
     "openPage": "{{page}} öffnen",
     "ereadersOff": "E-Books per E-Mail an einen Kindle, PocketBook oder anderen E-Reader senden. Schalte {{ebooks}} ein, um es einzurichten.",
     "turnOnType": "{{name}} einschalten",
-    "gameLayout": "Wähle den Ordner mit deinen Spielen: den Ordner eines Systems oder einen Ordner mit einem Ordner pro System (mame, snes, n64 usw.). Box Office erkennt die Systeme selbst."
+    "gameLayout": "Wähle den Ordner mit deinen Spielen: den Ordner eines Systems oder einen Ordner mit einem Ordner pro System (mame, snes, n64 usw.). Box Office erkennt die Systeme selbst.",
+    "database": {
+      "title": "Datenbank",
+      "usesSqlite": "Box Office nutzt die SQLite-Datei {{where}}.",
+      "usesPostgres": "Box Office nutzt die PostgreSQL-Datenbank {{where}}.",
+      "movedFrom": "Am {{time}} von {{from}} hierher umgezogen: {{rows}} Zeilen kopiert und gezählt.",
+      "configured": "Die Servereinstellungen nennen noch die Datenbank, aus der umgezogen wurde: {{old}}. Ändere sie auf diese (BOXOFFICE_DATABASE_URL oder database.url im Helm-Chart). Lass die alte Datenbank bis dahin laufen: Sie sagt Box Office, wo die neue ist.",
+      "pending": "Box Office zieht seine Datenbank beim nächsten Start nach {{where}} um.",
+      "cancel": "Umzug abbrechen",
+      "failed": "Der letzte Umzug hat nicht geklappt, daher behält Box Office seine bisherige Datenbank unverändert: {{error}}",
+      "intro": "Alles in eine andere Datenbank umziehen: Box Office kopiert es dort in seine eigenen Tabellen, zählt die Zeilen jeder Tabelle in beiden und wechselt dann. Die jetzige Datenbank behält alle Daten.",
+      "moveTo": "Umziehen nach",
+      "postgres": "PostgreSQL",
+      "sqlite": "SQLite-Datei",
+      "url": "PostgreSQL-Adresse",
+      "urlHint": "Eine leere Datenbank auf dem PostgreSQL-Server, die Box Offices Benutzer gehört. Lege sie zuerst an, etwa mit CREATE DATABASE boxoffice.",
+      "file": "Datei",
+      "fileHint": "Der vollständige Pfad einer neuen Datei, auf einem Datenträger, der bleibt.",
+      "check": "Prüfen",
+      "checkOk": "Box Office kann nach {{where}} umziehen.",
+      "move": "Datenbank umziehen",
+      "restartByHand": "Dieser Server kann sich nicht selbst neu starten: Starte Box Office neu, um einen Umzug abzuschließen.",
+      "moveConfirm": "Die Datenbank nach {{where}} umziehen? Box Office startet neu, kopiert alles, prüft es und öffnet mit der neuen Datenbank.",
+      "moving": "Datenbank wird umgezogen…",
+      "movingSub": "Box Office öffnet wieder, sobald alles kopiert und geprüft ist.",
+      "moveTitle": "Datenbank umziehen?"
+    }
   },
   "mediaTypes": {
     "music": {

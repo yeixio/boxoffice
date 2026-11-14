@@ -1060,7 +1060,33 @@
     "openPage": "{{page}} 열기",
     "ereadersOff": "전자책을 이메일로 Kindle, PocketBook 등 전자책 리더에 보낼 수 있습니다. 설정하려면 {{ebooks}}을(를) 켜세요.",
     "turnOnType": "{{name}} 켜기",
-    "gameLayout": "게임이 있는 폴더를 고르세요: 한 시스템의 폴더나, 시스템마다 폴더가 있는 폴더(mame, snes, n64 등)입니다. 시스템은 Box Office가 알아서 찾습니다."
+    "gameLayout": "게임이 있는 폴더를 고르세요: 한 시스템의 폴더나, 시스템마다 폴더가 있는 폴더(mame, snes, n64 등)입니다. 시스템은 Box Office가 알아서 찾습니다.",
+    "database": {
+      "title": "데이터베이스",
+      "usesSqlite": "Box Office는 SQLite 파일 {{where}}을(를) 사용합니다.",
+      "usesPostgres": "Box Office는 PostgreSQL 데이터베이스 {{where}}을(를) 사용합니다.",
+      "movedFrom": "{{time}}에 {{from}}에서 옮겨 왔습니다: {{rows}}개 행을 복사하고 셌습니다.",
+      "configured": "서버 설정에는 아직 옮기기 전 데이터베이스 {{old}}이(가) 적혀 있습니다. 이 데이터베이스로 바꾸세요(BOXOFFICE_DATABASE_URL 또는 Helm 차트의 database.url). 그때까지는 이전 데이터베이스를 계속 켜 두세요. 새 데이터베이스가 어디 있는지 Box Office에 알려 주는 것이 이전 데이터베이스입니다.",
+      "pending": "Box Office가 다음에 시작할 때 데이터베이스를 {{where}}(으)로 옮깁니다.",
+      "cancel": "옮기기 취소",
+      "failed": "마지막 옮기기에 실패해 Box Office가 기존 데이터베이스를 바꾸지 않고 계속 사용합니다: {{error}}",
+      "intro": "모든 것을 다른 데이터베이스로 옮깁니다. Box Office가 그곳의 자체 테이블로 복사하고, 양쪽에서 테이블마다 행 수를 센 뒤 전환합니다. 지금 쓰는 데이터베이스의 데이터는 모두 남습니다.",
+      "moveTo": "옮길 곳",
+      "postgres": "PostgreSQL",
+      "sqlite": "SQLite 파일",
+      "url": "PostgreSQL 주소",
+      "urlHint": "PostgreSQL 서버에 있는, Box Office 사용자가 소유한 빈 데이터베이스입니다. 먼저 만들어 두세요(예: CREATE DATABASE boxoffice).",
+      "file": "파일",
+      "fileHint": "오래 유지되는 디스크에 있는 새 파일의 전체 경로입니다.",
+      "check": "확인",
+      "checkOk": "Box Office가 {{where}}(으)로 옮길 수 있습니다.",
+      "move": "데이터베이스 옮기기",
+      "restartByHand": "이 서버는 스스로 다시 시작할 수 없습니다. 옮기기를 마치려면 Box Office를 다시 시작하세요.",
+      "moveConfirm": "데이터베이스를 {{where}}(으)로 옮길까요? Box Office가 다시 시작해 모든 것을 복사하고 확인한 뒤 새 데이터베이스로 열립니다.",
+      "moving": "데이터베이스를 옮기는 중…",
+      "movingSub": "모두 복사하고 확인하면 Box Office가 다시 열립니다.",
+      "moveTitle": "데이터베이스를 옮길까요?"
+    }
   },
   "mediaTypes": {
     "music": {

@@ -1214,7 +1214,33 @@
     "openPage": "פתיחת {{page}}",
     "ereadersOff": "שלח ספרים אלקטרוניים במייל ל-Kindle,‏ PocketBook או קורא אחר. הפעל {{ebooks}} כדי להגדיר.",
     "turnOnType": "הפעלת {{name}}",
-    "gameLayout": "בחרו את התיקייה שבה נמצאים המשחקים: תיקייה של מערכת אחת, או תיקייה עם תיקייה לכל מערכת (mame,‏ snes,‏ n64 וכן הלאה). Box Office מזהה את המערכות בעצמו."
+    "gameLayout": "בחרו את התיקייה שבה נמצאים המשחקים: תיקייה של מערכת אחת, או תיקייה עם תיקייה לכל מערכת (mame,‏ snes,‏ n64 וכן הלאה). Box Office מזהה את המערכות בעצמו.",
+    "database": {
+      "title": "מסד נתונים",
+      "usesSqlite": "Box Office משתמש בקובץ ה-SQLite ‏{{where}}.",
+      "usesPostgres": "Box Office משתמש במסד הנתונים PostgreSQL ‏{{where}}.",
+      "movedFrom": "הועבר לכאן מ-{{from}} ב-{{time}}: הועתקו ונספרו {{rows}} שורות.",
+      "configured": "הגדרות השרת עדיין מציינות את מסד הנתונים שממנו הועבר, {{old}}. שנה אותן למסד הזה (BOXOFFICE_DATABASE_URL, או database.url בתרשים Helm). עד אז השאר את המסד הישן פועל: הוא אומר ל-Box Office איפה החדש.",
+      "pending": "Box Office יעביר את מסד הנתונים שלו אל {{where}} בפעם הבאה שיופעל.",
+      "cancel": "ביטול ההעברה",
+      "failed": "ההעברה האחרונה לא הצליחה, ולכן Box Office שמר על מסד הנתונים שלו ללא שינוי: {{error}}",
+      "intro": "העבר הכול למסד נתונים אחר: Box Office מעתיק את הנתונים לטבלאות שלו שם, סופר את השורות של כל טבלה בשניהם ואז עובר. מסד הנתונים הנוכחי שומר את כל הנתונים שלו.",
+      "moveTo": "העברה אל",
+      "postgres": "PostgreSQL",
+      "sqlite": "קובץ SQLite",
+      "url": "כתובת PostgreSQL",
+      "urlHint": "מסד נתונים ריק בשרת PostgreSQL שבבעלות המשתמש של Box Office. צור אותו קודם, למשל עם CREATE DATABASE boxoffice.",
+      "file": "קובץ",
+      "fileHint": "הנתיב המלא של קובץ חדש, בדיסק קבוע.",
+      "check": "בדיקה",
+      "checkOk": "Box Office יכול לעבור אל {{where}}.",
+      "move": "העברת מסד הנתונים",
+      "restartByHand": "השרת הזה לא יכול להפעיל את עצמו מחדש: הפעל מחדש את Box Office כדי להשלים את ההעברה.",
+      "moveConfirm": "להעביר את מסד הנתונים אל {{where}}? Box Office יופעל מחדש, יעתיק הכול, יבדוק ויפתח על מסד הנתונים החדש.",
+      "moving": "מעביר את מסד הנתונים…",
+      "movingSub": "Box Office ייפתח שוב ברגע שהכול יועתק וייבדק.",
+      "moveTitle": "להעביר את מסד הנתונים?"
+    }
   },
   "mediaTypes": {
     "music": {

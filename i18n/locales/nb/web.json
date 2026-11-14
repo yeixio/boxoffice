@@ -1137,7 +1137,33 @@
     "openPage": "Åpne {{page}}",
     "ereadersOff": "Send e-bøker med e-post til en Kindle, PocketBook eller et annet lesebrett. Slå på {{ebooks}} for å sette det opp.",
     "turnOnType": "Slå på {{name}}",
-    "gameLayout": "Velg mappen med spillene dine: mappen til ett system, eller en mappe med én mappe for hvert system (mame, snes, n64 og så videre). Box Office finner systemene selv."
+    "gameLayout": "Velg mappen med spillene dine: mappen til ett system, eller en mappe med én mappe for hvert system (mame, snes, n64 og så videre). Box Office finner systemene selv.",
+    "database": {
+      "title": "Database",
+      "usesSqlite": "Box Office bruker SQLite-filen {{where}}.",
+      "usesPostgres": "Box Office bruker PostgreSQL-databasen {{where}}.",
+      "movedFrom": "Flyttet hit fra {{from}} {{time}}: {{rows}} rader kopiert og telt.",
+      "configured": "Serverinnstillingene peker fortsatt på databasen den ble flyttet fra, {{old}}. Endre dem til denne (BOXOFFICE_DATABASE_URL, eller database.url i Helm-chartet). La den gamle databasen kjøre til da: den forteller Box Office hvor den nye er.",
+      "pending": "Box Office flytter databasen til {{where}} neste gang den starter.",
+      "cancel": "Avbryt flytting",
+      "failed": "Den siste flyttingen virket ikke, så Box Office beholdt databasen sin uendret: {{error}}",
+      "intro": "Flytt alt til en annen database: Box Office kopierer det inn i sine egne tabeller der, teller radene i hver tabell i begge og bytter så over. Databasen som brukes nå, beholder alle dataene.",
+      "moveTo": "Flytt til",
+      "postgres": "PostgreSQL",
+      "sqlite": "SQLite-fil",
+      "url": "PostgreSQL-adresse",
+      "urlHint": "En tom database på PostgreSQL-serveren som Box Offices bruker eier. Lag den først, for eksempel med CREATE DATABASE boxoffice.",
+      "file": "Fil",
+      "fileHint": "Den fullstendige banen til en ny fil, på en disk som varer.",
+      "check": "Sjekk",
+      "checkOk": "Box Office kan flytte til {{where}}.",
+      "move": "Flytt database",
+      "restartByHand": "Denne serveren kan ikke starte seg selv på nytt: start Box Office på nytt for å fullføre en flytting.",
+      "moveConfirm": "Flytte databasen til {{where}}? Box Office starter på nytt, kopierer alt, sjekker det og åpner med den nye databasen.",
+      "moving": "Flytter databasen…",
+      "movingSub": "Box Office åpner igjen når alt er kopiert og sjekket.",
+      "moveTitle": "Flytte databasen?"
+    }
   },
   "mediaTypes": {
     "music": {

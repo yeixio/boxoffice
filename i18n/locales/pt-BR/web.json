@@ -1214,7 +1214,33 @@
     "openPage": "Abrir {{page}}",
     "ereadersOff": "Envie e-books por e-mail para um Kindle, PocketBook ou outro leitor digital. Ative {{ebooks}} para configurar.",
     "turnOnType": "Ativar {{name}}",
-    "gameLayout": "Escolha a pasta dos seus jogos: a pasta de um sistema, ou uma pasta com uma pasta para cada sistema (mame, snes, n64 e assim por diante). O Box Office encontra os sistemas sozinho."
+    "gameLayout": "Escolha a pasta dos seus jogos: a pasta de um sistema, ou uma pasta com uma pasta para cada sistema (mame, snes, n64 e assim por diante). O Box Office encontra os sistemas sozinho.",
+    "database": {
+      "title": "Banco de dados",
+      "usesSqlite": "O Box Office usa o arquivo SQLite {{where}}.",
+      "usesPostgres": "O Box Office usa o banco de dados PostgreSQL {{where}}.",
+      "movedFrom": "Movido para cá de {{from}} em {{time}}: {{rows}} linhas copiadas e contadas.",
+      "configured": "As configurações do servidor ainda indicam o banco de dados de origem, {{old}}. Troque-as por este (BOXOFFICE_DATABASE_URL, ou database.url no chart do Helm). Até lá, mantenha o antigo funcionando: ele diz ao Box Office onde está o novo.",
+      "pending": "O Box Office moverá seu banco de dados para {{where}} na próxima vez que iniciar.",
+      "cancel": "Cancelar mudança",
+      "failed": "A última mudança não deu certo, então o Box Office manteve seu banco de dados sem alterações: {{error}}",
+      "intro": "Mova tudo para outro banco de dados: o Box Office copia para as próprias tabelas lá, conta as linhas de cada tabela nos dois e então troca. O banco atual mantém todos os dados.",
+      "moveTo": "Mover para",
+      "postgres": "PostgreSQL",
+      "sqlite": "Arquivo SQLite",
+      "url": "Endereço do PostgreSQL",
+      "urlHint": "Um banco de dados vazio no servidor PostgreSQL, pertencente ao usuário do Box Office. Crie-o antes, por exemplo com CREATE DATABASE boxoffice.",
+      "file": "Arquivo",
+      "fileHint": "O caminho completo de um arquivo novo, em um disco que permaneça.",
+      "check": "Verificar",
+      "checkOk": "O Box Office pode mudar para {{where}}.",
+      "move": "Mover banco de dados",
+      "restartByHand": "Este servidor não consegue reiniciar sozinho: reinicie o Box Office para concluir uma mudança.",
+      "moveConfirm": "Mover o banco de dados para {{where}}? O Box Office reinicia, copia tudo, confere e abre no novo banco.",
+      "moving": "Movendo o banco de dados…",
+      "movingSub": "O Box Office abre de novo assim que tudo for copiado e conferido.",
+      "moveTitle": "Mover o banco de dados?"
+    }
   },
   "mediaTypes": {
     "music": {

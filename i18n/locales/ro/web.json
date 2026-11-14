@@ -1214,7 +1214,33 @@
     "openPage": "Deschide {{page}}",
     "ereadersOff": "Trimite cărți electronice prin e-mail pe un Kindle, PocketBook sau alt cititor. Activează {{ebooks}} ca să configurezi.",
     "turnOnType": "Activează {{name}}",
-    "gameLayout": "Alege dosarul în care sunt jocurile: dosarul unui sistem sau un dosar cu câte un dosar pentru fiecare sistem (mame, snes, n64 și așa mai departe). Box Office găsește singur sistemele."
+    "gameLayout": "Alege dosarul în care sunt jocurile: dosarul unui sistem sau un dosar cu câte un dosar pentru fiecare sistem (mame, snes, n64 și așa mai departe). Box Office găsește singur sistemele.",
+    "database": {
+      "title": "Bază de date",
+      "usesSqlite": "Box Office folosește fișierul SQLite {{where}}.",
+      "usesPostgres": "Box Office folosește baza de date PostgreSQL {{where}}.",
+      "movedFrom": "Mutată aici din {{from}} pe {{time}}: rânduri copiate și numărate: {{rows}}.",
+      "configured": "Setările serverului indică încă baza de date din care s-a mutat, {{old}}. Schimbă-le la aceasta (BOXOFFICE_DATABASE_URL sau database.url în chartul Helm). Până atunci, lasă baza veche pornită: ea îi spune lui Box Office unde este cea nouă.",
+      "pending": "Box Office își va muta baza de date în {{where}} la următoarea pornire.",
+      "cancel": "Anulează mutarea",
+      "failed": "Ultima mutare nu a reușit, așa că Box Office și-a păstrat baza de date neschimbată: {{error}}",
+      "intro": "Mută totul în altă bază de date: Box Office copiază datele în propriile tabele de acolo, numără rândurile fiecărui tabel în ambele, apoi comută. Baza de date actuală își păstrează toate datele.",
+      "moveTo": "Mută în",
+      "postgres": "PostgreSQL",
+      "sqlite": "Fișier SQLite",
+      "url": "Adresă PostgreSQL",
+      "urlHint": "O bază de date goală pe serverul PostgreSQL, deținută de utilizatorul Box Office. Creeaz-o întâi, de exemplu cu CREATE DATABASE boxoffice.",
+      "file": "Fișier",
+      "fileHint": "Calea completă a unui fișier nou, pe un disc durabil.",
+      "check": "Verifică",
+      "checkOk": "Box Office se poate muta în {{where}}.",
+      "move": "Mută baza de date",
+      "restartByHand": "Acest server nu se poate reporni singur: repornește Box Office pentru a termina o mutare.",
+      "moveConfirm": "Muți baza de date în {{where}}? Box Office repornește, copiază totul, verifică și se deschide pe baza nouă.",
+      "moving": "Se mută baza de date…",
+      "movingSub": "Box Office se deschide din nou după ce totul este copiat și verificat.",
+      "moveTitle": "Muți baza de date?"
+    }
   },
   "mediaTypes": {
     "music": {

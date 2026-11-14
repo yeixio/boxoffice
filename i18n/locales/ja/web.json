@@ -1060,7 +1060,33 @@
     "openPage": "{{page}}を開く",
     "ereadersOff": "電子書籍をメールで Kindle、PocketBook などのリーダーに送れます。設定するには{{ebooks}}をオンにしてください。",
     "turnOnType": "{{name}}をオンにする",
-    "gameLayout": "ゲームのあるフォルダーを選んでください。1 つのシステムのフォルダーか、システムごとのフォルダー（mame、snes、n64 など）を含むフォルダーです。システムは Box Office が自動で見つけます。"
+    "gameLayout": "ゲームのあるフォルダーを選んでください。1 つのシステムのフォルダーか、システムごとのフォルダー（mame、snes、n64 など）を含むフォルダーです。システムは Box Office が自動で見つけます。",
+    "database": {
+      "title": "データベース",
+      "usesSqlite": "Box Office は SQLite ファイル {{where}} を使っています。",
+      "usesPostgres": "Box Office は PostgreSQL データベース {{where}} を使っています。",
+      "movedFrom": "{{time}} に {{from}} から移動しました:{{rows}} 行をコピーして数えました。",
+      "configured": "サーバーの設定には、移動元のデータベース {{old}} がまだ書かれています。この新しいデータベースに変更してください(BOXOFFICE_DATABASE_URL、または Helm チャートの database.url)。それまでは古いデータベースを動かしたままにしてください。新しいデータベースの場所を Box Office に伝えるのは古いほうです。",
+      "pending": "Box Office は次回起動時にデータベースを {{where}} へ移動します。",
+      "cancel": "移動をキャンセル",
+      "failed": "前回の移動はうまくいかなかったため、Box Office はデータベースを変更せずに使い続けています:{{error}}",
+      "intro": "すべてを別のデータベースへ移動します。Box Office が移動先の自分のテーブルにコピーし、両方で各テーブルの行数を数えてから切り替えます。今のデータベースのデータはすべて残ります。",
+      "moveTo": "移動先",
+      "postgres": "PostgreSQL",
+      "sqlite": "SQLite ファイル",
+      "url": "PostgreSQL のアドレス",
+      "urlHint": "PostgreSQL サーバー上の、Box Office のユーザーが所有する空のデータベース。先に作成してください(例:CREATE DATABASE boxoffice)。",
+      "file": "ファイル",
+      "fileHint": "消えないディスク上の、新しいファイルのフルパス。",
+      "check": "確認",
+      "checkOk": "Box Office は {{where}} へ移動できます。",
+      "move": "データベースを移動",
+      "restartByHand": "このサーバーは自分で再起動できません。移動を完了するには Box Office を再起動してください。",
+      "moveConfirm": "データベースを {{where}} へ移動しますか?Box Office が再起動し、すべてをコピーして確認し、新しいデータベースで開きます。",
+      "moving": "データベースを移動しています…",
+      "movingSub": "すべてのコピーと確認が終わると Box Office が再び開きます。",
+      "moveTitle": "データベースを移動しますか?"
+    }
   },
   "mediaTypes": {
     "music": {
