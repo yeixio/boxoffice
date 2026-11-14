@@ -200,7 +200,7 @@ export type Upcoming = {
 }
 
 export type AutoSearch = {
-  settings: { enabled: boolean; perDay: number; rss: boolean; rssMinutes: number; upgrades: boolean; upgradesPerMonth: number; replaceSameQuality: boolean }
+  settings: { enabled: boolean; perDay: number; rss: boolean; rssMinutes: number; upgrades: boolean; upgradesPerMonth: number; replaceSameQuality: boolean; propers: boolean }
   missing: number
   upgrades: number
   upgradesThisMonth: number
@@ -541,6 +541,9 @@ export type Candidate = {
   episodes?: number[]
   // A book release's format, as its name gives it: EPUB, M4B.
   format?: string
+  // Set when it's a fixed re-release of the copy there (PROPER, REPACK,
+  // REAL, v2), taken in its place at its quality.
+  fix?: string
 }
 export type ReleaseResults = { releases: Candidate[]; errors?: string[]; searched: number }
 export type IndexerCaps = { categories: { id: number; name: string; subs?: { id: number; name: string }[] }[]; movieSearch: boolean; tvSearch: boolean }

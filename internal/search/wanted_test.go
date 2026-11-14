@@ -17,7 +17,7 @@ func TestAutoSettings(t *testing.T) {
 	ctx := context.Background()
 	a, err := LoadAutoSettings(ctx, st)
 	// Missing titles are searched for by default; upgrades aren't.
-	if err != nil || !a.Enabled || !a.RSS || a.Upgrades || a.PerDay != DefaultPerDay {
+	if err != nil || !a.Enabled || !a.RSS || a.Upgrades || !a.Propers || a.PerDay != DefaultPerDay {
 		t.Fatalf("defaults %+v %v", a, err)
 	}
 	SaveAutoSettings(ctx, st, AutoSettings{Enabled: false, PerDay: 1e6, Upgrades: true})

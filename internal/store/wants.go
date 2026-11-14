@@ -4,6 +4,8 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"path/filepath"
+	"slices"
 	"time"
 )
 
@@ -187,4 +189,25 @@ func (s *Store) DownloadImportedTo(ctx context.Context, path string) (Download, 
 		return Download{}, ErrNotFound
 	}
 	return list[0], nil
+}
+
+// ReleaseOf is the name of the release a copy on disk came from: the
+// download moved in to its path, or, for an episode from a season pack,
+// the download for it moved in to its season folder. It's the file's own
+// name when Box Office didn't download it.
+func (s *Store) ReleaseOf(ctx context.Context, f File) string {
+	if d, err := s.DownloadImportedTo(ctx, f.Path); err == nil {
+		return d.Name
+	}
+	if f.Kind == "episode" {
+		list, err := s.downloads(ctx, "imported_to = ? AND kind = 'series' ORDER BY finished_at DESC, id DESC LIMIT 20", filepath.Dir(f.Path))
+		if err == nil {
+			for _, d := range list {
+				if len(d.EpisodeIDs) == 0 || slices.Contains(d.EpisodeIDs, f.OwnerID) {
+					return d.Name
+				}
+			}
+		}
+	}
+	return filepath.Base(f.Path)
 }
