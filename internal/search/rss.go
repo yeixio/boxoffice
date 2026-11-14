@@ -168,6 +168,14 @@ func (s *Service) syncRSS(ctx context.Context) RSSResult {
 	}
 	res.Grabbed = got
 	res.Problems = append(res.Problems, problems...)
+	if c.Level == downloader.CapOK {
+		got, problems, err := s.takeFixes(ctx, releases)
+		if err != nil {
+			res.Problems = append(res.Problems, err.Error())
+		}
+		res.Grabbed = append(res.Grabbed, got...)
+		res.Problems = append(res.Problems, problems...)
+	}
 	return res
 }
 

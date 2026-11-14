@@ -71,6 +71,10 @@ type Candidate struct {
 	// EPUB, M4B, FLAC.
 	Format string `json:"format,omitempty"`
 
+	// Fix is how a release that fixes the copy there says so (PROPER,
+	// REPACK, REAL, v2): it's taken in that copy's place at its quality.
+	Fix string `json:"fix,omitempty"`
+
 	mode       string // how an edition asked for goes in: replace or alongside
 	kind       string
 	titleID    int64
@@ -79,6 +83,7 @@ type Candidate struct {
 	formatRank int
 	langRank   int // 1 when its name says it's in the language asked for
 	fitRank    int // for a replacement, how near it is to the copy's quality (quality.ReplacementFit)
+	fix        bool
 }
 
 // Results are a search's releases, best first, and the indexers that
@@ -265,10 +270,18 @@ func (s *Service) MovieFor(ctx context.Context, id int64, ask Ask) (Results, err
 	if err != nil {
 		return Results{}, err
 	}
+	var fixes *fixCheck
+	if has && ask.Mode == "" {
+		fixes = s.fixes(ctx, m.File, 0, 0)
+	}
 	out := Results{Errors: notes, Searched: n}
 	for _, r := range rs {
-		c := s.judge(ctx, r, p, has, have, blocked)
+		fix := fixes.of(r)
+		c := s.judge(ctx, r, p, has && !fix, have, blocked)
 		c.kind, c.titleID, c.mode = "movie", m.ID, ask.Mode
+		if fix {
+			markFix(&c)
+		}
 		if ask.Edition != "" && !quality.SameEdition(c.Edition, ask.Edition) {
 			c.reject("it isn't the " + ask.Edition + " edition")
 		}
@@ -344,9 +357,18 @@ func (s *Service) EpisodeFor(ctx context.Context, id int64, ask Ask) (Results, e
 		e.File = nil
 	}
 	same := s.replaceSameQuality(ctx)
+	fixes := s.fixes(ctx, e.File, e.Season, e.Number)
 	out := Results{Errors: notes, Searched: n}
 	for _, r := range rs {
-		c := s.judgeEpisodes(ctx, r, t, p, []store.Episode{e}, blocked, false, true)
+		ep := e
+		fix := fixes.of(r)
+		if fix {
+			ep.File = nil // judged as if it weren't there: the fix takes its place
+		}
+		c := s.judgeEpisodes(ctx, r, t, p, []store.Episode{ep}, blocked, false, true)
+		if fix {
+			markFix(&c)
+		}
 		ask.judgeLanguage(&c)
 		ask.judgeReplacement(&c, have, same)
 		out.Releases = append(out.Releases, c)
@@ -602,7 +624,15 @@ func (s *Service) grab(ctx context.Context, c Candidate) (store.Download, error)
 		return store.Download{}, err
 	}
 	upgrade := false
-	if !isByHand(ctx) {
+	switch {
+	case isByHand(ctx):
+	case c.fix:
+		// A fixed release of the copy there isn't an upgrade: it doesn't
+		// need automatic upgrades on, and isn't counted against them.
+		if err := s.fixAllowed(ctx, c); err != nil {
+			return store.Download{}, err
+		}
+	default:
 		if upgrade, err = s.autoUpgradeAllowed(ctx, c); err != nil {
 			return store.Download{}, err
 		}

@@ -76,6 +76,10 @@ type AutoSettings struct {
 	// Matinee, or in the wrong language) to that copy's quality: never a
 	// bigger picture or a remux it wasn't. On unless turned off.
 	ReplaceSameQuality bool `json:"replaceSameQuality"`
+	// Propers grabs a PROPER, REPACK, REAL or v2 of a copy on disk at its
+	// quality, to fix a flawed release (see SettingPropers). On unless
+	// turned off.
+	Propers bool `json:"propers"`
 }
 
 // LoadAutoSettings reads the settings; automatic searches for missing
@@ -118,6 +122,10 @@ func LoadAutoSettings(ctx context.Context, st *store.Store) (AutoSettings, error
 		return a, err
 	}
 	a.ReplaceSameQuality = v != "off"
+	if v, err = st.Setting(ctx, SettingPropers); err != nil {
+		return a, err
+	}
+	a.Propers = v != "off"
 	return a, nil
 }
 
@@ -169,7 +177,14 @@ func SaveAutoSettings(ctx context.Context, st *store.Store, a AutoSettings) erro
 	if !a.ReplaceSameQuality {
 		same = "off"
 	}
-	return st.SetSetting(ctx, SettingReplaceSameQuality, same)
+	if err := st.SetSetting(ctx, SettingReplaceSameQuality, same); err != nil {
+		return err
+	}
+	propers := ""
+	if !a.Propers {
+		propers = "off"
+	}
+	return st.SetSetting(ctx, SettingPropers, propers)
 }
 
 // upgradeOn says whether Box Office looks for upgrades of a title by

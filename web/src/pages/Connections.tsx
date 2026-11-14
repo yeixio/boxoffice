@@ -354,6 +354,17 @@ export function AutoSearchSettings() {
             </>
           }
         />
+        <Toggle
+          checked={s.propers}
+          onChange={(v) => save.mutate({ propers: v })}
+          disabled={save.isPending}
+          label={
+            <>
+              {t('conn.auto.propers')}
+              <span className="block text-xs text-muted">{t('conn.auto.propersHint')}</span>
+            </>
+          }
+        />
         <Field
           label={t('conn.auto.perDay')}
           hint={t('conn.auto.perDayHint')}
