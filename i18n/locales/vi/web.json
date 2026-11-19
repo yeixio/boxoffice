@@ -965,6 +965,11 @@
     "free": "Còn trống {{size}}",
     "cantSee": "không thấy được",
     "removePath": "Xóa {{path}}",
+    "removeRoot": {
+      "title": "Gỡ thư mục gốc này?",
+      "body": "Box Office sẽ ngừng trông coi {{path}}. Không có gì trong thư mục bị xóa.",
+      "inUse": "Số tựa vẫn nằm trong {{path}}: {{count}}. Hãy chuyển chúng sang thư mục khác hoặc gỡ khỏi danh sách trước."
+    },
     "scanFor": {
       "movie": "Quét tìm các phim đã có trong thư mục nhưng chưa có trong danh sách, để bạn có thể thêm chúng tại chỗ.",
       "series": "Quét tìm các chương trình đã có trong thư mục nhưng chưa có trong danh sách, để bạn có thể thêm chúng tại chỗ.",
@@ -1706,7 +1711,7 @@
       "copy": "Sao chép địa chỉ",
       "openLink": "Mở",
       "host": "Tên máy chủ riêng",
-      "hostHint": "Tùy chọn, như requests.example.com. Trỏ tên đó đến Box Office (trong DNS và ingress hoặc reverse proxy của bạn), và ở đó trang yêu cầu là toàn bộ trang. Giao diện quản trị này vẫn ở địa chỉ thường lệ.",
+      "hostHint": "Tùy chọn, như requests.example.com. Trỏ tên đó đến Box Office (trong DNS và ingress hoặc reverse proxy của bạn), và ở đó trang yêu cầu là toàn bộ trang. Giao diện quản trị này vẫn ở địa chỉ thường lệ. Các trang quản trị này và API của Box Office không trả lời ở tên đó.",
       "look": "Giao diện",
       "welcome": "Lời chào",
       "welcomeHint": "Hiển thị trên trang đăng nhập và ở đầu trang Khám phá.",

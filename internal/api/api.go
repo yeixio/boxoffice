@@ -330,7 +330,40 @@ func (s *Server) Handler() http.Handler {
 		w.Write([]byte("ok\n"))
 	})
 	mux.Handle("/", s.web())
-	return s.counted(securityHeaders(mux))
+	return s.counted(compressed(securityHeaders(s.portalOnly(mux))))
+}
+
+// portalOnly keeps Box Office's own side off the request site's host name:
+// the admin API, the Radarr and Sonarr APIs and the metrics answer as if
+// they weren't there, so opening the request site to people outside doesn't
+// open the admin sign-in with it. The request site's API, the web UI's
+// files and the health checks answer as usual.
+func (s *Server) portalOnly(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if adminPath(r.URL.Path) && s.portalHost(r) {
+			if strings.HasPrefix(path.Clean(r.URL.Path), "/api/") {
+				writeError(w, http.StatusNotFound, "there's no such API")
+			} else {
+				http.NotFound(w, r)
+			}
+			return
+		}
+		h.ServeHTTP(w, r)
+	})
+}
+
+// adminPath says whether a path is part of Box Office's own side.
+func adminPath(p string) bool {
+	p = strings.ToLower(path.Clean("/" + p))
+	if p == "/metrics" {
+		return true
+	}
+	for _, pre := range []string{"/api/v1", "/radarr", "/sonarr"} {
+		if p == pre || strings.HasPrefix(p, pre+"/") {
+			return true
+		}
+	}
+	return false
 }
 
 func securityHeaders(h http.Handler) http.Handler {

@@ -359,6 +359,11 @@ func (s *Server) savePortalSettings(w http.ResponseWriter, r *http.Request) erro
 			}
 		}
 	}
+	// The admin pages don't answer on the request site's host name, so
+	// naming the one in use here would lock the admin out.
+	if h := strings.TrimSpace(st.Host); h != "" && strings.EqualFold(h, hostOnly(r.Host)) {
+		return errorf(http.StatusBadRequest, "That's the address you're using Box Office at now. The request site needs a host name of its own, as these admin pages don't answer there.")
+	}
 	st, err := s.Portal.SaveSettings(r.Context(), st)
 	if err != nil {
 		return portalErr(err)
@@ -628,11 +633,15 @@ func (s *Server) portalHost(r *http.Request) bool {
 	if err != nil || !st.Enabled || st.Host == "" {
 		return false
 	}
-	host := r.Host
+	return strings.EqualFold(hostOnly(r.Host), st.Host)
+}
+
+// hostOnly is a Host header's name, without its port.
+func hostOnly(host string) string {
 	if h, _, err := net.SplitHostPort(host); err == nil {
-		host = h
+		return h
 	}
-	return strings.EqualFold(host, st.Host)
+	return host
 }
 
 // decodeDataURL reads a data: URL of base64 data.

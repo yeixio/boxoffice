@@ -1039,6 +1039,11 @@
     "free": "{{size}} ledig",
     "cantSee": "kan ikke se den",
     "removePath": "Fjern {{path}}",
+    "removeRoot": {
+      "title": "Fjerne denne rotmappen?",
+      "body": "Box Office slutter å ta seg av {{path}}. Ingenting i mappen slettes.",
+      "inUse": "Titler som fortsatt ligger under {{path}}: {{count}}. Flytt dem til en annen mappe eller fjern dem fra listen først."
+    },
     "scanFor": {
       "movie": "Skanning ser etter filmer som allerede er i en mappe, men ikke på listen, så du kan legge dem til der de er.",
       "series": "Skanning ser etter serier som allerede er i en mappe, men ikke på listen, så du kan legge dem til der de er.",
@@ -1805,7 +1810,7 @@
       "copy": "Kopier adressen",
       "openLink": "Åpne",
       "host": "Eget vertsnavn",
-      "hostHint": "Valgfritt, for eksempel requests.example.com. Pek det navnet mot Box Office (i DNS og ingress eller omvendt proxy), så er ønskesiden hele nettstedet der. Dette administratorgrensesnittet blir på den vanlige adressen.",
+      "hostHint": "Valgfritt, for eksempel requests.example.com. Pek det navnet mot Box Office (i DNS og ingress eller omvendt proxy), så er ønskesiden hele nettstedet der. Dette administratorgrensesnittet blir på den vanlige adressen. Disse administratorsidene og Box Offices API svarer ikke på det navnet.",
       "look": "Utseende",
       "welcome": "Velkomsttekst",
       "welcomeHint": "Vises på innloggingssiden og øverst på Utforsk.",

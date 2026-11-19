@@ -1113,6 +1113,11 @@
     "free": "{{size}} liberi",
     "cantSee": "nu-l vede",
     "removePath": "Elimină {{path}}",
+    "removeRoot": {
+      "title": "Elimini acest dosar rădăcină?",
+      "body": "Box Office nu se va mai ocupa de {{path}}. Nimic din dosar nu este șters.",
+      "inUse": "Titluri încă păstrate în {{path}}: {{count}}. Mută-le mai întâi în alt dosar sau elimină-le din listă."
+    },
     "scanFor": {
       "movie": "Scanarea caută filme aflate deja într-un dosar care nu sunt în listă, ca să le poți adăuga acolo unde sunt.",
       "series": "Scanarea caută seriale aflate deja într-un dosar care nu sunt în listă, ca să le poți adăuga acolo unde sunt.",
@@ -1904,7 +1909,7 @@
       "copy": "Copiază adresa",
       "openLink": "Deschide",
       "host": "Propriul nume de gazdă",
-      "hostHint": "Opțional, de exemplu requests.example.com. Îndreaptă acel nume spre Box Office (în DNS și în ingress sau reverse proxy), iar acolo site-ul de cereri e întregul site. Această interfață de administrare rămâne la adresa obișnuită.",
+      "hostHint": "Opțional, de exemplu requests.example.com. Îndreaptă acel nume spre Box Office (în DNS și în ingress sau reverse proxy), iar acolo site-ul de cereri e întregul site. Această interfață de administrare rămâne la adresa obișnuită. Aceste pagini de administrare și API-ul Box Office nu răspund la acel nume.",
       "look": "Aspect",
       "welcome": "Text de bun venit",
       "welcomeHint": "Afișat pe pagina de conectare și în partea de sus a Descoperă.",

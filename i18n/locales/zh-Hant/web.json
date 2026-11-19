@@ -965,6 +965,11 @@
     "free": "可用 {{size}}",
     "cantSee": "看不到",
     "removePath": "移除 {{path}}",
+    "removeRoot": {
+      "title": "移除此根資料夾？",
+      "body": "Box Office 將不再管理 {{path}}。資料夾裡的內容不會被刪除。",
+      "inUse": "仍歸在 {{path}} 下的作品：{{count}}。請先把它們移到其他資料夾，或從清單中移除。"
+    },
     "scanFor": {
       "movie": "掃描會尋找資料夾中已有但不在列表中的電影，讓你原地新增。",
       "series": "掃描會尋找資料夾中已有但不在列表中的劇集，讓你原地新增。",
@@ -1706,7 +1711,7 @@
       "copy": "複製地址",
       "openLink": "開啟",
       "host": "專用主機名",
-      "hostHint": "可選，例如 requests.example.com。把這個名稱指向 Box Office（在 DNS 和 ingress 或反向代理中），在那裡請求網站就是整個網站。此管理介面仍在其原來的地址。",
+      "hostHint": "可選，例如 requests.example.com。把這個名稱指向 Box Office（在 DNS 和 ingress 或反向代理中），在那裡請求網站就是整個網站。此管理介面仍在其原來的地址。這些管理頁面和 Box Office 的 API 不會在那個名稱上回應。",
       "look": "外觀",
       "welcome": "歡迎語",
       "welcomeHint": "顯示在登入頁和探索的頂部。",

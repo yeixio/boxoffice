@@ -238,7 +238,9 @@ export function Sidebar({ status, nav, signOut }: { status: Status; nav: Nav; si
 }
 
 // PhoneNav is the menu that folds down from the header on a phone.
-export function PhoneNav({ nav }: { nav: Nav }) {
+// Signing out sits at its end, away from the menu button, so a tap that
+// misses the menu doesn't sign anyone out.
+export function PhoneNav({ nav, status, signOut }: { nav: Nav; status: Status; signOut: () => void }) {
   const { t } = useTranslation()
   return (
     <nav id="mobile-nav" className="flex max-h-[calc(100dvh-4rem)] flex-col overflow-y-auto border-t border-line px-4 py-2 md:hidden" aria-label={t('nav.main')}>
@@ -261,6 +263,13 @@ export function PhoneNav({ nav }: { nav: Nav }) {
           </ul>
         </div>
       ))}
+      <div className="mt-1 border-t border-line py-2">
+        <button onClick={signOut} className="flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-start text-base font-medium text-ink hover:bg-line/50">
+          <LogOut className="size-5" aria-hidden />
+          {t('nav.signOutName', { name: status.user?.username })}
+        </button>
+        <div className="px-3 pt-1 text-xs text-muted">{t('nav.version', { version: status.version })}</div>
+      </div>
     </nav>
   )
 }

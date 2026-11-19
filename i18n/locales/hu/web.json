@@ -1039,6 +1039,11 @@
     "free": "{{size}} szabad",
     "cantSee": "nem látja",
     "removePath": "{{path}} eltávolítása",
+    "removeRoot": {
+      "title": "Eltávolítja ezt a gyökérmappát?",
+      "body": "A Box Office többé nem foglalkozik ezzel: {{path}}. A mappából semmi sem törlődik.",
+      "inUse": "Még ide tartozó címek ({{path}}): {{count}}. Előbb helyezze át őket másik mappába, vagy távolítsa el őket a listáról."
+    },
     "scanFor": {
       "movie": "A keresés olyan filmeket keres egy mappában, amelyek még nincsenek a listán, hogy ott helyben hozzáadhasd őket.",
       "series": "A keresés olyan sorozatokat keres egy mappában, amelyek még nincsenek a listán, hogy ott helyben hozzáadhasd őket.",
@@ -1805,7 +1810,7 @@
       "copy": "A cím másolása",
       "openLink": "Megnyitás",
       "host": "Saját hosztnév",
-      "hostHint": "Nem kötelező, például requests.example.com. Irányítsd ezt a nevet a Box Office-ra (DNS-ben és az ingressben vagy a reverse proxyban), és ott a kéréses oldal lesz a teljes oldal. Ez a rendszergazdai felület a szokásos címén marad.",
+      "hostHint": "Nem kötelező, például requests.example.com. Irányítsd ezt a nevet a Box Office-ra (DNS-ben és az ingressben vagy a reverse proxyban), és ott a kéréses oldal lesz a teljes oldal. Ez a rendszergazdai felület a szokásos címén marad. Ezek a rendszergazdai oldalak és a Box Office API-ja azon a néven nem válaszolnak.",
       "look": "Megjelenés",
       "welcome": "Üdvözlő szöveg",
       "welcomeHint": "A bejelentkezési oldalon és a Felfedezés tetején jelenik meg.",

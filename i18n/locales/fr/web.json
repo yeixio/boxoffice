@@ -1113,6 +1113,11 @@
     "free": "{{size}} libres",
     "cantSee": "inaccessible",
     "removePath": "Retirer {{path}}",
+    "removeRoot": {
+      "title": "Retirer ce dossier racine ?",
+      "body": "Box Office ne s’occupera plus de {{path}}. Rien n’est supprimé dans le dossier.",
+      "inUse": "Titres encore rangés dans {{path}} : {{count}}. Déplacez-les d’abord vers un autre dossier ou retirez-les de la liste."
+    },
     "scanFor": {
       "movie": "L’analyse cherche les films déjà présents dans un dossier mais pas sur la liste, pour que vous puissiez les ajouter là où ils sont.",
       "series": "L’analyse cherche les séries déjà présentes dans un dossier mais pas sur la liste, pour que vous puissiez les ajouter là où elles sont.",
@@ -1904,7 +1909,7 @@
       "copy": "Copier l’adresse",
       "openLink": "Ouvrir",
       "host": "Son propre nom d’hôte",
-      "hostHint": "Facultatif, comme requests.example.com. Faites pointer ce nom vers Box Office (dans le DNS et votre ingress ou reverse proxy), et le site de demandes y occupe tout le site. Cette interface d’administration reste à son adresse habituelle.",
+      "hostHint": "Facultatif, comme requests.example.com. Faites pointer ce nom vers Box Office (dans le DNS et votre ingress ou reverse proxy), et le site de demandes y occupe tout le site. Cette interface d’administration reste à son adresse habituelle. Ces pages d’administration et l’API de Box Office ne répondent pas à ce nom.",
       "look": "Apparence",
       "welcome": "Texte d’accueil",
       "welcomeHint": "Affiché sur la page de connexion et en haut de Découvrir.",

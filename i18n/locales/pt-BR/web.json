@@ -1113,6 +1113,11 @@
     "free": "{{size}} livres",
     "cantSee": "não é visível",
     "removePath": "Remover {{path}}",
+    "removeRoot": {
+      "title": "Remover esta pasta raiz?",
+      "body": "O Box Office deixará de cuidar de {{path}}. Nada na pasta é apagado.",
+      "inUse": "Títulos ainda guardados em {{path}}: {{count}}. Primeiro mova-os para outra pasta ou remova-os da lista."
+    },
     "scanFor": {
       "movie": "A varredura procura filmes que já estão em uma pasta mas não na lista, para você adicioná-los onde estão.",
       "series": "A varredura procura séries que já estão em uma pasta mas não na lista, para você adicioná-las onde estão.",
@@ -1904,7 +1909,7 @@
       "copy": "Copiar o endereço",
       "openLink": "Abrir",
       "host": "Nome de host próprio",
-      "hostHint": "Opcional, como requests.example.com. Aponte esse nome para o Box Office (no DNS e no seu ingress ou proxy reverso), e lá o site de pedidos é o site inteiro. Esta interface de administração continua no endereço de sempre.",
+      "hostHint": "Opcional, como requests.example.com. Aponte esse nome para o Box Office (no DNS e no seu ingress ou proxy reverso), e lá o site de pedidos é o site inteiro. Esta interface de administração continua no endereço de sempre. Estas páginas de administração e a API do Box Office não respondem nesse nome.",
       "look": "Aparência",
       "welcome": "Texto de boas-vindas",
       "welcomeHint": "Mostrado na página de entrada e no topo do Descobrir.",

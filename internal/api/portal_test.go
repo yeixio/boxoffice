@@ -224,6 +224,24 @@ func TestRequestSite(t *testing.T) {
 	if !strings.Contains(string(page), `name="boxoffice-portal"`) {
 		t.Fatalf("portal host page: %s", page)
 	}
+	// There, Box Office's own side isn't to be found; the request site's
+	// API and the health check are.
+	for path, want := range map[string]int{
+		"/api/v1/status": 404, "/api/v1/login": 404, "/API/v1/status": 404, "/api//v1/status": 404,
+		"/radarr/api/v3/system/status": 404, "/sonarr/api/v3/series": 404, "/metrics": 404,
+		"/api/portal/site": 200, "/healthz": 200,
+	} {
+		req, _ := http.NewRequest("GET", hs.URL+path, nil)
+		req.Host = "requests.example.com:8443"
+		res, err := http.DefaultClient.Do(req)
+		if err != nil {
+			t.Fatal(err)
+		}
+		res.Body.Close()
+		if res.StatusCode != want {
+			t.Errorf("%s on the request site's host: %d, want %d", path, res.StatusCode, want)
+		}
+	}
 	res, _ = http.Get(hs.URL + "/request")
 	page, _ = io.ReadAll(res.Body)
 	res.Body.Close()

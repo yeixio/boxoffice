@@ -9,7 +9,7 @@ import { formatLocale } from '../i18n'
 import { LanguageMenu, LanguagePicker } from '../LanguagePicker'
 import { LanguageSync } from '../i18n/sync'
 import { Button, Empty, ErrorNote, Field, Input, Modal, Poster, Select, Spinner } from '../ui'
-import { papi, pget, ppost, problemLabel, problems, stateText, type DiscoverHome, type DiscoverPage, type DiscoverTitle, type Issue, type Member, type Problem, type Request, type Site } from './papi'
+import { onMemberSignedOut, papi, pget, ppost, problemLabel, problems, stateText, type DiscoverHome, type DiscoverPage, type DiscoverTitle, type Issue, type Member, type Problem, type Request, type Site } from './papi'
 
 // The request site: where the people who watch ask for movies and shows,
 // follow what they asked for, and report problems. It has the admin's name,
@@ -20,6 +20,14 @@ const useSite = () => useQuery({ queryKey: ['portal', 'site'], queryFn: () => pg
 export function Portal() {
   const { t } = useTranslation('request')
   const site = useSite()
+  const qc = useQueryClient()
+  // A session that has run out shows sign-in again.
+  useEffect(() => {
+    onMemberSignedOut(() => {
+      if (qc.getQueryData<Site>(['portal', 'site'])?.member) qc.setQueryData<Site>(['portal', 'site'], (old) => old && { ...old, member: undefined })
+    })
+    return () => onMemberSignedOut(() => {})
+  }, [qc])
   useBrand(site.data)
   if (site.isPending) return <Spinner />
   if (site.isError) return <p className="p-8 text-bad">{t('site.down', { error: site.error.message })}</p>

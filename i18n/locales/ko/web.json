@@ -965,6 +965,11 @@
     "free": "{{size}} 남음",
     "cantSee": "보이지 않음",
     "removePath": "{{path}} 삭제",
+    "removeRoot": {
+      "title": "이 루트 폴더를 제거할까요?",
+      "body": "Box Office가 {{path}}을(를) 더 이상 관리하지 않아요. 폴더 안의 것은 아무것도 삭제되지 않아요.",
+      "inUse": "아직 {{path}}에 있는 타이틀: {{count}}. 먼저 다른 폴더로 옮기거나 목록에서 제거하세요."
+    },
     "scanFor": {
       "movie": "스캔은 폴더에 이미 있지만 목록에 없는 영화를 찾아서 그 자리 그대로 추가할 수 있게 해요.",
       "series": "스캔은 폴더에 이미 있지만 목록에 없는 프로그램을 찾아서 그 자리 그대로 추가할 수 있게 해요.",
@@ -1706,7 +1711,7 @@
       "copy": "주소 복사",
       "openLink": "열기",
       "host": "전용 호스트 이름",
-      "hostHint": "선택 사항(예: requests.example.com). 그 이름을 Box Office로 연결하면(DNS와 ingress 또는 리버스 프록시에서) 그곳에서는 요청 사이트가 사이트 전체가 돼요. 이 관리 화면은 원래 주소에 그대로 있어요.",
+      "hostHint": "선택 사항(예: requests.example.com). 그 이름을 Box Office로 연결하면(DNS와 ingress 또는 리버스 프록시에서) 그곳에서는 요청 사이트가 사이트 전체가 돼요. 이 관리 화면은 원래 주소에 그대로 있어요. 이 관리 페이지와 Box Office API는 그 이름에서는 응답하지 않아요.",
       "look": "모양",
       "welcome": "환영 문구",
       "welcomeHint": "로그인 페이지와 둘러보기 상단에 표시돼요.",

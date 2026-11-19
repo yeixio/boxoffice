@@ -1039,6 +1039,11 @@
     "free": "{{size}} boş",
     "cantSee": "göremiyor",
     "removePath": "{{path}} kaldır",
+    "removeRoot": {
+      "title": "Bu kök klasör kaldırılsın mı?",
+      "body": "Box Office artık {{path}} klasörüyle ilgilenmeyecek. Klasördeki hiçbir şey silinmez.",
+      "inUse": "Hâlâ {{path}} altında duran başlıklar: {{count}}. Önce onları başka bir klasöre taşıyın veya listeden kaldırın."
+    },
     "scanFor": {
       "movie": "Tara, bir klasörde zaten bulunan ama listede olmayan filmleri arar, böylece onları oldukları yerde ekleyebilirsiniz.",
       "series": "Tara, bir klasörde zaten bulunan ama listede olmayan dizileri arar, böylece onları oldukları yerde ekleyebilirsiniz.",
@@ -1805,7 +1810,7 @@
       "copy": "Adresi kopyala",
       "openLink": "Aç",
       "host": "Kendi ana bilgisayar adı",
-      "hostHint": "İsteğe bağlı, örneğin requests.example.com. Bu adı Box Office'e yönlendirin (DNS'te ve ingress veya ters proxy'nizde); orada istek sitesi sitenin tamamıdır. Bu yönetici arayüzü her zamanki adresinde kalır.",
+      "hostHint": "İsteğe bağlı, örneğin requests.example.com. Bu adı Box Office'e yönlendirin (DNS'te ve ingress veya ters proxy'nizde); orada istek sitesi sitenin tamamıdır. Bu yönetici arayüzü her zamanki adresinde kalır. Bu yönetici sayfaları ve Box Office'in API'si o adda yanıt vermez.",
       "look": "Görünüm",
       "welcome": "Karşılama metni",
       "welcomeHint": "Giriş sayfasında ve Keşfet'in üstünde gösterilir.",
