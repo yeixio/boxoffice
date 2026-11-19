@@ -62,6 +62,13 @@ func (s *Server) carryOut(r *http.Request, p library.Plan, subject string) error
 	if err != nil {
 		return err
 	}
+	return s.carryOutShown(r.Context(), p, subject, n, size, "")
+}
+
+// carryOutShown deletes as planned, if the plan takes n files and size
+// bytes: what a person, or the leaving soon list, was shown. why is added
+// to the note on Activity.
+func (s *Server) carryOutShown(ctx context.Context, p library.Plan, subject string, n int, size int64, why string) error {
 	if p.Problem != "" {
 		return errorf(http.StatusConflict, "Nothing was deleted: "+p.Problem+".")
 	}
@@ -79,8 +86,12 @@ func (s *Server) carryOut(r *http.Request, p library.Plan, subject string) error
 	if p.Folder != "" {
 		what = "the folder " + p.Folder + " (" + what + ")"
 	}
-	s.Log.Info("deleted files from the library", "title", subject, "folder", p.Folder, "files", p.Count, "bytes", p.Size)
-	s.Store.RecordJob(context.WithoutCancel(r.Context()), JobDeleteFiles, subject, "done", "Deleted "+what+" for good.")
+	s.Log.Info("deleted files from the library", "title", subject, "folder", p.Folder, "files", p.Count, "bytes", p.Size, "why", why)
+	note := "Deleted " + what + " for good."
+	if why != "" {
+		note += " " + why
+	}
+	s.Store.RecordJob(context.WithoutCancel(ctx), JobDeleteFiles, subject, "done", note)
 	return nil
 }
 

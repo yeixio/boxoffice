@@ -17,6 +17,7 @@ import { ProblemsCard } from './Problems'
 import { QualityCheckCard } from './QualityCheck'
 import { SubtitleSettingsCard } from './Subtitles'
 import { ListsCard } from './Lists'
+import { CleanupCard } from './Cleanup'
 import { matches, spans, words } from './settingsSearch'
 import { Badge, Button, Card, ErrorNote, Field, Input, Modal, Select, Spinner, Toggle } from '../ui'
 
@@ -58,6 +59,7 @@ const sections: SectionDef[] = [
       { id: 'problems', el: <ProblemsCard /> },
       { id: 'quality-check', el: <QualityCheckCard />, keys: ['title.quality', 'qualityCheck.corrections'], terms: ['ffprobe', 'FFmpeg', 'HDR', 'Dolby Vision', 'MediaInfo', '4K', '1080p'] },
       { id: 'subtitles', el: <SubtitleSettingsCard />, keys: ['subtitles.languages', 'subtitles.preferSdh', 'subtitles.dailyLimit', 'subtitles.apiKey'], terms: ['Bazarr', 'OpenSubtitles', 'Podnapisi', 'SRT', 'SDH', 'captions', 'CC'] },
+      { id: 'cleanup', el: <CleanupCard />, keys: ['cleanup.watched', 'cleanup.days', 'cleanup.auto', 'cleanup.leavingSoon'], terms: ['Maintainerr', 'Janitorr', 'delete watched', 'free space', 'disk space', 'purge'] },
       { id: 'recycle', el: <RecycleFolders /> },
     ],
   },

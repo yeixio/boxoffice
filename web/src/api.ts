@@ -1019,3 +1019,33 @@ export type FollowedList = {
 export type FollowedLists = { lists: FollowedList[]; traktClient: boolean; everyHours: number; perCheck: number }
 export type ListPreview = { source: FollowedList['source']; needsTraktClient?: boolean; address: string; name: string; movies: number; shows: number; sample: string[]; capped: boolean }
 export type ListItem = { listId: number; kind: 'movie' | 'series'; tmdbId: number; title: string; year?: number; state: ListState; note?: string; seenAt: string }
+
+// Clean-up rules (Settings → Library → Clean-up).
+export type CleanupWatched = 'everyone' | 'anyone' | 'nobody'
+export type CleanupRule = {
+  id: number
+  name: string
+  kind: 'movie' | 'series'
+  watched: CleanupWatched
+  days: number
+  endedOnly: boolean
+  graceDays: number
+  auto: boolean
+  enabled: boolean
+  checkedAt?: string
+  waiting?: 'report' | 'plays'
+  leaving: number
+  leavingSize: number
+}
+export type CleanupTitle = { kind: 'movie' | 'series'; titleId: number; tmdbId: number; title: string; year?: number; poster?: string; size: number; viewers: number; finishedBy: number; lastPlayed?: string; addedAt: string }
+export type CleanupItem = { id: number; ruleId: number; kind: 'movie' | 'series'; titleId: number; files: number; size: number; listedAt: string; leavesAt: string; problem?: string; about: CleanupTitle; auto: boolean }
+export type CleanupReport = { at: string; people: number; titles: number; fresh: boolean }
+export type Cleanup = {
+  rules: CleanupRule[]
+  items: CleanupItem[]
+  kept: { kind: 'movie' | 'series'; titleId: number; title: string; year?: number; keptAt: string }[]
+  reports: Partial<Record<'movie' | 'series', CleanupReport>>
+  dailyCap: number
+  deletedToday: number
+}
+export type CleanupPreview = { waiting?: 'report' | 'plays'; count: number; size: number; titles: CleanupTitle[] }

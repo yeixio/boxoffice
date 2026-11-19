@@ -2652,5 +2652,74 @@
       "skipped": "Udeladt",
       "failed": "Kunne ikke tilføjes"
     }
+  },
+  "cleanup": {
+    "title": "Oprydning",
+    "add": "Tilføj en regel",
+    "edit": "Ændr reglen",
+    "remove": "Fjern reglen",
+    "removeBody": "Reglen forsvinder, og de titler, den har listet, tages af listen over det, der snart forsvinder. Intet slettes.",
+    "sub": "Regler udvælger titler, der er blevet set, eller aldrig blev set, for at skaffe plads. En regel lister dem kun som på vej væk. Intet slettes, før du sletter det, medmindre du lader en regel slette selv. Reglerne går efter, hvad Matinee siger er blevet set.",
+    "none": "Ingen regler endnu. Tilføj en for at se, hvad den ville udvælge; at tilføje en regel sletter intet.",
+    "noReport": "Matinee har ikke for nylig sagt, hvad der er blevet set ({{kinds}}), så reglerne venter, og intet slettes. Matinee rapporterer af sig selv, når det er forbundet og opdateret.",
+    "connect": "Forbind Matinee",
+    "reported": "Matinee sagde sidst, hvad der er blevet set: {{when}}",
+    "noPlays": "Matinee siger, at intet overhovedet er blevet afspillet, så denne regel venter i stedet for at tage det for givet.",
+    "rule": {
+      "movie": {
+        "everyone": "Film, som alle, der begyndte på dem, har set færdig, ikke afspillet i {{days}} dage",
+        "anyone": "Film, som nogen har set færdig, ikke afspillet i {{days}} dage",
+        "nobody": "Film, som ingen har afspillet, {{days}} dage efter de kom"
+      },
+      "series": {
+        "everyone": "Serier, som alle, der begyndte på dem, har set færdig, ikke afspillet i {{days}} dage",
+        "anyone": "Serier, som nogen har set færdig, ikke afspillet i {{days}} dage",
+        "nobody": "Serier, som ingen har afspillet, {{days}} dage efter deres nyeste afsnit"
+      }
+    },
+    "autoBadge": "Sletter selv",
+    "listsBadge": "Lister kun",
+    "grace": "Listes først i {{days}} dage",
+    "leaving": "Forsvinder snart: {{titles}} ({{size}})",
+    "leavingSoon": "Forsvinder snart",
+    "checkNow": "Tjek nu",
+    "nothingLeaving": "Intet er på vej væk.",
+    "neverPlayed": "Aldrig afspillet; her siden {{when}}",
+    "plays": "Set færdig af {{finished}} af {{viewers}}, der har afspillet den; sidst afspillet {{when}}",
+    "canGo": "Listet {{when}}. Den bliver, indtil du sletter den.",
+    "deletedOn": "Reglen sletter den {{when}}, medmindre nogen afspiller den, eller du beholder den.",
+    "keep": "Behold",
+    "deleteNow": "Slet nu",
+    "deleteTitle": "Slet {{title}}?",
+    "deleteBody": "Mappen slettes fra disken for altid ({{files}} filer, {{size}}), og titlen tages af Box Offices liste. Det kan ikke fortrydes.",
+    "kept": "Beholdt",
+    "keptSub": "Ingen regel lister disse igen.",
+    "unkeep": "Lad regler liste den",
+    "cap": "Højeste antal titler om dagen, som regler sletter selv",
+    "capHint": "Slettet af regler i dag: {{titles}}. Resten venter til i morgen.",
+    "kind": "For",
+    "watched": "Set af",
+    "watchedBy": {
+      "everyone": "Alle, der begyndte på den, har set den færdig",
+      "anyone": "Nogen har set den færdig",
+      "nobody": "Ingen har afspillet den"
+    },
+    "days": "Stille i så mange dage",
+    "daysHint": "Tælles fra sidste gang, nogen afspillede den.",
+    "daysHintNobody": "Tælles fra den kom (en serie: dens nyeste afsnit). Mindst {{least}}, så nye titler får en chance.",
+    "endedOnly": "Kun serier, der er afsluttet",
+    "endedOnlyHint": "Serier med afsnit, der stadig kommer, lades i fred.",
+    "graceDays": "Dage på listen over det, der snart forsvinder",
+    "graceHint": "Hvor længe en titel er listet, før den kan forsvinde. At afspille den tager den af listen. Mindst {{least}}.",
+    "auto": "Slet selv, når de dage er gået",
+    "autoOff": "Fra: reglen lister kun titler, og du sletter dem, du vælger.",
+    "autoOn": "Til: reglen sletter hver titels mappe for altid, når dens dage er gået, højst {{most}} titler om dagen. Titler på Rør ikke, dem du beholder, og dem der er ønsket inden for de sidste 30 dage, slettes aldrig.",
+    "enabled": "Reglen er slået til",
+    "preview": "Hvad denne regel ville liste nu",
+    "previewNoReport": "Matinee har ikke for nylig sagt, hvad der er blevet set, så der er intet at vise endnu. Du kan gemme reglen; den venter, indtil Matinee rapporterer.",
+    "previewNone": "Intet passer lige nu.",
+    "previewCount": "Titler: {{titles}} ({{size}}). De største:",
+    "previewSafe": "Dette er kun en forhåndsvisning. At gemme reglen lister disse som på vej væk og sletter intet.",
+    "editNote": "Hvis du ændrer en regel, starter dens liste forfra."
   }
 }

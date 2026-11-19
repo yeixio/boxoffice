@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/yeixio/boxoffice/internal/catalog"
+	"github.com/yeixio/boxoffice/internal/store"
 )
 
 // Matinee's report of what was watched is kept by title, and each report
@@ -72,5 +73,41 @@ func TestWatchedReport(t *testing.T) {
 	body = map[string]any{"people": 3, "titles": []any{map[string]any{"tmdbId": 603, "viewers": 1, "finishedBy": 2}}}
 	if code := call(t, "PUT", e.url+"/radarr/api/v3/boxoffice/watched", body, nil); code != 400 {
 		t.Fatalf("bad report: %d", code)
+	}
+}
+
+// What clean-up rules have listed as leaving soon is there for Matinee.
+func TestLeavingFeed(t *testing.T) {
+	e := setup(t)
+	ctx := context.Background()
+	st := e.cat.Store
+	if f := features(t, e.url+"/radarr"); !slices.Contains(f, "leaving") {
+		t.Fatalf("features: %v", f)
+	}
+	mv, err := e.cat.AddMovie(ctx, 603, catalog.AddOptions{Monitored: true})
+	if err != nil {
+		t.Fatal(err)
+	}
+	rule, err := st.AddCleanupRule(ctx, store.CleanupRule{Kind: "movie", Watched: store.CleanupEveryone, Days: 30, GraceDays: 14, Enabled: true})
+	if err != nil {
+		t.Fatal(err)
+	}
+	leaves := time.Now().Add(14 * 24 * time.Hour).UTC().Truncate(time.Second)
+	if listed, err := st.ListCleanupItem(ctx, store.CleanupItem{RuleID: rule.ID, Kind: "movie", TitleID: mv.ID, Files: 1, Size: 10, LeavesAt: leaves}); err != nil || !listed {
+		t.Fatalf("list: %v %v", listed, err)
+	}
+	var out struct {
+		Titles []struct {
+			TMDBID   int64
+			Title    string
+			LeavesAt time.Time
+		}
+	}
+	if code := call(t, "GET", e.url+"/radarr/api/v3/boxoffice/leaving", nil, &out); code != 200 || len(out.Titles) != 1 || out.Titles[0].TMDBID != 603 || !out.Titles[0].LeavesAt.Equal(leaves) {
+		t.Fatalf("movies: %d %+v", code, out)
+	}
+	out.Titles = nil
+	if code := call(t, "GET", e.url+"/sonarr/api/v3/boxoffice/leaving", nil, &out); code != 200 || len(out.Titles) != 0 {
+		t.Fatalf("shows: %d %+v", code, out)
 	}
 }

@@ -265,6 +265,9 @@ func (s *Store) DeleteMovie(ctx context.Context, id int64) error {
 	if _, err := s.exec(ctx, "DELETE FROM title_wants WHERE kind = 'movie' AND owner_id = ?", id); err != nil {
 		return err
 	}
+	if _, err := s.exec(ctx, "DELETE FROM cleanup_items WHERE kind = 'movie' AND title_id = ?", id); err != nil {
+		return err
+	}
 	res, err := s.exec(ctx, "DELETE FROM movies WHERE id = ?", id)
 	if err != nil {
 		return err
@@ -497,6 +500,9 @@ func (s *Store) DeleteSeries(ctx context.Context, id int64) error {
 		return err
 	}
 	if _, err := s.exec(ctx, "DELETE FROM episodes WHERE series_id = ?", id); err != nil {
+		return err
+	}
+	if _, err := s.exec(ctx, "DELETE FROM cleanup_items WHERE kind = 'series' AND title_id = ?", id); err != nil {
 		return err
 	}
 	if _, err := s.exec(ctx, "DELETE FROM seasons WHERE series_id = ?", id); err != nil {

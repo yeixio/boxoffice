@@ -2529,5 +2529,74 @@
       "skipped": "Dilewati",
       "failed": "Tidak dapat ditambahkan"
     }
+  },
+  "cleanup": {
+    "title": "Pembersihan",
+    "add": "Tambah aturan",
+    "edit": "Ubah aturan",
+    "remove": "Hapus aturan",
+    "removeBody": "Aturan dihapus, dan judul yang didaftarkannya keluar dari daftar yang segera pergi. Tidak ada yang dihapus dari disk.",
+    "sub": "Aturan memilih judul yang sudah ditonton, atau tidak pernah ditonton, untuk memberi ruang. Aturan hanya mendaftarkannya sebagai segera pergi. Tidak ada yang dihapus sampai Anda menghapusnya, kecuali Anda membiarkan aturan menghapus sendiri. Aturan mengikuti apa yang menurut Matinee sudah ditonton.",
+    "none": "Belum ada aturan. Tambahkan satu untuk melihat apa yang akan dipilihnya; menambah aturan tidak menghapus apa pun.",
+    "noReport": "Matinee belum memberi tahu akhir-akhir ini apa yang ditonton ({{kinds}}), jadi aturan menunggu dan tidak ada yang dihapus. Matinee melapor sendiri begitu terhubung dan mutakhir.",
+    "connect": "Hubungkan Matinee",
+    "reported": "Matinee terakhir memberi tahu apa yang ditonton: {{when}}",
+    "noPlays": "Matinee mengatakan tidak ada yang diputar sama sekali, jadi aturan ini menunggu daripada langsung memercayainya.",
+    "rule": {
+      "movie": {
+        "everyone": "Film yang sudah diselesaikan semua orang yang memulainya, tidak diputar selama {{days}} hari",
+        "anyone": "Film yang sudah diselesaikan seseorang, tidak diputar selama {{days}} hari",
+        "nobody": "Film yang tidak pernah diputar siapa pun, {{days}} hari setelah datang"
+      },
+      "series": {
+        "everyone": "Serial yang sudah diselesaikan semua orang yang memulainya, tidak diputar selama {{days}} hari",
+        "anyone": "Serial yang sudah diselesaikan seseorang, tidak diputar selama {{days}} hari",
+        "nobody": "Serial yang tidak pernah diputar siapa pun, {{days}} hari setelah episode terbarunya"
+      }
+    },
+    "autoBadge": "Menghapus sendiri",
+    "listsBadge": "Hanya mendaftar",
+    "grace": "Didaftar dulu selama {{days}} hari",
+    "leaving": "Segera pergi: {{titles}} ({{size}})",
+    "leavingSoon": "Segera pergi",
+    "checkNow": "Periksa sekarang",
+    "nothingLeaving": "Tidak ada yang akan pergi.",
+    "neverPlayed": "Tidak pernah diputar; di sini sejak {{when}}",
+    "plays": "Diselesaikan oleh {{finished}} dari {{viewers}} yang memutarnya; terakhir diputar {{when}}",
+    "canGo": "Didaftar {{when}}. Tetap ada sampai Anda menghapusnya.",
+    "deletedOn": "Aturan menghapusnya pada {{when}} kecuali seseorang memutarnya atau Anda menyimpannya.",
+    "keep": "Simpan",
+    "deleteNow": "Hapus sekarang",
+    "deleteTitle": "Hapus {{title}}?",
+    "deleteBody": "Foldernya dihapus dari disk untuk selamanya ({{files}} berkas, {{size}}) dan judulnya keluar dari daftar Box Office. Ini tidak dapat dibatalkan.",
+    "kept": "Disimpan",
+    "keptSub": "Tidak ada aturan yang mendaftarkan ini lagi.",
+    "unkeep": "Izinkan aturan mendaftarkannya",
+    "cap": "Jumlah judul terbanyak per hari yang dihapus aturan sendiri",
+    "capHint": "Dihapus aturan hari ini: {{titles}}. Sisanya menunggu besok.",
+    "kind": "Untuk",
+    "watched": "Ditonton oleh",
+    "watchedBy": {
+      "everyone": "Semua orang yang memulainya sudah menyelesaikannya",
+      "anyone": "Seseorang sudah menyelesaikannya",
+      "nobody": "Tidak ada yang memutarnya"
+    },
+    "days": "Tenang selama sekian hari",
+    "daysHint": "Dihitung dari terakhir kali seseorang memutarnya.",
+    "daysHintNobody": "Dihitung sejak datang (serial: episode terbarunya). Paling sedikit {{least}}, agar judul baru mendapat kesempatan.",
+    "endedOnly": "Hanya serial yang sudah tamat",
+    "endedOnlyHint": "Serial yang episodenya masih akan datang dibiarkan saja.",
+    "graceDays": "Hari di daftar segera pergi",
+    "graceHint": "Berapa lama judul didaftar sebelum bisa pergi. Memutarnya mengeluarkannya dari daftar. Paling sedikit {{least}}.",
+    "auto": "Hapus sendiri saat hari-hari itu habis",
+    "autoOff": "Mati: aturan hanya mendaftar judul, dan Anda menghapus yang Anda pilih.",
+    "autoOn": "Nyala: aturan menghapus folder tiap judul untuk selamanya saat harinya habis, paling banyak {{most}} judul per hari. Judul di Jangan sentuh, yang Anda simpan, dan yang diminta dalam 30 hari terakhir tidak pernah dihapus.",
+    "enabled": "Aturan menyala",
+    "preview": "Apa yang akan didaftar aturan ini sekarang",
+    "previewNoReport": "Matinee belum memberi tahu akhir-akhir ini apa yang ditonton, jadi belum ada yang bisa ditampilkan. Anda bisa menyimpan aturan; aturan menunggu sampai Matinee melapor.",
+    "previewNone": "Tidak ada yang cocok saat ini.",
+    "previewCount": "Judul: {{titles}} ({{size}}). Yang terbesar:",
+    "previewSafe": "Ini hanya pratinjau. Menyimpan aturan mendaftarkan ini sebagai segera pergi dan tidak menghapus apa pun.",
+    "editNote": "Mengubah aturan memulai daftarnya dari awal."
   }
 }

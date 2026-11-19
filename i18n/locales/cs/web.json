@@ -2898,5 +2898,74 @@
       "skipped": "Vynecháno",
       "failed": "Nepodařilo se přidat"
     }
+  },
+  "cleanup": {
+    "title": "Úklid",
+    "add": "Přidat pravidlo",
+    "edit": "Změnit pravidlo",
+    "remove": "Odebrat pravidlo",
+    "removeBody": "Pravidlo zmizí a tituly, které vypsalo, zmizí ze seznamu brzy odcházejících. Nic se nesmaže.",
+    "sub": "Pravidla vybírají tituly, které už byly zhlédnuty nebo nebyly zhlédnuty nikdy, aby se uvolnilo místo. Pravidlo je jen vypíše jako brzy odcházející. Nic se nesmaže, dokud to nesmažete vy, pokud pravidlu nedovolíte mazat samo. Pravidla se řídí tím, co podle Matinee bylo zhlédnuto.",
+    "none": "Zatím žádná pravidla. Přidejte jedno a uvidíte, co by vybralo; přidání pravidla nic nesmaže.",
+    "noReport": "Matinee v poslední době neoznámilo, co bylo zhlédnuto ({{kinds}}), takže pravidla čekají a nic se nemaže. Matinee to hlásí samo, jakmile je připojené a aktuální.",
+    "connect": "Připojit Matinee",
+    "reported": "Matinee naposledy oznámilo, co bylo zhlédnuto: {{when}}",
+    "noPlays": "Matinee hlásí, že se nepřehrálo vůbec nic, takže toto pravidlo raději čeká, než aby tomu věřilo.",
+    "rule": {
+      "movie": {
+        "everyone": "Filmy, které dokoukali všichni, kdo je začali, a nepřehrály se {{days}} dní",
+        "anyone": "Filmy, které někdo dokoukal a nepřehrály se {{days}} dní",
+        "nobody": "Filmy, které nikdo nepřehrál, {{days}} dní po jejich příchodu"
+      },
+      "series": {
+        "everyone": "Seriály, které dokoukali všichni, kdo je začali, a nepřehrály se {{days}} dní",
+        "anyone": "Seriály, které někdo dokoukal a nepřehrály se {{days}} dní",
+        "nobody": "Seriály, které nikdo nepřehrál, {{days}} dní po nejnovější epizodě"
+      }
+    },
+    "autoBadge": "Maže samo",
+    "listsBadge": "Jen vypisuje",
+    "grace": "Nejprve {{days}} dní na seznamu",
+    "leaving": "Brzy odejde: {{titles}} ({{size}})",
+    "leavingSoon": "Brzy odejde",
+    "checkNow": "Zkontrolovat teď",
+    "nothingLeaving": "Nic neodchází.",
+    "neverPlayed": "Nikdy nepřehráno; tady od {{when}}",
+    "plays": "Dokoukalo {{finished}} z {{viewers}}, kdo to přehráli; naposledy přehráno {{when}}",
+    "canGo": "Na seznamu od {{when}}. Zůstane, dokud to nesmažete.",
+    "deletedOn": "Pravidlo to smaže {{when}}, pokud to někdo nepřehraje nebo si to neponecháte.",
+    "keep": "Ponechat",
+    "deleteNow": "Smazat teď",
+    "deleteTitle": "Smazat {{title}}?",
+    "deleteBody": "Složka se natrvalo smaže z disku (souborů: {{files}}, {{size}}) a titul zmizí ze seznamu Box Office. Nelze to vrátit.",
+    "kept": "Ponechané",
+    "keptSub": "Žádné pravidlo je znovu nevypíše.",
+    "unkeep": "Dovolit pravidlům ho vypsat",
+    "cap": "Nejvíce titulů denně, které pravidla smažou sama",
+    "capHint": "Dnes smazáno pravidly: {{titles}}. Zbytek počká do zítřka.",
+    "kind": "Pro",
+    "watched": "Zhlédnuto kým",
+    "watchedBy": {
+      "everyone": "Všichni, kdo to začali, to dokoukali",
+      "anyone": "Někdo to dokoukal",
+      "nobody": "Nikdo to nepřehrál"
+    },
+    "days": "Tolik dní v klidu",
+    "daysHint": "Počítá se od posledního přehrání kýmkoli.",
+    "daysHintNobody": "Počítá se od příchodu (u seriálu od nejnovější epizody). Nejméně {{least}}, aby nové tituly dostaly šanci.",
+    "endedOnly": "Jen seriály, které skončily",
+    "endedOnlyHint": "Seriály, kterým ještě vyjdou epizody, zůstanou na pokoji.",
+    "graceDays": "Dny na seznamu brzy odcházejících",
+    "graceHint": "Jak dlouho je titul na seznamu, než může odejít. Přehrání ho ze seznamu odebere. Nejméně {{least}}.",
+    "auto": "Mazat samo, až ty dny uplynou",
+    "autoOff": "Vypnuto: pravidlo tituly jen vypisuje a vy mažete ty, které si vyberete.",
+    "autoOn": "Zapnuto: pravidlo natrvalo smaže složku každého titulu, až jeho dny uplynou, nejvýše {{most}} titulů denně. Tituly s nastavením Nesahat, ty, které si ponecháte, a ty, o které někdo požádal v posledních 30 dnech, se nemažou nikdy.",
+    "enabled": "Pravidlo je zapnuté",
+    "preview": "Co by toto pravidlo teď vypsalo",
+    "previewNoReport": "Matinee v poslední době neoznámilo, co bylo zhlédnuto, takže zatím není co ukázat. Pravidlo můžete uložit; počká, až Matinee podá hlášení.",
+    "previewNone": "Teď nic neodpovídá.",
+    "previewCount": "Tituly: {{titles}} ({{size}}). Největší:",
+    "previewSafe": "Toto je jen náhled. Uložení pravidla je vypíše jako brzy odcházející a nic nesmaže.",
+    "editNote": "Změna pravidla začne jeho seznam od začátku."
   }
 }

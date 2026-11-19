@@ -2652,5 +2652,74 @@
       "skipped": "Dışarıda bırakıldı",
       "failed": "Eklenemedi"
     }
+  },
+  "cleanup": {
+    "title": "Temizlik",
+    "add": "Kural ekle",
+    "edit": "Kuralı değiştir",
+    "remove": "Kuralı kaldır",
+    "removeBody": "Kural gider ve listelediği başlıklar yakında ayrılacaklar listesinden çıkar. Hiçbir şey silinmez.",
+    "sub": "Kurallar, yer açmak için izlenmiş veya hiç izlenmemiş başlıkları seçer. Bir kural bunları yalnızca yakında ayrılacak olarak listeler. Siz silene kadar hiçbir şey silinmez; bir kuralın kendiliğinden silmesine izin vermediğiniz sürece. Kurallar, Matinee’nin izlendiğini söylediklerine göre çalışır.",
+    "none": "Henüz kural yok. Neyi seçeceğini görmek için bir tane ekleyin; kural eklemek hiçbir şeyi silmez.",
+    "noReport": "Matinee son zamanlarda neyin izlendiğini bildirmedi ({{kinds}}), bu yüzden kurallar bekliyor ve hiçbir şey silinmiyor. Matinee bağlı ve güncel olduğunda kendiliğinden bildirir.",
+    "connect": "Matinee’yi bağla",
+    "reported": "Matinee neyin izlendiğini en son şu zaman bildirdi: {{when}}",
+    "noPlays": "Matinee hiçbir şeyin oynatılmadığını söylüyor, bu yüzden bu kural buna güvenmek yerine bekliyor.",
+    "rule": {
+      "movie": {
+        "everyone": "Başlayan herkesin bitirdiği, {{days}} gündür oynatılmayan filmler",
+        "anyone": "Birinin bitirdiği, {{days}} gündür oynatılmayan filmler",
+        "nobody": "Kimsenin oynatmadığı filmler, geldikten {{days}} gün sonra"
+      },
+      "series": {
+        "everyone": "Başlayan herkesin bitirdiği, {{days}} gündür oynatılmayan diziler",
+        "anyone": "Birinin bitirdiği, {{days}} gündür oynatılmayan diziler",
+        "nobody": "Kimsenin oynatmadığı diziler, en yeni bölümlerinden {{days}} gün sonra"
+      }
+    },
+    "autoBadge": "Kendiliğinden siler",
+    "listsBadge": "Yalnızca listeler",
+    "grace": "Önce {{days}} gün listede",
+    "leaving": "Yakında ayrılacak: {{titles}} ({{size}})",
+    "leavingSoon": "Yakında ayrılacak",
+    "checkNow": "Şimdi denetle",
+    "nothingLeaving": "Ayrılan bir şey yok.",
+    "neverPlayed": "Hiç oynatılmadı; {{when}} tarihinden beri burada",
+    "plays": "Oynatan {{viewers}} kişiden {{finished}} kişi bitirdi; son oynatma {{when}}",
+    "canGo": "{{when}} tarihinde listelendi. Siz silene kadar kalır.",
+    "deletedOn": "Biri oynatmaz veya siz tutmazsanız kural onu {{when}} tarihinde siler.",
+    "keep": "Tut",
+    "deleteNow": "Şimdi sil",
+    "deleteTitle": "{{title}} silinsin mi?",
+    "deleteBody": "Klasörü diskten kalıcı olarak silinir ({{files}} dosya, {{size}}) ve başlık Box Office listesinden çıkar. Bu geri alınamaz.",
+    "kept": "Tutulanlar",
+    "keptSub": "Hiçbir kural bunları yeniden listelemez.",
+    "unkeep": "Kurallar listeleyebilsin",
+    "cap": "Kuralların kendiliğinden sildiği günlük en fazla başlık sayısı",
+    "capHint": "Bugün kuralların sildiği: {{titles}}. Geri kalanı yarını bekler.",
+    "kind": "Tür",
+    "watched": "İzleyen",
+    "watchedBy": {
+      "everyone": "Başlayan herkes bitirdi",
+      "anyone": "Biri bitirdi",
+      "nobody": "Kimse oynatmadı"
+    },
+    "days": "Bu kadar gündür sessiz",
+    "daysHint": "Birinin son oynatmasından itibaren sayılır.",
+    "daysHintNobody": "Geldiği andan itibaren sayılır (dizide: en yeni bölüm). Yeni başlıklara şans tanımak için en az {{least}}.",
+    "endedOnly": "Yalnızca sona ermiş diziler",
+    "endedOnlyHint": "Bölümleri hâlâ gelecek olan dizilere dokunulmaz.",
+    "graceDays": "Yakında ayrılacaklar listesindeki gün sayısı",
+    "graceHint": "Bir başlığın ayrılabilmesinden önce ne kadar listede kaldığı. Oynatmak onu listeden çıkarır. En az {{least}}.",
+    "auto": "O günler dolunca kendiliğinden sil",
+    "autoOff": "Kapalı: kural yalnızca başlıkları listeler, seçtiklerinizi siz silersiniz.",
+    "autoOn": "Açık: kural, günleri dolduğunda her başlığın klasörünü kalıcı olarak siler; günde en fazla {{most}} başlık. Dokunma olarak ayarlı başlıklar, tuttuklarınız ve son 30 günde istenenler asla silinmez.",
+    "enabled": "Kural açık",
+    "preview": "Bu kural şimdi neleri listelerdi",
+    "previewNoReport": "Matinee son zamanlarda neyin izlendiğini bildirmedi, bu yüzden henüz gösterilecek bir şey yok. Kuralı kaydedebilirsiniz; Matinee bildirene kadar bekler.",
+    "previewNone": "Şu anda eşleşen bir şey yok.",
+    "previewCount": "Başlıklar: {{titles}} ({{size}}). En büyükleri:",
+    "previewSafe": "Bu yalnızca bir önizlemedir. Kuralı kaydetmek bunları yakında ayrılacak olarak listeler ve hiçbir şeyi silmez.",
+    "editNote": "Bir kuralı değiştirmek listesini baştan başlatır."
   }
 }

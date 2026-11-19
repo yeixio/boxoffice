@@ -2529,5 +2529,74 @@
       "skipped": "已排除",
       "failed": "无法添加"
     }
+  },
+  "cleanup": {
+    "title": "清理",
+    "add": "添加规则",
+    "edit": "更改规则",
+    "remove": "移除规则",
+    "removeBody": "规则会被移除，它列出的影片会从“即将移除”列表中撤下。不会删除任何内容。",
+    "sub": "规则会挑出已看过或从未看过的影片，以腾出空间。规则只是把它们列为即将移除。除非你允许规则自行删除，否则在你删除之前不会删除任何内容。规则依据 Matinee 报告的观看情况。",
+    "none": "还没有规则。添加一条即可查看它会挑出什么；添加规则不会删除任何内容。",
+    "noReport": "Matinee 最近没有报告观看情况（{{kinds}}），所以规则正在等待，不会删除任何内容。Matinee 连接并更新到最新后会自行报告。",
+    "connect": "连接 Matinee",
+    "reported": "Matinee 上次报告观看情况：{{when}}",
+    "noPlays": "Matinee 报告没有播放过任何内容，所以这条规则选择等待，而不是直接相信。",
+    "rule": {
+      "movie": {
+        "everyone": "所有开始看的人都已看完、且 {{days}} 天未播放的电影",
+        "anyone": "有人已看完、且 {{days}} 天未播放的电影",
+        "nobody": "入库 {{days}} 天后仍无人播放的电影"
+      },
+      "series": {
+        "everyone": "所有开始看的人都已看完、且 {{days}} 天未播放的剧集",
+        "anyone": "有人已看完、且 {{days}} 天未播放的剧集",
+        "nobody": "最新一集 {{days}} 天后仍无人播放的剧集"
+      }
+    },
+    "autoBadge": "自行删除",
+    "listsBadge": "仅列出",
+    "grace": "先列出 {{days}} 天",
+    "leaving": "即将移除：{{titles}}（{{size}}）",
+    "leavingSoon": "即将移除",
+    "checkNow": "立即检查",
+    "nothingLeaving": "没有即将移除的内容。",
+    "neverPlayed": "从未播放；自 {{when}} 起在库中",
+    "plays": "播放过的 {{viewers}} 人中有 {{finished}} 人看完；上次播放 {{when}}",
+    "canGo": "{{when}} 列出。在你删除之前会一直保留。",
+    "deletedOn": "除非有人播放或你选择保留，否则规则会在 {{when}} 删除它。",
+    "keep": "保留",
+    "deleteNow": "立即删除",
+    "deleteTitle": "删除 {{title}}？",
+    "deleteBody": "其文件夹将从磁盘上永久删除（{{files}} 个文件，{{size}}），并从 Box Office 的列表中移除。此操作无法撤销。",
+    "kept": "已保留",
+    "keptSub": "任何规则都不会再列出这些。",
+    "unkeep": "允许规则列出",
+    "cap": "规则每天自行删除的影片数上限",
+    "capHint": "今天规则已删除：{{titles}}。其余的等到明天。",
+    "kind": "适用于",
+    "watched": "观看情况",
+    "watchedBy": {
+      "everyone": "所有开始看的人都已看完",
+      "anyone": "有人已看完",
+      "nobody": "无人播放"
+    },
+    "days": "安静了这么多天",
+    "daysHint": "从最后一次有人播放算起。",
+    "daysHintNobody": "从入库时算起（剧集：最新一集）。至少 {{least}}，让新影片有机会被观看。",
+    "endedOnly": "仅限已完结的剧集",
+    "endedOnlyHint": "还有新集数的剧集不受影响。",
+    "graceDays": "在“即将移除”列表中的天数",
+    "graceHint": "影片在可以移除之前被列出的时长。播放它会将其从列表中撤下。至少 {{least}}。",
+    "auto": "天数到期后自行删除",
+    "autoOff": "关闭：规则只列出影片，由你删除所选的影片。",
+    "autoOn": "开启：天数到期后，规则会永久删除每部影片的文件夹，每天最多 {{most}} 部。设为“请勿改动”的影片、你保留的影片以及最近 30 天内被请求的影片永远不会被删除。",
+    "enabled": "规则已开启",
+    "preview": "这条规则现在会列出的内容",
+    "previewNoReport": "Matinee 最近没有报告观看情况，所以暂时没有可显示的内容。你可以保存规则；它会等到 Matinee 报告。",
+    "previewNone": "目前没有匹配的内容。",
+    "previewCount": "影片数：{{titles}}（{{size}}）。最大的：",
+    "previewSafe": "这只是预览。保存规则只会把这些列为即将移除，不会删除任何内容。",
+    "editNote": "更改规则会重新开始它的列表。"
   }
 }

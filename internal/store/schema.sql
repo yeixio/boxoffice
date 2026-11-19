@@ -763,3 +763,45 @@ CREATE TABLE IF NOT EXISTS watched (
 	report      BIGINT NOT NULL,            -- the report it came in
 	PRIMARY KEY (kind, title_id)
 );
+
+-- Clean-up rules: which watched (or never watched) titles leave the
+-- library. A rule only lists titles as leaving soon, for an admin to
+-- delete or keep, unless auto says it deletes them itself once their days
+-- on the list are up. Rules go by what Matinee says was watched.
+CREATE TABLE IF NOT EXISTS cleanup_rules (
+	id         INTEGER PRIMARY KEY AUTOINCREMENT,
+	name       TEXT NOT NULL,
+	kind       TEXT NOT NULL,              -- movie or series
+	watched    TEXT NOT NULL,              -- everyone (who started it finished it), anyone (finished it), nobody (played it)
+	days       INTEGER NOT NULL,           -- quiet for this long: since the last play, or since it was added for nobody
+	ended_only INTEGER NOT NULL DEFAULT 1, -- shows: only ones that have ended
+	grace_days INTEGER NOT NULL DEFAULT 14, -- days on the leaving soon list before it can go
+	auto       INTEGER NOT NULL DEFAULT 0, -- deletes by itself once those days are up
+	enabled    INTEGER NOT NULL DEFAULT 1,
+	checked_at BIGINT NOT NULL DEFAULT 0,
+	waiting    TEXT NOT NULL DEFAULT '',   -- why it didn't run last time: report (no recent one), plays (Matinee reports none)
+	created_at BIGINT NOT NULL
+);
+
+-- Titles leaving soon: what a rule found, when it can go, and the files
+-- and bytes it had on disk when it was listed. Only that is ever deleted.
+CREATE TABLE IF NOT EXISTS cleanup_items (
+	id        INTEGER PRIMARY KEY AUTOINCREMENT,
+	rule_id   BIGINT NOT NULL REFERENCES cleanup_rules(id) ON DELETE CASCADE,
+	kind      TEXT NOT NULL,
+	title_id  BIGINT NOT NULL,
+	files     INTEGER NOT NULL DEFAULT 0,
+	size      BIGINT NOT NULL DEFAULT 0,
+	listed_at BIGINT NOT NULL,
+	leaves_at BIGINT NOT NULL,
+	problem   TEXT NOT NULL DEFAULT '',    -- why it couldn't be deleted
+	UNIQUE (kind, title_id)
+);
+
+-- Titles an admin said to keep: no clean-up rule lists them again.
+CREATE TABLE IF NOT EXISTS cleanup_kept (
+	kind     TEXT NOT NULL,
+	title_id BIGINT NOT NULL,
+	kept_at  BIGINT NOT NULL,
+	PRIMARY KEY (kind, title_id)
+);
