@@ -1094,7 +1094,15 @@
       "movingSub": "Box Office mở lại khi mọi thứ đã được sao chép và kiểm tra.",
       "moveTitle": "Chuyển cơ sở dữ liệu?"
     },
-    "homeLayout": "Chọn thư mục chứa ảnh và video của bạn, chẳng hạn một thư mục chia sẻ mà điện thoại sao lưu vào. Thư mục con không sao: Box Office đọc ngày chụp từ chính tệp."
+    "homeLayout": "Chọn thư mục chứa ảnh và video của bạn, chẳng hạn một thư mục chia sẻ mà điện thoại sao lưu vào. Thư mục con không sao: Box Office đọc ngày chụp từ chính tệp.",
+    "zone": {
+      "title": "Múi giờ",
+      "hint": "Đồng hồ mà Box Office dùng: các giờ của lịch tốc độ, ngày bắt đầu tháng của giới hạn dữ liệu, ngày tính các giới hạn hằng ngày và thời gian trong thông báo.",
+      "now": "Bây giờ là {{time}} theo đồng hồ của Box Office ({{zone}}).",
+      "server": "Múi giờ của chính máy chủ ({{zone}})",
+      "differs": "Trình duyệt này đang ở {{zone}}.",
+      "use": "Dùng {{zone}}"
+    }
   },
   "mediaTypes": {
     "music": {

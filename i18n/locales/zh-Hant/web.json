@@ -1094,7 +1094,15 @@
       "movingSub": "全部複製並檢查完畢後,Box Office 會重新開啟。",
       "moveTitle": "要搬移資料庫嗎?"
     },
-    "homeLayout": "選擇存放照片和影片的資料夾，例如手機備份到的共用資料夾。裡面有子資料夾也沒關係：Box Office 會從檔案本身讀取拍攝日期。"
+    "homeLayout": "選擇存放照片和影片的資料夾，例如手機備份到的共用資料夾。裡面有子資料夾也沒關係：Box Office 會從檔案本身讀取拍攝日期。",
+    "zone": {
+      "title": "時區",
+      "hint": "Box Office 使用的時鐘:速度排程的時段、流量上限的月份從哪天開始、每日上限按哪一天計算,以及訊息裡的時間。",
+      "now": "依 Box Office 的時鐘,現在是 {{time}}({{zone}})。",
+      "server": "伺服器自己的時區({{zone}})",
+      "differs": "此瀏覽器位於 {{zone}}。",
+      "use": "使用 {{zone}}"
+    }
   },
   "mediaTypes": {
     "music": {

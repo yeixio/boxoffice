@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"errors"
 	"time"
+
+	"github.com/yeixio/boxoffice/internal/zone"
 )
 
 // secs is a time as Unix seconds, 0 for the zero time.
@@ -208,7 +210,7 @@ func (s *Store) PruneIndexerUsage(ctx context.Context, before string) error {
 
 // DataDay is the day bytes downloaded count toward, in local time, as an
 // internet provider's billing month would.
-func DataDay(t time.Time) string { return t.Local().Format(time.DateOnly) }
+func DataDay(t time.Time) string { return zone.In(t).Format(time.DateOnly) }
 
 // AddDataUsage adds bytes downloaded from a news server today.
 func (s *Store) AddDataUsage(ctx context.Context, serverID, n int64) error {

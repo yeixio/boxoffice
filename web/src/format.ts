@@ -95,3 +95,12 @@ export function titleLink(kind?: string, id?: number): { to: string; label: stri
   }
   return null
 }
+
+/** This browser's time zone, such as Europe/Berlin, where the browser says. */
+export function browserZone(): string {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || ''
+  } catch {
+    return ''
+  }
+}

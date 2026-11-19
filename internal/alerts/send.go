@@ -19,6 +19,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/yeixio/boxoffice/internal/zone"
 )
 
 // sendTimeout is how long one channel gets to take an alert.
@@ -230,7 +232,7 @@ func (m *Manager) email(ctx context.Context, e Email, a Alert) error {
 	if d := m.dashboard(); d != "" {
 		body += "\nHealth: " + d + "\n"
 	}
-	body += "\n— " + m.serverName() + ", " + time.UnixMilli(a.Time).Format("2 Jan 2006 15:04 MST") + "\n" +
+	body += "\n— " + m.serverName() + ", " + zone.In(time.UnixMilli(a.Time)).Format("2 Jan 2006 15:04 MST") + "\n" +
 		"Change which alerts you get in Health → Alerts in Box Office.\n"
 	ctx, cancel := context.WithTimeout(ctx, sendTimeout)
 	defer cancel()

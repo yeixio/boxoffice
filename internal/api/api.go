@@ -161,6 +161,8 @@ func (s *Server) Handler() http.Handler {
 		{"PUT /api/v1/me/language", true, s.setLanguage},
 
 		{"GET /api/v1/system", true, s.system},
+		{"GET /api/v1/timezone", true, s.timeZone},
+		{"PUT /api/v1/timezone", true, s.setTimeZone},
 		{"GET /api/v1/settings", true, s.settings},
 		{"PUT /api/v1/settings", true, s.saveSettings},
 		{"POST /api/v1/settings/apikey", true, s.newAPIKey},
@@ -601,7 +603,11 @@ var setupMu sync.Mutex
 
 // setup makes the first admin. It only works once.
 func (s *Server) setup(w http.ResponseWriter, r *http.Request) error {
-	var c credentials
+	var c struct {
+		credentials
+		// TimeZone is the browser's zone, such as Europe/Berlin.
+		TimeZone string `json:"timeZone"`
+	}
 	if err := readJSON(r, &c); err != nil {
 		return err
 	}
@@ -623,6 +629,7 @@ func (s *Server) setup(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
+	s.adoptTimeZone(r.Context(), c.TimeZone)
 	return s.signIn(w, r, u)
 }
 

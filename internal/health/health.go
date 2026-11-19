@@ -16,6 +16,7 @@ import (
 
 	"github.com/yeixio/boxoffice/internal/backup"
 	"github.com/yeixio/boxoffice/internal/store"
+	"github.com/yeixio/boxoffice/internal/zone"
 )
 
 // An Issue is one problem, and how to fix it.
@@ -264,7 +265,7 @@ func (c *Checker) backups(ctx context.Context) ([]Issue, error) {
 	if due := time.Duration(s.EveryHours)*time.Hour + time.Hour; !newest.IsZero() && c.clock().Sub(newest) > due {
 		out = append(out, Issue{
 			ID: "backups-late", Level: "error", Title: "Backups have stopped",
-			Detail: fmt.Sprintf("The newest backup is from %s, though one is due every %d hours.", newest.Local().Format("Jan 2, 15:04"), s.EveryHours),
+			Detail: fmt.Sprintf("The newest backup is from %s, though one is due every %d hours.", zone.In(newest).Format("Jan 2, 15:04"), s.EveryHours),
 			Steps: []string{
 				"In Backups, click Back up now. If it fails, the message says why, such as a full disk.",
 				"Check Box Office's data volume has space free.",

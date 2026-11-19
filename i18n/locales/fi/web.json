@@ -1171,7 +1171,15 @@
       "movingSub": "Box Office avautuu taas, kun kaikki on kopioitu ja tarkistettu.",
       "moveTitle": "Siirretäänkö tietokanta?"
     },
-    "homeLayout": "Valitse kansio, jossa kuvasi ja videosi ovat, esimerkiksi jako, johon puhelimesi varmuuskopioi. Alikansiot eivät haittaa: Box Office lukee kuvausajan itse tiedostosta."
+    "homeLayout": "Valitse kansio, jossa kuvasi ja videosi ovat, esimerkiksi jako, johon puhelimesi varmuuskopioi. Alikansiot eivät haittaa: Box Office lukee kuvausajan itse tiedostosta.",
+    "zone": {
+      "title": "Aikavyöhyke",
+      "hint": "Kello, jonka mukaan Box Office toimii: nopeusaikataulun tunnit, päivä jona datakaton kuukausi alkaa, päivä jolta päivärajat lasketaan, ja viestien kellonajat.",
+      "now": "Box Officen kello on {{time}} ({{zone}}).",
+      "server": "Palvelimen oma ({{zone}})",
+      "differs": "Tämä selain on vyöhykkeellä {{zone}}.",
+      "use": "Käytä: {{zone}}"
+    }
   },
   "mediaTypes": {
     "music": {

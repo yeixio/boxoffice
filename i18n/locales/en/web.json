@@ -1171,7 +1171,15 @@
       "movingSub": "Box Office opens again once everything is copied and checked.",
       "moveTitle": "Move the database?"
     },
-    "homeLayout": "Pick the folder your photos and videos are in, such as a share your phone backs up to. Any folders inside it are fine: Box Office reads the date each one was taken from the file itself."
+    "homeLayout": "Pick the folder your photos and videos are in, such as a share your phone backs up to. Any folders inside it are fine: Box Office reads the date each one was taken from the file itself.",
+    "zone": {
+      "title": "Time zone",
+      "hint": "The clock Box Office keeps: the hours of the speed schedule, the day the data cap's month starts, the day daily limits count, and the times in messages.",
+      "now": "It's {{time}} on Box Office's clock ({{zone}}).",
+      "server": "The server's own ({{zone}})",
+      "differs": "This browser is in {{zone}}.",
+      "use": "Use {{zone}}"
+    }
   },
   "mediaTypes": {
     "music": {

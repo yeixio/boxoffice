@@ -1171,7 +1171,15 @@
       "movingSub": "Box Office öffnet wieder, sobald alles kopiert und geprüft ist.",
       "moveTitle": "Datenbank umziehen?"
     },
-    "homeLayout": "Wähle den Ordner mit deinen Fotos und Videos, etwa eine Freigabe, in die dein Handy sichert. Unterordner sind kein Problem: Box Office liest das Aufnahmedatum aus der Datei selbst."
+    "homeLayout": "Wähle den Ordner mit deinen Fotos und Videos, etwa eine Freigabe, in die dein Handy sichert. Unterordner sind kein Problem: Box Office liest das Aufnahmedatum aus der Datei selbst.",
+    "zone": {
+      "title": "Zeitzone",
+      "hint": "Die Uhr, nach der Box Office geht: die Stunden des Geschwindigkeitsplans, der Tag, an dem der Monat des Datenlimits beginnt, der Tag, für den Tageslimits zählen, und die Uhrzeiten in Meldungen.",
+      "now": "Auf der Uhr von Box Office ist es {{time}} ({{zone}}).",
+      "server": "Die des Servers ({{zone}})",
+      "differs": "Dieser Browser ist in {{zone}}.",
+      "use": "{{zone}} verwenden"
+    }
   },
   "mediaTypes": {
     "music": {

@@ -13,6 +13,7 @@ import (
 
 	"github.com/yeixio/boxoffice/internal/library"
 	"github.com/yeixio/boxoffice/internal/store"
+	"github.com/yeixio/boxoffice/internal/zone"
 )
 
 // ---- clean-up rules (Settings → Library → Clean-up) ----
@@ -390,7 +391,7 @@ func (s *Server) cleanupToday(ctx context.Context, now time.Time) (int, error) {
 		return 0, err
 	}
 	day, n, _ := strings.Cut(v, ":")
-	if day != now.Format(time.DateOnly) {
+	if day != zone.In(now).Format(time.DateOnly) {
 		return 0, nil
 	}
 	count, _ := strconv.Atoi(n)
@@ -413,7 +414,7 @@ func (s *Server) cleanupCountToday(ctx context.Context, now time.Time) error {
 	if err != nil {
 		return err
 	}
-	return s.Store.SetSetting(ctx, settingCleanupToday, now.Format(time.DateOnly)+":"+strconv.Itoa(done+1))
+	return s.Store.SetSetting(ctx, settingCleanupToday, zone.In(now).Format(time.DateOnly)+":"+strconv.Itoa(done+1))
 }
 
 // deleteCleanup deletes a listed title's folder and removes the title, if

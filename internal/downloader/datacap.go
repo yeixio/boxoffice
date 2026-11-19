@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/yeixio/boxoffice/internal/store"
+	"github.com/yeixio/boxoffice/internal/zone"
 )
 
 // The monthly data cap: an internet plan's allowance, which Box Office
@@ -113,8 +114,8 @@ type CapState struct {
 
 // monthStart is the start of the plan's month t is in, and the next one's.
 func monthStart(t time.Time, day int) (time.Time, time.Time) {
-	t = t.Local()
-	start := time.Date(t.Year(), t.Month(), day, 0, 0, 0, 0, time.Local)
+	t = zone.In(t)
+	start := time.Date(t.Year(), t.Month(), day, 0, 0, 0, 0, zone.Get())
 	if t.Before(start) {
 		start = start.AddDate(0, -1, 0)
 	}
@@ -154,7 +155,7 @@ func LoadCap(ctx context.Context, st *store.Store) (CapState, error) {
 // Why says what the cap has paused, for people; "" when nothing.
 func (c CapState) Why() string {
 	used := fmt.Sprintf("%s of this month's %s data cap is used", humanBytes(c.Used), humanBytes(c.Limit))
-	resets := c.Resets.Format("January 2")
+	resets := zone.In(c.Resets).Format("January 2")
 	switch c.Level {
 	case CapFull:
 		return fmt.Sprintf("%s, so downloading waits until %s", used, resets)
@@ -236,7 +237,7 @@ func quotas(ctx context.Context, st *store.Store, list []store.UsenetServer) (ma
 			}
 		}
 		if !u.Expires.IsZero() && now.After(u.Expires) {
-			q.Problem = "its account expired on " + u.Expires.Local().Format("January 2, 2006") + "; renew it and change the date"
+			q.Problem = "its account expired on " + zone.In(u.Expires).Format("January 2, 2006") + "; renew it and change the date"
 		}
 		out[u.ID] = q
 	}

@@ -1171,7 +1171,15 @@
       "movingSub": "Box Office öppnar igen när allt är kopierat och kontrollerat.",
       "moveTitle": "Flytta databasen?"
     },
-    "homeLayout": "Välj mappen där dina foton och videor finns, till exempel en delad mapp som telefonen säkerhetskopierar till. Undermappar går bra: Box Office läser när varje bild togs från själva filen."
+    "homeLayout": "Välj mappen där dina foton och videor finns, till exempel en delad mapp som telefonen säkerhetskopierar till. Undermappar går bra: Box Office läser när varje bild togs från själva filen.",
+    "zone": {
+      "title": "Tidszon",
+      "hint": "Klockan som Box Office går efter: timmarna i hastighetsschemat, dagen då datagränsens månad börjar, dagen som dagliga gränser räknas för, och klockslagen i meddelanden.",
+      "now": "Klockan är {{time}} på Box Offices klocka ({{zone}}).",
+      "server": "Serverns egen ({{zone}})",
+      "differs": "Den här webbläsaren är i {{zone}}.",
+      "use": "Använd {{zone}}"
+    }
   },
   "mediaTypes": {
     "music": {

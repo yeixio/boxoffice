@@ -1094,7 +1094,15 @@
       "movingSub": "Box Office terbuka lagi setelah semuanya disalin dan diperiksa.",
       "moveTitle": "Pindahkan database?"
     },
-    "homeLayout": "Pilih folder tempat foto dan videomu berada, misalnya folder bersama tempat ponselmu mencadangkan. Subfolder tidak masalah: Box Office membaca tanggal pengambilan dari file itu sendiri."
+    "homeLayout": "Pilih folder tempat foto dan videomu berada, misalnya folder bersama tempat ponselmu mencadangkan. Subfolder tidak masalah: Box Office membaca tanggal pengambilan dari file itu sendiri.",
+    "zone": {
+      "title": "Zona waktu",
+      "hint": "Jam yang dipakai Box Office: jam-jam jadwal kecepatan, hari dimulainya bulan batas data, hari yang dihitung untuk batas harian, dan waktu di dalam pesan.",
+      "now": "Sekarang pukul {{time}} menurut jam Box Office ({{zone}}).",
+      "server": "Milik server sendiri ({{zone}})",
+      "differs": "Browser ini berada di {{zone}}.",
+      "use": "Gunakan {{zone}}"
+    }
   },
   "mediaTypes": {
     "music": {

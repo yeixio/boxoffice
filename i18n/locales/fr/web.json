@@ -1248,7 +1248,15 @@
       "movingSub": "Box Office rouvre dès que tout est copié et vérifié.",
       "moveTitle": "Déplacer la base de données ?"
     },
-    "homeLayout": "Choisissez le dossier où se trouvent vos photos et vidéos, par exemple un partage où votre téléphone fait ses sauvegardes. Les sous-dossiers ne posent aucun problème : Box Office lit la date de prise de vue dans le fichier lui-même."
+    "homeLayout": "Choisissez le dossier où se trouvent vos photos et vidéos, par exemple un partage où votre téléphone fait ses sauvegardes. Les sous-dossiers ne posent aucun problème : Box Office lit la date de prise de vue dans le fichier lui-même.",
+    "zone": {
+      "title": "Fuseau horaire",
+      "hint": "L'horloge que suit Box Office : les heures du planning de vitesse, le jour où commence le mois du plafond de données, le jour sur lequel comptent les limites quotidiennes et les heures dans les messages.",
+      "now": "Il est {{time}} à l'horloge de Box Office ({{zone}}).",
+      "server": "Celui du serveur ({{zone}})",
+      "differs": "Ce navigateur est dans le fuseau {{zone}}.",
+      "use": "Utiliser {{zone}}"
+    }
   },
   "mediaTypes": {
     "music": {

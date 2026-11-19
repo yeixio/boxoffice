@@ -4,6 +4,8 @@ import (
 	"regexp"
 	"strconv"
 	"time"
+
+	"github.com/yeixio/boxoffice/internal/zone"
 )
 
 // nameDate finds a date (and maybe a time) in a file's name, as phones
@@ -31,7 +33,7 @@ func dateFromName(name string) (time.Time, bool) {
 // for times (a video's, a file's) that are moments rather than clock times.
 func wallClock(t time.Time, loc *time.Location) time.Time {
 	if loc == nil {
-		loc = time.Local
+		loc = zone.Get()
 	}
 	l := t.In(loc)
 	return time.Date(l.Year(), l.Month(), l.Day(), l.Hour(), l.Minute(), l.Second(), 0, time.UTC)

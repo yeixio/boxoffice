@@ -268,6 +268,7 @@ Most settings live in the web UI under **Settings**. The server itself takes a f
 | `BOXOFFICE_MAME_RELEASES_URL`, `BOXOFFICE_LIBRETRO_DB_URL`, `BOXOFFICE_GAME_ART_URL` | | MAME's releases on GitHub, libretro's database and thumbnails | Other copies of the game lists and box art the Games section uses. See [Games](docs/games.md) |
 | `BOXOFFICE_PLACES_URL` | | GeoNames' `cities15000.zip` | Another copy of the list of towns photos' places are named from (a URL or a file), or `off`. See [Home videos and photos](docs/home-media.md#places) |
 | `BOXOFFICE_EBOOK_CONVERT` | | `ebook-convert` on the `PATH`, if there | Calibre's `ebook-convert`, so ebooks a Kindle won't take by email (AZW3, MOBI) are turned into EPUB before they're sent. See [Sending ebooks to e-readers](docs/ereaders.md) |
+| `TZ` | | the system's zone; UTC in a container | The server's time zone, such as `Europe/Berlin`. The hours of the speed schedule, the day the data cap's month starts, the day daily limits count and the times in messages go by it. The zone picked in **Settings → General → Time zone** wins over it, and setting Box Office up takes your browser's zone when the server's clock is on UTC and `TZ` isn't set |
 | `BOXOFFICE_LOG_FORMAT` | `-log-format` | `text` | `text` or `json` |
 | `BOXOFFICE_DEBUG` | `-debug` | off | Log more. The Health page can also switch debug logging on and off while it runs |
 

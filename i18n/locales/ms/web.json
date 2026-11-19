@@ -1094,7 +1094,15 @@
       "movingSub": "Box Office dibuka semula sebaik sahaja semuanya disalin dan disemak.",
       "moveTitle": "Pindahkan pangkalan data?"
     },
-    "homeLayout": "Pilih folder tempat foto dan video anda berada, contohnya folder kongsi tempat telefon anda membuat sandaran. Subfolder tidak menjadi masalah: Box Office membaca tarikh setiap satu daripada fail itu sendiri."
+    "homeLayout": "Pilih folder tempat foto dan video anda berada, contohnya folder kongsi tempat telefon anda membuat sandaran. Subfolder tidak menjadi masalah: Box Office membaca tarikh setiap satu daripada fail itu sendiri.",
+    "zone": {
+      "title": "Zon waktu",
+      "hint": "Jam yang digunakan Box Office: waktu jadual kelajuan, hari bermulanya bulan had data, hari yang dikira untuk had harian, dan masa dalam mesej.",
+      "now": "Sekarang pukul {{time}} mengikut jam Box Office ({{zone}}).",
+      "server": "Zon pelayan sendiri ({{zone}})",
+      "differs": "Pelayar ini berada di {{zone}}.",
+      "use": "Guna {{zone}}"
+    }
   },
   "mediaTypes": {
     "music": {

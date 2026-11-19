@@ -18,6 +18,7 @@ import { QualityCheckCard } from './QualityCheck'
 import { SubtitleSettingsCard } from './Subtitles'
 import { ListsCard } from './Lists'
 import { CleanupCard } from './Cleanup'
+import { TimeZoneCard } from './TimeZone'
 import { matches, spans, words } from './settingsSearch'
 import { Badge, Button, Card, ErrorNote, Field, Input, Modal, Select, Spinner, Toggle } from '../ui'
 
@@ -41,6 +42,7 @@ const sections: SectionDef[] = [
     id: 'general',
     cards: [
       { id: 'language', el: <Language /> },
+      { id: 'time-zone', el: <TimeZoneCard />, terms: ['TZ', 'UTC', 'timezone', 'clock'] },
       { id: 'tmdb', el: <General />, keys: ['settings.tmdbKey'], terms: ['API'] },
       { id: 'password', el: <Account /> },
       { id: 'restart', el: <Restart />, keys: ['settings.restartNow'], terms: ['reboot', 'Kubernetes', 'Docker'] },

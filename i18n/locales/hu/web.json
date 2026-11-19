@@ -1171,7 +1171,15 @@
       "movingSub": "A Box Office újra megnyílik, ha minden át van másolva és ellenőrizve.",
       "moveTitle": "Költözteted az adatbázist?"
     },
-    "homeLayout": "Válaszd ki a fotóidat és videóidat tartalmazó mappát, például egy megosztást, ahová a telefonod ment. Az almappák nem gond: a Box Office magából a fájlból olvassa ki a készítés idejét."
+    "homeLayout": "Válaszd ki a fotóidat és videóidat tartalmazó mappát, például egy megosztást, ahová a telefonod ment. Az almappák nem gond: a Box Office magából a fájlból olvassa ki a készítés idejét.",
+    "zone": {
+      "title": "Időzóna",
+      "hint": "Az óra, amely szerint a Box Office működik: a sebességütemezés órái, a nap, amelyen az adatkorlát hónapja kezdődik, a nap, amelyre a napi korlátok számítanak, és az üzenetekben szereplő időpontok.",
+      "now": "A Box Office órája szerint {{time}} van ({{zone}}).",
+      "server": "A kiszolgáló sajátja ({{zone}})",
+      "differs": "Ez a böngésző a(z) {{zone}} zónában van.",
+      "use": "{{zone}} használata"
+    }
   },
   "mediaTypes": {
     "music": {

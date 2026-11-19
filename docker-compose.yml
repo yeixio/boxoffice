@@ -15,6 +15,9 @@ services:
     user: "${PUID:-1000}:${PGID:-1000}"
     environment:
       BOXOFFICE_DOWNLOADS_DIR: /downloads
+      # Your time zone, for the speed schedule's hours and the data cap's
+      # month; without it the clock is on UTC. Or pick it in Settings.
+      # TZ: Europe/Berlin
       # BOXOFFICE_TMDB_KEY: your-themoviedb-key  (or paste it in Settings)
     volumes:
       - ./boxoffice-data:/data

@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/yeixio/boxoffice/internal/store"
+	"github.com/yeixio/boxoffice/internal/zone"
 )
 
 // Pacing: each indexer is asked at most every Client.Spacing, rests after
@@ -166,7 +167,7 @@ func restingNote(ix store.Indexer, st store.IndexerStatus) string {
 	if st.LastError != "" {
 		why = " after: " + st.LastError
 	}
-	return fmt.Sprintf("%s is resting until %s%s", ix.Name, st.RestingUntil.Local().Format("15:04"), why)
+	return fmt.Sprintf("%s is resting until %s%s", ix.Name, zone.In(st.RestingUntil).Format("15:04"), why)
 }
 
 // autoSearchRoom is how many more searches Box Office may make by itself
