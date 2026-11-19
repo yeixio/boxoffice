@@ -34,7 +34,7 @@ export type Member = {
   id: number
   username: string
   displayName: string
-  source: 'local' | 'matinee'
+  source: 'local' | 'matinee' | 'sso'
   autoApprove: '' | 'on' | 'off'
   quotaMovies: number
   quotaShows: number
@@ -466,7 +466,7 @@ function People() {
                     <div className="font-medium">{m.displayName || m.username}</div>
                     <div className="text-xs text-muted">{m.username}</div>
                   </td>
-                  <td className="px-4 py-2">{m.source === 'matinee' ? 'Matinee' : t('req.people.local')}</td>
+                  <td className="px-4 py-2">{m.source === 'matinee' ? 'Matinee' : m.source === 'sso' ? t('sso.title') : t('req.people.local')}</td>
                   <td className="px-4 py-2 tabular-nums">
                     {m.requests}
                     {m.pending ? <span className="text-muted"> {t('req.people.waiting', { count: m.pending })}</span> : null}

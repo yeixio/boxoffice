@@ -550,14 +550,15 @@ CREATE TABLE IF NOT EXISTS members (
 	username      TEXT NOT NULL UNIQUE, -- lowercased
 	display_name  TEXT NOT NULL DEFAULT '',
 	password_hash TEXT NOT NULL DEFAULT '', -- empty for Matinee accounts
-	source        TEXT NOT NULL DEFAULT 'local', -- local or matinee
+	source        TEXT NOT NULL DEFAULT 'local', -- local, matinee or sso
 	auto_approve  TEXT NOT NULL DEFAULT '', -- '' follows Settings, or on or off
 	quota_movies  INTEGER NOT NULL DEFAULT -1, -- a week; -1 follows Settings, 0 is no limit
 	quota_shows   INTEGER NOT NULL DEFAULT -1,
 	disabled      INTEGER NOT NULL DEFAULT 0,
 	created_at    BIGINT NOT NULL,
 	seen_at       BIGINT NOT NULL DEFAULT 0,
-	language      TEXT NOT NULL DEFAULT '' -- '' follows the browser
+	language      TEXT NOT NULL DEFAULT '', -- '' follows the browser
+	subject       TEXT NOT NULL DEFAULT '' -- the single sign-on provider's id for an sso account
 );
 
 CREATE TABLE IF NOT EXISTS member_sessions (

@@ -73,5 +73,12 @@
       "unsupported": "Este navegador no puede recibir notificaciones.",
       "blocked": "Las notificaciones están bloqueadas para este sitio en el navegador. Permítelas en los ajustes del navegador para este sitio y vuelve a activar esto."
     }
+  },
+  "sso": {
+    "signIn": "Iniciar sesión con {{name}}",
+    "or": "o",
+    "refused": "El inicio de sesión se canceló o fue rechazado.",
+    "notallowed": "Esa cuenta no tiene acceso aquí. Pregunta a quien administra este servidor.",
+    "failed": "El inicio de sesión no funcionó. Quien administra este servidor puede ver el motivo en su registro."
   }
 }

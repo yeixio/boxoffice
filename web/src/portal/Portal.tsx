@@ -10,6 +10,7 @@ import { LanguageMenu, LanguagePicker } from '../LanguagePicker'
 import { LanguageSync } from '../i18n/sync'
 import { PageBoundary, SkipLink } from '../Broken'
 import { Install, ThisDevice } from '../Notify'
+import { SsoButton } from '../Sso'
 import { unsubscribe, usePush } from '../push'
 import { Button, Empty, ErrorNote, Field, Input, Modal, Poster, Select, Spinner } from '../ui'
 import { onMemberSignedOut, papi, pget, ppost, problemLabel, problems, stateText, type DiscoverHome, type DiscoverPage, type DiscoverTitle, type Issue, type Member, type Problem, type Request, type Site } from './papi'
@@ -169,6 +170,7 @@ function PortalSignIn({ site }: { site: Site }) {
         <Button variant="primary" type="submit" busy={busy}>
           {mode === 'signup' ? t('signIn.make') : t('signIn.signIn')}
         </Button>
+        {mode !== 'signup' && <SsoButton name={site.sso} what="member" />}
         {site.signUp && (
           <button type="button" className="text-sm font-medium text-marquee" onClick={() => setMode(mode === 'signup' ? (site.matinee ? 'matinee' : 'local') : 'signup')}>
             {mode === 'signup' ? t('signIn.haveAccount') : t('signIn.new')}

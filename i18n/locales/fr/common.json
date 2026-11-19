@@ -73,5 +73,12 @@
       "unsupported": "Ce navigateur ne peut pas recevoir de notifications.",
       "blocked": "Les notifications sont bloquées pour ce site dans le navigateur. Autorisez-les dans les réglages du navigateur pour ce site, puis réactivez ceci."
     }
+  },
+  "sso": {
+    "signIn": "Se connecter avec {{name}}",
+    "or": "ou",
+    "refused": "La connexion a été annulée ou refusée.",
+    "notallowed": "Ce compte n'a pas accès ici. Demandez à la personne qui gère ce serveur.",
+    "failed": "La connexion n'a pas fonctionné. La personne qui gère ce serveur peut voir pourquoi dans son journal."
   }
 }

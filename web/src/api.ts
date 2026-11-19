@@ -51,7 +51,8 @@ export const del = (path: string) => api<void>('DELETE', path)
 
 export type User = { id: number; username: string; language?: string }
 // movedIn is set once an admin has finished moving in from the old apps.
-export type Status = { setup: boolean; version: string; user?: User; movedIn?: boolean }
+// sso is the single sign-on provider's name, when the sign-in page offers it.
+export type Status = { setup: boolean; version: string; user?: User; movedIn?: boolean; sso?: string }
 
 export type Quality = { id: number; name: string; source: string; resolution: number }
 // locked is the Do not touch profile, which is never picked for a new title on its own.

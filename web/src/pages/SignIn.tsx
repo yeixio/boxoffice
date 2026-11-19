@@ -5,10 +5,11 @@ import { useQueryClient } from '@tanstack/react-query'
 import { Clapperboard } from 'lucide-react'
 import { post } from '../api'
 import { browserZone } from '../format'
+import { SsoButton } from '../Sso'
 import { Button, ErrorNote, Field, Input } from '../ui'
 
 // SignIn signs an admin in, or on first start makes the first admin.
-export function SignIn({ firstRun }: { firstRun: boolean }) {
+export function SignIn({ firstRun, sso }: { firstRun: boolean; sso?: string }) {
   const { t } = useTranslation()
   const qc = useQueryClient()
   const [username, setUsername] = useState('')
@@ -59,6 +60,7 @@ export function SignIn({ firstRun }: { firstRun: boolean }) {
           <Button variant="primary" type="submit" busy={busy}>
             {firstRun ? t('signIn.make') : t('signIn.signIn')}
           </Button>
+          {!firstRun && <SsoButton name={sso} what="admin" />}
         </div>
         <div className="mt-6 flex justify-center">
           <LanguageMenu />

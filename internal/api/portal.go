@@ -139,6 +139,9 @@ func (s *Server) portalSite(w http.ResponseWriter, r *http.Request) error {
 		"localSignIn": st.LocalSignIn, "signUp": st.SignUp, "matinee": st.MatineeURL != "",
 	}
 	if st.Enabled {
+		if name, on := s.ssoMembers(r); on {
+			out["sso"] = name
+		}
 		if m, ok := s.member(r); ok {
 			out["member"] = viewMember(m)
 		}

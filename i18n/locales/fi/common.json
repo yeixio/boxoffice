@@ -72,5 +72,12 @@
       "unsupported": "Tämä selain ei voi vastaanottaa ilmoituksia.",
       "blocked": "Ilmoitukset on estetty tältä sivustolta selaimessa. Salli ne selaimen sivustoasetuksista ja ota tämä sitten uudelleen käyttöön."
     }
+  },
+  "sso": {
+    "signIn": "Kirjaudu palvelulla {{name}}",
+    "or": "tai",
+    "refused": "Kirjautuminen peruttiin tai hylättiin.",
+    "notallowed": "Tällä tilillä ei ole pääsyä tänne. Kysy palvelimen ylläpitäjältä.",
+    "failed": "Kirjautuminen ei onnistunut. Palvelimen ylläpitäjä näkee syyn lokista."
   }
 }
