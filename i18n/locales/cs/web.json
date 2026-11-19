@@ -1187,6 +1187,11 @@
     "free": "{{size}} volné",
     "cantSee": "není vidět",
     "removePath": "Odebrat {{path}}",
+    "removeRoot": {
+      "title": "Odebrat tuto kořenovou složku?",
+      "body": "Box Office se přestane starat o {{path}}. Ve složce se nic nesmaže.",
+      "inUse": "Tituly stále uložené pod {{path}}: {{count}}. Nejdřív je přesuňte do jiné složky nebo je odeberte ze seznamu."
+    },
     "scanFor": {
       "movie": "Prohledání hledá filmy, které už jsou ve složce, ale ne na seznamu, abyste je mohli přidat tam, kde jsou.",
       "series": "Prohledání hledá seriály, které už jsou ve složce, ale ne na seznamu, abyste je mohli přidat tam, kde jsou.",

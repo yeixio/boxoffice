@@ -552,6 +552,31 @@ func (s *Store) AddRootFolder(ctx context.Context, kind, path string) (RootFolde
 	return RootFolder{ID: int(id), Kind: kind, Path: path}, err
 }
 
+// RootFolder gives one root folder.
+func (s *Store) RootFolder(ctx context.Context, id int) (RootFolder, error) {
+	f := RootFolder{ID: id}
+	err := s.row(ctx, "SELECT kind, path FROM root_folders WHERE id = ?", id).Scan(&f.Kind, &f.Path)
+	if errors.Is(err, sql.ErrNoRows) {
+		return f, ErrNotFound
+	}
+	return f, err
+}
+
+// RootFolderTitles counts the titles on the list that are filed under a
+// root folder: movies, shows and artists. Games and home media are found by
+// looking through their folder, so they don't count.
+func (s *Store) RootFolderTitles(ctx context.Context, path string) (int, error) {
+	total := 0
+	for _, table := range []string{"movies", "series", "artists"} {
+		var n int
+		if err := s.row(ctx, "SELECT COUNT(*) FROM "+table+" WHERE root_folder = ?", path).Scan(&n); err != nil {
+			return 0, err
+		}
+		total += n
+	}
+	return total, nil
+}
+
 func (s *Store) DeleteRootFolder(ctx context.Context, id int) error {
 	res, err := s.exec(ctx, "DELETE FROM root_folders WHERE id = ?", id)
 	if err != nil {

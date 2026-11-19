@@ -4,6 +4,12 @@
 import i18n, { formatLocale } from '../i18n'
 import { ApiError, type DiscoverHome, type DiscoverKind, type DiscoverPage, type DiscoverTitle } from '../api'
 
+// Told when the server says the member isn't signed in any more.
+let signedOut: () => void = () => {}
+export const onMemberSignedOut = (fn: () => void) => {
+  signedOut = fn
+}
+
 export async function papi<T>(method: string, path: string, body?: unknown): Promise<T> {
   const init: RequestInit = { method, headers: { Accept: 'application/json', 'X-Requested-With': 'boxoffice' }, credentials: 'same-origin' }
   if (body !== undefined) {
@@ -19,6 +25,7 @@ export async function papi<T>(method: string, path: string, body?: unknown): Pro
   } catch {
     // not JSON
   }
+  if (res.status === 401 && path !== '/login' && path !== '/signup' && path !== '/logout') signedOut()
   if (!res.ok) throw new ApiError(res.status, (data as { error?: string } | undefined)?.error ?? `The server answered ${res.status}`)
   return data as T
 }

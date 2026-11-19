@@ -965,6 +965,11 @@
     "free": "{{size}} kosong",
     "cantSee": "tidak dapat dilihat",
     "removePath": "Alih keluar {{path}}",
+    "removeRoot": {
+      "title": "Buang folder akar ini?",
+      "body": "Box Office tidak lagi menguruskan {{path}}. Tiada apa-apa dalam folder dipadam.",
+      "inUse": "Tajuk yang masih disimpan di {{path}}: {{count}}. Pindahkan dahulu ke folder lain atau buang daripada senarai."
+    },
     "scanFor": {
       "movie": "Imbas mencari filem yang sudah ada dalam folder tetapi belum dalam senarai, supaya anda boleh menambahnya di tempatnya.",
       "series": "Imbas mencari rancangan yang sudah ada dalam folder tetapi belum dalam senarai, supaya anda boleh menambahnya di tempatnya.",

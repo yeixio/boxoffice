@@ -1039,6 +1039,11 @@
     "free": "{{size}} boş",
     "cantSee": "göremiyor",
     "removePath": "{{path}} kaldır",
+    "removeRoot": {
+      "title": "Bu kök klasör kaldırılsın mı?",
+      "body": "Box Office artık {{path}} klasörüyle ilgilenmeyecek. Klasördeki hiçbir şey silinmez.",
+      "inUse": "Hâlâ {{path}} altında duran başlıklar: {{count}}. Önce onları başka bir klasöre taşıyın veya listeden kaldırın."
+    },
     "scanFor": {
       "movie": "Tara, bir klasörde zaten bulunan ama listede olmayan filmleri arar, böylece onları oldukları yerde ekleyebilirsiniz.",
       "series": "Tara, bir klasörde zaten bulunan ama listede olmayan dizileri arar, böylece onları oldukları yerde ekleyebilirsiniz.",

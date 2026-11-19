@@ -1113,6 +1113,11 @@
     "free": "{{size}} liberi",
     "cantSee": "non visibile",
     "removePath": "Rimuovi {{path}}",
+    "removeRoot": {
+      "title": "Rimuovere questa cartella principale?",
+      "body": "Box Office smetterà di occuparsi di {{path}}. Nella cartella non viene eliminato nulla.",
+      "inUse": "Titoli ancora archiviati in {{path}}: {{count}}. Prima spostali in un’altra cartella o rimuovili dall’elenco."
+    },
     "scanFor": {
       "movie": "La scansione cerca film già presenti in una cartella ma non nell’elenco, così puoi aggiungerli dove sono.",
       "series": "La scansione cerca serie già presenti in una cartella ma non nell’elenco, così puoi aggiungerle dove sono.",

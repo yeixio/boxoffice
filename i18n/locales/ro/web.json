@@ -1113,6 +1113,11 @@
     "free": "{{size}} liberi",
     "cantSee": "nu-l vede",
     "removePath": "Elimină {{path}}",
+    "removeRoot": {
+      "title": "Elimini acest dosar rădăcină?",
+      "body": "Box Office nu se va mai ocupa de {{path}}. Nimic din dosar nu este șters.",
+      "inUse": "Titluri încă păstrate în {{path}}: {{count}}. Mută-le mai întâi în alt dosar sau elimină-le din listă."
+    },
     "scanFor": {
       "movie": "Scanarea caută filme aflate deja într-un dosar care nu sunt în listă, ca să le poți adăuga acolo unde sunt.",
       "series": "Scanarea caută seriale aflate deja într-un dosar care nu sunt în listă, ca să le poți adăuga acolo unde sunt.",

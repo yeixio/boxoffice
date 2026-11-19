@@ -1039,6 +1039,11 @@
     "free": "{{size}} ledig",
     "cantSee": "kan ikke se den",
     "removePath": "Fjern {{path}}",
+    "removeRoot": {
+      "title": "Fjerne denne rotmappen?",
+      "body": "Box Office slutter å ta seg av {{path}}. Ingenting i mappen slettes.",
+      "inUse": "Titler som fortsatt ligger under {{path}}: {{count}}. Flytt dem til en annen mappe eller fjern dem fra listen først."
+    },
     "scanFor": {
       "movie": "Skanning ser etter filmer som allerede er i en mappe, men ikke på listen, så du kan legge dem til der de er.",
       "series": "Skanning ser etter serier som allerede er i en mappe, men ikke på listen, så du kan legge dem til der de er.",

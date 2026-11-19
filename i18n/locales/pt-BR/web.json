@@ -1113,6 +1113,11 @@
     "free": "{{size}} livres",
     "cantSee": "não é visível",
     "removePath": "Remover {{path}}",
+    "removeRoot": {
+      "title": "Remover esta pasta raiz?",
+      "body": "O Box Office deixará de cuidar de {{path}}. Nada na pasta é apagado.",
+      "inUse": "Títulos ainda guardados em {{path}}: {{count}}. Primeiro mova-os para outra pasta ou remova-os da lista."
+    },
     "scanFor": {
       "movie": "A varredura procura filmes que já estão em uma pasta mas não na lista, para você adicioná-los onde estão.",
       "series": "A varredura procura séries que já estão em uma pasta mas não na lista, para você adicioná-las onde estão.",

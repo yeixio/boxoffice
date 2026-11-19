@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useCallback, useEffect, useState } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
-import { LogOut, Menu, X } from 'lucide-react'
-import { get, post, put, type Status } from './api'
+import { Menu, X } from 'lucide-react'
+import { get, onSignedOut, post, put, type Status } from './api'
 import { Spinner } from './ui'
 import { Tray } from './Tray'
 import { Logo, PhoneNav, Sidebar, useNav } from './Nav'
@@ -34,6 +34,15 @@ import { Requests } from './pages/Requests'
 export function App() {
   const { t } = useTranslation()
   const status = useQuery({ queryKey: ['status'], queryFn: () => get<Status>('/status') })
+  const qc = useQueryClient()
+  // When the session has run out, asking who's signed in again shows the
+  // sign-in page; signing in comes back to the same page.
+  useEffect(() => {
+    onSignedOut(() => {
+      if (qc.getQueryData<Status>(['status'])?.user) qc.setQueryData<Status>(['status'], (old) => old && { ...old, user: undefined })
+    })
+    return () => onSignedOut(() => {})
+  }, [qc])
   if (status.isPending) return <Spinner />
   if (status.isError) return <p className="p-8 text-bad">{t('app.notAnswering', { error: status.error.message })}</p>
   if (!status.data.setup || !status.data.user) return <SignIn firstRun={!status.data.setup} />
@@ -55,8 +64,9 @@ function Shell({ status }: { status: Status }) {
   )
   const signOut = async () => {
     await post('/logout')
-    qc.clear()
-    qc.invalidateQueries({ queryKey: ['status'] })
+    // Show sign-in at once, and forget what this person was looking at.
+    qc.setQueryData<Status>(['status'], (old) => old && { ...old, user: undefined })
+    qc.removeQueries({ predicate: (q) => q.queryKey[0] !== 'status' })
   }
   return (
     <div className="min-h-screen md:flex">
@@ -78,12 +88,8 @@ function Shell({ status }: { status: Status }) {
             {menu ? <X className="size-5" aria-hidden /> : <Menu className="size-5" aria-hidden />}
             {nav.problems > 0 && !menu && <span className="absolute end-0.5 top-0.5 size-2 rounded-full bg-marquee" aria-hidden />}
           </button>
-          <button onClick={signOut} className="flex items-center gap-1.5 text-sm text-muted hover:text-ink" title={t('nav.signedInAs', { name: status.user?.username })} aria-label={t('nav.signOut')}>
-            <LogOut className="size-4" aria-hidden />
-            <span className="hidden sm:inline">{t('nav.signOut')}</span>
-          </button>
         </div>
-        {menu && <PhoneNav nav={nav} />}
+        {menu && <PhoneNav nav={nav} status={status} signOut={signOut} />}
         <div className="perforated" aria-hidden />
       </header>
       <main className="mx-auto max-w-7xl px-4 py-8 md:px-8">

@@ -965,6 +965,11 @@
     "free": "Còn trống {{size}}",
     "cantSee": "không thấy được",
     "removePath": "Xóa {{path}}",
+    "removeRoot": {
+      "title": "Gỡ thư mục gốc này?",
+      "body": "Box Office sẽ ngừng trông coi {{path}}. Không có gì trong thư mục bị xóa.",
+      "inUse": "Số tựa vẫn nằm trong {{path}}: {{count}}. Hãy chuyển chúng sang thư mục khác hoặc gỡ khỏi danh sách trước."
+    },
     "scanFor": {
       "movie": "Quét tìm các phim đã có trong thư mục nhưng chưa có trong danh sách, để bạn có thể thêm chúng tại chỗ.",
       "series": "Quét tìm các chương trình đã có trong thư mục nhưng chưa có trong danh sách, để bạn có thể thêm chúng tại chỗ.",

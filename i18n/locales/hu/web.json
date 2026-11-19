@@ -1039,6 +1039,11 @@
     "free": "{{size}} szabad",
     "cantSee": "nem látja",
     "removePath": "{{path}} eltávolítása",
+    "removeRoot": {
+      "title": "Eltávolítja ezt a gyökérmappát?",
+      "body": "A Box Office többé nem foglalkozik ezzel: {{path}}. A mappából semmi sem törlődik.",
+      "inUse": "Még ide tartozó címek ({{path}}): {{count}}. Előbb helyezze át őket másik mappába, vagy távolítsa el őket a listáról."
+    },
     "scanFor": {
       "movie": "A keresés olyan filmeket keres egy mappában, amelyek még nincsenek a listán, hogy ott helyben hozzáadhasd őket.",
       "series": "A keresés olyan sorozatokat keres egy mappában, amelyek még nincsenek a listán, hogy ott helyben hozzáadhasd őket.",

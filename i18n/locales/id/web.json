@@ -965,6 +965,11 @@
     "free": "{{size}} kosong",
     "cantSee": "tidak terlihat",
     "removePath": "Hapus {{path}}",
+    "removeRoot": {
+      "title": "Hapus folder akar ini?",
+      "body": "Box Office tidak lagi mengurus {{path}}. Tidak ada isi folder yang dihapus.",
+      "inUse": "Judul yang masih disimpan di {{path}}: {{count}}. Pindahkan dulu ke folder lain atau hapus dari daftar."
+    },
     "scanFor": {
       "movie": "Pindai mencari film yang sudah ada di folder tetapi belum ada di daftar, agar Anda dapat menambahkannya di tempatnya.",
       "series": "Pindai mencari acara yang sudah ada di folder tetapi belum ada di daftar, agar Anda dapat menambahkannya di tempatnya.",

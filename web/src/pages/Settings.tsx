@@ -575,13 +575,22 @@ function RootFolders({ kind, type }: { kind: RootKind; type?: MediaType }) {
   const qc = useQueryClient()
   const folders = useRootFolders(kind)
   const [picking, setPicking] = useState(false)
+  // Removing one asks first, and waits until no titles are filed under it.
+  const [removing, setRemoving] = useState<RootFolder | null>(null)
   const remove = useMutation({
     mutationFn: (f: RootFolder) => del(`/rootfolders/${f.id}`),
     onSuccess: () => {
+      setRemoving(null)
       qc.invalidateQueries({ queryKey: ['rootfolders', kind] })
       qc.invalidateQueries({ queryKey: ['settings'] })
     },
+    // Titles may have been added under it since the list was read.
+    onError: () => qc.invalidateQueries({ queryKey: ['rootfolders', kind] }),
   })
+  const ask = (f: RootFolder) => {
+    remove.reset()
+    setRemoving(f)
+  }
   return (
     <Card>
       <div className="mb-3 flex items-center justify-between">
@@ -601,7 +610,7 @@ function RootFolders({ kind, type }: { kind: RootKind; type?: MediaType }) {
             {f.accessible ? <span className="text-xs text-muted">{t('settings.free', { size: bytes(f.freeSpace) })}</span> : <Badge tone="bad">{t('settings.cantSee')}</Badge>}
             {f.accessible && scannable(kind) && <ScanButton folder={f} />}
             {f.accessible && kind === 'game' && <GameCheckButton rootId={f.id} />}
-            <button onClick={() => remove.mutate(f)} aria-label={t('settings.removePath', { path: f.path })} className="rounded p-1 text-muted hover:bg-line hover:text-bad">
+            <button onClick={() => ask(f)} aria-label={t('settings.removePath', { path: f.path })} className="rounded p-1 text-muted hover:bg-line hover:text-bad">
               <Trash2 className="size-4" />
             </button>
           </li>
@@ -613,8 +622,27 @@ function RootFolders({ kind, type }: { kind: RootKind; type?: MediaType }) {
       {scannable(kind) && !!folders.data?.length && (
         <p className="mt-2 text-xs text-muted">{t(`settings.scanFor.${kind === 'movie' || kind === 'series' || kind === 'music' ? kind : 'books'}`)}</p>
       )}
-      <ErrorNote error={remove.error} />
       {picking && <FolderPicker kind={kind} title={addTitle(kind, type)} onClose={() => setPicking(false)} />}
+      {removing && (
+        <Modal title={t('settings.removeRoot.title')} onClose={() => setRemoving(null)}>
+          <div className="flex flex-col gap-4">
+            <p className="break-words text-sm">
+              {removing.titles > 0 ? t('settings.removeRoot.inUse', { path: removing.path, count: removing.titles }) : t('settings.removeRoot.body', { path: removing.path })}
+            </p>
+            <ErrorNote error={remove.error} />
+            <div className="flex justify-end gap-2">
+              <Button variant="ghost" onClick={() => setRemoving(null)}>
+                {t('common.cancel')}
+              </Button>
+              {removing.titles === 0 && (
+                <Button variant="danger" busy={remove.isPending} onClick={() => remove.mutate(removing)}>
+                  {t('common.remove')}
+                </Button>
+              )}
+            </div>
+          </div>
+        </Modal>
+      )}
     </Card>
   )
 }

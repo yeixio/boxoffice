@@ -1039,6 +1039,11 @@
     "free": "{{size}} vrij",
     "cantSee": "niet zichtbaar",
     "removePath": "{{path}} verwijderen",
+    "removeRoot": {
+      "title": "Deze hoofdmap verwijderen?",
+      "body": "Box Office zorgt niet meer voor {{path}}. Er wordt niets in de map verwijderd.",
+      "inUse": "Titels die nog onder {{path}} staan: {{count}}. Verplaats ze eerst naar een andere map of haal ze van de lijst."
+    },
     "scanFor": {
       "movie": "Scannen zoekt naar films die al in een map staan maar niet op de lijst, zodat je ze kunt toevoegen waar ze staan.",
       "series": "Scannen zoekt naar series die al in een map staan maar niet op de lijst, zodat je ze kunt toevoegen waar ze staan.",

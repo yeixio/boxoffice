@@ -1039,6 +1039,11 @@
     "free": "{{size}} frei",
     "cantSee": "nicht sichtbar",
     "removePath": "{{path}} entfernen",
+    "removeRoot": {
+      "title": "Diesen Stammordner entfernen?",
+      "body": "Box Office kümmert sich nicht mehr um {{path}}. Im Ordner wird nichts gelöscht.",
+      "inUse": "Noch unter {{path}} abgelegte Titel: {{count}}. Verschiebe sie zuerst in einen anderen Ordner oder entferne sie von der Liste."
+    },
     "scanFor": {
       "movie": "Scannen sucht nach Filmen, die schon in einem Ordner liegen, aber nicht auf der Liste stehen, damit du sie dort hinzufügen kannst, wo sie sind.",
       "series": "Scannen sucht nach Serien, die schon in einem Ordner liegen, aber nicht auf der Liste stehen, damit du sie dort hinzufügen kannst, wo sie sind.",

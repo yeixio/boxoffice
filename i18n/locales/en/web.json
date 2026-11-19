@@ -1039,6 +1039,11 @@
     "free": "{{size}} free",
     "cantSee": "can't see it",
     "removePath": "Remove {{path}}",
+    "removeRoot": {
+      "title": "Remove this root folder?",
+      "body": "Box Office will stop looking after {{path}}. Nothing in the folder is deleted.",
+      "inUse": "Titles still filed under {{path}}: {{count}}. Move them to another folder or remove them from the list first."
+    },
     "scanFor": {
       "movie": "Scan looks for movies already in a folder that aren't on the list, so you can add them where they are.",
       "series": "Scan looks for shows already in a folder that aren't on the list, so you can add them where they are.",

@@ -220,11 +220,18 @@ func (s *Server) rootFolders(w http.ResponseWriter, r *http.Request) error {
 		store.RootFolder
 		FreeSpace  int64 `json:"freeSpace"`
 		Accessible bool  `json:"accessible"`
+		// Titles counts the titles filed under it; it can't be removed
+		// while there are any.
+		Titles int `json:"titles"`
 	}
 	out := make([]view, 0, len(fs))
 	for _, f := range fs {
+		n, err := s.Store.RootFolderTitles(r.Context(), f.Path)
+		if err != nil {
+			return err
+		}
 		st, err := os.Stat(f.Path)
-		out = append(out, view{f, arrapi.FreeSpace(f.Path), err == nil && st.IsDir()})
+		out = append(out, view{f, arrapi.FreeSpace(f.Path), err == nil && st.IsDir(), n})
 	}
 	return writeJSON(w, http.StatusOK, out)
 }
@@ -257,6 +264,11 @@ func (s *Server) addRootFolder(w http.ResponseWriter, r *http.Request) error {
 	if st, err := os.Stat(p); err != nil || !st.IsDir() {
 		return errorf(http.StatusBadRequest, "Box Office can't see a folder at "+p)
 	}
+	if why, err := s.rootFolderClash(r.Context(), in.Kind, p); err != nil {
+		return err
+	} else if why != "" {
+		return errorf(http.StatusBadRequest, why)
+	}
 	f, err := s.Store.AddRootFolder(r.Context(), in.Kind, p)
 	if errors.Is(err, store.ErrExists) {
 		return errorf(http.StatusConflict, "that folder is added already")
@@ -286,6 +298,22 @@ func (s *Server) deleteRootFolder(w http.ResponseWriter, r *http.Request) error 
 	if err != nil {
 		return err
 	}
+	f, err := s.Store.RootFolder(r.Context(), int(id))
+	if err != nil {
+		return err
+	}
+	// Titles filed under it would be left with a folder Box Office no
+	// longer scans, checks for space or tidies.
+	n, err := s.Store.RootFolderTitles(r.Context(), f.Path)
+	if err != nil {
+		return err
+	}
+	if n == 1 {
+		return errorf(http.StatusConflict, "1 title is still filed under "+f.Path+". Move it to another folder or remove it from the list first.")
+	}
+	if n > 1 {
+		return errorf(http.StatusConflict, fmt.Sprintf("%d titles are still filed under %s. Move them to another folder or remove them from the list first.", n, f.Path))
+	}
 	if err := s.Store.DeleteRootFolder(r.Context(), int(id)); err != nil {
 		return err
 	}
@@ -294,6 +322,73 @@ func (s *Server) deleteRootFolder(w http.ResponseWriter, r *http.Request) error 
 	}
 	w.WriteHeader(http.StatusNoContent)
 	return nil
+}
+
+// rootFolderClash says why a folder can't be a root folder, or "": it's the
+// whole disk, it holds Box Office's own data or downloads, or it overlaps
+// a root folder already added. Libraries that overlap confuse scans,
+// Problem files, the recycle folders and what a deletion would take.
+func (s *Server) rootFolderClash(ctx context.Context, kind, p string) (string, error) {
+	if p == string(filepath.Separator) || filepath.VolumeName(p)+string(filepath.Separator) == p {
+		return "That's the whole disk. Pick the folder the library is in.", nil
+	}
+	own := map[string]string{"its data": s.DataDir}
+	if s.Downloads != nil {
+		own["its downloads"] = s.Downloads.Dir
+		if within(p, s.Downloads.Dir) {
+			return "That's inside the downloads folder, " + s.Downloads.Dir + ", where Box Office deletes what it's finished with. Pick a folder outside it.", nil
+		}
+	}
+	for what, dir := range own {
+		if dir != "" && within(absolute(dir), p) {
+			return "Box Office keeps " + what + " in that folder (" + dir + "). Pick the folder the library is in.", nil
+		}
+	}
+	roots, err := s.Store.RootFolders(ctx, "")
+	if err != nil {
+		return "", err
+	}
+	for _, f := range roots {
+		switch {
+		case f.Path == p && f.Kind == kind:
+			// Added already; adding it says so.
+		case f.Path == p && store.IsBookKind(f.Kind) && store.IsBookKind(kind):
+			// Ebooks and audiobooks can share a folder, as Readarr's did.
+		case f.Path == p:
+			return "That folder is already the root folder for " + rootKindName(f.Kind) + ". Each library needs a folder of its own.", nil
+		case within(p, f.Path):
+			return "That folder is inside " + f.Path + ", which is already a root folder for " + rootKindName(f.Kind) + ".", nil
+		case within(f.Path, p):
+			return "That folder holds " + f.Path + ", which is already a root folder for " + rootKindName(f.Kind) + ". Pick a folder beside it.", nil
+		}
+	}
+	return "", nil
+}
+
+// within says whether p is dir or somewhere inside it.
+func within(p, dir string) bool {
+	rel, err := filepath.Rel(dir, p)
+	return err == nil && rel != ".." && !strings.HasPrefix(rel, ".."+string(filepath.Separator)) && filepath.IsAbs(dir)
+}
+
+func absolute(p string) string {
+	if a, err := filepath.Abs(p); err == nil {
+		return a
+	}
+	return p
+}
+
+func rootKindName(kind string) string {
+	switch kind {
+	case "movie":
+		return "movies"
+	case "series":
+		return "TV"
+	}
+	if t, ok := mediatypes.Lookup(kind); ok {
+		return strings.ToLower(t.Name)
+	}
+	return kind
 }
 
 // browse lists the folders in a folder, for picking root folders.

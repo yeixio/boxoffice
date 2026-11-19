@@ -1039,6 +1039,11 @@
     "free": "{{size}} vapaana",
     "cantSee": "ei näy",
     "removePath": "Poista {{path}}",
+    "removeRoot": {
+      "title": "Poistetaanko tämä juurikansio?",
+      "body": "Box Office lakkaa huolehtimasta kansiosta {{path}}. Kansiosta ei poisteta mitään.",
+      "inUse": "Kansiossa {{path}} on yhä nimikkeitä: {{count}}. Siirrä ne ensin toiseen kansioon tai poista ne listalta."
+    },
     "scanFor": {
       "movie": "Skannaus etsii elokuvia, jotka ovat jo kansiossa mutta eivät listalla, jotta voit lisätä ne paikoilleen.",
       "series": "Skannaus etsii sarjoja, jotka ovat jo kansiossa mutta eivät listalla, jotta voit lisätä ne paikoilleen.",

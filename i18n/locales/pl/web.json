@@ -1187,6 +1187,11 @@
     "free": "{{size}} wolne",
     "cantSee": "niewidoczny",
     "removePath": "Usuń {{path}}",
+    "removeRoot": {
+      "title": "Usunąć ten folder główny?",
+      "body": "Box Office przestanie zajmować się folderem {{path}}. Nic w folderze nie zostanie usunięte.",
+      "inUse": "Tytuły nadal przypisane do {{path}}: {{count}}. Najpierw przenieś je do innego folderu albo usuń z listy."
+    },
     "scanFor": {
       "movie": "Skanowanie szuka filmów, które są już w folderze, ale nie na liście, aby można je było dodać tam, gdzie są.",
       "series": "Skanowanie szuka seriali, które są już w folderze, ale nie na liście, aby można je było dodać tam, gdzie są.",

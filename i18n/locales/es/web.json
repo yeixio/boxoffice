@@ -1113,6 +1113,11 @@
     "free": "{{size}} libres",
     "cantSee": "no se ve",
     "removePath": "Quitar {{path}}",
+    "removeRoot": {
+      "title": "¿Quitar esta carpeta raíz?",
+      "body": "Box Office dejará de ocuparse de {{path}}. No se borra nada de la carpeta.",
+      "inUse": "Títulos que siguen archivados en {{path}}: {{count}}. Primero muévelos a otra carpeta o quítalos de la lista."
+    },
     "scanFor": {
       "movie": "Escanear busca películas que ya están en una carpeta pero no en la lista, para que puedas añadirlas donde están.",
       "series": "Escanear busca series que ya están en una carpeta pero no en la lista, para que puedas añadirlas donde están.",

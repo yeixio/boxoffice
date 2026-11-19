@@ -7,6 +7,15 @@ export class ApiError extends Error {
   }
 }
 
+// Told when the server says nobody is signed in any more (the session ran
+// out, or the password changed elsewhere), so the app can show sign-in.
+let signedOut: () => void = () => {}
+export const onSignedOut = (fn: () => void) => {
+  signedOut = fn
+}
+// Signing in answers 401 for a wrong password; that isn't a session ending.
+const signingIn = (path: string) => path === '/login' || path === '/setup' || path === '/logout'
+
 export async function api<T>(method: string, path: string, body?: unknown): Promise<T> {
   const init: RequestInit = { method, headers: { Accept: 'application/json', 'X-Requested-With': 'boxoffice' }, credentials: 'same-origin' }
   if (body instanceof Blob) {
@@ -25,6 +34,7 @@ export async function api<T>(method: string, path: string, body?: unknown): Prom
     // not JSON
   }
   if (!res.ok) {
+    if (res.status === 401 && !signingIn(path)) signedOut()
     const msg = (data as { error?: string } | undefined)?.error ?? `Box Office answered ${res.status}`
     throw new ApiError(res.status, msg)
   }
@@ -46,7 +56,8 @@ export type Status = { setup: boolean; version: string; user?: User; movedIn?: b
 export type Quality = { id: number; name: string; source: string; resolution: number }
 // locked is the Do not touch profile, which is never picked for a new title on its own.
 export type Profile = { id: number; name: string; allowed: number[]; cutoff: number; upgrade: boolean; locked?: boolean }
-export type RootFolder = { id: number; kind: RootKind; path: string; freeSpace: number; accessible: boolean }
+// titles counts the titles filed under it; it can't be removed while there are any.
+export type RootFolder = { id: number; kind: RootKind; path: string; freeSpace: number; accessible: boolean; titles: number }
 
 // FileMedia is what the quality check found inside a file.
 export type FileMedia = {
