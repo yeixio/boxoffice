@@ -2652,5 +2652,74 @@
       "skipped": "Weggelaten",
       "failed": "Kon niet worden toegevoegd"
     }
+  },
+  "cleanup": {
+    "title": "Opruimen",
+    "add": "Regel toevoegen",
+    "edit": "Regel wijzigen",
+    "remove": "Regel verwijderen",
+    "removeBody": "De regel verdwijnt, en de titels die hij had vermeld gaan van de lijst ‘Vertrekt binnenkort’. Er wordt niets verwijderd.",
+    "sub": "Regels zoeken titels uit die zijn bekeken, of nooit zijn bekeken, om ruimte te maken. Een regel vermeldt ze alleen als binnenkort vertrekkend. Er wordt niets verwijderd tot jij het verwijdert, tenzij je een regel zelf laat verwijderen. Regels gaan uit van wat Matinee zegt dat is bekeken.",
+    "none": "Nog geen regels. Voeg er een toe om te zien wat hij zou uitzoeken; een regel toevoegen verwijdert niets.",
+    "noReport": "Matinee heeft de laatste tijd niet gemeld wat is bekeken ({{kinds}}), dus de regels wachten en er wordt niets verwijderd. Matinee meldt het vanzelf zodra het verbonden en bijgewerkt is.",
+    "connect": "Matinee verbinden",
+    "reported": "Matinee meldde voor het laatst wat is bekeken: {{when}}",
+    "noPlays": "Matinee zegt dat er helemaal niets is afgespeeld, dus deze regel wacht in plaats van dat zomaar aan te nemen.",
+    "rule": {
+      "movie": {
+        "everyone": "Films die iedereen die eraan begon heeft uitgekeken, {{days}} dagen niet afgespeeld",
+        "anyone": "Films die iemand heeft uitgekeken, {{days}} dagen niet afgespeeld",
+        "nobody": "Films die niemand heeft afgespeeld, {{days}} dagen nadat ze binnenkwamen"
+      },
+      "series": {
+        "everyone": "Series die iedereen die eraan begon heeft uitgekeken, {{days}} dagen niet afgespeeld",
+        "anyone": "Series die iemand heeft uitgekeken, {{days}} dagen niet afgespeeld",
+        "nobody": "Series die niemand heeft afgespeeld, {{days}} dagen na hun nieuwste aflevering"
+      }
+    },
+    "autoBadge": "Verwijdert zelf",
+    "listsBadge": "Vermeldt alleen",
+    "grace": "Eerst {{days}} dagen op de lijst",
+    "leaving": "Vertrekt binnenkort: {{titles}} ({{size}})",
+    "leavingSoon": "Vertrekt binnenkort",
+    "checkNow": "Nu controleren",
+    "nothingLeaving": "Er vertrekt niets.",
+    "neverPlayed": "Nooit afgespeeld; hier sinds {{when}}",
+    "plays": "Uitgekeken door {{finished}} van de {{viewers}} die het afspeelden; laatst afgespeeld {{when}}",
+    "canGo": "Op de lijst sinds {{when}}. Het blijft tot jij het verwijdert.",
+    "deletedOn": "De regel verwijdert het op {{when}}, tenzij iemand het afspeelt of jij het houdt.",
+    "keep": "Houden",
+    "deleteNow": "Nu verwijderen",
+    "deleteTitle": "{{title}} verwijderen?",
+    "deleteBody": "De map wordt voorgoed van de schijf verwijderd ({{files}} bestanden, {{size}}) en de titel gaat van de lijst van Box Office. Dit kan niet ongedaan worden gemaakt.",
+    "kept": "Gehouden",
+    "keptSub": "Geen regel vermeldt deze opnieuw.",
+    "unkeep": "Regels het weer laten vermelden",
+    "cap": "Hoogste aantal titels per dag dat regels zelf verwijderen",
+    "capHint": "Vandaag door regels verwijderd: {{titles}}. De rest wacht tot morgen.",
+    "kind": "Voor",
+    "watched": "Bekeken door",
+    "watchedBy": {
+      "everyone": "Iedereen die eraan begon heeft het uitgekeken",
+      "anyone": "Iemand heeft het uitgekeken",
+      "nobody": "Niemand heeft het afgespeeld"
+    },
+    "days": "Zoveel dagen rustig",
+    "daysHint": "Geteld vanaf de laatste keer dat iemand het afspeelde.",
+    "daysHintNobody": "Geteld vanaf het moment dat het binnenkwam (een serie: de nieuwste aflevering). Minstens {{least}}, zodat nieuwe titels een kans krijgen.",
+    "endedOnly": "Alleen series die zijn afgelopen",
+    "endedOnlyHint": "Series waarvan nog afleveringen komen, worden met rust gelaten.",
+    "graceDays": "Dagen op de lijst ‘Vertrekt binnenkort’",
+    "graceHint": "Hoe lang een titel wordt vermeld voordat hij weg kan. Afspelen haalt hem van de lijst. Minstens {{least}}.",
+    "auto": "Zelf verwijderen als die dagen om zijn",
+    "autoOff": "Uit: de regel vermeldt alleen titels, en jij verwijdert de titels die je kiest.",
+    "autoOn": "Aan: de regel verwijdert de map van elke titel voorgoed als zijn dagen om zijn, hooguit {{most}} titels per dag. Titels op Niet aankomen, titels die je houdt en titels die in de afgelopen 30 dagen zijn aangevraagd, worden nooit verwijderd.",
+    "enabled": "Regel staat aan",
+    "preview": "Wat deze regel nu zou vermelden",
+    "previewNoReport": "Matinee heeft de laatste tijd niet gemeld wat is bekeken, dus er is nog niets te tonen. Je kunt de regel opslaan; hij wacht tot Matinee het meldt.",
+    "previewNone": "Er komt nu niets overeen.",
+    "previewCount": "Titels: {{titles}} ({{size}}). De grootste:",
+    "previewSafe": "Dit is alleen een voorbeeld. De regel opslaan vermeldt deze als binnenkort vertrekkend en verwijdert niets.",
+    "editNote": "Een regel wijzigen begint zijn lijst opnieuw."
   }
 }

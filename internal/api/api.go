@@ -111,6 +111,7 @@ type Server struct {
 	ereaderOnce  sync.Once
 	subtitleOnce sync.Once
 	listOnce     sync.Once
+	cleanupMu    sync.Mutex // one clean-up run or deletion at a time
 	started      time.Time
 	failures     sync.Map // username -> *failure
 	healthCount  healthCount
@@ -305,6 +306,7 @@ func (s *Server) Handler() http.Handler {
 	routes = append(routes, s.qualityCheckRoutes()...)
 	routes = append(routes, s.subtitleRoutes()...)
 	routes = append(routes, s.listRoutes()...)
+	routes = append(routes, s.cleanupRoutes()...)
 	routes = append(routes, s.portalRoutes()...)
 	routes = append(routes, s.gameRoutes()...)
 	routes = append(routes, s.homeRoutes()...)

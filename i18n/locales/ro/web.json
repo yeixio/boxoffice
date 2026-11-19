@@ -2775,5 +2775,74 @@
       "skipped": "Lăsat deoparte",
       "failed": "Nu a putut fi adăugat"
     }
+  },
+  "cleanup": {
+    "title": "Curățenie",
+    "add": "Adaugă o regulă",
+    "edit": "Schimbă regula",
+    "remove": "Elimină regula",
+    "removeBody": "Regula dispare, iar titlurile pe care le-a listat ies de pe lista celor care pleacă în curând. Nu se șterge nimic.",
+    "sub": "Regulile aleg titluri care au fost vizionate sau care n-au fost vizionate niciodată, ca să facă loc. O regulă doar le listează ca plecând în curând. Nu se șterge nimic până nu ștergi tu, decât dacă lași o regulă să șteargă singură. Regulile se ghidează după ce spune Matinee că s-a vizionat.",
+    "none": "Încă nu există reguli. Adaugă una ca să vezi ce ar alege; adăugarea unei reguli nu șterge nimic.",
+    "noReport": "Matinee nu a spus în ultima vreme ce s-a vizionat ({{kinds}}), așa că regulile așteaptă și nu se șterge nimic. Matinee raportează singur de îndată ce este conectat și actualizat.",
+    "connect": "Conectează Matinee",
+    "reported": "Matinee a spus ultima dată ce s-a vizionat: {{when}}",
+    "noPlays": "Matinee spune că nu s-a redat absolut nimic, așa că această regulă așteaptă în loc să ia asta de bun.",
+    "rule": {
+      "movie": {
+        "everyone": "Filme pe care toți cei care le-au început le-au terminat, neredate de {{days}} zile",
+        "anyone": "Filme pe care cineva le-a terminat, neredate de {{days}} zile",
+        "nobody": "Filme pe care nu le-a redat nimeni, la {{days}} zile după ce au sosit"
+      },
+      "series": {
+        "everyone": "Seriale pe care toți cei care le-au început le-au terminat, neredate de {{days}} zile",
+        "anyone": "Seriale pe care cineva le-a terminat, neredate de {{days}} zile",
+        "nobody": "Seriale pe care nu le-a redat nimeni, la {{days}} zile după cel mai nou episod"
+      }
+    },
+    "autoBadge": "Șterge singură",
+    "listsBadge": "Doar listează",
+    "grace": "Mai întâi {{days}} zile pe listă",
+    "leaving": "Pleacă în curând: {{titles}} ({{size}})",
+    "leavingSoon": "Pleacă în curând",
+    "checkNow": "Verifică acum",
+    "nothingLeaving": "Nu pleacă nimic.",
+    "neverPlayed": "Niciodată redat; aici din {{when}}",
+    "plays": "Terminat de {{finished}} din {{viewers}} care l-au redat; ultima redare {{when}}",
+    "canGo": "Pe listă din {{when}}. Rămâne până îl ștergi.",
+    "deletedOn": "Regula îl șterge pe {{when}}, dacă nu îl redă cineva sau nu îl păstrezi.",
+    "keep": "Păstrează",
+    "deleteNow": "Șterge acum",
+    "deleteTitle": "Ștergi {{title}}?",
+    "deleteBody": "Dosarul său este șters de pe disc definitiv ({{files}} fișiere, {{size}}) și titlul iese de pe lista Box Office. Nu se poate anula.",
+    "kept": "Păstrate",
+    "keptSub": "Nicio regulă nu le mai listează.",
+    "unkeep": "Lasă regulile să îl listeze",
+    "cap": "Numărul maxim de titluri pe zi pe care regulile le șterg singure",
+    "capHint": "Șterse azi de reguli: {{titles}}. Restul așteaptă până mâine.",
+    "kind": "Pentru",
+    "watched": "Vizionat de",
+    "watchedBy": {
+      "everyone": "Toți cei care l-au început l-au terminat",
+      "anyone": "Cineva l-a terminat",
+      "nobody": "Nu l-a redat nimeni"
+    },
+    "days": "Liniștit de atâtea zile",
+    "daysHint": "Se numără de la ultima redare de către oricine.",
+    "daysHintNobody": "Se numără de când a sosit (la un serial: cel mai nou episod). Cel puțin {{least}}, ca titlurile noi să aibă o șansă.",
+    "endedOnly": "Doar seriale care s-au încheiat",
+    "endedOnlyHint": "Serialele cu episoade care mai urmează sunt lăsate în pace.",
+    "graceDays": "Zile pe lista celor care pleacă în curând",
+    "graceHint": "Cât timp este listat un titlu înainte să poată pleca. Redarea lui îl scoate de pe listă. Cel puțin {{least}}.",
+    "auto": "Șterge singură când trec acele zile",
+    "autoOff": "Oprit: regula doar listează titluri, iar tu le ștergi pe cele pe care le alegi.",
+    "autoOn": "Pornit: regula șterge definitiv dosarul fiecărui titlu când îi trec zilele, cel mult {{most}} titluri pe zi. Titlurile pe Nu atinge, cele pe care le păstrezi și cele cerute în ultimele 30 de zile nu sunt șterse niciodată.",
+    "enabled": "Regula este pornită",
+    "preview": "Ce ar lista acum această regulă",
+    "previewNoReport": "Matinee nu a spus în ultima vreme ce s-a vizionat, așa că încă nu e nimic de arătat. Poți salva regula; așteaptă până raportează Matinee.",
+    "previewNone": "Nu se potrivește nimic acum.",
+    "previewCount": "Titluri: {{titles}} ({{size}}). Cele mai mari:",
+    "previewSafe": "Aceasta este doar o previzualizare. Salvarea regulii le listează ca plecând în curând și nu șterge nimic.",
+    "editNote": "Schimbarea unei reguli îi reia lista de la capăt."
   }
 }

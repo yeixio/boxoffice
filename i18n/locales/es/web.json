@@ -2775,5 +2775,74 @@
       "skipped": "Dejado fuera",
       "failed": "No se pudo añadir"
     }
+  },
+  "cleanup": {
+    "title": "Limpieza",
+    "add": "Añadir una regla",
+    "edit": "Cambiar la regla",
+    "remove": "Quitar la regla",
+    "removeBody": "La regla desaparece, y los títulos que listó salen de la lista de los que se van pronto. No se borra nada.",
+    "sub": "Las reglas eligen títulos que se han visto, o que nunca se vieron, para hacer sitio. Una regla solo los lista como que se van pronto. No se borra nada hasta que tú lo borres, salvo que dejes que una regla borre sola. Las reglas se guían por lo que Matinee dice que se ha visto.",
+    "none": "Aún no hay reglas. Añade una para ver qué elegiría; añadir una regla no borra nada.",
+    "noReport": "Matinee no ha dicho últimamente qué se ha visto ({{kinds}}), así que las reglas esperan y no se borra nada. Matinee informa solo en cuanto está conectado y actualizado.",
+    "connect": "Conectar Matinee",
+    "reported": "Matinee dijo por última vez qué se ha visto: {{when}}",
+    "noPlays": "Matinee dice que no se ha reproducido nada en absoluto, así que esta regla espera en vez de darlo por bueno.",
+    "rule": {
+      "movie": {
+        "everyone": "Películas que todos los que las empezaron han terminado, sin reproducirse desde hace {{days}} días",
+        "anyone": "Películas que alguien ha terminado, sin reproducirse desde hace {{days}} días",
+        "nobody": "Películas que nadie ha reproducido, {{days}} días después de llegar"
+      },
+      "series": {
+        "everyone": "Series que todos los que las empezaron han terminado, sin reproducirse desde hace {{days}} días",
+        "anyone": "Series que alguien ha terminado, sin reproducirse desde hace {{days}} días",
+        "nobody": "Series que nadie ha reproducido, {{days}} días después de su episodio más reciente"
+      }
+    },
+    "autoBadge": "Borra sola",
+    "listsBadge": "Solo lista",
+    "grace": "Primero {{days}} días en la lista",
+    "leaving": "Se van pronto: {{titles}} ({{size}})",
+    "leavingSoon": "Se van pronto",
+    "checkNow": "Comprobar ahora",
+    "nothingLeaving": "No se va nada.",
+    "neverPlayed": "Nunca reproducido; aquí desde {{when}}",
+    "plays": "Terminado por {{finished}} de {{viewers}} que lo reprodujeron; última reproducción {{when}}",
+    "canGo": "En la lista desde {{when}}. Se queda hasta que lo borres.",
+    "deletedOn": "La regla lo borra el {{when}} salvo que alguien lo reproduzca o lo conserves.",
+    "keep": "Conservar",
+    "deleteNow": "Borrar ahora",
+    "deleteTitle": "¿Borrar {{title}}?",
+    "deleteBody": "Su carpeta se borra del disco para siempre ({{files}} archivos, {{size}}) y sale de la lista de Box Office. No se puede deshacer.",
+    "kept": "Conservados",
+    "keptSub": "Ninguna regla vuelve a listar estos.",
+    "unkeep": "Dejar que las reglas lo listen",
+    "cap": "Máximo de títulos al día que las reglas borran solas",
+    "capHint": "Borrados hoy por las reglas: {{titles}}. El resto espera a mañana.",
+    "kind": "Para",
+    "watched": "Visto por",
+    "watchedBy": {
+      "everyone": "Todos los que lo empezaron lo han terminado",
+      "anyone": "Alguien lo ha terminado",
+      "nobody": "Nadie lo ha reproducido"
+    },
+    "days": "Tranquilo durante estos días",
+    "daysHint": "Se cuenta desde la última vez que alguien lo reprodujo.",
+    "daysHintNobody": "Se cuenta desde que llegó (una serie: su episodio más reciente). Al menos {{least}}, para dar una oportunidad a los títulos nuevos.",
+    "endedOnly": "Solo series que han terminado",
+    "endedOnlyHint": "Las series con episodios aún por llegar se dejan en paz.",
+    "graceDays": "Días en la lista de los que se van pronto",
+    "graceHint": "Cuánto tiempo está listado un título antes de que pueda irse. Reproducirlo lo quita de la lista. Al menos {{least}}.",
+    "auto": "Borrar sola cuando pasen esos días",
+    "autoOff": "Desactivado: la regla solo lista títulos, y tú borras los que elijas.",
+    "autoOn": "Activado: la regla borra para siempre la carpeta de cada título cuando pasan sus días, como mucho {{most}} títulos al día. Los títulos en No tocar, los que conservas y los pedidos en los últimos 30 días nunca se borran.",
+    "enabled": "La regla está activa",
+    "preview": "Lo que esta regla listaría ahora",
+    "previewNoReport": "Matinee no ha dicho últimamente qué se ha visto, así que aún no hay nada que mostrar. Puedes guardar la regla; espera hasta que Matinee informe.",
+    "previewNone": "Ahora mismo no coincide nada.",
+    "previewCount": "Títulos: {{titles}} ({{size}}). Los más grandes:",
+    "previewSafe": "Esto es solo una vista previa. Guardar la regla los lista como que se van pronto y no borra nada.",
+    "editNote": "Cambiar una regla reinicia su lista."
   }
 }

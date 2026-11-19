@@ -2775,5 +2775,74 @@
       "skipped": "Lasciato fuori",
       "failed": "Non è stato possibile aggiungerlo"
     }
+  },
+  "cleanup": {
+    "title": "Pulizia",
+    "add": "Aggiungi una regola",
+    "edit": "Modifica la regola",
+    "remove": "Rimuovi la regola",
+    "removeBody": "La regola sparisce, e i titoli che aveva elencato escono dalla lista di quelli in uscita. Non viene eliminato nulla.",
+    "sub": "Le regole individuano i titoli che sono stati guardati, o che non lo sono mai stati, per fare spazio. Una regola li elenca soltanto come in uscita. Non viene eliminato nulla finché non lo elimini tu, a meno che non lasci che una regola elimini da sola. Le regole si basano su ciò che Matinee dice sia stato guardato.",
+    "none": "Ancora nessuna regola. Aggiungine una per vedere cosa individuerebbe; aggiungere una regola non elimina nulla.",
+    "noReport": "Matinee non ha detto di recente cosa è stato guardato ({{kinds}}), quindi le regole aspettano e non viene eliminato nulla. Matinee lo comunica da solo appena è collegato e aggiornato.",
+    "connect": "Collega Matinee",
+    "reported": "Ultima volta che Matinee ha detto cosa è stato guardato: {{when}}",
+    "noPlays": "Matinee dice che non è stato riprodotto proprio nulla, quindi questa regola aspetta invece di fidarsi.",
+    "rule": {
+      "movie": {
+        "everyone": "Film che tutti quelli che li hanno iniziati hanno finito, non riprodotti da {{days}} giorni",
+        "anyone": "Film che qualcuno ha finito, non riprodotti da {{days}} giorni",
+        "nobody": "Film che nessuno ha riprodotto, {{days}} giorni dopo il loro arrivo"
+      },
+      "series": {
+        "everyone": "Serie che tutti quelli che le hanno iniziate hanno finito, non riprodotte da {{days}} giorni",
+        "anyone": "Serie che qualcuno ha finito, non riprodotte da {{days}} giorni",
+        "nobody": "Serie che nessuno ha riprodotto, {{days}} giorni dopo l’episodio più recente"
+      }
+    },
+    "autoBadge": "Elimina da sola",
+    "listsBadge": "Elenca soltanto",
+    "grace": "Prima in lista per {{days}} giorni",
+    "leaving": "In uscita: {{titles}} ({{size}})",
+    "leavingSoon": "In uscita",
+    "checkNow": "Controlla ora",
+    "nothingLeaving": "Non esce nulla.",
+    "neverPlayed": "Mai riprodotto; qui dal {{when}}",
+    "plays": "Finito da {{finished}} su {{viewers}} che l’hanno riprodotto; ultima riproduzione {{when}}",
+    "canGo": "In lista dal {{when}}. Resta finché non lo elimini.",
+    "deletedOn": "La regola lo elimina il {{when}} a meno che qualcuno lo riproduca o tu lo tenga.",
+    "keep": "Tieni",
+    "deleteNow": "Elimina ora",
+    "deleteTitle": "Eliminare {{title}}?",
+    "deleteBody": "La sua cartella viene eliminata dal disco per sempre ({{files}} file, {{size}}) e il titolo esce dalla lista di Box Office. Non si può annullare.",
+    "kept": "Tenuti",
+    "keptSub": "Nessuna regola li elenca di nuovo.",
+    "unkeep": "Lascia che le regole lo elenchino",
+    "cap": "Numero massimo di titoli al giorno che le regole eliminano da sole",
+    "capHint": "Eliminati oggi dalle regole: {{titles}}. Il resto aspetta domani.",
+    "kind": "Per",
+    "watched": "Guardato da",
+    "watchedBy": {
+      "everyone": "Tutti quelli che l’hanno iniziato l’hanno finito",
+      "anyone": "Qualcuno l’ha finito",
+      "nobody": "Nessuno l’ha riprodotto"
+    },
+    "days": "Fermo da questo numero di giorni",
+    "daysHint": "Contati dall’ultima volta che qualcuno l’ha riprodotto.",
+    "daysHintNobody": "Contati da quando è arrivato (per una serie: l’episodio più recente). Almeno {{least}}, per dare una possibilità ai titoli nuovi.",
+    "endedOnly": "Solo serie concluse",
+    "endedOnlyHint": "Le serie con episodi ancora in arrivo vengono lasciate stare.",
+    "graceDays": "Giorni nella lista dei titoli in uscita",
+    "graceHint": "Per quanto tempo un titolo resta in lista prima di poter uscire. Riprodurlo lo toglie dalla lista. Almeno {{least}}.",
+    "auto": "Elimina da sola quando quei giorni sono passati",
+    "autoOff": "Disattivato: la regola elenca soltanto i titoli, e tu elimini quelli che scegli.",
+    "autoOn": "Attivato: la regola elimina per sempre la cartella di ogni titolo quando i suoi giorni sono passati, al massimo {{most}} titoli al giorno. I titoli su Non toccare, quelli che tieni e quelli richiesti negli ultimi 30 giorni non vengono mai eliminati.",
+    "enabled": "La regola è attiva",
+    "preview": "Cosa elencherebbe ora questa regola",
+    "previewNoReport": "Matinee non ha detto di recente cosa è stato guardato, quindi non c’è ancora nulla da mostrare. Puoi salvare la regola; aspetta finché Matinee non lo comunica.",
+    "previewNone": "Al momento non corrisponde nulla.",
+    "previewCount": "Titoli: {{titles}} ({{size}}). I più grandi:",
+    "previewSafe": "Questa è solo un’anteprima. Salvare la regola li elenca come in uscita e non elimina nulla.",
+    "editNote": "Modificare una regola fa ripartire la sua lista da capo."
   }
 }

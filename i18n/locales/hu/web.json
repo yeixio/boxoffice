@@ -2652,5 +2652,74 @@
       "skipped": "Kihagyva",
       "failed": "Nem sikerült hozzáadni"
     }
+  },
+  "cleanup": {
+    "title": "Takarítás",
+    "add": "Szabály hozzáadása",
+    "edit": "Szabály módosítása",
+    "remove": "Szabály eltávolítása",
+    "removeBody": "A szabály megszűnik, és az általa listázott címek lekerülnek a hamarosan távozók listájáról. Semmi sem törlődik.",
+    "sub": "A szabályok kiválasztják azokat a címeket, amelyeket már megnéztek, vagy soha nem néztek meg, hogy hely szabaduljon fel. Egy szabály csak hamarosan távozóként listázza őket. Semmi sem törlődik, amíg te nem törlöd, hacsak nem engeded, hogy egy szabály magától töröljön. A szabályok abból indulnak ki, amit a Matinee megnézettként jelent.",
+    "none": "Még nincs szabály. Adj hozzá egyet, hogy lásd, mit választana ki; egy szabály hozzáadása semmit sem töröl.",
+    "noReport": "A Matinee mostanában nem jelentette, mit néztek meg ({{kinds}}), ezért a szabályok várnak, és semmi sem törlődik. A Matinee magától jelent, amint csatlakoztatva van és naprakész.",
+    "connect": "Matinee csatlakoztatása",
+    "reported": "A Matinee legutóbb ekkor jelentette, mit néztek meg: {{when}}",
+    "noPlays": "A Matinee szerint semmit sem játszottak le, ezért ez a szabály inkább vár, mintsem ezt elhiggye.",
+    "rule": {
+      "movie": {
+        "everyone": "Filmek, amelyeket mindenki végignézett, aki elkezdte, és {{days}} napja nem játszották le",
+        "anyone": "Filmek, amelyeket valaki végignézett, és {{days}} napja nem játszották le",
+        "nobody": "Filmek, amelyeket senki sem játszott le, {{days}} nappal az érkezésük után"
+      },
+      "series": {
+        "everyone": "Sorozatok, amelyeket mindenki végignézett, aki elkezdte, és {{days}} napja nem játszották le",
+        "anyone": "Sorozatok, amelyeket valaki végignézett, és {{days}} napja nem játszották le",
+        "nobody": "Sorozatok, amelyeket senki sem játszott le, {{days}} nappal a legújabb epizód után"
+      }
+    },
+    "autoBadge": "Magától töröl",
+    "listsBadge": "Csak listáz",
+    "grace": "Előbb {{days}} napig a listán",
+    "leaving": "Hamarosan távozik: {{titles}} ({{size}})",
+    "leavingSoon": "Hamarosan távozik",
+    "checkNow": "Ellenőrzés most",
+    "nothingLeaving": "Semmi sem távozik.",
+    "neverPlayed": "Soha nem játszották le; itt van {{when}} óta",
+    "plays": "Végignézte: {{finished}} / {{viewers}}, aki lejátszotta; utoljára lejátszva: {{when}}",
+    "canGo": "Listázva: {{when}}. Marad, amíg nem törlöd.",
+    "deletedOn": "A szabály {{when}} napján törli, hacsak valaki le nem játssza, vagy meg nem tartod.",
+    "keep": "Megtartás",
+    "deleteNow": "Törlés most",
+    "deleteTitle": "Törlöd ezt: {{title}}?",
+    "deleteBody": "A mappája végleg törlődik a lemezről ({{files}} fájl, {{size}}), és a cím lekerül a Box Office listájáról. Ez nem vonható vissza.",
+    "kept": "Megtartva",
+    "keptSub": "Ezeket egy szabály sem listázza újra.",
+    "unkeep": "A szabályok újra listázhatják",
+    "cap": "Legfeljebb ennyi címet törölnek naponta maguktól a szabályok",
+    "capHint": "A szabályok által ma törölve: {{titles}}. A többi holnapig vár.",
+    "kind": "Mire",
+    "watched": "Megnézte",
+    "watchedBy": {
+      "everyone": "Mindenki végignézte, aki elkezdte",
+      "anyone": "Valaki végignézte",
+      "nobody": "Senki sem játszotta le"
+    },
+    "days": "Ennyi napja nyugton van",
+    "daysHint": "Attól számítva, hogy valaki utoljára lejátszotta.",
+    "daysHintNobody": "Az érkezésétől számítva (sorozatnál a legújabb epizódtól). Legalább {{least}}, hogy az új címek esélyt kapjanak.",
+    "endedOnly": "Csak a befejeződött sorozatok",
+    "endedOnlyHint": "Azok a sorozatok, amelyekhez még jönnek epizódok, békén maradnak.",
+    "graceDays": "Napok a hamarosan távozók listáján",
+    "graceHint": "Meddig van listázva egy cím, mielőtt távozhat. A lejátszása leveszi a listáról. Legalább {{least}}.",
+    "auto": "Magától töröljön, ha letelnek ezek a napok",
+    "autoOff": "Ki: a szabály csak listázza a címeket, és te törlöd azokat, amelyeket kiválasztasz.",
+    "autoOn": "Be: a szabály végleg törli minden cím mappáját, amikor letelnek a napjai, naponta legfeljebb {{most}} címet. A Ne nyúlj hozzá beállítású, a megtartott és az elmúlt 30 napban kért címek soha nem törlődnek.",
+    "enabled": "A szabály be van kapcsolva",
+    "preview": "Mit listázna most ez a szabály",
+    "previewNoReport": "A Matinee mostanában nem jelentette, mit néztek meg, ezért még nincs mit mutatni. A szabályt elmentheted; megvárja a Matinee jelentését.",
+    "previewNone": "Most semmi sem felel meg.",
+    "previewCount": "Címek: {{titles}} ({{size}}). A legnagyobbak:",
+    "previewSafe": "Ez csak előnézet. A szabály mentése ezeket hamarosan távozóként listázza, és semmit sem töröl.",
+    "editNote": "Egy szabály módosítása újrakezdi a listáját."
   }
 }

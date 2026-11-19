@@ -2529,5 +2529,74 @@
       "skipped": "Ditinggalkan",
       "failed": "Tidak dapat ditambah"
     }
+  },
+  "cleanup": {
+    "title": "Pembersihan",
+    "add": "Tambah peraturan",
+    "edit": "Ubah peraturan",
+    "remove": "Buang peraturan",
+    "removeBody": "Peraturan dibuang, dan tajuk yang disenaraikannya keluar daripada senarai yang akan pergi tidak lama lagi. Tiada apa-apa dipadam.",
+    "sub": "Peraturan memilih tajuk yang telah ditonton, atau tidak pernah ditonton, untuk memberi ruang. Peraturan hanya menyenaraikannya sebagai akan pergi tidak lama lagi. Tiada apa-apa dipadam sehingga anda memadamnya, melainkan anda membenarkan peraturan memadam sendiri. Peraturan mengikut apa yang Matinee katakan telah ditonton.",
+    "none": "Belum ada peraturan. Tambah satu untuk melihat apa yang akan dipilihnya; menambah peraturan tidak memadam apa-apa.",
+    "noReport": "Matinee tidak memberitahu kebelakangan ini apa yang ditonton ({{kinds}}), jadi peraturan menunggu dan tiada apa-apa dipadam. Matinee melapor sendiri sebaik sahaja ia disambungkan dan terkini.",
+    "connect": "Sambungkan Matinee",
+    "reported": "Matinee kali terakhir memberitahu apa yang ditonton: {{when}}",
+    "noPlays": "Matinee mengatakan tiada apa-apa langsung dimainkan, jadi peraturan ini menunggu daripada terus mempercayainya.",
+    "rule": {
+      "movie": {
+        "everyone": "Filem yang telah dihabiskan oleh semua yang memulakannya, tidak dimainkan selama {{days}} hari",
+        "anyone": "Filem yang telah dihabiskan oleh seseorang, tidak dimainkan selama {{days}} hari",
+        "nobody": "Filem yang tidak pernah dimainkan sesiapa, {{days}} hari selepas tiba"
+      },
+      "series": {
+        "everyone": "Rancangan yang telah dihabiskan oleh semua yang memulakannya, tidak dimainkan selama {{days}} hari",
+        "anyone": "Rancangan yang telah dihabiskan oleh seseorang, tidak dimainkan selama {{days}} hari",
+        "nobody": "Rancangan yang tidak pernah dimainkan sesiapa, {{days}} hari selepas episod terbaharunya"
+      }
+    },
+    "autoBadge": "Memadam sendiri",
+    "listsBadge": "Hanya menyenaraikan",
+    "grace": "Disenaraikan dahulu selama {{days}} hari",
+    "leaving": "Akan pergi tidak lama lagi: {{titles}} ({{size}})",
+    "leavingSoon": "Akan pergi tidak lama lagi",
+    "checkNow": "Semak sekarang",
+    "nothingLeaving": "Tiada apa-apa yang akan pergi.",
+    "neverPlayed": "Tidak pernah dimainkan; di sini sejak {{when}}",
+    "plays": "Dihabiskan oleh {{finished}} daripada {{viewers}} yang memainkannya; kali terakhir dimainkan {{when}}",
+    "canGo": "Disenaraikan pada {{when}}. Ia kekal sehingga anda memadamnya.",
+    "deletedOn": "Peraturan memadamnya pada {{when}} melainkan seseorang memainkannya atau anda menyimpannya.",
+    "keep": "Simpan",
+    "deleteNow": "Padam sekarang",
+    "deleteTitle": "Padam {{title}}?",
+    "deleteBody": "Foldernya dipadam daripada cakera untuk selama-lamanya ({{files}} fail, {{size}}) dan tajuknya keluar daripada senarai Box Office. Ini tidak boleh dibuat asal.",
+    "kept": "Disimpan",
+    "keptSub": "Tiada peraturan menyenaraikan ini lagi.",
+    "unkeep": "Benarkan peraturan menyenaraikannya",
+    "cap": "Bilangan tajuk terbanyak sehari yang dipadam sendiri oleh peraturan",
+    "capHint": "Dipadam oleh peraturan hari ini: {{titles}}. Selebihnya menunggu esok.",
+    "kind": "Untuk",
+    "watched": "Ditonton oleh",
+    "watchedBy": {
+      "everyone": "Semua yang memulakannya telah menghabiskannya",
+      "anyone": "Seseorang telah menghabiskannya",
+      "nobody": "Tiada sesiapa memainkannya"
+    },
+    "days": "Senyap selama bilangan hari ini",
+    "daysHint": "Dikira dari kali terakhir sesiapa memainkannya.",
+    "daysHintNobody": "Dikira dari masa ia tiba (rancangan: episod terbaharunya). Sekurang-kurangnya {{least}}, supaya tajuk baharu mendapat peluang.",
+    "endedOnly": "Hanya rancangan yang telah tamat",
+    "endedOnlyHint": "Rancangan yang episodnya masih akan datang dibiarkan sahaja.",
+    "graceDays": "Hari dalam senarai yang akan pergi tidak lama lagi",
+    "graceHint": "Berapa lama tajuk disenaraikan sebelum ia boleh pergi. Memainkannya mengeluarkannya daripada senarai. Sekurang-kurangnya {{least}}.",
+    "auto": "Padam sendiri apabila hari-hari itu tamat",
+    "autoOff": "Mati: peraturan hanya menyenaraikan tajuk, dan anda memadam yang anda pilih.",
+    "autoOn": "Hidup: peraturan memadam folder setiap tajuk untuk selama-lamanya apabila harinya tamat, paling banyak {{most}} tajuk sehari. Tajuk pada Jangan sentuh, yang anda simpan, dan yang diminta dalam 30 hari lepas tidak pernah dipadam.",
+    "enabled": "Peraturan dihidupkan",
+    "preview": "Apa yang akan disenaraikan oleh peraturan ini sekarang",
+    "previewNoReport": "Matinee tidak memberitahu kebelakangan ini apa yang ditonton, jadi belum ada apa-apa untuk ditunjukkan. Anda boleh menyimpan peraturan; ia menunggu sehingga Matinee melapor.",
+    "previewNone": "Tiada yang sepadan sekarang.",
+    "previewCount": "Tajuk: {{titles}} ({{size}}). Yang terbesar:",
+    "previewSafe": "Ini hanya pratonton. Menyimpan peraturan menyenaraikan ini sebagai akan pergi tidak lama lagi dan tidak memadam apa-apa.",
+    "editNote": "Mengubah peraturan memulakan senarainya semula."
   }
 }

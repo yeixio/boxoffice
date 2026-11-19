@@ -96,3 +96,55 @@ func (h *Handler) watched(w http.ResponseWriter, r *http.Request) error {
 	}
 	return write(w, http.StatusOK, map[string]int{"kept": len(rows)})
 }
+
+// leaving is GET /api/v3/boxoffice/leaving: the movies (on /radarr) or
+// shows (on /sonarr) that clean-up rules have listed as leaving soon, with
+// the day each can go, soonest first, so Matinee can show a Leaving soon
+// row. Playing one takes it off the list the next time the rules run.
+func (h *Handler) leaving(w http.ResponseWriter, r *http.Request) error {
+	type title struct {
+		TMDBID   int64     `json:"tmdbId"`
+		TVDBID   int64     `json:"tvdbId,omitempty"`
+		Title    string    `json:"title"`
+		Year     int       `json:"year,omitempty"`
+		LeavesAt time.Time `json:"leavesAt"`
+	}
+	ctx := r.Context()
+	st := h.Catalog.Store
+	kind := "movie"
+	if h.App == Sonarr {
+		kind = "series"
+	}
+	items, err := st.CleanupItems(ctx)
+	if err != nil {
+		return err
+	}
+	out := []title{}
+	for _, i := range items {
+		if i.Kind != kind {
+			continue
+		}
+		t := title{LeavesAt: i.LeavesAt}
+		if kind == "movie" {
+			m, err := st.Movie(ctx, i.TitleID)
+			if errors.Is(err, store.ErrNotFound) {
+				continue
+			}
+			if err != nil {
+				return err
+			}
+			t.TMDBID, t.Title, t.Year = m.TMDBID, m.Title, m.Year
+		} else {
+			s, err := st.Series(ctx, i.TitleID)
+			if errors.Is(err, store.ErrNotFound) {
+				continue
+			}
+			if err != nil {
+				return err
+			}
+			t.TMDBID, t.TVDBID, t.Title, t.Year = s.TMDBID, s.TVDBID, s.Title, s.Year
+		}
+		out = append(out, t)
+	}
+	return write(w, http.StatusOK, map[string]any{"titles": out})
+}

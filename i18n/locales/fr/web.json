@@ -2775,5 +2775,74 @@
       "skipped": "Laissé de côté",
       "failed": "Ajout impossible"
     }
+  },
+  "cleanup": {
+    "title": "Nettoyage",
+    "add": "Ajouter une règle",
+    "edit": "Modifier la règle",
+    "remove": "Supprimer la règle",
+    "removeBody": "La règle disparaît, et les titres qu’elle avait listés quittent la liste des départs prochains. Rien n’est supprimé.",
+    "sub": "Les règles repèrent les titres qui ont été regardés, ou ne l’ont jamais été, pour faire de la place. Une règle se contente de les lister comme partant bientôt. Rien n’est supprimé tant que vous ne le supprimez pas, sauf si vous laissez une règle supprimer toute seule. Les règles se fient à ce que Matinee dit avoir été regardé.",
+    "none": "Aucune règle pour l’instant. Ajoutez-en une pour voir ce qu’elle repérerait ; ajouter une règle ne supprime rien.",
+    "noReport": "Matinee n’a pas dit récemment ce qui a été regardé ({{kinds}}), donc les règles attendent et rien n’est supprimé. Matinee le signale tout seul dès qu’il est connecté et à jour.",
+    "connect": "Connecter Matinee",
+    "reported": "Dernier rapport de Matinee sur ce qui a été regardé : {{when}}",
+    "noPlays": "Matinee dit que rien du tout n’a été lu, donc cette règle attend plutôt que de le croire sur parole.",
+    "rule": {
+      "movie": {
+        "everyone": "Films que tous ceux qui les ont commencés ont terminés, non lus depuis {{days}} jours",
+        "anyone": "Films que quelqu’un a terminés, non lus depuis {{days}} jours",
+        "nobody": "Films que personne n’a lus, {{days}} jours après leur arrivée"
+      },
+      "series": {
+        "everyone": "Séries que tous ceux qui les ont commencées ont terminées, non lues depuis {{days}} jours",
+        "anyone": "Séries que quelqu’un a terminées, non lues depuis {{days}} jours",
+        "nobody": "Séries que personne n’a lues, {{days}} jours après leur dernier épisode"
+      }
+    },
+    "autoBadge": "Supprime toute seule",
+    "listsBadge": "Liste seulement",
+    "grace": "D’abord listé pendant {{days}} jours",
+    "leaving": "Partent bientôt : {{titles}} ({{size}})",
+    "leavingSoon": "Partent bientôt",
+    "checkNow": "Vérifier maintenant",
+    "nothingLeaving": "Rien ne part.",
+    "neverPlayed": "Jamais lu ; ici depuis le {{when}}",
+    "plays": "Terminé par {{finished}} sur {{viewers}} qui l’ont lu ; dernière lecture le {{when}}",
+    "canGo": "Listé le {{when}}. Il reste jusqu’à ce que vous le supprimiez.",
+    "deletedOn": "La règle le supprime le {{when}} sauf si quelqu’un le lit ou si vous le gardez.",
+    "keep": "Garder",
+    "deleteNow": "Supprimer maintenant",
+    "deleteTitle": "Supprimer {{title}} ?",
+    "deleteBody": "Son dossier est supprimé du disque pour de bon ({{files}} fichiers, {{size}}) et il quitte la liste de Box Office. C’est irréversible.",
+    "kept": "Gardés",
+    "keptSub": "Aucune règle ne les liste à nouveau.",
+    "unkeep": "Laisser les règles le lister",
+    "cap": "Nombre maximal de titres par jour que les règles suppriment toutes seules",
+    "capHint": "Supprimés par les règles aujourd’hui : {{titles}}. Le reste attend demain.",
+    "kind": "Pour",
+    "watched": "Regardé par",
+    "watchedBy": {
+      "everyone": "Tous ceux qui l’ont commencé l’ont terminé",
+      "anyone": "Quelqu’un l’a terminé",
+      "nobody": "Personne ne l’a lu"
+    },
+    "days": "Calme depuis ce nombre de jours",
+    "daysHint": "Compté depuis la dernière fois que quelqu’un l’a lu.",
+    "daysHintNobody": "Compté depuis son arrivée (une série : son dernier épisode). Au moins {{least}}, pour laisser une chance aux nouveaux titres.",
+    "endedOnly": "Seulement les séries terminées",
+    "endedOnlyHint": "Les séries dont des épisodes sont encore à venir sont laissées tranquilles.",
+    "graceDays": "Jours sur la liste des départs prochains",
+    "graceHint": "Combien de temps un titre est listé avant de pouvoir partir. Le lire le retire de la liste. Au moins {{least}}.",
+    "auto": "Supprimer toute seule quand ces jours sont écoulés",
+    "autoOff": "Désactivé : la règle ne fait que lister les titres, et vous supprimez ceux que vous choisissez.",
+    "autoOn": "Activé : la règle supprime pour de bon le dossier de chaque titre quand ses jours sont écoulés, au plus {{most}} titres par jour. Les titres en Ne pas toucher, ceux que vous gardez et ceux demandés ces 30 derniers jours ne sont jamais supprimés.",
+    "enabled": "La règle est active",
+    "preview": "Ce que cette règle listerait maintenant",
+    "previewNoReport": "Matinee n’a pas dit récemment ce qui a été regardé, donc il n’y a encore rien à montrer. Vous pouvez enregistrer la règle ; elle attend le rapport de Matinee.",
+    "previewNone": "Rien ne correspond pour l’instant.",
+    "previewCount": "Titres : {{titles}} ({{size}}). Les plus gros :",
+    "previewSafe": "Ce n’est qu’un aperçu. Enregistrer la règle les liste comme partant bientôt et ne supprime rien.",
+    "editNote": "Modifier une règle remet sa liste à zéro."
   }
 }

@@ -2898,5 +2898,74 @@
       "skipped": "Pominięty",
       "failed": "Nie udało się dodać"
     }
+  },
+  "cleanup": {
+    "title": "Porządki",
+    "add": "Dodaj regułę",
+    "edit": "Zmień regułę",
+    "remove": "Usuń regułę",
+    "removeBody": "Reguła znika, a tytuły, które wymieniła, schodzą z listy wkrótce znikających. Nic nie jest usuwane.",
+    "sub": "Reguły wybierają tytuły, które zostały obejrzane albo nigdy nie były oglądane, żeby zrobić miejsce. Reguła tylko wymienia je jako wkrótce znikające. Nic nie jest usuwane, dopóki sam tego nie usuniesz, chyba że pozwolisz regule usuwać samodzielnie. Reguły opierają się na tym, co według Matinee zostało obejrzane.",
+    "none": "Nie ma jeszcze reguł. Dodaj jedną, żeby zobaczyć, co by wybrała; dodanie reguły niczego nie usuwa.",
+    "noReport": "Matinee ostatnio nie podało, co zostało obejrzane ({{kinds}}), więc reguły czekają i nic nie jest usuwane. Matinee zgłasza to samo, gdy jest połączone i aktualne.",
+    "connect": "Połącz Matinee",
+    "reported": "Matinee ostatnio podało, co zostało obejrzane: {{when}}",
+    "noPlays": "Matinee podaje, że nic nie zostało odtworzone, więc ta reguła czeka, zamiast przyjąć to na wiarę.",
+    "rule": {
+      "movie": {
+        "everyone": "Filmy, które wszyscy, którzy je zaczęli, obejrzeli do końca, nieodtwarzane od {{days}} dni",
+        "anyone": "Filmy, które ktoś obejrzał do końca, nieodtwarzane od {{days}} dni",
+        "nobody": "Filmy, których nikt nie odtworzył, {{days}} dni po ich pojawieniu się"
+      },
+      "series": {
+        "everyone": "Seriale, które wszyscy, którzy je zaczęli, obejrzeli do końca, nieodtwarzane od {{days}} dni",
+        "anyone": "Seriale, które ktoś obejrzał do końca, nieodtwarzane od {{days}} dni",
+        "nobody": "Seriale, których nikt nie odtworzył, {{days}} dni po najnowszym odcinku"
+      }
+    },
+    "autoBadge": "Usuwa sama",
+    "listsBadge": "Tylko wymienia",
+    "grace": "Najpierw na liście przez {{days}} dni",
+    "leaving": "Wkrótce znikną: {{titles}} ({{size}})",
+    "leavingSoon": "Wkrótce znikną",
+    "checkNow": "Sprawdź teraz",
+    "nothingLeaving": "Nic nie znika.",
+    "neverPlayed": "Nigdy nie odtworzono; tutaj od {{when}}",
+    "plays": "Obejrzane do końca przez {{finished}} z {{viewers}} osób, które to odtworzyły; ostatnio odtwarzane {{when}}",
+    "canGo": "Na liście od {{when}}. Zostaje, dopóki tego nie usuniesz.",
+    "deletedOn": "Reguła usunie to {{when}}, chyba że ktoś to odtworzy albo to zachowasz.",
+    "keep": "Zachowaj",
+    "deleteNow": "Usuń teraz",
+    "deleteTitle": "Usunąć {{title}}?",
+    "deleteBody": "Folder zostanie trwale usunięty z dysku (pliki: {{files}}, {{size}}), a tytuł zniknie z listy Box Office. Tego nie można cofnąć.",
+    "kept": "Zachowane",
+    "keptSub": "Żadna reguła nie wymieni ich ponownie.",
+    "unkeep": "Pozwól regułom to wymieniać",
+    "cap": "Najwięcej tytułów dziennie, które reguły usuwają same",
+    "capHint": "Usunięte dziś przez reguły: {{titles}}. Reszta czeka do jutra.",
+    "kind": "Dla",
+    "watched": "Obejrzane przez",
+    "watchedBy": {
+      "everyone": "Wszyscy, którzy zaczęli, obejrzeli do końca",
+      "anyone": "Ktoś obejrzał do końca",
+      "nobody": "Nikt tego nie odtworzył"
+    },
+    "days": "Tyle dni spokoju",
+    "daysHint": "Liczone od ostatniego odtworzenia przez kogokolwiek.",
+    "daysHintNobody": "Liczone od pojawienia się (serial: jego najnowszy odcinek). Co najmniej {{least}}, żeby nowe tytuły miały szansę.",
+    "endedOnly": "Tylko zakończone seriale",
+    "endedOnlyHint": "Seriale, których odcinki jeszcze się ukażą, zostają w spokoju.",
+    "graceDays": "Dni na liście wkrótce znikających",
+    "graceHint": "Jak długo tytuł jest na liście, zanim może zniknąć. Odtworzenie zdejmuje go z listy. Co najmniej {{least}}.",
+    "auto": "Usuwaj sama, gdy miną te dni",
+    "autoOff": "Wyłączone: reguła tylko wymienia tytuły, a ty usuwasz te, które wybierzesz.",
+    "autoOn": "Włączone: reguła trwale usuwa folder każdego tytułu, gdy miną jego dni, najwyżej {{most}} tytułów dziennie. Tytuły z ustawieniem Nie ruszać, te, które zachowasz, i te, o które proszono w ciągu ostatnich 30 dni, nigdy nie są usuwane.",
+    "enabled": "Reguła jest włączona",
+    "preview": "Co ta reguła wymieniłaby teraz",
+    "previewNoReport": "Matinee ostatnio nie podało, co zostało obejrzane, więc nie ma jeszcze czego pokazać. Możesz zapisać regułę; poczeka, aż Matinee to zgłosi.",
+    "previewNone": "Teraz nic nie pasuje.",
+    "previewCount": "Tytuły: {{titles}} ({{size}}). Największe:",
+    "previewSafe": "To tylko podgląd. Zapisanie reguły wymienia je jako wkrótce znikające i niczego nie usuwa.",
+    "editNote": "Zmiana reguły zaczyna jej listę od nowa."
   }
 }

@@ -2775,5 +2775,74 @@
       "skipped": "Deixado de fora",
       "failed": "Não foi possível adicionar"
     }
+  },
+  "cleanup": {
+    "title": "Limpeza",
+    "add": "Adicionar uma regra",
+    "edit": "Alterar a regra",
+    "remove": "Remover a regra",
+    "removeBody": "A regra some, e os títulos que ela listou saem da lista dos que vão sair em breve. Nada é excluído.",
+    "sub": "As regras escolhem títulos que foram assistidos, ou que nunca foram, para liberar espaço. Uma regra apenas os lista como saindo em breve. Nada é excluído até você excluir, a menos que você deixe uma regra excluir sozinha. As regras se baseiam no que o Matinee diz que foi assistido.",
+    "none": "Ainda não há regras. Adicione uma para ver o que ela escolheria; adicionar uma regra não exclui nada.",
+    "noReport": "O Matinee não disse recentemente o que foi assistido ({{kinds}}), então as regras estão esperando e nada é excluído. O Matinee informa sozinho assim que está conectado e atualizado.",
+    "connect": "Conectar o Matinee",
+    "reported": "Última vez que o Matinee disse o que foi assistido: {{when}}",
+    "noPlays": "O Matinee diz que nada foi reproduzido, então esta regra espera em vez de confiar nisso.",
+    "rule": {
+      "movie": {
+        "everyone": "Filmes que todos que começaram terminaram, sem reprodução há {{days}} dias",
+        "anyone": "Filmes que alguém terminou, sem reprodução há {{days}} dias",
+        "nobody": "Filmes que ninguém reproduziu, {{days}} dias depois de chegarem"
+      },
+      "series": {
+        "everyone": "Séries que todos que começaram terminaram, sem reprodução há {{days}} dias",
+        "anyone": "Séries que alguém terminou, sem reprodução há {{days}} dias",
+        "nobody": "Séries que ninguém reproduziu, {{days}} dias depois do episódio mais recente"
+      }
+    },
+    "autoBadge": "Exclui sozinha",
+    "listsBadge": "Só lista",
+    "grace": "Primeiro {{days}} dias na lista",
+    "leaving": "Saindo em breve: {{titles}} ({{size}})",
+    "leavingSoon": "Saindo em breve",
+    "checkNow": "Verificar agora",
+    "nothingLeaving": "Nada está saindo.",
+    "neverPlayed": "Nunca reproduzido; aqui desde {{when}}",
+    "plays": "Terminado por {{finished}} de {{viewers}} que reproduziram; última reprodução em {{when}}",
+    "canGo": "Na lista desde {{when}}. Fica até você excluir.",
+    "deletedOn": "A regra o exclui em {{when}}, a menos que alguém o reproduza ou você o mantenha.",
+    "keep": "Manter",
+    "deleteNow": "Excluir agora",
+    "deleteTitle": "Excluir {{title}}?",
+    "deleteBody": "A pasta é excluída do disco para sempre ({{files}} arquivos, {{size}}) e o título sai da lista do Box Office. Não dá para desfazer.",
+    "kept": "Mantidos",
+    "keptSub": "Nenhuma regra lista estes de novo.",
+    "unkeep": "Deixar as regras listarem",
+    "cap": "Máximo de títulos por dia que as regras excluem sozinhas",
+    "capHint": "Excluídos hoje pelas regras: {{titles}}. O resto espera até amanhã.",
+    "kind": "Para",
+    "watched": "Assistido por",
+    "watchedBy": {
+      "everyone": "Todos que começaram terminaram",
+      "anyone": "Alguém terminou",
+      "nobody": "Ninguém reproduziu"
+    },
+    "days": "Parado há este número de dias",
+    "daysHint": "Contados desde a última vez que alguém o reproduziu.",
+    "daysHintNobody": "Contados desde que chegou (uma série: o episódio mais recente). Pelo menos {{least}}, para dar uma chance aos títulos novos.",
+    "endedOnly": "Somente séries que terminaram",
+    "endedOnlyHint": "Séries com episódios ainda por vir são deixadas em paz.",
+    "graceDays": "Dias na lista dos que saem em breve",
+    "graceHint": "Por quanto tempo um título fica listado antes de poder sair. Reproduzi-lo o tira da lista. Pelo menos {{least}}.",
+    "auto": "Excluir sozinha quando esses dias passarem",
+    "autoOff": "Desligado: a regra só lista os títulos, e você exclui os que escolher.",
+    "autoOn": "Ligado: a regra exclui para sempre a pasta de cada título quando seus dias passam, no máximo {{most}} títulos por dia. Títulos em Não mexer, os que você mantém e os pedidos nos últimos 30 dias nunca são excluídos.",
+    "enabled": "A regra está ligada",
+    "preview": "O que esta regra listaria agora",
+    "previewNoReport": "O Matinee não disse recentemente o que foi assistido, então ainda não há nada para mostrar. Você pode salvar a regra; ela espera até o Matinee informar.",
+    "previewNone": "Nada corresponde no momento.",
+    "previewCount": "Títulos: {{titles}} ({{size}}). Os maiores:",
+    "previewSafe": "Isto é só uma prévia. Salvar a regra os lista como saindo em breve e não exclui nada.",
+    "editNote": "Alterar uma regra recomeça a lista dela."
   }
 }

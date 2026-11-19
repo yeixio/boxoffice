@@ -2529,5 +2529,74 @@
       "skipped": "Đã bỏ qua",
       "failed": "Không thêm được"
     }
+  },
+  "cleanup": {
+    "title": "Dọn dẹp",
+    "add": "Thêm quy tắc",
+    "edit": "Đổi quy tắc",
+    "remove": "Xóa quy tắc",
+    "removeBody": "Quy tắc biến mất, và các tựa nó đã liệt kê sẽ ra khỏi danh sách sắp rời đi. Không có gì bị xóa.",
+    "sub": "Quy tắc chọn ra các tựa đã được xem, hoặc chưa từng được xem, để lấy chỗ trống. Quy tắc chỉ liệt kê chúng là sắp rời đi. Không có gì bị xóa cho đến khi bạn xóa, trừ khi bạn cho phép quy tắc tự xóa. Quy tắc dựa theo những gì Matinee cho biết đã được xem.",
+    "none": "Chưa có quy tắc nào. Thêm một quy tắc để xem nó sẽ chọn gì; thêm quy tắc không xóa gì cả.",
+    "noReport": "Gần đây Matinee chưa cho biết những gì đã được xem ({{kinds}}), nên các quy tắc đang chờ và không có gì bị xóa. Matinee tự báo cáo khi đã được kết nối và cập nhật.",
+    "connect": "Kết nối Matinee",
+    "reported": "Lần gần nhất Matinee cho biết những gì đã được xem: {{when}}",
+    "noPlays": "Matinee nói rằng chưa có gì được phát, nên quy tắc này chờ thay vì tin ngay điều đó.",
+    "rule": {
+      "movie": {
+        "everyone": "Phim mà mọi người bắt đầu xem đều đã xem xong, không phát trong {{days}} ngày",
+        "anyone": "Phim mà có người đã xem xong, không phát trong {{days}} ngày",
+        "nobody": "Phim mà chưa ai phát, {{days}} ngày sau khi có"
+      },
+      "series": {
+        "everyone": "Chương trình mà mọi người bắt đầu xem đều đã xem xong, không phát trong {{days}} ngày",
+        "anyone": "Chương trình mà có người đã xem xong, không phát trong {{days}} ngày",
+        "nobody": "Chương trình mà chưa ai phát, {{days}} ngày sau tập mới nhất"
+      }
+    },
+    "autoBadge": "Tự xóa",
+    "listsBadge": "Chỉ liệt kê",
+    "grace": "Liệt kê trước {{days}} ngày",
+    "leaving": "Sắp rời đi: {{titles}} ({{size}})",
+    "leavingSoon": "Sắp rời đi",
+    "checkNow": "Kiểm tra ngay",
+    "nothingLeaving": "Không có gì sắp rời đi.",
+    "neverPlayed": "Chưa từng phát; ở đây từ {{when}}",
+    "plays": "{{finished}} trong số {{viewers}} người đã phát xem xong; phát lần cuối {{when}}",
+    "canGo": "Được liệt kê {{when}}. Nó ở lại cho đến khi bạn xóa.",
+    "deletedOn": "Quy tắc sẽ xóa nó vào {{when}} trừ khi có người phát hoặc bạn giữ lại.",
+    "keep": "Giữ lại",
+    "deleteNow": "Xóa ngay",
+    "deleteTitle": "Xóa {{title}}?",
+    "deleteBody": "Thư mục của nó bị xóa vĩnh viễn khỏi ổ đĩa ({{files}} tệp, {{size}}) và tựa này ra khỏi danh sách của Box Office. Không thể hoàn tác.",
+    "kept": "Đã giữ lại",
+    "keptSub": "Không quy tắc nào liệt kê lại những tựa này.",
+    "unkeep": "Cho quy tắc liệt kê",
+    "cap": "Số tựa tối đa mỗi ngày mà quy tắc tự xóa",
+    "capHint": "Quy tắc đã xóa hôm nay: {{titles}}. Phần còn lại chờ đến mai.",
+    "kind": "Cho",
+    "watched": "Người xem",
+    "watchedBy": {
+      "everyone": "Mọi người bắt đầu xem đều đã xem xong",
+      "anyone": "Có người đã xem xong",
+      "nobody": "Chưa ai phát"
+    },
+    "days": "Yên lặng trong số ngày này",
+    "daysHint": "Tính từ lần cuối có người phát.",
+    "daysHintNobody": "Tính từ khi có (chương trình: tập mới nhất). Ít nhất {{least}}, để các tựa mới có cơ hội.",
+    "endedOnly": "Chỉ chương trình đã kết thúc",
+    "endedOnlyHint": "Chương trình còn tập sắp ra được để yên.",
+    "graceDays": "Số ngày trong danh sách sắp rời đi",
+    "graceHint": "Một tựa được liệt kê bao lâu trước khi có thể rời đi. Phát nó sẽ đưa nó ra khỏi danh sách. Ít nhất {{least}}.",
+    "auto": "Tự xóa khi hết số ngày đó",
+    "autoOff": "Tắt: quy tắc chỉ liệt kê các tựa, và bạn xóa những tựa bạn chọn.",
+    "autoOn": "Bật: quy tắc xóa vĩnh viễn thư mục của từng tựa khi hết số ngày, tối đa {{most}} tựa mỗi ngày. Các tựa đặt Không đụng đến, tựa bạn giữ lại và tựa được yêu cầu trong 30 ngày qua không bao giờ bị xóa.",
+    "enabled": "Quy tắc đang bật",
+    "preview": "Quy tắc này sẽ liệt kê gì lúc này",
+    "previewNoReport": "Gần đây Matinee chưa cho biết những gì đã được xem, nên chưa có gì để hiển thị. Bạn có thể lưu quy tắc; nó chờ đến khi Matinee báo cáo.",
+    "previewNone": "Hiện không có gì khớp.",
+    "previewCount": "Số tựa: {{titles}} ({{size}}). Lớn nhất:",
+    "previewSafe": "Đây chỉ là bản xem trước. Lưu quy tắc sẽ liệt kê những tựa này là sắp rời đi và không xóa gì.",
+    "editNote": "Đổi quy tắc sẽ bắt đầu lại danh sách của nó."
   }
 }

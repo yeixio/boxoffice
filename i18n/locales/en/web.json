@@ -2652,5 +2652,74 @@
       "skipped": "Left out",
       "failed": "Couldn't be added"
     }
+  },
+  "cleanup": {
+    "title": "Clean-up",
+    "add": "Add a rule",
+    "edit": "Change the rule",
+    "remove": "Remove the rule",
+    "removeBody": "The rule goes, and the titles it listed come off the leaving soon list. Nothing is deleted.",
+    "sub": "Rules pick out titles that have been watched, or never were, to make room. A rule only lists them as leaving soon. Nothing is deleted until you delete it, unless you let a rule delete by itself. Rules go by what Matinee says was watched.",
+    "none": "No rules yet. Add one to see what it would pick out; adding a rule deletes nothing.",
+    "noReport": "Matinee hasn't said lately what was watched ({{kinds}}), so the rules are waiting and nothing is deleted. Matinee reports by itself once it's connected and up to date.",
+    "connect": "Connect Matinee",
+    "reported": "Matinee last said what was watched: {{when}}",
+    "noPlays": "Matinee says nothing at all has been played, so this rule is waiting rather than take that on trust.",
+    "rule": {
+      "movie": {
+        "everyone": "Movies that everyone who started them has finished, not played for {{days}} days",
+        "anyone": "Movies that someone has finished, not played for {{days}} days",
+        "nobody": "Movies that nobody has played, {{days}} days after they came"
+      },
+      "series": {
+        "everyone": "Shows that everyone who started them has finished, not played for {{days}} days",
+        "anyone": "Shows that someone has finished, not played for {{days}} days",
+        "nobody": "Shows that nobody has played, {{days}} days after their newest episode"
+      }
+    },
+    "autoBadge": "Deletes by itself",
+    "listsBadge": "Only lists",
+    "grace": "Listed for {{days}} days first",
+    "leaving": "Leaving soon: {{titles}} ({{size}})",
+    "leavingSoon": "Leaving soon",
+    "checkNow": "Check now",
+    "nothingLeaving": "Nothing is leaving.",
+    "neverPlayed": "Never played; here since {{when}}",
+    "plays": "Finished by {{finished}} of {{viewers}} who played it; last played {{when}}",
+    "canGo": "Listed {{when}}. It stays until you delete it.",
+    "deletedOn": "The rule deletes it on {{when}} unless someone plays it or you keep it.",
+    "keep": "Keep",
+    "deleteNow": "Delete now",
+    "deleteTitle": "Delete {{title}}?",
+    "deleteBody": "Its folder is deleted from the disk for good ({{files}} files, {{size}}) and it comes off Box Office's list. This can't be undone.",
+    "kept": "Kept",
+    "keptSub": "No rule lists these again.",
+    "unkeep": "Let rules list it",
+    "cap": "Most titles a day that rules delete by themselves",
+    "capHint": "Deleted by rules today: {{titles}}. The rest wait for tomorrow.",
+    "kind": "For",
+    "watched": "Watched by",
+    "watchedBy": {
+      "everyone": "Everyone who started it has finished it",
+      "anyone": "Someone has finished it",
+      "nobody": "Nobody has played it"
+    },
+    "days": "Quiet for this many days",
+    "daysHint": "Counted from the last time anyone played it.",
+    "daysHintNobody": "Counted from when it came (a show: its newest episode). At least {{least}}, so new titles get a chance.",
+    "endedOnly": "Only shows that have ended",
+    "endedOnlyHint": "Shows with episodes still to come are left alone.",
+    "graceDays": "Days on the leaving soon list",
+    "graceHint": "How long a title is listed before it can go. Playing it takes it off the list. At least {{least}}.",
+    "auto": "Delete by itself when those days are up",
+    "autoOff": "Off: the rule only lists titles, and you delete the ones you choose.",
+    "autoOn": "On: the rule deletes each title's folder for good when its days are up, at most {{most}} titles a day. Titles on Do not touch, ones you keep, and ones asked for in the last 30 days are never deleted.",
+    "enabled": "Rule is on",
+    "preview": "What this rule would list now",
+    "previewNoReport": "Matinee hasn't said lately what was watched, so there's nothing to show yet. You can save the rule; it waits until Matinee reports.",
+    "previewNone": "Nothing matches right now.",
+    "previewCount": "Titles: {{titles}} ({{size}}). The biggest:",
+    "previewSafe": "This is only a preview. Saving the rule lists these as leaving soon and deletes nothing.",
+    "editNote": "Changing a rule starts its leaving soon list over."
   }
 }

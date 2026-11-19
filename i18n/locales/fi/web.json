@@ -2652,5 +2652,74 @@
       "skipped": "Jätetty pois",
       "failed": "Ei voitu lisätä"
     }
+  },
+  "cleanup": {
+    "title": "Siivous",
+    "add": "Lisää sääntö",
+    "edit": "Muuta sääntöä",
+    "remove": "Poista sääntö",
+    "removeBody": "Sääntö poistuu, ja sen listaamat nimikkeet poistuvat pian lähtevien listalta. Mitään ei poisteta levyltä.",
+    "sub": "Säännöt poimivat nimikkeitä, jotka on katsottu tai joita ei ole koskaan katsottu, jotta tilaa vapautuu. Sääntö vain listaa ne pian lähteviksi. Mitään ei poisteta ennen kuin sinä poistat sen, ellet anna säännön poistaa itse. Säännöt perustuvat siihen, mitä Matinee kertoo katsotun.",
+    "none": "Ei vielä sääntöjä. Lisää sääntö nähdäksesi, mitä se poimisi; säännön lisääminen ei poista mitään.",
+    "noReport": "Matinee ei ole viime aikoina kertonut, mitä on katsottu ({{kinds}}), joten säännöt odottavat eikä mitään poisteta. Matinee raportoi itsestään, kun se on yhdistetty ja ajan tasalla.",
+    "connect": "Yhdistä Matinee",
+    "reported": "Matinee kertoi viimeksi, mitä on katsottu: {{when}}",
+    "noPlays": "Matinee kertoo, ettei mitään ole toistettu, joten tämä sääntö odottaa eikä luota siihen sellaisenaan.",
+    "rule": {
+      "movie": {
+        "everyone": "Elokuvat, jotka kaikki aloittaneet ovat katsoneet loppuun ja joita ei ole toistettu {{days}} päivään",
+        "anyone": "Elokuvat, jotka joku on katsonut loppuun ja joita ei ole toistettu {{days}} päivään",
+        "nobody": "Elokuvat, joita kukaan ei ole toistanut, {{days}} päivää niiden saapumisesta"
+      },
+      "series": {
+        "everyone": "Sarjat, jotka kaikki aloittaneet ovat katsoneet loppuun ja joita ei ole toistettu {{days}} päivään",
+        "anyone": "Sarjat, jotka joku on katsonut loppuun ja joita ei ole toistettu {{days}} päivään",
+        "nobody": "Sarjat, joita kukaan ei ole toistanut, {{days}} päivää uusimmasta jaksosta"
+      }
+    },
+    "autoBadge": "Poistaa itse",
+    "listsBadge": "Vain listaa",
+    "grace": "Ensin listalla {{days}} päivää",
+    "leaving": "Lähdössä pian: {{titles}} ({{size}})",
+    "leavingSoon": "Lähdössä pian",
+    "checkNow": "Tarkista nyt",
+    "nothingLeaving": "Mikään ei ole lähdössä.",
+    "neverPlayed": "Ei koskaan toistettu; täällä {{when}} alkaen",
+    "plays": "Katsonut loppuun {{finished}} / {{viewers}} toistaneesta; viimeksi toistettu {{when}}",
+    "canGo": "Listattu {{when}}. Se pysyy, kunnes poistat sen.",
+    "deletedOn": "Sääntö poistaa sen {{when}}, ellei joku toista sitä tai sinä säilytä sitä.",
+    "keep": "Säilytä",
+    "deleteNow": "Poista nyt",
+    "deleteTitle": "Poistetaanko {{title}}?",
+    "deleteBody": "Sen kansio poistetaan levyltä lopullisesti ({{files}} tiedostoa, {{size}}), ja nimike poistuu Box Officen listalta. Tätä ei voi perua.",
+    "kept": "Säilytetyt",
+    "keptSub": "Mikään sääntö ei listaa näitä uudelleen.",
+    "unkeep": "Anna sääntöjen listata se",
+    "cap": "Enimmäismäärä nimikkeitä päivässä, jotka säännöt poistavat itse",
+    "capHint": "Sääntöjen tänään poistamia: {{titles}}. Loput odottavat huomiseen.",
+    "kind": "Kohde",
+    "watched": "Katsonut",
+    "watchedBy": {
+      "everyone": "Kaikki aloittaneet ovat katsoneet sen loppuun",
+      "anyone": "Joku on katsonut sen loppuun",
+      "nobody": "Kukaan ei ole toistanut sitä"
+    },
+    "days": "Hiljaa näin monta päivää",
+    "daysHint": "Lasketaan viimeisestä kerrasta, kun joku toisti sen.",
+    "daysHintNobody": "Lasketaan sen saapumisesta (sarjalla uusimmasta jaksosta). Vähintään {{least}}, jotta uudet nimikkeet saavat mahdollisuuden.",
+    "endedOnly": "Vain päättyneet sarjat",
+    "endedOnlyHint": "Sarjat, joihin on vielä tulossa jaksoja, jätetään rauhaan.",
+    "graceDays": "Päivät pian lähtevien listalla",
+    "graceHint": "Kuinka kauan nimike on listalla ennen kuin se voi lähteä. Sen toistaminen poistaa sen listalta. Vähintään {{least}}.",
+    "auto": "Poista itse, kun nuo päivät ovat kuluneet",
+    "autoOff": "Pois: sääntö vain listaa nimikkeet, ja sinä poistat valitsemasi.",
+    "autoOn": "Päällä: sääntö poistaa jokaisen nimikkeen kansion lopullisesti, kun sen päivät ovat kuluneet, enintään {{most}} nimikettä päivässä. Älä koske -nimikkeitä, säilyttämiäsi ja viimeisten 30 päivän aikana pyydettyjä ei poisteta koskaan.",
+    "enabled": "Sääntö on päällä",
+    "preview": "Mitä tämä sääntö listaisi nyt",
+    "previewNoReport": "Matinee ei ole viime aikoina kertonut, mitä on katsottu, joten näytettävää ei vielä ole. Voit tallentaa säännön; se odottaa, kunnes Matinee raportoi.",
+    "previewNone": "Mikään ei täsmää juuri nyt.",
+    "previewCount": "Nimikkeitä: {{titles}} ({{size}}). Suurimmat:",
+    "previewSafe": "Tämä on vain esikatselu. Säännön tallentaminen listaa nämä pian lähteviksi eikä poista mitään.",
+    "editNote": "Säännön muuttaminen aloittaa sen listan alusta."
   }
 }

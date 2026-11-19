@@ -2652,5 +2652,74 @@
       "skipped": "Överhoppad",
       "failed": "Kunde inte läggas till"
     }
+  },
+  "cleanup": {
+    "title": "Städning",
+    "add": "Lägg till en regel",
+    "edit": "Ändra regeln",
+    "remove": "Ta bort regeln",
+    "removeBody": "Regeln försvinner, och titlarna den listade tas bort från listan över det som försvinner snart. Inget raderas.",
+    "sub": "Regler väljer ut titlar som har setts, eller aldrig setts, för att göra plats. En regel listar dem bara som på väg bort. Inget raderas förrän du raderar det, om du inte låter en regel radera själv. Reglerna går efter vad Matinee säger har setts.",
+    "none": "Inga regler än. Lägg till en för att se vad den skulle välja ut; att lägga till en regel raderar inget.",
+    "noReport": "Matinee har inte sagt på sistone vad som har setts ({{kinds}}), så reglerna väntar och inget raderas. Matinee rapporterar av sig självt när det är anslutet och uppdaterat.",
+    "connect": "Anslut Matinee",
+    "reported": "Matinee sa senast vad som har setts: {{when}}",
+    "noPlays": "Matinee säger att ingenting alls har spelats, så den här regeln väntar hellre än att lita på det.",
+    "rule": {
+      "movie": {
+        "everyone": "Filmer som alla som börjat se dem har sett klart, inte spelade på {{days}} dagar",
+        "anyone": "Filmer som någon har sett klart, inte spelade på {{days}} dagar",
+        "nobody": "Filmer som ingen har spelat, {{days}} dagar efter att de kom"
+      },
+      "series": {
+        "everyone": "Serier som alla som börjat se dem har sett klart, inte spelade på {{days}} dagar",
+        "anyone": "Serier som någon har sett klart, inte spelade på {{days}} dagar",
+        "nobody": "Serier som ingen har spelat, {{days}} dagar efter det senaste avsnittet"
+      }
+    },
+    "autoBadge": "Raderar själv",
+    "listsBadge": "Listar bara",
+    "grace": "Listas först i {{days}} dagar",
+    "leaving": "Försvinner snart: {{titles}} ({{size}})",
+    "leavingSoon": "Försvinner snart",
+    "checkNow": "Kontrollera nu",
+    "nothingLeaving": "Inget är på väg bort.",
+    "neverPlayed": "Aldrig spelad; här sedan {{when}}",
+    "plays": "Sedd klart av {{finished}} av {{viewers}} som spelat den; senast spelad {{when}}",
+    "canGo": "Listad {{when}}. Den stannar tills du raderar den.",
+    "deletedOn": "Regeln raderar den {{when}} om ingen spelar den eller du behåller den.",
+    "keep": "Behåll",
+    "deleteNow": "Radera nu",
+    "deleteTitle": "Radera {{title}}?",
+    "deleteBody": "Mappen raderas från disken för gott ({{files}} filer, {{size}}) och titeln tas bort från Box Offices lista. Det går inte att ångra.",
+    "kept": "Behållna",
+    "keptSub": "Ingen regel listar dessa igen.",
+    "unkeep": "Låt regler lista den",
+    "cap": "Högst antal titlar per dag som regler raderar själva",
+    "capHint": "Raderade av regler i dag: {{titles}}. Resten väntar till i morgon.",
+    "kind": "För",
+    "watched": "Sedd av",
+    "watchedBy": {
+      "everyone": "Alla som börjat har sett klart",
+      "anyone": "Någon har sett klart",
+      "nobody": "Ingen har spelat den"
+    },
+    "days": "Stilla i så här många dagar",
+    "daysHint": "Räknas från senaste gången någon spelade den.",
+    "daysHintNobody": "Räknas från när den kom (en serie: det senaste avsnittet). Minst {{least}}, så att nya titlar får en chans.",
+    "endedOnly": "Bara serier som har avslutats",
+    "endedOnlyHint": "Serier med avsnitt som återstår lämnas i fred.",
+    "graceDays": "Dagar på listan över det som försvinner snart",
+    "graceHint": "Hur länge en titel listas innan den kan försvinna. Att spela den tar bort den från listan. Minst {{least}}.",
+    "auto": "Radera själv när de dagarna har gått",
+    "autoOff": "Av: regeln listar bara titlar, och du raderar dem du väljer.",
+    "autoOn": "På: regeln raderar varje titels mapp för gott när dess dagar har gått, högst {{most}} titlar per dag. Titlar på Rör inte, de du behåller och de som önskats de senaste 30 dagarna raderas aldrig.",
+    "enabled": "Regeln är på",
+    "preview": "Vad den här regeln skulle lista nu",
+    "previewNoReport": "Matinee har inte sagt på sistone vad som har setts, så det finns inget att visa än. Du kan spara regeln; den väntar tills Matinee rapporterar.",
+    "previewNone": "Inget matchar just nu.",
+    "previewCount": "Titlar: {{titles}} ({{size}}). De största:",
+    "previewSafe": "Det här är bara en förhandsvisning. Att spara regeln listar dessa som på väg bort och raderar inget.",
+    "editNote": "Om du ändrar en regel börjar dess lista om."
   }
 }

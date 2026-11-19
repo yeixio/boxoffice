@@ -2652,5 +2652,74 @@
       "skipped": "Ausgelassen",
       "failed": "Konnte nicht hinzugefügt werden"
     }
+  },
+  "cleanup": {
+    "title": "Aufräumen",
+    "add": "Regel hinzufügen",
+    "edit": "Regel ändern",
+    "remove": "Regel entfernen",
+    "removeBody": "Die Regel verschwindet, und die Titel, die sie aufgelistet hat, kommen von der Liste „Verlässt bald die Mediathek“. Nichts wird gelöscht.",
+    "sub": "Regeln suchen Titel heraus, die angesehen wurden oder nie angesehen wurden, um Platz zu schaffen. Eine Regel listet sie nur als bald verschwindend auf. Nichts wird gelöscht, bis du es löschst, es sei denn, du lässt eine Regel selbst löschen. Regeln richten sich danach, was laut Matinee angesehen wurde.",
+    "none": "Noch keine Regeln. Füge eine hinzu, um zu sehen, was sie heraussuchen würde; das Hinzufügen einer Regel löscht nichts.",
+    "noReport": "Matinee hat in letzter Zeit nicht gemeldet, was angesehen wurde ({{kinds}}), daher warten die Regeln und nichts wird gelöscht. Matinee meldet es von selbst, sobald es verbunden und aktuell ist.",
+    "connect": "Matinee verbinden",
+    "reported": "Matinee hat zuletzt gemeldet, was angesehen wurde: {{when}}",
+    "noPlays": "Matinee meldet, dass überhaupt nichts abgespielt wurde, daher wartet diese Regel, statt sich darauf zu verlassen.",
+    "rule": {
+      "movie": {
+        "everyone": "Filme, die alle, die sie angefangen haben, zu Ende gesehen haben und die seit {{days}} Tagen nicht abgespielt wurden",
+        "anyone": "Filme, die jemand zu Ende gesehen hat und die seit {{days}} Tagen nicht abgespielt wurden",
+        "nobody": "Filme, die niemand abgespielt hat, {{days}} Tage nachdem sie dazugekommen sind"
+      },
+      "series": {
+        "everyone": "Serien, die alle, die sie angefangen haben, zu Ende gesehen haben und die seit {{days}} Tagen nicht abgespielt wurden",
+        "anyone": "Serien, die jemand zu Ende gesehen hat und die seit {{days}} Tagen nicht abgespielt wurden",
+        "nobody": "Serien, die niemand abgespielt hat, {{days}} Tage nach ihrer neuesten Folge"
+      }
+    },
+    "autoBadge": "Löscht selbst",
+    "listsBadge": "Listet nur auf",
+    "grace": "Zuerst {{days}} Tage aufgelistet",
+    "leaving": "Verschwindet bald: {{titles}} ({{size}})",
+    "leavingSoon": "Verschwindet bald",
+    "checkNow": "Jetzt prüfen",
+    "nothingLeaving": "Nichts verschwindet.",
+    "neverPlayed": "Nie abgespielt; hier seit {{when}}",
+    "plays": "Zu Ende gesehen von {{finished}} von {{viewers}}, die es abgespielt haben; zuletzt abgespielt {{when}}",
+    "canGo": "Aufgelistet am {{when}}. Es bleibt, bis du es löschst.",
+    "deletedOn": "Die Regel löscht es am {{when}}, außer jemand spielt es ab oder du behältst es.",
+    "keep": "Behalten",
+    "deleteNow": "Jetzt löschen",
+    "deleteTitle": "{{title}} löschen?",
+    "deleteBody": "Der Ordner wird endgültig von der Festplatte gelöscht ({{files}} Dateien, {{size}}), und der Titel verschwindet aus der Liste von Box Office. Das lässt sich nicht rückgängig machen.",
+    "kept": "Behalten",
+    "keptSub": "Keine Regel listet diese wieder auf.",
+    "unkeep": "Regeln wieder auflisten lassen",
+    "cap": "Höchstzahl an Titeln pro Tag, die Regeln selbst löschen",
+    "capHint": "Heute von Regeln gelöscht: {{titles}}. Der Rest wartet bis morgen.",
+    "kind": "Für",
+    "watched": "Angesehen von",
+    "watchedBy": {
+      "everyone": "Alle, die es angefangen haben, haben es zu Ende gesehen",
+      "anyone": "Jemand hat es zu Ende gesehen",
+      "nobody": "Niemand hat es abgespielt"
+    },
+    "days": "So viele Tage Ruhe",
+    "daysHint": "Gezählt ab dem letzten Mal, dass jemand es abgespielt hat.",
+    "daysHintNobody": "Gezählt ab dem Tag, an dem es dazukam (bei einer Serie: ihre neueste Folge). Mindestens {{least}}, damit neue Titel eine Chance bekommen.",
+    "endedOnly": "Nur Serien, die beendet sind",
+    "endedOnlyHint": "Serien, bei denen noch Folgen kommen, bleiben unberührt.",
+    "graceDays": "Tage auf der Liste „Verschwindet bald“",
+    "graceHint": "Wie lange ein Titel aufgelistet ist, bevor er verschwinden kann. Abspielen nimmt ihn von der Liste. Mindestens {{least}}.",
+    "auto": "Selbst löschen, wenn diese Tage um sind",
+    "autoOff": "Aus: Die Regel listet Titel nur auf, und du löschst die, die du auswählst.",
+    "autoOn": "An: Die Regel löscht den Ordner jedes Titels endgültig, wenn seine Tage um sind, höchstens {{most}} Titel pro Tag. Titel auf „Nicht anfassen“, Titel, die du behältst, und Titel, die in den letzten 30 Tagen gewünscht wurden, werden nie gelöscht.",
+    "enabled": "Regel ist an",
+    "preview": "Was diese Regel jetzt auflisten würde",
+    "previewNoReport": "Matinee hat in letzter Zeit nicht gemeldet, was angesehen wurde, daher gibt es noch nichts zu zeigen. Du kannst die Regel speichern; sie wartet, bis Matinee meldet.",
+    "previewNone": "Im Moment passt nichts.",
+    "previewCount": "Titel: {{titles}} ({{size}}). Die größten:",
+    "previewSafe": "Das ist nur eine Vorschau. Das Speichern der Regel listet diese als bald verschwindend auf und löscht nichts.",
+    "editNote": "Wenn du eine Regel änderst, beginnt ihre Liste von vorn."
   }
 }
