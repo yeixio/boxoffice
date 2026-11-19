@@ -1256,7 +1256,14 @@
       "server": "Quello del server ({{zone}})",
       "differs": "Questo browser è in {{zone}}.",
       "use": "Usa {{zone}}"
-    }
+    },
+    "sizes": "Limiti di dimensione",
+    "sizesHint": "Quanto può essere grande una copia rispetto alla sua durata, in megabyte al minuto. A 25 MB al minuto, un film di 2 ore occupa 3 GB. Le buone copie H.265 e AV1 sono molto più piccole di quelle H.264, quindi ognuna ha i propri numeri. Lascia una casella vuota per non mettere limiti.",
+    "sizesOther": "H.264 e altri",
+    "sizeMin": "Almeno",
+    "sizeMax": "Al massimo",
+    "sizesNote": "A una release il cui nome non dice come è codificato il video si applicano i numeri di H.264, e un titolo di cui non si conosce la durata non viene controllato. Puoi comunque scegliere tu qualsiasi release.",
+    "sizesOn": ", limiti di dimensione"
   },
   "mediaTypes": {
     "music": {

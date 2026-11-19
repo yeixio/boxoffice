@@ -355,6 +355,7 @@ func (s *Service) takeFromFeed(ctx context.Context, releases []Release, skip fun
 			}
 			c := s.judge(ctx, r, profiles[m.ProfileID], has, have, blocked("movie", m.ID))
 			c.kind, c.titleID = "movie", m.ID
+			c.sized(profiles[m.ProfileID], m.Runtime)
 			if c.Accepted {
 				out.Releases = append(out.Releases, c)
 			}

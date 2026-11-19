@@ -1179,7 +1179,14 @@
       "server": "Serverens egen ({{zone}})",
       "differs": "Denne nettleseren er i {{zone}}.",
       "use": "Bruk {{zone}}"
-    }
+    },
+    "sizes": "Størrelsesgrenser",
+    "sizesHint": "Hvor stor en kopi kan være i forhold til spilletiden, i megabyte per minutt. Med 25 MB per minutt er en film på 2 timer 3 GB. Gode H.265- og AV1-kopier er mye mindre enn H.264-kopier, så hver har sine egne tall. La et felt stå tomt for ingen grense.",
+    "sizesOther": "H.264 og andre",
+    "sizeMin": "Minst",
+    "sizeMax": "Høyst",
+    "sizesNote": "En utgivelse der navnet ikke sier hvordan videoen er pakket, følger tallene for H.264, og en tittel uten kjent spilletid sjekkes ikke. Du kan fortsatt velge hvilken som helst utgivelse selv.",
+    "sizesOn": ", størrelsesgrenser"
   },
   "mediaTypes": {
     "music": {

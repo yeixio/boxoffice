@@ -67,6 +67,8 @@ type Profile struct {
 	// Locked is the Do not touch profile: Box Office never searches for,
 	// grabs, replaces, moves or deletes the files of a title on it.
 	Locked bool `json:"locked"`
+	// Sizes are how big a copy may be for its running time.
+	Sizes Sizes `json:"sizes"`
 }
 
 // DoNotTouchName is the name of the Do not touch profile.
@@ -93,7 +95,7 @@ func (p Profile) Check() error {
 	if !slices.Contains(p.Allowed, p.Cutoff) {
 		return errors.New("the cutoff has to be one of the qualities the profile takes")
 	}
-	return nil
+	return p.Sizes.check()
 }
 
 // Accepts says whether a copy of quality q is one the profile takes. Do

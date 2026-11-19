@@ -1102,7 +1102,14 @@
       "server": "Múi giờ của chính máy chủ ({{zone}})",
       "differs": "Trình duyệt này đang ở {{zone}}.",
       "use": "Dùng {{zone}}"
-    }
+    },
+    "sizes": "Giới hạn kích thước",
+    "sizesHint": "Một bản sao được lớn đến đâu so với thời lượng của nó, tính bằng megabyte mỗi phút. Ở mức 25 MB mỗi phút, một bộ phim 2 giờ là 3 GB. Bản H.265 và AV1 tốt nhỏ hơn nhiều so với H.264, nên mỗi loại có con số riêng. Để trống một ô nếu không muốn giới hạn.",
+    "sizesOther": "H.264 và loại khác",
+    "sizeMin": "Ít nhất",
+    "sizeMax": "Nhiều nhất",
+    "sizesNote": "Bản phát hành mà tên không cho biết video được nén kiểu nào sẽ theo con số của H.264, và tựa không rõ thời lượng thì không được kiểm tra. Bạn vẫn có thể tự chọn bất kỳ bản phát hành nào.",
+    "sizesOn": ", giới hạn kích thước"
   },
   "mediaTypes": {
     "music": {

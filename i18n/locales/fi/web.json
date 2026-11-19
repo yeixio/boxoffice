@@ -1179,7 +1179,14 @@
       "server": "Palvelimen oma ({{zone}})",
       "differs": "Tämä selain on vyöhykkeellä {{zone}}.",
       "use": "Käytä: {{zone}}"
-    }
+    },
+    "sizes": "Kokorajat",
+    "sizesHint": "Kuinka suuri kopio saa olla kestoonsa nähden, megatavuina minuutissa. 25 Mt:lla minuutissa kahden tunnin elokuva on 3 Gt. Hyvät H.265- ja AV1-kopiot ovat paljon pienempiä kuin H.264-kopiot, joten kullakin on omat lukunsa. Jätä kenttä tyhjäksi, jos rajaa ei ole.",
+    "sizesOther": "H.264 ja muut",
+    "sizeMin": "Vähintään",
+    "sizeMax": "Enintään",
+    "sizesNote": "Julkaisuun, jonka nimi ei kerro videon pakkaustapaa, sovelletaan H.264:n lukuja, eikä nimikettä, jonka kestoa ei tiedetä, tarkisteta. Voit silti valita itse minkä tahansa julkaisun.",
+    "sizesOn": ", kokorajat"
   },
   "mediaTypes": {
     "music": {

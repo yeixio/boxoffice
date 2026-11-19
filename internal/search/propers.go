@@ -231,6 +231,7 @@ func (s *Service) takeFixes(ctx context.Context, releases []Release) ([]string, 
 			}
 			c := s.judge(ctx, r, profiles[m.ProfileID], false, 0, blocked)
 			c.kind, c.titleID = "movie", m.ID
+			c.sized(profiles[m.ProfileID], m.Runtime)
 			if c.Accepted {
 				markFix(&c)
 				out.Releases = append(out.Releases, c)

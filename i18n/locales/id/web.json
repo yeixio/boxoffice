@@ -1102,7 +1102,14 @@
       "server": "Milik server sendiri ({{zone}})",
       "differs": "Browser ini berada di {{zone}}.",
       "use": "Gunakan {{zone}}"
-    }
+    },
+    "sizes": "Batas ukuran",
+    "sizesHint": "Seberapa besar sebuah salinan boleh dibanding durasinya, dalam megabita per menit. Pada 25 MB per menit, film 2 jam berukuran 3 GB. Salinan H.265 dan AV1 yang bagus jauh lebih kecil daripada H.264, jadi masing-masing punya angkanya sendiri. Kosongkan kotak jika tidak ingin ada batas.",
+    "sizesOther": "H.264 dan lainnya",
+    "sizeMin": "Paling sedikit",
+    "sizeMax": "Paling banyak",
+    "sizesNote": "Rilis yang namanya tidak menyebut cara videonya dikemas mengikuti angka H.264, dan judul yang durasinya tidak diketahui tidak diperiksa. Anda tetap bisa memilih sendiri rilis mana pun.",
+    "sizesOn": ", batas ukuran"
   },
   "mediaTypes": {
     "music": {

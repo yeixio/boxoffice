@@ -287,6 +287,7 @@ func (s *Service) MovieFor(ctx context.Context, id int64, ask Ask) (Results, err
 		fix := fixes.of(r)
 		c := s.judge(ctx, r, p, has && !fix, have, blocked)
 		c.kind, c.titleID, c.mode = "movie", m.ID, ask.Mode
+		c.sized(p, m.Runtime)
 		if fix {
 			markFix(&c)
 		}
@@ -404,6 +405,14 @@ func (s *Service) markSearched(ctx context.Context, kind string, id int64, res R
 func (c *Candidate) reject(why string) {
 	c.Accepted = false
 	c.Rejections = append(c.Rejections, why)
+}
+
+// sized turns a release down when it's bigger or smaller, for minutes of
+// running time, than the profile's size limits allow.
+func (c *Candidate) sized(p quality.Profile, minutes int) {
+	if why := p.SizeProblem(c.Title, c.Size, minutes); why != "" {
+		c.reject(why)
+	}
 }
 
 func (s *Service) profile(ctx context.Context, id int) (quality.Profile, error) {

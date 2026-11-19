@@ -1256,7 +1256,14 @@
       "server": "Cel al serverului ({{zone}})",
       "differs": "Acest browser este în {{zone}}.",
       "use": "Folosește {{zone}}"
-    }
+    },
+    "sizes": "Limite de dimensiune",
+    "sizesHint": "Cât de mare poate fi o copie față de durata ei, în megabytes pe minut. La 25 MB pe minut, un film de 2 ore are 3 GB. Copiile bune H.265 și AV1 sunt mult mai mici decât cele H.264, așa că fiecare are propriile numere. Lasă o casetă goală dacă nu vrei limită.",
+    "sizesOther": "H.264 și altele",
+    "sizeMin": "Cel puțin",
+    "sizeMax": "Cel mult",
+    "sizesNote": "Unei lansări al cărei nume nu spune cum este codat videoclipul i se aplică numerele pentru H.264, iar un titlu fără durată cunoscută nu este verificat. Poți alege în continuare singur orice lansare.",
+    "sizesOn": ", limite de dimensiune"
   },
   "mediaTypes": {
     "music": {

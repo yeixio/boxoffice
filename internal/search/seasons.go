@@ -63,6 +63,15 @@ func (s *Service) judgeEpisodes(ctx context.Context, r Release, t store.Series, 
 		return c
 	}
 	c.Pack, c.Episodes = len(eps) == 0, eps
+	if p.Sizes.Any() && t.Runtime > 0 {
+		// A release of several episodes, or of a season, is as long as
+		// all of them.
+		n := len(eps)
+		if c.Pack {
+			n = s.seasonLength(ctx, t.ID, season)
+		}
+		c.sized(p, t.Runtime*n)
+	}
 	c.episodes = episodeCovers(c, p, season, eps, want)
 	if len(c.episodes) == 0 && c.Accepted {
 		seasons := map[int]bool{}
@@ -325,4 +334,20 @@ func bySeason(eps []store.Episode) [][]store.Episode {
 func compactProblems(ps []string) string {
 	slices.Sort(ps)
 	return strings.Join(slices.Compact(ps), "; ")
+}
+
+// seasonLength is how many episodes a season has, or 0 when that can't be
+// told.
+func (s *Service) seasonLength(ctx context.Context, seriesID int64, season int) int {
+	eps, err := s.Store.Episodes(ctx, seriesID)
+	if err != nil {
+		return 0
+	}
+	n := 0
+	for _, e := range eps {
+		if e.Season == season {
+			n++
+		}
+	}
+	return n
 }

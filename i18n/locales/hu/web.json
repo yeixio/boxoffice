@@ -1179,7 +1179,14 @@
       "server": "A kiszolgáló sajátja ({{zone}})",
       "differs": "Ez a böngésző a(z) {{zone}} zónában van.",
       "use": "{{zone}} használata"
-    }
+    },
+    "sizes": "Méretkorlátok",
+    "sizesHint": "Mekkora lehet egy másolat a játékidejéhez képest, megabájt per percben. 25 MB/perc mellett egy 2 órás film 3 GB. A jó H.265- és AV1-másolatok sokkal kisebbek a H.264-eseknél, ezért mindegyiknek saját értékei vannak. Hagyd üresen a mezőt, ha nem kell korlát.",
+    "sizesOther": "H.264 és egyebek",
+    "sizeMin": "Legalább",
+    "sizeMax": "Legfeljebb",
+    "sizesNote": "Arra a kiadásra, amelynek a neve nem árulja el a videó kodekjét, a H.264 értékei vonatkoznak, az ismeretlen játékidejű címet pedig nem ellenőrizzük. Bármelyik kiadást továbbra is kiválaszthatod magad.",
+    "sizesOn": ", méretkorlátok"
   },
   "mediaTypes": {
     "music": {

@@ -1256,7 +1256,14 @@
       "server": "Celui du serveur ({{zone}})",
       "differs": "Ce navigateur est dans le fuseau {{zone}}.",
       "use": "Utiliser {{zone}}"
-    }
+    },
+    "sizes": "Limites de taille",
+    "sizesHint": "La taille qu'une copie peut avoir pour sa durée, en mégaoctets par minute. À 25 Mo par minute, un film de 2 heures fait 3 Go. Les bonnes copies H.265 et AV1 sont bien plus petites que celles en H.264, chacune a donc ses propres chiffres. Laissez une case vide pour ne pas mettre de limite.",
+    "sizesOther": "H.264 et autres",
+    "sizeMin": "Au moins",
+    "sizeMax": "Au plus",
+    "sizesNote": "Une release dont le nom ne dit pas comment la vidéo est encodée suit les chiffres du H.264, et un titre dont la durée n'est pas connue n'est pas vérifié. Vous pouvez toujours choisir vous-même n'importe quelle release.",
+    "sizesOn": ", limites de taille"
   },
   "mediaTypes": {
     "music": {
