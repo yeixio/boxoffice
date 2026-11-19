@@ -195,12 +195,15 @@ func (s *Service) State(ctx context.Context) (State, error) {
 	if err != nil {
 		return State{}, err
 	}
+	// The folder is read with the lock held: read before it, a copy could
+	// finish in between, and its items would be missing from a state that
+	// says nothing is running.
+	s.mu.Lock()
+	defer s.mu.Unlock()
 	entries, err := os.ReadDir(dir)
 	if err != nil {
 		return State{}, err
 	}
-	s.mu.Lock()
-	defer s.mu.Unlock()
 	if s.items == nil {
 		s.items = map[string]*Item{}
 	}
