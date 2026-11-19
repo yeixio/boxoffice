@@ -103,9 +103,11 @@ func Extract(ctx context.Context, a Archive, dir, password string) (Result, erro
 // ExtractWithProgress is Extract, telling progress of how many bytes of
 // how many have been written out.
 func ExtractWithProgress(ctx context.Context, a Archive, dir, password string, progress func(done, total int64)) (Result, error) {
-	if progress != nil {
-		ctx = context.WithValue(ctx, meterKey{}, &meter{tell: progress})
+	if progress == nil {
+		progress = func(int64, int64) {}
 	}
+	room, _ := ctx.Value(roomKey{}).(Room)
+	ctx = context.WithValue(ctx, meterKey{}, &meter{tell: progress, room: room})
 	switch a.Kind {
 	case "rar":
 		return extractRAR(ctx, a, dir, password)
@@ -168,17 +170,46 @@ func (c ctxReader) Read(p []byte) (int, error) {
 	n, err := c.r.Read(p)
 	if m := meterOf(c.ctx); m != nil {
 		m.add(int64(n))
+		if over := m.over(); over != nil {
+			return n, over
+		}
 	}
 	return n, err
 }
 
 type meterKey struct{}
 
+// Room is asked whether the disk has room for need bytes more: before an
+// archive that says how much it holds is written out, and every so often
+// while one is, for what's left of it. An error from it stops the
+// unpacking.
+type Room func(need int64) error
+
+type roomKey struct{}
+
+// WithRoom has the archives extracted with ctx ask room first.
+func WithRoom(ctx context.Context, room Room) context.Context {
+	return context.WithValue(ctx, roomKey{}, room)
+}
+
+// ErrTooBig is an archive that wrote out much more than it said it holds:
+// one made to fill the disk.
+var ErrTooBig = errors.New("the archive holds much more than it says it does, so unpacking it was stopped")
+
+// How much more than it said an archive may write (a tenth and slack), and
+// how often room is asked for while writing.
+const (
+	overSlack = 64 << 20
+	roomEvery = 256 << 20
+)
+
 // meter counts the bytes written out of an archive.
 type meter struct {
 	done, total int64
 	tell        func(done, total int64)
 	last        time.Time
+	room        Room
+	asked       int64
 }
 
 func meterOf(ctx context.Context) *meter {
@@ -186,11 +217,44 @@ func meterOf(ctx context.Context) *meter {
 	return m
 }
 
-func setTotal(ctx context.Context, n int64) {
-	if m := meterOf(ctx); m != nil {
-		m.total = n
-		m.tell(0, n)
+// setTotal notes how much an archive says it holds, and asks room for it.
+func setTotal(ctx context.Context, n int64) error {
+	m := meterOf(ctx)
+	if m == nil {
+		return nil
 	}
+	m.total = n
+	m.tell(0, n)
+	return m.ask(n)
+}
+
+// noRoom is Room's no: unpacking stops there, and no other way of
+// unpacking is tried.
+type noRoom struct{ error }
+
+func (n noRoom) Unwrap() error { return n.error }
+
+func (m *meter) ask(need int64) error {
+	if m.room == nil {
+		return nil
+	}
+	if err := m.room(need); err != nil {
+		return noRoom{err}
+	}
+	return nil
+}
+
+// over says what's wrong with having written this much: more than the
+// archive said it holds, or the disk running out of room.
+func (m *meter) over() error {
+	if m.total > 0 && m.done > m.total+m.total/10+overSlack {
+		return ErrTooBig
+	}
+	if m.done-m.asked >= roomEvery {
+		m.asked = m.done
+		return m.ask(max(m.total-m.done, 0))
+	}
+	return nil
 }
 
 func (m *meter) add(n int64) {
@@ -219,7 +283,7 @@ func extractRAR(ctx context.Context, a Archive, dir, password string) (Result, e
 		}
 	}
 	res, err := decode(ctx, a, dir, password)
-	if err == nil || errors.Is(err, ErrPassword) || ctx.Err() != nil || unreadable(err) {
+	if err == nil || errors.Is(err, ErrPassword) || ctx.Err() != nil || unreadable(err) || errors.Is(err, ErrTooBig) || errors.As(err, new(noRoom)) {
 		return res, err
 	}
 	bin := unrarPath()
@@ -260,15 +324,15 @@ func decodeRAR(ctx context.Context, a Archive, dir, password string) (Result, er
 		opts = append(opts, rardecode.FileSystem(vfs))
 		path = vfs.name(0)
 	}
-	if m := meterOf(ctx); m != nil {
-		if list, err := rardecode.List(path, opts...); err == nil {
-			var total int64
-			for _, f := range list {
-				if !f.IsDir {
-					total += f.UnPackedSize
-				}
+	if list, err := rardecode.List(path, opts...); err == nil {
+		var total int64
+		for _, f := range list {
+			if !f.IsDir {
+				total += f.UnPackedSize
 			}
-			setTotal(ctx, total)
+		}
+		if err := setTotal(ctx, total); err != nil {
+			return Result{}, err
 		}
 	}
 	rc, err := rardecode.OpenReader(path, opts...)
@@ -330,12 +394,14 @@ func extract7z(ctx context.Context, path, dir, password string) (Result, error) 
 		return Result{}, err
 	}
 	defer rc.Close()
-	if meterOf(ctx) != nil {
+	{
 		var total int64
 		for _, f := range rc.File {
 			total += int64(f.UncompressedSize) //nolint:gosec
 		}
-		setTotal(ctx, total)
+		if err := setTotal(ctx, total); err != nil {
+			return Result{}, err
+		}
 	}
 	var res Result
 	for _, f := range rc.File {
@@ -371,12 +437,14 @@ func extractZip(ctx context.Context, path, dir string) (Result, error) {
 		return Result{}, err
 	}
 	defer zr.Close()
-	if meterOf(ctx) != nil {
+	{
 		var total int64
 		for _, f := range zr.File {
 			total += int64(f.UncompressedSize64) //nolint:gosec
 		}
-		setTotal(ctx, total)
+		if err := setTotal(ctx, total); err != nil {
+			return Result{}, err
+		}
 	}
 	var res Result
 	for _, f := range zr.File {

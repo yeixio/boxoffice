@@ -62,17 +62,25 @@ type Engine struct {
 	// waiting says why nothing is downloading though downloads are
 	// queued, when it's the data cap or the news servers' accounts.
 	waiting atomic.Value // string
-	wake    chan struct{}
-	mu      sync.Mutex
-	current *running           // the download being fetched, if any
-	working map[int64]*running // every download in progress, fetching or after
-	srv     *servers
-	post    chan struct{} // one download is checked and unpacked at a time
+	// roomWait is that reason when it's the disk being out of room.
+	roomWait atomic.Value // string
+	wake     chan struct{}
+	mu       sync.Mutex
+	current  *running           // the download being fetched, if any
+	working  map[int64]*running // every download in progress, fetching or after
+	srv      *servers
+	post     chan struct{} // one download is checked and unpacked at a time
 	// again holds downloads to check and unpack again without fetching.
 	again map[int64]bool
 	// shareTries counts, by download, the tries since the downloads
 	// folder last stopped answering mid-download.
 	shareTries map[int64]int
+	// unpackNeed is, by download, the room unpacking it takes, for ones
+	// stopped because the disk hadn't that much; they wait in the queue
+	// until it has.
+	unpackNeed map[int64]int64
+	// Free says how much room a folder's disk has; nil asks the system.
+	Free func(dir string) (int64, bool)
 	// forced holds downloads moved to the top while another was
 	// downloading: the one downloading makes way for them, and carries on
 	// once they're done.
@@ -134,6 +142,7 @@ func (e *Engine) init() {
 		e.working = map[int64]*running{}
 		e.again = map[int64]bool{}
 		e.shareTries = map[int64]int{}
+		e.unpackNeed = map[int64]int64{}
 		e.forced = map[int64]bool{}
 		e.post = make(chan struct{}, 1)
 	})
@@ -709,6 +718,13 @@ func (e *Engine) saveData(ctx context.Context) {
 
 // Waiting says why queued downloads aren't starting, when it's the data
 // cap or the news servers' accounts; "" otherwise.
+// RoomWait says why queued downloads aren't starting when it's the
+// downloads folder's disk being out of room, for Health; "" otherwise.
+func (e *Engine) RoomWait() string {
+	v, _ := e.roomWait.Load().(string)
+	return v
+}
+
 func (e *Engine) Waiting() string {
 	v, _ := e.waiting.Load().(string)
 	return v
@@ -878,6 +894,7 @@ func (e *Engine) startNext(ctx context.Context, wg *sync.WaitGroup) {
 	busy := e.current != nil
 	e.mu.Unlock()
 	e.waiting.Store("")
+	e.roomWait.Store("")
 	if held && set.Enabled && !set.Paused {
 		e.waiting.Store(sp.Why())
 	}
@@ -926,6 +943,14 @@ func (e *Engine) startNext(ctx context.Context, wg *sync.WaitGroup) {
 	}
 	if !e.folderOK.Swap(true) {
 		e.resumeFolderWaits(ctx)
+	}
+	// So does a disk without room for it: the next one waits until there
+	// is, rather than fill the disk and fail.
+	why := e.noRoom(set, d)
+	e.roomWait.Store(why)
+	if why != "" {
+		e.waiting.Store(why)
+		return
 	}
 	list, err := e.Store.UsenetServers(ctx)
 	if err != nil {
@@ -1015,12 +1040,16 @@ func (e *Engine) process(ctx context.Context, r *running, d store.Download, srv 
 		}
 	}
 	bg := context.WithoutCancel(ctx)
+	err = roomTrouble(err)
 	if e.shareRetry(ctx, r, &d, err) {
 		return
 	}
 	e.Store.SaveDownloadProgress(bg, d)
 	switch cause := context.Cause(ctx); {
 	case err == nil:
+		e.mu.Lock()
+		delete(e.unpackNeed, d.ID)
+		e.mu.Unlock()
 		if d.ImportedTo != "" {
 			e.notify(bg, d, store.EventImported, "")
 		} else {
@@ -1041,6 +1070,19 @@ func (e *Engine) process(ctx context.Context, r *running, d store.Download, srv 
 	case errors.Is(cause, errRemoved):
 	case errors.Is(cause, context.Canceled):
 		// Box Office is stopping; it carries on at the next start.
+	case errors.As(err, new(roomError)):
+		// The disk is out of room, or unpacking would have left too
+		// little: nothing is wrong with the release. It goes back in the
+		// queue with what it has, and the queue waits until there's room.
+		var re roomError
+		errors.As(err, &re)
+		e.mu.Lock()
+		e.unpackNeed[d.ID] = re.need
+		e.mu.Unlock()
+		e.Log.Warn("download waits: the downloads folder's disk is out of room", "name", d.Name, "id", d.ID, "err", err)
+		if cur, _ := e.Store.Download(bg, d.ID); cur.Status != store.DownloadPaused {
+			e.Store.SetDownloadStatus(bg, d.ID, store.DownloadQueued, "")
+		}
 	case errors.As(err, new(localError)):
 		// Box Office's own folder trouble, not the release's: it waits,
 		// and nothing is blocked.

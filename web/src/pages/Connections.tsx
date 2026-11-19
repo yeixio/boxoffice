@@ -89,6 +89,16 @@ export function DownloadSettings() {
           busy={save.isPending}
           onSave={(v) => save.mutate({ quarantineDays: v })}
         />
+        <NumberField
+          label={t('conn.dl.keepFree')}
+          hint={t('conn.dl.keepFreeHint')}
+          value={s.keepFree}
+          min={0}
+          max={100000}
+          suffix={t('conn.cap.gb')}
+          busy={save.isPending}
+          onSave={(v) => save.mutate({ keepFree: v })}
+        />
         <Field
           label={t('conn.dl.speed')}
           hint={

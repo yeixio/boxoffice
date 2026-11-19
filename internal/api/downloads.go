@@ -382,10 +382,16 @@ func (s *Server) clearSpeedOverride(w http.ResponseWriter, r *http.Request) erro
 }
 
 func (s *Server) saveDownloadSettings(w http.ResponseWriter, r *http.Request) error {
-	var in downloader.Settings
-	if err := readJSON(r, &in); err != nil {
+	// Keep free is its own field, so a page open since before the setting
+	// was there, which doesn't send it, leaves it as it was.
+	var body struct {
+		downloader.Settings
+		KeepFree *int `json:"keepFree"`
+	}
+	if err := readJSON(r, &body); err != nil {
 		return err
 	}
+	in := body.Settings
 	ctx := r.Context()
 	if in.SpeedLimit < 0 {
 		in.SpeedLimit = 0
@@ -394,6 +400,10 @@ func (s *Server) saveDownloadSettings(w http.ResponseWriter, r *http.Request) er
 	cur, err := downloader.LoadSettings(ctx, s.Store)
 	if err != nil {
 		return err
+	}
+	in.KeepFree = cur.KeepFree
+	if body.KeepFree != nil {
+		in.KeepFree = min(max(*body.KeepFree, 0), 100000)
 	}
 	if in.Enabled && !cur.Enabled {
 		if err := s.Downloads.CheckFolder(ctx); err != nil {
@@ -460,4 +470,13 @@ func (s *Server) grabRelease(w http.ResponseWriter, r *http.Request) error {
 		return errorf(http.StatusBadRequest, err.Error())
 	}
 	return writeJSON(w, http.StatusCreated, d)
+}
+
+// roomWait is why downloads wait for room on the downloads folder's disk,
+// for Health.
+func (s *Server) roomWait() string {
+	if s.Downloads == nil {
+		return ""
+	}
+	return s.Downloads.RoomWait()
 }

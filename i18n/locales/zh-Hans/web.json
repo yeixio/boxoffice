@@ -1147,7 +1147,9 @@
       "speedHint": "留 0 表示不限速。宽带以 Mbit/s 计：除以 8，所以 100 Mbit/s 的宽带最多约 12 MB/s。",
       "folder": "下载保存到 <path>{{path}}</path>。要使用其他文件夹，请在服务器上设置 BOXOFFICE_DOWNLOADS_DIR。",
       "folderFree": "下载保存到 <path>{{path}}</path>（可用 {{free}}）。要使用其他文件夹，请在服务器上设置 BOXOFFICE_DOWNLOADS_DIR。",
-      "speedSchedule": "按时间段更改。"
+      "speedSchedule": "按时间段更改。",
+      "keepFree": "保留空间",
+      "keepFreeHint": "下载文件夹所在磁盘上要留出的空间。如果下载并解压后剩余空间会少于这个数,下载会等待,有空间后自动继续。填 0 则不检查。"
     },
     "days": "天",
     "cap": {

@@ -59,7 +59,7 @@ func (s *Server) problems(ctx context.Context) int {
 	}
 	ctx, cancel := context.WithTimeout(ctx, 20*time.Second)
 	defer cancel()
-	c := &health.Checker{Store: s.Store, Backups: s.Backups, TMDBKey: func(ctx context.Context) string { return s.Catalog.TMDB(ctx).Key }}
+	c := &health.Checker{Store: s.Store, Backups: s.Backups, TMDBKey: func(ctx context.Context) string { return s.Catalog.TMDB(ctx).Key }, RoomWait: s.roomWait}
 	n := 0
 	for _, i := range c.Check(ctx) {
 		if i.Level == "error" || i.Level == "warning" {

@@ -115,3 +115,37 @@ func TestTarget(t *testing.T) {
 		}
 	}
 }
+
+// Room is asked before an archive is written out, with what it holds; a no
+// stops it with nothing written. One that writes much more than it said is
+// stopped too.
+func TestRoom(t *testing.T) {
+	dir := copyTestdata(t, "plain.zip", "multi.part1.rar", "multi.part2.rar", "multi.part3.rar")
+	full := errors.New("no room")
+	for _, a := range []Archive{{Path: filepath.Join(dir, "plain.zip"), Kind: "zip"}, Find(dir, []string{"multi.part1.rar", "multi.part2.rar", "multi.part3.rar"})[0]} {
+		var asked int64
+		ctx := WithRoom(context.Background(), func(need int64) error { asked = need; return full })
+		if _, err := Extract(ctx, a, dir, ""); !errors.Is(err, full) || asked == 0 {
+			t.Fatalf("%s: %v, asked for %d", a.Kind, err, asked)
+		}
+		holds := map[string]string{"zip": "readme.txt", "rar": "movie.mkv"}[a.Kind]
+		if _, err := os.Stat(filepath.Join(dir, holds)); err == nil {
+			t.Fatalf("%s was written out anyway", a.Kind)
+		}
+		ctx = WithRoom(context.Background(), func(int64) error { return nil })
+		if _, err := Extract(ctx, a, dir, ""); err != nil {
+			t.Fatalf("%s with room: %v", a.Kind, err)
+		}
+		if _, err := os.Stat(filepath.Join(dir, holds)); err != nil {
+			t.Fatalf("%s with room: %v", a.Kind, err)
+		}
+	}
+	m := &meter{total: 100 << 20, done: 100<<20 + 10<<20 + overSlack}
+	if err := m.over(); err != nil {
+		t.Fatalf("within the slack: %v", err)
+	}
+	m.done++
+	if err := m.over(); !errors.Is(err, ErrTooBig) {
+		t.Fatalf("past the slack: %v", err)
+	}
+}

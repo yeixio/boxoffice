@@ -42,7 +42,10 @@ type Checker struct {
 	Backups *backup.Manager
 	// TMDBKey is the key in use, "" for none.
 	TMDBKey func(ctx context.Context) string
-	now     func() time.Time
+	// RoomWait says why downloads are waiting for room on the downloads
+	// folder's disk, "" when they aren't.
+	RoomWait func() string
+	now      func() time.Time
 }
 
 // Thresholds.
@@ -63,7 +66,7 @@ func (c *Checker) clock() time.Time {
 // itself.
 func (c *Checker) Check(ctx context.Context) []Issue {
 	var out []Issue
-	for _, check := range []func(context.Context) ([]Issue, error){c.tmdb, c.rootFolders, c.files, c.connections, c.backups, c.jobs, c.quarantine, c.indexers, c.data} {
+	for _, check := range []func(context.Context) ([]Issue, error){c.tmdb, c.rootFolders, c.files, c.connections, c.backups, c.jobs, c.quarantine, c.indexers, c.data, c.room} {
 		issues, err := check(ctx)
 		if err != nil {
 			out = append(out, Issue{ID: "check-failed", Level: "warning", Title: "A health check couldn't run", Detail: err.Error()})
@@ -368,4 +371,25 @@ func quarantinedTitle(n int) string {
 		return "A download was quarantined"
 	}
 	return fmt.Sprintf("%d downloads were quarantined", n)
+}
+
+// room tells of downloads waiting because the downloads folder's disk is
+// nearly full.
+func (c *Checker) room(context.Context) ([]Issue, error) {
+	if c.RoomWait == nil {
+		return nil, nil
+	}
+	why := c.RoomWait()
+	if why == "" {
+		return nil, nil
+	}
+	return []Issue{{
+		ID: "downloads-room", Level: "warning", Title: "Downloads are waiting for room",
+		Detail: why,
+		Steps: []string{
+			"Free some space on the disk the downloads folder is on: finished downloads that haven't gone into the library, and the quarantine, are on the Downloads page.",
+			"Or lower Keep free in Settings, under Downloads. Nothing has failed, and downloads carry on by themselves once there's room.",
+		},
+		Link: &Link{To: "/downloads", Label: "Open Downloads"},
+	}}, nil
 }

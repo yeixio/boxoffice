@@ -1147,7 +1147,9 @@
       "speedHint": "留 0 表示不限速。網路方案以 Mbit/s 計：除以 8，所以 100 Mbit/s 的方案最多約 12 MB/s。",
       "folder": "下載儲存到 <path>{{path}}</path>。要使用其他資料夾，請在伺服器上設定 BOXOFFICE_DOWNLOADS_DIR。",
       "folderFree": "下載儲存到 <path>{{path}}</path>（可用 {{free}}）。要使用其他資料夾，請在伺服器上設定 BOXOFFICE_DOWNLOADS_DIR。",
-      "speedSchedule": "依時段變更。"
+      "speedSchedule": "依時段變更。",
+      "keepFree": "保留空間",
+      "keepFreeHint": "下載資料夾所在磁碟上要留出的空間。如果下載並解壓縮後剩餘空間會少於這個數,下載會等待,有空間後自動繼續。填 0 則不檢查。"
     },
     "days": "天",
     "cap": {

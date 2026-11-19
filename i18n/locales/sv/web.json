@@ -1224,7 +1224,9 @@
       "speedHint": "Lämna 0 för ingen gräns. Bredband säljs i Mbit/s: dela med 8, så 100 Mbit/s ger runt 12 MB/s.",
       "folder": "Nedladdningar hamnar i <path>{{path}}</path>. Sätt BOXOFFICE_DOWNLOADS_DIR på servern för att använda en annan mapp.",
       "folderFree": "Nedladdningar hamnar i <path>{{path}}</path> ({{free}} ledigt). Sätt BOXOFFICE_DOWNLOADS_DIR på servern för att använda en annan mapp.",
-      "speedSchedule": "Ändra den efter tid på dygnet."
+      "speedSchedule": "Ändra den efter tid på dygnet.",
+      "keepFree": "Håll ledigt",
+      "keepFreeHint": "Utrymme som ska finnas kvar på disken med nedladdningsmappen. En nedladdning väntar om hämtning och uppackning skulle lämna mindre, och fortsätter av sig själv när det finns plats. 0 kontrollerar inte."
     },
     "days": "dagar",
     "cap": {

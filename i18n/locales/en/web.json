@@ -1224,7 +1224,9 @@
       "speedHint": "Leave it at 0 for no limit. Internet plans are sold in Mbit/s: divide by 8, so a 100 Mbit/s plan tops out near 12 MB/s.",
       "folder": "Downloads go to <path>{{path}}</path>. Set BOXOFFICE_DOWNLOADS_DIR on the server to use another folder.",
       "folderFree": "Downloads go to <path>{{path}}</path> ({{free}} free). Set BOXOFFICE_DOWNLOADS_DIR on the server to use another folder.",
-      "speedSchedule": "Change it by time of day."
+      "speedSchedule": "Change it by time of day.",
+      "keepFree": "Keep free",
+      "keepFreeHint": "Room to leave on the downloads folder's disk. A download waits when fetching and unpacking it would leave less, and carries on by itself once there's room. 0 doesn't check."
     },
     "days": "days",
     "cap": {

@@ -28,7 +28,14 @@ const (
 	// SettingQuarantineDays deletes what's been in quarantine this many
 	// days; unset or 0, nothing there is deleted but by hand.
 	SettingQuarantineDays = "downloads_quarantine_days"
+	// SettingKeepFree is how many GB to keep free on the downloads
+	// folder's disk; unset is DefaultKeepFree, and 0 doesn't check.
+	SettingKeepFree = "downloads_keep_free_gb"
 )
+
+// DefaultKeepFree is how many GB are kept free until someone says
+// otherwise.
+const DefaultKeepFree = 5
 
 // Settings say what the downloader may do.
 type Settings struct {
@@ -42,6 +49,10 @@ type Settings struct {
 	// QuarantineDays deletes quarantined files after this many days;
 	// 0 keeps them until deleted by hand.
 	QuarantineDays int `json:"quarantineDays"`
+	// KeepFree is how many GB to keep free on the downloads folder's
+	// disk: a download doesn't start, and an archive isn't unpacked,
+	// when that would leave less. 0 doesn't check.
+	KeepFree int `json:"keepFree"`
 }
 
 // LoadSettings reads the settings. With none saved, everything is off,
@@ -74,6 +85,13 @@ func LoadSettings(ctx context.Context, st *store.Store) (Settings, error) {
 		return s, err
 	}
 	s.QuarantineDays, _ = strconv.Atoi(v)
+	if v, err = get(SettingKeepFree); err != nil {
+		return s, err
+	}
+	s.KeepFree = DefaultKeepFree
+	if n, err := strconv.Atoi(v); err == nil && n >= 0 {
+		s.KeepFree = n
+	}
 	return s, nil
 }
 
@@ -94,7 +112,7 @@ func SaveSettings(ctx context.Context, st *store.Store, s Settings) error {
 		days = strconv.Itoa(s.QuarantineDays)
 	}
 	for k, v := range map[string]string{SettingEnabled: flag(s.Enabled), SettingPaused: flag(s.Paused), SettingImport: flag(s.Import), SettingSpeedLimit: limit,
-		SettingKeepFailed: flag(!s.DeleteFailed), SettingQuarantineDays: days} {
+		SettingKeepFailed: flag(!s.DeleteFailed), SettingQuarantineDays: days, SettingKeepFree: strconv.Itoa(max(s.KeepFree, 0))} {
 		if err := st.SetSetting(ctx, k, v); err != nil {
 			return err
 		}

@@ -1224,7 +1224,9 @@
       "speedHint": "Jätä 0, jos et halua rajaa. Liittymät myydään Mbit/s-nopeuksina: jaa 8:lla, joten 100 Mbit/s on noin 12 MB/s.",
       "folder": "Lataukset menevät kansioon <path>{{path}}</path>. Aseta palvelimella BOXOFFICE_DOWNLOADS_DIR käyttääksesi toista kansiota.",
       "folderFree": "Lataukset menevät kansioon <path>{{path}}</path> ({{free}} vapaana). Aseta palvelimella BOXOFFICE_DOWNLOADS_DIR käyttääksesi toista kansiota.",
-      "speedSchedule": "Muuta sitä kellonajan mukaan."
+      "speedSchedule": "Muuta sitä kellonajan mukaan.",
+      "keepFree": "Pidä vapaana",
+      "keepFreeHint": "Tila, joka jätetään latauskansion levylle. Lataus odottaa, jos sen hakeminen ja purkaminen jättäisi vähemmän, ja jatkuu itsestään, kun tilaa on. 0 ei tarkista."
     },
     "days": "päivää",
     "cap": {

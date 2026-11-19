@@ -1147,7 +1147,9 @@
       "speedHint": "Biarkan 0 untuk tiada had. Pelan internet dijual dalam Mbit/s: bahagi dengan 8, jadi pelan 100 Mbit/s mencapai kira-kira 12 MB/s.",
       "folder": "Muat turun pergi ke <path>{{path}}</path>. Tetapkan BOXOFFICE_DOWNLOADS_DIR pada pelayan untuk menggunakan folder lain.",
       "folderFree": "Muat turun pergi ke <path>{{path}}</path> ({{free}} kosong). Tetapkan BOXOFFICE_DOWNLOADS_DIR pada pelayan untuk menggunakan folder lain.",
-      "speedSchedule": "Tukar mengikut waktu."
+      "speedSchedule": "Tukar mengikut waktu.",
+      "keepFree": "Kekalkan ruang kosong",
+      "keepFreeHint": "Ruang yang ditinggalkan pada cakera folder muat turun. Muat turun menunggu jika mengambil dan menyahmampatnya akan meninggalkan kurang daripada itu, dan bersambung sendiri apabila ada ruang. 0 tidak memeriksa."
     },
     "days": "hari",
     "cap": {

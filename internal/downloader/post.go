@@ -249,6 +249,7 @@ func isPar2(name string) (bool, int) {
 func (e *Engine) unpack(ctx context.Context, r *running, d *store.Download, job *fetchJob) error {
 	files := listFiles(job.dir)
 	archives := unpack.Find(job.dir, files)
+	ctx = unpack.WithRoom(ctx, e.unpackRoom(ctx))
 	var volumes []string
 	for i, a := range archives {
 		if len(archives) > 1 {
@@ -257,6 +258,9 @@ func (e *Engine) unpack(ctx context.Context, r *running, d *store.Download, job 
 		res, err := unpack.ExtractWithProgress(ctx, a, job.dir, d.Password, r.step)
 		if errors.Is(err, unpack.ErrPassword) {
 			return lockedError(d.Password != "")
+		}
+		if errors.Is(err, unpack.ErrTooBig) {
+			return hopeless(fmt.Errorf("unpack %s: %w. Archives like this are made to fill the disk; try another release", filepath.Base(a.Path), err))
 		}
 		if err != nil {
 			return fmt.Errorf("unpack %s: %w", filepath.Base(a.Path), err)

@@ -1224,7 +1224,9 @@
       "speedHint": "Sınır olmaması için 0 bırakın. İnternet paketleri Mbit/s ile satılır: 8'e bölün, yani 100 Mbit/s yaklaşık 12 MB/s eder.",
       "folder": "İndirmeler <path>{{path}}</path> içine gider. Başka bir klasör kullanmak için sunucuda BOXOFFICE_DOWNLOADS_DIR ayarlayın.",
       "folderFree": "İndirmeler <path>{{path}}</path> içine gider ({{free}} boş). Başka bir klasör kullanmak için sunucuda BOXOFFICE_DOWNLOADS_DIR ayarlayın.",
-      "speedSchedule": "Günün saatine göre değiştirin."
+      "speedSchedule": "Günün saatine göre değiştirin.",
+      "keepFree": "Boş bırak",
+      "keepFreeHint": "İndirmeler klasörünün diskinde boş bırakılacak alan. Bir indirme, alınması ve açılması daha azını bırakacaksa bekler, yer açılınca kendiliğinden sürer. 0 denetlemez."
     },
     "days": "gün",
     "cap": {

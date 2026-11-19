@@ -1224,7 +1224,9 @@
       "speedHint": "Lad den stå på 0 for ingen grænse. Internet sælges i Mbit/s: del med 8, så 100 Mbit/s giver omkring 12 MB/s.",
       "folder": "Downloads havner i <path>{{path}}</path>. Sæt BOXOFFICE_DOWNLOADS_DIR på serveren for at bruge en anden mappe.",
       "folderFree": "Downloads havner i <path>{{path}}</path> ({{free}} ledig). Sæt BOXOFFICE_DOWNLOADS_DIR på serveren for at bruge en anden mappe.",
-      "speedSchedule": "Skift den efter tid på døgnet."
+      "speedSchedule": "Skift den efter tid på døgnet.",
+      "keepFree": "Hold fri",
+      "keepFreeHint": "Plads, der skal være tilbage på disken med downloadmappen. En download venter, hvis hentning og udpakning ville efterlade mindre, og fortsætter af sig selv, når der er plads. 0 tjekker ikke."
     },
     "days": "dage",
     "cap": {
