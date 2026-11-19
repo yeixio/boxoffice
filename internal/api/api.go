@@ -34,6 +34,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/homemedia"
 	"github.com/yeixio/boxoffice/internal/importer"
 	"github.com/yeixio/boxoffice/internal/libscan"
+	"github.com/yeixio/boxoffice/internal/lists"
 	"github.com/yeixio/boxoffice/internal/migrate"
 	"github.com/yeixio/boxoffice/internal/music"
 	"github.com/yeixio/boxoffice/internal/portal"
@@ -98,6 +99,8 @@ type Server struct {
 	Ereaders *ereader.Service
 	// Subtitles fetches subtitles; nil makes one that only answers.
 	Subtitles *subtitles.Service
+	// Lists follows lists kept elsewhere; nil makes one that only answers.
+	Lists *lists.Service
 	// Restart stops Box Office cleanly and starts it again, for the
 	// Restart button in Settings; nil means it can't.
 	Restart func()
@@ -107,6 +110,7 @@ type Server struct {
 
 	ereaderOnce  sync.Once
 	subtitleOnce sync.Once
+	listOnce     sync.Once
 	started      time.Time
 	failures     sync.Map // username -> *failure
 	healthCount  healthCount
@@ -300,6 +304,7 @@ func (s *Server) Handler() http.Handler {
 	routes = append(routes, s.problemRoutes()...)
 	routes = append(routes, s.qualityCheckRoutes()...)
 	routes = append(routes, s.subtitleRoutes()...)
+	routes = append(routes, s.listRoutes()...)
 	routes = append(routes, s.portalRoutes()...)
 	routes = append(routes, s.gameRoutes()...)
 	routes = append(routes, s.homeRoutes()...)

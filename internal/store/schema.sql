@@ -711,3 +711,39 @@ CREATE TABLE IF NOT EXISTS subtitle_usage (
 	downloads INTEGER NOT NULL DEFAULT 0,
 	PRIMARY KEY (day, provider)
 );
+
+-- Lists followed from elsewhere (a TMDB list, a Trakt watchlist or list, a
+-- Plex watchlist): what's on them is added here by itself, or waits to be
+-- said yes to.
+CREATE TABLE IF NOT EXISTS lists (
+	id            INTEGER PRIMARY KEY AUTOINCREMENT,
+	name          TEXT NOT NULL,
+	source        TEXT NOT NULL,              -- tmdb, trakt or plex
+	address       TEXT NOT NULL,              -- as typed: the list's page or feed
+	enabled       INTEGER NOT NULL DEFAULT 1,
+	ask           INTEGER NOT NULL DEFAULT 0, -- titles wait for a yes
+	search        INTEGER NOT NULL DEFAULT 1, -- look for a title once it's added
+	movies        INTEGER NOT NULL DEFAULT 1,
+	shows         INTEGER NOT NULL DEFAULT 1,
+	movie_profile INTEGER NOT NULL DEFAULT 0, -- 0: the first profile
+	movie_root    TEXT NOT NULL DEFAULT '',   -- '': the first root folder
+	show_profile  INTEGER NOT NULL DEFAULT 0,
+	show_root     TEXT NOT NULL DEFAULT '',
+	checked_at    BIGINT NOT NULL DEFAULT 0,
+	last_error    TEXT NOT NULL DEFAULT '',
+	added_at      BIGINT NOT NULL
+);
+
+-- Every title a followed list has had, and what became of it, so one that
+-- was removed here isn't added again.
+CREATE TABLE IF NOT EXISTS list_items (
+	list_id BIGINT NOT NULL,
+	kind    TEXT NOT NULL,              -- movie or series
+	tmdb_id BIGINT NOT NULL,
+	title   TEXT NOT NULL,
+	year    INTEGER NOT NULL DEFAULT 0,
+	state   TEXT NOT NULL,              -- waiting, added, had, removed, skipped or failed
+	note    TEXT NOT NULL DEFAULT '',   -- why adding it failed
+	seen_at BIGINT NOT NULL,
+	PRIMARY KEY (list_id, kind, tmdb_id)
+);
