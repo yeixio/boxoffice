@@ -2767,5 +2767,18 @@
     "keepProfile": "Tavallinen profiili",
     "picked": "Sääntö {{name}} valitsi tässä kansion ja profiilin. Voit muuttaa niitä.",
     "moveUp": "Siirrä ylös"
+  },
+  "phone": {
+    "topics": {
+      "ready": "Nimike saapui kirjastoon",
+      "requests": "Joku pyysi nimikettä tai ilmoitti ongelmasta",
+      "problems": "Jokin meni vikaan: lataus epäonnistui tai tuli hälytys"
+    },
+    "title": "Puhelinsovellus ja ilmoitukset",
+    "sub": "Box Officen voi asentaa puhelimeen tai tietokoneeseen sovelluksen tavoin, ja se voi kertoa tälle laitteelle, mitä tapahtuu, kun se on suljettuna.",
+    "about": "Mistä haluat kuulla",
+    "devices": "Laitteet, jotka saavat ilmoituksia",
+    "thisOne": "Tämä laite",
+    "unnamed": "Selain"
   }
 }

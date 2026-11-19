@@ -2644,5 +2644,18 @@
     "keepProfile": "平常的設定檔",
     "picked": "規則「{{name}}」選了這裡的資料夾和設定檔。你可以更改。",
     "moveUp": "上移"
+  },
+  "phone": {
+    "topics": {
+      "ready": "有影片進入了媒體庫",
+      "requests": "有人請求了影片或回報了問題",
+      "problems": "出了問題：下載失敗，或有警示"
+    },
+    "title": "手機 App 與通知",
+    "sub": "Box Office 可以像 App 一樣安裝到手機或電腦上，並在關閉時把發生的事情告訴這台裝置。",
+    "about": "想收到哪些通知",
+    "devices": "接收通知的裝置",
+    "thisOne": "這台裝置",
+    "unnamed": "瀏覽器"
   }
 }

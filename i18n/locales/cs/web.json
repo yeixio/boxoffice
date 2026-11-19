@@ -3013,5 +3013,18 @@
     "keepProfile": "Obvyklý profil",
     "picked": "Složku a profil zde vybralo pravidlo {{name}}. Můžete je změnit.",
     "moveUp": "Posunout nahoru"
+  },
+  "phone": {
+    "topics": {
+      "ready": "Titul dorazil do knihovny",
+      "requests": "Někdo požádal o titul nebo nahlásil problém",
+      "problems": "Něco se pokazilo: stahování selhalo nebo přišlo upozornění"
+    },
+    "title": "Aplikace v telefonu a oznámení",
+    "sub": "Box Office lze nainstalovat do telefonu nebo počítače jako aplikaci a může tomuto zařízení dávat vědět, co se děje, i když je zavřený.",
+    "about": "O čem chcete vědět",
+    "devices": "Zařízení, která dostávají oznámení",
+    "thisOne": "Toto zařízení",
+    "unnamed": "Prohlížeč"
   }
 }

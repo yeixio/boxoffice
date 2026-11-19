@@ -135,6 +135,8 @@
     "new": "Nova senha",
     "changed": "Alterada. Você saiu em todos os outros lugares.",
     "changeButton": "Alterar senha",
-    "signOut": "Sair"
+    "signOut": "Sair",
+    "notify": "Notificações",
+    "notifyHint": "Saiba neste dispositivo quando algo que você pediu for aprovado, recusado ou estiver pronto para assistir."
   }
 }

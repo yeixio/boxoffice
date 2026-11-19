@@ -57,5 +57,20 @@
     "title": "Hiba történt ezen az oldalon",
     "body": "A Box Office többi része továbbra is működik. Az újratöltés általában megoldja. Ha újra előfordul, mellékeld az alábbi szöveget a hibajelentéshez.",
     "reload": "Oldal újratöltése"
+  },
+  "push": {
+    "install": "Telepítés alkalmazásként",
+    "installed": "Telepítve van ezen az eszközön.",
+    "installApple": "iPhone-on vagy iPaden nyisd meg ezt az oldalt Safariban, koppints a Megosztás gombra, majd a Főképernyőhöz adás lehetőségre.",
+    "installMenu": "A telepítéshez nyisd meg a böngésző menüjét, és válaszd a Telepítés vagy a Hozzáadás a kezdőképernyőhöz lehetőséget.",
+    "thisDevice": "Értesítések küldése erre az eszközre",
+    "test": "Próba küldése",
+    "testSent": "Elküldve. Egy pillanat múlva meg kell jelennie.",
+    "why": {
+      "insecure": "Az értesítések csak akkor működnek, ha ez az oldal https-en keresztül van megnyitva. Ez sima http-n lett megnyitva.",
+      "apple": "iPhone-on vagy iPaden az értesítések telepítés után működnek: nyisd meg ezt az oldalt Safariban, koppints a Megosztás gombra, majd a Főképernyőhöz adás lehetőségre. Utána kapcsold be őket itt, a telepített alkalmazásban.",
+      "unsupported": "Ez a böngésző nem tud értesítéseket fogadni.",
+      "blocked": "Az értesítések le vannak tiltva ennél a webhelynél a böngészőben. Engedélyezd őket a böngésző webhelybeállításaiban, majd kapcsold be ezt újra."
+    }
   }
 }

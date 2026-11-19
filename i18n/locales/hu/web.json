@@ -2767,5 +2767,18 @@
     "keepProfile": "A szokásos profil",
     "picked": "A(z) {{name}} szabály választotta itt a mappát és a profilt. Megváltoztathatod őket.",
     "moveUp": "Feljebb"
+  },
+  "phone": {
+    "topics": {
+      "ready": "Egy cím megérkezett a könyvtárba",
+      "requests": "Valaki kért egy címet, vagy hibát jelentett",
+      "problems": "Valami elromlott: nem sikerült egy letöltés, vagy riasztás érkezett"
+    },
+    "title": "Telefonos alkalmazás és értesítések",
+    "sub": "A Box Office alkalmazásként telepíthető telefonra vagy számítógépre, és szólni tud ennek az eszköznek arról, ami történik, miközben be van zárva.",
+    "about": "Miről szeretnél értesülni",
+    "devices": "Értesítést kapó eszközök",
+    "thisOne": "Ez az eszköz",
+    "unnamed": "Egy böngésző"
   }
 }

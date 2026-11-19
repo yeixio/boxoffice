@@ -9,6 +9,8 @@ import { formatLocale } from '../i18n'
 import { LanguageMenu, LanguagePicker } from '../LanguagePicker'
 import { LanguageSync } from '../i18n/sync'
 import { PageBoundary, SkipLink } from '../Broken'
+import { Install, ThisDevice } from '../Notify'
+import { unsubscribe, usePush } from '../push'
 import { Button, Empty, ErrorNote, Field, Input, Modal, Poster, Select, Spinner } from '../ui'
 import { onMemberSignedOut, papi, pget, ppost, problemLabel, problems, stateText, type DiscoverHome, type DiscoverPage, type DiscoverTitle, type Issue, type Member, type Problem, type Request, type Site } from './papi'
 
@@ -794,6 +796,34 @@ function MyProblems() {
   )
 }
 
+// DeviceNotices installs the request site as an app, and turns on news
+// about the person's own requests for this device.
+function DeviceNotices() {
+  const { t } = useTranslation('request')
+  const qc = useQueryClient()
+  const info = useQuery({ queryKey: ['portal', 'push'], queryFn: () => pget<{ publicKey: string; endpoints: string[] }>('/push') })
+  const reload = () => qc.invalidateQueries({ queryKey: ['portal', 'push'] })
+  const push = usePush()
+  return (
+    <div className="flex flex-col gap-3">
+      <h3 className="font-display font-semibold">{t('account.notify')}</h3>
+      <p className="text-sm text-muted">{t('account.notifyHint')}</p>
+      <ErrorNote error={info.error} />
+      {info.data && (
+        <ThisDevice
+          push={push}
+          publicKey={info.data.publicKey}
+          on={(e) => info.data.endpoints.includes(e)}
+          save={(sub) => ppost('/push', sub).then(reload)}
+          remove={(endpoint) => ppost('/push/remove', { endpoint }).then(reload)}
+          test={(endpoint) => ppost('/push/test', { endpoint }).finally(reload)}
+        />
+      )}
+      {push.why !== 'apple' && <Install />}
+    </div>
+  )
+}
+
 function Account({ member, onClose }: { member: Member; onClose: () => void }) {
   const { t } = useTranslation('request')
   const qc = useQueryClient()
@@ -820,6 +850,13 @@ function Account({ member, onClose }: { member: Member; onClose: () => void }) {
   const [error, setError] = useState<unknown>(null)
   const [done, setDone] = useState(false)
   const signOut = async () => {
+    // Whoever signs in here next shouldn't get this person's news.
+    try {
+      const endpoint = await unsubscribe()
+      if (endpoint) await ppost('/push/remove', { endpoint })
+    } catch {
+      // Signing out matters more.
+    }
     await ppost('/logout')
     qc.clear()
     qc.invalidateQueries({ queryKey: ['portal'] })
@@ -865,6 +902,7 @@ function Account({ member, onClose }: { member: Member; onClose: () => void }) {
             </div>
           </form>
         )}
+        <DeviceNotices />
         <div className="flex justify-end border-t border-line pt-4">
           <Button variant="ghost" onClick={signOut}>
             <LogOut className="size-4" aria-hidden /> {t('account.signOut')}

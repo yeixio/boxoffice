@@ -135,6 +135,8 @@
     "new": "Uusi salasana",
     "changed": "Vaihdettu. Sinut on kirjattu ulos kaikkialta muualta.",
     "changeButton": "Vaihda salasana",
-    "signOut": "Kirjaudu ulos"
+    "signOut": "Kirjaudu ulos",
+    "notify": "Ilmoitukset",
+    "notifyHint": "Saat tähän laitteeseen tiedon, kun jokin pyytämäsi on hyväksytty, hylätty tai valmis katsottavaksi."
   }
 }

@@ -135,6 +135,8 @@
     "new": "Nieuw wachtwoord",
     "changed": "Gewijzigd. Je bent overal anders uitgelogd.",
     "changeButton": "Wachtwoord wijzigen",
-    "signOut": "Uitloggen"
+    "signOut": "Uitloggen",
+    "notify": "Meldingen",
+    "notifyHint": "Hoor op dit apparaat wanneer iets wat je hebt aangevraagd is goedgekeurd, afgewezen of klaar is om te kijken."
   }
 }

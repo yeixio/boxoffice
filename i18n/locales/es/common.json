@@ -58,5 +58,20 @@
     "title": "Esta página ha tenido un problema",
     "body": "El resto de Box Office sigue funcionando. Recargar suele arreglarlo. Si sigue pasando, incluye el texto de abajo en un informe de error.",
     "reload": "Recargar la página"
+  },
+  "push": {
+    "install": "Instalar como aplicación",
+    "installed": "Está instalada en este dispositivo.",
+    "installApple": "En un iPhone o iPad, abre esta página en Safari, toca el botón Compartir y luego Añadir a pantalla de inicio.",
+    "installMenu": "Para instalarla, abre el menú del navegador y elige Instalar o Añadir a la pantalla de inicio.",
+    "thisDevice": "Enviar notificaciones a este dispositivo",
+    "test": "Enviar una prueba",
+    "testSent": "Enviada. Debería aparecer en un momento.",
+    "why": {
+      "insecure": "Las notificaciones solo funcionan cuando esta página se abre por https. Esta se abrió por http sin cifrar.",
+      "apple": "En un iPhone o iPad, las notificaciones funcionan una vez instalada: abre esta página en Safari, toca el botón Compartir y luego Añadir a pantalla de inicio. Después actívalas aquí, en la aplicación instalada.",
+      "unsupported": "Este navegador no puede recibir notificaciones.",
+      "blocked": "Las notificaciones están bloqueadas para este sitio en el navegador. Permítelas en los ajustes del navegador para este sitio y vuelve a activar esto."
+    }
   }
 }

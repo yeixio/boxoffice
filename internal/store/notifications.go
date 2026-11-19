@@ -43,6 +43,9 @@ type Notification struct {
 	Media    *Media    `json:"media,omitempty"`
 	Download int64     `json:"downloadId,omitempty"`
 	At       time.Time `json:"at"`
+	// Page is the page of Box Office's own web UI to open for it, for a
+	// push notification. It isn't kept or passed to Matinee.
+	Page string `json:"-"`
 }
 
 // Media is the title a notification is about, with the ids Matinee matches

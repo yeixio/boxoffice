@@ -2890,5 +2890,18 @@
     "keepProfile": "Profilul obișnuit",
     "picked": "Regula {{name}} a ales aici dosarul și profilul. Le poți schimba.",
     "moveUp": "Mută în sus"
+  },
+  "phone": {
+    "topics": {
+      "ready": "Un titlu a ajuns în bibliotecă",
+      "requests": "Cineva a cerut un titlu sau a raportat o problemă",
+      "problems": "Ceva nu a mers: o descărcare a eșuat sau există o alertă"
+    },
+    "title": "Aplicația de telefon și notificările",
+    "sub": "Box Office poate fi instalat pe un telefon sau computer ca o aplicație și poate anunța acest dispozitiv ce se întâmplă cât timp este închis.",
+    "about": "Despre ce să fii anunțat",
+    "devices": "Dispozitive care primesc notificări",
+    "thisOne": "Acest dispozitiv",
+    "unnamed": "Un browser"
   }
 }

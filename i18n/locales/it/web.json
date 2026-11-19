@@ -2890,5 +2890,18 @@
     "keepProfile": "Il profilo abituale",
     "picked": "La regola {{name}} ha scelto qui la cartella e il profilo. Puoi cambiarli.",
     "moveUp": "Sposta su"
+  },
+  "phone": {
+    "topics": {
+      "ready": "Un titolo è arrivato nella libreria",
+      "requests": "Qualcuno ha chiesto un titolo o segnalato un problema",
+      "problems": "Qualcosa è andato storto: un download non riuscito o un avviso"
+    },
+    "title": "App per il telefono e notifiche",
+    "sub": "Box Office si può installare su un telefono o un computer come un'app, e può avvisare questo dispositivo di ciò che succede mentre è chiuso.",
+    "about": "Di cosa essere avvisati",
+    "devices": "Dispositivi che ricevono le notifiche",
+    "thisOne": "Questo dispositivo",
+    "unnamed": "Un browser"
   }
 }

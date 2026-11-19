@@ -135,6 +135,8 @@
     "new": "Nové heslo",
     "changed": "Změněno. Všude jinde jste odhlášeni.",
     "changeButton": "Změnit heslo",
-    "signOut": "Odhlásit se"
+    "signOut": "Odhlásit se",
+    "notify": "Oznámení",
+    "notifyHint": "Na tomto zařízení se dozvíte, když je něco, o co jste požádali, schváleno, zamítnuto nebo připraveno ke sledování."
   }
 }

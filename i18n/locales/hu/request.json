@@ -135,6 +135,8 @@
     "new": "Új jelszó",
     "changed": "Módosítva. Mindenhol máshol ki lettél jelentkeztetve.",
     "changeButton": "Jelszó módosítása",
-    "signOut": "Kijelentkezés"
+    "signOut": "Kijelentkezés",
+    "notify": "Értesítések",
+    "notifyHint": "Ezen az eszközön megtudhatod, ha valamit, amit kértél, jóváhagytak, elutasítottak, vagy megnézhető."
   }
 }

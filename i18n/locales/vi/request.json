@@ -135,6 +135,8 @@
     "new": "Mật khẩu mới",
     "changed": "Đã đổi. Bạn đã được đăng xuất ở mọi nơi khác.",
     "changeButton": "Đổi mật khẩu",
-    "signOut": "Đăng xuất"
+    "signOut": "Đăng xuất",
+    "notify": "Thông báo",
+    "notifyHint": "Biết ngay trên thiết bị này khi thứ bạn yêu cầu được duyệt, bị từ chối hoặc đã sẵn sàng để xem."
   }
 }

@@ -57,5 +57,20 @@
     "title": "This page hit a problem",
     "body": "The rest of Box Office is still working. Reloading usually fixes it. If it keeps happening, include the text below in a bug report.",
     "reload": "Reload the page"
+  },
+  "push": {
+    "install": "Install as an app",
+    "installed": "It's installed on this device.",
+    "installApple": "To install it on an iPhone or iPad, open this page in Safari, tap the Share button, then tap Add to Home Screen.",
+    "installMenu": "To install it, open the browser's menu and choose Install or Add to Home screen.",
+    "thisDevice": "Send notifications to this device",
+    "test": "Send a test",
+    "testSent": "Sent. It should show up in a moment.",
+    "why": {
+      "insecure": "Notifications only work when this page is opened over https. This one was opened over plain http.",
+      "apple": "On an iPhone or iPad, notifications work once this is installed: open this page in Safari, tap the Share button, then Add to Home Screen. Then turn them on here, in the installed app.",
+      "unsupported": "This browser can't receive notifications.",
+      "blocked": "Notifications are blocked for this site in the browser. Allow them in the browser's settings for this site, then turn this on again."
+    }
   }
 }

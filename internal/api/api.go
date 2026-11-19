@@ -39,6 +39,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/music"
 	"github.com/yeixio/boxoffice/internal/portal"
 	"github.com/yeixio/boxoffice/internal/problems"
+	"github.com/yeixio/boxoffice/internal/push"
 	"github.com/yeixio/boxoffice/internal/qualitycheck"
 	"github.com/yeixio/boxoffice/internal/search"
 	"github.com/yeixio/boxoffice/internal/store"
@@ -80,7 +81,10 @@ type Server struct {
 	// QualityCheck looks inside files for their real quality.
 	QualityCheck *qualitycheck.Service
 	// Portal is the request site, for the people who ask for titles.
-	Portal   *portal.Service
+	Portal *portal.Service
+	// Push sends push notifications to phones and browsers; nil makes one.
+	Push     *push.Service
+	pushOnce sync.Once
 	Log      *slog.Logger
 	Version  string
 	Database string // sqlite or postgres, for the System page
@@ -318,6 +322,7 @@ func (s *Server) Handler() http.Handler {
 	routes = append(routes, s.listRoutes()...)
 	routes = append(routes, s.cleanupRoutes()...)
 	routes = append(routes, s.portalRoutes()...)
+	routes = append(routes, s.pushRoutes()...)
 	routes = append(routes, s.gameRoutes()...)
 	routes = append(routes, s.homeRoutes()...)
 	routes = append(routes, s.importRoutes()...)
@@ -407,7 +412,8 @@ func (s *Server) web() http.Handler {
 	}
 	files := http.FileServerFS(s.Web)
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		p := strings.TrimPrefix(path.Clean(r.URL.Path), "/")
+		asked := path.Clean(r.URL.Path)
+		p := strings.TrimPrefix(asked, "/")
 		if p == "" {
 			p = "index.html"
 		}
@@ -417,12 +423,18 @@ func (s *Server) web() http.Handler {
 			r.URL.Path = "/"
 		}
 		// On the request site's own host name, the page says so, and the
-		// web UI shows the request site at /.
-		if p == "index.html" && s.portalHost(r) {
+		// web UI shows the request site at /. Wherever the request site is,
+		// its page installs as an app under the request site's own name.
+		onHost := p == "index.html" && s.portalHost(r)
+		if onHost || (p == "index.html" && requestPath(asked)) {
 			if page, err := fs.ReadFile(s.Web, p); err == nil {
+				html := strings.Replace(string(page), `href="/manifest.webmanifest"`, `href="/manifest.webmanifest?for=request"`, 1)
+				if onHost {
+					html = strings.Replace(html, "<head>", `<head><meta name="boxoffice-portal" content="/">`, 1)
+				}
 				w.Header().Set("Content-Type", "text/html; charset=utf-8")
 				w.Header().Set("Cache-Control", "no-cache")
-				w.Write([]byte(strings.Replace(string(page), "<head>", `<head><meta name="boxoffice-portal" content="/">`, 1)))
+				w.Write([]byte(html))
 				return
 			}
 		}
@@ -433,6 +445,12 @@ func (s *Server) web() http.Handler {
 		}
 		files.ServeHTTP(w, r)
 	})
+}
+
+// requestPath says whether a path is one of the request site's pages where
+// it lives under /request.
+func requestPath(p string) bool {
+	return p == "/request" || strings.HasPrefix(p, "/request/")
 }
 
 // ---- answers ----

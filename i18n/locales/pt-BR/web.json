@@ -2890,5 +2890,18 @@
     "keepProfile": "O perfil de sempre",
     "picked": "A regra {{name}} escolheu aqui a pasta e o perfil. Você pode mudá-los.",
     "moveUp": "Mover para cima"
+  },
+  "phone": {
+    "topics": {
+      "ready": "Um título chegou à biblioteca",
+      "requests": "Alguém pediu um título ou relatou um problema",
+      "problems": "Algo deu errado: um download falhou ou há um alerta"
+    },
+    "title": "Aplicativo no celular e notificações",
+    "sub": "O Box Office pode ser instalado em um celular ou computador como um aplicativo, e pode avisar este dispositivo do que acontece enquanto está fechado.",
+    "about": "Sobre o que avisar",
+    "devices": "Dispositivos que recebem notificações",
+    "thisOne": "Este dispositivo",
+    "unnamed": "Um navegador"
   }
 }

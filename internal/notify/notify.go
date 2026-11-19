@@ -25,6 +25,9 @@ import (
 type Recorder struct {
 	Store *store.Store
 	Log   *slog.Logger
+	// After, when set, is given each notification once it's saved, to
+	// send on to phones and browsers (internal/push).
+	After func(store.Notification)
 }
 
 // Add records a notification. Admin alerts and anything else that isn't
@@ -40,13 +43,16 @@ func (r *Recorder) Add(ctx context.Context, n store.Notification) error {
 	if err != nil && r.Log != nil {
 		r.Log.Warn("couldn't save a notification", "event", n.Event, "err", err)
 	}
+	if err == nil && r.After != nil {
+		r.After(n)
+	}
 	return err
 }
 
 // Alert passes an admin alert (internal/alerts) on to Matinee's admins.
 // One that cleared up comes as information.
 func (r *Recorder) Alert(ctx context.Context, a alerts.Alert) {
-	n := store.Notification{Event: "alert." + a.Rule, Level: a.Level, Audience: store.AudienceAdmins, Title: a.Title, Body: a.Message}
+	n := store.Notification{Event: "alert." + a.Rule, Level: a.Level, Audience: store.AudienceAdmins, Title: a.Title, Body: a.Message, Page: "/health"}
 	if a.Resolved {
 		n.Level = store.LevelInfo
 	}
@@ -66,7 +72,15 @@ func (r *Recorder) Download(ctx context.Context, d store.Download, event, why st
 	} else if n := r.bookName(ctx, d); n != "" {
 		name = n
 	}
-	n := store.Notification{Event: event, Level: store.LevelInfo, Audience: store.AudienceEveryone, Media: m, Download: d.ID}
+	n := store.Notification{Event: event, Level: store.LevelInfo, Audience: store.AudienceEveryone, Media: m, Download: d.ID, Page: "/downloads"}
+	if event == store.EventImported && d.TitleID > 0 {
+		switch d.Kind {
+		case "movie":
+			n.Page = fmt.Sprintf("/movies/%d", d.TitleID)
+		case "series":
+			n.Page = fmt.Sprintf("/shows/%d", d.TitleID)
+		}
+	}
 	if m == nil {
 		// Added by hand: only admins know what it is.
 		n.Audience = store.AudienceAdmins

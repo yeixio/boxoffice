@@ -58,5 +58,20 @@
     "title": "Această pagină a întâmpinat o problemă",
     "body": "Restul Box Office funcționează în continuare. De obicei, reîncărcarea rezolvă problema. Dacă se repetă, include textul de mai jos într-un raport de eroare.",
     "reload": "Reîncarcă pagina"
+  },
+  "push": {
+    "install": "Instalează ca aplicație",
+    "installed": "Este instalată pe acest dispozitiv.",
+    "installApple": "Pe un iPhone sau iPad, deschide această pagină în Safari, atinge butonul Partajare, apoi Adaugă pe ecranul principal.",
+    "installMenu": "Pentru instalare, deschide meniul browserului și alege Instalează sau Adaugă pe ecranul de pornire.",
+    "thisDevice": "Trimite notificări pe acest dispozitiv",
+    "test": "Trimite un test",
+    "testSent": "Trimis. Ar trebui să apară într-o clipă.",
+    "why": {
+      "insecure": "Notificările funcționează doar când această pagină este deschisă prin https. Aceasta a fost deschisă prin http simplu.",
+      "apple": "Pe un iPhone sau iPad, notificările funcționează după instalare: deschide această pagină în Safari, atinge butonul Partajare, apoi Adaugă pe ecranul principal. Apoi activează-le aici, în aplicația instalată.",
+      "unsupported": "Acest browser nu poate primi notificări.",
+      "blocked": "Notificările sunt blocate pentru acest site în browser. Permite-le din setările browserului pentru acest site, apoi activează din nou."
+    }
   }
 }

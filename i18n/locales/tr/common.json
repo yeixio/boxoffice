@@ -57,5 +57,20 @@
     "title": "Bu sayfada bir sorun oluştu",
     "body": "Box Office'in geri kalanı çalışmaya devam ediyor. Yeniden yüklemek genellikle sorunu çözer. Tekrarlanırsa aşağıdaki metni hata bildirimine ekleyin.",
     "reload": "Sayfayı yeniden yükle"
+  },
+  "push": {
+    "install": "Uygulama olarak yükle",
+    "installed": "Bu cihaza yüklü.",
+    "installApple": "iPhone veya iPad'de bu sayfayı Safari'de açın, Paylaş düğmesine dokunun, ardından Ana Ekrana Ekle'ye dokunun.",
+    "installMenu": "Yüklemek için tarayıcının menüsünü açıp Yükle veya Ana ekrana ekle'yi seçin.",
+    "thisDevice": "Bu cihaza bildirim gönder",
+    "test": "Deneme gönder",
+    "testSent": "Gönderildi. Birazdan görünmesi gerekir.",
+    "why": {
+      "insecure": "Bildirimler yalnızca bu sayfa https üzerinden açıldığında çalışır. Bu sayfa düz http üzerinden açıldı.",
+      "apple": "iPhone veya iPad'de bildirimler yüklendikten sonra çalışır: bu sayfayı Safari'de açın, Paylaş düğmesine dokunun, ardından Ana Ekrana Ekle'ye dokunun. Sonra bunları burada, yüklü uygulamada açın.",
+      "unsupported": "Bu tarayıcı bildirim alamıyor.",
+      "blocked": "Bildirimler tarayıcıda bu site için engellenmiş. Tarayıcının bu siteye ait ayarlarından izin verin, sonra bunu yeniden açın."
+    }
   }
 }

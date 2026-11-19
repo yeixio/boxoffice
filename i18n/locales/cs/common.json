@@ -59,5 +59,20 @@
     "title": "Na této stránce došlo k potížím",
     "body": "Zbytek Box Office dál funguje. Obvykle pomůže stránku načíst znovu. Pokud se to opakuje, přiložte níže uvedený text k hlášení chyby.",
     "reload": "Načíst stránku znovu"
+  },
+  "push": {
+    "install": "Nainstalovat jako aplikaci",
+    "installed": "Na tomto zařízení je nainstalováno.",
+    "installApple": "Na iPhonu nebo iPadu otevřete tuto stránku v Safari, klepněte na tlačítko Sdílet a pak na Přidat na plochu.",
+    "installMenu": "Pro instalaci otevřete nabídku prohlížeče a zvolte Instalovat nebo Přidat na plochu.",
+    "thisDevice": "Posílat oznámení na toto zařízení",
+    "test": "Poslat zkoušku",
+    "testSent": "Odesláno. Za chvíli by se mělo objevit.",
+    "why": {
+      "insecure": "Oznámení fungují jen tehdy, když je tato stránka otevřená přes https. Tato byla otevřena přes obyčejné http.",
+      "apple": "Na iPhonu nebo iPadu fungují oznámení až po instalaci: otevřete tuto stránku v Safari, klepněte na tlačítko Sdílet a pak na Přidat na plochu. Potom je zapněte tady, v nainstalované aplikaci.",
+      "unsupported": "Tento prohlížeč neumí přijímat oznámení.",
+      "blocked": "Oznámení jsou pro tento web v prohlížeči zablokovaná. Povolte je v nastavení prohlížeče pro tento web a pak to zapněte znovu."
+    }
   }
 }

@@ -2644,5 +2644,18 @@
     "keepProfile": "Profil biasa",
     "picked": "Peraturan {{name}} memilih folder dan profil di sini. Anda boleh mengubahnya.",
     "moveUp": "Alih ke atas"
+  },
+  "phone": {
+    "topics": {
+      "ready": "Satu tajuk tiba di pustaka",
+      "requests": "Seseorang meminta tajuk atau melaporkan masalah",
+      "problems": "Sesuatu tidak kena: muat turun gagal, atau ada amaran"
+    },
+    "title": "Aplikasi telefon dan pemberitahuan",
+    "sub": "Box Office boleh dipasang pada telefon atau komputer seperti aplikasi, dan boleh memberitahu peranti ini apa yang berlaku semasa ia ditutup.",
+    "about": "Apa yang hendak diberitahu",
+    "devices": "Peranti yang menerima pemberitahuan",
+    "thisOne": "Peranti ini",
+    "unnamed": "Sebuah pelayar"
   }
 }

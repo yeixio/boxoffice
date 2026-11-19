@@ -57,5 +57,20 @@
     "title": "Tällä sivulla tapahtui virhe",
     "body": "Muu Box Office toimii edelleen. Sivun lataaminen uudelleen auttaa yleensä. Jos virhe toistuu, liitä alla oleva teksti vikailmoitukseen.",
     "reload": "Lataa sivu uudelleen"
+  },
+  "push": {
+    "install": "Asenna sovelluksena",
+    "installed": "Asennettu tähän laitteeseen.",
+    "installApple": "iPhonessa tai iPadissa: avaa tämä sivu Safarissa, napauta Jaa-painiketta ja sitten Lisää Koti-valikkoon.",
+    "installMenu": "Asenna avaamalla selaimen valikko ja valitsemalla Asenna tai Lisää aloitusnäyttöön.",
+    "thisDevice": "Lähetä ilmoitukset tähän laitteeseen",
+    "test": "Lähetä testi",
+    "testSent": "Lähetetty. Sen pitäisi näkyä hetken kuluttua.",
+    "why": {
+      "insecure": "Ilmoitukset toimivat vain, kun tämä sivu on avattu https-yhteydellä. Tämä avattiin tavallisella http-yhteydellä.",
+      "apple": "iPhonessa tai iPadissa ilmoitukset toimivat asennuksen jälkeen: avaa tämä sivu Safarissa, napauta Jaa-painiketta ja sitten Lisää Koti-valikkoon. Ota ne sen jälkeen käyttöön täällä, asennetussa sovelluksessa.",
+      "unsupported": "Tämä selain ei voi vastaanottaa ilmoituksia.",
+      "blocked": "Ilmoitukset on estetty tältä sivustolta selaimessa. Salli ne selaimen sivustoasetuksista ja ota tämä sitten uudelleen käyttöön."
+    }
   }
 }

@@ -135,6 +135,8 @@
     "new": "Contraseña nueva",
     "changed": "Cambiada. Se ha cerrado tu sesión en todos los demás sitios.",
     "changeButton": "Cambiar contraseña",
-    "signOut": "Cerrar sesión"
+    "signOut": "Cerrar sesión",
+    "notify": "Notificaciones",
+    "notifyHint": "Entérate en este dispositivo cuando algo que pediste se apruebe, se rechace o esté listo para ver."
   }
 }

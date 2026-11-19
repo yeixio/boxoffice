@@ -127,7 +127,7 @@ Box Office is the other half of [Matinee](https://github.com/yeixio/matinee), th
 - **One connection.** In Matinee, open **Settings → Add-ons** and click **Connect** next to **Box Office**. Matinee finds it by itself in most setups; paste the API key from Box Office's **Settings → Connect Matinee**, then **Test** and **Save**. [Matinee's guide](https://github.com/yeixio/matinee/blob/main/docs/guide/server/radarr-and-sonarr.md#box-office) has the details.
 - **Requests and coming soon.** People ask for movies and shows in Matinee's web player and apps, an admin approves, and Box Office finds them. Everyone sees what's coming in Matinee's Coming soon.
 - **Problems fix themselves.** When someone reports a title in Matinee as the wrong movie or episode, in the wrong language, or with broken picture or sound, Box Office blocks that copy's release and gets another, in the right language when that was the problem.
-- **Notifications.** Matinee tells the person who asked when their title is found and when it's ready to watch, in the web player and the phone and TV apps. Admins hear about failed and quarantined downloads too.
+- **Notifications.** Matinee tells the person who asked when their title is found and when it's ready to watch, in the web player and the phone and TV apps. Admins hear about failed and quarantined downloads too. Without Matinee, Box Office and the request site install as an app on a phone and send push notifications themselves (over https): admins pick what they hear about, and members hear about their own requests.
 - **Moving in switches Matinee over for you,** if you like: the last step of Move in points Matinee at Box Office in place of Radarr and Sonarr.
 
 Box Office answers on Radarr's and Sonarr's APIs at `/radarr` and `/sonarr`, so tools built for Radarr or Sonarr can talk to Box Office too. Matinee is the one tested so far; reports on others (Overseerr, Jellyseerr, Home Assistant) are welcome. Matinee is optional, so Box Office fits Plex and Jellyfin setups as well.
@@ -383,6 +383,7 @@ internal/quality       qualities and profiles
 internal/backup        backups to disk, another folder and S3, with encryption
 internal/health        the check-up; internal/monitor and internal/alerts for the rest of Health
 internal/notify        events Matinee passes on as notifications
+internal/push          push notifications to phones and browsers (Web Push)
 internal/store         SQLite / PostgreSQL storage and migrations
 web/                   React + Vite web UI
 deploy/helm/boxoffice  Helm chart

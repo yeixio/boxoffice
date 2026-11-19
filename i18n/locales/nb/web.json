@@ -2767,5 +2767,18 @@
     "keepProfile": "Den vanlige profilen",
     "picked": "Regelen {{name}} valgte mappen og profilen her. Du kan endre dem.",
     "moveUp": "Flytt opp"
+  },
+  "phone": {
+    "topics": {
+      "ready": "En tittel har kommet til biblioteket",
+      "requests": "Noen har bedt om en tittel eller meldt fra om et problem",
+      "problems": "Noe gikk galt: en nedlasting mislyktes, eller et varsel"
+    },
+    "title": "Telefonapp og varsler",
+    "sub": "Box Office kan installeres på en telefon eller datamaskin som en app, og kan si fra til denne enheten om hva som skjer mens den er lukket.",
+    "about": "Hva du vil ha beskjed om",
+    "devices": "Enheter som får varsler",
+    "thisOne": "Denne enheten",
+    "unnamed": "En nettleser"
   }
 }

@@ -2890,5 +2890,18 @@
     "keepProfile": "Le profil habituel",
     "picked": "La règle {{name}} a choisi ici le dossier et le profil. Vous pouvez les changer.",
     "moveUp": "Monter"
+  },
+  "phone": {
+    "topics": {
+      "ready": "Un titre est arrivé dans la bibliothèque",
+      "requests": "Quelqu'un a demandé un titre ou signalé un problème",
+      "problems": "Quelque chose s'est mal passé : un téléchargement a échoué, ou une alerte"
+    },
+    "title": "Application pour téléphone et notifications",
+    "sub": "Box Office peut s'installer sur un téléphone ou un ordinateur comme une application, et prévenir cet appareil de ce qui se passe pendant qu'il est fermé.",
+    "about": "De quoi être prévenu",
+    "devices": "Appareils qui reçoivent les notifications",
+    "thisOne": "Cet appareil",
+    "unnamed": "Un navigateur"
   }
 }

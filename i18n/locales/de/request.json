@@ -135,6 +135,8 @@
     "new": "Neues Passwort",
     "changed": "Geändert. Überall sonst bist du abgemeldet.",
     "changeButton": "Passwort ändern",
-    "signOut": "Abmelden"
+    "signOut": "Abmelden",
+    "notify": "Benachrichtigungen",
+    "notifyHint": "Erfahre auf diesem Gerät, wenn etwas, das du dir gewünscht hast, genehmigt, abgelehnt oder bereit zum Ansehen ist."
   }
 }

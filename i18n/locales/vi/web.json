@@ -2644,5 +2644,18 @@
     "keepProfile": "Hồ sơ thường dùng",
     "picked": "Quy tắc {{name}} đã chọn thư mục và hồ sơ ở đây. Bạn có thể đổi.",
     "moveUp": "Chuyển lên"
+  },
+  "phone": {
+    "topics": {
+      "ready": "Một tựa đã về thư viện",
+      "requests": "Ai đó yêu cầu một tựa hoặc báo cáo sự cố",
+      "problems": "Có trục trặc: một lượt tải xuống thất bại, hoặc có cảnh báo"
+    },
+    "title": "Ứng dụng điện thoại và thông báo",
+    "sub": "Box Office có thể được cài trên điện thoại hoặc máy tính như một ứng dụng, và có thể báo cho thiết bị này biết chuyện gì xảy ra khi đang đóng.",
+    "about": "Muốn được báo về điều gì",
+    "devices": "Các thiết bị nhận thông báo",
+    "thisOne": "Thiết bị này",
+    "unnamed": "Một trình duyệt"
   }
 }

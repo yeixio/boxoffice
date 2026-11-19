@@ -56,5 +56,20 @@
     "title": "Halaman ini mengalami masalah",
     "body": "Bagian lain Box Office masih berfungsi. Memuat ulang biasanya memperbaikinya. Jika terus terjadi, sertakan teks di bawah ini dalam laporan bug.",
     "reload": "Muat ulang halaman"
+  },
+  "push": {
+    "install": "Pasang sebagai aplikasi",
+    "installed": "Sudah terpasang di perangkat ini.",
+    "installApple": "Di iPhone atau iPad, buka halaman ini di Safari, ketuk tombol Bagikan, lalu ketuk Tambah ke Layar Utama.",
+    "installMenu": "Untuk memasangnya, buka menu browser dan pilih Instal atau Tambahkan ke layar utama.",
+    "thisDevice": "Kirim notifikasi ke perangkat ini",
+    "test": "Kirim percobaan",
+    "testSent": "Terkirim. Seharusnya muncul sebentar lagi.",
+    "why": {
+      "insecure": "Notifikasi hanya berfungsi jika halaman ini dibuka lewat https. Halaman ini dibuka lewat http biasa.",
+      "apple": "Di iPhone atau iPad, notifikasi berfungsi setelah dipasang: buka halaman ini di Safari, ketuk tombol Bagikan, lalu Tambah ke Layar Utama. Setelah itu nyalakan di sini, di aplikasi yang terpasang.",
+      "unsupported": "Browser ini tidak bisa menerima notifikasi.",
+      "blocked": "Notifikasi diblokir untuk situs ini di browser. Izinkan di pengaturan browser untuk situs ini, lalu nyalakan lagi."
+    }
   }
 }

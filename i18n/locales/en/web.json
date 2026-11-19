@@ -2767,5 +2767,18 @@
     "keepProfile": "The usual profile",
     "picked": "The {{name}} rule picked the folder and profile here. You can change them.",
     "moveUp": "Move up"
+  },
+  "phone": {
+    "topics": {
+      "ready": "A title arrived in the library",
+      "requests": "Someone asked for a title or reported a problem",
+      "problems": "Something went wrong: a download failed, or an alert"
+    },
+    "title": "Phone app and notifications",
+    "sub": "Box Office can be installed on a phone or computer like an app, and can tell this device what happens while it's closed.",
+    "about": "What to be told about",
+    "devices": "Devices that get notifications",
+    "thisOne": "This device",
+    "unnamed": "A browser"
   }
 }

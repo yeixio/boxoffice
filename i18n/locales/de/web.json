@@ -2767,5 +2767,18 @@
     "keepProfile": "Das übliche Profil",
     "picked": "Die Regel {{name}} hat hier Ordner und Profil gewählt. Du kannst sie ändern.",
     "moveUp": "Nach oben"
+  },
+  "phone": {
+    "topics": {
+      "ready": "Ein Titel ist in der Bibliothek angekommen",
+      "requests": "Jemand hat einen Titel gewünscht oder ein Problem gemeldet",
+      "problems": "Etwas ist schiefgegangen: ein Download ist fehlgeschlagen oder eine Warnung"
+    },
+    "title": "Telefon-App und Benachrichtigungen",
+    "sub": "Box Office lässt sich auf einem Telefon oder Computer wie eine App installieren und kann diesem Gerät sagen, was passiert, während es geschlossen ist.",
+    "about": "Worüber du informiert werden möchtest",
+    "devices": "Geräte, die Benachrichtigungen erhalten",
+    "thisOne": "Dieses Gerät",
+    "unnamed": "Ein Browser"
   }
 }
