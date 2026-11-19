@@ -5,6 +5,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Check, Copy, ExternalLink, Flag, Inbox, Plus, Trash2, UserRound, X } from 'lucide-react'
 import { api, del, get, patch, post, put } from '../api'
 import { useProfiles, useRootFolders } from '../hooks'
+import { useRuleFor } from './AddRules'
 import { formatLocale } from '../i18n'
 import { problemLabel, stateText, type Issue, type Request } from '../portal/papi'
 import { Badge, Button, Card, Empty, ErrorNote, Field, Heading, Input, Modal, Poster, Select, Spinner, Toggle } from '../ui'
@@ -244,6 +245,15 @@ function ApproveSheet({ r, onClose, onDone }: { r: Request; onClose: () => void;
   useEffect(() => {
     if (!folder && folders.data?.length) setFolder(folders.data[0].path)
   }, [folders.data, folder])
+  // A rule for new titles picks the folder and profile to start from.
+  const rule = useRuleFor(r.kind, r.tmdbId).data?.rule
+  const [ruled, setRuled] = useState(0)
+  useEffect(() => {
+    if (!rule || ruled === rule.id || !profiles.data || !folders.data) return
+    setRuled(rule.id)
+    if (rule.profileId && profiles.data.some((p) => p.id === rule.profileId)) setProfile(rule.profileId)
+    if (rule.rootFolder && folders.data.some((f) => f.path === rule.rootFolder)) setFolder(rule.rootFolder)
+  }, [rule, ruled, profiles.data, folders.data])
   const go = useMutation({ mutationFn: () => post(`/requests/${r.id}/approve`, { profileId: profile, rootFolder: folder }), onSuccess: onDone })
   return (
     <Modal title={t('req.approve.title', { title: r.title })} onClose={onClose}>
@@ -252,6 +262,7 @@ function ApproveSheet({ r, onClose, onDone }: { r: Request; onClose: () => void;
         <Field label={t('req.approve.folder')} hint={folders.data?.length ? undefined : r.kind === 'movie' ? t('req.approve.noMovieRoot') : t('req.approve.noShowRoot')}>
           {(id) => <Select id={id} value={folder} onChange={setFolder} options={(folders.data ?? []).map((f) => ({ value: f.path, label: f.path }))} />}
         </Field>
+        {rule && <p className="text-sm text-muted">{t('rules.picked', { name: rule.name })}</p>}
         <ErrorNote error={go.error} />
         <div className="flex justify-end gap-2">
           <Button variant="ghost" onClick={onClose}>

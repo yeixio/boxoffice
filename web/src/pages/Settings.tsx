@@ -7,6 +7,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AlertTriangle, ArrowRight, ArrowRightLeft, CircleCheck, Copy, Database, Lock, Search, Folder, FolderUp, KeyRound, LoaderCircle, Plus, RotateCcw, Trash2 } from 'lucide-react'
 import { api, del, get, post, put, type Status, type MediaType, type MediaTypeKey, type DatabaseInfo, type Profile, type ProfileSizes, type Recycle, type RestartInfo, type RootFolder, type RootKind, type Settings as SettingsData, type ShowDefaults, type SystemInfo } from '../api'
 import { bytes, day } from '../format'
+import { AddRulesCard } from './AddRules'
 import { monitorOptions, useProfiles, useQualities, useRootFolders, useShowDefaults } from '../hooks'
 import { AutoSearchSettings, Connections, DataCapSettingsCard, DownloadSettings, NumberField } from './Connections'
 import { SpeedScheduleCard } from './SpeedSchedule'
@@ -57,6 +58,7 @@ const sections: SectionDef[] = [
       { id: 'folders-series', el: <RootFolders kind="series" />, keys: ['settings.addFolder', 'files.folder'] },
       ...mediaKinds.map((k) => ({ id: `folders-${k}`, el: <TypeFolders kind={k} />, keys: ['settings.addFolder', 'files.folder'] })),
       { id: 'new-shows', el: <NewShows /> },
+      { id: 'add-rules', el: <AddRulesCard />, keys: ['rules.genres', 'rules.language'], terms: ['anime', 'kids', 'override rules', 'Seerr'] },
       { id: 'lists', el: <ListsCard />, keys: ['lists.address', 'lists.ask', 'lists.traktClient'], terms: ['Trakt', 'Plex', 'TMDB', 'watchlist', 'import list', 'Watchlistarr'] },
       { id: 'problems', el: <ProblemsCard /> },
       { id: 'quality-check', el: <QualityCheckCard />, keys: ['title.quality', 'qualityCheck.corrections'], terms: ['ffprobe', 'FFmpeg', 'HDR', 'Dolby Vision', 'MediaInfo', '4K', '1080p'] },

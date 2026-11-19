@@ -2738,5 +2738,21 @@
     "previewCount": "Titler: {{titles}} ({{size}}). De største:",
     "previewSafe": "Dette er kun en forhåndsvisning. At gemme reglen lister disse som på vej væk og sletter intet.",
     "editNote": "Hvis du ændrer en regel, starter dens liste forfra."
+  },
+  "rules": {
+    "title": "Regler for nye titler",
+    "intro": "Send nye titler til en mappe og en kvalitetsprofil efter genre eller sprog, for eksempel animation fra Japan til en anime-mappe. En regel vælger for titler, som ingen har valgt mappe til: anmodninger, fulgte lister og titler, som Matinee beder om. Når du selv tilføjer en titel, er reglens valg udfyldt, og du kan ændre det. Passer flere regler, vinder den øverste.",
+    "none": "Ingen regler endnu.",
+    "new": "Ny regel",
+    "kind": "For",
+    "genres": "Genrer",
+    "genresHint": "En titel med en af disse passer. Vælg ingen for alle genrer.",
+    "noGenres": "Genrerne kunne ikke hentes fra TMDB.",
+    "language": "Oprindeligt sprog",
+    "anyLanguage": "Alle sprog",
+    "keepFolder": "Den sædvanlige mappe",
+    "keepProfile": "Den sædvanlige profil",
+    "picked": "Reglen {{name}} valgte mappen og profilen her. Du kan ændre dem.",
+    "moveUp": "Flyt op"
   }
 }

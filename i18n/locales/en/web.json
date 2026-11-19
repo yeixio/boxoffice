@@ -2738,5 +2738,21 @@
     "previewCount": "Titles: {{titles}} ({{size}}). The biggest:",
     "previewSafe": "This is only a preview. Saving the rule lists these as leaving soon and deletes nothing.",
     "editNote": "Changing a rule starts its leaving soon list over."
+  },
+  "rules": {
+    "title": "Rules for new titles",
+    "intro": "Send new titles to a folder and quality profile by genre or language, such as animation from Japan to an anime folder. A rule picks for titles nobody chose a folder for: requests, followed lists and titles Matinee asks for. When you add a title yourself, the rule's choice is filled in and you can change it. When more than one rule fits, the one higher up wins.",
+    "none": "No rules yet.",
+    "new": "New rule",
+    "kind": "For",
+    "genres": "Genres",
+    "genresHint": "A title with any of these fits. Pick none for every genre.",
+    "noGenres": "The genres couldn't be loaded from TMDB.",
+    "language": "First made in",
+    "anyLanguage": "Any language",
+    "keepFolder": "The usual folder",
+    "keepProfile": "The usual profile",
+    "picked": "The {{name}} rule picked the folder and profile here. You can change them.",
+    "moveUp": "Move up"
   }
 }

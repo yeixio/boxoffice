@@ -2738,5 +2738,21 @@
     "previewCount": "Titel: {{titles}} ({{size}}). Die größten:",
     "previewSafe": "Das ist nur eine Vorschau. Das Speichern der Regel listet diese als bald verschwindend auf und löscht nichts.",
     "editNote": "Wenn du eine Regel änderst, beginnt ihre Liste von vorn."
+  },
+  "rules": {
+    "title": "Regeln für neue Titel",
+    "intro": "Schicke neue Titel je nach Genre oder Sprache in einen Ordner und ein Qualitätsprofil, zum Beispiel Animation aus Japan in einen Anime-Ordner. Eine Regel entscheidet bei Titeln, für die niemand einen Ordner gewählt hat: Wünsche, gefolgte Listen und Titel, die Matinee anfragt. Wenn du selbst einen Titel hinzufügst, ist die Wahl der Regel schon eingetragen und du kannst sie ändern. Passen mehrere Regeln, gewinnt die weiter oben.",
+    "none": "Noch keine Regeln.",
+    "new": "Neue Regel",
+    "kind": "Für",
+    "genres": "Genres",
+    "genresHint": "Ein Titel mit einem dieser Genres passt. Wähle keins für alle Genres.",
+    "noGenres": "Die Genres konnten nicht von TMDB geladen werden.",
+    "language": "Originalsprache",
+    "anyLanguage": "Jede Sprache",
+    "keepFolder": "Der übliche Ordner",
+    "keepProfile": "Das übliche Profil",
+    "picked": "Die Regel {{name}} hat hier Ordner und Profil gewählt. Du kannst sie ändern.",
+    "moveUp": "Nach oben"
   }
 }

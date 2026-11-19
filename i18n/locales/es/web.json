@@ -2861,5 +2861,21 @@
     "previewCount": "Títulos: {{titles}} ({{size}}). Los más grandes:",
     "previewSafe": "Esto es solo una vista previa. Guardar la regla los lista como que se van pronto y no borra nada.",
     "editNote": "Cambiar una regla reinicia su lista."
+  },
+  "rules": {
+    "title": "Reglas para títulos nuevos",
+    "intro": "Envía los títulos nuevos a una carpeta y un perfil de calidad según su género o idioma, por ejemplo la animación de Japón a una carpeta de anime. Una regla elige para los títulos a los que nadie eligió carpeta: peticiones, listas seguidas y títulos que pide Matinee. Cuando añades tú un título, la elección de la regla viene rellenada y puedes cambiarla. Si encaja más de una regla, gana la que está más arriba.",
+    "none": "Aún no hay reglas.",
+    "new": "Nueva regla",
+    "kind": "Para",
+    "genres": "Géneros",
+    "genresHint": "Encaja un título con cualquiera de estos. No elijas ninguno para todos los géneros.",
+    "noGenres": "No se pudieron cargar los géneros de TMDB.",
+    "language": "Idioma original",
+    "anyLanguage": "Cualquier idioma",
+    "keepFolder": "La carpeta habitual",
+    "keepProfile": "El perfil habitual",
+    "picked": "La regla {{name}} eligió aquí la carpeta y el perfil. Puedes cambiarlos.",
+    "moveUp": "Subir"
   }
 }

@@ -2615,5 +2615,21 @@
     "previewCount": "Judul: {{titles}} ({{size}}). Yang terbesar:",
     "previewSafe": "Ini hanya pratinjau. Menyimpan aturan mendaftarkan ini sebagai segera pergi dan tidak menghapus apa pun.",
     "editNote": "Mengubah aturan memulai daftarnya dari awal."
+  },
+  "rules": {
+    "title": "Aturan untuk judul baru",
+    "intro": "Kirim judul baru ke folder dan profil kualitas menurut genre atau bahasanya, misalnya animasi dari Jepang ke folder anime. Aturan memilih untuk judul yang foldernya tidak dipilih siapa pun: permintaan, daftar yang diikuti, dan judul yang diminta Matinee. Saat Anda menambahkan judul sendiri, pilihan aturan sudah terisi dan bisa Anda ubah. Jika lebih dari satu aturan cocok, yang lebih atas yang dipakai.",
+    "none": "Belum ada aturan.",
+    "new": "Aturan baru",
+    "kind": "Untuk",
+    "genres": "Genre",
+    "genresHint": "Judul dengan salah satu genre ini cocok. Jangan pilih apa pun untuk semua genre.",
+    "noGenres": "Genre tidak dapat dimuat dari TMDB.",
+    "language": "Bahasa asli",
+    "anyLanguage": "Bahasa apa pun",
+    "keepFolder": "Folder yang biasa",
+    "keepProfile": "Profil yang biasa",
+    "picked": "Aturan {{name}} memilih folder dan profil di sini. Anda bisa mengubahnya.",
+    "moveUp": "Naikkan"
   }
 }

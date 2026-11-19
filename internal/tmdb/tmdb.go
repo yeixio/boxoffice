@@ -129,6 +129,10 @@ type Movie struct {
 	PhysicalRelease *time.Time `json:"physicalRelease,omitempty"`
 	// Rating is TMDB's average vote, out of 10; 0 when nobody's voted.
 	Rating float64 `json:"rating,omitempty"`
+	// Genres and Language (the one it was first made in, such as "ja")
+	// are only filled in when one title is looked up, not by a search.
+	Genres   []Genre `json:"genres,omitempty"`
+	Language string  `json:"language,omitempty"`
 }
 
 type apiMovie struct {
@@ -143,6 +147,8 @@ type apiMovie struct {
 	Status       string  `json:"status"`
 	Popularity   float64 `json:"popularity"`
 	VoteAverage  float64 `json:"vote_average"`
+	Genres       []Genre `json:"genres"`
+	Language     string  `json:"original_language"`
 	ReleaseDates struct {
 		Results []struct {
 			Country string `json:"iso_3166_1"`
@@ -158,7 +164,7 @@ func (m apiMovie) movie(country string) Movie {
 	out := Movie{
 		TMDBID: m.ID, IMDBID: m.IMDBID, Title: m.Title, Year: year(m.ReleaseDate), Overview: m.Overview,
 		Poster: Image(m.PosterPath, "w500"), Backdrop: Image(m.BackdropPath, "w1280"), Runtime: m.Runtime, Status: m.Status,
-		Rating: m.VoteAverage,
+		Rating: m.VoteAverage, Genres: m.Genres, Language: m.Language,
 	}
 	// Release types: 1 premiere, 2 limited, 3 theatrical, 4 digital, 5 physical, 6 TV.
 	// The home country's dates win; elsewhere, the earliest of each type.
@@ -251,6 +257,10 @@ type Show struct {
 	Runtime  int          `json:"runtime,omitempty"`
 	Rating   float64      `json:"rating,omitempty"`
 	Seasons  []SeasonInfo `json:"seasons,omitempty"`
+	// Genres and Language (the one it was first made in) are only filled
+	// in when one show is looked up, not by a search.
+	Genres   []Genre `json:"genres,omitempty"`
+	Language string  `json:"language,omitempty"`
 }
 
 // SeasonInfo is a season in a show's description.
@@ -271,6 +281,8 @@ type apiShow struct {
 	Status       string  `json:"status"`
 	RunTimes     []int   `json:"episode_run_time"`
 	VoteAverage  float64 `json:"vote_average"`
+	Genres       []Genre `json:"genres"`
+	Language     string  `json:"original_language"`
 	Networks     []struct {
 		Name string `json:"name"`
 	} `json:"networks"`
@@ -289,7 +301,7 @@ func (s apiShow) show() Show {
 	out := Show{
 		TMDBID: s.ID, TVDBID: s.ExternalIDs.TVDBID, IMDBID: s.ExternalIDs.IMDBID, Title: s.Name, Year: year(s.FirstAirDate),
 		Overview: s.Overview, Poster: Image(s.PosterPath, "w500"), Backdrop: Image(s.BackdropPath, "w1280"), Status: s.Status,
-		Rating: s.VoteAverage,
+		Rating: s.VoteAverage, Genres: s.Genres, Language: s.Language,
 	}
 	if len(s.Networks) > 0 {
 		out.Network = s.Networks[0].Name

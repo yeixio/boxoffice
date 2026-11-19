@@ -2738,5 +2738,21 @@
     "previewCount": "Titlar: {{titles}} ({{size}}). De största:",
     "previewSafe": "Det här är bara en förhandsvisning. Att spara regeln listar dessa som på väg bort och raderar inget.",
     "editNote": "Om du ändrar en regel börjar dess lista om."
+  },
+  "rules": {
+    "title": "Regler för nya titlar",
+    "intro": "Skicka nya titlar till en mapp och en kvalitetsprofil efter genre eller språk, till exempel animation från Japan till en animemapp. En regel väljer för titlar som ingen valt mapp för: önskemål, följda listor och titlar som Matinee ber om. När du själv lägger till en titel är regelns val ifyllt och du kan ändra det. Om flera regler passar vinner den översta.",
+    "none": "Inga regler än.",
+    "new": "Ny regel",
+    "kind": "För",
+    "genres": "Genrer",
+    "genresHint": "En titel med någon av dessa passar. Välj ingen för alla genrer.",
+    "noGenres": "Genrerna kunde inte läsas in från TMDB.",
+    "language": "Originalspråk",
+    "anyLanguage": "Vilket språk som helst",
+    "keepFolder": "Den vanliga mappen",
+    "keepProfile": "Den vanliga profilen",
+    "picked": "Regeln {{name}} valde mappen och profilen här. Du kan ändra dem.",
+    "moveUp": "Flytta upp"
   }
 }

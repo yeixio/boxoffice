@@ -2861,5 +2861,21 @@
     "previewCount": "Títulos: {{titles}} ({{size}}). Os maiores:",
     "previewSafe": "Isto é só uma prévia. Salvar a regra os lista como saindo em breve e não exclui nada.",
     "editNote": "Alterar uma regra recomeça a lista dela."
+  },
+  "rules": {
+    "title": "Regras para novos títulos",
+    "intro": "Envie os novos títulos para uma pasta e um perfil de qualidade conforme o gênero ou o idioma, como animação do Japão para uma pasta de anime. Uma regra escolhe para os títulos cuja pasta ninguém escolheu: pedidos, listas seguidas e títulos que o Matinee pede. Quando você mesmo adiciona um título, a escolha da regra já vem preenchida e você pode mudá-la. Se mais de uma regra servir, vale a que está mais acima.",
+    "none": "Ainda não há regras.",
+    "new": "Nova regra",
+    "kind": "Para",
+    "genres": "Gêneros",
+    "genresHint": "Um título com qualquer um destes serve. Não escolha nenhum para todos os gêneros.",
+    "noGenres": "Não foi possível carregar os gêneros do TMDB.",
+    "language": "Idioma original",
+    "anyLanguage": "Qualquer idioma",
+    "keepFolder": "A pasta de sempre",
+    "keepProfile": "O perfil de sempre",
+    "picked": "A regra {{name}} escolheu aqui a pasta e o perfil. Você pode mudá-los.",
+    "moveUp": "Mover para cima"
   }
 }

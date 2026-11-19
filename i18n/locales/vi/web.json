@@ -2615,5 +2615,21 @@
     "previewCount": "Số tựa: {{titles}} ({{size}}). Lớn nhất:",
     "previewSafe": "Đây chỉ là bản xem trước. Lưu quy tắc sẽ liệt kê những tựa này là sắp rời đi và không xóa gì.",
     "editNote": "Đổi quy tắc sẽ bắt đầu lại danh sách của nó."
+  },
+  "rules": {
+    "title": "Quy tắc cho tựa mới",
+    "intro": "Đưa tựa mới vào thư mục và hồ sơ chất lượng theo thể loại hoặc ngôn ngữ, chẳng hạn hoạt hình Nhật Bản vào thư mục anime. Quy tắc chọn cho những tựa chưa ai chọn thư mục: yêu cầu, danh sách đang theo dõi và tựa do Matinee yêu cầu. Khi bạn tự thêm một tựa, lựa chọn của quy tắc được điền sẵn và bạn có thể đổi. Nếu nhiều quy tắc cùng khớp, quy tắc ở trên được dùng.",
+    "none": "Chưa có quy tắc nào.",
+    "new": "Quy tắc mới",
+    "kind": "Dành cho",
+    "genres": "Thể loại",
+    "genresHint": "Tựa có bất kỳ thể loại nào trong số này là khớp. Không chọn gì để áp dụng cho mọi thể loại.",
+    "noGenres": "Không tải được thể loại từ TMDB.",
+    "language": "Ngôn ngữ gốc",
+    "anyLanguage": "Bất kỳ ngôn ngữ nào",
+    "keepFolder": "Thư mục thường dùng",
+    "keepProfile": "Hồ sơ thường dùng",
+    "picked": "Quy tắc {{name}} đã chọn thư mục và hồ sơ ở đây. Bạn có thể đổi.",
+    "moveUp": "Chuyển lên"
   }
 }

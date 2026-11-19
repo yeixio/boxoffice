@@ -1053,3 +1053,9 @@ export type Cleanup = {
   deletedToday: number
 }
 export type CleanupPreview = { waiting?: 'report' | 'plays'; count: number; size: number; titles: CleanupTitle[] }
+
+// AddRule sends new titles of some genres, or first made in some language,
+// to a root folder and a quality profile; either may be left to the usual
+// one ('' and 0).
+export type AddRule = { id: number; name: string; kind: 'movie' | 'series'; genres: number[]; language: string; rootFolder: string; profileId: number }
+export type AddRules = { rules: AddRule[]; movieGenres: { id: number; name: string }[]; seriesGenres: { id: number; name: string }[] }

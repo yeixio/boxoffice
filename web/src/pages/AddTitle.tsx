@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Search } from 'lucide-react'
 import { get, post, type LookupMovie, type LookupShow, type Movie, type Series } from '../api'
 import { monitorOptions, pickProfile, rememberProfile, useProfiles, useRootFolders, useShowDefaults } from '../hooks'
+import { useRuleFor } from './AddRules'
 import { Button, ErrorNote, Field, Input, Modal, Poster, Select, Spinner, Toggle } from '../ui'
 
 type Kind = 'movie' | 'series'
@@ -101,6 +102,16 @@ export function AddOptions({
   useEffect(() => {
     if (!root && folders.data?.length) setRoot(folders.data[0].path)
   }, [folders.data, root])
+  // A rule for new titles picks the folder and profile to start from; they
+  // can still be changed.
+  const rule = useRuleFor(kind, title.tmdbId).data?.rule
+  const [ruled, setRuled] = useState(0)
+  useEffect(() => {
+    if (!rule || ruled === rule.id || !profiles.data || !folders.data) return
+    setRuled(rule.id)
+    if (rule.profileId && profiles.data.some((p) => p.id === rule.profileId)) setProfileId(rule.profileId)
+    if (rule.rootFolder && folders.data.some((f) => f.path === rule.rootFolder)) setRoot(rule.rootFolder)
+  }, [rule, ruled, profiles.data, folders.data])
   useEffect(() => {
     if (!monitor && defaults.data) {
       setMonitor(defaults.data.monitor)
@@ -123,7 +134,7 @@ export function AddOptions({
     try {
       const body = { tmdbId: title.tmdbId, profileId, rootFolder: root, monitored, search, ...(kind === 'series' ? { monitor, recent: seasons } : {}) }
       const added = await post<Movie | Series>(kind === 'movie' ? '/movies' : '/series', body)
-      rememberProfile(kind, profileId)
+      if (!rule?.profileId || profileId !== rule.profileId) rememberProfile(kind, profileId)
       await qc.invalidateQueries({ queryKey: [kind === 'movie' ? 'movies' : 'series'] })
       qc.invalidateQueries({ queryKey: ['discover'] })
       if (onAdded) {
@@ -154,6 +165,7 @@ export function AddOptions({
           </Field>
         )}
       </div>
+      {rule && <p className="text-sm text-muted">{t('rules.picked', { name: rule.name })}</p>}
       <Toggle checked={monitored} onChange={setMonitored} label={t('add.watch')} />
       <Toggle checked={search} onChange={setSearch} label={t('add.searchNow')} />
       <ErrorNote error={error} />

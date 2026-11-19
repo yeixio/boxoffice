@@ -120,6 +120,9 @@ type AddOptions struct {
 	Monitor string `json:"monitor,omitempty"`
 	// Recent is how many aired seasons "recent" keeps; 0 uses the default.
 	Recent int `json:"recent,omitempty"`
+	// Chosen says a person picked the profile and root folder, so the
+	// rules for new titles leave them alone.
+	Chosen bool `json:"-"`
 }
 
 // resolve fills in a profile and root folder, and checks the ones given.
@@ -222,6 +225,9 @@ func (s *Service) AddMovie(ctx context.Context, tmdbID int64, o AddOptions) (sto
 
 // AddMovieInfo adds a movie already looked up.
 func (s *Service) AddMovieInfo(ctx context.Context, info tmdb.Movie, o AddOptions) (store.Movie, error) {
+	if err := s.applyRule(ctx, "movie", info.Genres, info.Language, &o); err != nil {
+		return store.Movie{}, err
+	}
 	if err := s.resolve(ctx, "movie", &o); err != nil {
 		return store.Movie{}, err
 	}
@@ -338,6 +344,9 @@ func (s *Service) AddSeries(ctx context.Context, tmdbID int64, o AddOptions) (st
 // AddSeriesInfo adds a show already looked up. seasons, when given, says
 // which seasons are monitored (by number) instead of o.Monitor.
 func (s *Service) AddSeriesInfo(ctx context.Context, info tmdb.Show, o AddOptions, seasons map[int]bool) (store.Series, error) {
+	if err := s.applyRule(ctx, "series", info.Genres, info.Language, &o); err != nil {
+		return store.Series{}, err
+	}
 	if err := s.resolve(ctx, "series", &o); err != nil {
 		return store.Series{}, err
 	}

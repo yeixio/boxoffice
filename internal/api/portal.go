@@ -587,7 +587,8 @@ func (s *Server) approveRequest(w http.ResponseWriter, r *http.Request) error {
 	if err := readJSON(r, &in); err != nil {
 		return err
 	}
-	req, err := s.Portal.Approve(r.Context(), id, catalog.AddOptions{ProfileID: in.ProfileID, RootFolder: in.RootFolder, Monitor: in.Monitor, Recent: in.Recent})
+	req, err := s.Portal.Approve(r.Context(), id, catalog.AddOptions{ProfileID: in.ProfileID, RootFolder: in.RootFolder, Monitor: in.Monitor, Recent: in.Recent,
+		Chosen: in.ProfileID != 0 || in.RootFolder != ""})
 	if err != nil {
 		return portalErr(err)
 	}
