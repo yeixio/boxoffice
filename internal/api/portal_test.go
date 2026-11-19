@@ -14,6 +14,7 @@ import (
 	"sync/atomic"
 	"testing"
 	"testing/fstest"
+	"time"
 
 	"github.com/yeixio/boxoffice/internal/catalog"
 	"github.com/yeixio/boxoffice/internal/jobs"
@@ -315,5 +316,68 @@ func TestRequestSiteMatineeSignIn(t *testing.T) {
 	// Their password lives in Matinee.
 	if code := call(t, hs, "PATCH", fmt.Sprintf("/api/v1/portal/members/%d", ms[0].ID), `{"password":"password9"}`, nil); code != 400 {
 		t.Fatalf("set a Matinee account's password: %d", code)
+	}
+}
+
+// Sign-ups are limited: a few accounts an hour from one address, and
+// someone who made their own account gets a weekly limit where the site
+// has none.
+func TestRequestSiteSignUpLimit(t *testing.T) {
+	s, hs := portalServer(t)
+	ctx := context.Background()
+	if code := call(t, hs, "PUT", "/api/v1/portal/settings", `{"enabled":true,"name":"Movie Night","localSignIn":true,"signUp":true,"quotaShows":2}`, nil); code != 200 {
+		t.Fatalf("turn on: %d", code)
+	}
+	for i := range signUpsPerAddress {
+		if code := newVisitor(t, hs).do("POST", "/api/portal/signup", fmt.Sprintf(`{"username":"guest%d","password":"password1"}`, i), nil); code != 200 {
+			t.Fatalf("sign-up %d: %d", i, code)
+		}
+	}
+	req, _ := http.NewRequest("POST", hs.URL+"/api/portal/signup", strings.NewReader(`{"username":"onemore","password":"password1"}`))
+	req.Header.Set("X-Requested-With", "boxoffice")
+	req.Header.Set("Content-Type", "application/json")
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	res.Body.Close()
+	if res.StatusCode != 429 || res.Header.Get("Retry-After") == "" {
+		t.Fatalf("one too many: %d, Retry-After %q", res.StatusCode, res.Header.Get("Retry-After"))
+	}
+	if _, err := s.Store.MemberByName(ctx, "onemore"); err == nil {
+		t.Fatal("the account was made anyway")
+	}
+	// No limit on movies for the site, so they get their own; shows follow
+	// the site's.
+	m, err := s.Store.MemberByName(ctx, "guest0")
+	if err != nil || m.QuotaMovies != portal.SignUpQuota || m.QuotaShows != -1 {
+		t.Fatalf("weekly limits %d and %d, %v", m.QuotaMovies, m.QuotaShows, err)
+	}
+
+	// An hour on, the address may sign up again; all addresses together
+	// have a limit too, and tries that made nothing are counted.
+	var l signUpLimit
+	now := time.Now()
+	for i := range signUpsOverall {
+		from := fmt.Sprint("10.0.0.", i)
+		if l.try(from, now) != 0 {
+			t.Fatalf("address %d turned away", i)
+		}
+		l.made(from, now)
+	}
+	if wait := l.try("10.0.1.1", now.Add(time.Minute)); wait != 59*time.Minute {
+		t.Fatalf("over the limit for everyone: wait %v", wait)
+	}
+	if l.try("10.0.1.1", now.Add(signUpWindow)) != 0 {
+		t.Fatal("still turned away an hour on")
+	}
+	l = signUpLimit{}
+	for i := range signUpTries {
+		if l.try("10.0.0.1", now) != 0 {
+			t.Fatalf("try %d turned away", i)
+		}
+	}
+	if l.try("10.0.0.1", now) == 0 || l.try("10.0.0.2", now) != 0 {
+		t.Fatal("tries from one address aren't limited by themselves")
 	}
 }
