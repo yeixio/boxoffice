@@ -109,7 +109,12 @@ backupVolume: {}
 #      server: nas.local
 #      path: /export/backups
 
+# TZ is the server's time zone, which the speed schedule's hours and the
+# data cap's month go by; without it a container's clock is on UTC. The zone
+# picked in Settings → General → Time zone wins over it.
 env: []
+#  - name: TZ
+#    value: Europe/Berlin
 #  - name: BOXOFFICE_REFRESH_EVERY
 #    value: 6h
 #  - name: BOXOFFICE_LOG_FORMAT

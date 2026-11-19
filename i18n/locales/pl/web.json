@@ -1325,7 +1325,15 @@
       "movingSub": "Box Office otworzy się, gdy wszystko zostanie skopiowane i sprawdzone.",
       "moveTitle": "Przenieść bazę danych?"
     },
-    "homeLayout": "Wybierz folder ze zdjęciami i filmami, na przykład udział, do którego telefon robi kopię zapasową. Podfoldery nie przeszkadzają: Box Office odczytuje datę zrobienia z samego pliku."
+    "homeLayout": "Wybierz folder ze zdjęciami i filmami, na przykład udział, do którego telefon robi kopię zapasową. Podfoldery nie przeszkadzają: Box Office odczytuje datę zrobienia z samego pliku.",
+    "zone": {
+      "title": "Strefa czasowa",
+      "hint": "Zegar, według którego działa Box Office: godziny harmonogramu prędkości, dzień rozpoczęcia miesiąca limitu danych, dzień, za który liczą się limity dzienne, oraz godziny w komunikatach.",
+      "now": "Na zegarze Box Office jest {{time}} ({{zone}}).",
+      "server": "Własna strefa serwera ({{zone}})",
+      "differs": "Ta przeglądarka jest w strefie {{zone}}.",
+      "use": "Użyj {{zone}}"
+    }
   },
   "mediaTypes": {
     "music": {

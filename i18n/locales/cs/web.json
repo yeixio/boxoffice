@@ -1325,7 +1325,15 @@
       "movingSub": "Box Office se znovu otevře, až bude vše zkopírováno a zkontrolováno.",
       "moveTitle": "Přesunout databázi?"
     },
-    "homeLayout": "Vyberte složku s fotkami a videi, například sdílenou složku, kam se zálohuje telefon. Podsložky nevadí: Box Office čte datum pořízení přímo ze souboru."
+    "homeLayout": "Vyberte složku s fotkami a videi, například sdílenou složku, kam se zálohuje telefon. Podsložky nevadí: Box Office čte datum pořízení přímo ze souboru.",
+    "zone": {
+      "title": "Časové pásmo",
+      "hint": "Hodiny, podle kterých se Box Office řídí: hodiny rozvrhu rychlosti, den, kdy začíná měsíc datového limitu, den, za který se počítají denní limity, a časy ve zprávách.",
+      "now": "Na hodinách Box Office je {{time}} ({{zone}}).",
+      "server": "Vlastní pásmo serveru ({{zone}})",
+      "differs": "Tento prohlížeč je v pásmu {{zone}}.",
+      "use": "Použít {{zone}}"
+    }
   },
   "mediaTypes": {
     "music": {

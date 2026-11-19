@@ -1248,7 +1248,15 @@
       "movingSub": "O Box Office abre de novo assim que tudo for copiado e conferido.",
       "moveTitle": "Mover o banco de dados?"
     },
-    "homeLayout": "Escolha a pasta onde estão suas fotos e vídeos, como um compartilhamento para onde o celular faz backup. Subpastas não são problema: o Box Office lê a data de cada um no próprio arquivo."
+    "homeLayout": "Escolha a pasta onde estão suas fotos e vídeos, como um compartilhamento para onde o celular faz backup. Subpastas não são problema: o Box Office lê a data de cada um no próprio arquivo.",
+    "zone": {
+      "title": "Fuso horário",
+      "hint": "O relógio que o Box Office segue: as horas da programação de velocidade, o dia em que começa o mês do limite de dados, o dia em que os limites diários contam e os horários nas mensagens.",
+      "now": "São {{time}} no relógio do Box Office ({{zone}}).",
+      "server": "O do próprio servidor ({{zone}})",
+      "differs": "Este navegador está em {{zone}}.",
+      "use": "Usar {{zone}}"
+    }
   },
   "mediaTypes": {
     "music": {

@@ -1171,7 +1171,15 @@
       "movingSub": "Box Office åbner igen, når alt er kopieret og kontrolleret.",
       "moveTitle": "Flyt databasen?"
     },
-    "homeLayout": "Vælg mappen med dine fotos og videoer, fx en deling som din telefon tager backup til. Undermapper er fine: Box Office læser, hvornår hver enkelt blev taget, fra selve filen."
+    "homeLayout": "Vælg mappen med dine fotos og videoer, fx en deling som din telefon tager backup til. Undermapper er fine: Box Office læser, hvornår hver enkelt blev taget, fra selve filen.",
+    "zone": {
+      "title": "Tidszone",
+      "hint": "Det ur, Box Office går efter: hastighedsplanens timer, dagen hvor datagrænsens måned begynder, dagen de daglige grænser tæller for, og klokkeslættene i beskeder.",
+      "now": "Klokken er {{time}} på Box Offices ur ({{zone}}).",
+      "server": "Serverens egen ({{zone}})",
+      "differs": "Denne browser er i {{zone}}.",
+      "use": "Brug {{zone}}"
+    }
   },
   "mediaTypes": {
     "music": {

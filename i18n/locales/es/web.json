@@ -1248,7 +1248,15 @@
       "movingSub": "Box Office vuelve a abrirse cuando todo esté copiado y comprobado.",
       "moveTitle": "¿Trasladar la base de datos?"
     },
-    "homeLayout": "Elige la carpeta donde están tus fotos y vídeos, como una carpeta compartida donde se guarda la copia de tu móvil. Las subcarpetas no son problema: Box Office lee la fecha de cada uno del propio archivo."
+    "homeLayout": "Elige la carpeta donde están tus fotos y vídeos, como una carpeta compartida donde se guarda la copia de tu móvil. Las subcarpetas no son problema: Box Office lee la fecha de cada uno del propio archivo.",
+    "zone": {
+      "title": "Zona horaria",
+      "hint": "El reloj por el que se guía Box Office: las horas del horario de velocidad, el día en que empieza el mes del límite de datos, el día en que cuentan los límites diarios y las horas de los mensajes.",
+      "now": "Son las {{time}} en el reloj de Box Office ({{zone}}).",
+      "server": "La del propio servidor ({{zone}})",
+      "differs": "Este navegador está en {{zone}}.",
+      "use": "Usar {{zone}}"
+    }
   },
   "mediaTypes": {
     "music": {

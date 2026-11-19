@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/yeixio/boxoffice/internal/store"
+	"github.com/yeixio/boxoffice/internal/zone"
 )
 
 // The speed schedule: times of the week when downloads go slower, at full
@@ -169,7 +170,7 @@ func LoadSpeedNow(ctx context.Context, st *store.Store, set Settings, now time.T
 // Speed works out the speed at now from the speed limit setting (KB/s, 0
 // for none), the schedule and a quick change, if there is one.
 func Speed(base int64, s SpeedSchedule, o *SpeedOverride, now time.Time) SpeedNow {
-	now = now.Local()
+	now = zone.In(now)
 	var week []int8
 	if s.Enabled {
 		week = s.table()
@@ -192,11 +193,7 @@ func Speed(base int64, s SpeedSchedule, o *SpeedOverride, now time.Time) SpeedNo
 		}
 		return SpeedStep{Mode: SpeedFull, Source: FromSetting, Range: -1}
 	}
-	zone, _ := now.Zone()
-	if name := time.Local.String(); name != "" && name != "Local" {
-		zone = name
-	}
-	out := SpeedNow{SpeedStep: at(now), Override: o, Zone: zone, Clock: now.Format("15:04")}
+	out := SpeedNow{SpeedStep: at(now), Override: o, Zone: zone.Name(), Clock: now.Format("15:04")}
 	// When it changes: a minute at a time over the next week. The speed
 	// is the same while its source and range are, so the step only has to
 	// differ in those or in the speed itself.
@@ -331,7 +328,7 @@ func (s SpeedNow) Why() string {
 		who = "a speed change on the Downloads page"
 	}
 	if s.Until != nil {
-		return fmt.Sprintf("%s pauses downloading until %s", who, s.Until.Local().Format("15:04"))
+		return fmt.Sprintf("%s pauses downloading until %s", who, zone.In(*s.Until).Format("15:04"))
 	}
 	return who + " pauses downloading"
 }

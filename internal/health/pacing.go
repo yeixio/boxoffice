@@ -7,6 +7,7 @@ import (
 
 	"github.com/yeixio/boxoffice/internal/downloader"
 	"github.com/yeixio/boxoffice/internal/store"
+	"github.com/yeixio/boxoffice/internal/zone"
 )
 
 // indexers warns of an indexer resting after errors, or near its daily
@@ -36,7 +37,7 @@ func (c *Checker) indexers(ctx context.Context) ([]Issue, error) {
 			out = append(out, Issue{
 				ID: fmt.Sprintf("indexer-resting-%d", ix.ID), Level: "warning", Title: ix.Name + " is resting after errors",
 				Detail: fmt.Sprintf("Its last answer was: %s. After %s in a row, Box Office waits until %s before asking it again, longer each time, so a struggling indexer isn't hammered.",
-					st.LastError, plural(st.Failures, "error", "errors"), st.RestingUntil.Local().Format("Jan 2 15:04")),
+					st.LastError, plural(st.Failures, "error", "errors"), zone.In(st.RestingUntil).Format("Jan 2 15:04")),
 				Steps: []string{
 					"Check the indexer's website: it may be down, or your account may need attention (an expired membership, a changed API key).",
 					"If its daily limit ran out, it rests an hour at a time until it resets, usually at midnight UTC.",
@@ -100,11 +101,11 @@ func (c *Checker) data(ctx context.Context) ([]Issue, error) {
 			switch left := u.Expires.Sub(now); {
 			case left <= 0:
 				out = append(out, Issue{ID: fmt.Sprintf("server-expired-%d", u.ID), Level: "warning", Title: u.Name + "'s account has expired",
-					Detail: "Box Office stopped using it on " + u.Expires.Add(-time.Second).Local().Format("January 2") + ".",
+					Detail: "Box Office stopped using it on " + zone.In(u.Expires.Add(-time.Second)).Format("January 2") + ".",
 					Steps:  []string{"Renew the account on the provider's website, then change the expiry date in its settings, or turn the server off."}, Link: link})
 			case left < 7*24*time.Hour:
 				out = append(out, Issue{ID: fmt.Sprintf("server-expiring-%d", u.ID), Level: "notice", Title: u.Name + "'s account expires soon",
-					Detail: "It expires on " + u.Expires.Add(-time.Second).Local().Format("January 2") + ".",
+					Detail: "It expires on " + zone.In(u.Expires.Add(-time.Second)).Format("January 2") + ".",
 					Steps:  []string{"Renew it on the provider's website if you want to keep it, then change the date in its settings."}, Link: link})
 			}
 		}

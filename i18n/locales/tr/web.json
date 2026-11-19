@@ -1171,7 +1171,15 @@
       "movingSub": "Her şey kopyalanıp denetlenince Box Office yeniden açılır.",
       "moveTitle": "Veritabanı taşınsın mı?"
     },
-    "homeLayout": "Fotoğraflarının ve videolarının bulunduğu klasörü seç; örneğin telefonunun yedek aldığı bir paylaşım. Alt klasörler sorun değil: Box Office her birinin çekildiği tarihi dosyanın kendisinden okur."
+    "homeLayout": "Fotoğraflarının ve videolarının bulunduğu klasörü seç; örneğin telefonunun yedek aldığı bir paylaşım. Alt klasörler sorun değil: Box Office her birinin çekildiği tarihi dosyanın kendisinden okur.",
+    "zone": {
+      "title": "Saat dilimi",
+      "hint": "Box Office'in kullandığı saat: hız programının saatleri, veri sınırı ayının başladığı gün, günlük sınırların sayıldığı gün ve iletilerdeki saatler.",
+      "now": "Box Office'in saatine göre şu an {{time}} ({{zone}}).",
+      "server": "Sunucunun kendi dilimi ({{zone}})",
+      "differs": "Bu tarayıcı {{zone}} diliminde.",
+      "use": "{{zone}} kullan"
+    }
   },
   "mediaTypes": {
     "music": {

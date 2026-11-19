@@ -50,6 +50,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/subtitles"
 	"github.com/yeixio/boxoffice/internal/version"
 	"github.com/yeixio/boxoffice/internal/wikidata"
+	"github.com/yeixio/boxoffice/internal/zone"
 	"github.com/yeixio/boxoffice/web"
 )
 
@@ -121,6 +122,12 @@ func run() error {
 	}
 	db := opened.db
 	defer db.Close()
+	// The clock is kept in the zone picked in Settings, if one was.
+	if name, _ := db.Setting(context.Background(), zone.Setting); name != "" {
+		if err := zone.Set(name); err != nil {
+			log.Warn("the time zone picked in Settings can't be used; using the server's own", "zone", name, "err", err)
+		}
+	}
 	dbKind := "sqlite"
 	if store.IsPostgres(opened.dsn) {
 		dbKind = "postgres"
@@ -298,7 +305,7 @@ func run() error {
 	errc := make(chan error, 1)
 	go func() { errc <- hs.ListenAndServe() }()
 	log.Info("Box Office is running", "addr", cfg.Addr, "database", dbKind, "version", version.Version,
-		"data", cfg.DataDir, "downloads", cfg.Downloads, "debug", level.Level() == slog.LevelDebug)
+		"data", cfg.DataDir, "downloads", cfg.Downloads, "debug", level.Level() == slog.LevelDebug, "zone", zone.Name())
 	select {
 	case err := <-errc:
 		stop()

@@ -10,6 +10,7 @@ import (
 
 	"github.com/yeixio/boxoffice/internal/downloader"
 	"github.com/yeixio/boxoffice/internal/store"
+	"github.com/yeixio/boxoffice/internal/zone"
 )
 
 // ---- adding and changing indexers, download clients and news servers ----
@@ -308,7 +309,7 @@ func (s *Server) usenetServerFrom(r *http.Request, in usenetServerIn, id int64) 
 	}
 	u.Expires = time.Time{}
 	if e := strings.TrimSpace(in.Expires); e != "" {
-		t, err := time.ParseInLocation(time.DateOnly, e, time.Local)
+		t, err := time.ParseInLocation(time.DateOnly, e, zone.Get())
 		if err != nil {
 			return u, errorf(http.StatusBadRequest, "enter the day the account expires as a date, like 2027-06-30")
 		}

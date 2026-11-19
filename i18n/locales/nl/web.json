@@ -1171,7 +1171,15 @@
       "movingSub": "Box Office opent weer zodra alles gekopieerd en gecontroleerd is.",
       "moveTitle": "De database verhuizen?"
     },
-    "homeLayout": "Kies de map met je foto's en video's, zoals een share waar je telefoon een back-up naar maakt. Submappen zijn geen probleem: Box Office leest de opnamedatum uit het bestand zelf."
+    "homeLayout": "Kies de map met je foto's en video's, zoals een share waar je telefoon een back-up naar maakt. Submappen zijn geen probleem: Box Office leest de opnamedatum uit het bestand zelf.",
+    "zone": {
+      "title": "Tijdzone",
+      "hint": "De klok die Box Office aanhoudt: de uren van het snelheidsschema, de dag waarop de maand van de datalimiet begint, de dag waarvoor dagelijkse limieten tellen, en de tijden in meldingen.",
+      "now": "Het is {{time}} op de klok van Box Office ({{zone}}).",
+      "server": "Die van de server zelf ({{zone}})",
+      "differs": "Deze browser zit in {{zone}}.",
+      "use": "{{zone}} gebruiken"
+    }
   },
   "mediaTypes": {
     "music": {

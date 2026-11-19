@@ -14,6 +14,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/jobs"
 	"github.com/yeixio/boxoffice/internal/quality"
 	"github.com/yeixio/boxoffice/internal/store"
+	"github.com/yeixio/boxoffice/internal/zone"
 )
 
 // JobSearchWanted is the automatic search for missing titles and
@@ -233,8 +234,8 @@ func (a AutoSettings) upgradeOn(title string) bool {
 // monthStart is the first day of the calendar month, as store.DataDay
 // writes days.
 func monthStart(now time.Time) string {
-	now = now.Local()
-	return store.DataDay(time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, time.Local))
+	now = zone.In(now)
+	return store.DataDay(time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, zone.Get()))
 }
 
 // UpgradesLeft is how many more upgrades Box Office may grab by itself

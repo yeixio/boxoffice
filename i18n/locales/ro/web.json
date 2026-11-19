@@ -1248,7 +1248,15 @@
       "movingSub": "Box Office se deschide din nou după ce totul este copiat și verificat.",
       "moveTitle": "Muți baza de date?"
     },
-    "homeLayout": "Alege folderul cu fotografiile și videoclipurile tale, de exemplu un folder partajat în care telefonul face copii de siguranță. Subfolderele nu sunt o problemă: Box Office citește data fiecăruia din fișierul însuși."
+    "homeLayout": "Alege folderul cu fotografiile și videoclipurile tale, de exemplu un folder partajat în care telefonul face copii de siguranță. Subfolderele nu sunt o problemă: Box Office citește data fiecăruia din fișierul însuși.",
+    "zone": {
+      "title": "Fus orar",
+      "hint": "Ceasul după care merge Box Office: orele programului de viteză, ziua în care începe luna limitei de date, ziua pentru care se numără limitele zilnice și orele din mesaje.",
+      "now": "Este {{time}} pe ceasul Box Office ({{zone}}).",
+      "server": "Cel al serverului ({{zone}})",
+      "differs": "Acest browser este în {{zone}}.",
+      "use": "Folosește {{zone}}"
+    }
   },
   "mediaTypes": {
     "music": {

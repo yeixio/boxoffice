@@ -4,6 +4,7 @@ import { useState, type FormEvent } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { Clapperboard } from 'lucide-react'
 import { post } from '../api'
+import { browserZone } from '../format'
 import { Button, ErrorNote, Field, Input } from '../ui'
 
 // SignIn signs an admin in, or on first start makes the first admin.
@@ -25,7 +26,9 @@ export function SignIn({ firstRun }: { firstRun: boolean }) {
     }
     setBusy(true)
     try {
-      await post(firstRun ? '/setup' : '/login', { username, password })
+      // Setting up also says which time zone this browser is in, for a
+      // server that doesn't know its own.
+      await post(firstRun ? '/setup' : '/login', firstRun ? { username, password, timeZone: browserZone() } : { username, password })
       await qc.invalidateQueries({ queryKey: ['status'] })
     } catch (err) {
       setError(err)
