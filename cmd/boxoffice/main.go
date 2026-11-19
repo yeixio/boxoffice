@@ -35,6 +35,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/kube"
 	"github.com/yeixio/boxoffice/internal/library"
 	"github.com/yeixio/boxoffice/internal/libscan"
+	"github.com/yeixio/boxoffice/internal/lists"
 	"github.com/yeixio/boxoffice/internal/migrate"
 	"github.com/yeixio/boxoffice/internal/monitor"
 	"github.com/yeixio/boxoffice/internal/music"
@@ -243,6 +244,9 @@ func run() error {
 	// slowly for the rest of the library.
 	subs := &subtitles.Service{Store: db, Log: log, UserAgent: "BoxOffice/" + version.Version}
 	srv.Subtitles = subs
+	// Lists kept elsewhere (TMDB, Trakt, Plex) are read every few hours.
+	follower := &lists.Service{Store: db, Catalog: cat, Log: log, UserAgent: "BoxOffice/" + version.Version}
+	srv.Lists = follower
 	srv.Portal.Subtitles = subs.Reported
 	downloads.Imported = func(ctx context.Context, d store.Download) {
 		switch d.Kind {
@@ -267,7 +271,7 @@ func run() error {
 	var wg sync.WaitGroup
 	for _, loop := range []func(context.Context){runner.Run, backups.Run, downloads.Run, mon.Monitor.Run, alerter.Run,
 		func(ctx context.Context) { cat.RefreshEvery(ctx, cfg.Refresh) }, func(ctx context.Context) { finder.AutoSearchEvery(ctx, runner) },
-		finder.RSSEvery, finder.HeldEvery, finder.RegrabsEvery, finder.PruneEvery, shelf.DetailsEvery, finds.Run, checker.Run, subs.Run, gameShelf.Run, homeShelf.Run, func(ctx context.Context) { api.RecycleSweepEvery(ctx, db, log) },
+		finder.RSSEvery, finder.HeldEvery, finder.RegrabsEvery, finder.PruneEvery, shelf.DetailsEvery, finds.Run, checker.Run, subs.Run, follower.Run, gameShelf.Run, homeShelf.Run, func(ctx context.Context) { api.RecycleSweepEvery(ctx, db, log) },
 		func(ctx context.Context) { retryImports(ctx, downloads, log) }} {
 		wg.Add(1)
 		go func() { defer wg.Done(); loop(ctx) }()

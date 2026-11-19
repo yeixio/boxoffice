@@ -995,3 +995,27 @@ export type HomeScan = {
 }
 export type HomeSummary = { photos: number; videos: number; size: number; roots: number; albums: number; scan: HomeScan }
 export type HomeCopies = { kind: 'same' | 'alike'; items: HomeItem[]; keep: number; spare: number }
+
+// Lists followed from elsewhere (Settings → Library → Lists).
+export type ListState = 'waiting' | 'added' | 'had' | 'removed' | 'skipped' | 'failed'
+export type FollowedList = {
+  id: number
+  name: string
+  source: 'tmdb' | 'trakt' | 'plex'
+  address: string
+  enabled: boolean
+  ask: boolean
+  search: boolean
+  movies: boolean
+  shows: boolean
+  movieProfile: number
+  movieRoot: string
+  showProfile: number
+  showRoot: string
+  checkedAt?: string
+  lastError?: string
+  counts: Partial<Record<ListState, number>>
+}
+export type FollowedLists = { lists: FollowedList[]; traktClient: boolean; everyHours: number; perCheck: number }
+export type ListPreview = { source: FollowedList['source']; needsTraktClient?: boolean; address: string; name: string; movies: number; shows: number; sample: string[]; capped: boolean }
+export type ListItem = { listId: number; kind: 'movie' | 'series'; tmdbId: number; title: string; year?: number; state: ListState; note?: string; seenAt: string }
