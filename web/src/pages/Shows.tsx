@@ -10,6 +10,7 @@ import { SortControl, sortList, useSort, words, type SortOption } from '../sort'
 import { Badge, Button, Empty, ErrorNote, Heading, Input, Poster, Spinner } from '../ui'
 import { AddTitle } from './AddTitle'
 import { BulkBar, Pickable, useSelection } from '../Bulk'
+import { End, useWindowed } from '../windowed'
 
 // airing groups a show's status, as TMDB or Sonarr word it, the way
 // people think of it: still on, not started yet, or over. Shown as
@@ -60,6 +61,8 @@ export function Shows() {
     const sorted = sortList(shows.data ?? [], sort.option, sort.dir, byTitle)
     return sorted.filter((s) => !q || s.title.toLowerCase().includes(q))
   }, [shows.data, text, sort.option, sort.dir])
+  // Only the cards near the screen are drawn; shown is still the whole list.
+  const cards = useWindowed('shows', shown, [text, sort.option.key, sort.dir].join('|'))
   // Under each poster: how many episodes it has, or what it's sorted by.
   const fact = (s: Series) => {
     switch (sort.option.key) {
@@ -121,7 +124,7 @@ export function Shows() {
           </div>
           {shown.length === 0 && <p className="py-10 text-center text-sm text-muted">{t('shows.noMatch')}</p>}
           <ul className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            {shown.map((s) => {
+            {cards.items.map((s) => {
               const pct = s.episodeCount ? Math.round((100 * s.fileCount) / s.episodeCount) : 0
               const tile = (
                 <>
@@ -156,6 +159,7 @@ export function Shows() {
               )
             })}
           </ul>
+          <End list={cards} />
           {sel.on && <BulkBar kind="series" sel={sel} shown={shown.map((s) => s.id)} />}
         </>
       )}

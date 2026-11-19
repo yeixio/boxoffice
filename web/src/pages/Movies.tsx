@@ -10,6 +10,7 @@ import { SortControl, sortList, useSort, words, type SortOption } from '../sort'
 import { Badge, Button, Empty, ErrorNote, Heading, Input, Poster, Spinner } from '../ui'
 import { AddTitle } from './AddTitle'
 import { BulkBar, Pickable, useSelection } from '../Bulk'
+import { End, useWindowed } from '../windowed'
 
 const filters = {
   all: { label: 'filter.all', test: (_m: Movie, _l: Set<number>) => true },
@@ -66,6 +67,8 @@ export function Movies() {
     const q = text.trim().toLowerCase()
     return sorted.filter((m) => filters[filter].test(m, locked) && (!q || m.title.toLowerCase().includes(q)))
   }, [sorted, filter, text, locked])
+  // Only the cards near the screen are drawn; shown is still the whole list.
+  const cards = useWindowed('movies', shown, [filter, text, sort.option.key, sort.dir].join('|'))
   // Under each poster: the year, or what the list is sorted by.
   const fact = (m: Movie) => {
     switch (sort.option.key) {
@@ -135,7 +138,7 @@ export function Movies() {
           </div>
           {shown.length === 0 && <p className="py-10 text-center text-sm text-muted">{t('movies.noMatch')}</p>}
           <ul className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            {shown.map((m) => {
+            {cards.items.map((m) => {
               const tile = (
                 <>
                   <Poster src={m.poster} title={m.title} className="transition group-hover:ring-2 group-hover:ring-marquee" />
@@ -171,6 +174,7 @@ export function Movies() {
               )
             })}
           </ul>
+          <End list={cards} />
           {sel.on && <BulkBar kind="movies" sel={sel} shown={shown.map((m) => m.id)} />}
         </>
       )}
