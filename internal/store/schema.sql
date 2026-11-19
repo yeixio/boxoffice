@@ -747,3 +747,19 @@ CREATE TABLE IF NOT EXISTS list_items (
 	seen_at BIGINT NOT NULL,
 	PRIMARY KEY (list_id, kind, tmdb_id)
 );
+
+-- What Matinee says was watched: for each movie and show, when anyone last
+-- played it, how many people have played it, and how many have finished it
+-- (a show: every episode it has). Each report from Matinee replaces the
+-- last, so a title that isn't here hasn't been played. The clean-up rules
+-- go by this.
+CREATE TABLE IF NOT EXISTS watched (
+	kind        TEXT NOT NULL,              -- movie or series
+	title_id    BIGINT NOT NULL,
+	last_played BIGINT NOT NULL DEFAULT 0,  -- by anyone
+	viewers     INTEGER NOT NULL DEFAULT 0, -- people who have played any of it
+	finished_by INTEGER NOT NULL DEFAULT 0, -- people who have finished it
+	finished_at BIGINT NOT NULL DEFAULT 0,  -- when the last of them did
+	report      BIGINT NOT NULL,            -- the report it came in
+	PRIMARY KEY (kind, title_id)
+);
