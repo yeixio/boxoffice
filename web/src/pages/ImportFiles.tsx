@@ -226,12 +226,13 @@ export function ImportFiles() {
           </>
         }
       />
-      <input ref={files} type="file" multiple hidden onChange={(e) => (pickFiles(e.target.files), (e.target.value = ''))} data-testid="upload-files" />
+      <input ref={files} type="file" multiple hidden aria-label={t('importFiles.uploadFiles')} onChange={(e) => (pickFiles(e.target.files), (e.target.value = ''))} data-testid="upload-files" />
       <input
         ref={folder}
         type="file"
         multiple
         hidden
+        aria-label={t('importFiles.uploadFolder')}
         // Chrome, Edge, Firefox and Safari all take a folder this way.
         {...({ webkitdirectory: '' } as object)}
         onChange={(e) => (pickFiles(e.target.files), (e.target.value = ''))}

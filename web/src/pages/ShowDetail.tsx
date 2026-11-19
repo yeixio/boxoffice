@@ -12,7 +12,7 @@ import { bytes, day, episodeCode } from '../format'
 import { qualityName, useProfiles, useQualities } from '../hooks'
 import { pictureText } from './QualityCheck'
 import { FindSubtitles, SubtitleMark } from './Subtitles'
-import { Badge, Button, Card, ErrorNote, Field, Poster, Select, Spinner, Toggle } from '../ui'
+import { Backdrop, Badge, Button, Card, ErrorNote, Field, Poster, Select, Spinner, Toggle } from '../ui'
 
 type Detail = { series: Series; episodes: Episode[]; reported?: Reported[] }
 
@@ -54,15 +54,13 @@ export function ShowDetail() {
 
   return (
     <div>
-      {s.backdrop && (
-        <div className="-mx-4 -mt-8 mb-6 h-56 md:-mx-8 overflow-hidden sm:h-72">
-          <img src={s.backdrop} alt="" className="size-full object-cover opacity-80 [mask-image:linear-gradient(to_bottom,black_40%,transparent)]" />
-        </div>
-      )}
-      <div className="flex flex-col gap-8 md:flex-row">
-        <Poster src={s.poster} title={s.title} className="w-48 shrink-0 self-start shadow-lg" />
-        <div className="flex-1">
-          <h1 className="font-display text-4xl font-bold tracking-tight">
+      <Backdrop src={s.backdrop} />
+      {/* On a phone the poster is small and sits beside the title, and the
+          buttons come before the overview, so they're on the first screen. */}
+      <div className="grid grid-cols-[6rem_minmax(0,1fr)] gap-x-4 gap-y-4 md:grid-cols-[12rem_minmax(0,1fr)] md:gap-x-8 md:gap-y-0">
+        <Poster src={s.poster} title={s.title} className="w-full self-start shadow-lg md:row-span-2" />
+        <div className="self-end md:self-start">
+          <h1 className="font-display text-2xl font-bold tracking-tight sm:text-4xl">
             {s.title} {s.year ? <span className="font-normal text-muted">{s.year}</span> : null}
           </h1>
           <div className="mt-2 flex flex-wrap gap-2">
@@ -72,13 +70,15 @@ export function ShowDetail() {
               {t('shows.progress', { have: s.fileCount, count: s.episodeCount })}
             </Badge>
           </div>
-          {s.overview && <p className="mt-4 max-w-3xl leading-relaxed">{s.overview}</p>}
+        </div>
+        <div className="col-span-2 flex flex-col md:col-span-1 md:col-start-2">
+          {s.overview && <p className="max-w-3xl md:mt-4 leading-relaxed">{s.overview}</p>}
           {locked && <LockedNote />}
           {show.data.reported?.map((r) => {
             const e = episodes.find((x) => x.id === r.ownerId)
             return <ReportedNote key={r.ownerId} reported={r} episode={e ? episodeCode(e.season, e.number) : undefined} />
           })}
-          <div className="mt-6 flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 max-md:order-first max-md:mb-4 md:mt-6">
             {!locked && (
               <Button variant="primary" busy={action.isPending && action.variables === 'search'} onClick={() => action.mutate('search')}>
                 <Search className="size-4" aria-hidden /> {t('show.lookWanted')}

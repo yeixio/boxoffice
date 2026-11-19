@@ -56,9 +56,11 @@ export function Input(props: InputHTMLAttributes<HTMLInputElement>) {
   return <input {...props} className={`w-full rounded-md border border-line bg-paper px-3 py-2 text-sm placeholder:text-muted/70 ${props.className ?? ''}`} />
 }
 
-export function Select({ value, onChange, options, id }: { value: string | number; onChange: (v: string) => void; options: { value: string | number; label: string }[]; id?: string }) {
+// A picker with no visible label (a filter beside a heading, say) is named
+// for screen readers with label.
+export function Select({ value, onChange, options, id, label }: { value: string | number; onChange: (v: string) => void; options: { value: string | number; label: string }[]; id?: string; label?: string }) {
   return (
-    <select id={id} value={value} onChange={(e) => onChange(e.target.value)} className="w-full rounded-md border border-line bg-paper px-3 py-2 text-sm">
+    <select id={id} aria-label={label} value={value} onChange={(e) => onChange(e.target.value)} className="w-full rounded-md border border-line bg-paper px-3 py-2 text-sm">
       {options.map((o) => (
         <option key={o.value} value={o.value}>
           {o.label}
@@ -69,19 +71,25 @@ export function Select({ value, onChange, options, id }: { value: string | numbe
 }
 
 export function Toggle({ checked, onChange, label, disabled }: { checked: boolean; onChange: (v: boolean) => void; label: ReactNode; disabled?: boolean }) {
+  // The switch is named by its text; not every screen reader takes a
+  // button's name from the label around it.
+  const id = useId()
   return (
     <label className={`flex cursor-pointer items-start gap-3 ${disabled ? 'opacity-50' : ''}`}>
       <button
         type="button"
         role="switch"
         aria-checked={checked}
+        aria-labelledby={id}
         disabled={disabled}
         onClick={() => onChange(!checked)}
         className={`relative mt-0.5 h-5 w-9 shrink-0 rounded-full transition ${checked ? 'bg-marquee' : 'bg-line'}`}
       >
         <span className={`absolute top-0.5 size-4 rounded-full bg-card shadow transition ${checked ? 'start-4.5' : 'start-0.5'}`} />
       </button>
-      <span className="text-sm">{label}</span>
+      <span id={id} className="text-sm">
+        {label}
+      </span>
     </label>
   )
 }
@@ -161,5 +169,17 @@ export function Modal({ title, onClose, children, wide }: { title: string; onClo
       </div>
       <div className="max-h-[75vh] overflow-y-auto p-5">{children}</div>
     </dialog>
+  )
+}
+
+// Backdrop is the wide picture across the top of a title's page. One that
+// can't be loaded leaves no gap and no broken-picture mark.
+export function Backdrop({ src }: { src?: string }) {
+  const [failed, setFailed] = useState('')
+  if (!src || failed === src) return null
+  return (
+    <div className="-mx-4 -mt-8 mb-4 h-28 overflow-hidden sm:mb-6 sm:h-72 md:-mx-8">
+      <img src={src} alt="" onError={() => setFailed(src)} className="size-full object-cover opacity-80 [mask-image:linear-gradient(to_bottom,black_40%,transparent)]" />
+    </div>
   )
 }

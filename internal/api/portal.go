@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/yeixio/boxoffice/internal/catalog"
@@ -217,12 +218,86 @@ func (s *Server) memberSignUp(w http.ResponseWriter, r *http.Request) error {
 	if err := readJSON(r, &in); err != nil {
 		return err
 	}
+	from := clientIP(r)
+	if wait := s.signUps.try(from, time.Now()); wait > 0 {
+		w.Header().Set("Retry-After", strconv.Itoa(int(wait.Seconds())+1))
+		s.Log.Warn("too many sign-ups for the request site; this one was turned away", "from", from)
+		return errorf(http.StatusTooManyRequests, "too many new accounts just now; try again in an hour, or ask an admin for an account")
+	}
 	m, err := s.Portal.SignUp(r.Context(), in.Username, in.DisplayName, in.Password)
 	if err != nil {
 		return portalErr(err)
 	}
-	s.Log.Info("someone signed up for the request site", "username", m.Username, "from", clientIP(r))
+	s.signUps.made(from, time.Now())
+	s.Log.Info("someone signed up for the request site", "username", m.Username, "from", from)
 	return s.memberSignedIn(w, r, m)
+}
+
+// Sign-ups are limited, since anyone who can reach the request site can
+// make them: each address may make a few accounts an hour and try a few
+// more times than that (a try costs a password hash even when the username
+// is taken), and all addresses together may make a few more, which is what
+// counts behind a proxy, where everyone arrives from one address.
+const (
+	signUpsPerAddress = 3
+	signUpTries       = 10
+	signUpsOverall    = 10
+	signUpWindow      = time.Hour
+)
+
+type signUpLimit struct {
+	mu    sync.Mutex
+	tries map[string][]time.Time
+	by    map[string][]time.Time
+	all   []time.Time
+}
+
+// recent drops the times older than the window.
+func recent(times []time.Time, now time.Time) []time.Time {
+	i := 0
+	for i < len(times) && now.Sub(times[i]) >= signUpWindow {
+		i++
+	}
+	return times[i:]
+}
+
+// try counts an attempt from an address, and says how long to wait if
+// there have been too many.
+func (l *signUpLimit) try(from string, now time.Time) time.Duration {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	if l.tries == nil {
+		l.tries, l.by = map[string][]time.Time{}, map[string][]time.Time{}
+	}
+	// Forget addresses that have been quiet, so the lists stay small.
+	for _, m := range []map[string][]time.Time{l.tries, l.by} {
+		for k, v := range m {
+			if v = recent(v, now); len(v) == 0 {
+				delete(m, k)
+			} else {
+				m[k] = v
+			}
+		}
+	}
+	l.all = recent(l.all, now)
+	for _, full := range []struct {
+		times []time.Time
+		most  int
+	}{{l.by[from], signUpsPerAddress}, {l.tries[from], signUpTries}, {l.all, signUpsOverall}} {
+		if len(full.times) >= full.most {
+			return signUpWindow - now.Sub(full.times[len(full.times)-full.most])
+		}
+	}
+	l.tries[from] = append(l.tries[from], now)
+	return 0
+}
+
+// made counts an account that was made.
+func (l *signUpLimit) made(from string, now time.Time) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	l.by[from] = append(l.by[from], now)
+	l.all = append(l.all, now)
 }
 
 func (s *Server) memberLogout(w http.ResponseWriter, r *http.Request) error {

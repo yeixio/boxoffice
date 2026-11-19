@@ -53,5 +53,11 @@
     "previous": "Předchozí stránka",
     "next": "Další stránka",
     "page": "Stránka {{page}} z {{pages}}"
+  },
+  "skip": "Přejít na obsah",
+  "broken": {
+    "title": "Na této stránce došlo k potížím",
+    "body": "Zbytek Box Office dál funguje. Obvykle pomůže stránku načíst znovu. Pokud se to opakuje, přiložte níže uvedený text k hlášení chyby.",
+    "reload": "Načíst stránku znovu"
   }
 }

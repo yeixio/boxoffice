@@ -51,5 +51,11 @@
     "previous": "Önceki sayfa",
     "next": "Sonraki sayfa",
     "page": "Sayfa {{page}} / {{pages}}"
+  },
+  "skip": "İçeriğe geç",
+  "broken": {
+    "title": "Bu sayfada bir sorun oluştu",
+    "body": "Box Office'in geri kalanı çalışmaya devam ediyor. Yeniden yüklemek genellikle sorunu çözer. Tekrarlanırsa aşağıdaki metni hata bildirimine ekleyin.",
+    "reload": "Sayfayı yeniden yükle"
   }
 }

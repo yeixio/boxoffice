@@ -405,7 +405,7 @@ export function SendToReader({ book }: { book: Book }) {
       <div className="flex flex-wrap items-center gap-2">
         {data.devices.length > 1 && (
           <div className="min-w-40">
-            <Select value={picked.id} options={data.devices.map((d) => ({ value: d.id, label: label(d) }))} onChange={setDevice} />
+            <Select label={t('ereaders.title')} value={picked.id} options={data.devices.map((d) => ({ value: d.id, label: label(d) }))} onChange={setDevice} />
           </div>
         )}
         <Button busy={send.isPending} onClick={() => send.mutate(picked.id)}>

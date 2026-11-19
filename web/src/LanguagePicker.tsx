@@ -27,6 +27,7 @@ export function LanguagePicker({ saved, onPick, busy, id }: { saved?: string; on
     <div className="flex flex-col gap-1.5">
       <select
         id={id}
+        aria-label={id ? undefined : t('language.label')}
         className="w-full rounded-md border border-line bg-paper px-3 py-2 text-sm"
         value={value}
         disabled={saved === undefined || busy}

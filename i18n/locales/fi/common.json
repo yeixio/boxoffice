@@ -51,5 +51,11 @@
     "previous": "Edellinen sivu",
     "next": "Seuraava sivu",
     "page": "Sivu {{page}} / {{pages}}"
+  },
+  "skip": "Siirry sisältöön",
+  "broken": {
+    "title": "Tällä sivulla tapahtui virhe",
+    "body": "Muu Box Office toimii edelleen. Sivun lataaminen uudelleen auttaa yleensä. Jos virhe toistuu, liitä alla oleva teksti vikailmoitukseen.",
+    "reload": "Lataa sivu uudelleen"
   }
 }

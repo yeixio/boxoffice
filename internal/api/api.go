@@ -114,6 +114,7 @@ type Server struct {
 	cleanupMu    sync.Mutex // one clean-up run or deletion at a time
 	started      time.Time
 	failures     sync.Map // username -> *failure
+	signUps      signUpLimit
 	healthCount  healthCount
 }
 

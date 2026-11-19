@@ -93,8 +93,22 @@ func (s *Service) SignUp(ctx context.Context, username, displayName, password st
 	if !st.LocalSignIn || !st.SignUp {
 		return store.Member{}, badf("ask an admin for an account")
 	}
-	return s.CreateLocal(ctx, store.Member{Username: username, DisplayName: displayName, QuotaMovies: -1, QuotaShows: -1}, password)
+	// Someone who made their own account follows the site's weekly limits,
+	// and where the site has none gets a limit of their own, which an admin
+	// can change under People.
+	m := store.Member{Username: username, DisplayName: displayName, QuotaMovies: -1, QuotaShows: -1}
+	if st.QuotaMovies == 0 {
+		m.QuotaMovies = SignUpQuota
+	}
+	if st.QuotaShows == 0 {
+		m.QuotaShows = SignUpQuota
+	}
+	return s.CreateLocal(ctx, m, password)
 }
+
+// SignUpQuota is how many movies, and how many shows, someone who signed
+// up on their own may ask for a week when the site sets no limit.
+const SignUpQuota = 5
 
 // SignIn checks a username and password: a local account's here, or a
 // Matinee account's with Matinee. Someone signing in with Matinee for the

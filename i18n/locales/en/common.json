@@ -51,5 +51,11 @@
     "previous": "Previous page",
     "next": "Next page",
     "page": "Page {{page}} of {{pages}}"
+  },
+  "skip": "Skip to content",
+  "broken": {
+    "title": "This page hit a problem",
+    "body": "The rest of Box Office is still working. Reloading usually fixes it. If it keeps happening, include the text below in a bug report.",
+    "reload": "Reload the page"
   }
 }

@@ -52,5 +52,11 @@
     "previous": "Página anterior",
     "next": "Próxima página",
     "page": "Página {{page}} de {{pages}}"
+  },
+  "skip": "Pular para o conteúdo",
+  "broken": {
+    "title": "Esta página teve um problema",
+    "body": "O restante do Box Office continua funcionando. Recarregar costuma resolver. Se continuar acontecendo, inclua o texto abaixo em um relato de bug.",
+    "reload": "Recarregar a página"
   }
 }

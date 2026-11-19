@@ -51,5 +51,11 @@
     "previous": "Vorige pagina",
     "next": "Volgende pagina",
     "page": "Pagina {{page}} van {{pages}}"
+  },
+  "skip": "Naar de inhoud",
+  "broken": {
+    "title": "Er ging iets mis op deze pagina",
+    "body": "De rest van Box Office werkt nog. Opnieuw laden lost het meestal op. Als het blijft gebeuren, zet dan de tekst hieronder in een bugmelding.",
+    "reload": "Pagina opnieuw laden"
   }
 }

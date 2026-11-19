@@ -50,5 +50,11 @@
     "previous": "Trang trước",
     "next": "Trang sau",
     "page": "Trang {{page}} trên {{pages}}"
+  },
+  "skip": "Chuyển đến nội dung",
+  "broken": {
+    "title": "Trang này đã gặp sự cố",
+    "body": "Phần còn lại của Box Office vẫn hoạt động. Tải lại thường sẽ khắc phục được. Nếu vẫn tiếp diễn, hãy đính kèm đoạn văn bản bên dưới vào báo cáo lỗi.",
+    "reload": "Tải lại trang"
   }
 }

@@ -51,5 +51,11 @@
     "previous": "Föregående sida",
     "next": "Nästa sida",
     "page": "Sida {{page}} av {{pages}}"
+  },
+  "skip": "Hoppa till innehållet",
+  "broken": {
+    "title": "Det uppstod ett problem på den här sidan",
+    "body": "Resten av Box Office fungerar fortfarande. Det brukar hjälpa att läsa in sidan igen. Om det fortsätter, ta med texten nedan i en felrapport.",
+    "reload": "Läs in sidan igen"
   }
 }
