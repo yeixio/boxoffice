@@ -1711,7 +1711,7 @@
       "copy": "アドレスをコピー",
       "openLink": "開く",
       "host": "専用のホスト名",
-      "hostHint": "任意（requests.example.com など）。その名前を Box Office に向けると（DNS と ingress またはリバースプロキシで）、そこではリクエストサイトがサイト全体になります。この管理画面はいつものアドレスのままです。",
+      "hostHint": "任意（requests.example.com など）。その名前を Box Office に向けると（DNS と ingress またはリバースプロキシで）、そこではリクエストサイトがサイト全体になります。この管理画面はいつものアドレスのままです。この管理ページと Box Office の API は、その名前では応答しません。",
       "look": "外観",
       "welcome": "ようこそメッセージ",
       "welcomeHint": "サインインページと見つけるの上部に表示されます。",

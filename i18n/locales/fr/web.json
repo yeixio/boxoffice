@@ -1909,7 +1909,7 @@
       "copy": "Copier l’adresse",
       "openLink": "Ouvrir",
       "host": "Son propre nom d’hôte",
-      "hostHint": "Facultatif, comme requests.example.com. Faites pointer ce nom vers Box Office (dans le DNS et votre ingress ou reverse proxy), et le site de demandes y occupe tout le site. Cette interface d’administration reste à son adresse habituelle.",
+      "hostHint": "Facultatif, comme requests.example.com. Faites pointer ce nom vers Box Office (dans le DNS et votre ingress ou reverse proxy), et le site de demandes y occupe tout le site. Cette interface d’administration reste à son adresse habituelle. Ces pages d’administration et l’API de Box Office ne répondent pas à ce nom.",
       "look": "Apparence",
       "welcome": "Texte d’accueil",
       "welcomeHint": "Affiché sur la page de connexion et en haut de Découvrir.",

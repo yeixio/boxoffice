@@ -2008,7 +2008,7 @@
       "copy": "Kopiuj adres",
       "openLink": "Otwórz",
       "host": "Własna nazwa hosta",
-      "hostHint": "Opcjonalnie, na przykład requests.example.com. Skieruj tę nazwę na Box Office (w DNS i w swoim ingressie lub reverse proxy), a tam strona próśb będzie całą witryną. Ten panel administracyjny zostaje pod zwykłym adresem.",
+      "hostHint": "Opcjonalnie, na przykład requests.example.com. Skieruj tę nazwę na Box Office (w DNS i w swoim ingressie lub reverse proxy), a tam strona próśb będzie całą witryną. Ten panel administracyjny zostaje pod zwykłym adresem. Te strony administracyjne i API Box Office nie odpowiadają pod tą nazwą.",
       "look": "Wygląd",
       "welcome": "Tekst powitalny",
       "welcomeHint": "Wyświetlany na stronie logowania i u góry Odkrywaj.",

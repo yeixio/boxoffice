@@ -2008,7 +2008,7 @@
       "copy": "Kopírovat adresu",
       "openLink": "Otevřít",
       "host": "Vlastní název hostitele",
-      "hostHint": "Volitelné, například requests.example.com. Nasměrujte tento název na Box Office (v DNS a ve svém ingressu nebo reverzní proxy) a tam bude stránka žádostí celým webem. Toto rozhraní správy zůstane na obvyklé adrese.",
+      "hostHint": "Volitelné, například requests.example.com. Nasměrujte tento název na Box Office (v DNS a ve svém ingressu nebo reverzní proxy) a tam bude stránka žádostí celým webem. Toto rozhraní správy zůstane na obvyklé adrese. Tyto stránky správy a API Box Office na tom názvu neodpovídají.",
       "look": "Vzhled",
       "welcome": "Uvítací text",
       "welcomeHint": "Zobrazuje se na přihlašovací stránce a nahoře v Objevovat.",

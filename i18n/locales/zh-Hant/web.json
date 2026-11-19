@@ -1711,7 +1711,7 @@
       "copy": "複製地址",
       "openLink": "開啟",
       "host": "專用主機名",
-      "hostHint": "可選，例如 requests.example.com。把這個名稱指向 Box Office（在 DNS 和 ingress 或反向代理中），在那裡請求網站就是整個網站。此管理介面仍在其原來的地址。",
+      "hostHint": "可選，例如 requests.example.com。把這個名稱指向 Box Office（在 DNS 和 ingress 或反向代理中），在那裡請求網站就是整個網站。此管理介面仍在其原來的地址。這些管理頁面和 Box Office 的 API 不會在那個名稱上回應。",
       "look": "外觀",
       "welcome": "歡迎語",
       "welcomeHint": "顯示在登入頁和探索的頂部。",

@@ -1810,7 +1810,7 @@
       "copy": "Copy the address",
       "openLink": "Open",
       "host": "Its own host name",
-      "hostHint": "Optional, such as requests.example.com. Point that name at Box Office (in DNS and your ingress or reverse proxy), and there the request site is the whole site. This admin UI stays at its usual address.",
+      "hostHint": "Optional, such as requests.example.com. Point that name at Box Office (in DNS and your ingress or reverse proxy), and there the request site is the whole site. This admin UI stays at its usual address. These admin pages and Box Office's API don't answer at that name.",
       "look": "Look",
       "welcome": "Welcome text",
       "welcomeHint": "Shown on the sign-in page and at the top of Discover.",

@@ -1810,7 +1810,7 @@
       "copy": "Kopioi osoite",
       "openLink": "Avaa",
       "host": "Oma isäntänimi",
-      "hostHint": "Valinnainen, kuten requests.example.com. Ohjaa nimi Box Officeen (DNS:ssä ja ingressissäsi tai käänteisessä välityspalvelimessa), niin siellä toivesivu on koko sivusto. Tämä ylläpitonäkymä pysyy tavallisessa osoitteessaan.",
+      "hostHint": "Valinnainen, kuten requests.example.com. Ohjaa nimi Box Officeen (DNS:ssä ja ingressissäsi tai käänteisessä välityspalvelimessa), niin siellä toivesivu on koko sivusto. Tämä ylläpitonäkymä pysyy tavallisessa osoitteessaan. Nämä ylläpitosivut ja Box Officen API eivät vastaa siinä nimessä.",
       "look": "Ulkoasu",
       "welcome": "Tervetuloteksti",
       "welcomeHint": "Näytetään kirjautumissivulla ja Löydä-sivun yläosassa.",

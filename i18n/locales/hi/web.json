@@ -1810,7 +1810,7 @@
       "copy": "पता कॉपी करें",
       "openLink": "खोलें",
       "host": "इसका अपना होस्ट नाम",
-      "hostHint": "वैकल्पिक, जैसे requests.example.com। उस नाम को Box Office की ओर करें (DNS और अपने ingress या reverse proxy में), और वहाँ अनुरोध साइट ही पूरी साइट होगी। यह एडमिन UI अपने सामान्य पते पर रहता है।",
+      "hostHint": "वैकल्पिक, जैसे requests.example.com। उस नाम को Box Office की ओर करें (DNS और अपने ingress या reverse proxy में), और वहाँ अनुरोध साइट ही पूरी साइट होगी। यह एडमिन UI अपने सामान्य पते पर रहता है। ये एडमिन पेज और Box Office का API उस नाम पर जवाब नहीं देते।",
       "look": "रूप",
       "welcome": "स्वागत पाठ",
       "welcomeHint": "साइन-इन पेज पर और खोजें के ऊपर दिखता है।",

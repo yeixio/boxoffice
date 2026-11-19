@@ -1711,7 +1711,7 @@
       "copy": "Salin alamat",
       "openLink": "Buka",
       "host": "Nama host sendiri",
-      "hostHint": "Opsional, seperti requests.example.com. Arahkan nama itu ke Box Office (di DNS dan ingress atau reverse proxy Anda), dan di sana situs permintaan menjadi seluruh situs. UI admin ini tetap di alamat biasanya.",
+      "hostHint": "Opsional, seperti requests.example.com. Arahkan nama itu ke Box Office (di DNS dan ingress atau reverse proxy Anda), dan di sana situs permintaan menjadi seluruh situs. UI admin ini tetap di alamat biasanya. Halaman admin ini dan API Box Office tidak menjawab di nama itu.",
       "look": "Tampilan",
       "welcome": "Teks sambutan",
       "welcomeHint": "Ditampilkan di halaman masuk dan di bagian atas Jelajahi.",

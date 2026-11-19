@@ -1711,7 +1711,7 @@
       "copy": "주소 복사",
       "openLink": "열기",
       "host": "전용 호스트 이름",
-      "hostHint": "선택 사항(예: requests.example.com). 그 이름을 Box Office로 연결하면(DNS와 ingress 또는 리버스 프록시에서) 그곳에서는 요청 사이트가 사이트 전체가 돼요. 이 관리 화면은 원래 주소에 그대로 있어요.",
+      "hostHint": "선택 사항(예: requests.example.com). 그 이름을 Box Office로 연결하면(DNS와 ingress 또는 리버스 프록시에서) 그곳에서는 요청 사이트가 사이트 전체가 돼요. 이 관리 화면은 원래 주소에 그대로 있어요. 이 관리 페이지와 Box Office API는 그 이름에서는 응답하지 않아요.",
       "look": "모양",
       "welcome": "환영 문구",
       "welcomeHint": "로그인 페이지와 둘러보기 상단에 표시돼요.",

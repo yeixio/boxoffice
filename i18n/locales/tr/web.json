@@ -1810,7 +1810,7 @@
       "copy": "Adresi kopyala",
       "openLink": "Aç",
       "host": "Kendi ana bilgisayar adı",
-      "hostHint": "İsteğe bağlı, örneğin requests.example.com. Bu adı Box Office'e yönlendirin (DNS'te ve ingress veya ters proxy'nizde); orada istek sitesi sitenin tamamıdır. Bu yönetici arayüzü her zamanki adresinde kalır.",
+      "hostHint": "İsteğe bağlı, örneğin requests.example.com. Bu adı Box Office'e yönlendirin (DNS'te ve ingress veya ters proxy'nizde); orada istek sitesi sitenin tamamıdır. Bu yönetici arayüzü her zamanki adresinde kalır. Bu yönetici sayfaları ve Box Office'in API'si o adda yanıt vermez.",
       "look": "Görünüm",
       "welcome": "Karşılama metni",
       "welcomeHint": "Giriş sayfasında ve Keşfet'in üstünde gösterilir.",

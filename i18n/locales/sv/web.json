@@ -1810,7 +1810,7 @@
       "copy": "Kopiera adressen",
       "openLink": "Öppna",
       "host": "Eget värdnamn",
-      "hostHint": "Valfritt, till exempel requests.example.com. Peka det namnet mot Box Office (i DNS och din ingress eller omvända proxy), så är önskemålssidan hela webbplatsen där. Det här administratörsgränssnittet ligger kvar på sin vanliga adress.",
+      "hostHint": "Valfritt, till exempel requests.example.com. Peka det namnet mot Box Office (i DNS och din ingress eller omvända proxy), så är önskemålssidan hela webbplatsen där. Det här administratörsgränssnittet ligger kvar på sin vanliga adress. De här administratörssidorna och Box Offices API svarar inte på det namnet.",
       "look": "Utseende",
       "welcome": "Välkomsttext",
       "welcomeHint": "Visas på inloggningssidan och högst upp på Upptäck.",

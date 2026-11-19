@@ -1810,7 +1810,7 @@
       "copy": "Adresse kopieren",
       "openLink": "Öffnen",
       "host": "Eigener Hostname",
-      "hostHint": "Optional, etwa requests.example.com. Richte diesen Namen auf Box Office (im DNS und in deinem Ingress oder Reverse Proxy), dann ist dort die Wunschseite die ganze Seite. Diese Admin-Oberfläche bleibt unter ihrer üblichen Adresse.",
+      "hostHint": "Optional, etwa requests.example.com. Richte diesen Namen auf Box Office (im DNS und in deinem Ingress oder Reverse Proxy), dann ist dort die Wunschseite die ganze Seite. Diese Admin-Oberfläche bleibt unter ihrer üblichen Adresse. Diese Admin-Seiten und die API von Box Office antworten unter diesem Namen nicht.",
       "look": "Aussehen",
       "welcome": "Begrüßungstext",
       "welcomeHint": "Wird auf der Anmeldeseite und oben unter Entdecken gezeigt.",

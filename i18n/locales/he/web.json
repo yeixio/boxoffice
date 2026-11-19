@@ -1909,7 +1909,7 @@
       "copy": "העתקת הכתובת",
       "openLink": "פתיחה",
       "host": "שם מארח משלו",
-      "hostHint": "רשות, כמו requests.example.com. מפנים את השם הזה אל Box Office (ב־DNS וב־ingress או ב־reverse proxy), ושם אתר הבקשות הוא האתר כולו. ממשק הניהול הזה נשאר בכתובת הרגילה שלו.",
+      "hostHint": "רשות, כמו requests.example.com. מפנים את השם הזה אל Box Office (ב־DNS וב־ingress או ב־reverse proxy), ושם אתר הבקשות הוא האתר כולו. ממשק הניהול הזה נשאר בכתובת הרגילה שלו. דפי הניהול האלה וה־API של Box Office אינם עונים בשם הזה.",
       "look": "מראה",
       "welcome": "טקסט פתיחה",
       "welcomeHint": "מוצג בדף הכניסה ובראש הגילוי.",

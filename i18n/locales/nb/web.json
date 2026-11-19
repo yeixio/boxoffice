@@ -1810,7 +1810,7 @@
       "copy": "Kopier adressen",
       "openLink": "Åpne",
       "host": "Eget vertsnavn",
-      "hostHint": "Valgfritt, for eksempel requests.example.com. Pek det navnet mot Box Office (i DNS og ingress eller omvendt proxy), så er ønskesiden hele nettstedet der. Dette administratorgrensesnittet blir på den vanlige adressen.",
+      "hostHint": "Valgfritt, for eksempel requests.example.com. Pek det navnet mot Box Office (i DNS og ingress eller omvendt proxy), så er ønskesiden hele nettstedet der. Dette administratorgrensesnittet blir på den vanlige adressen. Disse administratorsidene og Box Offices API svarer ikke på det navnet.",
       "look": "Utseende",
       "welcome": "Velkomsttekst",
       "welcomeHint": "Vises på innloggingssiden og øverst på Utforsk.",

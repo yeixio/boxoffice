@@ -1810,7 +1810,7 @@
       "copy": "A cím másolása",
       "openLink": "Megnyitás",
       "host": "Saját hosztnév",
-      "hostHint": "Nem kötelező, például requests.example.com. Irányítsd ezt a nevet a Box Office-ra (DNS-ben és az ingressben vagy a reverse proxyban), és ott a kéréses oldal lesz a teljes oldal. Ez a rendszergazdai felület a szokásos címén marad.",
+      "hostHint": "Nem kötelező, például requests.example.com. Irányítsd ezt a nevet a Box Office-ra (DNS-ben és az ingressben vagy a reverse proxyban), és ott a kéréses oldal lesz a teljes oldal. Ez a rendszergazdai felület a szokásos címén marad. Ezek a rendszergazdai oldalak és a Box Office API-ja azon a néven nem válaszolnak.",
       "look": "Megjelenés",
       "welcome": "Üdvözlő szöveg",
       "welcomeHint": "A bejelentkezési oldalon és a Felfedezés tetején jelenik meg.",

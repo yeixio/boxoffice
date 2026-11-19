@@ -1909,7 +1909,7 @@
       "copy": "Copiază adresa",
       "openLink": "Deschide",
       "host": "Propriul nume de gazdă",
-      "hostHint": "Opțional, de exemplu requests.example.com. Îndreaptă acel nume spre Box Office (în DNS și în ingress sau reverse proxy), iar acolo site-ul de cereri e întregul site. Această interfață de administrare rămâne la adresa obișnuită.",
+      "hostHint": "Opțional, de exemplu requests.example.com. Îndreaptă acel nume spre Box Office (în DNS și în ingress sau reverse proxy), iar acolo site-ul de cereri e întregul site. Această interfață de administrare rămâne la adresa obișnuită. Aceste pagini de administrare și API-ul Box Office nu răspund la acel nume.",
       "look": "Aspect",
       "welcome": "Text de bun venit",
       "welcomeHint": "Afișat pe pagina de conectare și în partea de sus a Descoperă.",

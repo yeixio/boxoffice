@@ -1711,7 +1711,7 @@
       "copy": "Salin alamat",
       "openLink": "Buka",
       "host": "Nama hos sendiri",
-      "hostHint": "Pilihan, seperti requests.example.com. Halakan nama itu ke Box Office (dalam DNS dan ingress atau proksi songsang anda), dan di sana laman permintaan ialah keseluruhan laman. UI pentadbir ini kekal di alamat biasanya.",
+      "hostHint": "Pilihan, seperti requests.example.com. Halakan nama itu ke Box Office (dalam DNS dan ingress atau proksi songsang anda), dan di sana laman permintaan ialah keseluruhan laman. UI pentadbir ini kekal di alamat biasanya. Halaman pentadbir ini dan API Box Office tidak menjawab di nama itu.",
       "look": "Rupa",
       "welcome": "Teks alu-aluan",
       "welcomeHint": "Dipaparkan pada halaman log masuk dan di bahagian atas Teroka.",
