@@ -255,7 +255,20 @@
     "airs": "Sänds",
     "sub": "Premiärer och avsnitt de kommande sex veckorna, för det som finns på listan.",
     "nothing": "Inget kommande",
-    "nothingBody": "Lägg till filmer och serier så visas deras premiärdatum här."
+    "nothingBody": "Lägg till filmer och serier så visas deras premiärdatum här.",
+    "subscribe": "Prenumerera",
+    "view": "Vy",
+    "list": "Lista",
+    "month": "Månad",
+    "lastWeek": "Visa förra veckan",
+    "notYet": "Inte här än",
+    "prev": "Föregående månad",
+    "next": "Nästa månad",
+    "nothingDay": "Inget den här dagen.",
+    "feedTitle": "Kalenderflöde",
+    "feedBody": "Lägg till den här adressen i kalendern på din telefon eller dator som en prenumererad kalender (i Google Kalender: ”Från webbadress”), så visas det som är på väg där och håller sig uppdaterat av sig självt.",
+    "feedSafe": "Alla som har adressen kan se vad som är på väg och inget annat. Din kalender måste kunna nå Box Office på den här adressen.",
+    "renew": "Skapa en ny adress (den gamla slutar fungera)"
   },
   "common": {
     "onDisk": "På disk",

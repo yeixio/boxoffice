@@ -255,7 +255,20 @@
     "airs": "Yayında",
     "sub": "Listedekiler için önümüzdeki altı haftanın çıkışları ve bölümleri.",
     "nothing": "Yakında bir şey yok",
-    "nothingBody": "Film ve dizi ekleyin, çıkış tarihleri burada görünür."
+    "nothingBody": "Film ve dizi ekleyin, çıkış tarihleri burada görünür.",
+    "subscribe": "Abone ol",
+    "view": "Görünüm",
+    "list": "Liste",
+    "month": "Ay",
+    "lastWeek": "Geçen haftayı göster",
+    "notYet": "Henüz gelmedi",
+    "prev": "Önceki ay",
+    "next": "Sonraki ay",
+    "nothingDay": "Bu gün için bir şey yok.",
+    "feedTitle": "Takvim akışı",
+    "feedBody": "Bu adresi telefonunuzun veya bilgisayarınızın takvimine abone olunan takvim olarak ekleyin (Google Takvim'de \"URL'den\"); yaklaşanlar orada görünür ve kendiliğinden güncel kalır.",
+    "feedSafe": "Adrese sahip olan herkes yaklaşanları görebilir, başka hiçbir şeyi göremez. Takviminizin bu adresten Box Office'e ulaşabilmesi gerekir.",
+    "renew": "Yeni adres oluştur (eskisi çalışmaz olur)"
   },
   "common": {
     "onDisk": "Diskte",

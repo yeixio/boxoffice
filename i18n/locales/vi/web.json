@@ -233,7 +233,20 @@
     "airs": "Phát sóng",
     "sub": "Các bản phát hành và tập phim trong sáu tuần tới, cho những gì có trong danh sách.",
     "nothing": "Không có gì sắp tới",
-    "nothingBody": "Thêm phim và chương trình, ngày phát hành của chúng sẽ hiển thị ở đây."
+    "nothingBody": "Thêm phim và chương trình, ngày phát hành của chúng sẽ hiển thị ở đây.",
+    "subscribe": "Đăng ký",
+    "view": "Chế độ xem",
+    "list": "Danh sách",
+    "month": "Tháng",
+    "lastWeek": "Hiện tuần trước",
+    "notYet": "Chưa có",
+    "prev": "Tháng trước",
+    "next": "Tháng sau",
+    "nothingDay": "Không có gì vào ngày này.",
+    "feedTitle": "Nguồn cấp lịch",
+    "feedBody": "Thêm địa chỉ này vào lịch trên điện thoại hoặc máy tính của bạn dưới dạng lịch đăng ký (trong Lịch Google, \"Từ URL\"), và những gì sắp ra mắt sẽ hiện ở đó và tự cập nhật.",
+    "feedSafe": "Bất kỳ ai có địa chỉ này đều xem được những gì sắp ra mắt và không gì khác. Lịch của bạn phải truy cập được Box Office tại địa chỉ này.",
+    "renew": "Tạo địa chỉ mới (địa chỉ cũ sẽ ngừng hoạt động)"
   },
   "common": {
     "onDisk": "Trên ổ đĩa",

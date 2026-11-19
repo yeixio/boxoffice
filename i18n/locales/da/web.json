@@ -255,7 +255,20 @@
     "airs": "Vises",
     "sub": "Udgivelser og afsnit de næste seks uger, for det, der er på listen.",
     "nothing": "Intet på vej",
-    "nothingBody": "Tilføj film og serier, så vises deres udgivelsesdatoer her."
+    "nothingBody": "Tilføj film og serier, så vises deres udgivelsesdatoer her.",
+    "subscribe": "Abonner",
+    "view": "Visning",
+    "list": "Liste",
+    "month": "Måned",
+    "lastWeek": "Vis sidste uge",
+    "notYet": "Ikke kommet endnu",
+    "prev": "Forrige måned",
+    "next": "Næste måned",
+    "nothingDay": "Intet denne dag.",
+    "feedTitle": "Kalenderfeed",
+    "feedBody": "Føj denne adresse til kalenderen på din telefon eller computer som en abonneret kalender (i Google Kalender: \"Fra webadresse\"), så vises det, der er på vej, dér og holder sig selv opdateret.",
+    "feedSafe": "Alle med adressen kan se, hvad der er på vej, og intet andet. Din kalender skal kunne nå Box Office på denne adresse.",
+    "renew": "Lav en ny adresse (den gamle holder op med at virke)"
   },
   "common": {
     "onDisk": "På disk",

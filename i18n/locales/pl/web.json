@@ -299,7 +299,20 @@
     "airs": "Emisja",
     "sub": "Premiery i odcinki na najbliższe sześć tygodni, dla tego, co jest na liście.",
     "nothing": "Nic wkrótce",
-    "nothingBody": "Dodaj filmy i seriale, a ich daty premier pojawią się tutaj."
+    "nothingBody": "Dodaj filmy i seriale, a ich daty premier pojawią się tutaj.",
+    "subscribe": "Subskrybuj",
+    "view": "Widok",
+    "list": "Lista",
+    "month": "Miesiąc",
+    "lastWeek": "Pokaż zeszły tydzień",
+    "notYet": "Jeszcze nie dotarło",
+    "prev": "Poprzedni miesiąc",
+    "next": "Następny miesiąc",
+    "nothingDay": "Tego dnia nic nie ma.",
+    "feedTitle": "Kanał kalendarza",
+    "feedBody": "Dodaj ten adres do kalendarza w telefonie lub na komputerze jako subskrybowany kalendarz (w Kalendarzu Google: „Z adresu URL”), a nadchodzące pozycje pojawią się tam i będą się same aktualizować.",
+    "feedSafe": "Każdy, kto ma ten adres, widzi, co nadchodzi, i nic więcej. Twój kalendarz musi mieć dostęp do Box Office pod tym adresem.",
+    "renew": "Utwórz nowy adres (stary przestanie działać)"
   },
   "common": {
     "onDisk": "Na dysku",

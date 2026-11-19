@@ -255,7 +255,20 @@
     "airs": "Läuft",
     "sub": "Veröffentlichungen und Folgen der nächsten sechs Wochen, für alles auf der Liste.",
     "nothing": "Demnächst nichts",
-    "nothingBody": "Füge Filme und Serien hinzu, dann erscheinen hier ihre Termine."
+    "nothingBody": "Füge Filme und Serien hinzu, dann erscheinen hier ihre Termine.",
+    "subscribe": "Abonnieren",
+    "view": "Ansicht",
+    "list": "Liste",
+    "month": "Monat",
+    "lastWeek": "Letzte Woche anzeigen",
+    "notYet": "Noch nicht da",
+    "prev": "Vorheriger Monat",
+    "next": "Nächster Monat",
+    "nothingDay": "An diesem Tag nichts.",
+    "feedTitle": "Kalender-Feed",
+    "feedBody": "Füge diese Adresse im Kalender deines Telefons oder Computers als abonnierten Kalender hinzu (in Google Kalender: „Per URL“), dann erscheint dort, was ansteht, und bleibt von selbst aktuell.",
+    "feedSafe": "Wer die Adresse hat, sieht, was ansteht, und sonst nichts. Dein Kalender muss Box Office unter dieser Adresse erreichen können.",
+    "renew": "Neue Adresse erstellen (die alte funktioniert dann nicht mehr)"
   },
   "common": {
     "onDisk": "Vorhanden",

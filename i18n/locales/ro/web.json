@@ -277,7 +277,20 @@
     "airs": "Se difuzează",
     "sub": "Lansări și episoade pentru următoarele șase săptămâni, pentru ce e în listă.",
     "nothing": "Nimic în curând",
-    "nothingBody": "Adaugă filme și seriale, iar datele lor de lansare apar aici."
+    "nothingBody": "Adaugă filme și seriale, iar datele lor de lansare apar aici.",
+    "subscribe": "Abonează-te",
+    "view": "Vizualizare",
+    "list": "Listă",
+    "month": "Lună",
+    "lastWeek": "Arată săptămâna trecută",
+    "notYet": "Încă nu a sosit",
+    "prev": "Luna anterioară",
+    "next": "Luna următoare",
+    "nothingDay": "Nimic în această zi.",
+    "feedTitle": "Flux de calendar",
+    "feedBody": "Adaugă această adresă în calendarul telefonului sau al computerului ca un calendar la care ești abonat (în Google Calendar, „Din adresă URL”), iar ce urmează apare acolo și se actualizează singur.",
+    "feedSafe": "Oricine are adresa poate vedea ce urmează și nimic altceva. Calendarul tău trebuie să poată ajunge la Box Office la această adresă.",
+    "renew": "Creează o adresă nouă (cea veche nu mai funcționează)"
   },
   "common": {
     "onDisk": "Pe disc",

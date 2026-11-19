@@ -233,7 +233,20 @@
     "airs": "Ditayangkan",
     "sub": "Keluaran dan episod untuk enam minggu akan datang, bagi yang ada dalam senarai.",
     "nothing": "Tiada yang akan datang",
-    "nothingBody": "Tambah filem dan rancangan, dan tarikh keluarannya dipaparkan di sini."
+    "nothingBody": "Tambah filem dan rancangan, dan tarikh keluarannya dipaparkan di sini.",
+    "subscribe": "Langgan",
+    "view": "Paparan",
+    "list": "Senarai",
+    "month": "Bulan",
+    "lastWeek": "Tunjukkan minggu lepas",
+    "notYet": "Belum tiba",
+    "prev": "Bulan sebelumnya",
+    "next": "Bulan seterusnya",
+    "nothingDay": "Tiada apa-apa pada hari ini.",
+    "feedTitle": "Suapan kalendar",
+    "feedBody": "Tambahkan alamat ini pada kalendar telefon atau komputer anda sebagai kalendar langganan (dalam Google Calendar, \"Daripada URL\"), dan apa yang akan datang dipaparkan di sana serta dikemas kini sendiri.",
+    "feedSafe": "Sesiapa yang mempunyai alamat ini boleh melihat apa yang akan datang dan tiada yang lain. Kalendar anda mesti dapat mencapai Box Office di alamat ini.",
+    "renew": "Buat alamat baharu (yang lama berhenti berfungsi)"
   },
   "common": {
     "onDisk": "Pada cakera",

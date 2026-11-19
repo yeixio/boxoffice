@@ -299,7 +299,20 @@
     "airs": "Vysílá se",
     "sub": "Premiéry a díly na příštích šest týdnů pro to, co je na seznamu.",
     "nothing": "Nic se nechystá",
-    "nothingBody": "Přidejte filmy a seriály a jejich data vydání se zobrazí zde."
+    "nothingBody": "Přidejte filmy a seriály a jejich data vydání se zobrazí zde.",
+    "subscribe": "Odebírat",
+    "view": "Zobrazení",
+    "list": "Seznam",
+    "month": "Měsíc",
+    "lastWeek": "Zobrazit minulý týden",
+    "notYet": "Zatím tu není",
+    "prev": "Předchozí měsíc",
+    "next": "Další měsíc",
+    "nothingDay": "Tento den nic.",
+    "feedTitle": "Kalendářový kanál",
+    "feedBody": "Přidejte tuto adresu do kalendáře v telefonu nebo počítači jako odebíraný kalendář (v Kalendáři Google „Z adresy URL“) a to, co se chystá, se tam zobrazí a samo se aktualizuje.",
+    "feedSafe": "Kdokoli s touto adresou vidí, co se chystá, a nic dalšího. Váš kalendář musí být schopen se na této adrese k Box Office dostat.",
+    "renew": "Vytvořit novou adresu (stará přestane fungovat)"
   },
   "common": {
     "onDisk": "Na disku",

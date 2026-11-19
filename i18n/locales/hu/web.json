@@ -255,7 +255,20 @@
     "airs": "Adásban",
     "sub": "Megjelenések és epizódok a következő hat hétre, a listán szereplőkhöz.",
     "nothing": "Hamarosan semmi",
-    "nothingBody": "Adj hozzá filmeket és sorozatokat, és a megjelenési dátumaik itt jelennek meg."
+    "nothingBody": "Adj hozzá filmeket és sorozatokat, és a megjelenési dátumaik itt jelennek meg.",
+    "subscribe": "Feliratkozás",
+    "view": "Nézet",
+    "list": "Lista",
+    "month": "Hónap",
+    "lastWeek": "Múlt hét megjelenítése",
+    "notYet": "Még nincs itt",
+    "prev": "Előző hónap",
+    "next": "Következő hónap",
+    "nothingDay": "Ezen a napon nincs semmi.",
+    "feedTitle": "Naptárhírcsatorna",
+    "feedBody": "Add hozzá ezt a címet a telefonod vagy a számítógéped naptárához feliratkozott naptárként (a Google Naptárban: „URL-ből”), és ami érkezik, ott megjelenik, és magától naprakész marad.",
+    "feedSafe": "Akinél megvan a cím, láthatja, mi érkezik, de semmi mást. A naptáradnak el kell tudnia érni a Box Office-t ezen a címen.",
+    "renew": "Új cím készítése (a régi többé nem működik)"
   },
   "common": {
     "onDisk": "A lemezen",
