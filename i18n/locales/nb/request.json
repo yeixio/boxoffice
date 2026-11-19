@@ -135,6 +135,8 @@
     "new": "Nytt passord",
     "changed": "Endret. Du er logget ut alle andre steder.",
     "changeButton": "Bytt passord",
-    "signOut": "Logg ut"
+    "signOut": "Logg ut",
+    "notify": "Varsler",
+    "notifyHint": "Få beskjed på denne enheten når noe du har bedt om, er godkjent, avslått eller klart til å ses."
   }
 }

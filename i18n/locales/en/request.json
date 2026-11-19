@@ -135,6 +135,8 @@
     "new": "New password",
     "changed": "Changed. You're signed out everywhere else.",
     "changeButton": "Change password",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "notify": "Notifications",
+    "notifyHint": "Hear on this device when something you asked for is approved, declined or ready to watch."
   }
 }

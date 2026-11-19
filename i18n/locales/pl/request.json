@@ -135,6 +135,8 @@
     "new": "Nowe hasło",
     "changed": "Zmieniono. Zostałeś wylogowany wszędzie indziej.",
     "changeButton": "Zmień hasło",
-    "signOut": "Wyloguj się"
+    "signOut": "Wyloguj się",
+    "notify": "Powiadomienia",
+    "notifyHint": "Dowiedz się na tym urządzeniu, gdy coś, o co prosisz, zostanie zatwierdzone, odrzucone lub będzie gotowe do obejrzenia."
   }
 }

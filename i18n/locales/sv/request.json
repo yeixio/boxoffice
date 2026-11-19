@@ -135,6 +135,8 @@
     "new": "Nytt lösenord",
     "changed": "Ändrat. Du är utloggad överallt annars.",
     "changeButton": "Byt lösenord",
-    "signOut": "Logga ut"
+    "signOut": "Logga ut",
+    "notify": "Aviseringar",
+    "notifyHint": "Få veta på den här enheten när något du har bett om har godkänts, avslagits eller är klart att titta på."
   }
 }

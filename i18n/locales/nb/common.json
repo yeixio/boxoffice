@@ -57,5 +57,20 @@
     "title": "Det oppsto et problem på denne siden",
     "body": "Resten av Box Office fungerer fortsatt. Det hjelper som regel å laste inn på nytt. Hvis det fortsetter, ta med teksten nedenfor i en feilrapport.",
     "reload": "Last inn siden på nytt"
+  },
+  "push": {
+    "install": "Installer som app",
+    "installed": "Den er installert på denne enheten.",
+    "installApple": "På en iPhone eller iPad: åpne denne siden i Safari, trykk på Del-knappen og deretter Legg til på Hjem-skjerm.",
+    "installMenu": "For å installere: åpne nettleserens meny og velg Installer eller Legg til på startskjermen.",
+    "thisDevice": "Send varsler til denne enheten",
+    "test": "Send en test",
+    "testSent": "Sendt. Den bør dukke opp om et øyeblikk.",
+    "why": {
+      "insecure": "Varsler virker bare når denne siden er åpnet over https. Denne er åpnet over vanlig http.",
+      "apple": "På en iPhone eller iPad virker varsler når den er installert: åpne denne siden i Safari, trykk på Del-knappen og deretter Legg til på Hjem-skjerm. Slå dem så på her, i den installerte appen.",
+      "unsupported": "Denne nettleseren kan ikke motta varsler.",
+      "blocked": "Varsler er blokkert for dette nettstedet i nettleseren. Tillat dem i nettleserens innstillinger for nettstedet, og slå dette på igjen."
+    }
   }
 }

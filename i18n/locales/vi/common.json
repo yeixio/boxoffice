@@ -56,5 +56,20 @@
     "title": "Trang này đã gặp sự cố",
     "body": "Phần còn lại của Box Office vẫn hoạt động. Tải lại thường sẽ khắc phục được. Nếu vẫn tiếp diễn, hãy đính kèm đoạn văn bản bên dưới vào báo cáo lỗi.",
     "reload": "Tải lại trang"
+  },
+  "push": {
+    "install": "Cài đặt như ứng dụng",
+    "installed": "Đã được cài trên thiết bị này.",
+    "installApple": "Trên iPhone hoặc iPad, mở trang này trong Safari, chạm vào nút Chia sẻ, rồi chạm Thêm vào Màn hình chính.",
+    "installMenu": "Để cài đặt, mở menu của trình duyệt và chọn Cài đặt hoặc Thêm vào màn hình chính.",
+    "thisDevice": "Gửi thông báo đến thiết bị này",
+    "test": "Gửi thử",
+    "testSent": "Đã gửi. Thông báo sẽ hiện ra sau giây lát.",
+    "why": {
+      "insecure": "Thông báo chỉ hoạt động khi trang này được mở qua https. Trang này đang được mở qua http thường.",
+      "apple": "Trên iPhone hoặc iPad, thông báo hoạt động sau khi cài đặt: mở trang này trong Safari, chạm vào nút Chia sẻ, rồi Thêm vào Màn hình chính. Sau đó bật thông báo tại đây, trong ứng dụng đã cài.",
+      "unsupported": "Trình duyệt này không nhận được thông báo.",
+      "blocked": "Thông báo của trang này đang bị chặn trong trình duyệt. Hãy cho phép trong phần cài đặt của trình duyệt dành cho trang này, rồi bật lại."
+    }
   }
 }

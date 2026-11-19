@@ -44,6 +44,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/openlibrary"
 	"github.com/yeixio/boxoffice/internal/portal"
 	"github.com/yeixio/boxoffice/internal/problems"
+	"github.com/yeixio/boxoffice/internal/push"
 	"github.com/yeixio/boxoffice/internal/qualitycheck"
 	"github.com/yeixio/boxoffice/internal/search"
 	"github.com/yeixio/boxoffice/internal/store"
@@ -237,6 +238,15 @@ func run() error {
 		Version: version.Version, Database: dbKind, DatabaseInfo: api.DatabaseInfo{DSN: opened.dsn, Configured: opened.configured}, DataDir: cfg.DataDir, EnvAPIKey: cfg.APIKey, Web: web.FS(),
 		Monitoring: mon,
 		Restart:    func() { restartNow(errRestart) },
+	}
+	// The same news goes to the phones and browsers that asked for push
+	// notifications. Sending waits on the browser makers' push services,
+	// so it doesn't hold up what caused the news.
+	pusher := &push.Service{Store: db, Log: log}
+	srv.Push = pusher
+	notes.After = func(n store.Notification) { go pusher.Notify(context.WithoutCancel(ctx), n) }
+	srv.Portal.TellMember = func(ctx context.Context, memberID int64, title, body string) {
+		go pusher.Member(context.WithoutCancel(ctx), memberID, push.Message{Title: title, Body: body, URL: push.MemberPage, Tag: title})
 	}
 	alerter := srv.Alerts()
 	alerter.Crash = prev.CrashSummary()

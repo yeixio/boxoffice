@@ -20,6 +20,7 @@ import { SubtitleSettingsCard } from './Subtitles'
 import { ListsCard } from './Lists'
 import { CleanupCard } from './Cleanup'
 import { TimeZoneCard } from './TimeZone'
+import { PhoneCard } from './Phone'
 import { matches, spans, words } from './settingsSearch'
 import { Badge, Button, Card, ErrorNote, Field, Input, Modal, Select, Spinner, Toggle } from '../ui'
 
@@ -46,6 +47,7 @@ const sections: SectionDef[] = [
       { id: 'time-zone', el: <TimeZoneCard />, terms: ['TZ', 'UTC', 'timezone', 'clock'] },
       { id: 'tmdb', el: <General />, keys: ['settings.tmdbKey'], terms: ['API'] },
       { id: 'password', el: <Account /> },
+      { id: 'phone', el: <PhoneCard />, keys: ['phone.topics.ready', 'phone.topics.requests', 'phone.topics.problems'], terms: ['PWA', 'push', 'iPhone', 'Android', 'Home Screen', 'app'] },
       { id: 'restart', el: <Restart />, keys: ['settings.restartNow'], terms: ['reboot', 'Kubernetes', 'Docker'] },
       { id: 'database', el: <DatabaseMove />, keys: ['settings.database.url', 'settings.database.file', 'settings.database.move'], terms: ['PostgreSQL', 'Postgres', 'SQLite', 'migrate', 'migration', 'database'] },
     ],

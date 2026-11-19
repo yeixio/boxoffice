@@ -135,6 +135,8 @@
     "new": "Yeni parola",
     "changed": "Değiştirildi. Diğer her yerde oturumunuz kapatıldı.",
     "changeButton": "Parolayı değiştir",
-    "signOut": "Çıkış yap"
+    "signOut": "Çıkış yap",
+    "notify": "Bildirimler",
+    "notifyHint": "İstediğiniz bir şey onaylandığında, reddedildiğinde veya izlemeye hazır olduğunda bu cihazda haberdar olun."
   }
 }

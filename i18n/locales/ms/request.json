@@ -135,6 +135,8 @@
     "new": "Kata laluan baharu",
     "changed": "Ditukar. Anda telah dilog keluar di semua tempat lain.",
     "changeButton": "Tukar kata laluan",
-    "signOut": "Log keluar"
+    "signOut": "Log keluar",
+    "notify": "Pemberitahuan",
+    "notifyHint": "Ketahui pada peranti ini apabila sesuatu yang anda minta diluluskan, ditolak atau sedia untuk ditonton."
   }
 }

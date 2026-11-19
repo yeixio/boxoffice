@@ -135,6 +135,8 @@
     "new": "Kata sandi baru",
     "changed": "Diubah. Anda telah dikeluarkan dari semua tempat lain.",
     "changeButton": "Ubah kata sandi",
-    "signOut": "Keluar"
+    "signOut": "Keluar",
+    "notify": "Notifikasi",
+    "notifyHint": "Ketahui di perangkat ini saat sesuatu yang Anda minta disetujui, ditolak, atau siap ditonton."
   }
 }

@@ -2767,5 +2767,18 @@
     "keepProfile": "Het gebruikelijke profiel",
     "picked": "De regel {{name}} koos hier de map en het profiel. Je kunt ze wijzigen.",
     "moveUp": "Omhoog"
+  },
+  "phone": {
+    "topics": {
+      "ready": "Er is een titel in de bibliotheek aangekomen",
+      "requests": "Iemand heeft een titel aangevraagd of een probleem gemeld",
+      "problems": "Er ging iets mis: een download is mislukt, of een waarschuwing"
+    },
+    "title": "Telefoonapp en meldingen",
+    "sub": "Box Office kan als een app op een telefoon of computer worden geïnstalleerd en kan dit apparaat laten weten wat er gebeurt terwijl het gesloten is.",
+    "about": "Waarover je iets wilt horen",
+    "devices": "Apparaten die meldingen krijgen",
+    "thisOne": "Dit apparaat",
+    "unnamed": "Een browser"
   }
 }

@@ -135,6 +135,8 @@
     "new": "Ny adgangskode",
     "changed": "Ændret. Du er logget ud alle andre steder.",
     "changeButton": "Skift adgangskode",
-    "signOut": "Log ud"
+    "signOut": "Log ud",
+    "notify": "Notifikationer",
+    "notifyHint": "Få besked på denne enhed, når noget, du har bedt om, er godkendt, afvist eller klar til at blive set."
   }
 }

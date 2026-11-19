@@ -2767,5 +2767,18 @@
     "keepProfile": "Her zamanki profil",
     "picked": "Buradaki klasörü ve profili {{name}} kuralı seçti. Değiştirebilirsiniz.",
     "moveUp": "Yukarı taşı"
+  },
+  "phone": {
+    "topics": {
+      "ready": "Bir başlık kitaplığa geldi",
+      "requests": "Biri bir başlık istedi veya sorun bildirdi",
+      "problems": "Bir şeyler ters gitti: bir indirme başarısız oldu veya bir uyarı var"
+    },
+    "title": "Telefon uygulaması ve bildirimler",
+    "sub": "Box Office bir telefona veya bilgisayara uygulama gibi yüklenebilir ve kapalıyken olanları bu cihaza bildirebilir.",
+    "about": "Nelerden haberdar olmak istersiniz",
+    "devices": "Bildirim alan cihazlar",
+    "thisOne": "Bu cihaz",
+    "unnamed": "Bir tarayıcı"
   }
 }

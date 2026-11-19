@@ -59,5 +59,20 @@
     "title": "Na tej stronie wystąpił problem",
     "body": "Reszta Box Office nadal działa. Zwykle pomaga ponowne wczytanie. Jeśli problem się powtarza, dołącz poniższy tekst do zgłoszenia błędu.",
     "reload": "Wczytaj stronę ponownie"
+  },
+  "push": {
+    "install": "Zainstaluj jako aplikację",
+    "installed": "Zainstalowano na tym urządzeniu.",
+    "installApple": "Na iPhonie lub iPadzie otwórz tę stronę w Safari, stuknij przycisk Udostępnij, a potem Do ekranu początkowego.",
+    "installMenu": "Aby zainstalować, otwórz menu przeglądarki i wybierz Zainstaluj lub Dodaj do ekranu głównego.",
+    "thisDevice": "Wysyłaj powiadomienia na to urządzenie",
+    "test": "Wyślij próbne",
+    "testSent": "Wysłano. Powinno pojawić się za chwilę.",
+    "why": {
+      "insecure": "Powiadomienia działają tylko wtedy, gdy ta strona jest otwarta przez https. Ta została otwarta przez zwykłe http.",
+      "apple": "Na iPhonie lub iPadzie powiadomienia działają po zainstalowaniu: otwórz tę stronę w Safari, stuknij przycisk Udostępnij, a potem Do ekranu początkowego. Następnie włącz je tutaj, w zainstalowanej aplikacji.",
+      "unsupported": "Ta przeglądarka nie może odbierać powiadomień.",
+      "blocked": "Powiadomienia dla tej witryny są zablokowane w przeglądarce. Zezwól na nie w ustawieniach przeglądarki dla tej witryny, a potem włącz to ponownie."
+    }
   }
 }

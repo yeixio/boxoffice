@@ -806,3 +806,18 @@ CREATE TABLE IF NOT EXISTS cleanup_kept (
 	kept_at  BIGINT NOT NULL,
 	PRIMARY KEY (kind, title_id)
 );
+
+-- Browsers and phones that asked for push notifications (internal/push).
+-- member_id is 0 for an admin's device, or the request-site member whose
+-- device it is. topics is what an admin's device wants to hear about.
+CREATE TABLE IF NOT EXISTS push_devices (
+	id         INTEGER PRIMARY KEY AUTOINCREMENT,
+	endpoint   TEXT NOT NULL UNIQUE,
+	p256dh     TEXT NOT NULL,
+	auth       TEXT NOT NULL,
+	member_id  BIGINT NOT NULL DEFAULT 0,
+	topics     TEXT NOT NULL DEFAULT '',
+	name       TEXT NOT NULL DEFAULT '',
+	created_at BIGINT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS push_devices_member ON push_devices (member_id);

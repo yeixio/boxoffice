@@ -3013,5 +3013,18 @@
     "keepProfile": "Zwykły profil",
     "picked": "Reguła {{name}} wybrała tu folder i profil. Możesz je zmienić.",
     "moveUp": "W górę"
+  },
+  "phone": {
+    "topics": {
+      "ready": "Tytuł trafił do biblioteki",
+      "requests": "Ktoś poprosił o tytuł lub zgłosił problem",
+      "problems": "Coś poszło nie tak: pobieranie się nie udało albo pojawił się alert"
+    },
+    "title": "Aplikacja na telefon i powiadomienia",
+    "sub": "Box Office można zainstalować na telefonie lub komputerze jak aplikację, a ona może informować to urządzenie o tym, co się dzieje, gdy jest zamknięta.",
+    "about": "O czym chcesz wiedzieć",
+    "devices": "Urządzenia, które dostają powiadomienia",
+    "thisOne": "To urządzenie",
+    "unnamed": "Przeglądarka"
   }
 }

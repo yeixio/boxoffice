@@ -135,6 +135,8 @@
     "new": "Nuova password",
     "changed": "Cambiata. Sei stato disconnesso ovunque altrove.",
     "changeButton": "Cambia password",
-    "signOut": "Esci"
+    "signOut": "Esci",
+    "notify": "Notifiche",
+    "notifyHint": "Scopri su questo dispositivo quando qualcosa che hai chiesto viene approvato, rifiutato o è pronto da guardare."
   }
 }

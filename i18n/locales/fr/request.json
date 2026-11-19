@@ -135,6 +135,8 @@
     "new": "Nouveau mot de passe",
     "changed": "Changé. Vous êtes déconnecté partout ailleurs.",
     "changeButton": "Changer le mot de passe",
-    "signOut": "Se déconnecter"
+    "signOut": "Se déconnecter",
+    "notify": "Notifications",
+    "notifyHint": "Soyez prévenu sur cet appareil quand ce que vous avez demandé est approuvé, refusé ou prêt à regarder."
   }
 }

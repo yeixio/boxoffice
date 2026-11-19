@@ -8,6 +8,7 @@ import './index.css'
 import { ApiError } from './api'
 import { ready } from './i18n'
 import { PageBoundary } from './Broken'
+import './push'
 
 const queries = new QueryClient({
   defaultOptions: {
@@ -20,6 +21,9 @@ const queries = new QueryClient({
 const portalHost = !!document.querySelector('meta[name="boxoffice-portal"]')
 const portalPath = location.pathname === '/request' || location.pathname.startsWith('/request/')
 const portal = portalHost || portalPath
+// A notification's link is written for /request; on the request site's own
+// host name the same page is one level up.
+if (portalHost && portalPath) history.replaceState(null, '', location.pathname.slice('/request'.length) || '/')
 
 // The request site and Box Office's own pages are fetched apart, so people
 // asking for titles never download the admin's pages.

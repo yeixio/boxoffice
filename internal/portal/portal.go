@@ -129,8 +129,11 @@ type Service struct {
 	Notify interface {
 		Add(context.Context, store.Notification) error
 	}
-	Log  *slog.Logger
-	HTTP *http.Client
+	// TellMember, when set, sends someone a push notification about their
+	// own request: title and body are what it says.
+	TellMember func(ctx context.Context, memberID int64, title, body string)
+	Log        *slog.Logger
+	HTTP       *http.Client
 	// Subtitles, when set, looks for a title's missing subtitles at once
 	// when someone reports them missing or wrong: a season's or an
 	// episode's when they're given (0 for all).
@@ -511,6 +514,8 @@ func (s *Service) Approve(ctx context.Context, id int64, o catalog.AddOptions) (
 		if o.Status == store.RequestPending {
 			if err := s.Store.DecideRequest(ctx, o.ID, store.RequestApproved, ""); err != nil && !errors.Is(err, store.ErrInUse) {
 				return r, err
+			} else if err == nil {
+				s.tellMember(ctx, o, "Your request for "+requested(o)+" was approved", "Box Office is looking for it now.")
 			}
 		}
 	}
@@ -529,7 +534,25 @@ func (s *Service) Decline(ctx context.Context, id int64, reply string) (store.Re
 	} else if err != nil {
 		return store.Request{}, err
 	}
-	return s.Store.Request(ctx, id)
+	r, err := s.Store.Request(ctx, id)
+	if err == nil {
+		s.tellMember(ctx, r, "Your request for "+requested(r)+" was declined", r.Reply)
+	}
+	return r, err
+}
+
+// requested names a request's title: "Dune (2021)".
+func requested(r store.Request) string {
+	if r.Year > 0 {
+		return fmt.Sprintf("%s (%d)", r.Title, r.Year)
+	}
+	return r.Title
+}
+
+func (s *Service) tellMember(ctx context.Context, r store.Request, title, body string) {
+	if s.TellMember != nil {
+		s.TellMember(ctx, r.MemberID, title, body)
+	}
 }
 
 // Cancel is someone taking back a request an admin hasn't decided yet.
@@ -652,6 +675,10 @@ func (s *Service) tell(ctx context.Context, event, title, body string, t Title) 
 	if s.Notify == nil {
 		return
 	}
-	s.Notify.Add(ctx, store.Notification{Event: event, Level: store.LevelInfo, Audience: store.AudienceAdmins, Title: title, Body: body,
+	page := "/requests"
+	if event == "issue.created" {
+		page = "/requests?tab=problems"
+	}
+	s.Notify.Add(ctx, store.Notification{Event: event, Level: store.LevelInfo, Audience: store.AudienceAdmins, Title: title, Body: body, Page: page,
 		Media: &store.Media{Kind: t.Kind, Title: t.Title, Year: t.Year, TMDBID: t.TMDBID, Poster: t.Poster}})
 }

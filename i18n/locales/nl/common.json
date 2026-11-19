@@ -57,5 +57,20 @@
     "title": "Er ging iets mis op deze pagina",
     "body": "De rest van Box Office werkt nog. Opnieuw laden lost het meestal op. Als het blijft gebeuren, zet dan de tekst hieronder in een bugmelding.",
     "reload": "Pagina opnieuw laden"
+  },
+  "push": {
+    "install": "Als app installeren",
+    "installed": "Het is op dit apparaat geïnstalleerd.",
+    "installApple": "Op een iPhone of iPad: open deze pagina in Safari, tik op de deelknop en daarna op Zet op beginscherm.",
+    "installMenu": "Om te installeren open je het menu van de browser en kies je Installeren of Toevoegen aan startscherm.",
+    "thisDevice": "Meldingen naar dit apparaat sturen",
+    "test": "Test sturen",
+    "testSent": "Verstuurd. Hij zou zo moeten verschijnen.",
+    "why": {
+      "insecure": "Meldingen werken alleen als deze pagina via https is geopend. Deze is via gewoon http geopend.",
+      "apple": "Op een iPhone of iPad werken meldingen zodra het is geïnstalleerd: open deze pagina in Safari, tik op de deelknop en daarna op Zet op beginscherm. Zet ze daarna hier aan, in de geïnstalleerde app.",
+      "unsupported": "Deze browser kan geen meldingen ontvangen.",
+      "blocked": "Meldingen zijn in de browser geblokkeerd voor deze site. Sta ze toe in de instellingen van de browser voor deze site en zet dit daarna weer aan."
+    }
   }
 }

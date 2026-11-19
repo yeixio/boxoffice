@@ -135,6 +135,8 @@
     "new": "Parolă nouă",
     "changed": "Schimbată. Ai fost deconectat de peste tot în altă parte.",
     "changeButton": "Schimbă parola",
-    "signOut": "Deconectează-te"
+    "signOut": "Deconectează-te",
+    "notify": "Notificări",
+    "notifyHint": "Află pe acest dispozitiv când ceva ce ai cerut este aprobat, respins sau gata de vizionat."
   }
 }
