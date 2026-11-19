@@ -255,7 +255,20 @@
     "airs": "Esitetään",
     "sub": "Julkaisut ja jaksot seuraavalta kuudelta viikolta listalla oleville.",
     "nothing": "Ei mitään tulossa",
-    "nothingBody": "Lisää elokuvia ja sarjoja, niin niiden julkaisupäivät näkyvät täällä."
+    "nothingBody": "Lisää elokuvia ja sarjoja, niin niiden julkaisupäivät näkyvät täällä.",
+    "subscribe": "Tilaa",
+    "view": "Näkymä",
+    "list": "Luettelo",
+    "month": "Kuukausi",
+    "lastWeek": "Näytä viime viikko",
+    "notYet": "Ei vielä täällä",
+    "prev": "Edellinen kuukausi",
+    "next": "Seuraava kuukausi",
+    "nothingDay": "Ei mitään tänä päivänä.",
+    "feedTitle": "Kalenterisyöte",
+    "feedBody": "Lisää tämä osoite puhelimesi tai tietokoneesi kalenteriin tilattuna kalenterina (Google-kalenterissa ”URL-osoitteesta”), niin tulossa olevat näkyvät siellä ja pysyvät itsestään ajan tasalla.",
+    "feedSafe": "Kuka tahansa, jolla on osoite, näkee mitä on tulossa, eikä muuta. Kalenterisi täytyy päästä Box Officeen tässä osoitteessa.",
+    "renew": "Luo uusi osoite (vanha lakkaa toimimasta)"
   },
   "common": {
     "onDisk": "Levyllä",

@@ -277,7 +277,20 @@
     "airs": "Vai ao ar",
     "sub": "Lançamentos e episódios das próximas seis semanas, para o que está na lista.",
     "nothing": "Nada em breve",
-    "nothingBody": "Adicione filmes e séries, e as datas de lançamento aparecem aqui."
+    "nothingBody": "Adicione filmes e séries, e as datas de lançamento aparecem aqui.",
+    "subscribe": "Assinar",
+    "view": "Visualização",
+    "list": "Lista",
+    "month": "Mês",
+    "lastWeek": "Mostrar a semana passada",
+    "notYet": "Ainda não chegou",
+    "prev": "Mês anterior",
+    "next": "Próximo mês",
+    "nothingDay": "Nada neste dia.",
+    "feedTitle": "Feed do calendário",
+    "feedBody": "Adicione este endereço ao calendário do seu celular ou computador como um calendário assinado (no Google Agenda, \"Do URL\"), e o que está por vir aparece lá e se mantém atualizado sozinho.",
+    "feedSafe": "Qualquer pessoa com o endereço pode ver o que está por vir e nada mais. Seu calendário precisa conseguir acessar o Box Office neste endereço.",
+    "renew": "Criar um novo endereço (o antigo para de funcionar)"
   },
   "common": {
     "onDisk": "No disco",

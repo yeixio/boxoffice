@@ -255,7 +255,20 @@
     "airs": "Uitzending",
     "sub": "Releases en afleveringen voor de komende zes weken, voor wat op de lijst staat.",
     "nothing": "Niets binnenkort",
-    "nothingBody": "Voeg films en series toe, dan verschijnen hun releasedatums hier."
+    "nothingBody": "Voeg films en series toe, dan verschijnen hun releasedatums hier.",
+    "subscribe": "Abonneren",
+    "view": "Weergave",
+    "list": "Lijst",
+    "month": "Maand",
+    "lastWeek": "Vorige week tonen",
+    "notYet": "Nog niet binnen",
+    "prev": "Vorige maand",
+    "next": "Volgende maand",
+    "nothingDay": "Niets op deze dag.",
+    "feedTitle": "Agendafeed",
+    "feedBody": "Voeg dit adres toe aan de agenda op je telefoon of computer als geabonneerde agenda (in Google Agenda: 'Via URL'), dan verschijnt daar wat eraan komt en blijft het vanzelf bijgewerkt.",
+    "feedSafe": "Iedereen met het adres kan zien wat eraan komt en verder niets. Je agenda moet Box Office op dit adres kunnen bereiken.",
+    "renew": "Nieuw adres maken (het oude werkt dan niet meer)"
   },
   "common": {
     "onDisk": "Op schijf",

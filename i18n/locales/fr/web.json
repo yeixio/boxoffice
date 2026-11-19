@@ -277,7 +277,20 @@
     "airs": "Diffusion",
     "sub": "Sorties et épisodes des six prochaines semaines, pour ce qui est sur la liste.",
     "nothing": "Rien à venir",
-    "nothingBody": "Ajoutez des films et des séries, et leurs dates de sortie s’afficheront ici."
+    "nothingBody": "Ajoutez des films et des séries, et leurs dates de sortie s’afficheront ici.",
+    "subscribe": "S'abonner",
+    "view": "Affichage",
+    "list": "Liste",
+    "month": "Mois",
+    "lastWeek": "Afficher la semaine dernière",
+    "notYet": "Pas encore là",
+    "prev": "Mois précédent",
+    "next": "Mois suivant",
+    "nothingDay": "Rien ce jour-là.",
+    "feedTitle": "Flux du calendrier",
+    "feedBody": "Ajoutez cette adresse au calendrier de votre téléphone ou de votre ordinateur comme calendrier abonné (dans Google Agenda, « À partir de l'URL ») : ce qui arrive s'y affiche et se met à jour tout seul.",
+    "feedSafe": "Toute personne ayant l'adresse peut voir ce qui arrive, et rien d'autre. Votre calendrier doit pouvoir joindre Box Office à cette adresse.",
+    "renew": "Créer une nouvelle adresse (l'ancienne cesse de fonctionner)"
   },
   "common": {
     "onDisk": "Sur le disque",

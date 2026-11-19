@@ -277,7 +277,20 @@
     "airs": "In onda",
     "sub": "Uscite ed episodi delle prossime sei settimane, per ciò che è nell’elenco.",
     "nothing": "Niente in arrivo",
-    "nothingBody": "Aggiungi film e serie, e le loro date di uscita compaiono qui."
+    "nothingBody": "Aggiungi film e serie, e le loro date di uscita compaiono qui.",
+    "subscribe": "Abbonati",
+    "view": "Vista",
+    "list": "Elenco",
+    "month": "Mese",
+    "lastWeek": "Mostra la settimana scorsa",
+    "notYet": "Non ancora arrivato",
+    "prev": "Mese precedente",
+    "next": "Mese successivo",
+    "nothingDay": "Niente in questo giorno.",
+    "feedTitle": "Feed del calendario",
+    "feedBody": "Aggiungi questo indirizzo al calendario del telefono o del computer come calendario in abbonamento (in Google Calendar, «Da URL»): ciò che è in arrivo comparirà lì e si aggiornerà da solo.",
+    "feedSafe": "Chiunque abbia l'indirizzo può vedere cosa è in arrivo e nient'altro. Il tuo calendario deve poter raggiungere Box Office a questo indirizzo.",
+    "renew": "Crea un nuovo indirizzo (quello vecchio smette di funzionare)"
   },
   "common": {
     "onDisk": "Sul disco",

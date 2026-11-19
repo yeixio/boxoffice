@@ -250,6 +250,10 @@ func (s *Server) Handler() http.Handler {
 		{"PUT /api/v1/recycle", true, s.editRecycle},
 		{"POST /api/v1/recycle/empty", true, s.emptyRecycle},
 		{"GET /api/v1/calendar", true, s.calendar},
+		{"GET /api/v1/calendar/feed", true, s.calendarFeed},
+		{"POST /api/v1/calendar/feed/renew", true, s.renewCalendarFeed},
+		// The feed itself: opened by the token in its address.
+		{"GET /api/v1/calendar.ics", false, s.calendarICS},
 		{"GET /api/v1/activity", true, s.activity},
 
 		{"GET /api/v1/backups", true, s.backups},

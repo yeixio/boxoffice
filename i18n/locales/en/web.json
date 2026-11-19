@@ -255,7 +255,20 @@
     "airs": "Airs",
     "sub": "Releases and episodes for the next six weeks, for what's on the list.",
     "nothing": "Nothing coming up",
-    "nothingBody": "Add movies and shows, and their release dates show up here."
+    "nothingBody": "Add movies and shows, and their release dates show up here.",
+    "subscribe": "Subscribe",
+    "view": "View",
+    "list": "List",
+    "month": "Month",
+    "lastWeek": "Show last week",
+    "notYet": "Not here yet",
+    "prev": "Previous month",
+    "next": "Next month",
+    "nothingDay": "Nothing on this day.",
+    "feedTitle": "Calendar feed",
+    "feedBody": "Add this address to your phone's or computer's calendar as a subscribed calendar (in Google Calendar, \"From URL\"), and what's coming up shows there and keeps itself up to date.",
+    "feedSafe": "Anyone with the address can see what's coming up and nothing else. Your calendar has to be able to reach Box Office at this address.",
+    "renew": "Make a new address (the old one stops working)"
   },
   "common": {
     "onDisk": "On disk",
