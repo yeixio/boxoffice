@@ -461,6 +461,11 @@ func (s *Server) movies(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
+	// The list goes without what only a title's own page shows, which is
+	// most of its size in a large library.
+	for i := range list {
+		list[i].Overview, list[i].Backdrop = "", ""
+	}
 	return writeJSON(w, http.StatusOK, list)
 }
 
@@ -643,6 +648,10 @@ func (s *Server) seriesList(w http.ResponseWriter, r *http.Request) error {
 	list, err := s.Store.SeriesAll(r.Context())
 	if err != nil {
 		return err
+	}
+	// As the movies' list: without what only a show's own page shows.
+	for i := range list {
+		list[i].Overview, list[i].Backdrop = "", ""
 	}
 	return writeJSON(w, http.StatusOK, list)
 }

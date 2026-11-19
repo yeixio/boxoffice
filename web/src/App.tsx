@@ -1,7 +1,7 @@
 import { LanguageSync } from './i18n/sync'
 import { useTranslation } from 'react-i18next'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { useCallback, useEffect, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useState, type ComponentType } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import { get, onSignedOut, post, put, type Status } from './api'
@@ -9,27 +9,70 @@ import { Spinner } from './ui'
 import { Tray } from './Tray'
 import { Logo, PhoneNav, Sidebar, useNav } from './Nav'
 import { SignIn } from './pages/SignIn'
-import { Discover, DiscoverRowPage } from './pages/Discover'
-import { Movies } from './pages/Movies'
-import { MovieDetail } from './pages/MovieDetail'
-import { Shows } from './pages/Shows'
-import { ShowDetail } from './pages/ShowDetail'
-import { Music } from './pages/Music'
-import { AuthorPage, BookLink, Books } from './pages/Books'
-import { AlbumLink, ArtistDetail } from './pages/ArtistDetail'
-import { AddGame } from './pages/GameAdd'
-import { GamePage, Games, GameSystemPage } from './pages/Games'
-import { AlbumPage, Photos } from './pages/Photos'
-import { Calendar } from './pages/Calendar'
-import { Activity } from './pages/Activity'
-import { Downloads } from './pages/Downloads'
-import { Import } from './pages/Import'
-import { ImportFiles } from './pages/ImportFiles'
-import { Backups } from './pages/Backups'
-import { Settings } from './pages/Settings'
-import { Problems } from './pages/Problems'
-import { Health } from './pages/Health'
-import { Requests } from './pages/Requests'
+// Each page is fetched when it's first opened, so the first load is only
+// what every page shares. A page that can't be fetched (Box Office was
+// updated since this tab loaded, and its files have new names) reloads the
+// tab once to get the new ones.
+function page<M, K extends keyof M>(load: () => Promise<M>, name: K) {
+  return lazy(async () => {
+    try {
+      const m = await load()
+      try {
+        sessionStorage.removeItem('boxoffice-reloaded')
+      } catch {
+        // No storage: nothing to forget.
+      }
+      return { default: m[name] as M[K] & ComponentType<any> } // eslint-disable-line @typescript-eslint/no-explicit-any
+    } catch (err) {
+      let again = false
+      try {
+        again = !sessionStorage.getItem('boxoffice-reloaded')
+        sessionStorage.setItem('boxoffice-reloaded', '1')
+      } catch {
+        // No storage: don't risk reloading over and over.
+      }
+      if (again) {
+        location.reload()
+        return new Promise<never>(() => {})
+      }
+      throw err
+    }
+  })
+}
+
+const discover = () => import('./pages/Discover')
+const Discover = page(discover, 'Discover')
+const DiscoverRowPage = page(discover, 'DiscoverRowPage')
+const Movies = page(() => import('./pages/Movies'), 'Movies')
+const MovieDetail = page(() => import('./pages/MovieDetail'), 'MovieDetail')
+const Shows = page(() => import('./pages/Shows'), 'Shows')
+const ShowDetail = page(() => import('./pages/ShowDetail'), 'ShowDetail')
+const Music = page(() => import('./pages/Music'), 'Music')
+const books = () => import('./pages/Books')
+const Books = page(books, 'Books')
+const AuthorPage = page(books, 'AuthorPage')
+const BookLink = page(books, 'BookLink')
+const artist = () => import('./pages/ArtistDetail')
+const AlbumLink = page(artist, 'AlbumLink')
+const ArtistDetail = page(artist, 'ArtistDetail')
+const AddGame = page(() => import('./pages/GameAdd'), 'AddGame')
+const games = () => import('./pages/Games')
+const Games = page(games, 'Games')
+const GamePage = page(games, 'GamePage')
+const GameSystemPage = page(games, 'GameSystemPage')
+const photos = () => import('./pages/Photos')
+const Photos = page(photos, 'Photos')
+const AlbumPage = page(photos, 'AlbumPage')
+const Calendar = page(() => import('./pages/Calendar'), 'Calendar')
+const Activity = page(() => import('./pages/Activity'), 'Activity')
+const Downloads = page(() => import('./pages/Downloads'), 'Downloads')
+const Import = page(() => import('./pages/Import'), 'Import')
+const ImportFiles = page(() => import('./pages/ImportFiles'), 'ImportFiles')
+const Backups = page(() => import('./pages/Backups'), 'Backups')
+const Settings = page(() => import('./pages/Settings'), 'Settings')
+const Problems = page(() => import('./pages/Problems'), 'Problems')
+const Health = page(() => import('./pages/Health'), 'Health')
+const Requests = page(() => import('./pages/Requests'), 'Requests')
 
 export function App() {
   const { t } = useTranslation()
@@ -93,6 +136,7 @@ function Shell({ status }: { status: Status }) {
         <div className="perforated" aria-hidden />
       </header>
       <main className="mx-auto max-w-7xl px-4 py-8 md:px-8">
+        <Suspense fallback={<Spinner />}>
         <Routes>
           <Route path="/" element={<Navigate to="/discover" replace />} />
           <Route path="/discover" element={<Discover />} />
@@ -128,6 +172,7 @@ function Shell({ status }: { status: Status }) {
           <Route path="/problems" element={<Problems />} />
           <Route path="*" element={<Navigate to="/discover" replace />} />
         </Routes>
+        </Suspense>
       </main>
       <footer className="mx-auto max-w-7xl px-4 pb-8 text-xs text-muted md:hidden">{t('nav.version', { version: status.version })}</footer>
       </div>

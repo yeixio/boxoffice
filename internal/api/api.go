@@ -330,7 +330,7 @@ func (s *Server) Handler() http.Handler {
 		w.Write([]byte("ok\n"))
 	})
 	mux.Handle("/", s.web())
-	return s.counted(securityHeaders(s.portalOnly(mux)))
+	return s.counted(compressed(securityHeaders(s.portalOnly(mux))))
 }
 
 // portalOnly keeps Box Office's own side off the request site's host name:
