@@ -7,6 +7,7 @@ import '@fontsource-variable/space-grotesk'
 import './index.css'
 import { ApiError } from './api'
 import { ready } from './i18n'
+import { PageBoundary } from './Broken'
 
 const queries = new QueryClient({
   defaultOptions: {
@@ -33,9 +34,12 @@ void ready.then(() =>
   <StrictMode>
     <QueryClientProvider client={queries}>
       <BrowserRouter basename={portalPath && !portalHost ? '/request' : undefined}>
-        <Suspense fallback={null}>
-          <Site />
-        </Suspense>
+        {/* The last resort, for a problem outside any one page (the menu, sign-in). */}
+        <PageBoundary at="">
+          <Suspense fallback={null}>
+            <Site />
+          </Suspense>
+        </PageBoundary>
       </BrowserRouter>
     </QueryClientProvider>
   </StrictMode>,

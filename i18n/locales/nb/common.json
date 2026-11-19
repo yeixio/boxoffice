@@ -51,5 +51,11 @@
     "previous": "Forrige side",
     "next": "Neste side",
     "page": "Side {{page}} av {{pages}}"
+  },
+  "skip": "Hopp til innholdet",
+  "broken": {
+    "title": "Det oppsto et problem på denne siden",
+    "body": "Resten av Box Office fungerer fortsatt. Det hjelper som regel å laste inn på nytt. Hvis det fortsetter, ta med teksten nedenfor i en feilrapport.",
+    "reload": "Last inn siden på nytt"
   }
 }

@@ -7,6 +7,7 @@ import { Menu, X } from 'lucide-react'
 import { get, onSignedOut, post, put, type Status } from './api'
 import { Spinner } from './ui'
 import { Tray } from './Tray'
+import { PageBoundary, SkipLink } from './Broken'
 import { Logo, PhoneNav, Sidebar, useNav } from './Nav'
 import { SignIn } from './pages/SignIn'
 // Each page is fetched when it's first opened, so the first load is only
@@ -113,6 +114,7 @@ function Shell({ status }: { status: Status }) {
   }
   return (
     <div className="min-h-screen md:flex">
+      <SkipLink />
       <LanguageSync saved={status.user?.language ?? ''} adopt={adopt} />
       <Sidebar status={status} nav={nav} signOut={signOut} />
       <div className="min-w-0 flex-1">
@@ -135,7 +137,8 @@ function Shell({ status }: { status: Status }) {
         {menu && <PhoneNav nav={nav} status={status} signOut={signOut} />}
         <div className="perforated" aria-hidden />
       </header>
-      <main className="mx-auto max-w-7xl px-4 py-8 md:px-8">
+      <main id="content" tabIndex={-1} className="mx-auto max-w-7xl px-4 py-8 outline-none md:px-8">
+        <PageBoundary at={location.pathname}>
         <Suspense fallback={<Spinner />}>
         <Routes>
           <Route path="/" element={<Navigate to="/discover" replace />} />
@@ -173,6 +176,7 @@ function Shell({ status }: { status: Status }) {
           <Route path="*" element={<Navigate to="/discover" replace />} />
         </Routes>
         </Suspense>
+        </PageBoundary>
       </main>
       <footer className="mx-auto max-w-7xl px-4 pb-8 text-xs text-muted md:hidden">{t('nav.version', { version: status.version })}</footer>
       </div>

@@ -66,6 +66,7 @@ export function BulkBar({ kind, sel, shown }: { kind: 'movies' | 'series'; sel: 
           )}
           <div className="w-44">
             <Select
+              label={t('add.profile')}
               value={profile}
               onChange={setProfile}
               options={[{ value: '', label: t('bulk.profile') }, ...(profiles.data ?? []).filter((p) => !p.locked).map((p) => ({ value: p.id, label: p.name }))]}

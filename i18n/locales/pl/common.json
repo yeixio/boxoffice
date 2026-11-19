@@ -53,5 +53,11 @@
     "previous": "Poprzednia strona",
     "next": "Następna strona",
     "page": "Strona {{page}} z {{pages}}"
+  },
+  "skip": "Przejdź do treści",
+  "broken": {
+    "title": "Na tej stronie wystąpił problem",
+    "body": "Reszta Box Office nadal działa. Zwykle pomaga ponowne wczytanie. Jeśli problem się powtarza, dołącz poniższy tekst do zgłoszenia błędu.",
+    "reload": "Wczytaj stronę ponownie"
   }
 }

@@ -179,7 +179,7 @@ export function AddGame() {
           />
         </div>
         <div className="sm:w-72">
-          <Select value={system} onChange={setSystem} options={options} />
+          <Select label={t('games.fact.system')} value={system} onChange={setSystem} options={options} />
         </div>
       </div>
       {results.isFetching && <Spinner label={t("games.add.looking")} />}

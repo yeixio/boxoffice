@@ -634,6 +634,7 @@ export function GameSystemPage() {
               {d.genres.length > 0 && (
                 <div className="sm:w-44">
                   <Select
+                    label={t("games.allGenres")}
                     value={genre}
                     onChange={setGenre}
                     options={[
@@ -646,6 +647,7 @@ export function GameSystemPage() {
               {d.decades.length > 0 && (
                 <div className="sm:w-36">
                   <Select
+                    label={t("games.allYears")}
                     value={decade}
                     onChange={setDecade}
                     options={[
@@ -657,6 +659,7 @@ export function GameSystemPage() {
               )}
               <div className="sm:w-40">
                 <Select
+                  label={t("common:sort.by")}
                   value={sort}
                   onChange={(v) => setSort(v as (typeof sorts)[number])}
                   options={sorts.map((k) => ({

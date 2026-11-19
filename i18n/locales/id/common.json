@@ -50,5 +50,11 @@
     "previous": "Halaman sebelumnya",
     "next": "Halaman berikutnya",
     "page": "Halaman {{page}} dari {{pages}}"
+  },
+  "skip": "Langsung ke konten",
+  "broken": {
+    "title": "Halaman ini mengalami masalah",
+    "body": "Bagian lain Box Office masih berfungsi. Memuat ulang biasanya memperbaikinya. Jika terus terjadi, sertakan teks di bawah ini dalam laporan bug.",
+    "reload": "Muat ulang halaman"
   }
 }

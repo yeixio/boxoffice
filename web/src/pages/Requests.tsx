@@ -141,7 +141,7 @@ function RequestList() {
     <>
       <OffNote />
       <div className="mb-4 flex items-center gap-3">
-        <Select value={filter} onChange={(v) => setFilter(v as 'pending' | '')} options={[{ value: 'pending', label: t('req.list.pending') }, { value: '', label: t('req.list.all') }]} />
+        <Select label={t('list.show')} value={filter} onChange={(v) => setFilter(v as 'pending' | '')} options={[{ value: 'pending', label: t('req.list.pending') }, { value: '', label: t('req.list.all') }]} />
       </div>
       <ErrorNote error={error} />
       {list.isPending && <Spinner />}
@@ -307,7 +307,7 @@ function ProblemList() {
     <>
       <OffNote />
       <div className="mb-4">
-        <Select value={filter} onChange={(v) => setFilter(v as 'open' | 'resolved')} options={[{ value: 'open', label: t('req.problems.open') }, { value: 'resolved', label: t('req.problems.fixed') }]} />
+        <Select label={t('list.show')} value={filter} onChange={(v) => setFilter(v as 'open' | 'resolved')} options={[{ value: 'open', label: t('req.problems.open') }, { value: 'resolved', label: t('req.problems.fixed') }]} />
       </div>
       <ErrorNote error={reopen.error} />
       {list.isPending && <Spinner />}

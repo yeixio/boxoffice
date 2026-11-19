@@ -52,5 +52,11 @@
     "previous": "Pagina anterioară",
     "next": "Pagina următoare",
     "page": "Pagina {{page}} din {{pages}}"
+  },
+  "skip": "Sari la conținut",
+  "broken": {
+    "title": "Această pagină a întâmpinat o problemă",
+    "body": "Restul Box Office funcționează în continuare. De obicei, reîncărcarea rezolvă problema. Dacă se repetă, include textul de mai jos într-un raport de eroare.",
+    "reload": "Reîncarcă pagina"
   }
 }

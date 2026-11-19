@@ -1,13 +1,14 @@
 import { Trans, useTranslation } from 'react-i18next'
 import { useCallback, useEffect, useState, type FormEvent, type ReactNode } from 'react'
 import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Link, NavLink, Navigate, Route, Routes, useParams } from 'react-router-dom'
+import { Link, NavLink, Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import { Check, ChevronRight, Clock, Film, Flag, LoaderCircle, LogOut, Plus, Search, Star, Ticket, UserRound } from 'lucide-react'
 import { ApiError } from '../api'
 import { decimal } from '../format'
 import { formatLocale } from '../i18n'
 import { LanguageMenu, LanguagePicker } from '../LanguagePicker'
 import { LanguageSync } from '../i18n/sync'
+import { PageBoundary, SkipLink } from '../Broken'
 import { Button, Empty, ErrorNote, Field, Input, Modal, Poster, Select, Spinner } from '../ui'
 import { onMemberSignedOut, papi, pget, ppost, problemLabel, problems, stateText, type DiscoverHome, type DiscoverPage, type DiscoverTitle, type Issue, type Member, type Problem, type Request, type Site } from './papi'
 
@@ -180,6 +181,7 @@ function Shell({ site, member }: { site: Site; member: Member }) {
   const { t } = useTranslation('request')
   const qc = useQueryClient()
   const [account, setAccount] = useState(false)
+  const location = useLocation()
   const adopt = useCallback(
     async (language: string) => {
       await papi('PUT', '/me/language', { language })
@@ -194,6 +196,7 @@ function Shell({ site, member }: { site: Site; member: Member }) {
   ]
   return (
     <div className="min-h-screen">
+      <SkipLink />
       <LanguageSync saved={member.language ?? ''} adopt={adopt} />
       <header className="sticky top-0 z-20 border-b border-line bg-paper/95 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3 md:px-8">
@@ -219,7 +222,8 @@ function Shell({ site, member }: { site: Site; member: Member }) {
           ))}
         </nav>
       </header>
-      <main className="mx-auto max-w-6xl px-4 py-8 md:px-8">
+      <main id="content" tabIndex={-1} className="mx-auto max-w-6xl px-4 py-8 outline-none md:px-8">
+        <PageBoundary at={location.pathname}>
         <Routes>
           <Route path="/" element={<Home site={site} member={member} />} />
           <Route path="/discover/:id" element={<RowPage />} />
@@ -227,6 +231,7 @@ function Shell({ site, member }: { site: Site; member: Member }) {
           <Route path="/problems" element={<MyProblems />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        </PageBoundary>
       </main>
       {account && <Account member={member} onClose={() => setAccount(false)} />}
     </div>

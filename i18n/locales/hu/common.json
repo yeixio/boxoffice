@@ -51,5 +51,11 @@
     "previous": "Előző oldal",
     "next": "Következő oldal",
     "page": "{{page}}. oldal / {{pages}}"
+  },
+  "skip": "Ugrás a tartalomhoz",
+  "broken": {
+    "title": "Hiba történt ezen az oldalon",
+    "body": "A Box Office többi része továbbra is működik. Az újratöltés általában megoldja. Ha újra előfordul, mellékeld az alábbi szöveget a hibajelentéshez.",
+    "reload": "Oldal újratöltése"
   }
 }

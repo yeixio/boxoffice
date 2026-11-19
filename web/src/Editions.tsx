@@ -78,7 +78,7 @@ export function Editions({ id, title, hasFile, onClose }: { id: number; title: s
               <p className="mb-2 text-xs text-muted">{t('editions.otherHint')}</p>
               <div className="flex flex-wrap items-center gap-3">
                 <div className="w-56">
-                  <Select value={other} onChange={setOther} options={[{ value: '', label: t('editions.pick') }, ...notFound.map((k) => ({ value: k, label: k }))]} />
+                  <Select label={t('editions.pick')} value={other} onChange={setOther} options={[{ value: '', label: t('editions.pick') }, ...notFound.map((k) => ({ value: k, label: k }))]} />
                 </div>
                 {other && buttons(other)}
               </div>
