@@ -36,7 +36,7 @@ type openedDatabase struct {
 // the database; if it fails, the server carries on with the database it
 // has and Settings says why.
 func openDatabase(ctx context.Context, cfg config.Config, log *slog.Logger) (openedDatabase, error) {
-	configured := cfg.Database()
+	configured := store.CleanDSN(cfg.Database())
 	for range 5 {
 		dsn, err := store.Follow(ctx, configured)
 		if err != nil {
