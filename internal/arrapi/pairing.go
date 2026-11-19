@@ -53,7 +53,7 @@ type LiveStep struct {
 // Features are what this Box Office adds for Matinee, for
 // system/status's boxOfficeFeatures.
 func (h *Handler) features() []string {
-	f := []string{"notifications", "discover"}
+	f := []string{"notifications", "discover", "watched"}
 	if h.Requests != nil {
 		f = append(f, "requests")
 	}

@@ -77,6 +77,7 @@ func NewPaired(app App, c *catalog.Service, key func(context.Context) string, ve
 	h.route("GET /api/v3/calendar", h.calendar)
 	h.route("POST /api/v3/command", h.command)
 	h.route("GET /api/v3/boxoffice/notifications", h.notifications)
+	h.route("PUT /api/v3/boxoffice/watched", h.watched)
 	h.pairingRoutes()
 	h.discoverRoutes()
 	h.requestRoutes()
