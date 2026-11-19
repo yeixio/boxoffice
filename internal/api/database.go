@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"strings"
 	"time"
 
 	"github.com/yeixio/boxoffice/internal/store"
@@ -90,7 +89,7 @@ func (s *Server) moveTarget(r *http.Request) (string, error) {
 	if err := readJSON(r, &in); err != nil {
 		return "", errorf(http.StatusBadRequest, "invalid request")
 	}
-	to := strings.TrimSpace(in.To)
+	to := store.CleanDSN(in.To)
 	if to == "" {
 		return "", errorf(http.StatusBadRequest, "say where to move the database: a PostgreSQL URL or a SQLite file's full path")
 	}

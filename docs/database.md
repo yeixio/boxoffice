@@ -30,7 +30,7 @@ The new database must be **empty**:
   CREATE DATABASE boxoffice OWNER boxoffice;
   ```
 
-  Its address looks like `postgres://boxoffice:a%20long%20password@tower.local:5432/boxoffice?sslmode=disable`. Characters such as spaces and `@` in the password are written as `%20` and `%40`. Any recent PostgreSQL works; the Helm chart bundles PostgreSQL 17.
+  Its address looks like `postgres://boxoffice:a%20long%20password@tower.local:5432/boxoffice?sslmode=disable`. A password can be pasted as it is, even with characters such as `@`, `/`, `?` or `#` in it (or written for a URL, as `%40` for `@`); Box Office takes the database named after the last `/`. libpq's `host=… user=… password=… dbname=…` form works too. **Check** shows the address it will use, password hidden, so you can see the database name it read. Any recent PostgreSQL works; the Helm chart bundles PostgreSQL 17.
 - **SQLite**: the full path of a file that doesn't exist yet, on a disk that lasts, such as `/data/boxoffice.db` in the data folder.
 
 ## In Settings

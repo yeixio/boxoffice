@@ -37,11 +37,13 @@ type Store struct {
 // IsPostgres says whether dsn names a PostgreSQL database; anything else is
 // a SQLite file path (":memory:" in tests).
 func IsPostgres(dsn string) bool {
-	return strings.HasPrefix(dsn, "postgres://") || strings.HasPrefix(dsn, "postgresql://")
+	dsn = strings.TrimSpace(dsn)
+	return strings.HasPrefix(dsn, "postgres://") || strings.HasPrefix(dsn, "postgresql://") || isKeyValue(dsn)
 }
 
 // Open connects to the database and brings its schema up to date.
 func Open(dsn string) (*Store, error) {
+	dsn = CleanDSN(dsn)
 	s := &Store{postgres: IsPostgres(dsn)}
 	var err error
 	if s.postgres {
