@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"regexp"
 	"slices"
 	"strconv"
 	"strings"
@@ -41,11 +42,17 @@ const (
 
 const movePrefix = "database_move"
 
+var keyValuePassword = regexp.MustCompile(`(password\s*=\s*)('(?:[^'\\]|\\.)*'|\S+)`)
+
 // Describe is where dsn is, for people to read: a PostgreSQL URL without
 // its password, or a SQLite file's path.
 func Describe(dsn string) string {
+	dsn = CleanDSN(dsn)
 	if !IsPostgres(dsn) {
 		return dsn
+	}
+	if isKeyValue(dsn) {
+		return keyValuePassword.ReplaceAllString(dsn, "${1}xxxxx")
 	}
 	u, err := url.Parse(dsn)
 	if err != nil {
@@ -269,7 +276,11 @@ func (s *Store) MoveTo(ctx context.Context, dsn string, progress MoveProgress) (
 // openTarget connects to the database being moved to, without changing
 // it. made says it's a SQLite file this made.
 func openTarget(ctx context.Context, dsn string) (*Store, bool, error) {
+	dsn = CleanDSN(dsn)
 	if IsPostgres(dsn) {
+		if _, err := pgconn.ParseConfig(dsn); err != nil {
+			return nil, false, fmt.Errorf("can't read that PostgreSQL address; it looks like postgres://user:password@host:5432/database: %w", err)
+		}
 		conn, err := sql.Open("pgx", dsn)
 		if err != nil {
 			return nil, false, err
@@ -278,7 +289,7 @@ func openTarget(ctx context.Context, dsn string) (*Store, bool, error) {
 		defer cancel()
 		if err := conn.PingContext(pingCtx); err != nil {
 			conn.Close()
-			return nil, false, explainConnect(err)
+			return nil, false, explainConnect(err, DatabaseName(dsn))
 		}
 		return &Store{db: conn, postgres: true}, false, nil
 	}
@@ -331,14 +342,17 @@ func removeSQLite(path string) {
 
 // explainConnect says what a PostgreSQL error means for someone typing an
 // address in.
-func explainConnect(err error) error {
+func explainConnect(err error, database string) error {
 	var pg *pgconn.PgError
 	if errors.As(err, &pg) {
 		switch pg.Code {
 		case "28P01", "28000":
 			return fmt.Errorf("PostgreSQL says the user name or password is wrong: %w", err)
 		case "3D000":
-			return fmt.Errorf("that database doesn't exist on the PostgreSQL server yet; make an empty one first (CREATE DATABASE boxoffice): %w", err)
+			if database == "" {
+				database = "boxoffice"
+			}
+			return fmt.Errorf("there's no database named %q on that PostgreSQL server; check the name after the last / in the address (names are case-sensitive), or make an empty one first (CREATE DATABASE %s): %w", database, pgIdent(database), err)
 		}
 	}
 	return fmt.Errorf("can't reach that PostgreSQL server: %w", err)
@@ -800,12 +814,21 @@ func moveSequences(ctx context.Context, t *moveTx, tables []table) error {
 // see that every row comes after the rows it refers to.
 var moveBatch = 500
 
+// pgIdent writes a database name for a CREATE DATABASE people can copy.
+func pgIdent(name string) string {
+	if regexp.MustCompile(`^[a-z_][a-z0-9_]*$`).MatchString(name) {
+		return name
+	}
+	return quote(name)
+}
+
 func quote(name string) string { return `"` + strings.ReplaceAll(name, `"`, `""`) + `"` }
 
 // MovedTo is where the database at dsn was moved to, or "" if it wasn't.
 // It reads the note without opening the database the usual way, so the old
 // database isn't upgraded or changed.
 func MovedTo(ctx context.Context, dsn string) (string, error) {
+	dsn = CleanDSN(dsn)
 	var conn *sql.DB
 	var err error
 	if IsPostgres(dsn) {
@@ -849,6 +872,7 @@ func MovedTo(ctx context.Context, dsn string) (string, error) {
 // Follow is the database Box Office uses when it's set up with dsn: dsn,
 // or where it was moved to (and where that was moved to, and so on).
 func Follow(ctx context.Context, dsn string) (string, error) {
+	dsn = CleanDSN(dsn)
 	seen := map[string]bool{}
 	for range 10 {
 		seen[dsn] = true
@@ -856,6 +880,7 @@ func Follow(ctx context.Context, dsn string) (string, error) {
 		if err != nil {
 			return dsn, err
 		}
+		to = CleanDSN(to)
 		if to == "" || seen[to] {
 			return dsn, nil
 		}
@@ -874,6 +899,7 @@ type MovedFrom struct {
 // FinishMove switches over once the copy is in the new database (to): the
 // old database (s) notes where it went, and the new one where it came from.
 func (s *Store) FinishMove(ctx context.Context, from, to string, report MoveReport) error {
+	from, to = CleanDSN(from), CleanDSN(to)
 	n, made, err := openTarget(ctx, to)
 	if err != nil {
 		return err
