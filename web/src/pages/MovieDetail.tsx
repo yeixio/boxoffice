@@ -13,7 +13,7 @@ import { bytes, day, runtime } from '../format'
 import { qualityName, useProfiles, useQualities } from '../hooks'
 import { pictureText } from './QualityCheck'
 import { FindSubtitles, SubtitleBadges } from './Subtitles'
-import { Badge, Button, Card, ErrorNote, Field, Poster, Select, Spinner, Toggle } from '../ui'
+import { Backdrop, Badge, Button, Card, ErrorNote, Field, Poster, Select, Spinner, Toggle } from '../ui'
 
 // FileFacts are what's known of one copy of the movie: its cut, path,
 // quality, picture, length, size and when it came.
@@ -112,11 +112,7 @@ export function MovieDetail() {
 
   return (
     <div>
-      {m.backdrop && (
-        <div className="-mx-4 -mt-8 mb-6 h-56 md:-mx-8 overflow-hidden sm:h-72">
-          <img src={m.backdrop} alt="" className="size-full object-cover opacity-80 [mask-image:linear-gradient(to_bottom,black_40%,transparent)]" />
-        </div>
-      )}
+      <Backdrop src={m.backdrop} />
       <div className="flex flex-col gap-8 md:flex-row">
         <Poster src={m.poster} title={m.title} className="w-48 shrink-0 self-start shadow-lg" />
         <div className="flex-1">

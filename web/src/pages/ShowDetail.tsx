@@ -12,7 +12,7 @@ import { bytes, day, episodeCode } from '../format'
 import { qualityName, useProfiles, useQualities } from '../hooks'
 import { pictureText } from './QualityCheck'
 import { FindSubtitles, SubtitleMark } from './Subtitles'
-import { Badge, Button, Card, ErrorNote, Field, Poster, Select, Spinner, Toggle } from '../ui'
+import { Backdrop, Badge, Button, Card, ErrorNote, Field, Poster, Select, Spinner, Toggle } from '../ui'
 
 type Detail = { series: Series; episodes: Episode[]; reported?: Reported[] }
 
@@ -54,11 +54,7 @@ export function ShowDetail() {
 
   return (
     <div>
-      {s.backdrop && (
-        <div className="-mx-4 -mt-8 mb-6 h-56 md:-mx-8 overflow-hidden sm:h-72">
-          <img src={s.backdrop} alt="" className="size-full object-cover opacity-80 [mask-image:linear-gradient(to_bottom,black_40%,transparent)]" />
-        </div>
-      )}
+      <Backdrop src={s.backdrop} />
       <div className="flex flex-col gap-8 md:flex-row">
         <Poster src={s.poster} title={s.title} className="w-48 shrink-0 self-start shadow-lg" />
         <div className="flex-1">

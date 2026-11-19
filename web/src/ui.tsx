@@ -139,6 +139,16 @@ export function Poster({ src, title, className = '' }: { src?: string; title: st
   )
 }
 
+export function Backdrop({ src }: { src?: string }) {
+  const [failed, setFailed] = useState('')
+  if (!src || failed === src) return null
+  return (
+    <div className="-mx-4 -mt-8 mb-6 h-56 md:-mx-8 overflow-hidden sm:h-72">
+      <img src={src} alt="" className="size-full object-cover opacity-80 [mask-image:linear-gradient(to_bottom,black_40%,transparent)]" onError={() => setFailed(src)} />
+    </div>
+  )
+}
+
 export function Modal({ title, onClose, children, wide }: { title: string; onClose: () => void; children: ReactNode; wide?: boolean }) {
   const { t } = useTranslation('common')
   const ref = useRef<HTMLDialogElement>(null)
