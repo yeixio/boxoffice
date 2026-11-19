@@ -1333,7 +1333,14 @@
       "server": "Własna strefa serwera ({{zone}})",
       "differs": "Ta przeglądarka jest w strefie {{zone}}.",
       "use": "Użyj {{zone}}"
-    }
+    },
+    "sizes": "Limity rozmiaru",
+    "sizesHint": "Jak duża może być kopia względem czasu trwania, w megabajtach na minutę. Przy 25 MB na minutę dwugodzinny film zajmuje 3 GB. Dobre kopie H.265 i AV1 są dużo mniejsze niż H.264, więc każdy kodek ma własne liczby. Zostaw pole puste, aby nie ustawiać limitu.",
+    "sizesOther": "H.264 i inne",
+    "sizeMin": "Co najmniej",
+    "sizeMax": "Co najwyżej",
+    "sizesNote": "Wydanie, którego nazwa nie podaje kodeka wideo, podlega liczbom dla H.264, a tytuł bez znanego czasu trwania nie jest sprawdzany. Nadal możesz samodzielnie wybrać dowolne wydanie.",
+    "sizesOn": ", limity rozmiaru"
   },
   "mediaTypes": {
     "music": {

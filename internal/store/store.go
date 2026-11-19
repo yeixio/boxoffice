@@ -120,6 +120,7 @@ func migrateSchema(ctx context.Context, db schemaRunner, postgres bool) error {
 	for _, c := range []struct{ table, column, def string }{
 		{"downloads", "quarantined", "TEXT NOT NULL DEFAULT ''"},
 		{"quality_profiles", "locked", "INTEGER NOT NULL DEFAULT 0"},
+		{"quality_profiles", "sizes", "TEXT NOT NULL DEFAULT ''"},
 		{"movies", "auto_upgrade", "TEXT NOT NULL DEFAULT ''"},
 		{"series", "auto_upgrade", "TEXT NOT NULL DEFAULT ''"},
 		{"movies", "rating", "DOUBLE PRECISION NOT NULL DEFAULT 0"},
@@ -353,19 +354,33 @@ func (s *Store) SetSetting(ctx context.Context, key, value string) error {
 
 func scanProfile(r interface{ Scan(...any) error }) (quality.Profile, error) {
 	var p quality.Profile
-	var allowed string
+	var allowed, sizes string
 	var upgrade, locked int
-	if err := r.Scan(&p.ID, &p.Name, &allowed, &p.Cutoff, &upgrade, &locked); err != nil {
+	if err := r.Scan(&p.ID, &p.Name, &allowed, &p.Cutoff, &upgrade, &locked, &sizes); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return p, ErrNotFound
 		}
 		return p, err
 	}
 	p.UpgradeOK, p.Locked = upgrade == 1, locked == 1
+	if sizes != "" {
+		if err := json.Unmarshal([]byte(sizes), &p.Sizes); err != nil {
+			return p, err
+		}
+	}
 	return p, json.Unmarshal([]byte(allowed), &p.Allowed)
 }
 
-const profileCols = "id, name, allowed, cutoff, upgrade, locked"
+const profileCols = "id, name, allowed, cutoff, upgrade, locked, sizes"
+
+// sizesJSON is a profile's size limits as kept: nothing when none are set.
+func sizesJSON(p quality.Profile) string {
+	if !p.Sizes.Any() {
+		return ""
+	}
+	b, _ := json.Marshal(p.Sizes)
+	return string(b)
+}
 
 func (s *Store) Profiles(ctx context.Context) ([]quality.Profile, error) {
 	rows, err := s.query(ctx, "SELECT "+profileCols+" FROM quality_profiles ORDER BY id")
@@ -393,8 +408,8 @@ func (s *Store) CreateProfile(ctx context.Context, p quality.Profile) (quality.P
 		return p, err
 	}
 	allowed, _ := json.Marshal(p.Allowed)
-	id, err := s.insert(ctx, "INSERT INTO quality_profiles (name, allowed, cutoff, upgrade, locked) VALUES (?, ?, ?, ?, ?)",
-		strings.TrimSpace(p.Name), string(allowed), p.Cutoff, b2i(p.UpgradeOK), b2i(p.Locked))
+	id, err := s.insert(ctx, "INSERT INTO quality_profiles (name, allowed, cutoff, upgrade, locked, sizes) VALUES (?, ?, ?, ?, ?, ?)",
+		strings.TrimSpace(p.Name), string(allowed), p.Cutoff, b2i(p.UpgradeOK), b2i(p.Locked), sizesJSON(p))
 	p.ID = int(id)
 	return p, uniqueErr(err)
 }
@@ -404,8 +419,8 @@ func (s *Store) UpdateProfile(ctx context.Context, p quality.Profile) error {
 		return err
 	}
 	allowed, _ := json.Marshal(p.Allowed)
-	res, err := s.exec(ctx, "UPDATE quality_profiles SET name = ?, allowed = ?, cutoff = ?, upgrade = ? WHERE id = ?",
-		strings.TrimSpace(p.Name), string(allowed), p.Cutoff, b2i(p.UpgradeOK), p.ID)
+	res, err := s.exec(ctx, "UPDATE quality_profiles SET name = ?, allowed = ?, cutoff = ?, upgrade = ?, sizes = ? WHERE id = ?",
+		strings.TrimSpace(p.Name), string(allowed), p.Cutoff, b2i(p.UpgradeOK), sizesJSON(p), p.ID)
 	if err != nil {
 		return uniqueErr(err)
 	}

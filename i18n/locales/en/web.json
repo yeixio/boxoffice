@@ -1179,7 +1179,14 @@
       "server": "The server's own ({{zone}})",
       "differs": "This browser is in {{zone}}.",
       "use": "Use {{zone}}"
-    }
+    },
+    "sizes": "Size limits",
+    "sizesHint": "How big a copy may be for its running time, in megabytes a minute. At 25 MB a minute, a 2-hour movie is 3 GB. Good H.265 and AV1 copies are much smaller than H.264 ones, so each has its own numbers. Leave a box empty for no limit.",
+    "sizesOther": "H.264 and others",
+    "sizeMin": "At least",
+    "sizeMax": "At most",
+    "sizesNote": "A release whose name doesn't say how its video is packed is held to the H.264 numbers, and a title with no running time isn't checked. You can still pick any release yourself.",
+    "sizesOn": ", size limits"
   },
   "mediaTypes": {
     "music": {

@@ -55,7 +55,11 @@ export type Status = { setup: boolean; version: string; user?: User; movedIn?: b
 
 export type Quality = { id: number; name: string; source: string; resolution: number }
 // locked is the Do not touch profile, which is never picked for a new title on its own.
-export type Profile = { id: number; name: string; allowed: number[]; cutoff: number; upgrade: boolean; locked?: boolean }
+// SizeLimit is the least and most megabytes a minute a copy may be; 0 is no
+// limit.
+export type SizeLimit = { min: number; max: number }
+export type ProfileSizes = { h264: SizeLimit; hevc: SizeLimit; av1: SizeLimit }
+export type Profile = { id: number; name: string; allowed: number[]; cutoff: number; upgrade: boolean; locked?: boolean; sizes?: ProfileSizes }
 // titles counts the titles filed under it; it can't be removed while there are any.
 export type RootFolder = { id: number; kind: RootKind; path: string; freeSpace: number; accessible: boolean; titles: number }
 

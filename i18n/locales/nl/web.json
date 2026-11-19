@@ -1179,7 +1179,14 @@
       "server": "Die van de server zelf ({{zone}})",
       "differs": "Deze browser zit in {{zone}}.",
       "use": "{{zone}} gebruiken"
-    }
+    },
+    "sizes": "Groottelimieten",
+    "sizesHint": "Hoe groot een kopie mag zijn voor zijn speelduur, in megabytes per minuut. Bij 25 MB per minuut is een film van 2 uur 3 GB. Goede H.265- en AV1-kopieën zijn veel kleiner dan H.264-kopieën, dus elk heeft eigen getallen. Laat een vak leeg voor geen limiet.",
+    "sizesOther": "H.264 en andere",
+    "sizeMin": "Minstens",
+    "sizeMax": "Hoogstens",
+    "sizesNote": "Voor een release waarvan de naam niet zegt hoe de video is ingepakt gelden de getallen van H.264, en een titel zonder bekende speelduur wordt niet gecontroleerd. Je kunt nog steeds zelf elke release kiezen.",
+    "sizesOn": ", groottelimieten"
   },
   "mediaTypes": {
     "music": {

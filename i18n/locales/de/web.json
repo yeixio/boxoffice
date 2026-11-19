@@ -1179,7 +1179,14 @@
       "server": "Die des Servers ({{zone}})",
       "differs": "Dieser Browser ist in {{zone}}.",
       "use": "{{zone}} verwenden"
-    }
+    },
+    "sizes": "Größenlimits",
+    "sizesHint": "Wie groß eine Kopie im Verhältnis zu ihrer Laufzeit sein darf, in Megabyte pro Minute. Bei 25 MB pro Minute hat ein 2-Stunden-Film 3 GB. Gute H.265- und AV1-Kopien sind viel kleiner als H.264-Kopien, deshalb hat jeder Codec eigene Werte. Lass ein Feld leer, wenn es kein Limit geben soll.",
+    "sizesOther": "H.264 und andere",
+    "sizeMin": "Mindestens",
+    "sizeMax": "Höchstens",
+    "sizesNote": "Für ein Release, dessen Name den Videocodec nicht nennt, gelten die H.264-Werte, und ein Titel ohne bekannte Laufzeit wird nicht geprüft. Du kannst weiterhin jedes Release selbst auswählen.",
+    "sizesOn": ", Größenlimits"
   },
   "mediaTypes": {
     "music": {

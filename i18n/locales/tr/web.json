@@ -1179,7 +1179,14 @@
       "server": "Sunucunun kendi dilimi ({{zone}})",
       "differs": "Bu tarayıcı {{zone}} diliminde.",
       "use": "{{zone}} kullan"
-    }
+    },
+    "sizes": "Boyut sınırları",
+    "sizesHint": "Bir kopyanın süresine göre ne kadar büyük olabileceği, dakika başına megabayt olarak. Dakikada 25 MB ile 2 saatlik bir film 3 GB eder. İyi H.265 ve AV1 kopyaları H.264 kopyalarından çok daha küçüktür, bu yüzden her birinin kendi sayıları vardır. Sınır olmaması için kutuyu boş bırakın.",
+    "sizesOther": "H.264 ve diğerleri",
+    "sizeMin": "En az",
+    "sizeMax": "En çok",
+    "sizesNote": "Adı videonun nasıl sıkıştırıldığını söylemeyen bir sürüme H.264 sayıları uygulanır, süresi bilinmeyen bir yapım ise denetlenmez. Yine de istediğiniz sürümü kendiniz seçebilirsiniz.",
+    "sizesOn": ", boyut sınırları"
   },
   "mediaTypes": {
     "music": {

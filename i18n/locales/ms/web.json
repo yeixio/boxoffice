@@ -1102,7 +1102,14 @@
       "server": "Zon pelayan sendiri ({{zone}})",
       "differs": "Pelayar ini berada di {{zone}}.",
       "use": "Guna {{zone}}"
-    }
+    },
+    "sizes": "Had saiz",
+    "sizesHint": "Sebesar mana sesuatu salinan boleh jadi berbanding tempoh tayangannya, dalam megabait seminit. Pada 25 MB seminit, filem 2 jam bersaiz 3 GB. Salinan H.265 dan AV1 yang baik jauh lebih kecil daripada H.264, jadi setiap satu ada nombornya sendiri. Biarkan kotak kosong jika tiada had.",
+    "sizesOther": "H.264 dan lain-lain",
+    "sizeMin": "Sekurang-kurangnya",
+    "sizeMax": "Paling banyak",
+    "sizesNote": "Keluaran yang namanya tidak menyatakan cara videonya dibungkus mengikut nombor H.264, dan tajuk yang tempoh tayangannya tidak diketahui tidak diperiksa. Anda masih boleh memilih sendiri mana-mana keluaran.",
+    "sizesOn": ", had saiz"
   },
   "mediaTypes": {
     "music": {

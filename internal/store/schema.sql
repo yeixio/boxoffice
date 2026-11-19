@@ -27,7 +27,8 @@ CREATE TABLE IF NOT EXISTS quality_profiles (
 	allowed   TEXT NOT NULL, -- JSON list of quality ids
 	cutoff    INTEGER NOT NULL,
 	upgrade   INTEGER NOT NULL DEFAULT 1,
-	locked    INTEGER NOT NULL DEFAULT 0 -- Do not touch: Box Office never changes these titles' files
+	locked    INTEGER NOT NULL DEFAULT 0, -- Do not touch: Box Office never changes these titles' files
+	sizes     TEXT NOT NULL DEFAULT '' -- JSON: megabytes a minute a copy may be, per codec
 );
 
 CREATE TABLE IF NOT EXISTS root_folders (

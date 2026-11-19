@@ -1333,7 +1333,14 @@
       "server": "Vlastní pásmo serveru ({{zone}})",
       "differs": "Tento prohlížeč je v pásmu {{zone}}.",
       "use": "Použít {{zone}}"
-    }
+    },
+    "sizes": "Limity velikosti",
+    "sizesHint": "Jak velká smí kopie být vzhledem ke své délce, v megabajtech za minutu. Při 25 MB za minutu má dvouhodinový film 3 GB. Dobré kopie v H.265 a AV1 jsou mnohem menší než v H.264, proto má každý kodek vlastní čísla. Prázdné pole znamená bez limitu.",
+    "sizesOther": "H.264 a ostatní",
+    "sizeMin": "Nejméně",
+    "sizeMax": "Nejvíce",
+    "sizesNote": "Vydání, jehož název neuvádí kodek videa, se řídí čísly pro H.264 a titul bez známé délky se nekontroluje. Kterékoli vydání si stále můžete vybrat sami.",
+    "sizesOn": ", limity velikosti"
   },
   "mediaTypes": {
     "music": {

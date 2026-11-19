@@ -1,11 +1,11 @@
 import { LanguagePicker } from '../LanguagePicker'
 import i18n from '../i18n'
 import { Trans, useTranslation } from 'react-i18next'
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AlertTriangle, ArrowRight, ArrowRightLeft, CircleCheck, Copy, Database, Lock, Search, Folder, FolderUp, KeyRound, LoaderCircle, Plus, RotateCcw, Trash2 } from 'lucide-react'
-import { api, del, get, post, put, type Status, type MediaType, type MediaTypeKey, type DatabaseInfo, type Profile, type Recycle, type RestartInfo, type RootFolder, type RootKind, type Settings as SettingsData, type ShowDefaults, type SystemInfo } from '../api'
+import { api, del, get, post, put, type Status, type MediaType, type MediaTypeKey, type DatabaseInfo, type Profile, type ProfileSizes, type Recycle, type RestartInfo, type RootFolder, type RootKind, type Settings as SettingsData, type ShowDefaults, type SystemInfo } from '../api'
 import { bytes, day } from '../format'
 import { monitorOptions, useProfiles, useQualities, useRootFolders, useShowDefaults } from '../hooks'
 import { AutoSearchSettings, Connections, DataCapSettingsCard, DownloadSettings, NumberField } from './Connections'
@@ -96,7 +96,7 @@ const sections: SectionDef[] = [
         keys: ['conn.address', 'conn.indexer.apiKey', 'conn.indexer.kind', 'conn.indexer.categories', 'conn.indexer.apiPath', 'conn.indexer.priority', 'conn.auto.perDay', 'conn.indexer.grabs', 'conn.indexer.forSearch', 'conn.indexer.forRss'],
         terms: ['Prowlarr', 'Newznab', 'Torznab', 'NZB', 'API'],
       },
-      { id: 'profiles', el: <Profiles />, keys: ['settings.newProfileTitle', 'settings.qualities', 'settings.goodEnough', 'settings.upgradeUntil'] },
+      { id: 'profiles', el: <Profiles />, keys: ['settings.newProfileTitle', 'settings.qualities', 'settings.goodEnough', 'settings.upgradeUntil', 'settings.sizes'] },
       { id: 'automatic-searches', el: <AutoSearchSettings />, inner: true, terms: ['RSS'] },
       { id: 'data-cap', el: <DataCapSettingsCard />, inner: true },
     ],
@@ -891,6 +891,7 @@ function Profiles() {
               <span className="block text-xs text-muted">
                 {t('settings.profileSummary', { count: p.allowed.length, cutoff: name(p.cutoff) })}
                 {p.upgrade ? t('settings.upgradesOn') : ''}
+                {anySizes(p.sizes) ? t('settings.sizesOn') : ''}
               </span>
             </button>
             )}
@@ -902,6 +903,24 @@ function Profiles() {
   )
 }
 
+// The codecs a profile has size limits for, as written in the editor.
+const codecs = ['h264', 'hevc', 'av1'] as const
+type SizeText = Record<(typeof codecs)[number], { min: string; max: string }>
+
+const anySizes = (s?: ProfileSizes) => !!s && codecs.some((c) => s[c].min > 0 || s[c].max > 0)
+
+// sizeText is a profile's size limits as typed: an empty box is no limit.
+function sizeText(s?: ProfileSizes): SizeText {
+  const say = (n?: number) => (n ? String(n) : '')
+  return { h264: { min: say(s?.h264.min), max: say(s?.h264.max) }, hevc: { min: say(s?.hevc.min), max: say(s?.hevc.max) }, av1: { min: say(s?.av1.min), max: say(s?.av1.max) } }
+}
+
+function sizesOf(text: SizeText): ProfileSizes {
+  const num = (v: string) => Math.max(0, Number(v.replace(',', '.')) || 0)
+  const of = (c: (typeof codecs)[number]) => ({ min: num(text[c].min), max: num(text[c].max) })
+  return { h264: of('h264'), hevc: of('hevc'), av1: of('av1') }
+}
+
 function ProfileEditor({ profile, onClose }: { profile: Profile | null; onClose: () => void }) {
   const { t } = useTranslation()
   const qc = useQueryClient()
@@ -910,13 +929,14 @@ function ProfileEditor({ profile, onClose }: { profile: Profile | null; onClose:
   const [allowed, setAllowed] = useState<number[]>(profile?.allowed ?? [])
   const [cutoff, setCutoff] = useState(profile?.cutoff ?? 0)
   const [upgrade, setUpgrade] = useState(profile?.upgrade ?? true)
+  const [sizes, setSizes] = useState(() => sizeText(profile?.sizes))
   const done = () => {
     qc.invalidateQueries({ queryKey: ['profiles'] })
     onClose()
   }
   const save = useMutation({
     mutationFn: () => {
-      const body = { name, allowed, cutoff: allowed.includes(cutoff) ? cutoff : allowed[allowed.length - 1], upgrade }
+      const body = { name, allowed, cutoff: allowed.includes(cutoff) ? cutoff : allowed[allowed.length - 1], upgrade, sizes: sizesOf(sizes) }
       return profile ? put(`/profiles/${profile.id}`, body) : post('/profiles', body)
     },
     onSuccess: done,
@@ -946,6 +966,33 @@ function ProfileEditor({ profile, onClose }: { profile: Profile | null; onClose:
           </ul>
         </div>
         <Toggle checked={upgrade} onChange={setUpgrade} label={t('settings.upgradeUntil')} />
+        <fieldset>
+          <legend className="mb-1 text-sm font-medium">{t('settings.sizes')}</legend>
+          <p className="mb-3 text-xs text-muted">{t('settings.sizesHint')}</p>
+          <div className="grid grid-cols-[1fr_5.5rem_5.5rem] items-center gap-x-2 gap-y-1.5 text-sm sm:grid-cols-[1fr_7rem_7rem]">
+            <span />
+            <span className="text-xs text-muted">{t('settings.sizeMin')}</span>
+            <span className="text-xs text-muted">{t('settings.sizeMax')}</span>
+            {codecs.map((c) => {
+              const name = c === 'h264' ? t('settings.sizesOther') : c === 'hevc' ? 'H.265' : 'AV1'
+              return (
+                <Fragment key={c}>
+                  <span>{name}</span>
+                  {(['min', 'max'] as const).map((side) => (
+                    <Input
+                      key={side}
+                      inputMode="decimal"
+                      value={sizes[c][side]}
+                      aria-label={`${name}: ${t(side === 'min' ? 'settings.sizeMin' : 'settings.sizeMax')}`}
+                      onChange={(e) => setSizes({ ...sizes, [c]: { ...sizes[c], [side]: e.target.value } })}
+                    />
+                  ))}
+                </Fragment>
+              )
+            })}
+          </div>
+          <p className="mt-3 text-xs text-muted">{t('settings.sizesNote')}</p>
+        </fieldset>
         <ErrorNote error={save.error || remove.error} />
         <div className="flex justify-between gap-2">
           {profile ? (

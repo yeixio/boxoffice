@@ -174,15 +174,26 @@ func (s *Server) updateProfile(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
-	var p quality.Profile
-	if err := readJSON(r, &p); err != nil {
+	// Sizes is apart so a save that leaves the size limits out keeps them.
+	var body struct {
+		quality.Profile
+		Sizes *quality.Sizes `json:"sizes"`
+	}
+	if err := readJSON(r, &body); err != nil {
 		return err
 	}
+	p := body.Profile
 	p.ID = int(id)
-	if old, err := s.Store.Profile(r.Context(), p.ID); err != nil {
+	old, err := s.Store.Profile(r.Context(), p.ID)
+	if err != nil {
 		return err
-	} else if old.Locked {
+	}
+	if old.Locked {
 		return errorf(http.StatusBadRequest, "Do not touch is built in and can't be changed")
+	}
+	p.Sizes = old.Sizes
+	if body.Sizes != nil {
+		p.Sizes = *body.Sizes
 	}
 	p.Locked = false
 	if err := p.Check(); err != nil {
