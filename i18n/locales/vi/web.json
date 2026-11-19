@@ -1147,7 +1147,9 @@
       "speedHint": "Để 0 nếu không giới hạn. Gói internet được bán theo Mbit/s: chia cho 8, nên gói 100 Mbit/s đạt khoảng 12 MB/s.",
       "folder": "Bản tải được đặt trong <path>{{path}}</path>. Đặt BOXOFFICE_DOWNLOADS_DIR trên máy chủ để dùng thư mục khác.",
       "folderFree": "Bản tải được đặt trong <path>{{path}}</path> (còn trống {{free}}). Đặt BOXOFFICE_DOWNLOADS_DIR trên máy chủ để dùng thư mục khác.",
-      "speedSchedule": "Đổi theo giờ trong ngày."
+      "speedSchedule": "Đổi theo giờ trong ngày.",
+      "keepFree": "Giữ trống",
+      "keepFreeHint": "Dung lượng để trống trên ổ đĩa của thư mục tải xuống. Một lượt tải sẽ chờ nếu việc tải và giải nén nó khiến còn lại ít hơn mức này, rồi tự tiếp tục khi có chỗ. 0 là không kiểm tra."
     },
     "days": "ngày",
     "cap": {

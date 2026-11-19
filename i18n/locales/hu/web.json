@@ -1224,7 +1224,9 @@
       "speedHint": "Hagyd 0-n, ha nem kell korlát. Az internetet Mbit/s-ban árulják: oszd el 8-cal, így 100 Mbit/s nagyjából 12 MB/s.",
       "folder": "A letöltések ide kerülnek: <path>{{path}}</path>. Másik mappához állítsd be a BOXOFFICE_DOWNLOADS_DIR változót a szerveren.",
       "folderFree": "A letöltések ide kerülnek: <path>{{path}}</path> ({{free}} szabad). Másik mappához állítsd be a BOXOFFICE_DOWNLOADS_DIR változót a szerveren.",
-      "speedSchedule": "Módosítsd napszak szerint."
+      "speedSchedule": "Módosítsd napszak szerint.",
+      "keepFree": "Szabadon hagyandó hely",
+      "keepFreeHint": "A letöltési mappa lemezén szabadon hagyandó hely. Egy letöltés vár, ha a letöltése és kicsomagolása után ennél kevesebb maradna, és magától folytatódik, amint van hely. A 0 nem ellenőriz."
     },
     "days": "nap",
     "cap": {

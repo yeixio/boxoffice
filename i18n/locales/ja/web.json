@@ -1147,7 +1147,9 @@
       "speedHint": "0 のままなら制限なしです。回線速度は Mbit/s で表示されるので 8 で割ってください。100 Mbit/s の回線なら約 12 MB/s です。",
       "folder": "ダウンロード先は <path>{{path}}</path> です。別のフォルダーを使うにはサーバーで BOXOFFICE_DOWNLOADS_DIR を設定してください。",
       "folderFree": "ダウンロード先は <path>{{path}}</path>（空き {{free}}）です。別のフォルダーを使うにはサーバーで BOXOFFICE_DOWNLOADS_DIR を設定してください。",
-      "speedSchedule": "時間帯で変える。"
+      "speedSchedule": "時間帯で変える。",
+      "keepFree": "空けておく容量",
+      "keepFreeHint": "ダウンロードフォルダーのディスクに残しておく空き容量です。取得と展開でこれより少なくなる場合、ダウンロードは待機し、空きができると自動で再開します。0 にすると確認しません。"
     },
     "days": "日",
     "cap": {

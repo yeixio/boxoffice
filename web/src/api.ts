@@ -524,7 +524,7 @@ export type Download = {
   startedAt?: string
   finishedAt?: string
 }
-export type DownloadSettings = { enabled: boolean; paused: boolean; speedLimit: number; import: boolean; deleteFailed: boolean; quarantineDays: number }
+export type DownloadSettings = { enabled: boolean; paused: boolean; speedLimit: number; import: boolean; deleteFailed: boolean; quarantineDays: number; keepFree: number }
 // One release held in the quarantine folder.
 export type QuarantineItem = {
   path: string

@@ -1147,7 +1147,9 @@
       "speedHint": "제한이 없으면 0으로 두세요. 인터넷 요금제는 Mbit/s로 표시되니 8로 나누세요. 100 Mbit/s 요금제는 약 12 MB/s입니다.",
       "folder": "다운로드는 <path>{{path}}</path>에 저장돼요. 다른 폴더를 쓰려면 서버에서 BOXOFFICE_DOWNLOADS_DIR를 설정하세요.",
       "folderFree": "다운로드는 <path>{{path}}</path>에 저장돼요({{free}} 남음). 다른 폴더를 쓰려면 서버에서 BOXOFFICE_DOWNLOADS_DIR를 설정하세요.",
-      "speedSchedule": "시간대에 따라 바꾸기."
+      "speedSchedule": "시간대에 따라 바꾸기.",
+      "keepFree": "비워 둘 공간",
+      "keepFreeHint": "다운로드 폴더가 있는 디스크에 남겨 둘 공간입니다. 받고 압축을 풀면 이보다 적게 남는 다운로드는 기다렸다가 공간이 생기면 알아서 이어집니다. 0이면 확인하지 않습니다."
     },
     "days": "일",
     "cap": {

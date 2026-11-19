@@ -1224,7 +1224,9 @@
       "speedHint": "Laat op 0 voor geen limiet. Internetabonnementen worden in Mbit/s verkocht: deel door 8, dus 100 Mbit/s haalt ongeveer 12 MB/s.",
       "folder": "Downloads gaan naar <path>{{path}}</path>. Stel BOXOFFICE_DOWNLOADS_DIR in op de server om een andere map te gebruiken.",
       "folderFree": "Downloads gaan naar <path>{{path}}</path> ({{free}} vrij). Stel BOXOFFICE_DOWNLOADS_DIR in op de server om een andere map te gebruiken.",
-      "speedSchedule": "Pas het aan per tijdstip."
+      "speedSchedule": "Pas het aan per tijdstip.",
+      "keepFree": "Vrij houden",
+      "keepFreeHint": "Ruimte die op de schijf van de downloadmap vrij moet blijven. Een download wacht als ophalen en uitpakken minder zou overlaten, en gaat vanzelf verder zodra er ruimte is. 0 controleert niet."
     },
     "days": "dagen",
     "cap": {

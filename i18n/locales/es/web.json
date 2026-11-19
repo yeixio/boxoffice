@@ -1301,7 +1301,9 @@
       "speedHint": "Déjalo en 0 para no tener límite. Los planes de internet se venden en Mbit/s: divide entre 8, así que un plan de 100 Mbit/s llega a unos 12 MB/s.",
       "folder": "Las descargas van a <path>{{path}}</path>. Define BOXOFFICE_DOWNLOADS_DIR en el servidor para usar otra carpeta.",
       "folderFree": "Las descargas van a <path>{{path}}</path> ({{free}} libres). Define BOXOFFICE_DOWNLOADS_DIR en el servidor para usar otra carpeta.",
-      "speedSchedule": "Cámbialo según la hora."
+      "speedSchedule": "Cámbialo según la hora.",
+      "keepFree": "Mantener libre",
+      "keepFreeHint": "Espacio que se deja en el disco de la carpeta de descargas. Una descarga espera si bajarla y descomprimirla dejaría menos, y sigue sola cuando hay sitio. Con 0 no se comprueba."
     },
     "days": "días",
     "cap": {

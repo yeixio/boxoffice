@@ -1301,7 +1301,9 @@
       "speedHint": "Laissez 0 pour aucune limite. Les forfaits internet sont en Mbit/s : divisez par 8, un forfait à 100 Mbit/s plafonne donc vers 12 Mo/s.",
       "folder": "Les téléchargements vont dans <path>{{path}}</path>. Définissez BOXOFFICE_DOWNLOADS_DIR sur le serveur pour utiliser un autre dossier.",
       "folderFree": "Les téléchargements vont dans <path>{{path}}</path> ({{free}} libres). Définissez BOXOFFICE_DOWNLOADS_DIR sur le serveur pour utiliser un autre dossier.",
-      "speedSchedule": "La changer selon l'heure."
+      "speedSchedule": "La changer selon l'heure.",
+      "keepFree": "Garder libre",
+      "keepFreeHint": "Place à laisser sur le disque du dossier de téléchargements. Un téléchargement attend si le récupérer et le décompresser en laissait moins, et reprend tout seul dès qu'il y a de la place. 0 ne vérifie pas."
     },
     "days": "jours",
     "cap": {

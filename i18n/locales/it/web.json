@@ -1301,7 +1301,9 @@
       "speedHint": "Lascia 0 per nessun limite. Le offerte internet sono in Mbit/s: dividi per 8, quindi un'offerta da 100 Mbit/s arriva a circa 12 MB/s.",
       "folder": "I download vanno in <path>{{path}}</path>. Imposta BOXOFFICE_DOWNLOADS_DIR sul server per usare un’altra cartella.",
       "folderFree": "I download vanno in <path>{{path}}</path> ({{free}} liberi). Imposta BOXOFFICE_DOWNLOADS_DIR sul server per usare un’altra cartella.",
-      "speedSchedule": "Cambiala in base all'ora."
+      "speedSchedule": "Cambiala in base all'ora.",
+      "keepFree": "Spazio da lasciare libero",
+      "keepFreeHint": "Spazio da lasciare sul disco della cartella dei download. Un download aspetta se scaricarlo ed estrarlo ne lascerebbe meno, e riprende da solo quando c'è posto. Con 0 non si controlla."
     },
     "days": "giorni",
     "cap": {

@@ -1147,7 +1147,9 @@
       "speedHint": "Biarkan 0 untuk tanpa batas. Paket internet dijual dalam Mbit/s: bagi 8, jadi paket 100 Mbit/s mentok sekitar 12 MB/s.",
       "folder": "Unduhan disimpan di <path>{{path}}</path>. Atur BOXOFFICE_DOWNLOADS_DIR di server untuk memakai folder lain.",
       "folderFree": "Unduhan disimpan di <path>{{path}}</path> ({{free}} kosong). Atur BOXOFFICE_DOWNLOADS_DIR di server untuk memakai folder lain.",
-      "speedSchedule": "Ubah menurut waktu."
+      "speedSchedule": "Ubah menurut waktu.",
+      "keepFree": "Sisakan ruang kosong",
+      "keepFreeHint": "Ruang yang disisakan di disk folder unduhan. Unduhan menunggu jika mengambil dan mengekstraknya akan menyisakan kurang dari itu, lalu lanjut sendiri begitu ada ruang. 0 berarti tidak diperiksa."
     },
     "days": "hari",
     "cap": {

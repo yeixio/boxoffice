@@ -1124,7 +1124,7 @@ func (s *Server) dismissScan(w http.ResponseWriter, r *http.Request) error {
 func (s *Server) health(w http.ResponseWriter, r *http.Request) error {
 	ctx, cancel := context.WithTimeout(r.Context(), 20*time.Second)
 	defer cancel()
-	c := &health.Checker{Store: s.Store, Backups: s.Backups, TMDBKey: func(ctx context.Context) string { return s.Catalog.TMDB(ctx).Key }}
+	c := &health.Checker{Store: s.Store, Backups: s.Backups, TMDBKey: func(ctx context.Context) string { return s.Catalog.TMDB(ctx).Key }, RoomWait: s.roomWait}
 	return writeJSON(w, http.StatusOK, map[string]any{"issues": c.Check(ctx), "checked": time.Now().UTC()})
 }
 

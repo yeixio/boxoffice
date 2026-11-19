@@ -1378,7 +1378,9 @@
       "speedHint": "Nechte 0 pro žádný limit. Internet se prodává v Mbit/s: vydělte 8, takže 100 Mbit/s dá asi 12 MB/s.",
       "folder": "Stažené soubory jdou do <path>{{path}}</path>. Chcete-li použít jinou složku, nastavte na serveru BOXOFFICE_DOWNLOADS_DIR.",
       "folderFree": "Stažené soubory jdou do <path>{{path}}</path> ({{free}} volné). Chcete-li použít jinou složku, nastavte na serveru BOXOFFICE_DOWNLOADS_DIR.",
-      "speedSchedule": "Měnit ji podle denní doby."
+      "speedSchedule": "Měnit ji podle denní doby.",
+      "keepFree": "Ponechat volné",
+      "keepFreeHint": "Místo, které má na disku se složkou stahování zůstat volné. Stahování počká, pokud by po stažení a rozbalení zbylo méně, a samo pokračuje, jakmile je místo. 0 nic nekontroluje."
     },
     "days": "dní",
     "cap": {

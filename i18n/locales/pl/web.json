@@ -1378,7 +1378,9 @@
       "speedHint": "Zostaw 0, aby nie było limitu. Pakiety internetowe podaje się w Mbit/s: podziel przez 8, więc 100 Mbit/s to około 12 MB/s.",
       "folder": "Pobrane trafiają do <path>{{path}}</path>. Ustaw BOXOFFICE_DOWNLOADS_DIR na serwerze, aby użyć innego folderu.",
       "folderFree": "Pobrane trafiają do <path>{{path}}</path> ({{free}} wolne). Ustaw BOXOFFICE_DOWNLOADS_DIR na serwerze, aby użyć innego folderu.",
-      "speedSchedule": "Zmieniaj ją zależnie od pory dnia."
+      "speedSchedule": "Zmieniaj ją zależnie od pory dnia.",
+      "keepFree": "Zostaw wolne",
+      "keepFreeHint": "Miejsce, które ma zostać na dysku z folderem pobierania. Pobieranie czeka, jeśli po pobraniu i rozpakowaniu zostałoby mniej, i samo rusza dalej, gdy jest miejsce. 0 wyłącza sprawdzanie."
     },
     "days": "dni",
     "cap": {

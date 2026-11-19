@@ -1301,7 +1301,9 @@
       "speedHint": "Lasă 0 pentru nicio limită. Abonamentele de internet sunt în Mbit/s: împarte la 8, deci 100 Mbit/s înseamnă cam 12 MB/s.",
       "folder": "Descărcările merg în <path>{{path}}</path>. Setează BOXOFFICE_DOWNLOADS_DIR pe server pentru a folosi alt dosar.",
       "folderFree": "Descărcările merg în <path>{{path}}</path> ({{free}} liberi). Setează BOXOFFICE_DOWNLOADS_DIR pe server pentru a folosi alt dosar.",
-      "speedSchedule": "Schimb-o după ora din zi."
+      "speedSchedule": "Schimb-o după ora din zi.",
+      "keepFree": "Păstrează liber",
+      "keepFreeHint": "Spațiul care rămâne liber pe discul dosarului de descărcări. O descărcare așteaptă dacă aducerea și despachetarea ei ar lăsa mai puțin, și continuă singură când e loc. 0 nu verifică."
     },
     "days": "zile",
     "cap": {

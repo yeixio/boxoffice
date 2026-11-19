@@ -1224,7 +1224,9 @@
       "speedHint": "Lass es bei 0 für kein Limit. Internettarife werden in Mbit/s angegeben: durch 8 teilen, ein 100-Mbit/s-Tarif schafft also etwa 12 MB/s.",
       "folder": "Downloads kommen nach <path>{{path}}</path>. Setze BOXOFFICE_DOWNLOADS_DIR auf dem Server, um einen anderen Ordner zu verwenden.",
       "folderFree": "Downloads kommen nach <path>{{path}}</path> ({{free}} frei). Setze BOXOFFICE_DOWNLOADS_DIR auf dem Server, um einen anderen Ordner zu verwenden.",
-      "speedSchedule": "Nach Tageszeit ändern."
+      "speedSchedule": "Nach Tageszeit ändern.",
+      "keepFree": "Frei halten",
+      "keepFreeHint": "Platz, der auf dem Datenträger des Download-Ordners frei bleiben soll. Ein Download wartet, wenn Herunterladen und Entpacken weniger übrig ließen, und macht von selbst weiter, sobald Platz ist. 0 prüft nicht."
     },
     "days": "Tage",
     "cap": {
