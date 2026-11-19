@@ -171,3 +171,15 @@ export function Modal({ title, onClose, children, wide }: { title: string; onClo
     </dialog>
   )
 }
+
+// Backdrop is the wide picture across the top of a title's page. One that
+// can't be loaded leaves no gap and no broken-picture mark.
+export function Backdrop({ src }: { src?: string }) {
+  const [failed, setFailed] = useState('')
+  if (!src || failed === src) return null
+  return (
+    <div className="-mx-4 -mt-8 mb-4 h-28 overflow-hidden sm:mb-6 sm:h-72 md:-mx-8">
+      <img src={src} alt="" onError={() => setFailed(src)} className="size-full object-cover opacity-80 [mask-image:linear-gradient(to_bottom,black_40%,transparent)]" />
+    </div>
+  )
+}

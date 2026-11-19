@@ -541,7 +541,7 @@ function Sheet({ t, mine, where, onClose }: { t: DiscoverTitle; mine?: Request; 
   return (
     <Modal title={t.title} onClose={onClose} wide>
       <div className="flex flex-col gap-5">
-        {t.backdrop && <img src={t.backdrop} alt="" className="-mx-5 -mt-5 aspect-[21/9] w-[calc(100%+2.5rem)] max-w-none object-cover" />}
+        {t.backdrop && <img src={t.backdrop} alt="" onError={(e) => (e.currentTarget.hidden = true)} className="-mx-5 -mt-5 aspect-[21/9] w-[calc(100%+2.5rem)] max-w-none object-cover" />}
         <div className="flex gap-4">
           <Poster src={t.poster} title={t.title} className="hidden w-28 shrink-0 sm:block" />
           <div className="min-w-0 flex-1">
