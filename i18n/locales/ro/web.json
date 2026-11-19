@@ -2861,5 +2861,21 @@
     "previewCount": "Titluri: {{titles}} ({{size}}). Cele mai mari:",
     "previewSafe": "Aceasta este doar o previzualizare. Salvarea regulii le listează ca plecând în curând și nu șterge nimic.",
     "editNote": "Schimbarea unei reguli îi reia lista de la capăt."
+  },
+  "rules": {
+    "title": "Reguli pentru titluri noi",
+    "intro": "Trimite titlurile noi într-un dosar și un profil de calitate după gen sau limbă, de exemplu animația din Japonia într-un dosar de anime. O regulă alege pentru titlurile cărora nimeni nu le-a ales dosarul: cereri, liste urmărite și titluri cerute de Matinee. Când adaugi tu un titlu, alegerea regulii este deja completată și o poți schimba. Dacă se potrivesc mai multe reguli, câștigă cea de mai sus.",
+    "none": "Încă nu există reguli.",
+    "new": "Regulă nouă",
+    "kind": "Pentru",
+    "genres": "Genuri",
+    "genresHint": "Se potrivește un titlu cu oricare dintre acestea. Nu alege niciunul pentru toate genurile.",
+    "noGenres": "Genurile nu au putut fi încărcate de la TMDB.",
+    "language": "Limba originală",
+    "anyLanguage": "Orice limbă",
+    "keepFolder": "Dosarul obișnuit",
+    "keepProfile": "Profilul obișnuit",
+    "picked": "Regula {{name}} a ales aici dosarul și profilul. Le poți schimba.",
+    "moveUp": "Mută în sus"
   }
 }

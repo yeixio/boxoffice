@@ -2738,5 +2738,21 @@
     "previewCount": "Titels: {{titles}} ({{size}}). De grootste:",
     "previewSafe": "Dit is alleen een voorbeeld. De regel opslaan vermeldt deze als binnenkort vertrekkend en verwijdert niets.",
     "editNote": "Een regel wijzigen begint zijn lijst opnieuw."
+  },
+  "rules": {
+    "title": "Regels voor nieuwe titels",
+    "intro": "Stuur nieuwe titels naar een map en kwaliteitsprofiel op basis van genre of taal, bijvoorbeeld animatie uit Japan naar een animemap. Een regel kiest voor titels waarvoor niemand een map koos: verzoeken, gevolgde lijsten en titels waar Matinee om vraagt. Als je zelf een titel toevoegt, is de keuze van de regel al ingevuld en kun je die wijzigen. Als meer dan één regel past, wint de bovenste.",
+    "none": "Nog geen regels.",
+    "new": "Nieuwe regel",
+    "kind": "Voor",
+    "genres": "Genres",
+    "genresHint": "Een titel met een van deze past. Kies er geen voor alle genres.",
+    "noGenres": "De genres konden niet van TMDB worden geladen.",
+    "language": "Oorspronkelijke taal",
+    "anyLanguage": "Elke taal",
+    "keepFolder": "De gebruikelijke map",
+    "keepProfile": "Het gebruikelijke profiel",
+    "picked": "De regel {{name}} koos hier de map en het profiel. Je kunt ze wijzigen.",
+    "moveUp": "Omhoog"
   }
 }

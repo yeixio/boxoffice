@@ -2738,5 +2738,21 @@
     "previewCount": "Címek: {{titles}} ({{size}}). A legnagyobbak:",
     "previewSafe": "Ez csak előnézet. A szabály mentése ezeket hamarosan távozóként listázza, és semmit sem töröl.",
     "editNote": "Egy szabály módosítása újrakezdi a listáját."
+  },
+  "rules": {
+    "title": "Szabályok az új címekhez",
+    "intro": "Küldd az új címeket mappába és minőségi profilba a műfajuk vagy a nyelvük alapján, például a japán animációt egy anime mappába. A szabály azoknál a címeknél dönt, amelyeknek senki nem választott mappát: kéréseknél, követett listáknál és a Matinee által kért címeknél. Ha magad adsz hozzá címet, a szabály választása előre ki van töltve, és megváltoztathatod. Ha több szabály is illik, a feljebb lévő nyer.",
+    "none": "Még nincsenek szabályok.",
+    "new": "Új szabály",
+    "kind": "Mire",
+    "genres": "Műfajok",
+    "genresHint": "Az a cím illik, amelyre ezek bármelyike igaz. Ne válassz egyet sem, ha minden műfajra vonatkozzon.",
+    "noGenres": "A műfajokat nem sikerült betölteni a TMDB-ről.",
+    "language": "Eredeti nyelv",
+    "anyLanguage": "Bármilyen nyelv",
+    "keepFolder": "A szokásos mappa",
+    "keepProfile": "A szokásos profil",
+    "picked": "A(z) {{name}} szabály választotta itt a mappát és a profilt. Megváltoztathatod őket.",
+    "moveUp": "Feljebb"
   }
 }

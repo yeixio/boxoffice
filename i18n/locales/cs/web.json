@@ -2984,5 +2984,21 @@
     "previewCount": "Tituly: {{titles}} ({{size}}). Největší:",
     "previewSafe": "Toto je jen náhled. Uložení pravidla je vypíše jako brzy odcházející a nic nesmaže.",
     "editNote": "Změna pravidla začne jeho seznam od začátku."
+  },
+  "rules": {
+    "title": "Pravidla pro nové tituly",
+    "intro": "Posílejte nové tituly do složky a profilu kvality podle žánru nebo jazyka, třeba animované filmy z Japonska do složky s anime. Pravidlo vybírá u titulů, kterým složku nikdo nezvolil: u žádostí, sledovaných seznamů a titulů, o které požádá Matinee. Když titul přidáváte sami, volba pravidla se předvyplní a můžete ji změnit. Pokud vyhovuje více pravidel, platí to, které je výš.",
+    "none": "Zatím žádná pravidla.",
+    "new": "Nové pravidlo",
+    "kind": "Pro",
+    "genres": "Žánry",
+    "genresHint": "Vyhovuje titul s kterýmkoli z nich. Nevyberete-li žádný, platí pro všechny žánry.",
+    "noGenres": "Žánry se z TMDB nepodařilo načíst.",
+    "language": "Původní jazyk",
+    "anyLanguage": "Jakýkoli jazyk",
+    "keepFolder": "Obvyklá složka",
+    "keepProfile": "Obvyklý profil",
+    "picked": "Složku a profil zde vybralo pravidlo {{name}}. Můžete je změnit.",
+    "moveUp": "Posunout nahoru"
   }
 }

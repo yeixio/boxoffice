@@ -530,6 +530,9 @@ func (s *Server) addMovie(w http.ResponseWriter, r *http.Request) error {
 	if err := readJSON(r, &in); err != nil {
 		return err
 	}
+	// A folder or profile sent with the title was picked by a person (the
+	// Add dialog fills in what a rule would pick), so the rules leave it.
+	in.Chosen = in.ProfileID != 0 || in.RootFolder != ""
 	m, err := s.Catalog.AddMovie(r.Context(), in.TMDBID, in.AddOptions)
 	if err != nil {
 		return err
@@ -728,6 +731,7 @@ func (s *Server) addSeries(w http.ResponseWriter, r *http.Request) error {
 	if err := readJSON(r, &in); err != nil {
 		return err
 	}
+	in.Chosen = in.ProfileID != 0 || in.RootFolder != ""
 	t, err := s.Catalog.AddSeries(r.Context(), in.TMDBID, in.AddOptions)
 	if err != nil {
 		return err

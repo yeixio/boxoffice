@@ -2984,5 +2984,21 @@
     "previewCount": "Tytuły: {{titles}} ({{size}}). Największe:",
     "previewSafe": "To tylko podgląd. Zapisanie reguły wymienia je jako wkrótce znikające i niczego nie usuwa.",
     "editNote": "Zmiana reguły zaczyna jej listę od nowa."
+  },
+  "rules": {
+    "title": "Reguły dla nowych tytułów",
+    "intro": "Wysyłaj nowe tytuły do folderu i profilu jakości według gatunku lub języka, na przykład animację z Japonii do folderu z anime. Reguła wybiera dla tytułów, którym nikt nie wybrał folderu: próśb, obserwowanych list i tytułów, o które prosi Matinee. Gdy dodajesz tytuł samodzielnie, wybór reguły jest już wpisany i możesz go zmienić. Jeśli pasuje więcej niż jedna reguła, wygrywa ta wyżej.",
+    "none": "Nie ma jeszcze reguł.",
+    "new": "Nowa reguła",
+    "kind": "Dla",
+    "genres": "Gatunki",
+    "genresHint": "Pasuje tytuł z którymkolwiek z nich. Nie wybieraj żadnego, aby objąć wszystkie gatunki.",
+    "noGenres": "Nie udało się wczytać gatunków z TMDB.",
+    "language": "Język oryginału",
+    "anyLanguage": "Dowolny język",
+    "keepFolder": "Zwykły folder",
+    "keepProfile": "Zwykły profil",
+    "picked": "Reguła {{name}} wybrała tu folder i profil. Możesz je zmienić.",
+    "moveUp": "W górę"
   }
 }

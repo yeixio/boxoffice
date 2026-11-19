@@ -2861,5 +2861,21 @@
     "previewCount": "Titres : {{titles}} ({{size}}). Les plus gros :",
     "previewSafe": "Ce n’est qu’un aperçu. Enregistrer la règle les liste comme partant bientôt et ne supprime rien.",
     "editNote": "Modifier une règle remet sa liste à zéro."
+  },
+  "rules": {
+    "title": "Règles pour les nouveaux titres",
+    "intro": "Envoyez les nouveaux titres vers un dossier et un profil de qualité selon leur genre ou leur langue, par exemple l'animation japonaise vers un dossier d'anime. Une règle choisit pour les titres dont personne n'a choisi le dossier : demandes, listes suivies et titres demandés par Matinee. Quand vous ajoutez un titre vous-même, le choix de la règle est prérempli et vous pouvez le changer. Si plusieurs règles conviennent, celle du haut l'emporte.",
+    "none": "Aucune règle pour l'instant.",
+    "new": "Nouvelle règle",
+    "kind": "Pour",
+    "genres": "Genres",
+    "genresHint": "Un titre ayant l'un de ces genres convient. N'en choisissez aucun pour tous les genres.",
+    "noGenres": "Les genres n'ont pas pu être chargés depuis TMDB.",
+    "language": "Langue d'origine",
+    "anyLanguage": "Toutes les langues",
+    "keepFolder": "Le dossier habituel",
+    "keepProfile": "Le profil habituel",
+    "picked": "La règle {{name}} a choisi ici le dossier et le profil. Vous pouvez les changer.",
+    "moveUp": "Monter"
   }
 }

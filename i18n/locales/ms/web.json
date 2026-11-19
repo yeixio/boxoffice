@@ -2615,5 +2615,21 @@
     "previewCount": "Tajuk: {{titles}} ({{size}}). Yang terbesar:",
     "previewSafe": "Ini hanya pratonton. Menyimpan peraturan menyenaraikan ini sebagai akan pergi tidak lama lagi dan tidak memadam apa-apa.",
     "editNote": "Mengubah peraturan memulakan senarainya semula."
+  },
+  "rules": {
+    "title": "Peraturan untuk tajuk baharu",
+    "intro": "Hantar tajuk baharu ke folder dan profil kualiti mengikut genre atau bahasa, contohnya animasi dari Jepun ke folder anime. Peraturan memilih untuk tajuk yang foldernya tidak dipilih sesiapa: permintaan, senarai yang diikuti dan tajuk yang diminta oleh Matinee. Apabila anda menambah tajuk sendiri, pilihan peraturan sudah diisi dan anda boleh mengubahnya. Jika lebih daripada satu peraturan sepadan, yang lebih atas diguna.",
+    "none": "Belum ada peraturan.",
+    "new": "Peraturan baharu",
+    "kind": "Untuk",
+    "genres": "Genre",
+    "genresHint": "Tajuk dengan mana-mana genre ini sepadan. Jangan pilih apa-apa untuk semua genre.",
+    "noGenres": "Genre tidak dapat dimuatkan daripada TMDB.",
+    "language": "Bahasa asal",
+    "anyLanguage": "Mana-mana bahasa",
+    "keepFolder": "Folder biasa",
+    "keepProfile": "Profil biasa",
+    "picked": "Peraturan {{name}} memilih folder dan profil di sini. Anda boleh mengubahnya.",
+    "moveUp": "Alih ke atas"
   }
 }

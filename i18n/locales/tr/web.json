@@ -2738,5 +2738,21 @@
     "previewCount": "Başlıklar: {{titles}} ({{size}}). En büyükleri:",
     "previewSafe": "Bu yalnızca bir önizlemedir. Kuralı kaydetmek bunları yakında ayrılacak olarak listeler ve hiçbir şeyi silmez.",
     "editNote": "Bir kuralı değiştirmek listesini baştan başlatır."
+  },
+  "rules": {
+    "title": "Yeni yapımlar için kurallar",
+    "intro": "Yeni yapımları türüne veya diline göre bir klasöre ve kalite profiline gönderin; örneğin Japonya'dan animasyonları bir anime klasörüne. Kural, klasörünü kimsenin seçmediği yapımlar için seçer: istekler, takip edilen listeler ve Matinee'nin istediği yapımlar. Bir yapımı kendiniz eklerken kuralın seçimi doldurulmuş olur ve değiştirebilirsiniz. Birden fazla kural uyuyorsa üstteki geçerli olur.",
+    "none": "Henüz kural yok.",
+    "new": "Yeni kural",
+    "kind": "Şunun için",
+    "genres": "Türler",
+    "genresHint": "Bunlardan herhangi birine sahip bir yapım uyar. Tüm türler için hiçbirini seçmeyin.",
+    "noGenres": "Türler TMDB'den yüklenemedi.",
+    "language": "Özgün dil",
+    "anyLanguage": "Herhangi bir dil",
+    "keepFolder": "Her zamanki klasör",
+    "keepProfile": "Her zamanki profil",
+    "picked": "Buradaki klasörü ve profili {{name}} kuralı seçti. Değiştirebilirsiniz.",
+    "moveUp": "Yukarı taşı"
   }
 }

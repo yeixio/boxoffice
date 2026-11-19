@@ -2738,5 +2738,21 @@
     "previewCount": "Nimikkeitä: {{titles}} ({{size}}). Suurimmat:",
     "previewSafe": "Tämä on vain esikatselu. Säännön tallentaminen listaa nämä pian lähteviksi eikä poista mitään.",
     "editNote": "Säännön muuttaminen aloittaa sen listan alusta."
+  },
+  "rules": {
+    "title": "Säännöt uusille nimikkeille",
+    "intro": "Ohjaa uudet nimikkeet kansioon ja laatuprofiiliin lajityypin tai kielen mukaan, esimerkiksi japanilainen animaatio animekansioon. Sääntö valitsee nimikkeille, joille kukaan ei valinnut kansiota: pyynnöille, seuratuille listoille ja Matineen pyytämille nimikkeille. Kun lisäät nimikkeen itse, säännön valinta on valmiiksi täytetty ja voit muuttaa sitä. Jos useampi sääntö sopii, ylempänä oleva voittaa.",
+    "none": "Ei sääntöjä vielä.",
+    "new": "Uusi sääntö",
+    "kind": "Kohde",
+    "genres": "Lajityypit",
+    "genresHint": "Nimike, jolla on jokin näistä, sopii. Älä valitse yhtään, jos sääntö koskee kaikkia lajityyppejä.",
+    "noGenres": "Lajityyppejä ei voitu ladata TMDB:stä.",
+    "language": "Alkuperäiskieli",
+    "anyLanguage": "Mikä tahansa kieli",
+    "keepFolder": "Tavallinen kansio",
+    "keepProfile": "Tavallinen profiili",
+    "picked": "Sääntö {{name}} valitsi tässä kansion ja profiilin. Voit muuttaa niitä.",
+    "moveUp": "Siirrä ylös"
   }
 }
