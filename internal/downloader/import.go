@@ -31,9 +31,11 @@ type LibraryImporter struct {
 	Tags func(ctx context.Context, path string) (VideoTags, error)
 	// Games puts a wanted game's download in its system's folder.
 	Games GameImporter
-	// Moving says a movie or show is being moved to another root folder
-	// right now (package relocate): its downloads wait until it's done.
-	Moving func(kind string, id int64) bool
+	// Enter is called before anything goes into a movie's or show's
+	// folder (package relocate). It says no while the title is being moved
+	// to another root folder, and its downloads wait until that's done;
+	// otherwise no move starts on the title until leave is called.
+	Enter func(kind string, id int64) (leave func(), ok bool)
 }
 
 // ErrTitleMoving means a download waits to go into the library because its
@@ -123,8 +125,14 @@ func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir str
 			return "", err
 		}
 	}
-	if (d.Kind == "movie" || d.Kind == "series") && li.Moving != nil && li.Moving(d.Kind, d.TitleID) {
-		return "", ErrTitleMoving
+	if (d.Kind == "movie" || d.Kind == "series") && li.Enter != nil {
+		leave, ok := li.Enter(d.Kind, d.TitleID)
+		if !ok {
+			return "", ErrTitleMoving
+		}
+		// The title's folder is read below, after this, so a move that
+		// ended just now has already switched it to the new place.
+		defer leave()
 	}
 	if store.IsBookKind(d.Kind) {
 		return li.importBook(ctx, d, dir, files)

@@ -154,7 +154,7 @@ func run() error {
 	// Titles moved to another root folder, in the background. While one
 	// is, its downloads wait to go into its folder.
 	mover := &relocate.Service{Store: db, Log: log}
-	libImporter := &downloader.LibraryImporter{Store: db, Moving: mover.Moving}
+	libImporter := &downloader.LibraryImporter{Store: db, Enter: mover.Enter}
 	downloads := &downloader.Engine{Store: db, Dir: cfg.Downloads, NZBDir: filepath.Join(cfg.DataDir, "nzb"), Log: log, Importer: libImporter,
 		Libraries: func(ctx context.Context) ([]string, error) {
 			roots, err := db.RootFolders(ctx, "")
