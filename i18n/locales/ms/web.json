@@ -2710,5 +2710,16 @@
     "skipped": "Pelayan ini ditetapkan untuk melangkau kod (BOXOFFICE_SKIP_SIGN_IN_CODE). Buang tetapan itu supaya kod diminta semula.",
     "off": "Matikan",
     "password": "Kata laluan anda, untuk mematikannya"
+  },
+  "spaceSaver": {
+    "label": "Penjimat ruang",
+    "off": "Mati",
+    "next": "{{n}} episod seterusnya",
+    "hint": "Hanya mengambil beberapa episod seterusnya selepas episod terakhir yang ditonton sesiapa dalam Matinee, dan menambah apabila mereka terus menonton. Musim dan episod yang dimatikan tidak dikira. Tiada apa yang dipadam.",
+    "noReport": "Matinee belum memberitahu apa yang ditonton, jadi rancangan ini dikira belum dimulakan. Matinee melapor sendiri sebaik sahaja ia disambungkan dan dikemas kini.",
+    "notStarted": "Belum ada sesiapa yang memulakan rancangan ini.",
+    "upTo": "Ditonton sehingga {{episode}}.",
+    "later": "Kemudian",
+    "laterHint": "Penjimat ruang mengambilnya apabila seseorang semakin hampir dengannya."
   }
 }

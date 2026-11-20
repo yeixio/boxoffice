@@ -7,6 +7,7 @@ import { AutoUpgradeField } from '../AutoUpgrade'
 import { LockedNote, ReportedNote } from '../Bulk'
 import { Releases } from '../Releases'
 import { DeleteFiles, RemoveTitle } from '../RemoveFiles'
+import { SpaceSaverField, type SpaceSaverWatched } from '../SpaceSaver'
 import { get, patch, post, type Episode, type Profile, type Reported, type Series } from '../api'
 import { bytes, day, episodeCode } from '../format'
 import { qualityName, useProfiles, useQualities } from '../hooks'
@@ -14,7 +15,7 @@ import { pictureText } from './QualityCheck'
 import { FindSubtitles, SubtitleMark } from './Subtitles'
 import { Backdrop, Badge, Button, Card, ErrorNote, Field, Poster, Select, Spinner, Toggle } from '../ui'
 
-type Detail = { series: Series; episodes: Episode[]; reported?: Reported[] }
+type Detail = { series: Series; episodes: Episode[]; reported?: Reported[]; watched?: SpaceSaverWatched }
 
 export function ShowDetail() {
   const { t } = useTranslation()
@@ -30,7 +31,7 @@ export function ShowDetail() {
     qc.setQueryData(key, d)
     qc.invalidateQueries({ queryKey: ['series'] })
   }
-  const edit = useMutation({ mutationFn: (body: Partial<Pick<Series, 'monitored' | 'profileId' | 'autoUpgrade'>>) => patch<Detail>(`/series/${id}`, body), onSuccess: set })
+  const edit = useMutation({ mutationFn: (body: Partial<Pick<Series, 'monitored' | 'profileId' | 'autoUpgrade' | 'keepAhead'>>) => patch<Detail>(`/series/${id}`, body), onSuccess: set })
   const season = useMutation({ mutationFn: ({ n, monitored }: { n: number; monitored: boolean }) => patch<Detail>(`/series/${id}/seasons/${n}`, { monitored }), onSuccess: set })
   const action = useMutation({
     mutationFn: (what: 'search' | 'refresh') => post(`/series/${id}/${what}`),
@@ -105,6 +106,7 @@ export function ShowDetail() {
             {(fid) => <Select id={fid} value={s.profileId} onChange={(v) => edit.mutate({ profileId: Number(v) })} options={(profiles.data ?? []).map((p) => ({ value: p.id, label: p.name }))} />}
           </Field>
           {!locked && <AutoUpgradeField value={s.autoUpgrade} onChange={(v) => edit.mutate({ autoUpgrade: v as Series['autoUpgrade'] })} upgradeOK={!!profiles.data?.find((p) => p.id === s.profileId)?.upgrade} />}
+          {!locked && <SpaceSaverField value={s.keepAhead} onChange={(n) => edit.mutate({ keepAhead: n })} watched={show.data.watched} />}
         </div>
         <div className="mt-3 text-sm">
           <span className="text-muted">{t('title.folder')} </span>
@@ -122,7 +124,11 @@ export function ShowDetail() {
             monitored={se.monitored}
             episodes={episodes.filter((e) => e.season === se.number)}
             onMonitor={(v) => season.mutate({ n: se.number, monitored: v })}
-            onEpisode={(e) => set({ ...show.data, series: s, episodes: episodes.map((x) => (x.id === e.id ? e : x)) })}
+            onEpisode={(e) => {
+              set({ ...show.data, series: s, episodes: episodes.map((x) => (x.id === e.id ? e : x)) })
+              // Space saver counts the episodes switched on, so others may have moved.
+              if (s.keepAhead > 0) qc.invalidateQueries({ queryKey: key })
+            }}
             onShow={set}
             showTitle={s.title}
             defaultOpen={se.number === seasons[0]?.number}
@@ -228,12 +234,16 @@ function SeasonBlock({
                           {qualityName(qualities.data, e.file.quality)} · {bytes(e.file.size)}
                         </Badge>
                       </span>
+                    ) : e.held && e.monitored ? (
+                      <span title={t('spaceSaver.laterHint')}>
+                        <Badge>{t('spaceSaver.later')}</Badge>
+                      </span>
                     ) : aired ? (
                       !e.monitored && <Badge>{t('show.skipped')}</Badge>
                     ) : (
                       <Badge tone="gold">{t('show.coming')}</Badge>
                     )}
-                    {!locked && aired && e.monitored && (!e.file || upgrade) && (
+                    {!locked && aired && e.monitored && !(e.held && !e.file) && (!e.file || upgrade) && (
                       <button
                         className="rounded px-1.5 py-0.5 text-xs text-marquee hover:bg-line"
                         onClick={() => search.mutate(e)}

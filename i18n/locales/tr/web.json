@@ -2833,5 +2833,16 @@
     "skipped": "Bu sunucu kodu atlayacak şekilde ayarlanmış (BOXOFFICE_SKIP_SIGN_IN_CODE). Kodun yeniden istenmesi için bu ayarı kaldırın.",
     "off": "Kapat",
     "password": "Kapatmak için parolanız"
+  },
+  "spaceSaver": {
+    "label": "Alan tasarrufu",
+    "off": "Kapalı",
+    "next": "Sonraki {{n}} bölüm",
+    "hint": "Yalnızca Matinee'de birinin izlediği son bölümden sonraki birkaç bölümü getirir, izledikçe daha fazlasını getirir. Kapalı sezonlar ve bölümler sayılmaz. Hiçbir şey silinmez.",
+    "noReport": "Matinee henüz neyin izlendiğini bildirmedi, bu yüzden bu dizi başlanmamış sayılıyor. Matinee bağlanıp güncel olduğunda kendiliğinden bildirir.",
+    "notStarted": "Bu diziye henüz kimse başlamadı.",
+    "upTo": "{{episode}} bölümüne kadar izlendi.",
+    "later": "Sonra",
+    "laterHint": "Biri bu bölüme yaklaştığında alan tasarrufu onu getirir."
   }
 }

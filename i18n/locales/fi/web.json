@@ -2833,5 +2833,16 @@
     "skipped": "Tämä palvelin on asetettu ohittamaan koodi (BOXOFFICE_SKIP_SIGN_IN_CODE). Poista asetus, niin koodia kysytään taas.",
     "off": "Laita pois päältä",
     "password": "Salasanasi, pois päältä laittamiseksi"
+  },
+  "spaceSaver": {
+    "label": "Tilansäästö",
+    "off": "Pois",
+    "next": "Seuraavat {{n}} jaksoa",
+    "hint": "Hakee vain muutaman seuraavan jakson viimeisimmän Matineessa katsotun jälkeen ja lisää sitä mukaa kuin katsotaan. Pois kytketyt kaudet ja jaksot eivät laske mukaan. Mitään ei poisteta.",
+    "noReport": "Matinee ei ole vielä kertonut, mitä on katsottu, joten sarja lasketaan aloittamattomaksi. Matinee raportoi itse, kun se on yhdistetty ja ajan tasalla.",
+    "notStarted": "Kukaan ei ole vielä aloittanut tätä sarjaa.",
+    "upTo": "Katsottu jaksoon {{episode}} asti.",
+    "later": "Myöhemmin",
+    "laterHint": "Tilansäästö hakee sen, kun joku pääsee lähemmäs sitä."
   }
 }

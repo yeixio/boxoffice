@@ -84,7 +84,11 @@ CREATE TABLE IF NOT EXISTS series (
 	path         TEXT NOT NULL,
 	added_at     BIGINT NOT NULL,
 	refreshed_at BIGINT NOT NULL DEFAULT 0,
-	auto_upgrade TEXT NOT NULL DEFAULT '' -- '' follows Settings; 'on' or 'off' for this show
+	auto_upgrade TEXT NOT NULL DEFAULT '', -- '' follows Settings; 'on' or 'off' for this show
+	-- Space saver: fetch only this many episodes past the latest one
+	-- anyone has watched (Matinee says which), and more as they watch.
+	-- 0 is off.
+	keep_ahead   INTEGER NOT NULL DEFAULT 0
 );
 CREATE INDEX IF NOT EXISTS series_tvdb ON series (tvdb_id);
 
@@ -104,6 +108,10 @@ CREATE TABLE IF NOT EXISTS episodes (
 	overview  TEXT NOT NULL DEFAULT '',
 	air_date  BIGINT,
 	monitored INTEGER NOT NULL DEFAULT 1,
+	-- Held back by the show's space saver: too far past what has been
+	-- watched to fetch yet. A held episode that isn't on disk isn't
+	-- wanted, whatever monitored says.
+	held      INTEGER NOT NULL DEFAULT 0,
 	UNIQUE (series_id, season, number)
 );
 CREATE INDEX IF NOT EXISTS episodes_air ON episodes (air_date);
@@ -762,6 +770,10 @@ CREATE TABLE IF NOT EXISTS watched (
 	viewers     INTEGER NOT NULL DEFAULT 0, -- people who have played any of it
 	finished_by INTEGER NOT NULL DEFAULT 0, -- people who have finished it
 	finished_at BIGINT NOT NULL DEFAULT 0,  -- when the last of them did
+	-- A show: the latest episode anyone has started, specials left out;
+	-- 0 and 0 when Matinee doesn't say. Space saver goes by it.
+	furthest_season  INTEGER NOT NULL DEFAULT 0,
+	furthest_episode INTEGER NOT NULL DEFAULT 0,
 	report      BIGINT NOT NULL,            -- the report it came in
 	PRIMARY KEY (kind, title_id)
 );

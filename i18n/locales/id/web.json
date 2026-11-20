@@ -2710,5 +2710,16 @@
     "skipped": "Server ini diatur untuk melewati kode (BOXOFFICE_SKIP_SIGN_IN_CODE). Hapus pengaturan itu agar kode diminta lagi.",
     "off": "Matikan",
     "password": "Kata sandi Anda, untuk mematikannya"
+  },
+  "spaceSaver": {
+    "label": "Penghemat ruang",
+    "off": "Mati",
+    "next": "{{n}} episode berikutnya",
+    "hint": "Hanya mengambil beberapa episode berikutnya setelah episode terakhir yang ditonton siapa pun di Matinee, dan menambah seiring mereka menonton. Musim dan episode yang dimatikan tidak dihitung. Tidak ada yang dihapus.",
+    "noReport": "Matinee belum memberi tahu apa yang ditonton, jadi acara ini dianggap belum dimulai. Matinee melapor sendiri setelah terhubung dan versinya terbaru.",
+    "notStarted": "Belum ada yang mulai menonton acara ini.",
+    "upTo": "Ditonton sampai {{episode}}.",
+    "later": "Nanti",
+    "laterHint": "Penghemat ruang mengambilnya saat seseorang sudah lebih dekat ke episode ini."
   }
 }

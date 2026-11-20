@@ -50,7 +50,8 @@ func (s *Store) OwnedTitles(ctx context.Context) ([]Owned, error) {
 	rows, err = s.query(ctx, `SELECT s.id, s.tmdb_id, s.title, s.monitored, s.added_at,
 		(SELECT COUNT(*) FROM episodes e JOIN media_files f ON f.kind = 'episode' AND f.owner_id = e.id WHERE e.series_id = s.id),
 		(SELECT COUNT(*) FROM episodes e JOIN seasons se ON se.series_id = e.series_id AND se.number = e.season
-			WHERE e.series_id = s.id AND e.monitored = 1 AND se.monitored = 1 AND e.air_date IS NOT NULL AND e.air_date <= ?),
+			WHERE e.series_id = s.id AND e.monitored = 1 AND se.monitored = 1 AND e.air_date IS NOT NULL AND e.air_date <= ?
+				AND (e.held = 0 OR EXISTS (SELECT 1 FROM media_files f WHERE f.kind = 'episode' AND f.owner_id = e.id))),
 		(SELECT COUNT(f.id) FROM episodes e JOIN seasons se ON se.series_id = e.series_id AND se.number = e.season
 			JOIN media_files f ON f.kind = 'episode' AND f.owner_id = e.id
 			WHERE e.series_id = s.id AND e.monitored = 1 AND se.monitored = 1 AND e.air_date IS NOT NULL AND e.air_date <= ?)

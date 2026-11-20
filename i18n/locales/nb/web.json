@@ -2833,5 +2833,16 @@
     "skipped": "Denne serveren er satt til å hoppe over koden (BOXOFFICE_SKIP_SIGN_IN_CODE). Fjern den innstillingen for å be om koden igjen.",
     "off": "Slå av",
     "password": "Passordet ditt, for å slå det av"
+  },
+  "spaceSaver": {
+    "label": "Plasssparer",
+    "off": "Av",
+    "next": "De neste {{n}} episodene",
+    "hint": "Henter bare de neste få episodene etter den siste noen har sett i Matinee, og flere etter hvert som de ser. Sesonger og episoder som er slått av, teller ikke. Ingenting slettes.",
+    "noReport": "Matinee har ikke sagt ennå hva som er sett, så serien regnes som ikke påbegynt. Matinee rapporterer selv når det er tilkoblet og oppdatert.",
+    "notStarted": "Ingen har begynt på denne serien ennå.",
+    "upTo": "Sett til og med {{episode}}.",
+    "later": "Senere",
+    "laterHint": "Plasssparer henter den når noen kommer nærmere."
   }
 }

@@ -355,7 +355,9 @@ func (s *Service) WantedList(ctx context.Context) ([]Wanted, error) {
 			return nil, err
 		}
 		for _, e := range eps {
-			if !e.Monitored || !seasons[e.Season] || e.AirDate == nil || !e.AirDate.Before(now) {
+			// One space saver holds back isn't fetched yet; one already
+			// here is upgraded like any other.
+			if !e.Monitored || e.Held && e.File == nil || !seasons[e.Season] || e.AirDate == nil || !e.AirDate.Before(now) {
 				continue
 			}
 			w := Wanted{Kind: "episode", ID: e.ID, SeriesID: t.ID, Subject: fmt.Sprintf("%s S%02dE%02d", t.Title, e.Season, e.Number),

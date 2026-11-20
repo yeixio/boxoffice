@@ -2956,5 +2956,16 @@
     "skipped": "Acest server este setat să sară peste cod (BOXOFFICE_SKIP_SIGN_IN_CODE). Scoate setarea ca să fie cerut din nou.",
     "off": "Oprește",
     "password": "Parola ta, pentru a-l opri"
+  },
+  "spaceSaver": {
+    "label": "Economisire spațiu",
+    "off": "Oprit",
+    "next": "Următoarele {{n}} episoade",
+    "hint": "Aduce doar următoarele câteva episoade după ultimul vizionat de cineva în Matinee, și mai multe pe măsură ce se vizionează. Sezoanele și episoadele oprite nu se pun la socoteală. Nu se șterge nimic.",
+    "noReport": "Matinee nu a spus încă ce s-a vizionat, așa că acest serial se consideră neînceput. Matinee raportează singur de îndată ce este conectat și actualizat.",
+    "notStarted": "Nimeni nu a început încă acest serial.",
+    "upTo": "Vizionat până la {{episode}}.",
+    "later": "Mai târziu",
+    "laterHint": "Economisirea de spațiu îl aduce când cineva se apropie de el."
   }
 }

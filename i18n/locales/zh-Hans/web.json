@@ -2710,5 +2710,16 @@
     "skipped": "此服务器被设置为跳过验证码（BOXOFFICE_SKIP_SIGN_IN_CODE）。移除该设置后才会再次要求验证码。",
     "off": "关闭",
     "password": "你的密码，用于关闭"
+  },
+  "spaceSaver": {
+    "label": "节省空间",
+    "off": "关闭",
+    "next": "接下来的 {{n}} 集",
+    "hint": "只获取 Matinee 中有人看过的最新一集之后的几集，并随着观看进度继续获取。已关闭的季和集不计入。不会删除任何内容。",
+    "noReport": "Matinee 还没有报告观看情况，所以这部剧集按未开始计算。Matinee 连接并更新到最新后会自行报告。",
+    "notStarted": "还没有人开始看这部剧集。",
+    "upTo": "已看到 {{episode}}。",
+    "later": "稍后",
+    "laterHint": "有人快看到这一集时，节省空间会获取它。"
   }
 }

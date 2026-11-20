@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate } from 'react-router-dom'
 import { Search } from 'lucide-react'
 import { get, post, type LookupMovie, type LookupShow, type Movie, type Series } from '../api'
+import { SpaceSaverField } from '../SpaceSaver'
 import { monitorOptions, pickProfile, rememberProfile, useProfiles, useRootFolders, useShowDefaults } from '../hooks'
 import { useRuleFor } from './AddRules'
 import { Button, ErrorNote, Field, Input, Modal, Poster, Select, Spinner, Toggle } from '../ui'
@@ -94,6 +95,7 @@ export function AddOptions({
   const defaults = useShowDefaults()
   const [monitor, setMonitor] = useState('')
   const [recent, setRecent] = useState('')
+  const [keepAhead, setKeepAhead] = useState(0)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<unknown>(null)
   useEffect(() => {
@@ -132,7 +134,7 @@ export function AddOptions({
     setBusy(true)
     setError(null)
     try {
-      const body = { tmdbId: title.tmdbId, profileId, rootFolder: root, monitored, search, ...(kind === 'series' ? { monitor, recent: seasons } : {}) }
+      const body = { tmdbId: title.tmdbId, profileId, rootFolder: root, monitored, search, ...(kind === 'series' ? { monitor, recent: seasons, keepAhead } : {}) }
       const added = await post<Movie | Series>(kind === 'movie' ? '/movies' : '/series', body)
       if (!rule?.profileId || profileId !== rule.profileId) rememberProfile(kind, profileId)
       await qc.invalidateQueries({ queryKey: [kind === 'movie' ? 'movies' : 'series'] })
@@ -164,6 +166,7 @@ export function AddOptions({
             {(id) => <Input id={id} type="number" min={1} max={99} value={recent} onChange={(e) => setRecent(e.target.value)} className="max-w-32" />}
           </Field>
         )}
+        {kind === 'series' && <SpaceSaverField value={keepAhead} onChange={setKeepAhead} />}
       </div>
       {rule && <p className="text-sm text-muted">{t('rules.picked', { name: rule.name })}</p>}
       <Toggle checked={monitored} onChange={setMonitored} label={t('add.watch')} />

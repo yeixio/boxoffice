@@ -9,7 +9,7 @@ import (
 )
 
 // watched is PUT /api/v3/boxoffice/watched: Matinee says what has been
-// watched, so Box Office's clean-up rules can go by it. /radarr takes the
+// watched, so Box Office's clean-up rules and space saver can go by it. /radarr takes the
 // movies and /sonarr the shows. Each report is the whole picture for its
 // kind and replaces the last one: a title left out has no plays. Titles
 // Box Office hasn't got are passed over.
@@ -18,7 +18,9 @@ import (
 //	  "viewers": 2, "finishedBy": 1, "finishedAt": "2026-10-30T21:10:00Z"}]}
 //
 // A show is named by tvdbId or tmdbId, and is finished by someone who has
-// played every episode Matinee has of it.
+// played every episode Matinee has of it. A show can also say the latest
+// episode anyone has started, specials left out, as furthestSeason and
+// furthestEpisode: space saver fetches the next ones past it.
 func (h *Handler) watched(w http.ResponseWriter, r *http.Request) error {
 	var in struct {
 		People int `json:"people"`
@@ -29,6 +31,9 @@ func (h *Handler) watched(w http.ResponseWriter, r *http.Request) error {
 			Viewers    int        `json:"viewers"`
 			FinishedBy int        `json:"finishedBy"`
 			FinishedAt *time.Time `json:"finishedAt"`
+			// Shows only.
+			FurthestSeason  int `json:"furthestSeason"`
+			FurthestEpisode int `json:"furthestEpisode"`
 		} `json:"titles"`
 	}
 	if err := read(r, &in); err != nil {
@@ -89,10 +94,21 @@ func (h *Handler) watched(w http.ResponseWriter, r *http.Request) error {
 			continue
 		}
 		seen[id] = true
-		rows = append(rows, store.Watched{TitleID: id, LastPlayed: clamp(t.LastPlayed), Viewers: t.Viewers, FinishedBy: t.FinishedBy, FinishedAt: clamp(t.FinishedAt)})
+		row := store.Watched{TitleID: id, LastPlayed: clamp(t.LastPlayed), Viewers: t.Viewers, FinishedBy: t.FinishedBy, FinishedAt: clamp(t.FinishedAt)}
+		if kind == "series" && t.FurthestSeason > 0 && t.FurthestEpisode > 0 {
+			row.FurthestSeason, row.FurthestEpisode = t.FurthestSeason, t.FurthestEpisode
+		}
+		rows = append(rows, row)
 	}
 	if err := st.ReplaceWatched(ctx, kind, in.People, rows); err != nil {
 		return err
+	}
+	// Someone may have got further into a show: fetch its next episodes.
+	// The report is kept either way.
+	if kind == "series" {
+		if err := h.Catalog.SpaceSaver(ctx); err != nil {
+			h.Log.Warn("couldn't run space saver after a watch report", "err", err)
+		}
 	}
 	return write(w, http.StatusOK, map[string]int{"kept": len(rows)})
 }

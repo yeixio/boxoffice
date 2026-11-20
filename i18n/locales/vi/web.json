@@ -2710,5 +2710,16 @@
     "skipped": "Máy chủ này được đặt để bỏ qua mã (BOXOFFICE_SKIP_SIGN_IN_CODE). Hãy bỏ cài đặt đó để mã được hỏi lại.",
     "off": "Tắt",
     "password": "Mật khẩu của bạn, để tắt"
+  },
+  "spaceSaver": {
+    "label": "Tiết kiệm dung lượng",
+    "off": "Tắt",
+    "next": "{{n}} tập tiếp theo",
+    "hint": "Chỉ tải vài tập tiếp theo sau tập mới nhất mà ai đó đã xem trong Matinee, và tải thêm khi họ xem tiếp. Các mùa và tập đã tắt không được tính. Không có gì bị xóa.",
+    "noReport": "Matinee chưa cho biết những gì đã được xem, nên chương trình này được coi là chưa bắt đầu. Matinee tự báo cáo khi đã kết nối và được cập nhật.",
+    "notStarted": "Chưa ai bắt đầu xem chương trình này.",
+    "upTo": "Đã xem đến {{episode}}.",
+    "later": "Để sau",
+    "laterHint": "Tiết kiệm dung lượng sẽ tải tập này khi có người xem đến gần nó."
   }
 }

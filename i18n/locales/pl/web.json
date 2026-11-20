@@ -3079,5 +3079,16 @@
     "skipped": "Ten serwer jest ustawiony tak, by pomijać kod (BOXOFFICE_SKIP_SIGN_IN_CODE). Usuń to ustawienie, aby znów o niego pytać.",
     "off": "Wyłącz",
     "password": "Twoje hasło, aby wyłączyć"
+  },
+  "spaceSaver": {
+    "label": "Oszczędzanie miejsca",
+    "off": "Wyłączone",
+    "next": "Następne odcinki: {{n}}",
+    "hint": "Pobiera tylko kilka kolejnych odcinków po ostatnim, który ktokolwiek obejrzał w Matinee, i kolejne w miarę oglądania. Wyłączone sezony i odcinki się nie liczą. Nic nie jest usuwane.",
+    "noReport": "Matinee jeszcze nie podało, co zostało obejrzane, więc ten serial liczy się jako nierozpoczęty. Matinee zgłasza to samo, gdy jest połączone i aktualne.",
+    "notStarted": "Nikt jeszcze nie zaczął tego serialu.",
+    "upTo": "Obejrzano do {{episode}}.",
+    "later": "Później",
+    "laterHint": "Oszczędzanie miejsca pobierze go, gdy ktoś się do niego zbliży."
   }
 }

@@ -2833,5 +2833,16 @@
     "skipped": "Ez a szerver úgy van beállítva, hogy kihagyja a kódot (BOXOFFICE_SKIP_SIGN_IN_CODE). Vedd ki ezt a beállítást, hogy újra kérje.",
     "off": "Kikapcsolás",
     "password": "A jelszavad, a kikapcsoláshoz"
+  },
+  "spaceSaver": {
+    "label": "Helytakarékos mód",
+    "off": "Ki",
+    "next": "A következő {{n}} epizód",
+    "hint": "Csak a következő néhány epizódot tölti le az után, amelyet valaki legutóbb megnézett a Matinee-ben, és továbbiakat, ahogy haladnak. A kikapcsolt évadok és epizódok nem számítanak. Semmi sem törlődik.",
+    "noReport": "A Matinee még nem jelentette, mit néztek meg, ezért a sorozat el nem kezdettnek számít. A Matinee magától jelent, amint csatlakozik és naprakész.",
+    "notStarted": "Ezt a sorozatot még senki sem kezdte el.",
+    "upTo": "Megnézve eddig: {{episode}}.",
+    "later": "Később",
+    "laterHint": "A helytakarékos mód akkor tölti le, amikor valaki közelebb ér hozzá."
   }
 }
