@@ -238,6 +238,11 @@ func (h *Handler) editSeries(w http.ResponseWriter, r *http.Request) error {
 			return err
 		}
 	}
+	if t.KeepAhead > 0 {
+		if _, err := h.Catalog.HoldAhead(ctx, id); err != nil {
+			return err
+		}
+	}
 	if t, err = h.Catalog.Store.Series(ctx, id); err != nil {
 		return err
 	}

@@ -2833,5 +2833,16 @@
     "skipped": "Den här servern är inställd på att hoppa över koden (BOXOFFICE_SKIP_SIGN_IN_CODE). Ta bort den inställningen för att be om koden igen.",
     "off": "Stäng av",
     "password": "Ditt lösenord, för att stänga av"
+  },
+  "spaceSaver": {
+    "label": "Utrymmessparare",
+    "off": "Av",
+    "next": "De nästa {{n}} avsnitten",
+    "hint": "Hämtar bara de närmaste avsnitten efter det senaste någon har sett i Matinee, och fler allteftersom de tittar. Säsonger och avsnitt som är avstängda räknas inte. Inget raderas.",
+    "noReport": "Matinee har inte sagt än vad som har setts, så serien räknas som inte påbörjad. Matinee rapporterar självt när det är anslutet och uppdaterat.",
+    "notStarted": "Ingen har börjat på den här serien än.",
+    "upTo": "Sett till och med {{episode}}.",
+    "later": "Senare",
+    "laterHint": "Utrymmessparare hämtar det när någon kommer närmare."
   }
 }

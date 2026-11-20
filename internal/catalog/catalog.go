@@ -120,6 +120,9 @@ type AddOptions struct {
 	Monitor string `json:"monitor,omitempty"`
 	// Recent is how many aired seasons "recent" keeps; 0 uses the default.
 	Recent int `json:"recent,omitempty"`
+	// KeepAhead turns on a show's space saver: fetch only this many
+	// episodes past the latest one anyone has watched. 0 leaves it off.
+	KeepAhead int `json:"keepAhead,omitempty"`
 	// Chosen says a person picked the profile and root folder, so the
 	// rules for new titles leave them alone.
 	Chosen bool `json:"-"`
@@ -356,8 +359,11 @@ func (s *Service) AddSeriesInfo(ctx context.Context, info tmdb.Show, o AddOption
 		}
 		seasons = WatchedSeasons(info.Seasons, o.Monitor, o.Recent, time.Now())
 	}
+	if err := CheckKeepAhead(o.KeepAhead); err != nil {
+		return store.Series{}, err
+	}
 	t := fromTMDBShow(info)
-	t.Monitored, t.ProfileID, t.RootFolder = o.Monitored, o.ProfileID, o.RootFolder
+	t.Monitored, t.ProfileID, t.RootFolder, t.KeepAhead = o.Monitored, o.ProfileID, o.RootFolder, o.KeepAhead
 	t.Path = cmp.Or(o.Path, filepath.Join(o.RootFolder, FolderName(t.Title, t.Year)))
 	for _, se := range info.Seasons {
 		t.Seasons = append(t.Seasons, store.Season{Number: se.Number, Monitored: seasons[se.Number]})
@@ -372,6 +378,11 @@ func (s *Service) AddSeriesInfo(ctx context.Context, info tmdb.Show, o AddOption
 	}
 	if err := s.syncEpisodes(ctx, added, info, o.Monitor); err != nil {
 		s.Log.Warn("couldn't fetch a show's episodes; they'll come with the next refresh", "title", added.Title, "err", err)
+	}
+	if added.KeepAhead > 0 {
+		if _, err := s.HoldAhead(ctx, added.ID); err != nil {
+			return added, err
+		}
 	}
 	s.Log.Info("show added", "title", added.Title, "year", added.Year)
 	if o.Search && added.Monitored {
@@ -424,7 +435,14 @@ func (s *Service) RefreshSeries(ctx context.Context, id int64) error {
 	if err := s.Store.RefreshSeries(ctx, n); err != nil {
 		return err
 	}
-	return s.syncEpisodes(ctx, t, info, "")
+	if err := s.syncEpisodes(ctx, t, info, ""); err != nil {
+		return err
+	}
+	// New episodes of a show with space saver on wait their turn.
+	if t.KeepAhead > 0 {
+		_, err = s.HoldAhead(ctx, t.ID)
+	}
+	return err
 }
 
 // SearchSeries queues a search for each show's missing episodes, and the

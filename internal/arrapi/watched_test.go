@@ -62,6 +62,36 @@ func TestWatchedReport(t *testing.T) {
 	if got, _ := st.WatchedTitles(ctx, "movie"); len(got) != 1 {
 		t.Fatalf("the shows' report changed the movies: %+v", got)
 	}
+	// A show's report can say how far anyone has got, which space saver
+	// goes by: with it on, only the next episodes past there are wanted.
+	if n, _ := st.Series(ctx, show.ID); n.EpisodeCount < 3 {
+		t.Fatalf("the show has %d episodes out; the test needs 3", n.EpisodeCount)
+	}
+	keep, _ := st.Series(ctx, show.ID)
+	keep.KeepAhead = 1
+	if err := st.UpdateSeries(ctx, keep); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := e.cat.HoldAhead(ctx, show.ID); err != nil {
+		t.Fatal(err)
+	}
+	wanted := func() int {
+		n, _ := st.Series(ctx, show.ID)
+		return n.EpisodeCount
+	}
+	if wanted() != 1 {
+		t.Fatalf("space saver on, nothing watched: %d wanted", wanted())
+	}
+	body = map[string]any{"people": 3, "titles": []any{map[string]any{"tvdbId": 371980, "viewers": 1, "furthestSeason": 1, "furthestEpisode": 1}}}
+	if code := call(t, "PUT", e.url+"/sonarr/api/v3/boxoffice/watched", body, &out); code != 200 || out.Kept != 1 {
+		t.Fatalf("shows, with how far: %d %+v", code, out)
+	}
+	if shows, _ = st.WatchedTitles(ctx, "series"); shows[show.ID].FurthestSeason != 1 || shows[show.ID].FurthestEpisode != 1 {
+		t.Fatalf("how far: %+v", shows)
+	}
+	if wanted() != 2 {
+		t.Fatalf("after episode 1 was watched: %d wanted", wanted())
+	}
 	// The next report has nothing for the movie: its plays are forgotten.
 	if code := call(t, "PUT", e.url+"/radarr/api/v3/boxoffice/watched", map[string]any{"people": 3, "titles": []any{}}, &out); code != 200 || out.Kept != 0 {
 		t.Fatalf("empty report: %d %+v", code, out)

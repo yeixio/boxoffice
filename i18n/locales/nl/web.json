@@ -2833,5 +2833,16 @@
     "skipped": "Deze server is ingesteld om de code over te slaan (BOXOFFICE_SKIP_SIGN_IN_CODE). Haal die instelling weg om er weer om te vragen.",
     "off": "Uitzetten",
     "password": "Je wachtwoord, om het uit te zetten"
+  },
+  "spaceSaver": {
+    "label": "Ruimtebesparing",
+    "off": "Uit",
+    "next": "De volgende {{n}} afleveringen",
+    "hint": "Haalt alleen de eerstvolgende afleveringen op na de laatste die iemand in Matinee heeft bekeken, en meer naarmate er verder wordt gekeken. Uitgeschakelde seizoenen en afleveringen tellen niet mee. Er wordt niets verwijderd.",
+    "noReport": "Matinee heeft nog niet gemeld wat is bekeken, dus deze serie telt als niet begonnen. Matinee meldt het vanzelf zodra het verbonden en bijgewerkt is.",
+    "notStarted": "Nog niemand is aan deze serie begonnen.",
+    "upTo": "Bekeken tot en met {{episode}}.",
+    "later": "Later",
+    "laterHint": "Ruimtebesparing haalt deze op zodra iemand er dichterbij komt."
   }
 }

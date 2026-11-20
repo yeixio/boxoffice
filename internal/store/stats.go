@@ -28,7 +28,7 @@ func (s *Store) LibraryStats(ctx context.Context) (LibraryStats, error) {
 		(SELECT COUNT(*) FROM episodes WHERE air_date IS NOT NULL AND air_date <= ?),
 		(SELECT COUNT(*) FROM episodes e WHERE EXISTS (SELECT 1 FROM media_files f WHERE f.kind = 'episode' AND f.owner_id = e.id)),
 		(SELECT COUNT(*) FROM episodes e JOIN seasons se ON se.series_id = e.series_id AND se.number = e.season
-			WHERE e.monitored = 1 AND se.monitored = 1 AND e.air_date IS NOT NULL AND e.air_date <= ?
+			WHERE e.monitored = 1 AND e.held = 0 AND se.monitored = 1 AND e.air_date IS NOT NULL AND e.air_date <= ?
 			AND NOT EXISTS (SELECT 1 FROM media_files f WHERE f.kind = 'episode' AND f.owner_id = e.id))`,
 		t, t, t).Scan(&st.Movies, &st.MoviesOnDisk, &st.MoviesMissing, &st.Series, &st.Episodes, &st.EpisodesOnDisk, &st.EpisodesMissing)
 	return st, err

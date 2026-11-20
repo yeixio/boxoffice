@@ -17,6 +17,11 @@ type Watched struct {
 	FinishedBy int `json:"finishedBy"`
 	// FinishedAt is when the last of them finished.
 	FinishedAt *time.Time `json:"finishedAt,omitempty"`
+	// FurthestSeason and FurthestEpisode are the latest episode of a show
+	// anyone has started, specials left out; 0 and 0 when nobody has, or
+	// Matinee is too old to say.
+	FurthestSeason  int `json:"furthestSeason,omitempty"`
+	FurthestEpisode int `json:"furthestEpisode,omitempty"`
 }
 
 // WatchReport is when Matinee last said what was watched, for movies or
@@ -50,10 +55,11 @@ func timeOrNil(sec int64) *time.Time {
 func (s *Store) ReplaceWatched(ctx context.Context, kind string, people int, rows []Watched) error {
 	stamp := time.Now().UnixNano()
 	for _, w := range rows {
-		_, err := s.exec(ctx, `INSERT INTO watched (kind, title_id, last_played, viewers, finished_by, finished_at, report) VALUES (?, ?, ?, ?, ?, ?, ?)
+		_, err := s.exec(ctx, `INSERT INTO watched (kind, title_id, last_played, viewers, finished_by, finished_at, furthest_season, furthest_episode, report) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
 			ON CONFLICT (kind, title_id) DO UPDATE SET last_played = excluded.last_played, viewers = excluded.viewers,
-				finished_by = excluded.finished_by, finished_at = excluded.finished_at, report = excluded.report`,
-			kind, w.TitleID, unixOrZero(w.LastPlayed), w.Viewers, w.FinishedBy, unixOrZero(w.FinishedAt), stamp)
+				finished_by = excluded.finished_by, finished_at = excluded.finished_at,
+				furthest_season = excluded.furthest_season, furthest_episode = excluded.furthest_episode, report = excluded.report`,
+			kind, w.TitleID, unixOrZero(w.LastPlayed), w.Viewers, w.FinishedBy, unixOrZero(w.FinishedAt), w.FurthestSeason, w.FurthestEpisode, stamp)
 		if err != nil {
 			return err
 		}
@@ -67,7 +73,7 @@ func (s *Store) ReplaceWatched(ctx context.Context, kind string, people int, row
 
 // WatchedTitles is what was watched of a kind, by title id.
 func (s *Store) WatchedTitles(ctx context.Context, kind string) (map[int64]Watched, error) {
-	rows, err := s.query(ctx, "SELECT title_id, last_played, viewers, finished_by, finished_at FROM watched WHERE kind = ?", kind)
+	rows, err := s.query(ctx, "SELECT title_id, last_played, viewers, finished_by, finished_at, furthest_season, furthest_episode FROM watched WHERE kind = ?", kind)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +82,7 @@ func (s *Store) WatchedTitles(ctx context.Context, kind string) (map[int64]Watch
 	for rows.Next() {
 		var w Watched
 		var last, fin int64
-		if err := rows.Scan(&w.TitleID, &last, &w.Viewers, &w.FinishedBy, &fin); err != nil {
+		if err := rows.Scan(&w.TitleID, &last, &w.Viewers, &w.FinishedBy, &fin, &w.FurthestSeason, &w.FurthestEpisode); err != nil {
 			return nil, err
 		}
 		w.LastPlayed, w.FinishedAt = timeOrNil(last), timeOrNil(fin)

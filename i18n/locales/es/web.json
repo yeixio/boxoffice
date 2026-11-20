@@ -2956,5 +2956,16 @@
     "skipped": "Este servidor está configurado para saltarse el código (BOXOFFICE_SKIP_SIGN_IN_CODE). Quita ese ajuste para que se vuelva a pedir.",
     "off": "Desactivar",
     "password": "Tu contraseña, para desactivarlo"
+  },
+  "spaceSaver": {
+    "label": "Ahorro de espacio",
+    "off": "Desactivado",
+    "next": "Los próximos {{n}} episodios",
+    "hint": "Solo trae los próximos episodios después del último que alguien ha visto en Matinee, y más a medida que avanzan. Las temporadas y los episodios desactivados no cuentan. No se borra nada.",
+    "noReport": "Matinee aún no ha dicho qué se ha visto, así que esta serie cuenta como no empezada. Matinee informa por sí solo cuando está conectado y actualizado.",
+    "notStarted": "Nadie ha empezado esta serie todavía.",
+    "upTo": "Visto hasta {{episode}}.",
+    "later": "Más tarde",
+    "laterHint": "El ahorro de espacio lo trae cuando alguien se acerque a él."
   }
 }

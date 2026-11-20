@@ -3079,5 +3079,16 @@
     "skipped": "Tento server je nastaven tak, aby kód přeskakoval (BOXOFFICE_SKIP_SIGN_IN_CODE). Odeberte to nastavení, aby se kód zase žádal.",
     "off": "Vypnout",
     "password": "Vaše heslo, pro vypnutí"
+  },
+  "spaceSaver": {
+    "label": "Úspora místa",
+    "off": "Vypnuto",
+    "next": "Dalších {{n}} dílů",
+    "hint": "Stahuje jen několik dalších dílů po posledním, který kdokoli zhlédl v Matinee, a další přidává, jak se dívají. Vypnuté řady a díly se nepočítají. Nic se nemaže.",
+    "noReport": "Matinee zatím neoznámilo, co bylo zhlédnuto, takže se tento seriál bere jako nezačatý. Matinee to hlásí samo, jakmile je připojené a aktuální.",
+    "notStarted": "Tento seriál zatím nikdo nezačal.",
+    "upTo": "Zhlédnuto po {{episode}}.",
+    "later": "Později",
+    "laterHint": "Úspora místa ho stáhne, až se k němu někdo přiblíží."
   }
 }

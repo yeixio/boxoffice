@@ -2833,5 +2833,16 @@
     "skipped": "This server is set to skip the code (BOXOFFICE_SKIP_SIGN_IN_CODE). Take that setting away to ask for it again.",
     "off": "Turn off",
     "password": "Your password, to turn it off"
+  },
+  "spaceSaver": {
+    "label": "Space saver",
+    "off": "Off",
+    "next": "Next {{n}} episodes",
+    "hint": "Fetches only the next few episodes after the latest one anyone has watched in Matinee, and more as they watch. Seasons and episodes switched off don't count. Nothing is deleted.",
+    "noReport": "Matinee hasn't said what was watched yet, so this show counts as not started. Matinee reports by itself once it's connected and up to date.",
+    "notStarted": "Nobody has started this show yet.",
+    "upTo": "Watched up to {{episode}}.",
+    "later": "Later",
+    "laterHint": "Space saver fetches this once someone gets closer to it."
   }
 }

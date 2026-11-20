@@ -203,6 +203,8 @@ export type Series = {
   monitored: boolean
   profileId: number
   autoUpgrade?: '' | 'on' | 'off'
+  // Space saver: fetch only this many episodes past the latest one watched; 0 is off.
+  keepAhead: number
   rootFolder: string
   path: string
   addedAt: string
@@ -224,6 +226,8 @@ export type Episode = {
   overview?: string
   airDate?: string
   monitored: boolean
+  // Held back by the show's space saver for now.
+  held?: boolean
   file?: MediaFile
 }
 

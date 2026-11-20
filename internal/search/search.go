@@ -922,7 +922,7 @@ func (s *Service) jobSeries(ctx context.Context, payload string) (jobs.Result, e
 	now := time.Now()
 	var missing, upgrades []store.Episode
 	for _, e := range eps {
-		if !e.Monitored || !seasons[e.Season] || e.AirDate == nil || !e.AirDate.Before(now) {
+		if !e.Monitored || e.Held && e.File == nil || !seasons[e.Season] || e.AirDate == nil || !e.AirDate.Before(now) {
 			continue
 		}
 		switch {

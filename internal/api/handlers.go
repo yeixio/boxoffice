@@ -547,6 +547,9 @@ type editInput struct {
 	Path       *string `json:"path"`
 	// "" to follow Settings, or "on" or "off" for this title.
 	AutoUpgrade *string `json:"autoUpgrade"`
+	// A show's space saver: how many episodes past the latest one watched
+	// to fetch, or 0 for off.
+	KeepAhead *int `json:"keepAhead"`
 }
 
 func (s *Server) checkEdit(r *http.Request, in editInput, kind string) error {
@@ -557,6 +560,14 @@ func (s *Server) checkEdit(r *http.Request, in editInput, kind string) error {
 	}
 	if in.AutoUpgrade != nil && *in.AutoUpgrade != "" && *in.AutoUpgrade != "on" && *in.AutoUpgrade != "off" {
 		return errorf(http.StatusBadRequest, `automatic upgrades are "on", "off", or "" to follow Settings`)
+	}
+	if in.KeepAhead != nil {
+		if kind != "series" {
+			return errorf(http.StatusBadRequest, "space saver is for shows")
+		}
+		if err := catalog.CheckKeepAhead(*in.KeepAhead); err != nil {
+			return errorf(http.StatusBadRequest, err.Error())
+		}
 	}
 	if in.Path != nil && !filepath.IsAbs(*in.Path) {
 		return errorf(http.StatusBadRequest, "give the folder's full path")
@@ -702,7 +713,21 @@ func (s *Server) series(w http.ResponseWriter, r *http.Request) error {
 			reported = append(reported, tw)
 		}
 	}
-	return writeJSON(w, http.StatusOK, map[string]any{"series": t, "episodes": eps, "reported": reported})
+	out := map[string]any{"series": t, "episodes": eps, "reported": reported}
+	// Space saver goes by what Matinee says was watched: whether it has
+	// said anything, and how far into this show anyone has got.
+	if t.KeepAhead > 0 {
+		_, told, err := s.Store.LastWatchReport(r.Context(), "series")
+		if err != nil {
+			return err
+		}
+		all, err := s.Store.WatchedTitles(r.Context(), "series")
+		if err != nil {
+			return err
+		}
+		out["watched"] = map[string]any{"reported": told, "season": all[t.ID].FurthestSeason, "episode": all[t.ID].FurthestEpisode}
+	}
+	return writeJSON(w, http.StatusOK, out)
 }
 
 // showDefaults are which seasons a new show watches when nobody picks:
@@ -771,8 +796,19 @@ func (s *Server) editSeries(w http.ResponseWriter, r *http.Request) error {
 	if in.AutoUpgrade != nil {
 		t.AutoUpgrade = *in.AutoUpgrade
 	}
+	saver := in.KeepAhead != nil && *in.KeepAhead != t.KeepAhead
+	if saver {
+		t.KeepAhead = *in.KeepAhead
+	}
 	if err := s.Store.UpdateSeries(r.Context(), t); err != nil {
 		return err
+	}
+	// Space saver changed: hold back or let go of episodes, and look for
+	// the ones let go.
+	if saver {
+		if err := s.Catalog.HoldAheadAndSearch(r.Context(), id); err != nil {
+			return err
+		}
 	}
 	return s.series(w, r)
 }
@@ -849,6 +885,11 @@ func (s *Server) editSeason(w http.ResponseWriter, r *http.Request) error {
 	if err := s.Store.SetSeason(r.Context(), id, store.Season{Number: n, Monitored: in.Monitored}); err != nil {
 		return err
 	}
+	if t.KeepAhead > 0 {
+		if _, err := s.Catalog.HoldAhead(r.Context(), id); err != nil {
+			return err
+		}
+	}
 	return s.series(w, r)
 }
 
@@ -869,6 +910,17 @@ func (s *Server) editEpisode(w http.ResponseWriter, r *http.Request) error {
 	e, err := s.Store.Episode(r.Context(), id)
 	if err != nil {
 		return err
+	}
+	// Space saver counts the episodes switched on, so the count moves.
+	if t, err := s.Store.Series(r.Context(), e.SeriesID); err != nil {
+		return err
+	} else if t.KeepAhead > 0 {
+		if _, err := s.Catalog.HoldAhead(r.Context(), t.ID); err != nil {
+			return err
+		}
+		if e, err = s.Store.Episode(r.Context(), id); err != nil {
+			return err
+		}
 	}
 	return writeJSON(w, http.StatusOK, e)
 }

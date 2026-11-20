@@ -300,8 +300,12 @@ type Series struct {
 	AddedAt     time.Time `json:"addedAt"`
 	RefreshedAt time.Time `json:"refreshedAt"`
 	AutoUpgrade string    `json:"autoUpgrade"` // as Movie's
-	Seasons     []Season  `json:"seasons"`
-	// Counts over monitored, aired episodes.
+	// KeepAhead is the show's space saver: only this many episodes past
+	// the latest one anyone has watched are fetched. 0 is off.
+	KeepAhead int      `json:"keepAhead"`
+	Seasons   []Season `json:"seasons"`
+	// Counts over monitored, aired episodes, leaving out the ones space
+	// saver is holding back that aren't on disk.
 	EpisodeCount int `json:"episodeCount"`
 	FileCount    int `json:"fileCount"`
 	// Over every episode file, wanted or not.
@@ -327,18 +331,21 @@ type Episode struct {
 	Overview  string     `json:"overview,omitempty"`
 	AirDate   *time.Time `json:"airDate,omitempty"`
 	Monitored bool       `json:"monitored"`
-	File      *File      `json:"file,omitempty"`
+	// Held is set by the show's space saver: the episode is too far past
+	// what has been watched to fetch yet.
+	Held bool  `json:"held,omitempty"`
+	File *File `json:"file,omitempty"`
 }
 
 const seriesCols = `id, tmdb_id, tvdb_id, imdb_id, title, sort_title, year, overview, poster, backdrop, status, network, runtime, rating,
-	monitored, profile_id, root_folder, path, added_at, refreshed_at, auto_upgrade`
+	monitored, profile_id, root_folder, path, added_at, refreshed_at, auto_upgrade, keep_ahead`
 
 func scanSeries(r interface{ Scan(...any) error }) (Series, error) {
 	var t Series
 	var mon int
 	var added, refreshed int64
 	err := r.Scan(&t.ID, &t.TMDBID, &t.TVDBID, &t.IMDBID, &t.Title, &t.SortTitle, &t.Year, &t.Overview, &t.Poster, &t.Backdrop, &t.Status, &t.Network, &t.Runtime, &t.Rating,
-		&mon, &t.ProfileID, &t.RootFolder, &t.Path, &added, &refreshed, &t.AutoUpgrade)
+		&mon, &t.ProfileID, &t.RootFolder, &t.Path, &added, &refreshed, &t.AutoUpgrade, &t.KeepAhead)
 	if errors.Is(err, sql.ErrNoRows) {
 		return t, ErrNotFound
 	}
@@ -397,7 +404,7 @@ func (s *Store) fillSeries(ctx context.Context, t *Series) error {
 	if err := s.row(ctx, `SELECT COUNT(*), COUNT(f.id) FROM episodes e
 		JOIN seasons se ON se.series_id = e.series_id AND se.number = e.season
 		LEFT JOIN media_files f ON f.kind = 'episode' AND f.owner_id = e.id
-		WHERE e.series_id = ? AND e.monitored = 1 AND se.monitored = 1 AND e.air_date IS NOT NULL AND e.air_date <= ?`, t.ID, at).
+		WHERE e.series_id = ? AND e.monitored = 1 AND (e.held = 0 OR f.id IS NOT NULL) AND se.monitored = 1 AND e.air_date IS NOT NULL AND e.air_date <= ?`, t.ID, at).
 		Scan(&t.EpisodeCount, &t.FileCount); err != nil {
 		return err
 	}
@@ -448,9 +455,9 @@ func (s *Store) SeriesByTVDB(ctx context.Context, tvdbID int64) (Series, error) 
 // AddSeries puts a show on the wanted list, with its seasons.
 func (s *Store) AddSeries(ctx context.Context, t Series) (Series, error) {
 	id, err := s.insert(ctx, `INSERT INTO series (tmdb_id, tvdb_id, imdb_id, title, sort_title, year, overview, poster, backdrop, status, network, runtime, rating,
-		monitored, profile_id, root_folder, path, added_at, refreshed_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+		monitored, profile_id, root_folder, path, added_at, refreshed_at, keep_ahead) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 		t.TMDBID, t.TVDBID, t.IMDBID, t.Title, SortTitle(t.Title), t.Year, t.Overview, t.Poster, t.Backdrop, t.Status, t.Network, t.Runtime, t.Rating,
-		b2i(t.Monitored), t.ProfileID, t.RootFolder, t.Path, now(), now())
+		b2i(t.Monitored), t.ProfileID, t.RootFolder, t.Path, now(), now(), t.KeepAhead)
 	if err != nil {
 		return t, err
 	}
@@ -477,8 +484,8 @@ func (s *Store) EnsureSeason(ctx context.Context, seriesID int64, se Season) err
 }
 
 func (s *Store) UpdateSeries(ctx context.Context, t Series) error {
-	res, err := s.exec(ctx, "UPDATE series SET monitored = ?, profile_id = ?, root_folder = ?, path = ?, auto_upgrade = ? WHERE id = ?",
-		b2i(t.Monitored), t.ProfileID, t.RootFolder, t.Path, t.AutoUpgrade, t.ID)
+	res, err := s.exec(ctx, "UPDATE series SET monitored = ?, profile_id = ?, root_folder = ?, path = ?, auto_upgrade = ?, keep_ahead = ? WHERE id = ?",
+		b2i(t.Monitored), t.ProfileID, t.RootFolder, t.Path, t.AutoUpgrade, t.KeepAhead, t.ID)
 	if err != nil {
 		return err
 	}
@@ -517,7 +524,7 @@ func (s *Store) DeleteSeries(ctx context.Context, id int64) error {
 
 // ---- episodes ----
 
-const episodeCols = `e.id, e.series_id, e.season, e.number, e.title, e.overview, e.air_date, e.monitored,
+const episodeCols = `e.id, e.series_id, e.season, e.number, e.title, e.overview, e.air_date, e.monitored, e.held,
 	f.id, f.path, f.size, f.quality, f.added_at, f.media, f.guessed`
 
 const episodeFrom = ` FROM episodes e LEFT JOIN media_files f ON f.kind = 'episode' AND f.owner_id = e.id`
@@ -525,17 +532,17 @@ const episodeFrom = ` FROM episodes e LEFT JOIN media_files f ON f.kind = 'episo
 func scanEpisode(r interface{ Scan(...any) error }) (Episode, error) {
 	var e Episode
 	var air sql.NullInt64
-	var mon int
+	var mon, held int
 	var fid, fsize, fq, fadded, fguessed sql.NullInt64
 	var fpath, fmedia sql.NullString
-	err := r.Scan(&e.ID, &e.SeriesID, &e.Season, &e.Number, &e.Title, &e.Overview, &air, &mon, &fid, &fpath, &fsize, &fq, &fadded, &fmedia, &fguessed)
+	err := r.Scan(&e.ID, &e.SeriesID, &e.Season, &e.Number, &e.Title, &e.Overview, &air, &mon, &held, &fid, &fpath, &fsize, &fq, &fadded, &fmedia, &fguessed)
 	if errors.Is(err, sql.ErrNoRows) {
 		return e, ErrNotFound
 	}
 	if err != nil {
 		return e, err
 	}
-	e.AirDate, e.Monitored = unix(air), mon == 1
+	e.AirDate, e.Monitored, e.Held = unix(air), mon == 1, held == 1
 	if fid.Valid {
 		e.File = &File{ID: fid.Int64, Kind: "episode", OwnerID: e.ID, Path: fpath.String, Size: fsize.Int64, Quality: int(fq.Int64), AddedAt: time.Unix(fadded.Int64, 0).UTC()}
 		e.File.checked(fmedia, fguessed)
@@ -592,6 +599,13 @@ func (s *Store) SetEpisodeMonitored(ctx context.Context, id int64, monitored boo
 		return err
 	}
 	return affected(res)
+}
+
+// SetEpisodeHeld says whether a show's space saver is holding an episode
+// back.
+func (s *Store) SetEpisodeHeld(ctx context.Context, id int64, held bool) error {
+	_, err := s.exec(ctx, "UPDATE episodes SET held = ? WHERE id = ?", b2i(held), id)
+	return err
 }
 
 // ---- files ----

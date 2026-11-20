@@ -2833,5 +2833,16 @@
     "skipped": "Dieser Server ist so eingestellt, dass er den Code überspringt (BOXOFFICE_SKIP_SIGN_IN_CODE). Entferne diese Einstellung, damit wieder danach gefragt wird.",
     "off": "Ausschalten",
     "password": "Dein Passwort, zum Ausschalten"
+  },
+  "spaceSaver": {
+    "label": "Platzsparer",
+    "off": "Aus",
+    "next": "Die nächsten {{n}} Folgen",
+    "hint": "Holt nur die nächsten paar Folgen nach der letzten, die jemand in Matinee angesehen hat, und weitere, während geschaut wird. Ausgeschaltete Staffeln und Folgen zählen nicht mit. Es wird nichts gelöscht.",
+    "noReport": "Matinee hat noch nicht gemeldet, was angesehen wurde, daher gilt diese Serie als nicht begonnen. Matinee meldet von selbst, sobald es verbunden und aktuell ist.",
+    "notStarted": "Noch hat niemand diese Serie begonnen.",
+    "upTo": "Angesehen bis {{episode}}.",
+    "later": "Später",
+    "laterHint": "Der Platzsparer holt sie, sobald jemand näher herankommt."
   }
 }
