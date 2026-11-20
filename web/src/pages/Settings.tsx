@@ -11,6 +11,7 @@ import { AddRulesCard } from './AddRules'
 import { monitorOptions, useProfiles, useQualities, useRootFolders, useShowDefaults } from '../hooks'
 import { AutoSearchSettings, Connections, DataCapSettingsCard, DownloadSettings, NumberField } from './Connections'
 import { SpeedScheduleCard } from './SpeedSchedule'
+import { DownloadOrderCard } from './DownloadOrder'
 import { ScanButton, scannable } from './LibraryScan'
 import { GameCheckButton } from './Games'
 import { EreaderSettingsCard } from './Ereaders'
@@ -81,6 +82,7 @@ const sections: SectionDef[] = [
     cards: [
       { id: 'downloads', el: <DownloadSettings />, inner: true, terms: ['Usenet', 'NZB'] },
       { id: 'speed-schedule', el: <SpeedScheduleCard />, inner: true, keys: ['speed.from', 'speed.to', 'speed.full', 'speed.limit', 'speed.pause', 'speed.add', 'speed.example'], terms: ['bandwidth', 'throttle', 'speed limit', 'MB/s'] },
+      { id: 'download-order', el: <DownloadOrderCard />, inner: true, keys: ['order.newDays', 'order.preempt', 'order.groups.upgrades', 'order.groups.fixes'], terms: ['priority', 'prioritize', 'queue', 'PROPER', 'REPACK'] },
       {
         id: 'news-servers',
         el: <Connections section="news-servers" />,

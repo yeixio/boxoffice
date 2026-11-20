@@ -22,6 +22,7 @@ import {
   RotateCcw,
   ShieldAlert,
   Trash2,
+  Undo2,
   Upload,
 } from "lucide-react";
 import {
@@ -780,7 +781,14 @@ function useAction() {
       what,
     }: {
       id: number;
-      what: "pause" | "resume" | "retry" | "reprocess" | "import" | "top";
+      what:
+        | "pause"
+        | "resume"
+        | "retry"
+        | "reprocess"
+        | "import"
+        | "top"
+        | "unpin";
     }) => post(`/downloads/${id}/${what}`),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["downloads"] }),
   });
@@ -825,9 +833,24 @@ function QueueItem({
             {q && q.id > 0 && <span>{q.name}</span>}
             {d.indexer && <span>{t("dl.from", { indexer: d.indexer })}</span>}
             {title(d)}
+            {d.group && <span>{t(`order.groups.${d.group}`)}</span>}
+            {!!d.pinned && (
+              <Badge tone="gold">
+                {t(d.pinned > 0 ? "dl.pinnedTop" : "dl.pinnedBottom")}
+              </Badge>
+            )}
           </div>
         </div>
         <div className={`flex shrink-0 gap-1 ${pick ? "hidden" : ""}`}>
+          {!!d.pinned && (
+            <IconButton
+              label={t("dl.unpin")}
+              busy={busy}
+              onClick={() => act.mutate({ id: d.id, what: "unpin" })}
+            >
+              <Undo2 className="size-4" />
+            </IconButton>
+          )}
           {(d.status === "queued" || d.status === "downloading") && (
             <IconButton
               label={t("dl.pause")}

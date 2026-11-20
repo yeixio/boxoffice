@@ -1019,7 +1019,8 @@
     "keep": "Behold dem",
     "blockMany": "Føj disse udgivelser til blokeringslisten",
     "blockOne": "Føj denne udgivelse til blokeringslisten",
-    "blockHint": "Søgninger springer en blokeret udgivelse over, så den ikke hentes igen. Slå dette fra for at tillade den senere."
+    "blockHint": "Søgninger springer en blokeret udgivelse over, så den ikke hentes igen. Slå dette fra for at tillade den senere.",
+    "unpin": "Tilbage på deres plads"
   },
   "settings": {
     "tmdbIntro": "Box Office slår film og serier op på TMDB. Få en gratis nøgle på <link>themoviedb.org</link>; både API-nøglen og det længere læseadgangstoken virker.",
@@ -1754,7 +1755,10 @@
       "pickAll_other": "Vælg alle ({{count}})",
       "pickShown_one": "Vælg alle viste ({{count}})",
       "pickShown_other": "Vælg alle viste ({{count}})"
-    }
+    },
+    "pinnedTop": "Flyttet til toppen",
+    "pinnedBottom": "Flyttet til bunden",
+    "unpin": "Tilbage på sin plads i rækkefølgen"
   },
   "req": {
     "tabs": {
@@ -2876,6 +2880,32 @@
     "stays": "Filmen og dens første kopi bliver.",
     "stop": "Hold op med at beholde en ekstra kopi",
     "again": "Ellers leder Box Office efter en ekstra kopi og henter den igen."
+  },
+  "order": {
+    "title": "Downloadrækkefølge",
+    "sub": "Ventende downloads kører i denne rækkefølge, øverst først. Når du gemmer en ny rækkefølge, sorteres køen om med det samme. Downloads, du har flyttet til toppen eller bunden i hånden, bliver hvor du satte dem.",
+    "groups": {
+      "new-episodes": "Nye afsnit",
+      "new-movies": "Nye film",
+      "backlog-episodes": "Ældre manglende afsnit",
+      "backlog-movies": "Ældre manglende film",
+      "books": "Bøger og lydbøger",
+      "music": "Musik",
+      "games": "Spil",
+      "replacements": "Erstatninger for dårlige kopier",
+      "fixes": "PROPER- og REPACK-rettelser",
+      "second-copies": "Andre kopier af film",
+      "upgrades": "Opgraderinger til bedre kvalitet",
+      "other": "Tilføjet i hånden"
+    },
+    "waiting": "{{n}} venter",
+    "up": "Flyt op",
+    "down": "Flyt ned",
+    "reset": "Tilbage til standardrækkefølgen",
+    "newDays": "Dage en udgivelse tæller som ny",
+    "newDaysHint": "En film eller et afsnit er nyt så mange dage efter det er sendt eller udkommet til køb eller streaming. Derefter er det et ældre manglende.",
+    "preempt": "Stop den igangværende download for en, der rangerer højere",
+    "preemptHint": "Den stoppede fortsætter bagefter, hvor den var. Slået fra venter den nye på sin tur."
   },
   "relocate": {
     "title": "Flyt til en anden rodmappe",

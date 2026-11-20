@@ -1167,7 +1167,8 @@
     "keep": "Zachowaj je",
     "blockMany": "Dodaj te wydania do listy blokad",
     "blockOne": "Dodaj to wydanie do listy blokad",
-    "blockHint": "Wyszukiwania pomijają zablokowane wydanie, więc nie zostanie znów pobrane. Wyłącz to, aby zezwolić na nie później."
+    "blockHint": "Wyszukiwania pomijają zablokowane wydanie, więc nie zostanie znów pobrane. Wyłącz to, aby zezwolić na nie później.",
+    "unpin": "Wróć na miejsce"
   },
   "settings": {
     "tmdbIntro": "Box Office wyszukuje filmy i seriale w TMDB. Zdobądź darmowy klucz na <link>themoviedb.org</link>; działa zarówno klucz API, jak i dłuższy token dostępu do odczytu.",
@@ -1948,7 +1949,10 @@
       "pickShown_few": "Zaznacz wszystkie widoczne ({{count}})",
       "pickShown_many": "Zaznacz wszystkie widoczne ({{count}})",
       "pickShown_other": "Zaznacz wszystkie widoczne ({{count}})"
-    }
+    },
+    "pinnedTop": "Przeniesione na górę",
+    "pinnedBottom": "Przeniesione na dół",
+    "unpin": "Wróć na miejsce w kolejności"
   },
   "req": {
     "tabs": {
@@ -3122,6 +3126,32 @@
     "stays": "Film i jego pierwsza kopia zostają.",
     "stop": "Przestań trzymać drugą kopię",
     "again": "W przeciwnym razie Box Office znów wyszuka drugą kopię i ją pobierze."
+  },
+  "order": {
+    "title": "Kolejność pobierania",
+    "sub": "Oczekujące pobrania idą w tej kolejności, od góry. Zapisanie nowej kolejności od razu przestawia kolejkę. Pobrania przeniesione ręcznie na górę lub dół zostają tam, gdzie je umieszczono.",
+    "groups": {
+      "new-episodes": "Nowe odcinki",
+      "new-movies": "Nowe filmy",
+      "backlog-episodes": "Starsze brakujące odcinki",
+      "backlog-movies": "Starsze brakujące filmy",
+      "books": "Książki i audiobooki",
+      "music": "Muzyka",
+      "games": "Gry",
+      "replacements": "Zamienniki złych kopii",
+      "fixes": "Poprawki PROPER i REPACK",
+      "second-copies": "Drugie kopie filmów",
+      "upgrades": "Ulepszenia jakości",
+      "other": "Dodane ręcznie"
+    },
+    "waiting": "Oczekuje: {{n}}",
+    "up": "W górę",
+    "down": "W dół",
+    "reset": "Przywróć domyślną kolejność",
+    "newDays": "Dni, przez które wydanie jest nowe",
+    "newDaysHint": "Film lub odcinek jest nowy przez tyle dni od emisji lub premiery do kupienia lub streamingu. Potem jest starszym brakującym.",
+    "preempt": "Zatrzymaj bieżące pobieranie dla wyżej ustawionego",
+    "preemptHint": "Zatrzymane wznowi się potem od miejsca, w którym było. Gdy wyłączone, nowe czeka na swoją kolej."
   },
   "relocate": {
     "title": "Przenieś do innego folderu głównego",

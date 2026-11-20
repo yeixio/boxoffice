@@ -1019,7 +1019,8 @@
     "keep": "Säilytä ne",
     "blockMany": "Lisää nämä julkaisut estolistalle",
     "blockOne": "Lisää tämä julkaisu estolistalle",
-    "blockHint": "Haut ohittavat estetyn julkaisun, joten sitä ei noudeta uudelleen. Kytke tämä pois salliaksesi sen myöhemmin."
+    "blockHint": "Haut ohittavat estetyn julkaisun, joten sitä ei noudeta uudelleen. Kytke tämä pois salliaksesi sen myöhemmin.",
+    "unpin": "Takaisin paikoilleen"
   },
   "settings": {
     "tmdbIntro": "Box Office hakee elokuvat ja sarjat TMDB:stä. Hanki ilmainen avain osoitteesta <link>themoviedb.org</link>; sekä API-avain että pidempi lukuoikeustunnus toimivat.",
@@ -1754,7 +1755,10 @@
       "pickAll_other": "Valitse kaikki ({{count}})",
       "pickShown_one": "Valitse kaikki näytetyt ({{count}})",
       "pickShown_other": "Valitse kaikki näytetyt ({{count}})"
-    }
+    },
+    "pinnedTop": "Siirretty ylös",
+    "pinnedBottom": "Siirretty alas",
+    "unpin": "Takaisin paikalleen järjestyksessä"
   },
   "req": {
     "tabs": {
@@ -2876,6 +2880,32 @@
     "stays": "Elokuva ja sen ensimmäinen kopio säilyvät.",
     "stop": "Lopeta toisen kopion säilyttäminen",
     "again": "Muuten Box Office etsii toisen kopion ja lataa sen uudelleen."
+  },
+  "order": {
+    "title": "Latausjärjestys",
+    "sub": "Odottavat lataukset menevät tässä järjestyksessä ylhäältä alkaen. Uuden järjestyksen tallentaminen järjestää jonon heti uudelleen. Käsin ylös tai alas siirretyt lataukset pysyvät paikallaan.",
+    "groups": {
+      "new-episodes": "Uudet jaksot",
+      "new-movies": "Uudet elokuvat",
+      "backlog-episodes": "Vanhemmat puuttuvat jaksot",
+      "backlog-movies": "Vanhemmat puuttuvat elokuvat",
+      "books": "Kirjat ja äänikirjat",
+      "music": "Musiikki",
+      "games": "Pelit",
+      "replacements": "Korvaukset huonoille kopioille",
+      "fixes": "PROPER- ja REPACK-korjaukset",
+      "second-copies": "Elokuvien toiset kopiot",
+      "upgrades": "Päivitykset parempaan laatuun",
+      "other": "Käsin lisätyt"
+    },
+    "waiting": "{{n}} odottaa",
+    "up": "Siirrä ylös",
+    "down": "Siirrä alas",
+    "reset": "Palauta oletusjärjestys",
+    "newDays": "Päivät, jotka julkaisu on uusi",
+    "newDaysHint": "Elokuva tai jakso on uusi näin monta päivää esityksen tai osto- tai suoratoistojulkaisun jälkeen. Sen jälkeen se on vanhempi puuttuva.",
+    "preempt": "Pysäytä käynnissä oleva lataus korkeammalle sijoitetun tieltä",
+    "preemptHint": "Pysäytetty jatkaa myöhemmin siitä, mihin jäi. Pois päältä uusi odottaa vuoroaan."
   },
   "relocate": {
     "title": "Siirrä toiseen juurikansioon",

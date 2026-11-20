@@ -1093,7 +1093,8 @@
     "keep": "Les garder",
     "blockMany": "Ajouter ces releases à la liste de blocage",
     "blockOne": "Ajouter cette release à la liste de blocage",
-    "blockHint": "Les recherches ignorent une release bloquée, elle n’est donc pas récupérée à nouveau. Désactivez ceci pour l’autoriser plus tard."
+    "blockHint": "Les recherches ignorent une release bloquée, elle n’est donc pas récupérée à nouveau. Désactivez ceci pour l’autoriser plus tard.",
+    "unpin": "Remettre à leur place"
   },
   "settings": {
     "tmdbIntro": "Box Office cherche les films et les séries sur TMDB. Obtenez une clé gratuite sur <link>themoviedb.org</link> ; la clé d’API et le jeton d’accès en lecture, plus long, fonctionnent tous les deux.",
@@ -1851,7 +1852,10 @@
       "pickShown_one": "Sélectionner tout ce qui est affiché ({{count}})",
       "pickShown_many": "Sélectionner tout ce qui est affiché ({{count}})",
       "pickShown_other": "Sélectionner tout ce qui est affiché ({{count}})"
-    }
+    },
+    "pinnedTop": "Déplacé en haut",
+    "pinnedBottom": "Déplacé en bas",
+    "unpin": "Remettre à sa place dans l'ordre"
   },
   "req": {
     "tabs": {
@@ -2999,6 +3003,32 @@
     "stays": "Le film et sa première copie restent.",
     "stop": "Ne plus garder de deuxième copie",
     "again": "Sinon, Box Office recherchera une deuxième copie et la téléchargera à nouveau."
+  },
+  "order": {
+    "title": "Ordre des téléchargements",
+    "sub": "Les téléchargements en attente suivent cet ordre, du haut vers le bas. Enregistrer un nouvel ordre retrie la file tout de suite. Les téléchargements que vous avez déplacés en haut ou en bas à la main restent à leur place.",
+    "groups": {
+      "new-episodes": "Nouveaux épisodes",
+      "new-movies": "Nouveaux films",
+      "backlog-episodes": "Anciens épisodes manquants",
+      "backlog-movies": "Anciens films manquants",
+      "books": "Livres et livres audio",
+      "music": "Musique",
+      "games": "Jeux",
+      "replacements": "Remplacements de copies défectueuses",
+      "fixes": "Corrections PROPER et REPACK",
+      "second-copies": "Secondes copies de films",
+      "upgrades": "Améliorations de qualité",
+      "other": "Ajoutés à la main"
+    },
+    "waiting": "{{n}} en attente",
+    "up": "Monter",
+    "down": "Descendre",
+    "reset": "Revenir à l'ordre par défaut",
+    "newDays": "Jours pendant lesquels une sortie est nouvelle",
+    "newDaysHint": "Un film ou un épisode est nouveau pendant ce nombre de jours après sa diffusion ou sa sortie à l'achat ou en streaming. Ensuite, c'est un ancien manquant.",
+    "preempt": "Arrêter le téléchargement en cours pour un mieux classé",
+    "preemptHint": "Celui arrêté reprend ensuite là où il en était. Désactivé, le nouveau attend son tour."
   },
   "relocate": {
     "title": "Déplacer vers un autre dossier racine",

@@ -82,7 +82,14 @@ type Download struct {
 	// it in the library once it's downloaded: "auto" works out what it
 	// is, a kind (movie, series, album, ebook, audiobook, game) says what
 	// it is; "" leaves it in the downloads folder.
-	FileAs     string    `json:"fileAs,omitempty"`
+	FileAs string `json:"fileAs,omitempty"`
+	// Reason is why it was grabbed (ReasonNew, ReasonUpgrade…), and Group
+	// where that puts it in the download order (worked out, not stored).
+	Reason string `json:"reason,omitempty"`
+	Group  string `json:"group"`
+	// Pinned is where it was moved by hand (PinnedTop, PinnedBottom): it
+	// stays there whatever the order.
+	Pinned     int       `json:"pinned,omitempty"`
 	AddedAt    time.Time `json:"addedAt"`
 	StartedAt  time.Time `json:"startedAt,omitzero"`
 	FinishedAt time.Time `json:"finishedAt,omitzero"`
@@ -102,14 +109,14 @@ type PartFile struct {
 func (d Download) Finished() bool { return d.Status == DownloadCompleted || d.Status == DownloadFailed }
 
 const downloadCols = `id, name, status, kind, title_id, episode_ids, quality, indexer, source, password, size, done_bytes, failed_bytes,
-	done_files, position, folder, message, imported_to, quarantined, added_at, started_at, finished_at, edition, mode, missing, fetched, done_names, file_as, partial`
+	done_files, position, folder, message, imported_to, quarantined, added_at, started_at, finished_at, edition, mode, missing, fetched, done_names, file_as, partial, reason, pinned`
 
 func scanDownload(r interface{ Scan(...any) error }) (Download, error) {
 	var d Download
 	var eps, files, names, partial string
 	var added, started, finished int64
 	err := r.Scan(&d.ID, &d.Name, &d.Status, &d.Kind, &d.TitleID, &eps, &d.Quality, &d.Indexer, &d.Source, &d.Password, &d.Size,
-		&d.DoneBytes, &d.FailedBytes, &files, &d.Position, &d.Folder, &d.Message, &d.ImportedTo, &d.Quarantined, &added, &started, &finished, &d.Edition, &d.Mode, &d.Missing, &d.Fetched, &names, &d.FileAs, &partial)
+		&d.DoneBytes, &d.FailedBytes, &files, &d.Position, &d.Folder, &d.Message, &d.ImportedTo, &d.Quarantined, &added, &started, &finished, &d.Edition, &d.Mode, &d.Missing, &d.Fetched, &names, &d.FileAs, &partial, &d.Reason, &d.Pinned)
 	if errors.Is(err, sql.ErrNoRows) {
 		return d, ErrNotFound
 	}
@@ -120,6 +127,7 @@ func scanDownload(r interface{ Scan(...any) error }) (Download, error) {
 	json.Unmarshal([]byte(files), &d.DoneFiles)
 	json.Unmarshal([]byte(names), &d.DoneNames)
 	json.Unmarshal([]byte(partial), &d.Partial)
+	d.Group = d.PriorityGroup()
 	d.AddedAt = time.Unix(added, 0).UTC()
 	if started > 0 {
 		d.StartedAt = time.Unix(started, 0).UTC()
@@ -147,9 +155,9 @@ func (s *Store) AddDownload(ctx context.Context, d Download) (Download, error) {
 	if d.Status == "" {
 		d.Status = DownloadQueued
 	}
-	id, err := s.insert(ctx, `INSERT INTO downloads (name, status, kind, title_id, episode_ids, quality, indexer, source, password, size, position, added_at, edition, mode, file_as)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-		d.Name, d.Status, d.Kind, d.TitleID, jsonText(d.EpisodeIDs), d.Quality, d.Indexer, d.Source, d.Password, d.Size, pos+1, now(), d.Edition, d.Mode, d.FileAs)
+	id, err := s.insert(ctx, `INSERT INTO downloads (name, status, kind, title_id, episode_ids, quality, indexer, source, password, size, position, added_at, edition, mode, file_as, reason)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+		d.Name, d.Status, d.Kind, d.TitleID, jsonText(d.EpisodeIDs), d.Quality, d.Indexer, d.Source, d.Password, d.Size, pos+1, now(), d.Edition, d.Mode, d.FileAs, d.Reason)
 	if err != nil {
 		return d, err
 	}
@@ -178,8 +186,18 @@ func (s *Store) downloads(ctx context.Context, where string, args ...any) ([]Dow
 }
 
 // DownloadQueue is everything not finished, in queue order.
+// The order is read each time, so a new one sorts the queue at once.
 func (s *Store) DownloadQueue(ctx context.Context) ([]Download, error) {
-	return s.downloads(ctx, "status NOT IN ('completed', 'failed') ORDER BY position, id")
+	list, err := s.downloads(ctx, "status NOT IN ('completed', 'failed') ORDER BY position, id")
+	if err != nil {
+		return nil, err
+	}
+	p, err := s.QueuePriority(ctx)
+	if err != nil {
+		return nil, err
+	}
+	SortQueue(list, p.Order)
+	return list, nil
 }
 
 // DownloadHistory is finished downloads, newest first.
@@ -399,7 +417,7 @@ func (s *Store) ResetDownload(ctx context.Context, id int64) error {
 		return err
 	}
 	res, err := s.exec(ctx, `UPDATE downloads SET status = 'queued', message = '', done_bytes = 0, failed_bytes = 0, done_files = '[]', done_names = '{}', partial = '{}', quarantined = '', missing = 0, fetched = 0,
-		started_at = 0, finished_at = 0, position = ? WHERE id = ?`, pos+1, id)
+		started_at = 0, finished_at = 0, position = ?, pinned = 0 WHERE id = ?`, pos+1, id)
 	if err != nil {
 		return err
 	}
@@ -414,33 +432,35 @@ func (s *Store) RequeueDownload(ctx context.Context, id int64) error {
 	if err := s.row(ctx, "SELECT COALESCE(MAX(position), 0) FROM downloads").Scan(&pos); err != nil {
 		return err
 	}
-	res, err := s.exec(ctx, "UPDATE downloads SET status = 'queued', message = '', missing = 0, finished_at = 0, position = ? WHERE id = ?", pos+1, id)
+	res, err := s.exec(ctx, "UPDATE downloads SET status = 'queued', message = '', missing = 0, finished_at = 0, position = ?, pinned = 0 WHERE id = ?", pos+1, id)
 	if err != nil {
 		return err
 	}
 	return affected(res)
 }
 
-// MoveDownloadToTop puts a download first in the queue.
+// MoveDownloadToTop puts a download first in the queue, and keeps it
+// there whatever the download order.
 func (s *Store) MoveDownloadToTop(ctx context.Context, id int64) error {
 	var pos int
 	if err := s.row(ctx, "SELECT COALESCE(MIN(position), 0) FROM downloads").Scan(&pos); err != nil {
 		return err
 	}
-	res, err := s.exec(ctx, "UPDATE downloads SET position = ? WHERE id = ?", pos-1, id)
+	res, err := s.exec(ctx, "UPDATE downloads SET position = ?, pinned = ? WHERE id = ?", pos-1, PinnedTop, id)
 	if err != nil {
 		return err
 	}
 	return affected(res)
 }
 
-// MoveDownloadToBottom puts a queued download last.
+// MoveDownloadToBottom puts a queued download last, and keeps it there
+// whatever the download order.
 func (s *Store) MoveDownloadToBottom(ctx context.Context, id int64) error {
 	var pos int
 	if err := s.row(ctx, "SELECT COALESCE(MAX(position), 0) FROM downloads").Scan(&pos); err != nil {
 		return err
 	}
-	res, err := s.exec(ctx, "UPDATE downloads SET position = ? WHERE id = ?", pos+1, id)
+	res, err := s.exec(ctx, "UPDATE downloads SET position = ?, pinned = ? WHERE id = ?", pos+1, PinnedBottom, id)
 	if err != nil {
 		return err
 	}
