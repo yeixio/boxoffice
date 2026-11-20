@@ -384,6 +384,7 @@ internal/backup        backups to disk, another folder and S3, with encryption
 internal/health        the check-up; internal/monitor and internal/alerts for the rest of Health
 internal/notify        events Matinee passes on as notifications
 internal/push          push notifications to phones and browsers (Web Push)
+internal/sso           single sign-on through an OpenID Connect provider
 internal/store         SQLite / PostgreSQL storage and migrations
 web/                   React + Vite web UI
 deploy/helm/boxoffice  Helm chart

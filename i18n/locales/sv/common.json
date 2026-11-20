@@ -72,5 +72,12 @@
       "unsupported": "Den här webbläsaren kan inte ta emot aviseringar.",
       "blocked": "Aviseringar är blockerade för den här webbplatsen i webbläsaren. Tillåt dem i webbläsarens inställningar för webbplatsen och slå sedan på det här igen."
     }
+  },
+  "sso": {
+    "signIn": "Logga in med {{name}}",
+    "or": "eller",
+    "refused": "Inloggningen avbröts eller nekades.",
+    "notallowed": "Det kontot släpps inte in här. Fråga den som driver den här servern.",
+    "failed": "Inloggningen fungerade inte. Den som driver den här servern kan se varför i loggen."
   }
 }

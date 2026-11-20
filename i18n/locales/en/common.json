@@ -72,5 +72,12 @@
       "unsupported": "This browser can't receive notifications.",
       "blocked": "Notifications are blocked for this site in the browser. Allow them in the browser's settings for this site, then turn this on again."
     }
+  },
+  "sso": {
+    "signIn": "Sign in with {{name}}",
+    "or": "or",
+    "refused": "That sign-in was cancelled or turned down.",
+    "notallowed": "That account isn't let in here. Ask whoever runs this server.",
+    "failed": "That sign-in didn't work. Whoever runs this server can see why in its log."
   }
 }

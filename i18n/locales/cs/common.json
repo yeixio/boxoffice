@@ -74,5 +74,12 @@
       "unsupported": "Tento prohlížeč neumí přijímat oznámení.",
       "blocked": "Oznámení jsou pro tento web v prohlížeči zablokovaná. Povolte je v nastavení prohlížeče pro tento web a pak to zapněte znovu."
     }
+  },
+  "sso": {
+    "signIn": "Přihlásit se přes {{name}}",
+    "or": "nebo",
+    "refused": "Přihlášení bylo zrušeno nebo odmítnuto.",
+    "notallowed": "Tento účet sem nemá přístup. Zeptejte se toho, kdo tento server spravuje.",
+    "failed": "Přihlášení se nepovedlo. Správce tohoto serveru najde důvod v jeho protokolu."
   }
 }

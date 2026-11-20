@@ -74,5 +74,12 @@
       "unsupported": "Ta przeglądarka nie może odbierać powiadomień.",
       "blocked": "Powiadomienia dla tej witryny są zablokowane w przeglądarce. Zezwól na nie w ustawieniach przeglądarki dla tej witryny, a potem włącz to ponownie."
     }
+  },
+  "sso": {
+    "signIn": "Zaloguj się przez {{name}}",
+    "or": "lub",
+    "refused": "Logowanie zostało anulowane lub odrzucone.",
+    "notallowed": "To konto nie ma tu wstępu. Zapytaj osobę, która prowadzi ten serwer.",
+    "failed": "Logowanie się nie udało. Osoba, która prowadzi ten serwer, zobaczy przyczynę w dzienniku."
   }
 }

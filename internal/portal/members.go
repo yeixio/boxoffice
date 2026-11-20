@@ -6,6 +6,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"strings"
 	"time"
@@ -227,6 +228,57 @@ func (s *Service) matineeMember(ctx context.Context, username string) (store.Mem
 		}
 	}
 	return m, err
+}
+
+// SSOMember is the member for an account at the single sign-on provider,
+// made the first time it signs in. It's found again by subject, the
+// provider's id for the account, so nobody gets someone else's account by
+// taking their username. username and name are what the provider calls
+// the person.
+func (s *Service) SSOMember(ctx context.Context, subject, username, name string) (store.Member, error) {
+	if subject == "" {
+		return store.Member{}, badf("the provider didn't say who signed in")
+	}
+	m, err := s.Store.MemberBySubject(ctx, subject)
+	switch {
+	case err == nil && m.Disabled:
+		return m, badf("this account is turned off; ask an admin")
+	case err == nil || !errors.Is(err, store.ErrNotFound):
+		return m, err
+	}
+	base := store.MemberName(strings.Join(strings.Fields(username), ""))
+	if at := strings.IndexByte(base, '@'); at > 0 {
+		base = base[:at]
+	}
+	if base == "" {
+		base = "member"
+	}
+	if r := []rune(base); len(r) > 36 {
+		base = string(r[:36])
+	}
+	// A name someone has already gets a number after it.
+	for n := 1; n <= 200; n++ {
+		try := base
+		if n > 1 {
+			try = fmt.Sprintf("%s%d", base, n)
+		}
+		if _, err := s.Store.MemberByName(ctx, try); err == nil {
+			continue
+		} else if !errors.Is(err, store.ErrNotFound) {
+			return store.Member{}, err
+		}
+		m, err := s.Store.CreateMember(ctx, store.Member{Username: try, DisplayName: strings.TrimSpace(name), Source: "sso", QuotaMovies: -1, QuotaShows: -1}, "")
+		if errors.Is(err, store.ErrExists) {
+			continue
+		} else if err != nil {
+			return m, err
+		}
+		if err := s.Store.SetMemberSubject(ctx, m.ID, subject); err != nil {
+			return m, err
+		}
+		return m, nil
+	}
+	return store.Member{}, badf("couldn't find a free username for %s", base)
 }
 
 // matineeSignOut ends the session the check made, so it doesn't linger in

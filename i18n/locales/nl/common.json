@@ -72,5 +72,12 @@
       "unsupported": "Deze browser kan geen meldingen ontvangen.",
       "blocked": "Meldingen zijn in de browser geblokkeerd voor deze site. Sta ze toe in de instellingen van de browser voor deze site en zet dit daarna weer aan."
     }
+  },
+  "sso": {
+    "signIn": "Inloggen met {{name}}",
+    "or": "of",
+    "refused": "Het inloggen is geannuleerd of geweigerd.",
+    "notallowed": "Dat account wordt hier niet toegelaten. Vraag het aan wie deze server beheert.",
+    "failed": "Het inloggen is niet gelukt. Wie deze server beheert, kan in het logboek zien waarom."
   }
 }

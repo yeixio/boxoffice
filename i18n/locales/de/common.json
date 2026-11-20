@@ -72,5 +72,12 @@
       "unsupported": "Dieser Browser kann keine Benachrichtigungen empfangen.",
       "blocked": "Benachrichtigungen sind für diese Website im Browser blockiert. Erlaube sie in den Einstellungen des Browsers für diese Website und schalte dies dann wieder ein."
     }
+  },
+  "sso": {
+    "signIn": "Mit {{name}} anmelden",
+    "or": "oder",
+    "refused": "Die Anmeldung wurde abgebrochen oder abgelehnt.",
+    "notallowed": "Dieses Konto hat hier keinen Zutritt. Frag die Person, die diesen Server betreibt.",
+    "failed": "Die Anmeldung hat nicht funktioniert. Wer diesen Server betreibt, findet den Grund im Protokoll."
   }
 }

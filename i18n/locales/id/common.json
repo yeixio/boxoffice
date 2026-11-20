@@ -71,5 +71,12 @@
       "unsupported": "Browser ini tidak bisa menerima notifikasi.",
       "blocked": "Notifikasi diblokir untuk situs ini di browser. Izinkan di pengaturan browser untuk situs ini, lalu nyalakan lagi."
     }
+  },
+  "sso": {
+    "signIn": "Masuk dengan {{name}}",
+    "or": "atau",
+    "refused": "Proses masuk dibatalkan atau ditolak.",
+    "notallowed": "Akun itu tidak diizinkan masuk ke sini. Tanyakan kepada pengelola server ini.",
+    "failed": "Proses masuk tidak berhasil. Pengelola server ini bisa melihat sebabnya di log."
   }
 }

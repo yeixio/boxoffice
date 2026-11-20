@@ -73,5 +73,12 @@
       "unsupported": "Este navegador não consegue receber notificações.",
       "blocked": "As notificações estão bloqueadas para este site no navegador. Permita-as nas configurações do navegador para este site e ative isto de novo."
     }
+  },
+  "sso": {
+    "signIn": "Entrar com {{name}}",
+    "or": "ou",
+    "refused": "Esse login foi cancelado ou recusado.",
+    "notallowed": "Essa conta não tem entrada aqui. Fale com quem administra este servidor.",
+    "failed": "Esse login não funcionou. Quem administra este servidor pode ver o motivo no log."
   }
 }

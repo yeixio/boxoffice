@@ -132,6 +132,7 @@ func migrateSchema(ctx context.Context, db schemaRunner, postgres bool) error {
 		{"usenet_servers", "expires", "BIGINT NOT NULL DEFAULT 0"},
 		{"users", "language", "TEXT NOT NULL DEFAULT ''"},
 		{"members", "language", "TEXT NOT NULL DEFAULT ''"},
+		{"members", "subject", "TEXT NOT NULL DEFAULT ''"},
 		{"downloads", "edition", "TEXT NOT NULL DEFAULT ''"},
 		{"downloads", "mode", "TEXT NOT NULL DEFAULT ''"},
 		{"authors", "locked", "INTEGER NOT NULL DEFAULT 0"},

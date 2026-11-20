@@ -71,5 +71,12 @@
       "unsupported": "Pelayar ini tidak boleh menerima pemberitahuan.",
       "blocked": "Pemberitahuan disekat untuk laman ini dalam pelayar. Benarkannya dalam tetapan pelayar untuk laman ini, kemudian hidupkan semula."
     }
+  },
+  "sso": {
+    "signIn": "Log masuk dengan {{name}}",
+    "or": "atau",
+    "refused": "Log masuk itu dibatalkan atau ditolak.",
+    "notallowed": "Akaun itu tidak dibenarkan masuk di sini. Tanya orang yang mengendalikan pelayan ini.",
+    "failed": "Log masuk itu tidak berjaya. Orang yang mengendalikan pelayan ini boleh melihat sebabnya dalam lognya."
   }
 }

@@ -73,5 +73,12 @@
       "unsupported": "Acest browser nu poate primi notificări.",
       "blocked": "Notificările sunt blocate pentru acest site în browser. Permite-le din setările browserului pentru acest site, apoi activează din nou."
     }
+  },
+  "sso": {
+    "signIn": "Autentificare cu {{name}}",
+    "or": "sau",
+    "refused": "Autentificarea a fost anulată sau refuzată.",
+    "notallowed": "Acest cont nu are acces aici. Întreabă persoana care administrează acest server.",
+    "failed": "Autentificarea nu a reușit. Cine administrează acest server poate vedea motivul în jurnal."
   }
 }

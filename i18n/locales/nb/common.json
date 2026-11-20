@@ -72,5 +72,12 @@
       "unsupported": "Denne nettleseren kan ikke motta varsler.",
       "blocked": "Varsler er blokkert for dette nettstedet i nettleseren. Tillat dem i nettleserens innstillinger for nettstedet, og slå dette på igjen."
     }
+  },
+  "sso": {
+    "signIn": "Logg inn med {{name}}",
+    "or": "eller",
+    "refused": "Innloggingen ble avbrutt eller avvist.",
+    "notallowed": "Den kontoen slipper ikke inn her. Spør den som driver denne serveren.",
+    "failed": "Innloggingen virket ikke. Den som driver denne serveren, kan se hvorfor i loggen."
   }
 }

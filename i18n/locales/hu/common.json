@@ -72,5 +72,12 @@
       "unsupported": "Ez a böngésző nem tud értesítéseket fogadni.",
       "blocked": "Az értesítések le vannak tiltva ennél a webhelynél a böngészőben. Engedélyezd őket a böngésző webhelybeállításaiban, majd kapcsold be ezt újra."
     }
+  },
+  "sso": {
+    "signIn": "Bejelentkezés ezzel: {{name}}",
+    "or": "vagy",
+    "refused": "A bejelentkezést megszakították vagy elutasították.",
+    "notallowed": "Ez a fiók ide nem léphet be. Kérdezd meg azt, aki a szervert üzemelteti.",
+    "failed": "A bejelentkezés nem sikerült. Aki a szervert üzemelteti, a naplóban láthatja az okát."
   }
 }

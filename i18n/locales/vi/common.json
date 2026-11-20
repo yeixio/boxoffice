@@ -71,5 +71,12 @@
       "unsupported": "Trình duyệt này không nhận được thông báo.",
       "blocked": "Thông báo của trang này đang bị chặn trong trình duyệt. Hãy cho phép trong phần cài đặt của trình duyệt dành cho trang này, rồi bật lại."
     }
+  },
+  "sso": {
+    "signIn": "Đăng nhập bằng {{name}}",
+    "or": "hoặc",
+    "refused": "Lần đăng nhập đó đã bị hủy hoặc bị từ chối.",
+    "notallowed": "Tài khoản đó không được vào đây. Hãy hỏi người vận hành máy chủ này.",
+    "failed": "Lần đăng nhập đó không thành công. Người vận hành máy chủ này có thể xem lý do trong nhật ký."
   }
 }

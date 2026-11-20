@@ -112,6 +112,14 @@ func TestCancelWhileDownloading(t *testing.T) {
 		t.Fatal(err)
 	}
 	d = waitFor(t, st, d.ID, store.DownloadDownloading)
+	// It says it's downloading a moment before the first article is asked
+	// for, so wait for one: the point is that what it fetched is deleted.
+	for range 500 {
+		if srv.Fetches.Load() > 0 {
+			break
+		}
+		time.Sleep(10 * time.Millisecond)
+	}
 	if err := st.DeleteSeries(ctx, show.ID); err != nil {
 		t.Fatal(err)
 	}

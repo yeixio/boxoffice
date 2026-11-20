@@ -73,5 +73,12 @@
       "unsupported": "Questo browser non può ricevere notifiche.",
       "blocked": "Le notifiche sono bloccate per questo sito nel browser. Consentile nelle impostazioni del browser per questo sito, poi riattiva questa opzione."
     }
+  },
+  "sso": {
+    "signIn": "Accedi con {{name}}",
+    "or": "oppure",
+    "refused": "L'accesso è stato annullato o rifiutato.",
+    "notallowed": "Questo account non può entrare qui. Chiedi a chi gestisce questo server.",
+    "failed": "L'accesso non è riuscito. Chi gestisce questo server può vederne il motivo nel registro."
   }
 }

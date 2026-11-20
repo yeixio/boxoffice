@@ -33,7 +33,7 @@ export async function papi<T>(method: string, path: string, body?: unknown): Pro
 export const pget = <T>(path: string) => papi<T>('GET', path)
 export const ppost = <T>(path: string, body?: unknown) => papi<T>('POST', path, body ?? {})
 
-export type Member = { id: number; username: string; displayName: string; name: string; source: 'local' | 'matinee'; language?: string }
+export type Member = { id: number; username: string; displayName: string; name: string; source: 'local' | 'matinee' | 'sso'; language?: string }
 
 export type Site = {
   enabled: boolean
@@ -44,6 +44,8 @@ export type Site = {
   localSignIn: boolean
   signUp: boolean
   matinee: boolean
+  // sso is the single sign-on provider's name, when it's offered.
+  sso?: string
   member?: Member
 }
 

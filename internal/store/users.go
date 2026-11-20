@@ -41,6 +41,16 @@ func (s *Store) UserByName(ctx context.Context, username string) (User, error) {
 	return u, err
 }
 
+// FirstUser is the admin account: the one made when Box Office was set up.
+func (s *Store) FirstUser(ctx context.Context) (User, error) {
+	var u User
+	err := s.row(ctx, "SELECT id, username, password_hash, language FROM users ORDER BY id LIMIT 1").Scan(&u.ID, &u.Username, &u.hash, &u.Language)
+	if errors.Is(err, sql.ErrNoRows) {
+		return u, ErrNotFound
+	}
+	return u, err
+}
+
 func (s *Store) SetPassword(ctx context.Context, id int64, passwordHash string) error {
 	res, err := s.exec(ctx, "UPDATE users SET password_hash = ? WHERE id = ?", passwordHash, id)
 	if err != nil {

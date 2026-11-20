@@ -14,8 +14,9 @@ type Member struct {
 	ID          int64  `json:"id"`
 	Username    string `json:"username"`
 	DisplayName string `json:"displayName"`
-	// Source is local, for an account made here, or matinee, for one that
-	// signs in with its Matinee account.
+	// Source is local, for an account made here, matinee, for one that
+	// signs in with its Matinee account, or sso, for one that signs in
+	// through the single sign-on provider.
 	Source string `json:"source"`
 	// AutoApprove is '' to follow Settings, or on or off for this person.
 	AutoApprove string `json:"autoApprove"`
@@ -84,6 +85,24 @@ func (s *Store) Member(ctx context.Context, id int64) (Member, error) {
 
 func (s *Store) MemberByName(ctx context.Context, username string) (Member, error) {
 	return scanMember(s.row(ctx, "SELECT "+memberCols+" FROM members WHERE username = ?", MemberName(username)))
+}
+
+// MemberBySubject finds the account of someone who signs in through the
+// single sign-on provider, by the provider's id for them.
+func (s *Store) MemberBySubject(ctx context.Context, subject string) (Member, error) {
+	if subject == "" {
+		return Member{}, ErrNotFound
+	}
+	return scanMember(s.row(ctx, "SELECT "+memberCols+" FROM members WHERE source = 'sso' AND subject = ?", subject))
+}
+
+// SetMemberSubject ties an account to the provider's id for the person.
+func (s *Store) SetMemberSubject(ctx context.Context, id int64, subject string) error {
+	res, err := s.exec(ctx, "UPDATE members SET subject = ? WHERE id = ?", subject, id)
+	if err != nil {
+		return err
+	}
+	return affected(res)
 }
 
 func (s *Store) Members(ctx context.Context) ([]Member, error) {

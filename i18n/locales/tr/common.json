@@ -72,5 +72,12 @@
       "unsupported": "Bu tarayıcı bildirim alamıyor.",
       "blocked": "Bildirimler tarayıcıda bu site için engellenmiş. Tarayıcının bu siteye ait ayarlarından izin verin, sonra bunu yeniden açın."
     }
+  },
+  "sso": {
+    "signIn": "{{name}} ile giriş yap",
+    "or": "veya",
+    "refused": "Giriş iptal edildi ya da reddedildi.",
+    "notallowed": "Bu hesabın buraya girmesine izin yok. Bu sunucuyu işleten kişiye sorun.",
+    "failed": "Giriş yapılamadı. Bu sunucuyu işleten kişi nedenini günlükte görebilir."
   }
 }

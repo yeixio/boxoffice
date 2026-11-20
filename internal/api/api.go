@@ -42,6 +42,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/push"
 	"github.com/yeixio/boxoffice/internal/qualitycheck"
 	"github.com/yeixio/boxoffice/internal/search"
+	"github.com/yeixio/boxoffice/internal/sso"
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/subtitles"
 	"github.com/yeixio/boxoffice/internal/tmdb"
@@ -82,6 +83,9 @@ type Server struct {
 	QualityCheck *qualitycheck.Service
 	// Portal is the request site, for the people who ask for titles.
 	Portal *portal.Service
+	// SSO talks to the single sign-on provider; nil makes one.
+	SSO *sso.Client
+	sso ssoState
 	// Push sends push notifications to phones and browsers; nil makes one.
 	Push     *push.Service
 	pushOnce sync.Once
@@ -323,6 +327,7 @@ func (s *Server) Handler() http.Handler {
 	routes = append(routes, s.cleanupRoutes()...)
 	routes = append(routes, s.portalRoutes()...)
 	routes = append(routes, s.pushRoutes()...)
+	routes = append(routes, s.ssoRoutes()...)
 	routes = append(routes, s.gameRoutes()...)
 	routes = append(routes, s.homeRoutes()...)
 	routes = append(routes, s.importRoutes()...)
@@ -598,6 +603,10 @@ func (s *Server) status(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 	out := map[string]any{"product": "boxoffice", "id": id, "setup": n > 0, "version": s.Version}
+	// The sign-in page offers single sign-on under the provider's name.
+	if name, on := s.ssoAdmins(r); on && !s.portalHost(r) {
+		out["sso"] = name
+	}
 	if u, ok := s.authenticate(r); ok {
 		out["user"] = u
 		v, err := s.Store.Setting(r.Context(), settingMovedIn)
@@ -659,13 +668,23 @@ func (s *Server) setup(w http.ResponseWriter, r *http.Request) error {
 }
 
 func (s *Server) signIn(w http.ResponseWriter, r *http.Request, u store.User) error {
-	tok, err := s.Store.CreateSession(r.Context(), u.ID, sessionTTL)
+	tok, err := s.sessionCookie(w, r, u)
 	if err != nil {
 		return err
 	}
+	return writeJSON(w, http.StatusOK, map[string]any{"user": u, "token": tok})
+}
+
+// sessionCookie starts a session for an admin and gives the browser its
+// cookie.
+func (s *Server) sessionCookie(w http.ResponseWriter, r *http.Request, u store.User) (string, error) {
+	tok, err := s.Store.CreateSession(r.Context(), u.ID, sessionTTL)
+	if err != nil {
+		return "", err
+	}
 	http.SetCookie(w, &http.Cookie{Name: cookieName, Value: tok, Path: "/", HttpOnly: true, SameSite: http.SameSiteStrictMode,
 		Secure: r.TLS != nil || r.Header.Get("X-Forwarded-Proto") == "https", MaxAge: int(sessionTTL.Seconds())})
-	return writeJSON(w, http.StatusOK, map[string]any{"user": u, "token": tok})
+	return tok, nil
 }
 
 var dummyHash, _ = bcrypt.GenerateFromPassword([]byte("box office"), bcrypt.DefaultCost)

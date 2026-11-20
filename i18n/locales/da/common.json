@@ -72,5 +72,12 @@
       "unsupported": "Denne browser kan ikke modtage notifikationer.",
       "blocked": "Notifikationer er blokeret for dette websted i browseren. Tillad dem i browserens indstillinger for webstedet, og slå dette til igen."
     }
+  },
+  "sso": {
+    "signIn": "Log ind med {{name}}",
+    "or": "eller",
+    "refused": "Login blev annulleret eller afvist.",
+    "notallowed": "Den konto har ikke adgang her. Spørg den, der driver serveren.",
+    "failed": "Login virkede ikke. Den, der driver serveren, kan se hvorfor i loggen."
   }
 }
