@@ -201,3 +201,43 @@ func TestMoveToTopDoesntStopForced(t *testing.T) {
 		t.Fatalf("the first moved to the top is %s: it made way for the second", d.Status)
 	}
 }
+
+// With the download order set to stop the one on for one ranked ahead of
+// it, a new episode grabbed while an upgrade downloads has the upgrade
+// make way; without it, the upgrade goes on.
+func TestPriorityMakesWay(t *testing.T) {
+	for _, preempt := range []bool{true, false} {
+		t.Run(map[bool]string{true: "preempt", false: "wait"}[preempt], func(t *testing.T) {
+			srv := nntptest.New()
+			defer srv.Close()
+			data, _, _ := release(t, srv, false)
+			e, st := newEngine(t, srv)
+			ctx := context.Background()
+			if err := st.SaveQueuePriority(ctx, store.QueuePriority{NewDays: 14, Preempt: preempt}); err != nil {
+				t.Fatal(err)
+			}
+			enable(t, st, Settings{SpeedLimit: 10})
+			run(t, e)
+			a, err := e.Add(ctx, store.Download{Kind: "movie", Reason: store.ReasonUpgrade}, data)
+			if err != nil {
+				t.Fatal(err)
+			}
+			waitFor(t, st, a.ID, store.DownloadDownloading)
+			b, err := e.Add(ctx, store.Download{Kind: "series", Reason: store.ReasonNew}, data)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if preempt {
+				waitFor(t, st, b.ID, store.DownloadDownloading)
+				if a, _ = st.Download(ctx, a.ID); a.Status != store.DownloadQueued {
+					t.Fatalf("the upgrade is %s, want queued", a.Status)
+				}
+				return
+			}
+			time.Sleep(500 * time.Millisecond)
+			if a, _ = st.Download(ctx, a.ID); a.Status != store.DownloadDownloading {
+				t.Fatalf("the upgrade is %s: it made way with preempting off", a.Status)
+			}
+		})
+	}
+}

@@ -945,7 +945,8 @@
     "keep": "Simpan",
     "blockMany": "Tambahkan rilis ini ke daftar blokir",
     "blockOne": "Tambahkan rilis ini ke daftar blokir",
-    "blockHint": "Pencarian melewati rilis yang diblokir, jadi tidak diambil lagi. Nonaktifkan ini untuk mengizinkannya nanti."
+    "blockHint": "Pencarian melewati rilis yang diblokir, jadi tidak diambil lagi. Nonaktifkan ini untuk mengizinkannya nanti.",
+    "unpin": "Kembali ke tempatnya"
   },
   "settings": {
     "tmdbIntro": "Box Office mencari film dan acara di TMDB. Dapatkan kunci gratis di <link>themoviedb.org</link>; kunci API maupun token akses baca yang lebih panjang sama-sama berfungsi.",
@@ -1657,7 +1658,10 @@
       "clear": "Hapus filter",
       "pickAll_other": "Pilih semua ({{count}})",
       "pickShown_other": "Pilih semua yang ditampilkan ({{count}})"
-    }
+    },
+    "pinnedTop": "Dipindah ke atas",
+    "pinnedBottom": "Dipindah ke bawah",
+    "unpin": "Kembali ke tempatnya dalam urutan"
   },
   "req": {
     "tabs": {
@@ -2753,5 +2757,31 @@
     "stays": "Film dan salinan pertamanya tetap ada.",
     "stop": "Berhenti menyimpan salinan kedua",
     "again": "Jika tidak, Box Office akan mencari salinan kedua dan mengunduhnya lagi."
+  },
+  "order": {
+    "title": "Urutan unduhan",
+    "sub": "Unduhan yang menunggu berjalan dengan urutan ini, dari atas. Menyimpan urutan baru langsung mengurutkan ulang antrean. Unduhan yang Anda pindahkan ke atas atau bawah secara manual tetap di tempatnya.",
+    "groups": {
+      "new-episodes": "Episode baru",
+      "new-movies": "Film baru",
+      "backlog-episodes": "Episode lama yang hilang",
+      "backlog-movies": "Film lama yang hilang",
+      "books": "Buku dan buku audio",
+      "music": "Musik",
+      "games": "Game",
+      "replacements": "Pengganti salinan rusak",
+      "fixes": "Perbaikan PROPER dan REPACK",
+      "second-copies": "Salinan kedua film",
+      "upgrades": "Peningkatan kualitas",
+      "other": "Ditambahkan manual"
+    },
+    "waiting": "{{n}} menunggu",
+    "up": "Naikkan",
+    "down": "Turunkan",
+    "reset": "Kembali ke urutan bawaan",
+    "newDays": "Hari sebuah rilis dianggap baru",
+    "newDaysHint": "Film atau episode dianggap baru selama sekian hari setelah tayang atau rilis untuk dibeli atau di-streaming. Setelah itu menjadi yang hilang lebih lama.",
+    "preempt": "Hentikan unduhan yang berjalan demi yang berperingkat lebih tinggi",
+    "preemptHint": "Yang dihentikan lanjut dari posisinya nanti. Jika mati, yang baru menunggu gilirannya."
   }
 }

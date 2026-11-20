@@ -11,6 +11,7 @@ import {
   Play,
   RotateCcw,
   Trash2,
+  Undo2,
   X,
 } from "lucide-react";
 import { post, type Download } from "../api";
@@ -25,6 +26,7 @@ export type BulkAction =
   | "reprocess"
   | "top"
   | "bottom"
+  | "unpin"
   | "remove";
 
 type BulkResult = { done: number; failed: { id: number; error: string }[] };
@@ -56,6 +58,7 @@ const applies: Record<
       "dlBulk.bottom",
       (d) => d.status === "queued" || d.status === "paused",
     ],
+    ["unpin", "dlBulk.unpin", (d) => !!d.pinned],
     ["remove", "dlBulk.remove", (d) => !working(d)],
   ],
   history: [
@@ -79,6 +82,7 @@ const icons: Record<BulkAction, React.ReactNode> = {
   resume: <Play className="size-4" aria-hidden />,
   top: <ArrowUpToLine className="size-4" aria-hidden />,
   bottom: <ArrowDownToLine className="size-4" aria-hidden />,
+  unpin: <Undo2 className="size-4" aria-hidden />,
   remove: <Trash2 className="size-4" aria-hidden />,
   import: <FolderInput className="size-4" aria-hidden />,
   reprocess: <PackageOpen className="size-4" aria-hidden />,

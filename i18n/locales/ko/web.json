@@ -945,7 +945,8 @@
     "keep": "그대로 두기",
     "blockMany": "이 릴리스들을 차단 목록에 추가",
     "blockOne": "이 릴리스를 차단 목록에 추가",
-    "blockHint": "검색은 차단된 릴리스를 건너뛰어서 다시 받지 않아요. 나중에 허용하려면 끄세요."
+    "blockHint": "검색은 차단된 릴리스를 건너뛰어서 다시 받지 않아요. 나중에 허용하려면 끄세요.",
+    "unpin": "제자리로 되돌리기"
   },
   "settings": {
     "tmdbIntro": "Box Office는 영화와 프로그램을 TMDB에서 찾아요. <link>themoviedb.org</link>에서 무료 키를 받으세요. API 키와 더 긴 읽기 액세스 토큰 모두 쓸 수 있어요.",
@@ -1657,7 +1658,10 @@
       "clear": "필터 지우기",
       "pickAll_other": "모두 선택 ({{count}})",
       "pickShown_other": "표시된 항목 모두 선택 ({{count}})"
-    }
+    },
+    "pinnedTop": "맨 위로 옮김",
+    "pinnedBottom": "맨 아래로 옮김",
+    "unpin": "순서상 제자리로 되돌리기"
   },
   "req": {
     "tabs": {
@@ -2753,5 +2757,31 @@
     "stays": "영화와 첫 번째 사본은 그대로 남습니다.",
     "stop": "두 번째 사본 보관 중지",
     "again": "그러지 않으면 Box Office가 두 번째 사본을 찾아 다시 다운로드합니다."
+  },
+  "order": {
+    "title": "다운로드 순서",
+    "sub": "대기 중인 다운로드는 이 순서대로 위에서부터 진행됩니다. 새 순서를 저장하면 대기열이 바로 다시 정렬됩니다. 직접 맨 위나 맨 아래로 옮긴 다운로드는 그 자리에 그대로 있습니다.",
+    "groups": {
+      "new-episodes": "새 에피소드",
+      "new-movies": "새 영화",
+      "backlog-episodes": "이전에 빠진 에피소드",
+      "backlog-movies": "이전에 빠진 영화",
+      "books": "책과 오디오북",
+      "music": "음악",
+      "games": "게임",
+      "replacements": "불량 사본 교체",
+      "fixes": "PROPER 및 REPACK 수정본",
+      "second-copies": "영화의 두 번째 사본",
+      "upgrades": "더 나은 화질로 업그레이드",
+      "other": "직접 추가함"
+    },
+    "waiting": "대기 {{n}}개",
+    "up": "위로",
+    "down": "아래로",
+    "reset": "기본 순서로 되돌리기",
+    "newDays": "릴리스를 새것으로 보는 일수",
+    "newDaysHint": "영화나 에피소드는 방영 또는 구매·스트리밍 출시 후 이 일수 동안 새것으로 봅니다. 그 뒤에는 이전에 빠진 항목입니다.",
+    "preempt": "더 앞 순위가 오면 진행 중인 다운로드 멈추기",
+    "preemptHint": "멈춘 다운로드는 나중에 이어서 받습니다. 끄면 새 다운로드가 차례를 기다립니다."
   }
 }

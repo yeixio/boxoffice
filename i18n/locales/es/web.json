@@ -1093,7 +1093,8 @@
     "keep": "Conservarlos",
     "blockMany": "Añadir estos releases a la lista de bloqueo",
     "blockOne": "Añadir este release a la lista de bloqueo",
-    "blockHint": "Las búsquedas omiten un release bloqueado, para que no se vuelva a obtener. Desactiva esto para permitirlo más tarde."
+    "blockHint": "Las búsquedas omiten un release bloqueado, para que no se vuelva a obtener. Desactiva esto para permitirlo más tarde.",
+    "unpin": "Volver a su lugar"
   },
   "settings": {
     "tmdbIntro": "Box Office busca películas y series en TMDB. Consigue una clave gratis en <link>themoviedb.org</link>; sirven tanto la clave API como el token de acceso de lectura, más largo.",
@@ -1851,7 +1852,10 @@
       "pickShown_one": "Seleccionar todo lo mostrado ({{count}})",
       "pickShown_many": "Seleccionar todo lo mostrado ({{count}})",
       "pickShown_other": "Seleccionar todo lo mostrado ({{count}})"
-    }
+    },
+    "pinnedTop": "Movida arriba",
+    "pinnedBottom": "Movida abajo",
+    "unpin": "Volver a su lugar en el orden"
   },
   "req": {
     "tabs": {
@@ -2999,5 +3003,31 @@
     "stays": "La película y su primera copia se quedan.",
     "stop": "Dejar de conservar una segunda copia",
     "again": "Si no, Box Office buscará una segunda copia y la descargará otra vez."
+  },
+  "order": {
+    "title": "Orden de descargas",
+    "sub": "Las descargas en espera siguen este orden, de arriba abajo. Al guardar un orden nuevo, la cola se reordena al momento. Las descargas que moviste arriba o abajo a mano se quedan donde las pusiste.",
+    "groups": {
+      "new-episodes": "Episodios nuevos",
+      "new-movies": "Películas nuevas",
+      "backlog-episodes": "Episodios antiguos que faltan",
+      "backlog-movies": "Películas antiguas que faltan",
+      "books": "Libros y audiolibros",
+      "music": "Música",
+      "games": "Juegos",
+      "replacements": "Reemplazos de copias defectuosas",
+      "fixes": "Correcciones PROPER y REPACK",
+      "second-copies": "Segundas copias de películas",
+      "upgrades": "Mejoras de calidad",
+      "other": "Añadidas a mano"
+    },
+    "waiting": "{{n}} en espera",
+    "up": "Subir",
+    "down": "Bajar",
+    "reset": "Volver al orden predeterminado",
+    "newDays": "Días que un estreno cuenta como nuevo",
+    "newDaysHint": "Una película o episodio es nuevo durante estos días después de emitirse o salir a la venta o en streaming. Después, es uno antiguo que falta.",
+    "preempt": "Detener la descarga en curso por una con más prioridad",
+    "preemptHint": "La detenida sigue después desde donde estaba. Si está desactivado, la nueva espera su turno."
   }
 }

@@ -1019,7 +1019,8 @@
     "keep": "Behouden",
     "blockMany": "Deze releases aan de blokkeerlijst toevoegen",
     "blockOne": "Deze release aan de blokkeerlijst toevoegen",
-    "blockHint": "Zoekopdrachten slaan een geblokkeerde release over, zodat hij niet opnieuw wordt gegrabd. Zet dit uit om hem later toe te staan."
+    "blockHint": "Zoekopdrachten slaan een geblokkeerde release over, zodat hij niet opnieuw wordt gegrabd. Zet dit uit om hem later toe te staan.",
+    "unpin": "Terug naar hun plek"
   },
   "settings": {
     "tmdbIntro": "Box Office zoekt films en series op bij TMDB. Haal een gratis sleutel op <link>themoviedb.org</link>; zowel de API-sleutel als het langere leestoegangstoken werkt.",
@@ -1754,7 +1755,10 @@
       "pickAll_other": "Alles selecteren ({{count}})",
       "pickShown_one": "Alle getoonde selecteren ({{count}})",
       "pickShown_other": "Alle getoonde selecteren ({{count}})"
-    }
+    },
+    "pinnedTop": "Naar boven verplaatst",
+    "pinnedBottom": "Naar onder verplaatst",
+    "unpin": "Terug naar zijn plek in de volgorde"
   },
   "req": {
     "tabs": {
@@ -2876,5 +2880,31 @@
     "stays": "De film en de eerste kopie blijven.",
     "stop": "Geen tweede kopie meer bewaren",
     "again": "Anders zoekt Box Office weer een tweede kopie en downloadt die opnieuw."
+  },
+  "order": {
+    "title": "Downloadvolgorde",
+    "sub": "Wachtende downloads gaan in deze volgorde, van boven naar beneden. Een nieuwe volgorde opslaan sorteert de wachtrij meteen opnieuw. Downloads die je met de hand naar boven of onder hebt verplaatst, blijven waar je ze zette.",
+    "groups": {
+      "new-episodes": "Nieuwe afleveringen",
+      "new-movies": "Nieuwe films",
+      "backlog-episodes": "Oudere ontbrekende afleveringen",
+      "backlog-movies": "Oudere ontbrekende films",
+      "books": "Boeken en luisterboeken",
+      "music": "Muziek",
+      "games": "Games",
+      "replacements": "Vervangingen voor slechte kopieën",
+      "fixes": "PROPER- en REPACK-correcties",
+      "second-copies": "Tweede kopieën van films",
+      "upgrades": "Upgrades naar betere kwaliteit",
+      "other": "Met de hand toegevoegd"
+    },
+    "waiting": "{{n}} wachtend",
+    "up": "Omhoog",
+    "down": "Omlaag",
+    "reset": "Terug naar de standaardvolgorde",
+    "newDays": "Dagen dat een release als nieuw telt",
+    "newDaysHint": "Een film of aflevering is zoveel dagen nieuw nadat hij is uitgezonden of te koop of te streamen is. Daarna is het een oudere ontbrekende.",
+    "preempt": "Lopende download stoppen voor een hoger gerangschikte",
+    "preemptHint": "De gestopte gaat daarna verder waar hij was. Uit: de nieuwe wacht op zijn beurt."
   }
 }

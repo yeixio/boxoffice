@@ -162,6 +162,8 @@ func run() error {
 		}}
 	finder := &search.Service{Store: db, Engine: downloads, Client: &search.Client{Spacing: search.DefaultSpacing}, Log: log}
 	finder.Register(runner)
+	// Downloads grabbed before the download order kept why are placed in it.
+	go finder.SortOutQueue(context.Background())
 	// A download that fails is blocked, and something else looked for.
 	downloads.Failed = func(ctx context.Context, d store.Download, why string) {
 		// Releases gone from the news servers are common and need nothing

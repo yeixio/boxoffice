@@ -1019,7 +1019,8 @@
     "keep": "Megtartás",
     "blockMany": "Ezeknek a kiadásoknak a tiltólistára tétele",
     "blockOne": "Ennek a kiadásnak a tiltólistára tétele",
-    "blockHint": "A keresések kihagyják a letiltott kiadást, így nem töltődik le újra. Kapcsold ki, ha később engedélyezni szeretnéd."
+    "blockHint": "A keresések kihagyják a letiltott kiadást, így nem töltődik le újra. Kapcsold ki, ha később engedélyezni szeretnéd.",
+    "unpin": "Vissza a helyükre"
   },
   "settings": {
     "tmdbIntro": "A Box Office a TMDB-n keresi meg a filmeket és sorozatokat. Szerezz ingyenes kulcsot a <link>themoviedb.org</link> oldalon; az API-kulcs és a hosszabb olvasási hozzáférési token is működik.",
@@ -1754,7 +1755,10 @@
       "pickAll_other": "Összes kijelölése ({{count}})",
       "pickShown_one": "Összes látható kijelölése ({{count}})",
       "pickShown_other": "Összes látható kijelölése ({{count}})"
-    }
+    },
+    "pinnedTop": "A tetejére téve",
+    "pinnedBottom": "Az aljára téve",
+    "unpin": "Vissza a helyére a sorrendben"
   },
   "req": {
     "tabs": {
@@ -2876,5 +2880,31 @@
     "stays": "A film és az első példánya megmarad.",
     "stop": "Ne maradjon második példány",
     "again": "Különben a Box Office újra keres egy második példányt, és letölti."
+  },
+  "order": {
+    "title": "Letöltési sorrend",
+    "sub": "A várakozó letöltések ebben a sorrendben mennek, fentről lefelé. Új sorrend mentésekor a sor azonnal átrendeződik. A kézzel a tetejére vagy aljára tett letöltések ott maradnak.",
+    "groups": {
+      "new-episodes": "Új epizódok",
+      "new-movies": "Új filmek",
+      "backlog-episodes": "Régebbi hiányzó epizódok",
+      "backlog-movies": "Régebbi hiányzó filmek",
+      "books": "Könyvek és hangoskönyvek",
+      "music": "Zene",
+      "games": "Játékok",
+      "replacements": "Hibás másolatok cseréi",
+      "fixes": "PROPER és REPACK javítások",
+      "second-copies": "Filmek második példányai",
+      "upgrades": "Jobb minőségre váltás",
+      "other": "Kézzel hozzáadott"
+    },
+    "waiting": "{{n}} vár",
+    "up": "Fel",
+    "down": "Le",
+    "reset": "Vissza az alapértelmezett sorrendhez",
+    "newDays": "Napok, ameddig egy kiadás újnak számít",
+    "newDaysHint": "Egy film vagy epizód ennyi napig új a sugárzása vagy megvásárolható, streamelhető megjelenése után. Utána régebbi hiányzó.",
+    "preempt": "A futó letöltés leállítása egy előrébb soroltért",
+    "preemptHint": "A leállított utána onnan folytatja, ahol tartott. Kikapcsolva az új kivárja a sorát."
   }
 }

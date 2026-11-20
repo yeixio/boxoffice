@@ -1019,7 +1019,8 @@
     "keep": "Kalsınlar",
     "blockMany": "Bu sürümleri engel listesine ekle",
     "blockOne": "Bu sürümü engel listesine ekle",
-    "blockHint": "Aramalar engellenen bir sürümü atlar, böylece yeniden indirilmez. Daha sonra izin vermek için bunu kapatın."
+    "blockHint": "Aramalar engellenen bir sürümü atlar, böylece yeniden indirilmez. Daha sonra izin vermek için bunu kapatın.",
+    "unpin": "Yerlerine geri koy"
   },
   "settings": {
     "tmdbIntro": "Box Office filmleri ve dizileri TMDB'de arar. <link>themoviedb.org</link> adresinden ücretsiz bir anahtar alın; hem API anahtarı hem de daha uzun okuma erişim belirteci çalışır.",
@@ -1754,7 +1755,10 @@
       "pickAll_other": "Tümünü seç ({{count}})",
       "pickShown_one": "Gösterilenlerin tümünü seç ({{count}})",
       "pickShown_other": "Gösterilenlerin tümünü seç ({{count}})"
-    }
+    },
+    "pinnedTop": "En üste taşındı",
+    "pinnedBottom": "En alta taşındı",
+    "unpin": "Sıradaki yerine geri koy"
   },
   "req": {
     "tabs": {
@@ -2876,5 +2880,31 @@
     "stays": "Film ve ilk kopyası kalır.",
     "stop": "İkinci kopya saklamayı bırak",
     "again": "Yoksa Box Office yeniden bir ikinci kopya arayıp indirir."
+  },
+  "order": {
+    "title": "İndirme sırası",
+    "sub": "Bekleyen indirmeler yukarıdan aşağıya bu sırayla yapılır. Yeni bir sıra kaydetmek kuyruğu hemen yeniden sıralar. Elle en üste veya en alta taşıdığınız indirmeler koyduğunuz yerde kalır.",
+    "groups": {
+      "new-episodes": "Yeni bölümler",
+      "new-movies": "Yeni filmler",
+      "backlog-episodes": "Eski eksik bölümler",
+      "backlog-movies": "Eski eksik filmler",
+      "books": "Kitaplar ve sesli kitaplar",
+      "music": "Müzik",
+      "games": "Oyunlar",
+      "replacements": "Kötü kopyaların yerine gelenler",
+      "fixes": "PROPER ve REPACK düzeltmeleri",
+      "second-copies": "Filmlerin ikinci kopyaları",
+      "upgrades": "Daha iyi kaliteye yükseltmeler",
+      "other": "Elle eklenenler"
+    },
+    "waiting": "{{n}} bekliyor",
+    "up": "Yukarı taşı",
+    "down": "Aşağı taşı",
+    "reset": "Varsayılan sıraya dön",
+    "newDays": "Bir sürümün yeni sayıldığı gün sayısı",
+    "newDaysHint": "Bir film veya bölüm, yayınlanmasından ya da satın alma veya yayın için çıkmasından sonra bu kadar gün yeni sayılır. Sonra eski bir eksik olur.",
+    "preempt": "Önde sıralanan biri için süren indirmeyi durdur",
+    "preemptHint": "Durdurulan sonra kaldığı yerden devam eder. Kapalıyken yeni olan sırasını bekler."
   }
 }
