@@ -631,7 +631,7 @@ function RootFolders({ kind, type }: { kind: RootKind; type?: MediaType }) {
             {f.accessible ? <span className="text-xs text-muted">{t('settings.free', { size: bytes(f.freeSpace) })}</span> : <Badge tone="bad">{t('settings.cantSee')}</Badge>}
             {f.accessible && scannable(kind) && <ScanButton folder={f} />}
             {f.accessible && kind === 'game' && <GameCheckButton rootId={f.id} />}
-            {(kind === 'movie' || kind === 'series') && f.titles > 0 && (folders.data?.length ?? 0) > 1 && (
+            {(kind === 'movie' || kind === 'series') && f.titles > 0 && (
               <Button variant="ghost" onClick={() => setMoving(f.path)}>
                 <FolderInput className="size-4" aria-hidden /> {t('relocate.moveAll')}
               </Button>
