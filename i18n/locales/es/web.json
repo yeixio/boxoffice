@@ -135,7 +135,9 @@
     "grabCount_other": "{{count}} descargas",
     "notPicked": "No elegido: {{why}}",
     "inQueue": "En la cola",
-    "grab": "Obtener"
+    "grab": "Obtener",
+    "preferred": "El perfil prefiere: {{words}}",
+    "avoided": "El perfil evita: {{words}}. Solo se elige cuando no hay nada más de esta calidad."
   },
   "remove": {
     "deletesFolder_one": "Borra la carpeta <code>{{folder}}</code> y todo lo que contiene: <strong>{{count}} archivo</strong>, <strong>{{size}}</strong>.",
@@ -1278,7 +1280,20 @@
     "sizeMin": "Como mínimo",
     "sizeMax": "Como máximo",
     "sizesNote": "A un lanzamiento cuyo nombre no dice cómo está codificado el vídeo se le aplican los números de H.264, y un título sin duración conocida no se comprueba. Aun así puedes elegir tú cualquier lanzamiento.",
-    "sizesOn": ", límites de tamaño"
+    "sizesOn": ", límites de tamaño",
+    "prefs": "Preferencias de lanzamientos",
+    "prefsHint": "Palabras y grupos en el nombre de un lanzamiento que se prefieren o se evitan. Entre lanzamientos de la misma calidad se elige el que tiene más palabras preferidas, y uno con una palabra evitada solo cuando no hay nada más.",
+    "prefsBest": "La mejor imagen y sonido",
+    "prefsSmall": "Archivos más pequeños",
+    "prefsPoor": "Evitar reescalados y lanzamientos pobres",
+    "prefsPrefers": "Prefiere {{words}}.",
+    "prefsAvoids": "Evita {{words}}.",
+    "prefsPrefer": "Preferir",
+    "prefsAvoid": "Evitar",
+    "prefsNever": "No tomar nunca",
+    "prefsWordsHint": "Separa las palabras con comas. Una palabra debe coincidir entera, en mayúsculas o no, en la parte del nombre que sigue al título.",
+    "prefsNeverHint": "Un lanzamiento con una de estas se rechaza. Aun así puedes elegirlo tú.",
+    "prefsOn": ", preferencias de lanzamientos"
   },
   "mediaTypes": {
     "music": {

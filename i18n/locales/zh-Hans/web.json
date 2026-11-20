@@ -117,7 +117,9 @@
     "grabCount_other": "抓取 {{count}} 次",
     "notPicked": "未选中：{{why}}",
     "inQueue": "在队列中",
-    "grab": "抓取"
+    "grab": "抓取",
+    "preferred": "画质配置优先：{{words}}",
+    "avoided": "画质配置避开：{{words}}。只在这个画质没有其他选择时才选。"
   },
   "remove": {
     "deletesFolder_other": "删除文件夹 <code>{{folder}}</code> 及其中所有内容：<strong>{{count}} 个文件</strong>，<strong>{{size}}</strong>。",
@@ -1124,7 +1126,20 @@
     "sizeMin": "最小",
     "sizeMax": "最大",
     "sizesNote": "名称里没有写明视频编码的发布按 H.264 的数值处理，片长未知的影片不会检查。你仍然可以自己选择任何发布。",
-    "sizesOn": "，有大小限制"
+    "sizesOn": "，有大小限制",
+    "prefs": "发布偏好",
+    "prefsHint": "发布名称中要优先或避开的词和发布组。在相同画质的发布中，选中优先词最多的那个；含有避开词的发布只在没有其他选择时才选。",
+    "prefsBest": "最佳画质和音质",
+    "prefsSmall": "更小的文件",
+    "prefsPoor": "避开放大版和劣质发布",
+    "prefsPrefers": "优先：{{words}}。",
+    "prefsAvoids": "避开：{{words}}。",
+    "prefsPrefer": "优先",
+    "prefsAvoid": "避开",
+    "prefsNever": "绝不获取",
+    "prefsWordsHint": "用逗号分隔各个词。词要在名称中标题之后的部分整词匹配，不区分大小写。",
+    "prefsNeverHint": "含有其中任何一个词的发布会被拒绝。你仍然可以自己选择它。",
+    "prefsOn": "，有发布偏好"
   },
   "mediaTypes": {
     "music": {

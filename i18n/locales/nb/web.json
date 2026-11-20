@@ -126,7 +126,9 @@
     "grabCount_other": "{{count}} hentinger",
     "notPicked": "Ikke valgt: {{why}}",
     "inQueue": "I køen",
-    "grab": "Hent"
+    "grab": "Hent",
+    "preferred": "Profilen foretrekker: {{words}}",
+    "avoided": "Profilen unngår: {{words}}. Velges bare når det ikke finnes noe annet i denne kvaliteten."
   },
   "remove": {
     "deletesFolder_one": "Sletter mappen <code>{{folder}}</code> og alt i den: <strong>{{count}} fil</strong>, <strong>{{size}}</strong>.",
@@ -1201,7 +1203,20 @@
     "sizeMin": "Minst",
     "sizeMax": "Høyst",
     "sizesNote": "En utgivelse der navnet ikke sier hvordan videoen er pakket, følger tallene for H.264, og en tittel uten kjent spilletid sjekkes ikke. Du kan fortsatt velge hvilken som helst utgivelse selv.",
-    "sizesOn": ", størrelsesgrenser"
+    "sizesOn": ", størrelsesgrenser",
+    "prefs": "Preferanser for utgivelser",
+    "prefsHint": "Ord og utgivelsesgrupper i navnet på en utgivelse som skal foretrekkes eller unngås. Blant utgivelser i samme kvalitet velges den med flest foretrukne ord, og en med et unngått ord bare når det ikke finnes noe annet.",
+    "prefsBest": "Beste bilde og lyd",
+    "prefsSmall": "Mindre filer",
+    "prefsPoor": "Unngå oppskaleringer og dårlige utgivelser",
+    "prefsPrefers": "Foretrekker {{words}}.",
+    "prefsAvoids": "Unngår {{words}}.",
+    "prefsPrefer": "Foretrekk",
+    "prefsAvoid": "Unngå",
+    "prefsNever": "Ta aldri",
+    "prefsWordsHint": "Skill ord med komma. Et ord må stemme helt, med store eller små bokstaver, i den delen av navnet som kommer etter tittelen.",
+    "prefsNeverHint": "En utgivelse med ett av disse avvises. Du kan fortsatt velge den selv.",
+    "prefsOn": ", preferanser for utgivelser"
   },
   "mediaTypes": {
     "music": {

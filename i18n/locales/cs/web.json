@@ -144,7 +144,9 @@
     "grabCount_other": "{{count}} stažení",
     "notPicked": "Nevybráno: {{why}}",
     "inQueue": "Ve frontě",
-    "grab": "Stáhnout"
+    "grab": "Stáhnout",
+    "preferred": "Profil upřednostňuje: {{words}}",
+    "avoided": "Profil se vyhýbá: {{words}}. Vybere se jen tehdy, když v této kvalitě není nic jiného."
   },
   "remove": {
     "deletesFolder_one": "Smaže složku <code>{{folder}}</code> a vše v ní: <strong>{{count}} soubor</strong>, <strong>{{size}}</strong>.",
@@ -1355,7 +1357,20 @@
     "sizeMin": "Nejméně",
     "sizeMax": "Nejvíce",
     "sizesNote": "Vydání, jehož název neuvádí kodek videa, se řídí čísly pro H.264 a titul bez známé délky se nekontroluje. Kterékoli vydání si stále můžete vybrat sami.",
-    "sizesOn": ", limity velikosti"
+    "sizesOn": ", limity velikosti",
+    "prefs": "Předvolby vydání",
+    "prefsHint": "Slova a release skupiny v názvu vydání, které se mají upřednostnit nebo jim vyhnout. Mezi vydáními stejné kvality se vybere to s nejvíce upřednostňovanými slovy a vydání se slovem, kterému se vyhýbáte, jen když není nic jiného.",
+    "prefsBest": "Nejlepší obraz a zvuk",
+    "prefsSmall": "Menší soubory",
+    "prefsPoor": "Vyhnout se upscalům a špatným vydáním",
+    "prefsPrefers": "Upřednostňuje {{words}}.",
+    "prefsAvoids": "Vyhýbá se {{words}}.",
+    "prefsPrefer": "Upřednostnit",
+    "prefsAvoid": "Vyhnout se",
+    "prefsNever": "Nikdy nebrat",
+    "prefsWordsHint": "Slova oddělte čárkami. Slovo se hledá celé, bez ohledu na velikost písmen, v části názvu za titulem.",
+    "prefsNeverHint": "Vydání s některým z těchto slov se odmítne. Stále si ho můžete vybrat sami.",
+    "prefsOn": ", předvolby vydání"
   },
   "mediaTypes": {
     "music": {

@@ -135,7 +135,9 @@
     "grabCount_other": "{{count}} de descărcări",
     "notPicked": "Neales: {{why}}",
     "inQueue": "În coadă",
-    "grab": "Descarcă"
+    "grab": "Descarcă",
+    "preferred": "Profilul preferă: {{words}}",
+    "avoided": "Profilul evită: {{words}}. Aleasă doar când nu există altceva de această calitate."
   },
   "remove": {
     "deletesFolder_one": "Șterge dosarul <code>{{folder}}</code> și tot ce conține: <strong>{{count}} fișier</strong>, <strong>{{size}}</strong>.",
@@ -1278,7 +1280,20 @@
     "sizeMin": "Cel puțin",
     "sizeMax": "Cel mult",
     "sizesNote": "Unei lansări al cărei nume nu spune cum este codat videoclipul i se aplică numerele pentru H.264, iar un titlu fără durată cunoscută nu este verificat. Poți alege în continuare singur orice lansare.",
-    "sizesOn": ", limite de dimensiune"
+    "sizesOn": ", limite de dimensiune",
+    "prefs": "Preferințe pentru lansări",
+    "prefsHint": "Cuvinte și grupuri de lansare din numele unei lansări, de preferat sau de evitat. Dintre lansările de aceeași calitate este aleasă cea cu cele mai multe cuvinte preferate, iar una cu un cuvânt evitat doar când nu există altceva.",
+    "prefsBest": "Cea mai bună imagine și cel mai bun sunet",
+    "prefsSmall": "Fișiere mai mici",
+    "prefsPoor": "Evită upscale-urile și lansările slabe",
+    "prefsPrefers": "Preferă {{words}}.",
+    "prefsAvoids": "Evită {{words}}.",
+    "prefsPrefer": "Preferă",
+    "prefsAvoid": "Evită",
+    "prefsNever": "Nu lua niciodată",
+    "prefsWordsHint": "Separă cuvintele prin virgule. Un cuvânt trebuie să se potrivească întreg, cu majuscule sau nu, în partea numelui de după titlu.",
+    "prefsNeverHint": "O lansare cu unul dintre acestea este respinsă. O poți alege în continuare singur.",
+    "prefsOn": ", preferințe pentru lansări"
   },
   "mediaTypes": {
     "music": {

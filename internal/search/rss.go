@@ -375,6 +375,12 @@ func (s *Service) takeFromFeed(ctx context.Context, releases []Release, skip fun
 		if !c.Accepted {
 			continue // too new yet, and held back (holdYoung)
 		}
+		if len(c.Avoided) > 0 {
+			// The profile avoids it. RSS sync sees releases a few at a
+			// time, so it's left for a search, which can tell whether
+			// there's anything better.
+			continue
+		}
 		var keys []string
 		if c.kind == "movie" {
 			keys = []string{fmt.Sprintf("m%d", c.titleID)}

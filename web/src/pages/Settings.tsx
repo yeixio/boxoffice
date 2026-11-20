@@ -5,7 +5,7 @@ import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState, type R
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AlertTriangle, ArrowRight, ArrowRightLeft, CircleCheck, Copy, Database, Lock, Search, Folder, FolderUp, KeyRound, LoaderCircle, Plus, RotateCcw, Trash2 } from 'lucide-react'
-import { api, del, get, post, put, type Status, type MediaType, type MediaTypeKey, type DatabaseInfo, type Profile, type ProfileSizes, type Recycle, type RestartInfo, type RootFolder, type RootKind, type Settings as SettingsData, type ShowDefaults, type SystemInfo } from '../api'
+import { api, del, get, post, put, type Status, type MediaType, type MediaTypeKey, type DatabaseInfo, type Profile, type ProfilePrefs, type ProfilePreset, type ProfileSizes, type Recycle, type RestartInfo, type RootFolder, type RootKind, type Settings as SettingsData, type ShowDefaults, type SystemInfo } from '../api'
 import { bytes, day } from '../format'
 import { AddRulesCard } from './AddRules'
 import { monitorOptions, useProfiles, useQualities, useRootFolders, useShowDefaults } from '../hooks'
@@ -105,7 +105,7 @@ const sections: SectionDef[] = [
         keys: ['conn.address', 'conn.indexer.apiKey', 'conn.indexer.kind', 'conn.indexer.categories', 'conn.indexer.apiPath', 'conn.indexer.priority', 'conn.auto.perDay', 'conn.indexer.grabs', 'conn.indexer.forSearch', 'conn.indexer.forRss'],
         terms: ['Prowlarr', 'Newznab', 'Torznab', 'NZB', 'API'],
       },
-      { id: 'profiles', el: <Profiles />, keys: ['settings.newProfileTitle', 'settings.qualities', 'settings.goodEnough', 'settings.upgradeUntil', 'settings.sizes'] },
+      { id: 'profiles', el: <Profiles />, keys: ['settings.newProfileTitle', 'settings.qualities', 'settings.goodEnough', 'settings.upgradeUntil', 'settings.sizes', 'settings.prefs'] },
       { id: 'automatic-searches', el: <AutoSearchSettings />, inner: true, terms: ['RSS'] },
       { id: 'data-cap', el: <DataCapSettingsCard />, inner: true },
     ],
@@ -901,6 +901,7 @@ function Profiles() {
                 {t('settings.profileSummary', { count: p.allowed.length, cutoff: name(p.cutoff) })}
                 {p.upgrade ? t('settings.upgradesOn') : ''}
                 {anySizes(p.sizes) ? t('settings.sizesOn') : ''}
+                {anyPrefs(p.prefs) ? t('settings.prefsOn') : ''}
               </span>
             </button>
             )}
@@ -930,6 +931,17 @@ function sizesOf(text: SizeText): ProfileSizes {
   return { h264: of('h264'), hevc: of('hevc'), av1: of('av1') }
 }
 
+const anyPrefs = (p?: ProfilePrefs) => !!p && [p.presets, p.prefer, p.avoid, p.never].some((l) => l?.length)
+
+// Words as typed in one box, separated by commas or new lines.
+const wordsOf = (text: string) => text.split(/[,\n]/).map((w) => w.trim()).filter(Boolean)
+
+// What the word boxes suggest; release names, so the same in every language.
+const prefExample = 'x265, NTb, Atmos'
+
+// The ready-made preferences' names.
+const presetNames: Record<string, string> = { best: 'settings.prefsBest', small: 'settings.prefsSmall', poor: 'settings.prefsPoor' }
+
 function ProfileEditor({ profile, onClose }: { profile: Profile | null; onClose: () => void }) {
   const { t } = useTranslation()
   const qc = useQueryClient()
@@ -939,13 +951,16 @@ function ProfileEditor({ profile, onClose }: { profile: Profile | null; onClose:
   const [cutoff, setCutoff] = useState(profile?.cutoff ?? 0)
   const [upgrade, setUpgrade] = useState(profile?.upgrade ?? true)
   const [sizes, setSizes] = useState(() => sizeText(profile?.sizes))
+  const presets = useQuery({ queryKey: ['profile-presets'], queryFn: () => get<ProfilePreset[]>('/profiles/presets'), staleTime: Infinity })
+  const [on, setOn] = useState<string[]>(profile?.prefs?.presets ?? [])
+  const [words, setWords] = useState({ prefer: (profile?.prefs?.prefer ?? []).join(', '), avoid: (profile?.prefs?.avoid ?? []).join(', '), never: (profile?.prefs?.never ?? []).join(', ') })
   const done = () => {
     qc.invalidateQueries({ queryKey: ['profiles'] })
     onClose()
   }
   const save = useMutation({
     mutationFn: () => {
-      const body = { name, allowed, cutoff: allowed.includes(cutoff) ? cutoff : allowed[allowed.length - 1], upgrade, sizes: sizesOf(sizes) }
+      const body = { name, allowed, cutoff: allowed.includes(cutoff) ? cutoff : allowed[allowed.length - 1], upgrade, sizes: sizesOf(sizes), prefs: { presets: on, prefer: wordsOf(words.prefer), avoid: wordsOf(words.avoid), never: wordsOf(words.never) } }
       return profile ? put(`/profiles/${profile.id}`, body) : post('/profiles', body)
     },
     onSuccess: done,
@@ -1001,6 +1016,40 @@ function ProfileEditor({ profile, onClose }: { profile: Profile | null; onClose:
             })}
           </div>
           <p className="mt-3 text-xs text-muted">{t('settings.sizesNote')}</p>
+        </fieldset>
+        <fieldset>
+          <legend className="mb-1 text-sm font-medium">{t('settings.prefs')}</legend>
+          <p className="mb-3 text-xs text-muted">{t('settings.prefsHint')}</p>
+          <ul className="mb-3 flex flex-col gap-2 text-sm">
+            {presets.data?.map((ps) => (
+              <li key={ps.id} className="flex items-start gap-2">
+                <input
+                  type="checkbox"
+                  id={`preset-${ps.id}`}
+                  checked={on.includes(ps.id)}
+                  onChange={() => setOn(on.includes(ps.id) ? on.filter((x) => x !== ps.id) : [...on, ps.id])}
+                  className="mt-1 accent-[var(--marquee)]"
+                />
+                <label htmlFor={`preset-${ps.id}`} className="min-w-0 flex-1">
+                  {presetNames[ps.id] ? t(presetNames[ps.id]) : ps.id}
+                  <span className="block break-words text-xs text-muted">
+                    {[ps.prefer?.length ? t('settings.prefsPrefers', { words: ps.prefer.join(', ') }) : '', ps.avoid?.length ? t('settings.prefsAvoids', { words: ps.avoid.join(', ') }) : ''].filter(Boolean).join(' ')}
+                  </span>
+                </label>
+              </li>
+            ))}
+          </ul>
+          <div className="flex flex-col gap-3">
+            {(['prefer', 'avoid', 'never'] as const).map((list) => (
+              <Field
+                key={list}
+                label={t(list === 'prefer' ? 'settings.prefsPrefer' : list === 'avoid' ? 'settings.prefsAvoid' : 'settings.prefsNever')}
+                hint={list === 'never' ? t('settings.prefsNeverHint') : list === 'prefer' ? t('settings.prefsWordsHint') : undefined}
+              >
+                {(id) => <Input id={id} value={words[list]} placeholder={list === 'prefer' ? prefExample : undefined} onChange={(e) => setWords({ ...words, [list]: e.target.value })} />}
+              </Field>
+            ))}
+          </div>
         </fieldset>
         <ErrorNote error={save.error || remove.error} />
         <div className="flex justify-between gap-2">

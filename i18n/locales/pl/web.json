@@ -144,7 +144,9 @@
     "grabCount_other": "{{count}} pobrania",
     "notPicked": "Nie wybrano: {{why}}",
     "inQueue": "W kolejce",
-    "grab": "Pobierz"
+    "grab": "Pobierz",
+    "preferred": "Profil preferuje: {{words}}",
+    "avoided": "Profil omija: {{words}}. Wybierane tylko wtedy, gdy nie ma nic innego w tej jakości."
   },
   "remove": {
     "deletesFolder_one": "Usuwa folder <code>{{folder}}</code> i wszystko w nim: <strong>{{count}} plik</strong>, <strong>{{size}}</strong>.",
@@ -1355,7 +1357,20 @@
     "sizeMin": "Co najmniej",
     "sizeMax": "Co najwyżej",
     "sizesNote": "Wydanie, którego nazwa nie podaje kodeka wideo, podlega liczbom dla H.264, a tytuł bez znanego czasu trwania nie jest sprawdzany. Nadal możesz samodzielnie wybrać dowolne wydanie.",
-    "sizesOn": ", limity rozmiaru"
+    "sizesOn": ", limity rozmiaru",
+    "prefs": "Preferencje wydań",
+    "prefsHint": "Słowa i grupy wydające w nazwie wydania, które mają być preferowane lub omijane. Spośród wydań tej samej jakości wybierane jest to z największą liczbą preferowanych słów, a wydanie z omijanym słowem tylko wtedy, gdy nie ma nic innego.",
+    "prefsBest": "Najlepszy obraz i dźwięk",
+    "prefsSmall": "Mniejsze pliki",
+    "prefsPoor": "Omijaj upscale i słabe wydania",
+    "prefsPrefers": "Preferuje {{words}}.",
+    "prefsAvoids": "Omija {{words}}.",
+    "prefsPrefer": "Preferuj",
+    "prefsAvoid": "Omijaj",
+    "prefsNever": "Nigdy nie bierz",
+    "prefsWordsHint": "Oddziel słowa przecinkami. Słowo musi pasować w całości, wielkimi lub małymi literami, w części nazwy po tytule.",
+    "prefsNeverHint": "Wydanie z jednym z tych słów jest odrzucane. Nadal możesz wybrać je samodzielnie.",
+    "prefsOn": ", preferencje wydań"
   },
   "mediaTypes": {
     "music": {

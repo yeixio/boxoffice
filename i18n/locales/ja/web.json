@@ -117,7 +117,9 @@
     "grabCount_other": "{{count}} 回取得",
     "notPicked": "選ばれなかった理由: {{why}}",
     "inQueue": "キューにあり",
-    "grab": "取得"
+    "grab": "取得",
+    "preferred": "プロファイルが優先: {{words}}",
+    "avoided": "プロファイルが回避: {{words}}。この画質でほかに何もないときだけ選ばれます。"
   },
   "remove": {
     "deletesFolder_other": "フォルダー <code>{{folder}}</code> とその中身をすべて削除します: <strong>{{count}} 個のファイル</strong>、<strong>{{size}}</strong>。",
@@ -1124,7 +1126,20 @@
     "sizeMin": "最小",
     "sizeMax": "最大",
     "sizesNote": "名前に映像の圧縮方式が書かれていないリリースにはH.264の数値が適用され、再生時間がわからないタイトルは確認されません。どのリリースでも自分で選ぶことはできます。",
-    "sizesOn": "、サイズ制限あり"
+    "sizesOn": "、サイズ制限あり",
+    "prefs": "リリースの優先設定",
+    "prefsHint": "リリース名に含まれる語やリリースグループのうち、優先するものと避けるものです。同じ画質のリリースの中では、優先する語が最も多いものが選ばれ、避ける語を含むものはほかに何もないときだけ選ばれます。",
+    "prefsBest": "最高の映像と音声",
+    "prefsSmall": "小さいファイル",
+    "prefsPoor": "アップスケールや質の低いリリースを避ける",
+    "prefsPrefers": "優先: {{words}}。",
+    "prefsAvoids": "回避: {{words}}。",
+    "prefsPrefer": "優先する",
+    "prefsAvoid": "避ける",
+    "prefsNever": "取得しない",
+    "prefsWordsHint": "語はカンマで区切ります。語は、名前のうちタイトルより後の部分で、大文字小文字を区別せず単語単位で照合されます。",
+    "prefsNeverHint": "これらのいずれかを含むリリースは選ばれません。自分で選ぶことはできます。",
+    "prefsOn": "、リリースの優先設定あり"
   },
   "mediaTypes": {
     "music": {

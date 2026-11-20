@@ -182,6 +182,7 @@ func (s *Server) Handler() http.Handler {
 		{"POST /api/v1/settings/apikey", true, s.newAPIKey},
 		{"GET /api/v1/qualities", true, s.qualities},
 		{"GET /api/v1/profiles", true, s.profiles},
+		{"GET /api/v1/profiles/presets", true, s.profilePresets},
 		{"POST /api/v1/profiles", true, s.createProfile},
 		{"PUT /api/v1/profiles/{id}", true, s.updateProfile},
 		{"DELETE /api/v1/profiles/{id}", true, s.deleteProfile},

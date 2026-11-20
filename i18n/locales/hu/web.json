@@ -126,7 +126,9 @@
     "grabCount_other": "{{count}} letöltés",
     "notPicked": "Nem választva: {{why}}",
     "inQueue": "A sorban",
-    "grab": "Letöltés"
+    "grab": "Letöltés",
+    "preferred": "A profil előnyben részesíti: {{words}}",
+    "avoided": "A profil kerüli: {{words}}. Csak akkor kerül kiválasztásra, ha ebben a minőségben nincs más."
   },
   "remove": {
     "deletesFolder_one": "Törli a(z) <code>{{folder}}</code> mappát és mindent, ami benne van: <strong>{{count}} fájl</strong>, <strong>{{size}}</strong>.",
@@ -1201,7 +1203,20 @@
     "sizeMin": "Legalább",
     "sizeMax": "Legfeljebb",
     "sizesNote": "Arra a kiadásra, amelynek a neve nem árulja el a videó kodekjét, a H.264 értékei vonatkoznak, az ismeretlen játékidejű címet pedig nem ellenőrizzük. Bármelyik kiadást továbbra is kiválaszthatod magad.",
-    "sizesOn": ", méretkorlátok"
+    "sizesOn": ", méretkorlátok",
+    "prefs": "Kiadási preferenciák",
+    "prefsHint": "Szavak és kiadócsoportok a kiadás nevében, amelyeket előnyben részesítünk vagy kerülünk. Az azonos minőségű kiadások közül az kerül kiválasztásra, amelyben a legtöbb előnyben részesített szó van, a kerülendő szót tartalmazó pedig csak akkor, ha nincs más.",
+    "prefsBest": "Legjobb kép és hang",
+    "prefsSmall": "Kisebb fájlok",
+    "prefsPoor": "Felskálázott és gyenge kiadások kerülése",
+    "prefsPrefers": "Előnyben részesíti: {{words}}.",
+    "prefsAvoids": "Kerüli: {{words}}.",
+    "prefsPrefer": "Előnyben részesítés",
+    "prefsAvoid": "Kerülés",
+    "prefsNever": "Soha ne vegye",
+    "prefsWordsHint": "A szavakat vesszővel válaszd el. A szónak egészben kell egyeznie, kis- vagy nagybetűvel, a név cím utáni részében.",
+    "prefsNeverHint": "Az ilyen szót tartalmazó kiadást elutasítjuk. Magad továbbra is kiválaszthatod.",
+    "prefsOn": ", kiadási preferenciák"
   },
   "mediaTypes": {
     "music": {

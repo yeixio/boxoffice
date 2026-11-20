@@ -82,6 +82,12 @@ type Candidate struct {
 	// looking at the list (Browsing), which a grab by hand doesn't wait for.
 	NewUntil time.Time `json:"newUntil,omitzero"`
 
+	// Preferred and Avoided are the words in its name the profile's
+	// release preferences prefer and avoid: among releases of the same
+	// quality, more preferred words come first and an avoided one last.
+	Preferred []string `json:"preferred,omitempty"`
+	Avoided   []string `json:"avoided,omitempty"`
+
 	mode       string // how an edition asked for goes in: replace or alongside
 	kind       string
 	titleID    int64
@@ -90,6 +96,7 @@ type Candidate struct {
 	formatRank int
 	langRank   int // 1 when its name says it's in the language asked for
 	fitRank    int // for a replacement, how near it is to the copy's quality (quality.ReplacementFit)
+	prefRank   int // how the profile's release preferences score its name (quality.PrefMatch.Score)
 	fix        bool
 	held       bool // too new to grab yet, and held back until it isn't (holdYoung)
 }
@@ -459,6 +466,11 @@ func (s *Service) judge(ctx context.Context, r Release, p quality.Profile, has b
 		hq, _ := quality.ByID(have)
 		c.reject(fmt.Sprintf("there's a %s copy already", hq.Name))
 	}
+	if m := p.Prefs.Judge(r.Title); m.Never != "" {
+		c.reject(fmt.Sprintf("its name has %q, which the %s profile never takes", m.Never, p.Name))
+	} else {
+		c.Preferred, c.Avoided, c.prefRank = m.Preferred, m.Avoided, m.Score()
+	}
 	return c
 }
 
@@ -479,8 +491,8 @@ func key(r Release) string {
 	return hex.EncodeToString(h[:12])
 }
 
-// rank puts the best first: accepted, then quality, the indexer's
-// priority, how many grabbed it, and newest.
+// rank puts the best first: accepted, then quality, the profile's release
+// preferences, the indexer's priority, how many grabbed it, and newest.
 func (s *Service) rank(ctx context.Context, out *Results) {
 	pri := map[int64]int{}
 	if list, err := s.Store.Indexers(ctx); err == nil {
@@ -515,6 +527,8 @@ func (s *Service) rank(ctx context.Context, out *Results) {
 			return b.fitRank - a.fitRank
 		case a.Quality != b.Quality:
 			return quality.Rank(b.Quality) - quality.Rank(a.Quality)
+		case a.prefRank != b.prefRank:
+			return b.prefRank - a.prefRank
 		case a.formatRank != b.formatRank:
 			return b.formatRank - a.formatRank
 		case a.priority != b.priority:

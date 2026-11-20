@@ -135,7 +135,9 @@
     "grabCount_other": "{{count}} prelievi",
     "notPicked": "Non scelto: {{why}}",
     "inQueue": "In coda",
-    "grab": "Preleva"
+    "grab": "Preleva",
+    "preferred": "Il profilo preferisce: {{words}}",
+    "avoided": "Il profilo evita: {{words}}. Scelta solo quando non c’è altro di questa qualità."
   },
   "remove": {
     "deletesFolder_one": "Elimina la cartella <code>{{folder}}</code> e tutto il suo contenuto: <strong>{{count}} file</strong>, <strong>{{size}}</strong>.",
@@ -1278,7 +1280,20 @@
     "sizeMin": "Almeno",
     "sizeMax": "Al massimo",
     "sizesNote": "A una release il cui nome non dice come è codificato il video si applicano i numeri di H.264, e un titolo di cui non si conosce la durata non viene controllato. Puoi comunque scegliere tu qualsiasi release.",
-    "sizesOn": ", limiti di dimensione"
+    "sizesOn": ", limiti di dimensione",
+    "prefs": "Preferenze per le release",
+    "prefsHint": "Parole e gruppi di release nel nome di una release da preferire o da evitare. Tra release della stessa qualità viene scelta quella con più parole preferite, e una con una parola da evitare solo quando non c’è altro.",
+    "prefsBest": "Immagine e audio migliori",
+    "prefsSmall": "File più piccoli",
+    "prefsPoor": "Evita upscale e release scadenti",
+    "prefsPrefers": "Preferisce {{words}}.",
+    "prefsAvoids": "Evita {{words}}.",
+    "prefsPrefer": "Preferisci",
+    "prefsAvoid": "Evita",
+    "prefsNever": "Non prendere mai",
+    "prefsWordsHint": "Separa le parole con virgole. Una parola deve corrispondere per intero, in maiuscolo o no, nella parte del nome dopo il titolo.",
+    "prefsNeverHint": "Una release con una di queste viene scartata. Puoi comunque sceglierla tu.",
+    "prefsOn": ", preferenze per le release"
   },
   "mediaTypes": {
     "music": {

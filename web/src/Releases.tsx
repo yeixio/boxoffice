@@ -77,6 +77,8 @@ export function Releases({ path, title, onClose }: { path: string; title: string
                           {!!r.grabs && <span>{t('releases.grabCount', { count: r.grabs })}</span>}
                         </div>
                         {r.newUntil && <p className="mt-1 text-xs text-muted">{t('releases.newUntil', { time: clock(r.newUntil) })}</p>}
+                        {!!r.preferred?.length && <p className="mt-1 text-xs text-ok">{t('releases.preferred', { words: r.preferred.join(', ') })}</p>}
+                        {!!r.avoided?.length && <p className="mt-1 text-xs text-gold">{t('releases.avoided', { words: r.avoided.join(', ') })}</p>}
                         {r.rejections?.map((why) => (
                           <p key={why} className="mt-1 text-xs text-bad">
                             {t('releases.notPicked', { why })}
