@@ -91,7 +91,7 @@ func (s *Store) LibraryTitles(ctx context.Context) ([]LibraryTitle, error) {
 		return nil, err
 	}
 	// Movies' copies and their other editions.
-	rows, err = s.query(ctx, "SELECT id, kind, owner_id, path, size, quality, added_at FROM media_files WHERE kind IN ('movie', 'edition') ORDER BY path")
+	rows, err = s.query(ctx, "SELECT id, kind, owner_id, path, size, quality, added_at FROM media_files WHERE kind IN ('movie', 'edition', 'second') ORDER BY path")
 	if err != nil {
 		return nil, err
 	}

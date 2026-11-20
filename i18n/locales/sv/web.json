@@ -172,7 +172,8 @@
     "blockOneThem": "Blockera releasen de kom från, så att den inte hämtas igen",
     "blockMany": "Blockera releaserna de kom från, så att de inte hämtas igen",
     "keepThem": "Behåll dem",
-    "delete": "Radera {{size}}"
+    "delete": "Radera {{size}}",
+    "secondKept": "Dess extra kopia i {{path}} ligger inte i den här mappen, så den blir kvar på disken. Ska den också bort, radera den först från filmens sida."
   },
   "hooks": {
     "unknown": "Okänd"
@@ -2859,5 +2860,21 @@
     "upTo": "Sett till och med {{episode}}.",
     "later": "Senare",
     "laterHint": "Utrymmessparare hämtar det när någon kommer närmare."
+  },
+  "secondCopy": {
+    "title": "Extra kopia",
+    "hint": "Behåll en extra kopia av filmen i en annan kvalitet, till exempel en i 1080p bredvid den i 4K. Den har en egen kvalitetsprofil och söks och uppgraderas för sig.",
+    "profile": "Kvalitetsprofil för den extra kopian",
+    "off": "Ingen extra kopia",
+    "where": "Var den hamnar",
+    "nextToFirst": "Bredvid den första kopian",
+    "looking": "Den finns inte här än. Box Office letar efter den.",
+    "notWatched": "Den finns inte här än, och filmen bevakas inte, så Box Office letar inte efter den.",
+    "stopped": "Box Office letar inte längre efter en extra kopia. Den här finns kvar tills du raderar den.",
+    "delete": "Radera den extra kopian",
+    "filesOf": "Den extra kopian av {{title}}",
+    "stays": "Filmen och dess första kopia finns kvar.",
+    "stop": "Sluta behålla en extra kopia",
+    "again": "Annars letar Box Office efter en extra kopia och laddar ner den igen."
   }
 }

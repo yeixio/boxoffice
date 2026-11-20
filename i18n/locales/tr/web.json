@@ -172,7 +172,8 @@
     "blockOneThem": "Geldikleri sürümü engelle, böylece yeniden indirilmez",
     "blockMany": "Geldikleri sürümleri engelle, böylece yeniden indirilmezler",
     "keepThem": "Kalsınlar",
-    "delete": "{{size}} sil"
+    "delete": "{{size}} sil",
+    "secondKept": "{{path}} konumundaki ikinci kopyası bu klasörde değil, bu yüzden diskte kalır. Onun da gitmesi için önce filmin sayfasından silin."
   },
   "hooks": {
     "unknown": "Bilinmiyor"
@@ -2859,5 +2860,21 @@
     "upTo": "{{episode}} bölümüne kadar izlendi.",
     "later": "Sonra",
     "laterHint": "Biri bu bölüme yaklaştığında alan tasarrufu onu getirir."
+  },
+  "secondCopy": {
+    "title": "İkinci kopya",
+    "hint": "Bu filmin başka bir kalitede bir kopyasını daha saklayın; örneğin 4K olanın yanında 1080p bir kopya. Kendi kalite profili vardır, ayrı olarak aranır ve yükseltilir.",
+    "profile": "İkinci kopyanın kalite profili",
+    "off": "İkinci kopya yok",
+    "where": "Nereye konacak",
+    "nextToFirst": "İlk kopyanın yanına",
+    "looking": "Henüz burada değil. Box Office onu arıyor.",
+    "notWatched": "Henüz burada değil ve bu film izlenmiyor, bu yüzden Box Office onu aramıyor.",
+    "stopped": "Box Office artık ikinci kopya aramıyor. Bu kopya siz silene kadar kalır.",
+    "delete": "İkinci kopyayı sil",
+    "filesOf": "{{title}} filminin ikinci kopyası",
+    "stays": "Film ve ilk kopyası kalır.",
+    "stop": "İkinci kopya saklamayı bırak",
+    "again": "Yoksa Box Office yeniden bir ikinci kopya arayıp indirir."
   }
 }

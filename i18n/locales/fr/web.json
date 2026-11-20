@@ -186,7 +186,8 @@
     "blockOneThem": "Bloquer la release dont ils viennent, pour qu’elle ne soit pas récupérée à nouveau",
     "blockMany": "Bloquer les releases dont ils viennent, pour qu’elles ne soient pas récupérées à nouveau",
     "keepThem": "Les garder",
-    "delete": "Supprimer {{size}}"
+    "delete": "Supprimer {{size}}",
+    "secondKept": "Sa deuxième copie dans {{path}} n’est pas dans ce dossier, elle reste donc sur le disque. Pour qu’elle disparaisse aussi, supprimez-la d’abord depuis la page du film."
   },
   "hooks": {
     "unknown": "Inconnu"
@@ -2982,5 +2983,21 @@
     "upTo": "Regardé jusqu’à {{episode}}.",
     "later": "Plus tard",
     "laterHint": "L’économie d’espace le récupère dès que quelqu’un s’en approche."
+  },
+  "secondCopy": {
+    "title": "Deuxième copie",
+    "hint": "Gardez une autre copie de ce film dans une qualité différente, par exemple une en 1080p à côté de celle en 4K. Elle a son propre profil de qualité et est recherchée et améliorée séparément.",
+    "profile": "Profil de qualité de la deuxième copie",
+    "off": "Pas de deuxième copie",
+    "where": "Où elle va",
+    "nextToFirst": "À côté de la première copie",
+    "looking": "Elle n’est pas encore là. Box Office la recherche.",
+    "notWatched": "Elle n’est pas encore là et ce film n’est pas surveillé, donc Box Office ne la recherche pas.",
+    "stopped": "Box Office ne recherche plus de deuxième copie. Celle-ci reste jusqu’à ce que vous la supprimiez.",
+    "delete": "Supprimer la deuxième copie",
+    "filesOf": "Deuxième copie de {{title}}",
+    "stays": "Le film et sa première copie restent.",
+    "stop": "Ne plus garder de deuxième copie",
+    "again": "Sinon, Box Office recherchera une deuxième copie et la téléchargera à nouveau."
   }
 }

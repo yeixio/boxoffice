@@ -171,6 +171,12 @@ export type Movie = {
   path: string
   addedAt: string
   file?: MediaFile
+  // A second copy kept at another quality: its profile (0 or unset for
+  // none), the movie root folder it goes in ("" for next to the first
+  // copy), and the copy once it's there.
+  secondProfileId?: number
+  secondRoot?: string
+  second?: MediaFile
   // Other cuts kept next to its copy.
   editions?: MediaFile[]
   // The edition its copy should be, once one was asked for in its place.
@@ -648,7 +654,8 @@ export type IndexerCaps = { categories: { id: number; name: string; subs?: { id:
 // title's folder goes; files names up to 200 of them, biggest first.
 export type DeletePlan = { folder?: string; files: { path: string; size: number }[]; count: number; size: number; problem?: string }
 // Removing a movie or a show: its folder, and its downloads that are cancelled.
-export type TitleRemoval = DeletePlan & { downloads?: number }
+// secondKept is a movie's second copy outside the folder that would go.
+export type TitleRemoval = DeletePlan & { downloads?: number; secondKept?: string }
 // Deleting a movie's, a season's or an episode's files, keeping the title.
 export type FileRemoval = DeletePlan & { releases: { name: string; indexer?: string }[]; watched: boolean }
 export type RecycleFolder = { root: string; folder: string; count: number; size: number; oldest?: string }

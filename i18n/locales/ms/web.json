@@ -158,7 +158,8 @@
     "blockOneThem": "Sekat keluaran asalnya, supaya ia tidak diambil semula",
     "blockMany": "Sekat keluaran-keluaran asalnya, supaya ia tidak diambil semula",
     "keepThem": "Simpan",
-    "delete": "Padam {{size}}"
+    "delete": "Padam {{size}}",
+    "secondKept": "Salinan keduanya di {{path}} tiada dalam folder ini, jadi ia kekal pada cakera. Untuk membuangnya juga, padamkannya dahulu dari halaman filem."
   },
   "hooks": {
     "unknown": "Tidak diketahui"
@@ -2736,5 +2737,21 @@
     "upTo": "Ditonton sehingga {{episode}}.",
     "later": "Kemudian",
     "laterHint": "Penjimat ruang mengambilnya apabila seseorang semakin hampir dengannya."
+  },
+  "secondCopy": {
+    "title": "Salinan kedua",
+    "hint": "Simpan satu lagi salinan filem ini pada kualiti berbeza, contohnya salinan 1080p di sebelah salinan 4K. Ia mempunyai profil kualiti sendiri serta dicari dan dinaik taraf secara berasingan.",
+    "profile": "Profil kualiti salinan kedua",
+    "off": "Tiada salinan kedua",
+    "where": "Tempat ia disimpan",
+    "nextToFirst": "Di sebelah salinan pertama",
+    "looking": "Ia belum ada di sini. Box Office sedang mencarinya.",
+    "notWatched": "Ia belum ada di sini, dan filem ini tidak dipantau, jadi Box Office tidak mencarinya.",
+    "stopped": "Box Office tidak lagi mencari salinan kedua. Salinan ini kekal sehingga anda memadamnya.",
+    "delete": "Padam salinan kedua",
+    "filesOf": "Salinan kedua {{title}}",
+    "stays": "Filem dan salinan pertamanya kekal.",
+    "stop": "Berhenti menyimpan salinan kedua",
+    "again": "Jika tidak, Box Office akan mencari salinan kedua dan memuat turunnya semula."
   }
 }

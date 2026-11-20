@@ -38,6 +38,14 @@ type Movie struct {
 	// movie: whether Box Office looks for upgrades of it by itself.
 	AutoUpgrade string `json:"autoUpgrade"`
 	File        *File  `json:"file,omitempty"`
+	// SecondProfileID is the quality profile of a second copy to keep of
+	// it (a 1080p one next to the 4K one, say), or 0 for none. SecondRoot
+	// is the library folder that copy goes in, in a folder named like the
+	// movie's; "" keeps it next to the first copy, in the movie's folder.
+	// Second is that copy, once it's there.
+	SecondProfileID int    `json:"secondProfileId,omitempty"`
+	SecondRoot      string `json:"secondRoot,omitempty"`
+	Second          *File  `json:"second,omitempty"`
 	// Editions are other cuts of it kept next to its copy (see
 	// AddEditionFile), when asked for with LabelEditions.
 	Editions []File `json:"editions,omitempty"`
@@ -143,9 +151,25 @@ func (f *File) checked(media sql.NullString, guessed sql.NullInt64) {
 
 const movieCols = `m.id, m.tmdb_id, m.imdb_id, m.title, m.sort_title, m.year, m.overview, m.poster, m.backdrop, m.runtime, m.status,
 	m.in_cinemas, m.digital_release, m.physical_release, m.rating, m.monitored, m.profile_id, m.root_folder, m.path, m.added_at, m.refreshed_at, m.auto_upgrade,
-	f.id, f.path, f.size, f.quality, f.added_at, f.media, f.guessed`
+	f.id, f.path, f.size, f.quality, f.added_at, f.media, f.guessed,
+	m.second_profile_id, m.second_root, f2.id, f2.path, f2.size, f2.quality, f2.added_at, f2.media, f2.guessed`
 
-const movieFrom = ` FROM movies m LEFT JOIN media_files f ON f.kind = 'movie' AND f.owner_id = m.id`
+const movieFrom = ` FROM movies m LEFT JOIN media_files f ON f.kind = 'movie' AND f.owner_id = m.id
+	LEFT JOIN media_files f2 ON f2.kind = 'second' AND f2.owner_id = m.id`
+
+// SecondKind is the kind of a movie's second copy among recorded files and
+// the mode of a download for one.
+const SecondKind = "second"
+
+// SecondFolder is the folder a movie's second copy is kept in: the
+// movie's own, or one named like it in the library folder chosen for
+// second copies.
+func (m Movie) SecondFolder() (root, folder string) {
+	if m.SecondRoot == "" || filepath.Clean(m.SecondRoot) == filepath.Clean(m.RootFolder) {
+		return m.RootFolder, m.Path
+	}
+	return m.SecondRoot, filepath.Join(m.SecondRoot, filepath.Base(m.Path))
+}
 
 func scanMovie(r interface{ Scan(...any) error }) (Movie, error) {
 	var m Movie
@@ -156,9 +180,12 @@ func scanMovie(r interface{ Scan(...any) error }) (Movie, error) {
 	var fpath sql.NullString
 	var fq, fguessed sql.NullInt64
 	var fmedia sql.NullString
+	var sid, ssize, sadded, sq, sguessed sql.NullInt64
+	var spath, smedia sql.NullString
 	err := r.Scan(&m.ID, &m.TMDBID, &m.IMDBID, &m.Title, &m.SortTitle, &m.Year, &m.Overview, &m.Poster, &m.Backdrop, &m.Runtime, &m.Status,
 		&cin, &dig, &phy, &m.Rating, &mon, &m.ProfileID, &m.RootFolder, &m.Path, &added, &refreshed, &m.AutoUpgrade,
-		&fid, &fpath, &fsize, &fq, &fadded, &fmedia, &fguessed)
+		&fid, &fpath, &fsize, &fq, &fadded, &fmedia, &fguessed,
+		&m.SecondProfileID, &m.SecondRoot, &sid, &spath, &ssize, &sq, &sadded, &smedia, &sguessed)
 	if errors.Is(err, sql.ErrNoRows) {
 		return m, ErrNotFound
 	}
@@ -171,6 +198,10 @@ func scanMovie(r interface{ Scan(...any) error }) (Movie, error) {
 	if fid.Valid {
 		m.File = &File{ID: fid.Int64, Kind: "movie", OwnerID: m.ID, Path: fpath.String, Size: fsize.Int64, Quality: int(fq.Int64), AddedAt: time.Unix(fadded.Int64, 0).UTC()}
 		m.File.checked(fmedia, fguessed)
+	}
+	if sid.Valid {
+		m.Second = &File{ID: sid.Int64, Kind: SecondKind, OwnerID: m.ID, Path: spath.String, Size: ssize.Int64, Quality: int(sq.Int64), AddedAt: time.Unix(sadded.Int64, 0).UTC()}
+		m.Second.checked(smedia, sguessed)
 	}
 	return m, nil
 }
@@ -225,10 +256,11 @@ func (s *Store) AddMovie(ctx context.Context, m Movie) (Movie, error) {
 	return s.Movie(ctx, id)
 }
 
-// UpdateMovie saves what an admin can change: monitoring, profile, folder.
+// UpdateMovie saves what an admin can change: monitoring, profile, folder,
+// and the second copy to keep.
 func (s *Store) UpdateMovie(ctx context.Context, m Movie) error {
-	res, err := s.exec(ctx, "UPDATE movies SET monitored = ?, profile_id = ?, root_folder = ?, path = ?, auto_upgrade = ? WHERE id = ?",
-		b2i(m.Monitored), m.ProfileID, m.RootFolder, m.Path, m.AutoUpgrade, m.ID)
+	res, err := s.exec(ctx, "UPDATE movies SET monitored = ?, profile_id = ?, root_folder = ?, path = ?, auto_upgrade = ?, second_profile_id = ?, second_root = ? WHERE id = ?",
+		b2i(m.Monitored), m.ProfileID, m.RootFolder, m.Path, m.AutoUpgrade, m.SecondProfileID, m.SecondRoot, m.ID)
 	if err != nil {
 		return err
 	}
@@ -259,7 +291,7 @@ func (s *Store) FillRating(ctx context.Context, kind string, id int64, rating fl
 }
 
 func (s *Store) DeleteMovie(ctx context.Context, id int64) error {
-	if _, err := s.exec(ctx, "DELETE FROM media_files WHERE kind IN ('movie', 'edition') AND owner_id = ?", id); err != nil {
+	if _, err := s.exec(ctx, "DELETE FROM media_files WHERE kind IN ('movie', 'edition', 'second') AND owner_id = ?", id); err != nil {
 		return err
 	}
 	if _, err := s.exec(ctx, "DELETE FROM title_wants WHERE kind = 'movie' AND owner_id = ?", id); err != nil {
@@ -611,7 +643,8 @@ func (s *Store) SetEpisodeHeld(ctx context.Context, id int64, held bool) error {
 // ---- files ----
 
 // AddFile records a file for a movie or an episode, replacing the one it
-// had: Box Office keeps one copy per title for now.
+// had. A movie's second copy (kind SecondKind, owned by the movie) is
+// recorded the same way, next to its first.
 func (s *Store) AddFile(ctx context.Context, f File) (File, error) {
 	if _, err := s.exec(ctx, "DELETE FROM media_files WHERE kind = ? AND owner_id = ?", f.Kind, f.OwnerID); err != nil {
 		return f, err

@@ -15,8 +15,8 @@ import (
 // media_files.
 
 // checkKinds are the kinds of file the quality check looks inside: movies,
-// a movie's other editions, and episodes.
-const checkKinds = "('movie', 'edition', 'episode')"
+// a movie's other editions and its second copy, and episodes.
+const checkKinds = "('movie', 'edition', 'second', 'episode')"
 
 // ToCheck is a file the quality check hasn't looked inside yet (or that
 // changed size since), with its title's profile.
@@ -35,9 +35,9 @@ const retryAfter = 24 * time.Hour
 // out of time was saved as ffprobe being killed; those are retried too.
 func (s *Store) FilesToCheck(ctx context.Context, n int) ([]ToCheck, error) {
 	rows, err := s.query(ctx, `SELECT f.id, f.kind, f.owner_id, f.path, f.size, f.quality,
-		COALESCE(m.profile_id, t.profile_id, 0)
+		COALESCE(CASE WHEN f.kind = 'second' THEN m.second_profile_id ELSE m.profile_id END, t.profile_id, 0)
 		FROM media_files f
-		LEFT JOIN movies m ON f.kind IN ('movie', 'edition') AND m.id = f.owner_id
+		LEFT JOIN movies m ON f.kind IN ('movie', 'edition', 'second') AND m.id = f.owner_id
 		LEFT JOIN episodes e ON f.kind = 'episode' AND e.id = f.owner_id
 		LEFT JOIN series t ON t.id = e.series_id
 		WHERE f.kind IN `+checkKinds+` AND (f.probed_at = 0 OR f.probed_size <> f.size
@@ -78,7 +78,7 @@ func (s *Store) SaveCheck(ctx context.Context, f File, m quality.Media, q int) e
 // CheckMoviesAgain has the quality check look inside every movie copy
 // and edition again.
 func (s *Store) CheckMoviesAgain(ctx context.Context) error {
-	_, err := s.exec(ctx, "UPDATE media_files SET probed_at = 0 WHERE kind IN ('movie', 'edition')")
+	_, err := s.exec(ctx, "UPDATE media_files SET probed_at = 0 WHERE kind IN ('movie', 'edition', 'second')")
 	return err
 }
 
@@ -125,7 +125,7 @@ func (s *Store) Corrections(ctx context.Context) ([]Correction, error) {
 	rows, err := s.query(ctx, `SELECT f.id, f.kind, f.path, f.guessed, f.quality, f.media, f.probed_at,
 		COALESCE(m.id, t.id, 0), COALESCE(m.title, t.title, ''), COALESCE(m.year, 0), COALESCE(e.season, 0), COALESCE(e.number, 0)
 		FROM media_files f
-		LEFT JOIN movies m ON f.kind IN ('movie', 'edition') AND m.id = f.owner_id
+		LEFT JOIN movies m ON f.kind IN ('movie', 'edition', 'second') AND m.id = f.owner_id
 		LEFT JOIN episodes e ON f.kind = 'episode' AND e.id = f.owner_id
 		LEFT JOIN series t ON t.id = e.series_id
 		WHERE f.kind IN `+checkKinds+` AND f.guessed >= 0

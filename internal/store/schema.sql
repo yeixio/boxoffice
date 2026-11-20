@@ -61,7 +61,10 @@ CREATE TABLE IF NOT EXISTS movies (
 	path             TEXT NOT NULL,
 	added_at         BIGINT NOT NULL,
 	refreshed_at     BIGINT NOT NULL DEFAULT 0,
-	auto_upgrade     TEXT NOT NULL DEFAULT '' -- '' follows Settings; 'on' or 'off' for this movie
+	auto_upgrade     TEXT NOT NULL DEFAULT '', -- '' follows Settings; 'on' or 'off' for this movie
+	-- A second copy kept at another quality (see store.Movie.SecondProfileID).
+	second_profile_id INTEGER NOT NULL DEFAULT 0, -- 0: no second copy
+	second_root       TEXT NOT NULL DEFAULT ''    -- '' keeps it next to the first copy
 );
 
 CREATE TABLE IF NOT EXISTS series (

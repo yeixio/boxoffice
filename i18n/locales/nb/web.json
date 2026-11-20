@@ -172,7 +172,8 @@
     "blockOneThem": "Blokker utgivelsen de kom fra, så den ikke hentes igjen",
     "blockMany": "Blokker utgivelsene de kom fra, så de ikke hentes igjen",
     "keepThem": "Behold dem",
-    "delete": "Slett {{size}}"
+    "delete": "Slett {{size}}",
+    "secondKept": "Den ekstra kopien i {{path}} ligger ikke i denne mappen, så den blir på disken. Skal den også bort, slett den først fra filmens side."
   },
   "hooks": {
     "unknown": "Ukjent"
@@ -2859,5 +2860,21 @@
     "upTo": "Sett til og med {{episode}}.",
     "later": "Senere",
     "laterHint": "Plasssparer henter den når noen kommer nærmere."
+  },
+  "secondCopy": {
+    "title": "Ekstra kopi",
+    "hint": "Behold en ekstra kopi av filmen i en annen kvalitet, for eksempel en i 1080p ved siden av den i 4K. Den har sin egen kvalitetsprofil og blir søkt etter og oppgradert for seg.",
+    "profile": "Kvalitetsprofil for den ekstra kopien",
+    "off": "Ingen ekstra kopi",
+    "where": "Hvor den legges",
+    "nextToFirst": "Ved siden av den første kopien",
+    "looking": "Den er ikke her ennå. Box Office leter etter den.",
+    "notWatched": "Den er ikke her ennå, og filmen følges ikke med på, så Box Office leter ikke etter den.",
+    "stopped": "Box Office leter ikke lenger etter en ekstra kopi. Denne blir til du sletter den.",
+    "delete": "Slett den ekstra kopien",
+    "filesOf": "Den ekstra kopien av {{title}}",
+    "stays": "Filmen og den første kopien blir.",
+    "stop": "Slutt å beholde en ekstra kopi",
+    "again": "Ellers leter Box Office etter en ekstra kopi og laster den ned igjen."
   }
 }

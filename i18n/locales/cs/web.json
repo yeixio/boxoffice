@@ -200,7 +200,8 @@
     "blockOneThem": "Zablokovat vydání, ze kterého pocházejí, aby se znovu nestáhlo",
     "blockMany": "Zablokovat vydání, ze kterých pocházejí, aby se znovu nestáhla",
     "keepThem": "Ponechat je",
-    "delete": "Smazat {{size}}"
+    "delete": "Smazat {{size}}",
+    "secondKept": "Jeho druhá kopie v {{path}} není v této složce, takže zůstane na disku. Má-li zmizet i ona, smažte ji nejdřív na stránce filmu."
   },
   "hooks": {
     "unknown": "Neznámé"
@@ -3105,5 +3106,21 @@
     "upTo": "Zhlédnuto po {{episode}}.",
     "later": "Později",
     "laterHint": "Úspora místa ho stáhne, až se k němu někdo přiblíží."
+  },
+  "secondCopy": {
+    "title": "Druhá kopie",
+    "hint": "Uchovávejte další kopii tohoto filmu v jiné kvalitě, třeba 1080p vedle 4K. Má vlastní profil kvality a hledá se i vylepšuje samostatně.",
+    "profile": "Profil kvality druhé kopie",
+    "off": "Bez druhé kopie",
+    "where": "Kam se uloží",
+    "nextToFirst": "Vedle první kopie",
+    "looking": "Zatím tu není. Box Office ji hledá.",
+    "notWatched": "Zatím tu není a tento film se nesleduje, takže ji Box Office nehledá.",
+    "stopped": "Box Office už druhou kopii nehledá. Tato zůstane, dokud ji nesmažete.",
+    "delete": "Smazat druhou kopii",
+    "filesOf": "Druhá kopie filmu {{title}}",
+    "stays": "Film a jeho první kopie zůstanou.",
+    "stop": "Přestat uchovávat druhou kopii",
+    "again": "Jinak Box Office druhou kopii znovu vyhledá a stáhne."
   }
 }

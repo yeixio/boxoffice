@@ -263,6 +263,7 @@ func (s *Service) takeFromFeed(ctx context.Context, releases []Release, skip fun
 		norm string
 	}
 	movies := map[int64]store.Movie{}
+	upgrades := map[int64]bool{} // movies whose copies on disk may be upgraded
 	shows := map[int64]*showWant{}
 	for _, w := range list {
 		if skip(w) {
@@ -275,6 +276,7 @@ func (s *Service) takeFromFeed(ctx context.Context, releases []Release, skip fun
 				continue
 			}
 			movies[m.ID] = m
+			upgrades[m.ID] = w.Upgrade
 		case "episode":
 			sw, ok := shows[w.SeriesID]
 			if !ok {
@@ -353,11 +355,19 @@ func (s *Service) takeFromFeed(ctx context.Context, releases []Release, skip fun
 			if has {
 				have = m.File.Quality
 			}
-			c := s.judge(ctx, r, profiles[m.ProfileID], has, have, blocked("movie", m.ID))
-			c.kind, c.titleID = "movie", m.ID
-			c.sized(profiles[m.ProfileID], m.Runtime)
-			if c.Accepted {
-				out.Releases = append(out.Releases, c)
+			if !has || upgrades[m.ID] {
+				c := s.judge(ctx, r, profiles[m.ProfileID], has, have, blocked("movie", m.ID))
+				c.kind, c.titleID = "movie", m.ID
+				c.sized(profiles[m.ProfileID], m.Runtime)
+				if c.Accepted {
+					out.Releases = append(out.Releases, c)
+				}
+			}
+			// Its second copy, when it keeps one.
+			if p2, ok := profiles[m.SecondProfileID]; ok && m.SecondProfileID != 0 && !p2.Locked && (m.Second == nil || upgrades[m.ID]) {
+				if c := s.judgeSecond(ctx, r, m, p2, blocked("movie", m.ID)); c.Accepted {
+					out.Releases = append(out.Releases, c)
+				}
 			}
 			break
 		}
@@ -383,7 +393,7 @@ func (s *Service) takeFromFeed(ctx context.Context, releases []Release, skip fun
 		}
 		var keys []string
 		if c.kind == "movie" {
-			keys = []string{fmt.Sprintf("m%d", c.titleID)}
+			keys = []string{fmt.Sprintf("m%d%s", c.titleID, c.mode)}
 		} else {
 			for _, id := range c.episodes {
 				keys = append(keys, fmt.Sprintf("e%d", id))
@@ -394,7 +404,7 @@ func (s *Service) takeFromFeed(ctx context.Context, releases []Release, skip fun
 		}
 		busy := false
 		if c.kind == "movie" {
-			b, err := s.busy(ctx, "movie", c.titleID, 0, c.Title)
+			b, err := s.busyFor(ctx, "movie", c.titleID, 0, c.Title, c.mode == ModeSecond)
 			if err != nil {
 				return got, problems, err
 			}

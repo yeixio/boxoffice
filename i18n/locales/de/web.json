@@ -172,7 +172,8 @@
     "blockOneThem": "Das Release, aus dem sie stammen, sperren, damit es nicht erneut geholt wird",
     "blockMany": "Die Releases, aus denen sie stammen, sperren, damit sie nicht erneut geholt werden",
     "keepThem": "Behalten",
-    "delete": "{{size}} löschen"
+    "delete": "{{size}} löschen",
+    "secondKept": "Seine zweite Kopie unter {{path}} liegt nicht in diesem Ordner und bleibt daher auf der Festplatte. Soll sie auch weg, lösche sie zuerst auf der Seite des Films."
   },
   "hooks": {
     "unknown": "Unbekannt"
@@ -2859,5 +2860,21 @@
     "upTo": "Angesehen bis {{episode}}.",
     "later": "Später",
     "laterHint": "Der Platzsparer holt sie, sobald jemand näher herankommt."
+  },
+  "secondCopy": {
+    "title": "Zweite Kopie",
+    "hint": "Behalte eine weitere Kopie dieses Films in einer anderen Qualität, etwa eine in 1080p neben der in 4K. Sie hat ihr eigenes Qualitätsprofil und wird für sich gesucht und verbessert.",
+    "profile": "Qualitätsprofil der zweiten Kopie",
+    "off": "Keine zweite Kopie",
+    "where": "Wohin sie kommt",
+    "nextToFirst": "Neben die erste Kopie",
+    "looking": "Sie ist noch nicht da. Box Office sucht danach.",
+    "notWatched": "Sie ist noch nicht da, und nach diesem Film wird nicht Ausschau gehalten, daher sucht Box Office nicht danach.",
+    "stopped": "Box Office sucht nicht mehr nach einer zweiten Kopie. Diese bleibt, bis du sie löschst.",
+    "delete": "Zweite Kopie löschen",
+    "filesOf": "Zweite Kopie von {{title}}",
+    "stays": "Der Film und seine erste Kopie bleiben.",
+    "stop": "Keine zweite Kopie mehr behalten",
+    "again": "Sonst sucht Box Office wieder nach einer zweiten Kopie und lädt sie erneut herunter."
   }
 }

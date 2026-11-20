@@ -243,16 +243,59 @@ func (s *Service) Movie(ctx context.Context, id int64) (Results, error) {
 	return s.MovieFor(ctx, id, Ask{})
 }
 
-// MovieFor searches for a movie as asked: another edition of it, or a
-// better or replacement copy (see Ask). With nothing asked it follows what
-// was asked before and is still wanted (store.TitleWant), and the profile.
+// MovieFor searches for a movie as asked: another edition of it, a
+// better or replacement copy, or its second copy (see Ask). With nothing
+// asked it follows what was asked before and is still wanted
+// (store.TitleWant), and the profile.
 func (s *Service) MovieFor(ctx context.Context, id int64, ask Ask) (Results, error) {
 	m, err := s.Store.Movie(ctx, id)
 	if err != nil {
 		return Results{}, err
 	}
-	if err := s.Store.CheckUnlocked(ctx, "movie", m.ID); err != nil {
+	out, rs, err := s.movieReleases(ctx, m)
+	if err != nil {
 		return Results{}, err
+	}
+	if err := s.judgeMovie(ctx, m, rs, ask, &out); err != nil {
+		return Results{}, err
+	}
+	s.markSearched(ctx, "movie", m.ID, out)
+	return out, nil
+}
+
+// movieBoth searches for a movie once and judges what was found for its
+// copy and, when it keeps a second copy, for that one too (second is nil
+// when it doesn't).
+func (s *Service) movieBoth(ctx context.Context, id int64) (first Results, second *Results, err error) {
+	m, err := s.Store.Movie(ctx, id)
+	if err != nil {
+		return Results{}, nil, err
+	}
+	first, rs, err := s.movieReleases(ctx, m)
+	if err != nil {
+		return Results{}, nil, err
+	}
+	if m.SecondProfileID != 0 {
+		second = &Results{Errors: first.Errors, Searched: first.Searched}
+		if err := s.judgeMovie(ctx, m, rs, Ask{Mode: ModeSecond}, second); err != nil {
+			return Results{}, nil, err
+		}
+	}
+	if err := s.judgeMovie(ctx, m, rs, Ask{}, &first); err != nil {
+		return Results{}, nil, err
+	}
+	found := first
+	if second != nil {
+		found.Releases = append(slices.Clone(first.Releases), second.Releases...)
+	}
+	s.markSearched(ctx, "movie", m.ID, found)
+	return first, second, nil
+}
+
+// movieReleases asks the indexers for a movie's releases.
+func (s *Service) movieReleases(ctx context.Context, m store.Movie) (Results, []Release, error) {
+	if err := s.Store.CheckUnlocked(ctx, "movie", m.ID); err != nil {
+		return Results{}, nil, err
 	}
 	rs, notes, n, err := s.ask(ctx, func(ix store.Indexer) Query {
 		q := Query{Type: "movie", TMDBID: m.TMDBID, Cats: cats(ix, 2000, 2999, 2000)}
@@ -263,12 +306,38 @@ func (s *Service) MovieFor(ctx context.Context, id int64, ask Ask) (Results, err
 		}
 		return q
 	})
+	return Results{Errors: notes, Searched: n}, rs, err
+}
+
+// judgeMovie judges a movie's releases as asked, best first, into out.
+func (s *Service) judgeMovie(ctx context.Context, m store.Movie, rs []Release, ask Ask, out *Results) error {
+	blocked, err := s.blocked(ctx, "movie", m.ID)
 	if err != nil {
-		return Results{}, err
+		return err
+	}
+	what := fmt.Sprintf("%s (%d)", m.Title, m.Year)
+	if ask.Mode == ModeSecond {
+		p, err := s.profile(ctx, m.SecondProfileID)
+		if err != nil {
+			return err
+		}
+		for _, r := range rs {
+			c := s.judgeSecond(ctx, r, m, p, blocked)
+			if y := releaseYear(r.Title); y > 0 && m.Year > 0 && (y < m.Year-1 || y > m.Year+1) {
+				c.reject(fmt.Sprintf("it's from %d, and the movie's from %d", y, m.Year))
+			}
+			if m.IMDBID == "" && !titleMatches(r.Title, m.Title) {
+				c.reject("its name doesn't match the movie's")
+			}
+			out.Releases = append(out.Releases, c)
+		}
+		s.rank(ctx, out)
+		s.logResults(what+", second copy", *out)
+		return nil
 	}
 	p, err := s.profile(ctx, m.ProfileID)
 	if err != nil {
-		return Results{}, err
+		return err
 	}
 	has, have := m.File != nil, 0
 	if has {
@@ -276,20 +345,15 @@ func (s *Service) MovieFor(ctx context.Context, id int64, ask Ask) (Results, err
 	}
 	tw, err := s.Store.TitleWant(ctx, "movie", m.ID)
 	if err != nil {
-		return Results{}, err
+		return err
 	}
 	ask = ask.with(tw)
 	p, has = ask.profile(p, has)
 	same := s.replaceSameQuality(ctx)
-	blocked, err := s.blocked(ctx, "movie", m.ID)
-	if err != nil {
-		return Results{}, err
-	}
 	var fixes *fixCheck
 	if has && ask.Mode == "" {
 		fixes = s.fixes(ctx, m.File, 0, 0)
 	}
-	out := Results{Errors: notes, Searched: n}
 	for _, r := range rs {
 		fix := fixes.of(r)
 		c := s.judge(ctx, r, p, has && !fix, have, blocked)
@@ -311,10 +375,30 @@ func (s *Service) MovieFor(ctx context.Context, id int64, ask Ask) (Results, err
 		ask.judgeReplacement(&c, have, same)
 		out.Releases = append(out.Releases, c)
 	}
-	s.rank(ctx, &out)
-	s.markSearched(ctx, "movie", m.ID, out)
-	s.logResults(fmt.Sprintf("%s (%d)", m.Title, m.Year), out)
-	return out, nil
+	s.rank(ctx, out)
+	s.logResults(what, *out)
+	return nil
+}
+
+// judgeSecond judges a release for a movie's second copy, against that
+// copy's profile p. One of the first copy's quality isn't taken: the two
+// are kept to be different.
+func (s *Service) judgeSecond(ctx context.Context, r Release, m store.Movie, p quality.Profile, blocked map[string]bool) Candidate {
+	has, have := m.Second != nil, 0
+	if has {
+		have = m.Second.Quality
+	}
+	c := s.judge(ctx, r, p, has, have, blocked)
+	c.kind, c.titleID, c.mode = "movie", m.ID, ModeSecond
+	// Its own key, so a release shown for the first copy isn't grabbed by
+	// hand into the second one's place.
+	c.Key += "2"
+	c.sized(p, m.Runtime)
+	if m.File != nil && c.Quality == m.File.Quality {
+		q, _ := quality.ByID(c.Quality)
+		c.reject(fmt.Sprintf("the first copy is %s already", q.Name))
+	}
+	return c
 }
 
 // ---- episodes ----
@@ -503,7 +587,7 @@ func (s *Service) rank(ctx context.Context, out *Results) {
 	// The same release from two indexers is shown once.
 	seen := map[string]bool{}
 	out.Releases = slices.DeleteFunc(out.Releases, func(c Candidate) bool {
-		k := strings.ToLower(c.Title) + "\x00" + strconv.FormatInt(c.Size/(1<<20), 10)
+		k := strings.ToLower(c.Title) + "\x00" + strconv.FormatInt(c.Size/(1<<20), 10) + "\x00" + c.mode
 		if seen[k] {
 			return true
 		}
@@ -723,7 +807,7 @@ func (s *Service) autoUpgradeAllowed(ctx context.Context, c Candidate) (bool, er
 	switch {
 	case c.kind == "movie" && c.titleID != 0:
 		m, err := s.Store.Movie(ctx, c.titleID)
-		if err != nil || m.File == nil {
+		if err != nil || c.mode != ModeSecond && m.File == nil || c.mode == ModeSecond && m.Second == nil {
 			return false, nil
 		}
 		pref = m.AutoUpgrade
@@ -817,7 +901,7 @@ func (s *Service) pick(ctx context.Context, res Results, kind string, titleID, e
 		return jobs.Done("found %d %s, none of them right%s", len(res.Releases), plural(len(res.Releases), "release", "releases"), note), nil
 	}
 	best := res.Releases[i]
-	if busy, err := s.busy(ctx, kind, titleID, episodeID, best.Title); err != nil {
+	if busy, err := s.busyFor(ctx, kind, titleID, episodeID, best.Title, best.mode == ModeSecond); err != nil {
 		return jobs.Result{}, err
 	} else if busy {
 		return jobs.Skipped("it's downloading already"), nil
@@ -836,11 +920,20 @@ func (s *Service) pick(ctx context.Context, res Results, kind string, titleID, e
 // busy says whether a movie, or one episode of a show, has a download on
 // the way already, or release name was grabbed for it before.
 func (s *Service) busy(ctx context.Context, kind string, titleID, episodeID int64, name string) (bool, error) {
+	return s.busyFor(ctx, kind, titleID, episodeID, name, false)
+}
+
+// busyFor is busy for a movie's copy, or (second) for its second copy:
+// a download for the one doesn't keep the other waiting.
+func (s *Service) busyFor(ctx context.Context, kind string, titleID, episodeID int64, name string, second bool) (bool, error) {
 	pending, err := s.Store.Pending(ctx, kind, titleID)
 	if err != nil {
 		return false, err
 	}
 	for _, d := range pending {
+		if kind == "movie" && (d.Mode == ModeSecond) != second {
+			continue
+		}
 		if episodeID == 0 || len(d.EpisodeIDs) == 0 || slices.Contains(d.EpisodeIDs, episodeID) {
 			return true, nil
 		}
@@ -856,21 +949,71 @@ func (s *Service) jobMovie(ctx context.Context, payload string) (jobs.Result, er
 	if err != nil {
 		return jobs.Result{}, err
 	}
+	upgrades := true
 	if payloadByHand(payload) {
 		ctx = byHand(ctx)
-	} else if m, err := s.Store.Movie(ctx, id); err == nil && m.File != nil {
-		if skip, err := s.upgradeSkipped(ctx, m.AutoUpgrade); err != nil || skip != "" {
-			return jobs.Skipped("%s", skip), err
+	} else if m, err := s.Store.Movie(ctx, id); err == nil {
+		left, err := s.upgradeRules(ctx, m.AutoUpgrade)
+		if err != nil {
+			return jobs.Result{}, err
 		}
+		upgrades = left != 0
 	}
-	res, err := s.Movie(ctx, id)
+	r, _, _, err := s.findMovie(ctx, id, upgrades)
+	return r, err
+}
+
+// findMovie searches for a movie and grabs the best release for its copy
+// and, when it keeps a second one, the best for that too. A copy that's
+// there is only looked at when upgrades may be taken. It says how many
+// indexers were searched and how many releases were grabbed.
+func (s *Service) findMovie(ctx context.Context, id int64, upgrades bool) (r jobs.Result, searched, grabbed int, err error) {
+	m, err := s.Store.Movie(ctx, id)
+	if err != nil {
+		return jobs.Result{}, 0, 0, err
+	}
+	wantFirst := m.File == nil || upgrades
+	wantSecond := m.SecondProfileID != 0 && (m.Second == nil || upgrades)
+	if !wantFirst && !wantSecond {
+		return jobs.Skipped("it has a copy, and %s", s.whyNoUpgrades(ctx, m.AutoUpgrade)), 0, 0, nil
+	}
+	res, second, err := s.movieBoth(ctx, id)
 	if errors.Is(err, ErrNoIndexers) || errors.Is(err, store.ErrLocked) {
-		return jobs.Skipped("%s", err.Error()), nil
+		return jobs.Skipped("%s", err.Error()), 0, 0, nil
 	}
 	if err != nil {
-		return jobs.Result{}, err
+		return jobs.Result{}, 0, 0, err
 	}
-	return s.pick(ctx, res, "movie", id, 0)
+	searched = res.Searched
+	took := func(r jobs.Result) int {
+		if r.Status == "done" && strings.HasPrefix(r.Message, "grabbed ") {
+			return 1
+		}
+		return 0
+	}
+	if wantFirst {
+		if r, err = s.pick(ctx, res, "movie", id, 0); err != nil {
+			return jobs.Result{}, searched, 0, err
+		}
+		grabbed += took(r)
+	}
+	if wantSecond && second != nil {
+		r2, err := s.pick(ctx, *second, "movie", id, 0)
+		if err != nil {
+			return jobs.Result{}, searched, grabbed, err
+		}
+		grabbed += took(r2)
+		if !wantFirst {
+			r = jobs.Result{Status: r2.Status, Message: "second copy: " + r2.Message}
+		} else {
+			// The job is done if either copy got somewhere.
+			if r2.Status == "done" {
+				r.Status = r2.Status
+			}
+			r.Message += "; second copy: " + r2.Message
+		}
+	}
+	return r, searched, grabbed, nil
 }
 
 func (s *Service) jobEpisode(ctx context.Context, payload string) (jobs.Result, error) {

@@ -158,7 +158,8 @@
     "blockOneThem": "Chặn bản phát hành chúng đến từ, để không tải lại",
     "blockMany": "Chặn các bản phát hành chúng đến từ, để không tải lại",
     "keepThem": "Giữ chúng lại",
-    "delete": "Xóa {{size}}"
+    "delete": "Xóa {{size}}",
+    "secondKept": "Bản sao thứ hai tại {{path}} không nằm trong thư mục này nên vẫn ở trên đĩa. Để xóa cả bản đó, hãy xóa nó trước từ trang của phim."
   },
   "hooks": {
     "unknown": "Không rõ"
@@ -2736,5 +2737,21 @@
     "upTo": "Đã xem đến {{episode}}.",
     "later": "Để sau",
     "laterHint": "Tiết kiệm dung lượng sẽ tải tập này khi có người xem đến gần nó."
+  },
+  "secondCopy": {
+    "title": "Bản sao thứ hai",
+    "hint": "Giữ thêm một bản sao của phim này ở chất lượng khác, chẳng hạn bản 1080p bên cạnh bản 4K. Bản này có hồ sơ chất lượng riêng và được tìm, nâng cấp riêng.",
+    "profile": "Hồ sơ chất lượng của bản sao thứ hai",
+    "off": "Không có bản sao thứ hai",
+    "where": "Nơi lưu",
+    "nextToFirst": "Bên cạnh bản sao thứ nhất",
+    "looking": "Chưa có ở đây. Box Office đang tìm.",
+    "notWatched": "Chưa có ở đây, và phim này không được theo dõi nên Box Office không tìm.",
+    "stopped": "Box Office không còn tìm bản sao thứ hai nữa. Bản này vẫn ở lại cho đến khi bạn xóa.",
+    "delete": "Xóa bản sao thứ hai",
+    "filesOf": "Bản sao thứ hai của {{title}}",
+    "stays": "Phim và bản sao thứ nhất vẫn ở lại.",
+    "stop": "Thôi giữ bản sao thứ hai",
+    "again": "Nếu không, Box Office sẽ tìm một bản sao thứ hai và tải lại."
   }
 }

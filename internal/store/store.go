@@ -138,6 +138,8 @@ func migrateSchema(ctx context.Context, db schemaRunner, postgres bool) error {
 		{"episodes", "held", "INTEGER NOT NULL DEFAULT 0"},
 		{"watched", "furthest_season", "INTEGER NOT NULL DEFAULT 0"},
 		{"watched", "furthest_episode", "INTEGER NOT NULL DEFAULT 0"},
+		{"movies", "second_profile_id", "INTEGER NOT NULL DEFAULT 0"},
+		{"movies", "second_root", "TEXT NOT NULL DEFAULT ''"},
 		{"downloads", "edition", "TEXT NOT NULL DEFAULT ''"},
 		{"downloads", "mode", "TEXT NOT NULL DEFAULT ''"},
 		{"authors", "locked", "INTEGER NOT NULL DEFAULT 0"},
@@ -612,7 +614,12 @@ func (s *Store) RootFolderTitles(ctx context.Context, path string) (int, error) 
 		}
 		total += n
 	}
-	return total, nil
+	// Movies whose second copy is kept there.
+	var n int
+	if err := s.row(ctx, "SELECT COUNT(*) FROM movies WHERE second_profile_id <> 0 AND second_root = ? AND root_folder <> ?", path, path).Scan(&n); err != nil {
+		return 0, err
+	}
+	return total + n, nil
 }
 
 func (s *Store) DeleteRootFolder(ctx context.Context, id int) error {

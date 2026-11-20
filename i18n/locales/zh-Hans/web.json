@@ -158,7 +158,8 @@
     "blockOneThem": "屏蔽它们来源的发布，以免再次抓取",
     "blockMany": "屏蔽它们来源的各个发布，以免再次抓取",
     "keepThem": "保留",
-    "delete": "删除 {{size}}"
+    "delete": "删除 {{size}}",
+    "secondKept": "它在 {{path}} 的第二份副本不在这个文件夹里，所以会留在磁盘上。要一并删除，请先在电影页面删除它。"
   },
   "hooks": {
     "unknown": "未知"
@@ -2736,5 +2737,21 @@
     "upTo": "已看到 {{episode}}。",
     "later": "稍后",
     "laterHint": "有人快看到这一集时，节省空间会获取它。"
+  },
+  "secondCopy": {
+    "title": "第二份副本",
+    "hint": "以不同画质再保留一份这部电影的副本，例如在 4K 副本旁再放一份 1080p 的。它有自己的画质配置，并单独搜索和升级。",
+    "profile": "第二份副本的画质配置",
+    "off": "没有第二份副本",
+    "where": "放在哪里",
+    "nextToFirst": "放在第一份副本旁边",
+    "looking": "它还不在这里。Box Office 正在寻找。",
+    "notWatched": "它还不在这里，而且这部电影没有被关注，所以 Box Office 不会寻找它。",
+    "stopped": "Box Office 不再寻找第二份副本。这一份会保留到你删除为止。",
+    "delete": "删除第二份副本",
+    "filesOf": "{{title}} 的第二份副本",
+    "stays": "电影和它的第一份副本会保留。",
+    "stop": "不再保留第二份副本",
+    "again": "否则 Box Office 会再次寻找并下载第二份副本。"
   }
 }

@@ -139,6 +139,10 @@ type titleRemoval struct {
 	// queued, under way, or waiting for Move into library. They're
 	// cancelled and what they fetched is deleted.
 	Downloads int `json:"downloads"`
+	// SecondKept is a movie's second copy kept in another library folder:
+	// it isn't in the folder that goes, so it stays on disk (delete it
+	// first, from the movie's page, to have it gone too).
+	SecondKept string `json:"secondKept,omitempty"`
 }
 
 func (s *Server) titleRemoval(ctx context.Context, kind string, id int64, p library.Plan) (titleRemoval, error) {
@@ -212,6 +216,7 @@ func (s *Server) movieRemoval(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
+	tr.SecondKept = secondKept(m)
 	return writeJSON(w, http.StatusOK, tr)
 }
 

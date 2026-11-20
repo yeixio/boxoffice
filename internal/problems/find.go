@@ -309,6 +309,9 @@ type finder struct {
 	// extras the folders looked through with a title's own (by title).
 	linked map[string]int64
 	extras map[int64][]string
+	// second are folders in the root that hold the second copy of a movie
+	// kept in another library folder: they're that movie's, not unknown.
+	second map[string]bool
 	// seasons are the subfolders of show folders, read once each.
 	seasons map[string][]string
 	out     []Problem
@@ -347,7 +350,7 @@ func Find(ctx context.Context, st *store.Store, progress func(done, total int)) 
 		if err := ctx.Err(); err != nil {
 			return rep, err
 		}
-		f := &finder{root: filepath.Clean(r.Path), kind: r.Kind, byFolder: map[string]*store.LibraryTitle{}, recorded: map[string]recorded{}, found: map[int64]bool{}, linked: map[string]int64{}, extras: map[int64][]string{}}
+		f := &finder{root: filepath.Clean(r.Path), kind: r.Kind, byFolder: map[string]*store.LibraryTitle{}, recorded: map[string]recorded{}, found: map[int64]bool{}, linked: map[string]int64{}, extras: map[int64][]string{}, second: map[string]bool{}}
 		for _, l := range links {
 			if l.Kind == r.Kind {
 				f.linked[filepath.Clean(l.Path)] = l.TitleID
@@ -356,6 +359,16 @@ func Find(ctx context.Context, st *store.Store, progress func(done, total int)) 
 		for i := range titles {
 			t := &titles[i]
 			if t.Kind != r.Kind || filepath.Clean(t.Root) != f.root {
+				// A movie kept in another library folder can keep its
+				// second copy in this one.
+				for _, tf := range t.Files {
+					if p := filepath.Clean(tf.Path); t.Kind == r.Kind && tf.Kind == store.SecondKind && inside(f.root, p) {
+						f.recorded[p] = recorded{t, tf}
+						if rel, err := filepath.Rel(f.root, p); err == nil {
+							f.second[filepath.Join(f.root, strings.Split(rel, string(filepath.Separator))[0])] = true
+						}
+					}
+				}
 				continue
 			}
 			f.titles = append(f.titles, t)
@@ -449,6 +462,13 @@ func (f *finder) run(ctx context.Context) (Root, []Problem) {
 		if e.IsDir() {
 			if t := f.byFolder[path]; t != nil {
 				f.titleFolder(t, seen)
+			} else if f.second[path] {
+				// The second copy of a movie in another library folder:
+				// only whether it's still there is checked, below.
+				files, _ := walk(path, false)
+				for _, e := range files {
+					seen[e.path] = true
+				}
 			} else if t := extra[path]; t != nil {
 				// Looked through with the title's own folder.
 				if f.byFolder[filepath.Clean(t.Path)] == nil || filepath.Dir(filepath.Clean(t.Path)) != f.root {
@@ -755,6 +775,9 @@ func withSubtitles(from, to string) []Move {
 
 // misplaced is a title's recorded copy kept somewhere other than its folder.
 func (f *finder) misplaced(rc recorded, fl File) {
+	if rc.file.Kind == store.SecondKind {
+		return // a second copy is kept where it was put
+	}
 	fl.Recorded = true
 	t := rc.title
 	dest := f.expected(t, rc.file, fl.Path)
@@ -926,7 +949,7 @@ func (f *finder) movieFolder(t *store.LibraryTitle, videos, discs []entry) {
 	// Parts first: a movie in parts is one copy.
 	groups := map[string][]entry{}
 	for _, v := range videos {
-		if _, ok := f.recorded[v.path]; ok && f.recorded[v.path].file.Kind == "edition" {
+		if rc, ok := f.recorded[v.path]; ok && (rc.file.Kind == "edition" || rc.file.Kind == store.SecondKind) {
 			continue
 		}
 		rest, n := Part(v.path)
@@ -991,6 +1014,9 @@ func (f *finder) movieFolder(t *store.LibraryTitle, videos, discs []entry) {
 			if rc.file.Kind == "edition" {
 				f.checkName(t, rc.file, fl)
 				continue
+			}
+			if rc.file.Kind == store.SecondKind {
+				continue // the movie's second copy, wanted next to the first
 			}
 		}
 		copies = append(copies, fl)
