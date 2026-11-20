@@ -14,7 +14,7 @@ import (
 func (s *Store) OtherTitleIn(ctx context.Context, folder, kind string, id int64) (string, error) {
 	folder = filepath.Clean(folder)
 	prefix := folder + string(filepath.Separator)
-	n := len(prefix)
+	n := prefixLen(prefix)
 	for _, q := range []struct{ table, kind string }{{"movies", "movie"}, {"series", "series"}} {
 		var title string
 		except := int64(-1)

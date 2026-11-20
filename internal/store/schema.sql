@@ -854,3 +854,29 @@ CREATE TABLE IF NOT EXISTS passkeys (
 	used_at    BIGINT NOT NULL DEFAULT 0
 );
 CREATE INDEX IF NOT EXISTS passkeys_member ON passkeys (member_id);
+
+-- Titles being moved to another root folder (a new drive, say), one row
+-- each, worked through in order in the background (package relocate). A
+-- title is copied and checked before its folder is switched, and only then
+-- is the original removed; state says how far it got, so a restart carries
+-- on. Not kept in backups.
+CREATE TABLE IF NOT EXISTS title_moves (
+	id          INTEGER PRIMARY KEY AUTOINCREMENT,
+	kind        TEXT NOT NULL,             -- movie or series
+	title_id    BIGINT NOT NULL,
+	title       TEXT NOT NULL,             -- for the list
+	from_root   TEXT NOT NULL,
+	from_path   TEXT NOT NULL,             -- its folder when it was picked
+	to_root     TEXT NOT NULL,
+	to_path     TEXT NOT NULL DEFAULT '',  -- its new folder, once it starts
+	files       INTEGER NOT NULL DEFAULT 0,
+	size        BIGINT NOT NULL DEFAULT 0,
+	state       TEXT NOT NULL DEFAULT 'waiting', -- waiting, copying, copied, switched, done, failed, skipped, cancelled
+	manifest    TEXT NOT NULL DEFAULT '',  -- JSON: the files copied, their sizes and checksums
+	note        TEXT NOT NULL DEFAULT '',
+	tries       INTEGER NOT NULL DEFAULT 0,
+	created_at  BIGINT NOT NULL,
+	started_at  BIGINT NOT NULL DEFAULT 0,
+	finished_at BIGINT NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS title_moves_state ON title_moves (state, id);

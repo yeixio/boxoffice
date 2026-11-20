@@ -94,3 +94,21 @@ func (e *Engine) releaseImport(id int64) {
 	delete(e.importing, id)
 	e.mu.Unlock()
 }
+
+// ImportAfterMove moves in a title's finished downloads that waited while
+// its folder was moved to another root folder (ErrTitleMoving).
+func (e *Engine) ImportAfterMove(ctx context.Context, kind string, id int64) {
+	list, err := e.Store.UnfinishedFor(ctx, []string{kind}, []int64{id})
+	if err != nil {
+		e.Log.Warn("couldn't look for downloads that waited for a title's move", "err", err)
+		return
+	}
+	for _, d := range list {
+		if !e.CanImport(d) || !strings.Contains(d.Message, ErrTitleMoving.Error()) {
+			continue
+		}
+		if err := e.Import(ctx, d.ID); err != nil {
+			e.Log.Info("couldn't move in a download that waited for its title's move", "name", d.Name, "err", err)
+		}
+	}
+}

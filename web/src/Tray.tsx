@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 import { Bell, Check, LoaderCircle, X } from 'lucide-react'
 import { del, get, type Progress, type Scan } from './api'
 import { appName } from './format'
+import { moveTrayItem, useMoves } from './MoveTitles'
 
 // Moves finished this long ago still show, so their result can be seen.
 const recent = 30 * 60 * 1000
@@ -54,10 +55,14 @@ export function useBackground() {
     await del(`/migrations/scans/${id}`)
     qc.invalidateQueries({ queryKey: ['scans'] })
   }
+  // Titles being moved to another root folder.
+  const titleMoves = useMoves()
   const now = Date.now()
+  const moving = moveTrayItem(titleMoves.data, now)
   const items: Item[] = [
     ...(scans.data ?? []).map((s) => scanItem(s, dismiss(s.id))),
     ...(moves.data ?? []).filter((m) => m.status === 'running' || now - Date.parse(m.finished ?? m.started) < recent).map(moveItem),
+    ...(moving ? [moving] : []),
   ]
   return items
 }

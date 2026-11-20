@@ -1089,3 +1089,27 @@ export type CleanupPreview = { waiting?: 'report' | 'plays'; count: number; size
 // one ('' and 0).
 export type AddRule = { id: number; name: string; kind: 'movie' | 'series'; genres: number[]; language: string; rootFolder: string; profileId: number }
 export type AddRules = { rules: AddRule[]; movieGenres: { id: number; name: string }[]; seriesGenres: { id: number; name: string }[] }
+
+// Moving titles to another root folder (a new drive, say).
+export type MoveTitle = { id: number; title: string; root: string; from: string; to: string; files: number; size: number; problem?: string; notes?: string[] }
+export type MovePlan = { kind: 'movie' | 'series'; to: string; titles: MoveTitle[]; count: number; files: number; size: number; skipped: MoveTitle[]; freeSpace: number; need: number; problem?: string }
+export type TitleMoveState = 'waiting' | 'copying' | 'copied' | 'switched' | 'done' | 'failed' | 'skipped' | 'cancelled'
+export type TitleMove = {
+  id: number
+  kind: 'movie' | 'series'
+  titleId: number
+  title: string
+  fromRoot: string
+  fromPath: string
+  toRoot: string
+  toPath: string
+  files: number
+  size: number
+  state: TitleMoveState
+  note?: string
+  createdAt: string
+  startedAt?: string
+  finishedAt?: string
+}
+export type MoveProgress = { stage: 'copying' | 'checking' | 'removing'; done: number; size: number; file?: string; speed: number }
+export type MoveStatus = { paused: boolean; pausedWhy?: string; speedLimit: number; current?: TitleMove; progress?: MoveProgress; moves: TitleMove[]; size: number; done: number }

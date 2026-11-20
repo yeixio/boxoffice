@@ -146,7 +146,7 @@ export function speed(n: number) {
   return i18n.t("web:dl.speed", { size: bytes(n) });
 }
 
-function eta(left: number, rate: number) {
+export function eta(left: number, rate: number) {
   const time = duration(left, rate);
   return time ? i18n.t("web:dl.eta.left", { time }) : "";
 }

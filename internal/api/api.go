@@ -42,6 +42,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/problems"
 	"github.com/yeixio/boxoffice/internal/push"
 	"github.com/yeixio/boxoffice/internal/qualitycheck"
+	"github.com/yeixio/boxoffice/internal/relocate"
 	"github.com/yeixio/boxoffice/internal/search"
 	"github.com/yeixio/boxoffice/internal/sso"
 	"github.com/yeixio/boxoffice/internal/store"
@@ -70,9 +71,13 @@ type Server struct {
 	// Home is the Home videos and photos section, used while it's turned on.
 	Home *homemedia.Service
 	// Imports is the Import page's imports folder.
-	Imports  *importer.Service
-	Backups  *backup.Manager
-	Migrator *migrate.Migrator
+	Imports *importer.Service
+	// Moves moves titles to another root folder; nil makes one that only
+	// plans and answers.
+	Moves     *relocate.Service
+	movesOnce sync.Once
+	Backups   *backup.Manager
+	Migrator  *migrate.Migrator
 	// Downloads is the downloader, and Search finds releases for it.
 	Downloads *downloader.Engine
 	Search    *search.Service
@@ -341,6 +346,7 @@ func (s *Server) Handler() http.Handler {
 	routes = append(routes, s.gameRoutes()...)
 	routes = append(routes, s.homeRoutes()...)
 	routes = append(routes, s.importRoutes()...)
+	routes = append(routes, s.moveRoutes()...)
 	for _, r := range routes {
 		mux.Handle(r.pattern, s.wrap(r))
 	}

@@ -46,6 +46,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/problems"
 	"github.com/yeixio/boxoffice/internal/push"
 	"github.com/yeixio/boxoffice/internal/qualitycheck"
+	"github.com/yeixio/boxoffice/internal/relocate"
 	"github.com/yeixio/boxoffice/internal/search"
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/subtitles"
@@ -150,7 +151,10 @@ func run() error {
 		mb.Base = cfg.MusicBrainz
 	}
 	backups := &backup.Manager{Store: db, Dir: cfg.BackupDir(), Log: log}
-	libImporter := &downloader.LibraryImporter{Store: db}
+	// Titles moved to another root folder, in the background. While one
+	// is, its downloads wait to go into its folder.
+	mover := &relocate.Service{Store: db, Log: log}
+	libImporter := &downloader.LibraryImporter{Store: db, Moving: mover.Moving}
 	downloads := &downloader.Engine{Store: db, Dir: cfg.Downloads, NZBDir: filepath.Join(cfg.DataDir, "nzb"), Log: log, Importer: libImporter,
 		Libraries: func(ctx context.Context) ([]string, error) {
 			roots, err := db.RootFolders(ctx, "")
@@ -229,12 +233,14 @@ func run() error {
 	// An NZB added by hand for no title is filed through it once it's
 	// downloaded.
 	downloads.FileAway = imports.Adopt
+	mover.AfterMove = downloads.ImportAfterMove
 	srv := &api.Server{
 		Store: db, Catalog: cat, Music: tunes, LibScan: scanner, Problems: finds, QualityCheck: checker, Backups: backups, Migrator: &migrate.Migrator{Catalog: cat, Books: shelf, Backups: backups, Log: log, DataDir: cfg.DataDir}, Log: log,
 		Books:     shelf,
 		Games:     gameShelf,
 		Home:      homeShelf,
 		Imports:   imports,
+		Moves:     mover,
 		Portal:    &portal.Service{Store: db, Catalog: cat, Notify: notes, Log: log},
 		Downloads: downloads, Search: finder,
 		Version: version.Version, Database: dbKind, DatabaseInfo: api.DatabaseInfo{DSN: opened.dsn, Configured: opened.configured}, DataDir: cfg.DataDir, EnvAPIKey: cfg.APIKey, Web: web.FS(),
@@ -291,7 +297,7 @@ func run() error {
 	var wg sync.WaitGroup
 	for _, loop := range []func(context.Context){runner.Run, backups.Run, downloads.Run, mon.Monitor.Run, alerter.Run,
 		func(ctx context.Context) { cat.RefreshEvery(ctx, cfg.Refresh) }, func(ctx context.Context) { finder.AutoSearchEvery(ctx, runner) },
-		finder.RSSEvery, finder.HeldEvery, finder.RegrabsEvery, finder.PruneEvery, shelf.DetailsEvery, finds.Run, checker.Run, subs.Run, follower.Run, gameShelf.Run, homeShelf.Run, func(ctx context.Context) { api.RecycleSweepEvery(ctx, db, log) }, srv.RunCleanup,
+		finder.RSSEvery, finder.HeldEvery, finder.RegrabsEvery, finder.PruneEvery, shelf.DetailsEvery, finds.Run, checker.Run, subs.Run, follower.Run, mover.Run, gameShelf.Run, homeShelf.Run, func(ctx context.Context) { api.RecycleSweepEvery(ctx, db, log) }, srv.RunCleanup,
 		func(ctx context.Context) { retryImports(ctx, downloads, log) }} {
 		wg.Add(1)
 		go func() { defer wg.Done(); loop(ctx) }()
