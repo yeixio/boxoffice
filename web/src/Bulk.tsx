@@ -1,12 +1,14 @@
 // Changing many titles at once: pick them on Movies or Shows, then set
-// their quality profile (Do not touch, say) or whether they're watched for.
+// their quality profile (Do not touch, say) or whether they're watched
+// for, or move them to another root folder.
 
 import { useTranslation } from 'react-i18next'
 import { useState, type ReactNode } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Flag, Lock } from 'lucide-react'
+import { Flag, FolderInput, Lock } from 'lucide-react'
 import { post, type Reported } from './api'
 import { useProfiles } from './hooks'
+import { MoveDialog } from './MoveTitles'
 import { Button, ErrorNote, Select } from './ui'
 
 export function useSelection() {
@@ -41,6 +43,8 @@ export function BulkBar({ kind, sel, shown }: { kind: 'movies' | 'series'; sel: 
   const locked = profiles.data?.find((p) => p.locked)
   const [profile, setProfile] = useState('')
   const [done, setDone] = useState('')
+  // Moving the picked titles to another root folder.
+  const [moving, setMoving] = useState(false)
   const apply = useMutation({
     mutationFn: (body: { profileId?: number; monitored?: boolean }) => post<{ changed: number }>(`/${kind}/bulk`, { ids: [...sel.ids], ...body }),
     onSuccess: (r) => {
@@ -81,6 +85,9 @@ export function BulkBar({ kind, sel, shown }: { kind: 'movies' | 'series'; sel: 
           <Button disabled={!n} onClick={() => apply.mutate({ monitored: false })}>
             {t('bulk.pause')}
           </Button>
+          <Button disabled={!n} onClick={() => setMoving(true)}>
+            <FolderInput className="size-4" aria-hidden /> {t('relocate.moveTo')}
+          </Button>
           <Button variant="ghost" onClick={sel.stop}>
             {t('bulk.done')}
           </Button>
@@ -88,6 +95,7 @@ export function BulkBar({ kind, sel, shown }: { kind: 'movies' | 'series'; sel: 
       </div>
       {done && !apply.isPending && <p className="mt-1 text-xs text-muted">{done}</p>}
       <ErrorNote error={apply.error} />
+      {moving && <MoveDialog kind={kind === 'movies' ? 'movie' : 'series'} ids={[...sel.ids]} onClose={() => setMoving(false)} onStarted={() => sel.set([])} />}
     </div>
   )
 }

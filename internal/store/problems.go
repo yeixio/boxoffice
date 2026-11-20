@@ -172,7 +172,7 @@ func (s *Store) MoveTitleFolder(ctx context.Context, kind string, id int64, from
 	}
 	from, to = filepath.Clean(from), filepath.Clean(to)
 	prefix := from + string(filepath.Separator)
-	rows, err := tx.QueryContext(ctx, s.q("SELECT id, path FROM media_files WHERE substr(path, 1, ?) = ?"), len(prefix), prefix)
+	rows, err := tx.QueryContext(ctx, s.q("SELECT id, path FROM media_files WHERE substr(path, 1, ?) = ?"), prefixLen(prefix), prefix)
 	if err != nil {
 		return err
 	}

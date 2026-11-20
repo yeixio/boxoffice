@@ -204,6 +204,9 @@ func (s *Server) lockPlan(ctx context.Context, kind string, id int64, p *library
 	if err == nil && locked {
 		p.Problem = "it's set to Do not touch, so Box Office never deletes its files (pick another quality profile for it first)"
 	}
+	if s.Moves.Moving(kind, id) {
+		p.Problem = "it's being moved to another root folder right now; try again once that's done"
+	}
 	return err
 }
 

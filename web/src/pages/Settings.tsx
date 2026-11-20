@@ -4,7 +4,7 @@ import { Trans, useTranslation } from 'react-i18next'
 import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { AlertTriangle, ArrowRight, ArrowRightLeft, CircleCheck, Copy, Database, Lock, Search, Folder, FolderUp, KeyRound, LoaderCircle, Plus, RotateCcw, Trash2 } from 'lucide-react'
+import { AlertTriangle, ArrowRight, ArrowRightLeft, CircleCheck, Copy, Database, Lock, Search, Folder, FolderInput, FolderUp, KeyRound, LoaderCircle, Plus, RotateCcw, Trash2 } from 'lucide-react'
 import { api, del, get, post, put, type Status, type MediaType, type MediaTypeKey, type DatabaseInfo, type Profile, type ProfilePrefs, type ProfilePreset, type ProfileSizes, type Recycle, type RestartInfo, type RootFolder, type RootKind, type Settings as SettingsData, type ShowDefaults, type SystemInfo } from '../api'
 import { bytes, day } from '../format'
 import { AddRulesCard } from './AddRules'
@@ -24,6 +24,7 @@ import { PhoneCard } from './Phone'
 import { CodeCard, PasskeysCard } from './SignInWays'
 import { SsoCard } from './Sso'
 import { matches, spans, words } from './settingsSearch'
+import { MoveDialog, MovesCard } from '../MoveTitles'
 import { Badge, Button, Card, ErrorNote, Field, Input, Modal, Select, Spinner, Toggle } from '../ui'
 
 // The sections Settings is split into, in tab order. "elsewhere" is never a
@@ -63,6 +64,7 @@ const sections: SectionDef[] = [
       { id: 'media-types', el: <MediaTypes /> },
       { id: 'folders-movie', el: <RootFolders kind="movie" />, keys: ['settings.addFolder', 'files.folder'] },
       { id: 'folders-series', el: <RootFolders kind="series" />, keys: ['settings.addFolder', 'files.folder'] },
+      { id: 'moves', el: <MovesCard />, keys: ['relocate.speedLimit', 'relocate.to'], terms: ['migrate', 'move', 'new drive', 'new disk', 'storage', 'transfer', 'relocate'] },
       ...mediaKinds.map((k) => ({ id: `folders-${k}`, el: <TypeFolders kind={k} />, keys: ['settings.addFolder', 'files.folder'] })),
       { id: 'new-shows', el: <NewShows /> },
       { id: 'add-rules', el: <AddRulesCard />, keys: ['rules.genres', 'rules.language'], terms: ['anime', 'kids', 'override rules', 'Seerr'] },
@@ -592,6 +594,8 @@ function RootFolders({ kind, type }: { kind: RootKind; type?: MediaType }) {
   const [picking, setPicking] = useState(false)
   // Removing one asks first, and waits until no titles are filed under it.
   const [removing, setRemoving] = useState<RootFolder | null>(null)
+  // Moving all its titles to another root folder, such as a new drive.
+  const [moving, setMoving] = useState('')
   const remove = useMutation({
     mutationFn: (f: RootFolder) => del(`/rootfolders/${f.id}`),
     onSuccess: () => {
@@ -625,6 +629,11 @@ function RootFolders({ kind, type }: { kind: RootKind; type?: MediaType }) {
             {f.accessible ? <span className="text-xs text-muted">{t('settings.free', { size: bytes(f.freeSpace) })}</span> : <Badge tone="bad">{t('settings.cantSee')}</Badge>}
             {f.accessible && scannable(kind) && <ScanButton folder={f} />}
             {f.accessible && kind === 'game' && <GameCheckButton rootId={f.id} />}
+            {(kind === 'movie' || kind === 'series') && f.titles > 0 && (folders.data?.length ?? 0) > 1 && (
+              <Button variant="ghost" onClick={() => setMoving(f.path)}>
+                <FolderInput className="size-4" aria-hidden /> {t('relocate.moveAll')}
+              </Button>
+            )}
             <button onClick={() => ask(f)} aria-label={t('settings.removePath', { path: f.path })} className="rounded p-1 text-muted hover:bg-line hover:text-bad">
               <Trash2 className="size-4" />
             </button>
@@ -638,6 +647,7 @@ function RootFolders({ kind, type }: { kind: RootKind; type?: MediaType }) {
         <p className="mt-2 text-xs text-muted">{t(`settings.scanFor.${kind === 'movie' || kind === 'series' || kind === 'music' ? kind : 'books'}`)}</p>
       )}
       {picking && <FolderPicker kind={kind} title={addTitle(kind, type)} onClose={() => setPicking(false)} />}
+      {moving && (kind === 'movie' || kind === 'series') && <MoveDialog kind={kind} from={moving} onClose={() => setMoving('')} />}
       {removing && (
         <Modal title={t('settings.removeRoot.title')} onClose={() => setRemoving(null)}>
           <div className="flex flex-col gap-4">
