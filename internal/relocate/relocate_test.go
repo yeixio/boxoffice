@@ -378,6 +378,44 @@ func TestWaitsForADownloadGoingIn(t *testing.T) {
 	}
 }
 
+// A file going into a title's folder by hand (Import files, or Move into
+// library on Downloads) has no download state to see, so it's counted
+// while it goes in: a move waits for it, and it's refused while the title
+// moves.
+func TestWaitsForAFileGoingIn(t *testing.T) {
+	ctx := context.Background()
+	f := setup(t)
+	m := f.movie(t, "Ran (1985)", 11645, map[string]string{"Ran (1985).mkv": "ran"})
+	f.start(t, Pick{Kind: "movie", IDs: []int64{m.ID}, To: f.new})
+	leave, ok := f.s.Enter("movie", m.ID)
+	if !ok {
+		t.Fatal("refused before any move started")
+	}
+	if f.s.runOnce(ctx) {
+		t.Fatal("moved while a file was going in")
+	}
+	if got := f.moves(t)["Ran (1985)"]; got.State != store.MoveWaiting || !strings.Contains(got.Note, "download") {
+		t.Fatalf("move %+v", got)
+	}
+	leave()
+	leave() // twice is harmless
+	// While it moves, nothing goes in.
+	var during bool
+	afterCopy = func() { _, during = f.s.Enter("movie", m.ID) }
+	t.Cleanup(func() { afterCopy = nil })
+	acrossDisks(t)
+	f.s.RunAll(ctx)
+	if during {
+		t.Fatal("a file was let in during the move")
+	}
+	if got := f.moves(t)["Ran (1985)"]; got.State != store.MoveDone {
+		t.Fatalf("move %+v", got)
+	}
+	if _, ok := f.s.Enter("movie", m.ID); !ok {
+		t.Fatal("still refused after the move")
+	}
+}
+
 func jsonList(list []entry) (string, error) {
 	b, err := json.Marshal(list)
 	return string(b), err

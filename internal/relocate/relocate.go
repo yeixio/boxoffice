@@ -71,8 +71,11 @@ type Service struct {
 
 	speed atomic.Int64 // MB/s, 0 for no limit
 
-	mu      sync.Mutex
-	held    map[key]bool
+	mu   sync.Mutex
+	held map[key]bool
+	// writing counts what's going into each title's folder right now
+	// (Enter), so a move doesn't start under it.
+	writing map[key]int
 	current *store.TitleMove
 	prog    *live
 	stop    context.CancelCauseFunc
@@ -122,10 +125,50 @@ func (s *Service) Moving(kind string, id int64) bool {
 	return s.held[key{kind, id}]
 }
 
-func (s *Service) hold(kind string, id int64) {
+// Enter is for something about to write into a title's folder, such as a
+// download going in. It says no while the title is being moved; otherwise
+// no move starts on the title until leave is called. Checking and
+// counting under one lock means a download can't slip in between a move's
+// checks and its copy, or a move start under a download half moved in.
+func (s *Service) Enter(kind string, id int64) (leave func(), ok bool) {
+	if s == nil {
+		return func() {}, true
+	}
+	k := key{kind, id}
 	s.mu.Lock()
+	defer s.mu.Unlock()
+	if s.held[k] {
+		return nil, false
+	}
+	if s.writing == nil {
+		s.writing = map[key]int{}
+	}
+	s.writing[k]++
+	var once sync.Once
+	return func() {
+		once.Do(func() {
+			s.mu.Lock()
+			if s.writing[k]--; s.writing[k] <= 0 {
+				delete(s.writing, k)
+			}
+			s.mu.Unlock()
+		})
+	}, true
+}
+
+// hold keeps everything else out of a title's folder while it moves. It
+// says no while something is going into the folder (Enter).
+func (s *Service) hold(kind string, id int64) bool {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if s.writing[key{kind, id}] > 0 {
+		return false
+	}
+	if s.held == nil {
+		s.held = map[key]bool{}
+	}
 	s.held[key{kind, id}] = true
-	s.mu.Unlock()
+	return true
 }
 
 func (s *Service) release(ctx context.Context, kind string, id int64) {
@@ -227,7 +270,9 @@ func plural(n int, one, other string) string {
 // its folder.
 func (s *Service) work(ctx context.Context, m store.TitleMove) bool {
 	if m.State != store.MoveWaiting {
-		s.hold(m.Kind, m.TitleID)
+		if !s.hold(m.Kind, m.TitleID) {
+			return false
+		}
 		defer s.release(ctx, m.Kind, m.TitleID)
 		s.resume(ctx, m)
 		return true
@@ -257,9 +302,13 @@ func (s *Service) work(ctx context.Context, m store.TitleMove) bool {
 	}
 	// Held first, so a download can't start going into its folder between
 	// the check and the copy.
-	s.hold(m.Kind, m.TitleID)
-	if why, err := s.busy(ctx, m); err != nil || why != "" {
-		s.release(ctx, m.Kind, m.TitleID)
+	why, err := waitingForDownload, error(nil)
+	if s.hold(m.Kind, m.TitleID) {
+		if why, err = s.busy(ctx, m); err != nil || why != "" {
+			s.release(ctx, m.Kind, m.TitleID)
+		}
+	}
+	if err != nil || why != "" {
 		if why != "" && why != m.Note {
 			m.Note = why
 			s.Store.SaveTitleMove(ctx, m)
@@ -281,6 +330,8 @@ func (s *Service) work(ctx context.Context, m store.TitleMove) bool {
 	return true
 }
 
+const waitingForDownload = "waiting for a download to go into its folder first"
+
 // busy says what the title's waiting for before it can be moved, or "".
 func (s *Service) busy(ctx context.Context, m store.TitleMove) (string, error) {
 	list, err := s.Store.UnfinishedFor(ctx, []string{m.Kind}, []int64{m.TitleID})
@@ -290,7 +341,7 @@ func (s *Service) busy(ctx context.Context, m store.TitleMove) (string, error) {
 	for _, d := range list {
 		switch d.Status {
 		case store.DownloadVerifying, store.DownloadRepairing, store.DownloadUnpacking, store.DownloadImporting:
-			return "waiting for a download to go into its folder first", nil
+			return waitingForDownload, nil
 		}
 	}
 	return "", nil

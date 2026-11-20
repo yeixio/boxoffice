@@ -65,6 +65,7 @@ What changed in Box Office, newest first. The format follows [Keep a Changelog](
 
 ### Fixed
 
+- A file moved into a show's or movie's folder by hand (Import files, or **Move into library** on Downloads) can no longer go in just as that title starts moving to another root folder. The move now waits for it, the same way it already waited for downloads.
 - The **Move titles** button beside a movie or show root folder now shows even when it's the only root folder; its dialog says to add the new drive's folder first.
 - **Folders named with accents are checked properly.** Removing a title with its files, and moving a folder's records in Problem files, now see the files inside a folder whose name has an accent or other non-English letter (Amélie, TÁR). Before, the check for another title's files in the same folder missed them there.
 - **Big libraries open quickly.** Movies and Shows drew a card for every title at once, so a library of a few thousand took seconds to appear on a phone and lagged behind each letter typed in the filter. They now draw the first 120 cards and more as you scroll towards the end. The count, the filter, sorting and **Select all** still work over the whole list, and coming back from a title finds the list where you left it.
