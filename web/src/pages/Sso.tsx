@@ -28,6 +28,10 @@ type Trial = {
   error?: string
 }
 
+// A provider's name to show in the empty box: a product's name, the same in
+// every language.
+const exampleName = 'Authentik'
+
 // lines reads a box with one account on each line.
 export const lines = (s: string) =>
   s
@@ -134,7 +138,7 @@ export function SsoCard() {
           </Field>
         </div>
         <Field label={t('sso.name')} hint={t('sso.nameHint')}>
-          {(id) => <Input id={id} maxLength={40} placeholder="Authentik" value={form.name} onChange={(e) => set({ name: e.target.value })} />}
+          {(id) => <Input id={id} maxLength={40} placeholder={exampleName} value={form.name} onChange={(e) => set({ name: e.target.value })} />}
         </Field>
         <Field label={t('sso.admins')} hint={t('sso.adminsHint')}>
           {(id) => (
