@@ -150,11 +150,18 @@ func (s *Server) profiles(w http.ResponseWriter, r *http.Request) error {
 	return writeJSON(w, http.StatusOK, ps)
 }
 
+// profilePresets are the ready-made release preferences a profile can
+// turn on, with the words each prefers and avoids.
+func (s *Server) profilePresets(w http.ResponseWriter, r *http.Request) error {
+	return writeJSON(w, http.StatusOK, quality.Presets)
+}
+
 func (s *Server) createProfile(w http.ResponseWriter, r *http.Request) error {
 	var p quality.Profile
 	if err := readJSON(r, &p); err != nil {
 		return err
 	}
+	p.Prefs = p.Prefs.Clean()
 	p.Locked = false // there's one Do not touch profile, and it's built in
 	if err := p.Check(); err != nil {
 		return errorf(http.StatusBadRequest, err.Error())
@@ -174,10 +181,12 @@ func (s *Server) updateProfile(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
-	// Sizes is apart so a save that leaves the size limits out keeps them.
+	// Sizes and Prefs are apart so a save that leaves the size limits or
+	// the release preferences out keeps them.
 	var body struct {
 		quality.Profile
 		Sizes *quality.Sizes `json:"sizes"`
+		Prefs *quality.Prefs `json:"prefs"`
 	}
 	if err := readJSON(r, &body); err != nil {
 		return err
@@ -191,9 +200,12 @@ func (s *Server) updateProfile(w http.ResponseWriter, r *http.Request) error {
 	if old.Locked {
 		return errorf(http.StatusBadRequest, "Do not touch is built in and can't be changed")
 	}
-	p.Sizes = old.Sizes
+	p.Sizes, p.Prefs = old.Sizes, old.Prefs
 	if body.Sizes != nil {
 		p.Sizes = *body.Sizes
+	}
+	if body.Prefs != nil {
+		p.Prefs = body.Prefs.Clean()
 	}
 	p.Locked = false
 	if err := p.Check(); err != nil {

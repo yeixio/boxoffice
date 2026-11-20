@@ -117,7 +117,9 @@
     "grabCount_other": "{{count}} lượt tải",
     "notPicked": "Không chọn: {{why}}",
     "inQueue": "Trong hàng đợi",
-    "grab": "Tải"
+    "grab": "Tải",
+    "preferred": "Hồ sơ ưu tiên: {{words}}",
+    "avoided": "Hồ sơ tránh: {{words}}. Chỉ được chọn khi không còn gì khác ở chất lượng này."
   },
   "remove": {
     "deletesFolder_other": "Xóa thư mục <code>{{folder}}</code> và mọi thứ bên trong: <strong>{{count}} tệp</strong>, <strong>{{size}}</strong>.",
@@ -1124,7 +1126,20 @@
     "sizeMin": "Ít nhất",
     "sizeMax": "Nhiều nhất",
     "sizesNote": "Bản phát hành mà tên không cho biết video được nén kiểu nào sẽ theo con số của H.264, và tựa không rõ thời lượng thì không được kiểm tra. Bạn vẫn có thể tự chọn bất kỳ bản phát hành nào.",
-    "sizesOn": ", giới hạn kích thước"
+    "sizesOn": ", giới hạn kích thước",
+    "prefs": "Ưu tiên bản phát hành",
+    "prefsHint": "Các từ và nhóm phát hành trong tên bản phát hành cần ưu tiên hoặc tránh. Trong các bản phát hành cùng chất lượng, bản có nhiều từ được ưu tiên nhất sẽ được chọn, còn bản có từ cần tránh chỉ được chọn khi không còn gì khác.",
+    "prefsBest": "Hình ảnh và âm thanh tốt nhất",
+    "prefsSmall": "Tệp nhỏ hơn",
+    "prefsPoor": "Tránh bản nâng độ phân giải và bản kém chất lượng",
+    "prefsPrefers": "Ưu tiên {{words}}.",
+    "prefsAvoids": "Tránh {{words}}.",
+    "prefsPrefer": "Ưu tiên",
+    "prefsAvoid": "Tránh",
+    "prefsNever": "Không bao giờ lấy",
+    "prefsWordsHint": "Phân cách các từ bằng dấu phẩy. Từ phải khớp trọn vẹn, viết hoa hay thường đều được, trong phần tên nằm sau tiêu đề.",
+    "prefsNeverHint": "Bản phát hành có một trong các từ này sẽ bị từ chối. Bạn vẫn có thể tự chọn nó.",
+    "prefsOn": ", ưu tiên bản phát hành"
   },
   "mediaTypes": {
     "music": {

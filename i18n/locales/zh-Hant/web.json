@@ -117,7 +117,9 @@
     "grabCount_other": "抓取 {{count}} 次",
     "notPicked": "未選中：{{why}}",
     "inQueue": "在佇列中",
-    "grab": "抓取"
+    "grab": "抓取",
+    "preferred": "畫質配置優先：{{words}}",
+    "avoided": "畫質配置避開：{{words}}。只在這個畫質沒有其他選擇時才選。"
   },
   "remove": {
     "deletesFolder_other": "刪除資料夾 <code>{{folder}}</code> 及其中所有內容：<strong>{{count}} 個檔案</strong>，<strong>{{size}}</strong>。",
@@ -1124,7 +1126,20 @@
     "sizeMin": "最小",
     "sizeMax": "最大",
     "sizesNote": "名稱裡沒有寫明視訊編碼的發布依 H.264 的數值處理，片長未知的影片不會檢查。你仍然可以自己選擇任何發布。",
-    "sizesOn": "，有大小限制"
+    "sizesOn": "，有大小限制",
+    "prefs": "發布偏好",
+    "prefsHint": "發布名稱中要優先或避開的詞和發布組。在相同畫質的發布中，選中優先詞最多的那個；含有避開詞的發布只在沒有其他選擇時才選。",
+    "prefsBest": "最佳畫質和音質",
+    "prefsSmall": "更小的檔案",
+    "prefsPoor": "避開放大版和劣質發布",
+    "prefsPrefers": "優先：{{words}}。",
+    "prefsAvoids": "避開：{{words}}。",
+    "prefsPrefer": "優先",
+    "prefsAvoid": "避開",
+    "prefsNever": "絕不取得",
+    "prefsWordsHint": "用逗號分隔各個詞。詞要在名稱中標題之後的部分整詞相符，不區分大小寫。",
+    "prefsNeverHint": "含有其中任何一個詞的發布會被拒絕。你仍然可以自己選擇它。",
+    "prefsOn": "，有發布偏好"
   },
   "mediaTypes": {
     "music": {

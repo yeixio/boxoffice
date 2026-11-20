@@ -117,7 +117,9 @@
     "grabCount_other": "{{count}} ambilan",
     "notPicked": "Tidak dipilih: {{why}}",
     "inQueue": "Dalam baris gilir",
-    "grab": "Ambil"
+    "grab": "Ambil",
+    "preferred": "Profil mengutamakan: {{words}}",
+    "avoided": "Profil mengelakkan: {{words}}. Hanya dipilih apabila tiada yang lain dengan kualiti ini."
   },
   "remove": {
     "deletesFolder_other": "Memadam folder <code>{{folder}}</code> dan semua isinya: <strong>{{count}} fail</strong>, <strong>{{size}}</strong>.",
@@ -1124,7 +1126,20 @@
     "sizeMin": "Sekurang-kurangnya",
     "sizeMax": "Paling banyak",
     "sizesNote": "Keluaran yang namanya tidak menyatakan cara videonya dibungkus mengikut nombor H.264, dan tajuk yang tempoh tayangannya tidak diketahui tidak diperiksa. Anda masih boleh memilih sendiri mana-mana keluaran.",
-    "sizesOn": ", had saiz"
+    "sizesOn": ", had saiz",
+    "prefs": "Keutamaan keluaran",
+    "prefsHint": "Perkataan dan kumpulan keluaran dalam nama keluaran untuk diutamakan atau dielakkan. Antara keluaran yang sama kualiti, yang paling banyak perkataan diutamakan akan dipilih, dan keluaran dengan perkataan yang dielakkan hanya apabila tiada yang lain.",
+    "prefsBest": "Gambar dan bunyi terbaik",
+    "prefsSmall": "Fail lebih kecil",
+    "prefsPoor": "Elakkan upscale dan keluaran yang lemah",
+    "prefsPrefers": "Mengutamakan {{words}}.",
+    "prefsAvoids": "Mengelakkan {{words}}.",
+    "prefsPrefer": "Utamakan",
+    "prefsAvoid": "Elakkan",
+    "prefsNever": "Jangan sekali-kali ambil",
+    "prefsWordsHint": "Asingkan perkataan dengan koma. Perkataan dipadankan sepenuhnya, huruf besar atau kecil, dalam bahagian nama selepas tajuk.",
+    "prefsNeverHint": "Keluaran yang mengandungi salah satu daripadanya ditolak. Anda masih boleh memilihnya sendiri.",
+    "prefsOn": ", keutamaan keluaran"
   },
   "mediaTypes": {
     "music": {

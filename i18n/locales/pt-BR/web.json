@@ -135,7 +135,9 @@
     "grabCount_other": "{{count}} capturas",
     "notPicked": "Não escolhido: {{why}}",
     "inQueue": "Na fila",
-    "grab": "Capturar"
+    "grab": "Capturar",
+    "preferred": "O perfil prefere: {{words}}",
+    "avoided": "O perfil evita: {{words}}. Escolhido só quando não há mais nada desta qualidade."
   },
   "remove": {
     "deletesFolder_one": "Exclui a pasta <code>{{folder}}</code> e tudo o que há nela: <strong>{{count}} arquivo</strong>, <strong>{{size}}</strong>.",
@@ -1278,7 +1280,20 @@
     "sizeMin": "No mínimo",
     "sizeMax": "No máximo",
     "sizesNote": "Um lançamento cujo nome não diz como o vídeo está codificado segue os números do H.264, e um título sem duração conhecida não é verificado. Você ainda pode escolher qualquer lançamento por conta própria.",
-    "sizesOn": ", limites de tamanho"
+    "sizesOn": ", limites de tamanho",
+    "prefs": "Preferências de lançamentos",
+    "prefsHint": "Palavras e grupos no nome de um lançamento para preferir ou evitar. Entre lançamentos da mesma qualidade, é escolhido o que tem mais palavras preferidas, e um com uma palavra evitada só quando não há mais nada.",
+    "prefsBest": "Melhor imagem e som",
+    "prefsSmall": "Arquivos menores",
+    "prefsPoor": "Evitar upscales e lançamentos ruins",
+    "prefsPrefers": "Prefere {{words}}.",
+    "prefsAvoids": "Evita {{words}}.",
+    "prefsPrefer": "Preferir",
+    "prefsAvoid": "Evitar",
+    "prefsNever": "Nunca pegar",
+    "prefsWordsHint": "Separe as palavras com vírgulas. A palavra precisa coincidir inteira, em maiúsculas ou não, na parte do nome depois do título.",
+    "prefsNeverHint": "Um lançamento com uma destas é recusado. Você ainda pode escolhê-lo por conta própria.",
+    "prefsOn": ", preferências de lançamentos"
   },
   "mediaTypes": {
     "music": {

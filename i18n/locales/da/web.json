@@ -126,7 +126,9 @@
     "grabCount_other": "{{count}} hentninger",
     "notPicked": "Ikke valgt: {{why}}",
     "inQueue": "I køen",
-    "grab": "Hent"
+    "grab": "Hent",
+    "preferred": "Profilen foretrækker: {{words}}",
+    "avoided": "Profilen undgår: {{words}}. Vælges kun, når der ikke er andet i denne kvalitet."
   },
   "remove": {
     "deletesFolder_one": "Sletter mappen <code>{{folder}}</code> og alt i den: <strong>{{count}} fil</strong>, <strong>{{size}}</strong>.",
@@ -1201,7 +1203,20 @@
     "sizeMin": "Mindst",
     "sizeMax": "Højst",
     "sizesNote": "En udgivelse, hvis navn ikke siger, hvordan videoen er pakket, følger tallene for H.264, og en titel uden kendt spilletid tjekkes ikke. Du kan stadig selv vælge en hvilken som helst udgivelse.",
-    "sizesOn": ", størrelsesgrænser"
+    "sizesOn": ", størrelsesgrænser",
+    "prefs": "Præferencer for udgivelser",
+    "prefsHint": "Ord og udgivelsesgrupper i en udgivelses navn, som skal foretrækkes eller undgås. Blandt udgivelser i samme kvalitet vælges den med flest foretrukne ord, og en med et undgået ord kun, når der ikke er andet.",
+    "prefsBest": "Bedste billede og lyd",
+    "prefsSmall": "Mindre filer",
+    "prefsPoor": "Undgå opskaleringer og dårlige udgivelser",
+    "prefsPrefers": "Foretrækker {{words}}.",
+    "prefsAvoids": "Undgår {{words}}.",
+    "prefsPrefer": "Foretræk",
+    "prefsAvoid": "Undgå",
+    "prefsNever": "Tag aldrig",
+    "prefsWordsHint": "Adskil ord med kommaer. Et ord skal passe helt, med store eller små bogstaver, i den del af navnet, der kommer efter titlen.",
+    "prefsNeverHint": "En udgivelse med et af disse ord afvises. Du kan stadig selv vælge den.",
+    "prefsOn": ", præferencer for udgivelser"
   },
   "mediaTypes": {
     "music": {

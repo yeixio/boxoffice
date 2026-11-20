@@ -126,7 +126,9 @@
     "grabCount_other": "{{count}} hämtningar",
     "notPicked": "Inte vald: {{why}}",
     "inQueue": "I kön",
-    "grab": "Hämta"
+    "grab": "Hämta",
+    "preferred": "Profilen föredrar: {{words}}",
+    "avoided": "Profilen undviker: {{words}}. Väljs bara när det inte finns något annat i den här kvaliteten."
   },
   "remove": {
     "deletesFolder_one": "Tar bort mappen <code>{{folder}}</code> och allt i den: <strong>{{count}} fil</strong>, <strong>{{size}}</strong>.",
@@ -1201,7 +1203,20 @@
     "sizeMin": "Minst",
     "sizeMax": "Högst",
     "sizesNote": "En utgåva vars namn inte säger hur videon är packad följer talen för H.264, och en titel utan känd speltid kontrolleras inte. Du kan fortfarande själv välja vilken utgåva som helst.",
-    "sizesOn": ", storleksgränser"
+    "sizesOn": ", storleksgränser",
+    "prefs": "Preferenser för utgåvor",
+    "prefsHint": "Ord och releasegrupper i en utgåvas namn som ska föredras eller undvikas. Bland utgåvor av samma kvalitet väljs den med flest föredragna ord, och en med ett undvikt ord bara när det inte finns något annat.",
+    "prefsBest": "Bästa bild och ljud",
+    "prefsSmall": "Mindre filer",
+    "prefsPoor": "Undvik uppskalningar och dåliga utgåvor",
+    "prefsPrefers": "Föredrar {{words}}.",
+    "prefsAvoids": "Undviker {{words}}.",
+    "prefsPrefer": "Föredra",
+    "prefsAvoid": "Undvik",
+    "prefsNever": "Ta aldrig",
+    "prefsWordsHint": "Skilj ord åt med kommatecken. Ett ord måste stämma helt, med stora eller små bokstäver, i den del av namnet som kommer efter titeln.",
+    "prefsNeverHint": "En utgåva med något av dessa avvisas. Du kan fortfarande välja den själv.",
+    "prefsOn": ", preferenser för utgåvor"
   },
   "mediaTypes": {
     "music": {

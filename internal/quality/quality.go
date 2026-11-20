@@ -69,6 +69,8 @@ type Profile struct {
 	Locked bool `json:"locked"`
 	// Sizes are how big a copy may be for its running time.
 	Sizes Sizes `json:"sizes"`
+	// Prefs are words and release groups to prefer, avoid or never take.
+	Prefs Prefs `json:"prefs"`
 }
 
 // DoNotTouchName is the name of the Do not touch profile.
@@ -95,7 +97,10 @@ func (p Profile) Check() error {
 	if !slices.Contains(p.Allowed, p.Cutoff) {
 		return errors.New("the cutoff has to be one of the qualities the profile takes")
 	}
-	return p.Sizes.check()
+	if err := p.Sizes.check(); err != nil {
+		return err
+	}
+	return p.Prefs.check()
 }
 
 // Accepts says whether a copy of quality q is one the profile takes. Do

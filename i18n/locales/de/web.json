@@ -126,7 +126,9 @@
     "grabCount_other": "{{count}} Grabs",
     "notPicked": "Nicht gewählt: {{why}}",
     "inQueue": "In der Warteschlange",
-    "grab": "Holen"
+    "grab": "Holen",
+    "preferred": "Das Profil bevorzugt: {{words}}",
+    "avoided": "Das Profil meidet: {{words}}. Wird nur gewählt, wenn es in dieser Qualität nichts anderes gibt."
   },
   "remove": {
     "deletesFolder_one": "Löscht den Ordner <code>{{folder}}</code> mit allem darin: <strong>{{count}} Datei</strong>, <strong>{{size}}</strong>.",
@@ -1201,7 +1203,20 @@
     "sizeMin": "Mindestens",
     "sizeMax": "Höchstens",
     "sizesNote": "Für ein Release, dessen Name den Videocodec nicht nennt, gelten die H.264-Werte, und ein Titel ohne bekannte Laufzeit wird nicht geprüft. Du kannst weiterhin jedes Release selbst auswählen.",
-    "sizesOn": ", Größenlimits"
+    "sizesOn": ", Größenlimits",
+    "prefs": "Release-Vorlieben",
+    "prefsHint": "Wörter und Release-Gruppen im Namen eines Releases, die bevorzugt oder gemieden werden. Unter Releases gleicher Qualität wird das mit den meisten bevorzugten Wörtern gewählt, und eines mit einem gemiedenen Wort nur, wenn es nichts anderes gibt.",
+    "prefsBest": "Bestes Bild und bester Ton",
+    "prefsSmall": "Kleinere Dateien",
+    "prefsPoor": "Upscales und schlechte Releases meiden",
+    "prefsPrefers": "Bevorzugt {{words}}.",
+    "prefsAvoids": "Meidet {{words}}.",
+    "prefsPrefer": "Bevorzugen",
+    "prefsAvoid": "Meiden",
+    "prefsNever": "Nie nehmen",
+    "prefsWordsHint": "Trenne Wörter mit Kommas. Ein Wort muss ganz übereinstimmen, groß oder klein geschrieben, im Teil des Namens nach dem Titel.",
+    "prefsNeverHint": "Ein Release mit einem dieser Wörter wird abgelehnt. Du kannst es weiterhin selbst auswählen.",
+    "prefsOn": ", Release-Vorlieben"
   },
   "mediaTypes": {
     "music": {

@@ -117,7 +117,9 @@
     "grabCount_other": "{{count}} ambilan",
     "notPicked": "Tidak dipilih: {{why}}",
     "inQueue": "Dalam antrean",
-    "grab": "Ambil"
+    "grab": "Ambil",
+    "preferred": "Profil mengutamakan: {{words}}",
+    "avoided": "Profil menghindari: {{words}}. Hanya dipilih jika tidak ada yang lain dengan kualitas ini."
   },
   "remove": {
     "deletesFolder_other": "Menghapus folder <code>{{folder}}</code> dan semua isinya: <strong>{{count}} file</strong>, <strong>{{size}}</strong>.",
@@ -1124,7 +1126,20 @@
     "sizeMin": "Paling sedikit",
     "sizeMax": "Paling banyak",
     "sizesNote": "Rilis yang namanya tidak menyebut cara videonya dikemas mengikuti angka H.264, dan judul yang durasinya tidak diketahui tidak diperiksa. Anda tetap bisa memilih sendiri rilis mana pun.",
-    "sizesOn": ", batas ukuran"
+    "sizesOn": ", batas ukuran",
+    "prefs": "Preferensi rilis",
+    "prefsHint": "Kata dan grup rilis dalam nama rilis yang diutamakan atau dihindari. Di antara rilis berkualitas sama, yang dipilih adalah yang paling banyak memuat kata yang diutamakan, dan rilis dengan kata yang dihindari hanya jika tidak ada yang lain.",
+    "prefsBest": "Gambar dan suara terbaik",
+    "prefsSmall": "File lebih kecil",
+    "prefsPoor": "Hindari upscale dan rilis yang buruk",
+    "prefsPrefers": "Mengutamakan {{words}}.",
+    "prefsAvoids": "Menghindari {{words}}.",
+    "prefsPrefer": "Utamakan",
+    "prefsAvoid": "Hindari",
+    "prefsNever": "Jangan pernah ambil",
+    "prefsWordsHint": "Pisahkan kata dengan koma. Kata dicocokkan utuh, huruf besar atau kecil, di bagian nama setelah judul.",
+    "prefsNeverHint": "Rilis yang memuat salah satunya ditolak. Anda tetap bisa memilihnya sendiri.",
+    "prefsOn": ", preferensi rilis"
   },
   "mediaTypes": {
     "music": {

@@ -135,7 +135,9 @@
     "grabCount_other": "{{count}} récupérations",
     "notPicked": "Non retenu : {{why}}",
     "inQueue": "Dans la file",
-    "grab": "Récupérer"
+    "grab": "Récupérer",
+    "preferred": "Le profil préfère : {{words}}",
+    "avoided": "Le profil évite : {{words}}. Retenue seulement quand il n’y a rien d’autre de cette qualité."
   },
   "remove": {
     "deletesFolder_one": "Supprime le dossier <code>{{folder}}</code> et tout son contenu : <strong>{{count}} fichier</strong>, <strong>{{size}}</strong>.",
@@ -1278,7 +1280,20 @@
     "sizeMin": "Au moins",
     "sizeMax": "Au plus",
     "sizesNote": "Une release dont le nom ne dit pas comment la vidéo est encodée suit les chiffres du H.264, et un titre dont la durée n'est pas connue n'est pas vérifié. Vous pouvez toujours choisir vous-même n'importe quelle release.",
-    "sizesOn": ", limites de taille"
+    "sizesOn": ", limites de taille",
+    "prefs": "Préférences de releases",
+    "prefsHint": "Mots et groupes de release dans le nom d’une release, à préférer ou à éviter. Parmi les releases de même qualité, celle qui a le plus de mots préférés est retenue, et une release avec un mot évité seulement quand il n’y a rien d’autre.",
+    "prefsBest": "Meilleure image et meilleur son",
+    "prefsSmall": "Fichiers plus petits",
+    "prefsPoor": "Éviter les upscales et les mauvaises releases",
+    "prefsPrefers": "Préfère {{words}}.",
+    "prefsAvoids": "Évite {{words}}.",
+    "prefsPrefer": "Préférer",
+    "prefsAvoid": "Éviter",
+    "prefsNever": "Ne jamais prendre",
+    "prefsWordsHint": "Séparez les mots par des virgules. Un mot doit correspondre en entier, en majuscules ou non, dans la partie du nom qui suit le titre.",
+    "prefsNeverHint": "Une release contenant l’un de ces mots est refusée. Vous pouvez toujours la choisir vous-même.",
+    "prefsOn": ", préférences de releases"
   },
   "mediaTypes": {
     "music": {

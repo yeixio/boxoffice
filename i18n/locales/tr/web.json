@@ -126,7 +126,9 @@
     "grabCount_other": "{{count}} indirme",
     "notPicked": "Seçilmedi: {{why}}",
     "inQueue": "Kuyrukta",
-    "grab": "İndir"
+    "grab": "İndir",
+    "preferred": "Profilin tercihi: {{words}}",
+    "avoided": "Profil kaçınıyor: {{words}}. Yalnızca bu kalitede başka bir şey yoksa seçilir."
   },
   "remove": {
     "deletesFolder_one": "<code>{{folder}}</code> klasörünü ve içindeki her şeyi siler: <strong>{{count}} dosya</strong>, <strong>{{size}}</strong>.",
@@ -1201,7 +1203,20 @@
     "sizeMin": "En az",
     "sizeMax": "En çok",
     "sizesNote": "Adı videonun nasıl sıkıştırıldığını söylemeyen bir sürüme H.264 sayıları uygulanır, süresi bilinmeyen bir yapım ise denetlenmez. Yine de istediğiniz sürümü kendiniz seçebilirsiniz.",
-    "sizesOn": ", boyut sınırları"
+    "sizesOn": ", boyut sınırları",
+    "prefs": "Sürüm tercihleri",
+    "prefsHint": "Bir sürümün adında tercih edilecek veya kaçınılacak sözcükler ve sürüm grupları. Aynı kalitedeki sürümler arasında en çok tercih edilen sözcüğü içeren seçilir, kaçınılan bir sözcük içeren ise yalnızca başka bir şey yoksa.",
+    "prefsBest": "En iyi görüntü ve ses",
+    "prefsSmall": "Daha küçük dosyalar",
+    "prefsPoor": "Büyütülmüş ve kötü sürümlerden kaçın",
+    "prefsPrefers": "Tercih eder: {{words}}.",
+    "prefsAvoids": "Kaçınır: {{words}}.",
+    "prefsPrefer": "Tercih et",
+    "prefsAvoid": "Kaçın",
+    "prefsNever": "Asla alma",
+    "prefsWordsHint": "Sözcükleri virgülle ayırın. Sözcük, adın başlıktan sonraki bölümünde, büyük veya küçük harfle, bütün olarak eşleşmelidir.",
+    "prefsNeverHint": "Bunlardan birini içeren sürüm reddedilir. Yine de kendiniz seçebilirsiniz.",
+    "prefsOn": ", sürüm tercihleri"
   },
   "mediaTypes": {
     "music": {

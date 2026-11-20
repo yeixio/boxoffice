@@ -62,7 +62,11 @@ export type Quality = { id: number; name: string; source: string; resolution: nu
 // limit.
 export type SizeLimit = { min: number; max: number }
 export type ProfileSizes = { h264: SizeLimit; hevc: SizeLimit; av1: SizeLimit }
-export type Profile = { id: number; name: string; allowed: number[]; cutoff: number; upgrade: boolean; locked?: boolean; sizes?: ProfileSizes }
+export type Profile = { id: number; name: string; allowed: number[]; cutoff: number; upgrade: boolean; locked?: boolean; sizes?: ProfileSizes; prefs?: ProfilePrefs }
+// Words and release groups a profile prefers, avoids or never takes, and
+// the ready-made lists (presets) it has turned on.
+export type ProfilePrefs = { presets?: string[]; prefer?: string[]; avoid?: string[]; never?: string[] }
+export type ProfilePreset = { id: string; prefer?: string[]; avoid?: string[] }
 // titles counts the titles filed under it; it can't be removed while there are any.
 export type RootFolder = { id: number; kind: RootKind; path: string; freeSpace: number; accessible: boolean; titles: number }
 
@@ -633,6 +637,9 @@ export type Candidate = {
   fix?: string
   // Too new for Box Office to grab by itself until then; a grab by hand doesn't wait.
   newUntil?: string
+  // Words in its name the profile's release preferences prefer and avoid.
+  preferred?: string[]
+  avoided?: string[]
 }
 export type ReleaseResults = { releases: Candidate[]; errors?: string[]; searched: number }
 export type IndexerCaps = { categories: { id: number; name: string; subs?: { id: number; name: string }[] }[]; movieSearch: boolean; tvSearch: boolean }

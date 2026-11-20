@@ -126,7 +126,9 @@
     "grabCount_other": "{{count}} noutoa",
     "notPicked": "Ei valittu: {{why}}",
     "inQueue": "Jonossa",
-    "grab": "Nouda"
+    "grab": "Nouda",
+    "preferred": "Profiili suosii: {{words}}",
+    "avoided": "Profiili välttää: {{words}}. Valitaan vain, kun tässä laadussa ei ole muuta."
   },
   "remove": {
     "deletesFolder_one": "Poistaa kansion <code>{{folder}}</code> ja kaiken sen sisällön: <strong>{{count}} tiedosto</strong>, <strong>{{size}}</strong>.",
@@ -1201,7 +1203,20 @@
     "sizeMin": "Vähintään",
     "sizeMax": "Enintään",
     "sizesNote": "Julkaisuun, jonka nimi ei kerro videon pakkaustapaa, sovelletaan H.264:n lukuja, eikä nimikettä, jonka kestoa ei tiedetä, tarkisteta. Voit silti valita itse minkä tahansa julkaisun.",
-    "sizesOn": ", kokorajat"
+    "sizesOn": ", kokorajat",
+    "prefs": "Julkaisumieltymykset",
+    "prefsHint": "Sanat ja julkaisuryhmät julkaisun nimessä, joita suositaan tai vältetään. Samanlaatuisista julkaisuista valitaan se, jossa on eniten suosittuja sanoja, ja vältettävän sanan sisältävä vain, kun muuta ei ole.",
+    "prefsBest": "Paras kuva ja ääni",
+    "prefsSmall": "Pienemmät tiedostot",
+    "prefsPoor": "Vältä skaalattuja ja heikkoja julkaisuja",
+    "prefsPrefers": "Suosii: {{words}}.",
+    "prefsAvoids": "Välttää: {{words}}.",
+    "prefsPrefer": "Suosi",
+    "prefsAvoid": "Vältä",
+    "prefsNever": "Älä ota koskaan",
+    "prefsWordsHint": "Erota sanat pilkuilla. Sanan on täsmättävä kokonaan, isoilla tai pienillä kirjaimilla, nimen siinä osassa, joka tulee otsikon jälkeen.",
+    "prefsNeverHint": "Julkaisu, jossa on jokin näistä, hylätään. Voit silti valita sen itse.",
+    "prefsOn": ", julkaisumieltymykset"
   },
   "mediaTypes": {
     "music": {

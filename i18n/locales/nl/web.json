@@ -126,7 +126,9 @@
     "grabCount_other": "{{count}} grabs",
     "notPicked": "Niet gekozen: {{why}}",
     "inQueue": "In de wachtrij",
-    "grab": "Grabben"
+    "grab": "Grabben",
+    "preferred": "Het profiel geeft de voorkeur aan: {{words}}",
+    "avoided": "Het profiel vermijdt: {{words}}. Wordt alleen gekozen als er niets anders van deze kwaliteit is."
   },
   "remove": {
     "deletesFolder_one": "Verwijdert de map <code>{{folder}}</code> en alles erin: <strong>{{count}} bestand</strong>, <strong>{{size}}</strong>.",
@@ -1201,7 +1203,20 @@
     "sizeMin": "Minstens",
     "sizeMax": "Hoogstens",
     "sizesNote": "Voor een release waarvan de naam niet zegt hoe de video is ingepakt gelden de getallen van H.264, en een titel zonder bekende speelduur wordt niet gecontroleerd. Je kunt nog steeds zelf elke release kiezen.",
-    "sizesOn": ", groottelimieten"
+    "sizesOn": ", groottelimieten",
+    "prefs": "Releasevoorkeuren",
+    "prefsHint": "Woorden en releasegroepen in de naam van een release om de voorkeur te geven of te vermijden. Van releases met dezelfde kwaliteit wordt die met de meeste voorkeurswoorden gekozen, en een release met een vermeden woord alleen als er niets anders is.",
+    "prefsBest": "Beste beeld en geluid",
+    "prefsSmall": "Kleinere bestanden",
+    "prefsPoor": "Upscales en slechte releases vermijden",
+    "prefsPrefers": "Geeft de voorkeur aan {{words}}.",
+    "prefsAvoids": "Vermijdt {{words}}.",
+    "prefsPrefer": "Voorkeur geven",
+    "prefsAvoid": "Vermijden",
+    "prefsNever": "Nooit nemen",
+    "prefsWordsHint": "Scheid woorden met komma's. Een woord moet in zijn geheel overeenkomen, met of zonder hoofdletters, in het deel van de naam na de titel.",
+    "prefsNeverHint": "Een release met een van deze woorden wordt afgewezen. Je kunt hem nog steeds zelf kiezen.",
+    "prefsOn": ", releasevoorkeuren"
   },
   "mediaTypes": {
     "music": {

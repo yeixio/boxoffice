@@ -126,7 +126,9 @@
     "grabCount_other": "{{count}} grabs",
     "notPicked": "Not picked: {{why}}",
     "inQueue": "In the queue",
-    "grab": "Grab"
+    "grab": "Grab",
+    "preferred": "The profile prefers: {{words}}",
+    "avoided": "The profile avoids: {{words}}. Picked only when there's nothing else of this quality."
   },
   "remove": {
     "deletesFolder_one": "Deletes the folder <code>{{folder}}</code> and everything in it: <strong>{{count}} file</strong>, <strong>{{size}}</strong>.",
@@ -1201,7 +1203,20 @@
     "sizeMin": "At least",
     "sizeMax": "At most",
     "sizesNote": "A release whose name doesn't say how its video is packed is held to the H.264 numbers, and a title with no running time isn't checked. You can still pick any release yourself.",
-    "sizesOn": ", size limits"
+    "sizesOn": ", size limits",
+    "prefs": "Release preferences",
+    "prefsHint": "Words and release groups in a release's name to prefer or avoid. Among releases of the same quality, the one with the most preferred words is picked, and one with an avoided word only when there's nothing else.",
+    "prefsBest": "Best picture and sound",
+    "prefsSmall": "Smaller files",
+    "prefsPoor": "Avoid upscales and poor releases",
+    "prefsPrefers": "Prefers {{words}}.",
+    "prefsAvoids": "Avoids {{words}}.",
+    "prefsPrefer": "Prefer",
+    "prefsAvoid": "Avoid",
+    "prefsNever": "Never take",
+    "prefsWordsHint": "Separate words with commas. A word is matched whole, in capitals or not, in the part of the name after the title.",
+    "prefsNeverHint": "A release with one of these is turned down. You can still pick it yourself.",
+    "prefsOn": ", release preferences"
   },
   "mediaTypes": {
     "music": {
