@@ -78,5 +78,23 @@
     "refused": "Proses masuk dibatalkan atau ditolak.",
     "notallowed": "Akun itu tidak diizinkan masuk ke sini. Tanyakan kepada pengelola server ini.",
     "failed": "Proses masuk tidak berhasil. Pengelola server ini bisa melihat sebabnya di log."
+  },
+  "passkey": {
+    "signIn": "Masuk dengan kunci sandi",
+    "cancelled": "Kunci sandi tidak digunakan. Coba lagi saat Anda siap.",
+    "exists": "Perangkat ini sudah punya kunci sandi untuk akun ini.",
+    "unsupported": "Browser ini tidak dapat menggunakan kunci sandi di sini.",
+    "title": "Kunci sandi",
+    "sub": "Masuk dengan sidik jari, wajah, kunci layar, atau kunci keamanan sebagai pengganti kata sandi. Kunci sandi hanya berfungsi di alamat tempat ia dibuat.",
+    "add": "Tambah kunci sandi",
+    "name": "Nama untuk kunci sandi ini",
+    "none": "Belum ada kunci sandi.",
+    "unnamed": "Kunci sandi",
+    "added": "Ditambahkan {{date}}",
+    "used": "terakhir dipakai {{date}}",
+    "never": "belum pernah dipakai",
+    "remove": "Hapus",
+    "removeNamed": "Hapus {{name}}",
+    "otherHost": "berfungsi di {{host}}"
   }
 }

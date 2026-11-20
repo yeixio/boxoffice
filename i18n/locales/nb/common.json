@@ -79,5 +79,23 @@
     "refused": "Innloggingen ble avbrutt eller avvist.",
     "notallowed": "Den kontoen slipper ikke inn her. Spør den som driver denne serveren.",
     "failed": "Innloggingen virket ikke. Den som driver denne serveren, kan se hvorfor i loggen."
+  },
+  "passkey": {
+    "signIn": "Logg inn med en passnøkkel",
+    "cancelled": "Passnøkkelen ble ikke brukt. Prøv igjen når du er klar.",
+    "exists": "Denne enheten har allerede en passnøkkel for denne kontoen.",
+    "unsupported": "Denne nettleseren kan ikke bruke passnøkler her.",
+    "title": "Passnøkler",
+    "sub": "Logg inn med fingeravtrykk, ansikt, skjermlås eller en sikkerhetsnøkkel i stedet for passordet. En passnøkkel virker bare på adressen den ble laget på.",
+    "add": "Legg til en passnøkkel",
+    "name": "Navn på denne passnøkkelen",
+    "none": "Ingen passnøkler ennå.",
+    "unnamed": "Passnøkkel",
+    "added": "Lagt til {{date}}",
+    "used": "sist brukt {{date}}",
+    "never": "aldri brukt",
+    "remove": "Fjern",
+    "removeNamed": "Fjern {{name}}",
+    "otherHost": "virker på {{host}}"
   }
 }

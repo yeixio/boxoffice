@@ -238,6 +238,7 @@ func run() error {
 		Version: version.Version, Database: dbKind, DatabaseInfo: api.DatabaseInfo{DSN: opened.dsn, Configured: opened.configured}, DataDir: cfg.DataDir, EnvAPIKey: cfg.APIKey, Web: web.FS(),
 		Monitoring: mon,
 		Restart:    func() { restartNow(errRestart) },
+		SkipCode:   os.Getenv("BOXOFFICE_SKIP_SIGN_IN_CODE") != "",
 	}
 	// The same news goes to the phones and browsers that asked for push
 	// notifications. Sending waits on the browser makers' push services,

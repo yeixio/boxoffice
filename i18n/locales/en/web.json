@@ -46,7 +46,9 @@
     "passwordHint": "At least 8 characters.",
     "passwordAgain": "Password again",
     "make": "Make the account",
-    "signIn": "Sign in"
+    "signIn": "Sign in",
+    "code": "Code from your authenticator app",
+    "codeHint": "Or one of your recovery codes."
   },
   "tray": {
     "ready": "{{name}} is ready to look over",
@@ -2813,5 +2815,23 @@
     "isMember": "It's let in to the request site.",
     "notMember": "It isn't let in to the request site.",
     "addMe": "Add this account as an admin"
+  },
+  "code": {
+    "title": "One-time code",
+    "sub": "Ask for a 6-digit code from an authenticator app after the password. Signing in with a passkey or single sign-on doesn't ask for it.",
+    "setUp": "Set it up",
+    "scan": "Scan this with your authenticator app, or type the key into it. Then type the code the app shows.",
+    "qr": "QR code for the authenticator app",
+    "key": "Key",
+    "enter": "Code from the app",
+    "confirm": "Turn on",
+    "recoveryTitle": "Recovery codes",
+    "recoveryHint": "Keep these somewhere safe. If you lose the app, each one signs you in once in place of a code. They aren't shown again.",
+    "copy": "Copy them",
+    "saved": "I've kept them",
+    "on": "On. Recovery codes left: {{n}}",
+    "skipped": "This server is set to skip the code (BOXOFFICE_SKIP_SIGN_IN_CODE). Take that setting away to ask for it again.",
+    "off": "Turn off",
+    "password": "Your password, to turn it off"
   }
 }

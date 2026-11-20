@@ -81,5 +81,23 @@
     "refused": "Přihlášení bylo zrušeno nebo odmítnuto.",
     "notallowed": "Tento účet sem nemá přístup. Zeptejte se toho, kdo tento server spravuje.",
     "failed": "Přihlášení se nepovedlo. Správce tohoto serveru najde důvod v jeho protokolu."
+  },
+  "passkey": {
+    "signIn": "Přihlásit se přístupovým klíčem",
+    "cancelled": "Přístupový klíč nebyl použit. Zkuste to znovu, až budete připraveni.",
+    "exists": "Toto zařízení už přístupový klíč pro tento účet má.",
+    "unsupported": "Tento prohlížeč zde přístupové klíče použít neumí.",
+    "title": "Přístupové klíče",
+    "sub": "Přihlašujte se otiskem prstu, obličejem, zámkem obrazovky nebo bezpečnostním klíčem místo hesla. Přístupový klíč funguje jen na adrese, na které vznikl.",
+    "add": "Přidat přístupový klíč",
+    "name": "Název tohoto klíče",
+    "none": "Zatím žádné přístupové klíče.",
+    "unnamed": "Přístupový klíč",
+    "added": "Přidáno {{date}}",
+    "used": "naposledy použito {{date}}",
+    "never": "nikdy nepoužito",
+    "remove": "Odebrat",
+    "removeNamed": "Odebrat {{name}}",
+    "otherHost": "funguje na {{host}}"
   }
 }

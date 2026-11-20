@@ -80,5 +80,23 @@
     "refused": "Autentificarea a fost anulată sau refuzată.",
     "notallowed": "Acest cont nu are acces aici. Întreabă persoana care administrează acest server.",
     "failed": "Autentificarea nu a reușit. Cine administrează acest server poate vedea motivul în jurnal."
+  },
+  "passkey": {
+    "signIn": "Autentificare cu o cheie de acces",
+    "cancelled": "Cheia de acces nu a fost folosită. Încearcă din nou când ești gata.",
+    "exists": "Acest dispozitiv are deja o cheie de acces pentru acest cont.",
+    "unsupported": "Acest browser nu poate folosi chei de acces aici.",
+    "title": "Chei de acces",
+    "sub": "Autentifică-te cu amprenta, fața, blocarea ecranului sau o cheie de securitate în locul parolei. O cheie de acces funcționează doar la adresa la care a fost creată.",
+    "add": "Adaugă o cheie de acces",
+    "name": "Nume pentru această cheie",
+    "none": "Încă nu există chei de acces.",
+    "unnamed": "Cheie de acces",
+    "added": "Adăugată la {{date}}",
+    "used": "folosită ultima dată la {{date}}",
+    "never": "nefolosită niciodată",
+    "remove": "Elimină",
+    "removeNamed": "Elimină {{name}}",
+    "otherHost": "funcționează la {{host}}"
   }
 }

@@ -10,7 +10,9 @@ import { LanguageMenu, LanguagePicker } from '../LanguagePicker'
 import { LanguageSync } from '../i18n/sync'
 import { PageBoundary, SkipLink } from '../Broken'
 import { Install, ThisDevice } from '../Notify'
-import { SsoButton } from '../Sso'
+import { PasskeyButton, PasskeyList } from '../Passkeys'
+import type { Passkey } from '../passkey'
+import { Or, SsoButton } from '../Sso'
 import { unsubscribe, usePush } from '../push'
 import { Button, Empty, ErrorNote, Field, Input, Modal, Poster, Select, Spinner } from '../ui'
 import { onMemberSignedOut, papi, pget, ppost, problemLabel, problems, stateText, type DiscoverHome, type DiscoverPage, type DiscoverTitle, type Issue, type Member, type Problem, type Request, type Site } from './papi'
@@ -170,6 +172,8 @@ function PortalSignIn({ site }: { site: Site }) {
         <Button variant="primary" type="submit" busy={busy}>
           {mode === 'signup' ? t('signIn.make') : t('signIn.signIn')}
         </Button>
+        {mode !== 'signup' && (site.sso || site.passkeys) && <Or />}
+        {mode !== 'signup' && site.passkeys && <PasskeyButton calls={{ post: ppost }} onSignedIn={() => qc.invalidateQueries({ queryKey: ['portal'] })} />}
         {mode !== 'signup' && <SsoButton name={site.sso} what="member" />}
         {site.signUp && (
           <button type="button" className="text-sm font-medium text-marquee" onClick={() => setMode(mode === 'signup' ? (site.matinee ? 'matinee' : 'local') : 'signup')}>
@@ -826,6 +830,25 @@ function DeviceNotices() {
   )
 }
 
+// MemberPasskeys is where someone adds and removes their own passkeys.
+function MemberPasskeys() {
+  const { t } = useTranslation('common')
+  return (
+    <div className="flex flex-col gap-3">
+      <div>
+        <h3 className="font-display font-semibold">{t('passkey.title')}</h3>
+        <p className="text-sm text-muted">{t('passkey.sub')}</p>
+      </div>
+      <PasskeyList
+        calls={{ post: ppost }}
+        queryKey={['portal', 'passkeys']}
+        list={() => pget<{ passkeys: Passkey[]; host: string }>('/passkeys')}
+        remove={(id) => ppost(`/passkeys/${id}/remove`)}
+      />
+    </div>
+  )
+}
+
 function Account({ member, onClose }: { member: Member; onClose: () => void }) {
   const { t } = useTranslation('request')
   const qc = useQueryClient()
@@ -904,6 +927,7 @@ function Account({ member, onClose }: { member: Member; onClose: () => void }) {
             </div>
           </form>
         )}
+        {member.source === 'local' && <MemberPasskeys />}
         <DeviceNotices />
         <div className="flex justify-end border-t border-line pt-4">
           <Button variant="ghost" onClick={signOut}>

@@ -80,5 +80,23 @@
     "refused": "L'accesso è stato annullato o rifiutato.",
     "notallowed": "Questo account non può entrare qui. Chiedi a chi gestisce questo server.",
     "failed": "L'accesso non è riuscito. Chi gestisce questo server può vederne il motivo nel registro."
+  },
+  "passkey": {
+    "signIn": "Accedi con una passkey",
+    "cancelled": "La passkey non è stata usata. Riprova quando vuoi.",
+    "exists": "Questo dispositivo ha già una passkey per questo account.",
+    "unsupported": "Questo browser non può usare le passkey qui.",
+    "title": "Passkey",
+    "sub": "Accedi con l'impronta, il volto, il blocco schermo o una chiave di sicurezza al posto della password. Una passkey funziona solo all'indirizzo in cui è stata creata.",
+    "add": "Aggiungi una passkey",
+    "name": "Nome di questa passkey",
+    "none": "Ancora nessuna passkey.",
+    "unnamed": "Passkey",
+    "added": "Aggiunta il {{date}}",
+    "used": "usata l'ultima volta il {{date}}",
+    "never": "mai usata",
+    "remove": "Rimuovi",
+    "removeNamed": "Rimuovi {{name}}",
+    "otherHost": "funziona su {{host}}"
   }
 }

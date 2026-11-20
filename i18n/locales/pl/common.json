@@ -81,5 +81,23 @@
     "refused": "Logowanie zostało anulowane lub odrzucone.",
     "notallowed": "To konto nie ma tu wstępu. Zapytaj osobę, która prowadzi ten serwer.",
     "failed": "Logowanie się nie udało. Osoba, która prowadzi ten serwer, zobaczy przyczynę w dzienniku."
+  },
+  "passkey": {
+    "signIn": "Zaloguj się kluczem dostępu",
+    "cancelled": "Klucz dostępu nie został użyty. Spróbuj ponownie, gdy będziesz gotowy.",
+    "exists": "To urządzenie ma już klucz dostępu do tego konta.",
+    "unsupported": "Ta przeglądarka nie może tu używać kluczy dostępu.",
+    "title": "Klucze dostępu",
+    "sub": "Loguj się odciskiem palca, twarzą, blokadą ekranu lub kluczem bezpieczeństwa zamiast hasła. Klucz dostępu działa tylko pod adresem, pod którym został utworzony.",
+    "add": "Dodaj klucz dostępu",
+    "name": "Nazwa tego klucza",
+    "none": "Nie ma jeszcze kluczy dostępu.",
+    "unnamed": "Klucz dostępu",
+    "added": "Dodano {{date}}",
+    "used": "ostatnio użyto {{date}}",
+    "never": "nigdy nie użyto",
+    "remove": "Usuń",
+    "removeNamed": "Usuń {{name}}",
+    "otherHost": "działa pod adresem {{host}}"
   }
 }

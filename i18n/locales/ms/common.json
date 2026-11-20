@@ -78,5 +78,23 @@
     "refused": "Log masuk itu dibatalkan atau ditolak.",
     "notallowed": "Akaun itu tidak dibenarkan masuk di sini. Tanya orang yang mengendalikan pelayan ini.",
     "failed": "Log masuk itu tidak berjaya. Orang yang mengendalikan pelayan ini boleh melihat sebabnya dalam lognya."
+  },
+  "passkey": {
+    "signIn": "Log masuk dengan kunci laluan",
+    "cancelled": "Kunci laluan tidak digunakan. Cuba lagi apabila anda bersedia.",
+    "exists": "Peranti ini sudah mempunyai kunci laluan untuk akaun ini.",
+    "unsupported": "Pelayar ini tidak boleh menggunakan kunci laluan di sini.",
+    "title": "Kunci laluan",
+    "sub": "Log masuk dengan cap jari, wajah, kunci skrin atau kunci keselamatan sebagai ganti kata laluan. Kunci laluan hanya berfungsi di alamat tempat ia dibuat.",
+    "add": "Tambah kunci laluan",
+    "name": "Nama untuk kunci laluan ini",
+    "none": "Belum ada kunci laluan.",
+    "unnamed": "Kunci laluan",
+    "added": "Ditambah {{date}}",
+    "used": "kali terakhir digunakan {{date}}",
+    "never": "belum pernah digunakan",
+    "remove": "Alih keluar",
+    "removeNamed": "Alih keluar {{name}}",
+    "otherHost": "berfungsi di {{host}}"
   }
 }

@@ -28,6 +28,18 @@ if (arrived) {
 // SsoButton offers single sign-on under the provider's name, when the
 // server has it on. what is admin for Box Office itself or member for the
 // request site.
+// Or is the line between the password form and the other ways in.
+export function Or() {
+  const { t } = useTranslation('common')
+  return (
+    <div className="flex items-center gap-3 text-xs text-muted" aria-hidden>
+      <span className="h-px flex-1 bg-line" />
+      {t('sso.or')}
+      <span className="h-px flex-1 bg-line" />
+    </div>
+  )
+}
+
 export function SsoButton({ name, what }: { name?: string; what: 'admin' | 'member' }) {
   const { t } = useTranslation('common')
   const went = arrived
@@ -41,11 +53,6 @@ export function SsoButton({ name, what }: { name?: string; what: 'admin' | 'memb
       )}
       {name && (
         <>
-          <div className="flex items-center gap-3 text-xs text-muted" aria-hidden>
-            <span className="h-px flex-1 bg-line" />
-            {t('sso.or')}
-            <span className="h-px flex-1 bg-line" />
-          </div>
           <Button
             type="button"
             busy={busy}

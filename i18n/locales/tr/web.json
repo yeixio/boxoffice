@@ -46,7 +46,9 @@
     "passwordHint": "En az 8 karakter.",
     "passwordAgain": "Parola tekrar",
     "make": "Hesabı oluştur",
-    "signIn": "Giriş yap"
+    "signIn": "Giriş yap",
+    "code": "Kimlik doğrulama uygulamanızdaki kod",
+    "codeHint": "Ya da kurtarma kodlarınızdan biri."
   },
   "tray": {
     "ready": "{{name}} incelemeye hazır",
@@ -2813,5 +2815,23 @@
     "isMember": "İstek sitesine girmesine izin var.",
     "notMember": "İstek sitesine girmesine izin yok.",
     "addMe": "Bu hesabı yönetici olarak ekle"
+  },
+  "code": {
+    "title": "Tek kullanımlık kod",
+    "sub": "Paroladan sonra bir kimlik doğrulama uygulamasından 6 haneli kod iste. Geçiş anahtarıyla veya tek oturum açmayla girişte istenmez.",
+    "setUp": "Kur",
+    "scan": "Bunu kimlik doğrulama uygulamanızla tarayın ya da anahtarı uygulamaya yazın. Sonra uygulamanın gösterdiği kodu yazın.",
+    "qr": "Kimlik doğrulama uygulaması için QR kodu",
+    "key": "Anahtar",
+    "enter": "Uygulamadaki kod",
+    "confirm": "Aç",
+    "recoveryTitle": "Kurtarma kodları",
+    "recoveryHint": "Bunları güvenli bir yerde saklayın. Uygulamayı kaybederseniz her biri kod yerine bir kez giriş yaptırır. Bir daha gösterilmezler.",
+    "copy": "Kopyala",
+    "saved": "Sakladım",
+    "on": "Açık. Kalan kurtarma kodu: {{n}}",
+    "skipped": "Bu sunucu kodu atlayacak şekilde ayarlanmış (BOXOFFICE_SKIP_SIGN_IN_CODE). Kodun yeniden istenmesi için bu ayarı kaldırın.",
+    "off": "Kapat",
+    "password": "Kapatmak için parolanız"
   }
 }

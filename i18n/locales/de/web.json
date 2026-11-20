@@ -46,7 +46,9 @@
     "passwordHint": "Mindestens 8 Zeichen.",
     "passwordAgain": "Passwort wiederholen",
     "make": "Konto anlegen",
-    "signIn": "Anmelden"
+    "signIn": "Anmelden",
+    "code": "Code aus deiner Authenticator-App",
+    "codeHint": "Oder einer deiner Wiederherstellungscodes."
   },
   "tray": {
     "ready": "{{name}} kann jetzt durchgesehen werden",
@@ -2813,5 +2815,23 @@
     "isMember": "Es hat Zutritt zur Wunschseite.",
     "notMember": "Es hat keinen Zutritt zur Wunschseite.",
     "addMe": "Dieses Konto als Admin hinzufügen"
+  },
+  "code": {
+    "title": "Einmalcode",
+    "sub": "Nach dem Passwort einen 6-stelligen Code aus einer Authenticator-App verlangen. Die Anmeldung mit Passkey oder Single Sign-on fragt nicht danach.",
+    "setUp": "Einrichten",
+    "scan": "Scanne das mit deiner Authenticator-App oder tippe den Schlüssel dort ein. Gib dann den Code ein, den die App anzeigt.",
+    "qr": "QR-Code für die Authenticator-App",
+    "key": "Schlüssel",
+    "enter": "Code aus der App",
+    "confirm": "Einschalten",
+    "recoveryTitle": "Wiederherstellungscodes",
+    "recoveryHint": "Bewahre sie sicher auf. Wenn du die App verlierst, meldet dich jeder davon einmal anstelle eines Codes an. Sie werden nicht noch einmal angezeigt.",
+    "copy": "Kopieren",
+    "saved": "Ich habe sie gesichert",
+    "on": "Eingeschaltet. Übrige Wiederherstellungscodes: {{n}}",
+    "skipped": "Dieser Server ist so eingestellt, dass er den Code überspringt (BOXOFFICE_SKIP_SIGN_IN_CODE). Entferne diese Einstellung, damit wieder danach gefragt wird.",
+    "off": "Ausschalten",
+    "password": "Dein Passwort, zum Ausschalten"
   }
 }

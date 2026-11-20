@@ -48,7 +48,9 @@
     "passwordHint": "Pelo menos 8 caracteres.",
     "passwordAgain": "Senha de novo",
     "make": "Criar a conta",
-    "signIn": "Entrar"
+    "signIn": "Entrar",
+    "code": "Código do seu app autenticador",
+    "codeHint": "Ou um dos seus códigos de recuperação."
   },
   "tray": {
     "ready": "{{name}} está pronto para ser revisado",
@@ -2936,5 +2938,23 @@
     "isMember": "Tem entrada no site de pedidos.",
     "notMember": "Não tem entrada no site de pedidos.",
     "addMe": "Adicionar esta conta como administrador"
+  },
+  "code": {
+    "title": "Código de uso único",
+    "sub": "Pedir um código de 6 dígitos de um app autenticador depois da senha. Entrar com uma chave de acesso ou com o login único não pede o código.",
+    "setUp": "Configurar",
+    "scan": "Escaneie isto com seu app autenticador ou digite a chave nele. Depois digite o código que o app mostrar.",
+    "qr": "Código QR para o app autenticador",
+    "key": "Chave",
+    "enter": "Código do app",
+    "confirm": "Ativar",
+    "recoveryTitle": "Códigos de recuperação",
+    "recoveryHint": "Guarde-os em um lugar seguro. Se você perder o app, cada um permite entrar uma vez no lugar de um código. Eles não serão mostrados de novo.",
+    "copy": "Copiar",
+    "saved": "Já guardei",
+    "on": "Ativado. Códigos de recuperação restantes: {{n}}",
+    "skipped": "Este servidor está configurado para pular o código (BOXOFFICE_SKIP_SIGN_IN_CODE). Tire essa configuração para voltar a pedir.",
+    "off": "Desativar",
+    "password": "Sua senha, para desativar"
   }
 }

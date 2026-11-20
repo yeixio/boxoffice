@@ -46,7 +46,9 @@
     "passwordHint": "Mindst 8 tegn.",
     "passwordAgain": "Adgangskode igen",
     "make": "Opret kontoen",
-    "signIn": "Log ind"
+    "signIn": "Log ind",
+    "code": "Kode fra din godkendelsesapp",
+    "codeHint": "Eller en af dine gendannelseskoder."
   },
   "tray": {
     "ready": "{{name}} er klar til at blive gennemgået",
@@ -2813,5 +2815,23 @@
     "isMember": "Den har adgang til ønskesiden.",
     "notMember": "Den har ikke adgang til ønskesiden.",
     "addMe": "Tilføj denne konto som administrator"
+  },
+  "code": {
+    "title": "Engangskode",
+    "sub": "Bed om en 6-cifret kode fra en godkendelsesapp efter adgangskoden. Login med en adgangsnøgle eller single sign-on beder ikke om den.",
+    "setUp": "Sæt det op",
+    "scan": "Scan dette med din godkendelsesapp, eller skriv nøglen ind i den. Skriv derefter den kode, appen viser.",
+    "qr": "QR-kode til godkendelsesappen",
+    "key": "Nøgle",
+    "enter": "Kode fra appen",
+    "confirm": "Slå til",
+    "recoveryTitle": "Gendannelseskoder",
+    "recoveryHint": "Gem dem et sikkert sted. Hvis du mister appen, logger hver af dem dig ind én gang i stedet for en kode. De vises ikke igen.",
+    "copy": "Kopiér dem",
+    "saved": "Jeg har gemt dem",
+    "on": "Slået til. Gendannelseskoder tilbage: {{n}}",
+    "skipped": "Denne server er sat til at springe koden over (BOXOFFICE_SKIP_SIGN_IN_CODE). Fjern den indstilling for at bede om koden igen.",
+    "off": "Slå fra",
+    "password": "Din adgangskode, for at slå det fra"
   }
 }

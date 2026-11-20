@@ -50,7 +50,9 @@
     "passwordHint": "Alespoň 8 znaků.",
     "passwordAgain": "Heslo znovu",
     "make": "Vytvořit účet",
-    "signIn": "Přihlásit se"
+    "signIn": "Přihlásit se",
+    "code": "Kód z ověřovací aplikace",
+    "codeHint": "Nebo některý ze záložních kódů."
   },
   "tray": {
     "ready": "{{name}} je připraveno ke kontrole",
@@ -3059,5 +3061,23 @@
     "isMember": "Na stránku žádostí přístup má.",
     "notMember": "Na stránku žádostí přístup nemá.",
     "addMe": "Přidat tento účet jako správce"
+  },
+  "code": {
+    "title": "Jednorázový kód",
+    "sub": "Po heslu žádat 6místný kód z ověřovací aplikace. Přihlášení přístupovým klíčem nebo jednotným přihlášením ho nežádá.",
+    "setUp": "Nastavit",
+    "scan": "Naskenujte to ověřovací aplikací, nebo do ní opište klíč. Pak zadejte kód, který aplikace ukáže.",
+    "qr": "QR kód pro ověřovací aplikaci",
+    "key": "Klíč",
+    "enter": "Kód z aplikace",
+    "confirm": "Zapnout",
+    "recoveryTitle": "Záložní kódy",
+    "recoveryHint": "Uložte si je na bezpečné místo. Když o aplikaci přijdete, každý z nich vás jednou přihlásí místo kódu. Znovu se nezobrazí.",
+    "copy": "Zkopírovat",
+    "saved": "Mám je uložené",
+    "on": "Zapnuto. Zbývá záložních kódů: {{n}}",
+    "skipped": "Tento server je nastaven tak, aby kód přeskakoval (BOXOFFICE_SKIP_SIGN_IN_CODE). Odeberte to nastavení, aby se kód zase žádal.",
+    "off": "Vypnout",
+    "password": "Vaše heslo, pro vypnutí"
   }
 }

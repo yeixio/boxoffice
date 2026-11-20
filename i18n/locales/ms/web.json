@@ -44,7 +44,9 @@
     "passwordHint": "Sekurang-kurangnya 8 aksara.",
     "passwordAgain": "Kata laluan sekali lagi",
     "make": "Cipta akaun",
-    "signIn": "Log masuk"
+    "signIn": "Log masuk",
+    "code": "Kod daripada aplikasi pengesah anda",
+    "codeHint": "Atau salah satu kod pemulihan anda."
   },
   "tray": {
     "ready": "{{name}} sedia untuk disemak",
@@ -2690,5 +2692,23 @@
     "isMember": "Ia dibenarkan masuk ke laman permintaan.",
     "notMember": "Ia tidak dibenarkan masuk ke laman permintaan.",
     "addMe": "Tambah akaun ini sebagai pentadbir"
+  },
+  "code": {
+    "title": "Kod sekali guna",
+    "sub": "Minta kod 6 digit daripada aplikasi pengesah selepas kata laluan. Log masuk dengan kunci laluan atau log masuk tunggal tidak memintanya.",
+    "setUp": "Sediakan",
+    "scan": "Imbas ini dengan aplikasi pengesah anda, atau taipkan kuncinya ke dalam aplikasi. Kemudian taip kod yang ditunjukkan oleh aplikasi.",
+    "qr": "Kod QR untuk aplikasi pengesah",
+    "key": "Kunci",
+    "enter": "Kod daripada aplikasi",
+    "confirm": "Hidupkan",
+    "recoveryTitle": "Kod pemulihan",
+    "recoveryHint": "Simpan di tempat yang selamat. Jika aplikasi hilang, setiap satu membolehkan anda log masuk sekali sebagai ganti kod. Ia tidak akan ditunjukkan lagi.",
+    "copy": "Salin",
+    "saved": "Saya sudah menyimpannya",
+    "on": "Hidup. Kod pemulihan yang tinggal: {{n}}",
+    "skipped": "Pelayan ini ditetapkan untuk melangkau kod (BOXOFFICE_SKIP_SIGN_IN_CODE). Buang tetapan itu supaya kod diminta semula.",
+    "off": "Matikan",
+    "password": "Kata laluan anda, untuk mematikannya"
   }
 }

@@ -46,7 +46,9 @@
     "passwordHint": "Minstens 8 tekens.",
     "passwordAgain": "Wachtwoord nogmaals",
     "make": "Account aanmaken",
-    "signIn": "Inloggen"
+    "signIn": "Inloggen",
+    "code": "Code uit je authenticator-app",
+    "codeHint": "Of een van je herstelcodes."
   },
   "tray": {
     "ready": "{{name}} is klaar om te bekijken",
@@ -2813,5 +2815,23 @@
     "isMember": "Het wordt toegelaten tot de verzoekensite.",
     "notMember": "Het wordt niet toegelaten tot de verzoekensite.",
     "addMe": "Dit account toevoegen als beheerder"
+  },
+  "code": {
+    "title": "Eenmalige code",
+    "sub": "Vraag na het wachtwoord om een 6-cijferige code uit een authenticator-app. Inloggen met een passkey of eenmalige aanmelding vraagt er niet om.",
+    "setUp": "Instellen",
+    "scan": "Scan dit met je authenticator-app of typ de sleutel erin. Typ daarna de code die de app toont.",
+    "qr": "QR-code voor de authenticator-app",
+    "key": "Sleutel",
+    "enter": "Code uit de app",
+    "confirm": "Aanzetten",
+    "recoveryTitle": "Herstelcodes",
+    "recoveryHint": "Bewaar ze op een veilige plek. Als je de app kwijtraakt, logt elke code je één keer in in plaats van een code. Ze worden niet opnieuw getoond.",
+    "copy": "Kopiëren",
+    "saved": "Ik heb ze bewaard",
+    "on": "Aan. Resterende herstelcodes: {{n}}",
+    "skipped": "Deze server is ingesteld om de code over te slaan (BOXOFFICE_SKIP_SIGN_IN_CODE). Haal die instelling weg om er weer om te vragen.",
+    "off": "Uitzetten",
+    "password": "Je wachtwoord, om het uit te zetten"
   }
 }

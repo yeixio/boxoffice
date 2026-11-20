@@ -79,5 +79,23 @@
     "refused": "A bejelentkezést megszakították vagy elutasították.",
     "notallowed": "Ez a fiók ide nem léphet be. Kérdezd meg azt, aki a szervert üzemelteti.",
     "failed": "A bejelentkezés nem sikerült. Aki a szervert üzemelteti, a naplóban láthatja az okát."
+  },
+  "passkey": {
+    "signIn": "Bejelentkezés azonosítókulccsal",
+    "cancelled": "Az azonosítókulcs nem lett használva. Próbáld újra, amikor készen állsz.",
+    "exists": "Ezen az eszközön már van azonosítókulcs ehhez a fiókhoz.",
+    "unsupported": "Ez a böngésző itt nem tud azonosítókulcsot használni.",
+    "title": "Azonosítókulcsok",
+    "sub": "Jelentkezz be ujjlenyomattal, arccal, képernyőzárral vagy biztonsági kulccsal a jelszó helyett. Egy azonosítókulcs csak azon a címen működik, ahol létrehozták.",
+    "add": "Azonosítókulcs hozzáadása",
+    "name": "Az azonosítókulcs neve",
+    "none": "Még nincs azonosítókulcs.",
+    "unnamed": "Azonosítókulcs",
+    "added": "Hozzáadva: {{date}}",
+    "used": "utoljára használva: {{date}}",
+    "never": "még nem volt használva",
+    "remove": "Eltávolítás",
+    "removeNamed": "{{name}} eltávolítása",
+    "otherHost": "itt működik: {{host}}"
   }
 }
