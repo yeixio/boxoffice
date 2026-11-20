@@ -1019,7 +1019,8 @@
     "keep": "Behold dem",
     "blockMany": "Legg disse utgivelsene til i blokkeringslisten",
     "blockOne": "Legg denne utgivelsen til i blokkeringslisten",
-    "blockHint": "Søk hopper over en blokkert utgivelse, så den ikke hentes igjen. Slå av dette for å tillate den senere."
+    "blockHint": "Søk hopper over en blokkert utgivelse, så den ikke hentes igjen. Slå av dette for å tillate den senere.",
+    "unpin": "Tilbake til sin plass"
   },
   "settings": {
     "tmdbIntro": "Box Office slår opp filmer og serier på TMDB. Skaff deg en gratis nøkkel på <link>themoviedb.org</link>; både API-nøkkelen og det lengre lesetilgangstokenet fungerer.",
@@ -1754,7 +1755,10 @@
       "pickAll_other": "Velg alle ({{count}})",
       "pickShown_one": "Velg alle viste ({{count}})",
       "pickShown_other": "Velg alle viste ({{count}})"
-    }
+    },
+    "pinnedTop": "Flyttet til toppen",
+    "pinnedBottom": "Flyttet til bunnen",
+    "unpin": "Tilbake til sin plass i rekkefølgen"
   },
   "req": {
     "tabs": {
@@ -2876,5 +2880,31 @@
     "stays": "Filmen og den første kopien blir.",
     "stop": "Slutt å beholde en ekstra kopi",
     "again": "Ellers leter Box Office etter en ekstra kopi og laster den ned igjen."
+  },
+  "order": {
+    "title": "Nedlastingsrekkefølge",
+    "sub": "Ventende nedlastinger går i denne rekkefølgen, øverst først. Når du lagrer en ny rekkefølge, sorteres køen om med en gang. Nedlastinger du har flyttet til toppen eller bunnen for hånd, blir der du satte dem.",
+    "groups": {
+      "new-episodes": "Nye episoder",
+      "new-movies": "Nye filmer",
+      "backlog-episodes": "Eldre manglende episoder",
+      "backlog-movies": "Eldre manglende filmer",
+      "books": "Bøker og lydbøker",
+      "music": "Musikk",
+      "games": "Spill",
+      "replacements": "Erstatninger for dårlige kopier",
+      "fixes": "PROPER- og REPACK-rettelser",
+      "second-copies": "Andre kopier av filmer",
+      "upgrades": "Oppgraderinger til bedre kvalitet",
+      "other": "Lagt til for hånd"
+    },
+    "waiting": "{{n}} venter",
+    "up": "Flytt opp",
+    "down": "Flytt ned",
+    "reset": "Tilbake til standardrekkefølgen",
+    "newDays": "Dager en utgivelse regnes som ny",
+    "newDaysHint": "En film eller episode er ny så mange dager etter at den er sendt eller kommet ut for kjøp eller strømming. Etter det er den en eldre manglende.",
+    "preempt": "Stopp pågående nedlasting for en som rangeres foran den",
+    "preemptHint": "Den stoppede fortsetter etterpå der den var. Av: den nye venter på tur."
   }
 }

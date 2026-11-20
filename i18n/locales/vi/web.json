@@ -945,7 +945,8 @@
     "keep": "Giữ chúng lại",
     "blockMany": "Thêm các bản phát hành này vào danh sách chặn",
     "blockOne": "Thêm bản phát hành này vào danh sách chặn",
-    "blockHint": "Tìm kiếm sẽ bỏ qua bản phát hành bị chặn, nên nó không bị tải lại. Tắt mục này để cho phép sau."
+    "blockHint": "Tìm kiếm sẽ bỏ qua bản phát hành bị chặn, nên nó không bị tải lại. Tắt mục này để cho phép sau.",
+    "unpin": "Về chỗ cũ"
   },
   "settings": {
     "tmdbIntro": "Box Office tra cứu phim và chương trình trên TMDB. Lấy khóa miễn phí tại <link>themoviedb.org</link>; cả khóa API lẫn mã truy cập đọc dài hơn đều dùng được.",
@@ -1657,7 +1658,10 @@
       "clear": "Xóa bộ lọc",
       "pickAll_other": "Chọn tất cả ({{count}})",
       "pickShown_other": "Chọn tất cả mục đang hiện ({{count}})"
-    }
+    },
+    "pinnedTop": "Đã chuyển lên đầu",
+    "pinnedBottom": "Đã chuyển xuống cuối",
+    "unpin": "Về chỗ của nó trong thứ tự"
   },
   "req": {
     "tabs": {
@@ -2753,5 +2757,31 @@
     "stays": "Phim và bản sao thứ nhất vẫn ở lại.",
     "stop": "Thôi giữ bản sao thứ hai",
     "again": "Nếu không, Box Office sẽ tìm một bản sao thứ hai và tải lại."
+  },
+  "order": {
+    "title": "Thứ tự tải xuống",
+    "sub": "Các lượt tải đang chờ chạy theo thứ tự này, từ trên xuống. Lưu thứ tự mới sẽ sắp xếp lại hàng đợi ngay. Lượt tải bạn tự chuyển lên đầu hoặc xuống cuối sẽ giữ nguyên chỗ.",
+    "groups": {
+      "new-episodes": "Tập mới",
+      "new-movies": "Phim mới",
+      "backlog-episodes": "Tập còn thiếu cũ hơn",
+      "backlog-movies": "Phim còn thiếu cũ hơn",
+      "books": "Sách và sách nói",
+      "music": "Nhạc",
+      "games": "Trò chơi",
+      "replacements": "Thay thế bản lỗi",
+      "fixes": "Bản sửa PROPER và REPACK",
+      "second-copies": "Bản thứ hai của phim",
+      "upgrades": "Nâng lên chất lượng tốt hơn",
+      "other": "Thêm thủ công"
+    },
+    "waiting": "{{n}} đang chờ",
+    "up": "Lên",
+    "down": "Xuống",
+    "reset": "Về thứ tự mặc định",
+    "newDays": "Số ngày một bản phát hành được coi là mới",
+    "newDaysHint": "Phim hoặc tập được coi là mới trong số ngày này sau khi phát sóng hoặc ra mắt để mua hay xem trực tuyến. Sau đó là mục còn thiếu cũ hơn.",
+    "preempt": "Dừng lượt tải đang chạy cho lượt được xếp trước",
+    "preemptHint": "Lượt bị dừng sẽ tiếp tục từ chỗ cũ sau đó. Khi tắt, lượt mới chờ đến lượt."
   }
 }

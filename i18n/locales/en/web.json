@@ -1019,7 +1019,8 @@
     "keep": "Keep them",
     "blockMany": "Add these releases to the blocklist",
     "blockOne": "Add this release to the blocklist",
-    "blockHint": "Searches skip a blocked release, so it isn't grabbed again. Turn this off to allow it later."
+    "blockHint": "Searches skip a blocked release, so it isn't grabbed again. Turn this off to allow it later.",
+    "unpin": "Back to their place"
   },
   "settings": {
     "tmdbIntro": "Box Office looks up movies and shows on TMDB. Get a free key at <link>themoviedb.org</link>; the API key and the longer read access token both work.",
@@ -1754,7 +1755,10 @@
       "pickAll_other": "Select all ({{count}})",
       "pickShown_one": "Select all shown ({{count}})",
       "pickShown_other": "Select all shown ({{count}})"
-    }
+    },
+    "pinnedTop": "Moved to the top",
+    "pinnedBottom": "Moved to the bottom",
+    "unpin": "Back to its place in the download order"
   },
   "req": {
     "tabs": {
@@ -2876,5 +2880,31 @@
     "stays": "The movie and its first copy stay.",
     "stop": "Stop keeping a second copy",
     "again": "Otherwise Box Office will look for a second copy and download it again."
+  },
+  "order": {
+    "title": "Download order",
+    "sub": "Waiting downloads go in this order, top first. Saving a new order re-sorts the queue right away. Downloads you moved to the top or bottom by hand stay where you put them.",
+    "groups": {
+      "new-episodes": "New episodes",
+      "new-movies": "New movies",
+      "backlog-episodes": "Older missing episodes",
+      "backlog-movies": "Older missing movies",
+      "books": "Books and audiobooks",
+      "music": "Music",
+      "games": "Games",
+      "replacements": "Replacements for bad copies",
+      "fixes": "PROPER and REPACK fixes",
+      "second-copies": "Second copies of movies",
+      "upgrades": "Upgrades to a better quality",
+      "other": "Added by hand"
+    },
+    "waiting": "{{n}} waiting",
+    "up": "Move up",
+    "down": "Move down",
+    "reset": "Back to the default order",
+    "newDays": "Days a release counts as new",
+    "newDaysHint": "A movie or episode is new for this many days after it airs or comes out to buy or stream. After that, it's an older missing one.",
+    "preempt": "Stop the download that's on for one ranked ahead of it",
+    "preemptHint": "The one stopped carries on from where it was afterwards. When off, the new one waits its turn."
   }
 }

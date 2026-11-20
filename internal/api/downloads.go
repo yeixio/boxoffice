@@ -40,6 +40,7 @@ func (s *Server) downloadRoutes() []route {
 		{"PUT /api/v1/downloads/settings", true, s.saveDownloadSettings},
 		{"PUT /api/v1/downloads/cap", true, s.saveDataCap},
 		{"PUT /api/v1/downloads/schedule", true, s.saveSpeedSchedule},
+		{"PUT /api/v1/downloads/priority", true, s.saveQueuePriority},
 		{"PUT /api/v1/downloads/speed", true, s.setSpeedOverride},
 		{"DELETE /api/v1/downloads/speed", true, s.clearSpeedOverride},
 		{"DELETE /api/v1/downloads/history", true, func(w http.ResponseWriter, r *http.Request) error {
@@ -56,6 +57,7 @@ func (s *Server) downloadRoutes() []route {
 		{"POST /api/v1/downloads/{id}/reprocess", true, act(func(r *http.Request, id int64) error { return badRequest(s.Downloads.Reprocess(r.Context(), id)) })},
 		{"POST /api/v1/downloads/{id}/top", true, act(func(r *http.Request, id int64) error { return s.Downloads.MoveToTop(r.Context(), id) })},
 		{"POST /api/v1/downloads/{id}/bottom", true, act(func(r *http.Request, id int64) error { return s.Downloads.MoveToBottom(r.Context(), id) })},
+		{"POST /api/v1/downloads/{id}/unpin", true, act(func(r *http.Request, id int64) error { return s.Downloads.Unpin(r.Context(), id) })},
 		{"POST /api/v1/downloads/bulk", true, s.bulkDownloads},
 		{"DELETE /api/v1/downloads/{id}", true, act(func(r *http.Request, id int64) error {
 			q := r.URL.Query()
@@ -162,6 +164,7 @@ func (s *Server) bulkDownloads(w http.ResponseWriter, r *http.Request) error {
 		"reprocess": func(id int64) error { return e.Reprocess(ctx, id) },
 		"top":       func(id int64) error { return e.MoveToTop(ctx, id) },
 		"bottom":    func(id int64) error { return e.MoveToBottom(ctx, id) },
+		"unpin":     func(id int64) error { return e.Unpin(ctx, id) },
 		"remove":    func(id int64) error { return s.removeDownload(ctx, id, in.DeleteFiles, in.Block) },
 	}[in.Action]
 	if do == nil {
@@ -278,8 +281,12 @@ func (s *Server) downloads(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
+	priority, err := s.Store.QueuePriority(ctx)
+	if err != nil {
+		return err
+	}
 	out := map[string]any{
-		"schedule": sched, "speedNow": speedNow,
+		"schedule": sched, "speedNow": speedNow, "priority": priority,
 		"settings": set, "queue": queue, "history": history, "speed": live.Speed, "servers": live.Servers,
 		"newsServers": enabled, "folder": folder, "cap": dataCap, "historyTotal": historyTotal, "historyHidden": historyHidden,
 		"historyTypes": historyTypes, "historyStates": historyStates,
@@ -308,6 +315,23 @@ func (s *Server) saveDataCap(w http.ResponseWriter, r *http.Request) error {
 		return errorf(http.StatusBadRequest, "pick the day of the month your plan's month starts, from 1 to 28")
 	}
 	if err := downloader.SaveCapSettings(r.Context(), s.Store, in); err != nil {
+		return err
+	}
+	s.Downloads.Wake()
+	return s.downloads(w, r)
+}
+
+// saveQueuePriority saves the download order; the queue is sorted by it
+// as it's read, so the waiting downloads take their new places at once.
+func (s *Server) saveQueuePriority(w http.ResponseWriter, r *http.Request) error {
+	var in store.QueuePriority
+	if err := readJSON(r, &in); err != nil {
+		return err
+	}
+	if in.NewDays < 1 || in.NewDays > 365 {
+		return errorf(http.StatusBadRequest, "say how many days something counts as new for, from 1 to 365")
+	}
+	if err := s.Store.SaveQueuePriority(r.Context(), in); err != nil {
 		return err
 	}
 	s.Downloads.Wake()

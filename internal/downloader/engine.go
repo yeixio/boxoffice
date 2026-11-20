@@ -132,8 +132,9 @@ func (r *running) step(done, total int64) {
 var (
 	errPaused  = errors.New("paused")
 	errRemoved = errors.New("removed")
-	// errPreempted stops a download to make way for one moved to the top.
-	errPreempted = errors.New("made way for a download moved to the top")
+	// errPreempted stops a download to make way for one moved to the top,
+	// or one the download order ranks ahead of it.
+	errPreempted = errors.New("made way for a download ahead of it")
 )
 
 func (e *Engine) init() {
@@ -620,14 +621,19 @@ func (e *Engine) MoveToTop(ctx context.Context, id int64) error {
 // first in the queue, so that one starts now. The one stopped goes back
 // to waiting, keeping what it fetched, below those moved to the top, so
 // it carries on once they're done. One moved to the top itself isn't
-// stopped for another: they go in turn.
+// stopped for another: they go in turn. With the download order set to
+// (Preempt), it also makes way for one the order ranks ahead of it.
 func (e *Engine) makeWay(ctx context.Context) {
 	e.mu.Lock()
 	r := e.current
 	n := len(e.forced)
 	cur := r != nil && e.forced[r.id]
 	e.mu.Unlock()
-	if r == nil || n == 0 || cur {
+	if r == nil || cur {
+		return
+	}
+	prio, err := e.Store.QueuePriority(ctx)
+	if err != nil || n == 0 && !prio.Preempt {
 		return
 	}
 	queue, err := e.Store.DownloadQueue(ctx)
@@ -638,12 +644,16 @@ func (e *Engine) makeWay(ctx context.Context) {
 	// say, or done) aren't forced any more.
 	waiting := map[int64]bool{}
 	var first int64
-	for _, d := range queue {
+	var firstD, curD *store.Download
+	for i, d := range queue {
 		if d.Status == store.DownloadQueued || d.Status == store.DownloadDownloading {
 			waiting[d.ID] = true
 		}
 		if first == 0 && d.Status == store.DownloadQueued {
-			first = d.ID
+			first, firstD = d.ID, &queue[i]
+		}
+		if d.ID == r.id {
+			curD = &queue[i]
 		}
 	}
 	e.mu.Lock()
@@ -653,6 +663,8 @@ func (e *Engine) makeWay(ctx context.Context) {
 		}
 	}
 	stopIt := first != 0 && e.forced[first] && e.current == r
+	ranked := !stopIt && prio.Preempt && firstD != nil && curD != nil && e.current == r && store.Ahead(*firstD, *curD, prio.Order)
+	stopIt = stopIt || ranked
 	e.mu.Unlock()
 	if !stopIt {
 		return
@@ -662,7 +674,11 @@ func (e *Engine) makeWay(ctx context.Context) {
 	if c, err := LoadCap(ctx, e.Store); err != nil || c.Level == CapFull {
 		return
 	}
-	e.Log.Info("download makes way for one moved to the top", "id", r.id, "for", first)
+	if ranked {
+		e.Log.Info("download makes way for one the download order puts ahead of it", "id", r.id, "for", first)
+	} else {
+		e.Log.Info("download makes way for one moved to the top", "id", r.id, "for", first)
+	}
 	r.cancel(errPreempted)
 }
 
@@ -671,6 +687,19 @@ func (e *Engine) MoveToBottom(ctx context.Context, id int64) error {
 	if err := e.Store.MoveDownloadToBottom(ctx, id); err != nil {
 		return err
 	}
+	e.Wake()
+	return nil
+}
+
+// Unpin puts a download moved to the top or bottom by hand back in its
+// place in the download order.
+func (e *Engine) Unpin(ctx context.Context, id int64) error {
+	if err := e.Store.UnpinDownload(ctx, id); err != nil {
+		return err
+	}
+	e.mu.Lock()
+	delete(e.forced, id)
+	e.mu.Unlock()
 	e.Wake()
 	return nil
 }
@@ -1062,10 +1091,11 @@ func (e *Engine) process(ctx context.Context, r *running, d store.Download, srv 
 			e.Store.SetDownloadStatus(bg, d.ID, store.DownloadQueued, "")
 		}
 	case errors.Is(cause, errPreempted):
-		// It made way for a download moved to the top, and waits below
-		// it, carrying on from where it was once that's done.
+		// It made way for a download moved to the top or ranked ahead of
+		// it, and waits below it, carrying on from where it was once
+		// that's done.
 		if cur, _ := e.Store.Download(bg, d.ID); cur.Status != store.DownloadPaused {
-			e.Store.SetDownloadStatus(bg, d.ID, store.DownloadQueued, "Waiting for the downloads moved to the top; it carries on from where it was once they're done")
+			e.Store.SetDownloadStatus(bg, d.ID, store.DownloadQueued, "Waiting for the downloads ahead of it; it carries on from where it was once they're done")
 		}
 	case errors.Is(cause, errRemoved):
 	case errors.Is(cause, context.Canceled):

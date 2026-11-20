@@ -1093,7 +1093,8 @@
     "keep": "Manter",
     "blockMany": "Adicionar estes releases à lista de bloqueio",
     "blockOne": "Adicionar este release à lista de bloqueio",
-    "blockHint": "As buscas ignoram um release bloqueado, então ele não é capturado de novo. Desative isto para permiti-lo depois."
+    "blockHint": "As buscas ignoram um release bloqueado, então ele não é capturado de novo. Desative isto para permiti-lo depois.",
+    "unpin": "Voltar ao lugar"
   },
   "settings": {
     "tmdbIntro": "O Box Office procura filmes e séries no TMDB. Consiga uma chave gratuita em <link>themoviedb.org</link>; a chave de API e o token de acesso de leitura, mais longo, funcionam.",
@@ -1851,7 +1852,10 @@
       "pickShown_one": "Selecionar todos os exibidos ({{count}})",
       "pickShown_many": "Selecionar todos os exibidos ({{count}})",
       "pickShown_other": "Selecionar todos os exibidos ({{count}})"
-    }
+    },
+    "pinnedTop": "Movido para o topo",
+    "pinnedBottom": "Movido para o fim",
+    "unpin": "Voltar ao seu lugar na ordem"
   },
   "req": {
     "tabs": {
@@ -2999,5 +3003,31 @@
     "stays": "O filme e a primeira cópia ficam.",
     "stop": "Parar de manter uma segunda cópia",
     "again": "Senão o Box Office vai procurar uma segunda cópia e baixá-la de novo."
+  },
+  "order": {
+    "title": "Ordem dos downloads",
+    "sub": "Os downloads em espera seguem esta ordem, de cima para baixo. Salvar uma nova ordem reorganiza a fila na hora. Downloads que você moveu para o topo ou o fim manualmente ficam onde você os colocou.",
+    "groups": {
+      "new-episodes": "Episódios novos",
+      "new-movies": "Filmes novos",
+      "backlog-episodes": "Episódios antigos faltando",
+      "backlog-movies": "Filmes antigos faltando",
+      "books": "Livros e audiolivros",
+      "music": "Música",
+      "games": "Jogos",
+      "replacements": "Substituições de cópias ruins",
+      "fixes": "Correções PROPER e REPACK",
+      "second-copies": "Segundas cópias de filmes",
+      "upgrades": "Melhorias de qualidade",
+      "other": "Adicionados manualmente"
+    },
+    "waiting": "{{n}} em espera",
+    "up": "Mover para cima",
+    "down": "Mover para baixo",
+    "reset": "Voltar à ordem padrão",
+    "newDays": "Dias em que um lançamento conta como novo",
+    "newDaysHint": "Um filme ou episódio é novo por esta quantidade de dias depois de ir ao ar ou sair para compra ou streaming. Depois disso, é um antigo faltando.",
+    "preempt": "Parar o download atual por um com prioridade maior",
+    "preemptHint": "O interrompido continua depois de onde estava. Desligado, o novo espera sua vez."
   }
 }

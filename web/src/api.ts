@@ -541,10 +541,18 @@ export type Download = {
   // How far checking, repairing or unpacking has got.
   stepDone?: number
   stepTotal?: number
+  // Why it was grabbed (new, backlog, upgrade, fix, replace, second), and
+  // the download order's group that puts it in.
+  reason?: string
+  group: string
+  // Moved to the top (1) or bottom (-1) by hand: it stays there.
+  pinned?: number
   addedAt: string
   startedAt?: string
   finishedAt?: string
 }
+// The order downloads are fetched in, by group (see Download.group).
+export type QueuePriority = { order: string[]; newDays: number; preempt: boolean }
 export type DownloadSettings = { enabled: boolean; paused: boolean; speedLimit: number; import: boolean; deleteFailed: boolean; quarantineDays: number; keepFree: number }
 // One release held in the quarantine folder.
 export type QuarantineItem = {
@@ -576,6 +584,7 @@ export type Downloads = {
   settings: DownloadSettings
   schedule: SpeedSchedule
   speedNow: SpeedNow
+  priority: QueuePriority
   queue: Download[]
   history: Download[]
   speed: number

@@ -1167,7 +1167,8 @@
     "keep": "Ponechat je",
     "blockMany": "Přidat tato vydání na seznam blokovaných",
     "blockOne": "Přidat toto vydání na seznam blokovaných",
-    "blockHint": "Hledání blokované vydání přeskočí, takže se znovu nestáhne. Vypněte to, chcete-li ho později povolit."
+    "blockHint": "Hledání blokované vydání přeskočí, takže se znovu nestáhne. Vypněte to, chcete-li ho později povolit.",
+    "unpin": "Zpět na místo"
   },
   "settings": {
     "tmdbIntro": "Box Office vyhledává filmy a seriály v TMDB. Získejte bezplatný klíč na <link>themoviedb.org</link>; funguje API klíč i delší přístupový token pro čtení.",
@@ -1948,7 +1949,10 @@
       "pickShown_few": "Vybrat vše zobrazené ({{count}})",
       "pickShown_many": "Vybrat vše zobrazené ({{count}})",
       "pickShown_other": "Vybrat vše zobrazené ({{count}})"
-    }
+    },
+    "pinnedTop": "Přesunuto nahoru",
+    "pinnedBottom": "Přesunuto dolů",
+    "unpin": "Zpět na své místo v pořadí"
   },
   "req": {
     "tabs": {
@@ -3122,5 +3126,31 @@
     "stays": "Film a jeho první kopie zůstanou.",
     "stop": "Přestat uchovávat druhou kopii",
     "again": "Jinak Box Office druhou kopii znovu vyhledá a stáhne."
+  },
+  "order": {
+    "title": "Pořadí stahování",
+    "sub": "Čekající stahování jdou v tomto pořadí, shora dolů. Uložení nového pořadí frontu hned přeřadí. Stahování, která jste ručně přesunuli nahoru nebo dolů, zůstanou tam, kam jste je dali.",
+    "groups": {
+      "new-episodes": "Nové díly",
+      "new-movies": "Nové filmy",
+      "backlog-episodes": "Starší chybějící díly",
+      "backlog-movies": "Starší chybějící filmy",
+      "books": "Knihy a audioknihy",
+      "music": "Hudba",
+      "games": "Hry",
+      "replacements": "Náhrady za vadné kopie",
+      "fixes": "Opravy PROPER a REPACK",
+      "second-copies": "Druhé kopie filmů",
+      "upgrades": "Vylepšení kvality",
+      "other": "Přidané ručně"
+    },
+    "waiting": "Čeká: {{n}}",
+    "up": "Posunout nahoru",
+    "down": "Posunout dolů",
+    "reset": "Zpět na výchozí pořadí",
+    "newDays": "Dny, kdy je vydání nové",
+    "newDaysHint": "Film nebo díl je nový tolik dní po odvysílání nebo vydání ke koupi či streamování. Potom je to starší chybějící.",
+    "preempt": "Zastavit běžící stahování kvůli výše zařazenému",
+    "preemptHint": "Zastavené potom pokračuje tam, kde bylo. Když je vypnuto, nové čeká, až na něj přijde řada."
   }
 }

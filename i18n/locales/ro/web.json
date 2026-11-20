@@ -1093,7 +1093,8 @@
     "keep": "Păstrează-le",
     "blockMany": "Adaugă aceste versiuni în lista de blocare",
     "blockOne": "Adaugă această versiune în lista de blocare",
-    "blockHint": "Căutările sar peste o versiune blocată, ca să nu fie descărcată din nou. Oprește asta pentru a o permite mai târziu."
+    "blockHint": "Căutările sar peste o versiune blocată, ca să nu fie descărcată din nou. Oprește asta pentru a o permite mai târziu.",
+    "unpin": "Înapoi la locul lor"
   },
   "settings": {
     "tmdbIntro": "Box Office caută filme și seriale pe TMDB. Obține o cheie gratuită pe <link>themoviedb.org</link>; funcționează atât cheia API, cât și tokenul de acces la citire, mai lung.",
@@ -1851,7 +1852,10 @@
       "pickShown_one": "Selectează tot ce e afișat ({{count}})",
       "pickShown_few": "Selectează tot ce e afișat ({{count}})",
       "pickShown_other": "Selectează tot ce e afișat ({{count}})"
-    }
+    },
+    "pinnedTop": "Mutată sus",
+    "pinnedBottom": "Mutată jos",
+    "unpin": "Înapoi la locul ei în ordine"
   },
   "req": {
     "tabs": {
@@ -2999,5 +3003,31 @@
     "stays": "Filmul și prima lui copie rămân.",
     "stop": "Nu mai păstra o a doua copie",
     "again": "Altfel Box Office va căuta o a doua copie și o va descărca din nou."
+  },
+  "order": {
+    "title": "Ordinea descărcărilor",
+    "sub": "Descărcările în așteptare merg în această ordine, de sus în jos. Salvarea unei ordini noi reordonează coada imediat. Descărcările mutate manual sus sau jos rămân unde le-ai pus.",
+    "groups": {
+      "new-episodes": "Episoade noi",
+      "new-movies": "Filme noi",
+      "backlog-episodes": "Episoade lipsă mai vechi",
+      "backlog-movies": "Filme lipsă mai vechi",
+      "books": "Cărți și cărți audio",
+      "music": "Muzică",
+      "games": "Jocuri",
+      "replacements": "Înlocuiri pentru copii defecte",
+      "fixes": "Corecturi PROPER și REPACK",
+      "second-copies": "A doua copie a filmelor",
+      "upgrades": "Îmbunătățiri de calitate",
+      "other": "Adăugate manual"
+    },
+    "waiting": "{{n}} în așteptare",
+    "up": "Mută sus",
+    "down": "Mută jos",
+    "reset": "Înapoi la ordinea implicită",
+    "newDays": "Zile în care o lansare e nouă",
+    "newDaysHint": "Un film sau episod e nou atâtea zile după difuzare sau apariția pentru cumpărare ori streaming. După aceea e unul lipsă mai vechi.",
+    "preempt": "Oprește descărcarea în curs pentru una clasată înaintea ei",
+    "preemptHint": "Cea oprită continuă apoi de unde a rămas. Dezactivat, cea nouă își așteaptă rândul."
   }
 }

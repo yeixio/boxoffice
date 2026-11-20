@@ -1019,7 +1019,8 @@
     "keep": "Behalten",
     "blockMany": "Diese Releases zur Sperrliste hinzufügen",
     "blockOne": "Dieses Release zur Sperrliste hinzufügen",
-    "blockHint": "Suchen überspringen ein gesperrtes Release, damit es nicht erneut geholt wird. Schalte das aus, um es später zu erlauben."
+    "blockHint": "Suchen überspringen ein gesperrtes Release, damit es nicht erneut geholt wird. Schalte das aus, um es später zu erlauben.",
+    "unpin": "Zurück an ihren Platz"
   },
   "settings": {
     "tmdbIntro": "Box Office schlägt Filme und Serien bei TMDB nach. Hol dir einen kostenlosen Schlüssel auf <link>themoviedb.org</link>; sowohl der API-Schlüssel als auch das längere Lesezugriffstoken funktionieren.",
@@ -1754,7 +1755,10 @@
       "pickAll_other": "Alle auswählen ({{count}})",
       "pickShown_one": "Alle angezeigten auswählen ({{count}})",
       "pickShown_other": "Alle angezeigten auswählen ({{count}})"
-    }
+    },
+    "pinnedTop": "Nach oben verschoben",
+    "pinnedBottom": "Nach unten verschoben",
+    "unpin": "Zurück an seinen Platz in der Reihenfolge"
   },
   "req": {
     "tabs": {
@@ -2876,5 +2880,31 @@
     "stays": "Der Film und seine erste Kopie bleiben.",
     "stop": "Keine zweite Kopie mehr behalten",
     "again": "Sonst sucht Box Office wieder nach einer zweiten Kopie und lädt sie erneut herunter."
+  },
+  "order": {
+    "title": "Download-Reihenfolge",
+    "sub": "Wartende Downloads laufen in dieser Reihenfolge, von oben nach unten. Beim Speichern einer neuen Reihenfolge wird die Warteschlange sofort neu sortiert. Downloads, die du von Hand nach oben oder unten verschoben hast, bleiben dort.",
+    "groups": {
+      "new-episodes": "Neue Folgen",
+      "new-movies": "Neue Filme",
+      "backlog-episodes": "Ältere fehlende Folgen",
+      "backlog-movies": "Ältere fehlende Filme",
+      "books": "Bücher und Hörbücher",
+      "music": "Musik",
+      "games": "Spiele",
+      "replacements": "Ersatz für fehlerhafte Kopien",
+      "fixes": "PROPER- und REPACK-Korrekturen",
+      "second-copies": "Zweitkopien von Filmen",
+      "upgrades": "Upgrades auf bessere Qualität",
+      "other": "Von Hand hinzugefügt"
+    },
+    "waiting": "{{n}} wartend",
+    "up": "Nach oben",
+    "down": "Nach unten",
+    "reset": "Zurück zur Standardreihenfolge",
+    "newDays": "Tage, die eine Veröffentlichung als neu gilt",
+    "newDaysHint": "Ein Film oder eine Folge gilt so viele Tage nach Ausstrahlung oder Erscheinen zum Kaufen oder Streamen als neu. Danach gilt er als älterer fehlender Titel.",
+    "preempt": "Laufenden Download für einen höher eingestuften anhalten",
+    "preemptHint": "Der angehaltene macht danach dort weiter, wo er war. Wenn aus, wartet der neue, bis er dran ist."
   }
 }

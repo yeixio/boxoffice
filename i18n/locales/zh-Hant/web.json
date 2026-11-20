@@ -945,7 +945,8 @@
     "keep": "保留",
     "blockMany": "將這些釋出加入遮蔽列表",
     "blockOne": "將此釋出加入遮蔽列表",
-    "blockHint": "搜尋會跳過被遮蔽的釋出，因此不會再次抓取。之後想允許時關閉此項。"
+    "blockHint": "搜尋會跳過被遮蔽的釋出，因此不會再次抓取。之後想允許時關閉此項。",
+    "unpin": "回到原位"
   },
   "settings": {
     "tmdbIntro": "Box Office 在 TMDB 上尋找電影和劇集。在 <link>themoviedb.org</link> 獲取免費金鑰；API 金鑰和更長的讀取訪問令牌都可以使用。",
@@ -1657,7 +1658,10 @@
       "clear": "清除篩選",
       "pickAll_other": "全選（{{count}}）",
       "pickShown_other": "選取所有顯示的項目（{{count}}）"
-    }
+    },
+    "pinnedTop": "已移到頂端",
+    "pinnedBottom": "已移到底端",
+    "unpin": "回到順序中的位置"
   },
   "req": {
     "tabs": {
@@ -2753,5 +2757,31 @@
     "stays": "電影和它的第一份副本會保留。",
     "stop": "不再保留第二份副本",
     "again": "否則 Box Office 會再次尋找並下載第二份副本。"
+  },
+  "order": {
+    "title": "下載順序",
+    "sub": "等待中的下載依此順序由上而下進行。儲存新順序後佇列會立即重新排序。你手動移到頂端或底端的下載會保持原位。",
+    "groups": {
+      "new-episodes": "新劇集",
+      "new-movies": "新電影",
+      "backlog-episodes": "較早缺少的劇集",
+      "backlog-movies": "較早缺少的電影",
+      "books": "書籍和有聲書",
+      "music": "音樂",
+      "games": "遊戲",
+      "replacements": "損壞副本的替換",
+      "fixes": "PROPER 和 REPACK 修正版",
+      "second-copies": "電影的第二份副本",
+      "upgrades": "升級到更好畫質",
+      "other": "手動加入"
+    },
+    "waiting": "等待中 {{n}} 個",
+    "up": "上移",
+    "down": "下移",
+    "reset": "恢復預設順序",
+    "newDays": "發行被視為新的天數",
+    "newDaysHint": "電影或劇集在播出或上架購買、串流後的這麼多天內視為新的。之後就是較早缺少的。",
+    "preempt": "有排在前面的下載時停止目前下載",
+    "preemptHint": "被停止的下載之後會從原處繼續。關閉時，新的下載會排隊等候。"
   }
 }

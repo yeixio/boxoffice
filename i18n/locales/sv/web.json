@@ -1019,7 +1019,8 @@
     "keep": "Behåll dem",
     "blockMany": "Lägg till de här releaserna i blocklistan",
     "blockOne": "Lägg till den här releasen i blocklistan",
-    "blockHint": "Sökningar hoppar över en blockerad release, så den hämtas inte igen. Stäng av detta för att tillåta den senare."
+    "blockHint": "Sökningar hoppar över en blockerad release, så den hämtas inte igen. Stäng av detta för att tillåta den senare.",
+    "unpin": "Tillbaka till sin plats"
   },
   "settings": {
     "tmdbIntro": "Box Office slår upp filmer och serier på TMDB. Skaffa en gratis nyckel på <link>themoviedb.org</link>; både API-nyckeln och den längre läsåtkomsttoken fungerar.",
@@ -1754,7 +1755,10 @@
       "pickAll_other": "Markera alla ({{count}})",
       "pickShown_one": "Markera alla som visas ({{count}})",
       "pickShown_other": "Markera alla som visas ({{count}})"
-    }
+    },
+    "pinnedTop": "Flyttad till toppen",
+    "pinnedBottom": "Flyttad till botten",
+    "unpin": "Tillbaka till sin plats i ordningen"
   },
   "req": {
     "tabs": {
@@ -2876,5 +2880,31 @@
     "stays": "Filmen och dess första kopia finns kvar.",
     "stop": "Sluta behålla en extra kopia",
     "again": "Annars letar Box Office efter en extra kopia och laddar ner den igen."
+  },
+  "order": {
+    "title": "Nedladdningsordning",
+    "sub": "Väntande nedladdningar går i den här ordningen, uppifrån och ned. När du sparar en ny ordning sorteras kön om direkt. Nedladdningar du flyttat till toppen eller botten för hand stannar där du lade dem.",
+    "groups": {
+      "new-episodes": "Nya avsnitt",
+      "new-movies": "Nya filmer",
+      "backlog-episodes": "Äldre saknade avsnitt",
+      "backlog-movies": "Äldre saknade filmer",
+      "books": "Böcker och ljudböcker",
+      "music": "Musik",
+      "games": "Spel",
+      "replacements": "Ersättningar för dåliga kopior",
+      "fixes": "PROPER- och REPACK-rättningar",
+      "second-copies": "Andra kopior av filmer",
+      "upgrades": "Uppgraderingar till bättre kvalitet",
+      "other": "Tillagda för hand"
+    },
+    "waiting": "{{n}} väntar",
+    "up": "Flytta upp",
+    "down": "Flytta ned",
+    "reset": "Tillbaka till standardordningen",
+    "newDays": "Dagar en release räknas som ny",
+    "newDaysHint": "En film eller ett avsnitt är nytt så många dagar efter att det sänts eller släppts för köp eller streaming. Därefter är det ett äldre saknat.",
+    "preempt": "Stoppa pågående nedladdning för en som rankas före den",
+    "preemptHint": "Den stoppade fortsätter sedan där den var. Av: den nya väntar på sin tur."
   }
 }

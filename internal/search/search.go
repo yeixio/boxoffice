@@ -780,7 +780,7 @@ func (s *Service) grab(ctx context.Context, c Candidate) (store.Download, error)
 	q, _ := quality.ByID(c.Quality)
 	s.logger().Info("grabbing a release", "release", c.Title, "indexer", ix.Name, "quality", q.Name, "size", c.Size, "kind", c.kind, "title", c.titleID)
 	d, err := s.Engine.Add(ctx, store.Download{Name: c.Title, Kind: c.kind, TitleID: c.titleID, EpisodeIDs: c.episodes, Quality: c.Quality,
-		Indexer: c.Indexer, Source: "search", Password: c.Password, Edition: c.Edition, Mode: c.mode}, data)
+		Indexer: c.Indexer, Source: "search", Password: c.Password, Edition: c.Edition, Mode: c.mode, Reason: s.reasonFor(ctx, c, upgrade, regrab)}, data)
 	if err == nil && upgrade {
 		if e := s.Store.CountAutoUpgrade(context.WithoutCancel(ctx)); e != nil {
 			s.logger().Warn("couldn't count an automatic upgrade", "release", c.Title, "err", e)

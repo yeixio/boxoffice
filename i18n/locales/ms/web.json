@@ -945,7 +945,8 @@
     "keep": "Simpan",
     "blockMany": "Tambah keluaran ini ke senarai sekatan",
     "blockOne": "Tambah keluaran ini ke senarai sekatan",
-    "blockHint": "Carian melangkau keluaran yang disekat, jadi ia tidak diambil semula. Matikan ini untuk membenarkannya kemudian."
+    "blockHint": "Carian melangkau keluaran yang disekat, jadi ia tidak diambil semula. Matikan ini untuk membenarkannya kemudian.",
+    "unpin": "Kembali ke tempatnya"
   },
   "settings": {
     "tmdbIntro": "Box Office mencari filem dan rancangan di TMDB. Dapatkan kunci percuma di <link>themoviedb.org</link>; kunci API dan token akses baca yang lebih panjang kedua-duanya berfungsi.",
@@ -1657,7 +1658,10 @@
       "clear": "Kosongkan penapis",
       "pickAll_other": "Pilih semua ({{count}})",
       "pickShown_other": "Pilih semua yang dipaparkan ({{count}})"
-    }
+    },
+    "pinnedTop": "Dialih ke atas",
+    "pinnedBottom": "Dialih ke bawah",
+    "unpin": "Kembali ke tempatnya dalam susunan"
   },
   "req": {
     "tabs": {
@@ -2753,5 +2757,31 @@
     "stays": "Filem dan salinan pertamanya kekal.",
     "stop": "Berhenti menyimpan salinan kedua",
     "again": "Jika tidak, Box Office akan mencari salinan kedua dan memuat turunnya semula."
+  },
+  "order": {
+    "title": "Susunan muat turun",
+    "sub": "Muat turun yang menunggu berjalan mengikut susunan ini, dari atas. Menyimpan susunan baharu menyusun semula baris gilir serta-merta. Muat turun yang anda alihkan ke atas atau bawah secara manual kekal di tempatnya.",
+    "groups": {
+      "new-episodes": "Episod baharu",
+      "new-movies": "Filem baharu",
+      "backlog-episodes": "Episod hilang yang lebih lama",
+      "backlog-movies": "Filem hilang yang lebih lama",
+      "books": "Buku dan buku audio",
+      "music": "Muzik",
+      "games": "Permainan",
+      "replacements": "Pengganti salinan rosak",
+      "fixes": "Pembetulan PROPER dan REPACK",
+      "second-copies": "Salinan kedua filem",
+      "upgrades": "Naik taraf kualiti",
+      "other": "Ditambah secara manual"
+    },
+    "waiting": "{{n}} menunggu",
+    "up": "Naikkan",
+    "down": "Turunkan",
+    "reset": "Kembali ke susunan lalai",
+    "newDays": "Hari sesuatu keluaran dikira baharu",
+    "newDaysHint": "Filem atau episod dikira baharu selama bilangan hari ini selepas disiarkan atau keluar untuk dibeli atau distrim. Selepas itu ia yang hilang lebih lama.",
+    "preempt": "Hentikan muat turun semasa untuk yang berkedudukan lebih tinggi",
+    "preemptHint": "Yang dihentikan akan bersambung dari tempatnya kemudian. Jika dimatikan, yang baharu menunggu gilirannya."
   }
 }
