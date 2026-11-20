@@ -50,7 +50,9 @@
     "passwordHint": "Co najmniej 8 znaków.",
     "passwordAgain": "Powtórz hasło",
     "make": "Utwórz konto",
-    "signIn": "Zaloguj się"
+    "signIn": "Zaloguj się",
+    "code": "Kod z aplikacji uwierzytelniającej",
+    "codeHint": "Albo jeden z kodów odzyskiwania."
   },
   "tray": {
     "ready": "{{name}} jest gotowy do przejrzenia",
@@ -3059,5 +3061,23 @@
     "isMember": "Ma wstęp na stronę próśb.",
     "notMember": "Nie ma wstępu na stronę próśb.",
     "addMe": "Dodaj to konto jako administratora"
+  },
+  "code": {
+    "title": "Kod jednorazowy",
+    "sub": "Po haśle pytaj o 6-cyfrowy kod z aplikacji uwierzytelniającej. Logowanie kluczem dostępu lub logowaniem jednokrotnym o niego nie pyta.",
+    "setUp": "Skonfiguruj",
+    "scan": "Zeskanuj to aplikacją uwierzytelniającą albo wpisz w niej klucz. Potem wpisz kod, który pokazuje aplikacja.",
+    "qr": "Kod QR dla aplikacji uwierzytelniającej",
+    "key": "Klucz",
+    "enter": "Kod z aplikacji",
+    "confirm": "Włącz",
+    "recoveryTitle": "Kody odzyskiwania",
+    "recoveryHint": "Przechowuj je w bezpiecznym miejscu. Jeśli stracisz aplikację, każdy z nich raz zaloguje cię zamiast kodu. Nie zostaną pokazane ponownie.",
+    "copy": "Skopiuj",
+    "saved": "Mam je zapisane",
+    "on": "Włączone. Pozostałe kody odzyskiwania: {{n}}",
+    "skipped": "Ten serwer jest ustawiony tak, by pomijać kod (BOXOFFICE_SKIP_SIGN_IN_CODE). Usuń to ustawienie, aby znów o niego pytać.",
+    "off": "Wyłącz",
+    "password": "Twoje hasło, aby wyłączyć"
   }
 }

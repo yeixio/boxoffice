@@ -46,7 +46,9 @@
     "passwordHint": "Minst 8 tecken.",
     "passwordAgain": "Lösenord igen",
     "make": "Skapa kontot",
-    "signIn": "Logga in"
+    "signIn": "Logga in",
+    "code": "Kod från din autentiseringsapp",
+    "codeHint": "Eller en av dina återställningskoder."
   },
   "tray": {
     "ready": "{{name}} är redo att granskas",
@@ -2813,5 +2815,23 @@
     "isMember": "Det släpps in på önskemålssidan.",
     "notMember": "Det släpps inte in på önskemålssidan.",
     "addMe": "Lägg till det här kontot som administratör"
+  },
+  "code": {
+    "title": "Engångskod",
+    "sub": "Be om en 6-siffrig kod från en autentiseringsapp efter lösenordet. Inloggning med en lösennyckel eller enkel inloggning ber inte om den.",
+    "setUp": "Ställ in",
+    "scan": "Skanna det här med din autentiseringsapp, eller skriv in nyckeln i den. Skriv sedan koden som appen visar.",
+    "qr": "QR-kod för autentiseringsappen",
+    "key": "Nyckel",
+    "enter": "Kod från appen",
+    "confirm": "Slå på",
+    "recoveryTitle": "Återställningskoder",
+    "recoveryHint": "Förvara dem på ett säkert ställe. Om du förlorar appen loggar var och en in dig en gång i stället för en kod. De visas inte igen.",
+    "copy": "Kopiera dem",
+    "saved": "Jag har sparat dem",
+    "on": "På. Återställningskoder kvar: {{n}}",
+    "skipped": "Den här servern är inställd på att hoppa över koden (BOXOFFICE_SKIP_SIGN_IN_CODE). Ta bort den inställningen för att be om koden igen.",
+    "off": "Stäng av",
+    "password": "Ditt lösenord, för att stänga av"
   }
 }

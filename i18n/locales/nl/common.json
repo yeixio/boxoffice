@@ -79,5 +79,23 @@
     "refused": "Het inloggen is geannuleerd of geweigerd.",
     "notallowed": "Dat account wordt hier niet toegelaten. Vraag het aan wie deze server beheert.",
     "failed": "Het inloggen is niet gelukt. Wie deze server beheert, kan in het logboek zien waarom."
+  },
+  "passkey": {
+    "signIn": "Inloggen met een passkey",
+    "cancelled": "De passkey is niet gebruikt. Probeer het opnieuw wanneer je zover bent.",
+    "exists": "Dit apparaat heeft al een passkey voor dit account.",
+    "unsupported": "Deze browser kan hier geen passkeys gebruiken.",
+    "title": "Passkeys",
+    "sub": "Log in met je vingerafdruk, gezicht, schermvergrendeling of een beveiligingssleutel in plaats van het wachtwoord. Een passkey werkt alleen op het adres waar hij is gemaakt.",
+    "add": "Passkey toevoegen",
+    "name": "Naam voor deze passkey",
+    "none": "Nog geen passkeys.",
+    "unnamed": "Passkey",
+    "added": "Toegevoegd op {{date}}",
+    "used": "laatst gebruikt op {{date}}",
+    "never": "nooit gebruikt",
+    "remove": "Verwijderen",
+    "removeNamed": "{{name}} verwijderen",
+    "otherHost": "werkt op {{host}}"
   }
 }

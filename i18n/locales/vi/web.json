@@ -44,7 +44,9 @@
     "passwordHint": "Ít nhất 8 ký tự.",
     "passwordAgain": "Nhập lại mật khẩu",
     "make": "Tạo tài khoản",
-    "signIn": "Đăng nhập"
+    "signIn": "Đăng nhập",
+    "code": "Mã từ ứng dụng xác thực của bạn",
+    "codeHint": "Hoặc một trong các mã khôi phục của bạn."
   },
   "tray": {
     "ready": "{{name}} đã sẵn sàng để xem lại",
@@ -2690,5 +2692,23 @@
     "isMember": "Tài khoản được vào trang yêu cầu.",
     "notMember": "Tài khoản không được vào trang yêu cầu.",
     "addMe": "Thêm tài khoản này làm quản trị viên"
+  },
+  "code": {
+    "title": "Mã dùng một lần",
+    "sub": "Yêu cầu mã 6 chữ số từ ứng dụng xác thực sau mật khẩu. Đăng nhập bằng khóa truy cập hoặc đăng nhập một lần sẽ không hỏi mã này.",
+    "setUp": "Thiết lập",
+    "scan": "Quét mã này bằng ứng dụng xác thực của bạn, hoặc nhập khóa vào ứng dụng. Sau đó nhập mã mà ứng dụng hiển thị.",
+    "qr": "Mã QR cho ứng dụng xác thực",
+    "key": "Khóa",
+    "enter": "Mã từ ứng dụng",
+    "confirm": "Bật",
+    "recoveryTitle": "Mã khôi phục",
+    "recoveryHint": "Hãy cất chúng ở nơi an toàn. Nếu bạn mất ứng dụng, mỗi mã cho bạn đăng nhập một lần thay cho mã. Chúng sẽ không được hiển thị lại.",
+    "copy": "Sao chép",
+    "saved": "Tôi đã cất chúng",
+    "on": "Đang bật. Số mã khôi phục còn lại: {{n}}",
+    "skipped": "Máy chủ này được đặt để bỏ qua mã (BOXOFFICE_SKIP_SIGN_IN_CODE). Hãy bỏ cài đặt đó để mã được hỏi lại.",
+    "off": "Tắt",
+    "password": "Mật khẩu của bạn, để tắt"
   }
 }

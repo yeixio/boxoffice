@@ -48,7 +48,9 @@
     "passwordHint": "Cel puțin 8 caractere.",
     "passwordAgain": "Parola din nou",
     "make": "Creează contul",
-    "signIn": "Conectează-te"
+    "signIn": "Conectează-te",
+    "code": "Codul din aplicația de autentificare",
+    "codeHint": "Sau unul dintre codurile de recuperare."
   },
   "tray": {
     "ready": "{{name}} e gata de verificat",
@@ -2936,5 +2938,23 @@
     "isMember": "Are acces la site-ul de cereri.",
     "notMember": "Nu are acces la site-ul de cereri.",
     "addMe": "Adaugă acest cont ca administrator"
+  },
+  "code": {
+    "title": "Cod de unică folosință",
+    "sub": "Cere un cod din 6 cifre dintr-o aplicație de autentificare după parolă. Autentificarea cu o cheie de acces sau cu autentificarea unică nu îl cere.",
+    "setUp": "Configurează",
+    "scan": "Scanează asta cu aplicația de autentificare sau tastează cheia în ea. Apoi tastează codul afișat de aplicație.",
+    "qr": "Cod QR pentru aplicația de autentificare",
+    "key": "Cheie",
+    "enter": "Codul din aplicație",
+    "confirm": "Pornește",
+    "recoveryTitle": "Coduri de recuperare",
+    "recoveryHint": "Păstrează-le într-un loc sigur. Dacă pierzi aplicația, fiecare te autentifică o dată în locul unui cod. Nu vor mai fi afișate.",
+    "copy": "Copiază-le",
+    "saved": "Le-am păstrat",
+    "on": "Pornit. Coduri de recuperare rămase: {{n}}",
+    "skipped": "Acest server este setat să sară peste cod (BOXOFFICE_SKIP_SIGN_IN_CODE). Scoate setarea ca să fie cerut din nou.",
+    "off": "Oprește",
+    "password": "Parola ta, pentru a-l opri"
   }
 }

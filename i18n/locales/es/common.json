@@ -80,5 +80,23 @@
     "refused": "El inicio de sesión se canceló o fue rechazado.",
     "notallowed": "Esa cuenta no tiene acceso aquí. Pregunta a quien administra este servidor.",
     "failed": "El inicio de sesión no funcionó. Quien administra este servidor puede ver el motivo en su registro."
+  },
+  "passkey": {
+    "signIn": "Iniciar sesión con una llave de acceso",
+    "cancelled": "No se usó la llave de acceso. Inténtalo de nuevo cuando quieras.",
+    "exists": "Este dispositivo ya tiene una llave de acceso para esta cuenta.",
+    "unsupported": "Este navegador no puede usar llaves de acceso aquí.",
+    "title": "Llaves de acceso",
+    "sub": "Inicia sesión con tu huella, tu cara, el bloqueo de pantalla o una llave de seguridad en lugar de la contraseña. Una llave de acceso solo funciona en la dirección en la que se creó.",
+    "add": "Añadir una llave de acceso",
+    "name": "Nombre para esta llave",
+    "none": "Aún no hay llaves de acceso.",
+    "unnamed": "Llave de acceso",
+    "added": "Añadida el {{date}}",
+    "used": "usada por última vez el {{date}}",
+    "never": "nunca usada",
+    "remove": "Quitar",
+    "removeNamed": "Quitar {{name}}",
+    "otherHost": "funciona en {{host}}"
   }
 }

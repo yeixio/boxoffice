@@ -37,6 +37,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/lists"
 	"github.com/yeixio/boxoffice/internal/migrate"
 	"github.com/yeixio/boxoffice/internal/music"
+	"github.com/yeixio/boxoffice/internal/passkey"
 	"github.com/yeixio/boxoffice/internal/portal"
 	"github.com/yeixio/boxoffice/internal/problems"
 	"github.com/yeixio/boxoffice/internal/push"
@@ -86,6 +87,11 @@ type Server struct {
 	// SSO talks to the single sign-on provider; nil makes one.
 	SSO *sso.Client
 	sso ssoState
+	// SkipCode stops sign-in asking for the one-time code, for when the
+	// authenticator app and the recovery codes are both gone.
+	SkipCode bool
+	pk       passkeyState
+	codeMu   sync.Mutex
 	// Push sends push notifications to phones and browsers; nil makes one.
 	Push     *push.Service
 	pushOnce sync.Once
@@ -328,6 +334,7 @@ func (s *Server) Handler() http.Handler {
 	routes = append(routes, s.portalRoutes()...)
 	routes = append(routes, s.pushRoutes()...)
 	routes = append(routes, s.ssoRoutes()...)
+	routes = append(routes, s.passkeyRoutes()...)
 	routes = append(routes, s.gameRoutes()...)
 	routes = append(routes, s.homeRoutes()...)
 	routes = append(routes, s.importRoutes()...)
@@ -607,6 +614,12 @@ func (s *Server) status(w http.ResponseWriter, r *http.Request) error {
 	if name, on := s.ssoAdmins(r); on && !s.portalHost(r) {
 		out["sso"] = name
 	}
+	// And passkeys, when there's one for the name the browser came by.
+	if host, ok := passkey.RPID(r.Host); ok && !s.portalHost(r) {
+		if has, err := s.Store.HasPasskeys(r.Context(), false, host); err == nil && has {
+			out["passkeys"] = true
+		}
+	}
 	if u, ok := s.authenticate(r); ok {
 		out["user"] = u
 		v, err := s.Store.Setting(r.Context(), settingMovedIn)
@@ -690,7 +703,11 @@ func (s *Server) sessionCookie(w http.ResponseWriter, r *http.Request, u store.U
 var dummyHash, _ = bcrypt.GenerateFromPassword([]byte("box office"), bcrypt.DefaultCost)
 
 func (s *Server) login(w http.ResponseWriter, r *http.Request) error {
-	var c credentials
+	var c struct {
+		credentials
+		// Code is the one-time code, or a recovery code, when that's on.
+		Code string `json:"code"`
+	}
 	if err := readJSON(r, &c); err != nil {
 		return err
 	}
@@ -718,6 +735,28 @@ func (s *Server) login(w http.ResponseWriter, r *http.Request) error {
 		f.mu.Unlock()
 		s.Log.Warn("wrong sign-in", "username", name, "from", clientIP(r))
 		return errorf(http.StatusUnauthorized, "that username and password don't match")
+	}
+	// The second step, when it's on: the code the authenticator app shows.
+	if want, err := s.codeWanted(r); err != nil {
+		return err
+	} else if want {
+		if strings.TrimSpace(c.Code) == "" {
+			return writeJSON(w, http.StatusUnauthorized, map[string]any{"error": "enter the code from your authenticator app", "needsCode": true})
+		}
+		ok, err := s.useCode(r, c.Code)
+		if err != nil {
+			return err
+		}
+		if !ok {
+			f.mu.Lock()
+			f.count++
+			if f.count >= 5 {
+				f.until = time.Now().Add(time.Duration(min(f.count-4, 15)) * time.Minute)
+			}
+			f.mu.Unlock()
+			s.Log.Warn("wrong one-time code at sign-in", "username", name, "from", clientIP(r))
+			return writeJSON(w, http.StatusUnauthorized, map[string]any{"error": "that code isn't right", "needsCode": true})
+		}
 	}
 	s.failures.Delete(strings.ToLower(name))
 	return s.signIn(w, r, u)

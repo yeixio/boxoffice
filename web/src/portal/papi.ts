@@ -25,7 +25,7 @@ export async function papi<T>(method: string, path: string, body?: unknown): Pro
   } catch {
     // not JSON
   }
-  if (res.status === 401 && path !== '/login' && path !== '/signup' && path !== '/logout') signedOut()
+  if (res.status === 401 && path !== '/login' && path !== '/signup' && path !== '/logout' && path !== '/passkeys/login') signedOut()
   if (!res.ok) throw new ApiError(res.status, (data as { error?: string } | undefined)?.error ?? `The server answered ${res.status}`)
   return data as T
 }
@@ -46,6 +46,8 @@ export type Site = {
   matinee: boolean
   // sso is the single sign-on provider's name, when it's offered.
   sso?: string
+  // passkeys is set when someone has a passkey for this address.
+  passkeys?: boolean
   member?: Member
 }
 

@@ -80,5 +80,23 @@
     "refused": "La connexion a été annulée ou refusée.",
     "notallowed": "Ce compte n'a pas accès ici. Demandez à la personne qui gère ce serveur.",
     "failed": "La connexion n'a pas fonctionné. La personne qui gère ce serveur peut voir pourquoi dans son journal."
+  },
+  "passkey": {
+    "signIn": "Se connecter avec une clé d'accès",
+    "cancelled": "La clé d'accès n'a pas été utilisée. Réessayez quand vous serez prêt.",
+    "exists": "Cet appareil a déjà une clé d'accès pour ce compte.",
+    "unsupported": "Ce navigateur ne peut pas utiliser de clés d'accès ici.",
+    "title": "Clés d'accès",
+    "sub": "Connectez-vous avec votre empreinte, votre visage, le verrouillage de l'écran ou une clé de sécurité au lieu du mot de passe. Une clé d'accès ne fonctionne qu'à l'adresse où elle a été créée.",
+    "add": "Ajouter une clé d'accès",
+    "name": "Nom de cette clé d'accès",
+    "none": "Aucune clé d'accès pour l'instant.",
+    "unnamed": "Clé d'accès",
+    "added": "Ajoutée le {{date}}",
+    "used": "dernière utilisation le {{date}}",
+    "never": "jamais utilisée",
+    "remove": "Retirer",
+    "removeNamed": "Retirer {{name}}",
+    "otherHost": "fonctionne sur {{host}}"
   }
 }

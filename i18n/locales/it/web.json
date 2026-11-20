@@ -48,7 +48,9 @@
     "passwordHint": "Almeno 8 caratteri.",
     "passwordAgain": "Ripeti la password",
     "make": "Crea l’account",
-    "signIn": "Accedi"
+    "signIn": "Accedi",
+    "code": "Codice dalla tua app di autenticazione",
+    "codeHint": "Oppure uno dei tuoi codici di recupero."
   },
   "tray": {
     "ready": "{{name}} è pronto da esaminare",
@@ -2936,5 +2938,23 @@
     "isMember": "Può entrare nel sito delle richieste.",
     "notMember": "Non può entrare nel sito delle richieste.",
     "addMe": "Aggiungi questo account come amministratore"
+  },
+  "code": {
+    "title": "Codice monouso",
+    "sub": "Chiedi un codice di 6 cifre da un'app di autenticazione dopo la password. L'accesso con una passkey o con il single sign-on non lo chiede.",
+    "setUp": "Configura",
+    "scan": "Scansiona questo con la tua app di autenticazione, oppure digita la chiave nell'app. Poi digita il codice che l'app mostra.",
+    "qr": "Codice QR per l'app di autenticazione",
+    "key": "Chiave",
+    "enter": "Codice dall'app",
+    "confirm": "Attiva",
+    "recoveryTitle": "Codici di recupero",
+    "recoveryHint": "Conservali in un posto sicuro. Se perdi l'app, ognuno ti fa accedere una volta al posto di un codice. Non verranno mostrati di nuovo.",
+    "copy": "Copiali",
+    "saved": "Li ho conservati",
+    "on": "Attivo. Codici di recupero rimasti: {{n}}",
+    "skipped": "Questo server è impostato per saltare il codice (BOXOFFICE_SKIP_SIGN_IN_CODE). Togli quell'impostazione per chiederlo di nuovo.",
+    "off": "Disattiva",
+    "password": "La tua password, per disattivarlo"
   }
 }

@@ -163,7 +163,7 @@ func (s *Store) DeleteMember(ctx context.Context, id int64) error {
 	defer tx.Rollback()
 	// SQLite only follows ON DELETE CASCADE with foreign keys on, so the
 	// children go first by hand.
-	for _, t := range []string{"member_sessions", "requests", "issues", "push_devices"} {
+	for _, t := range []string{"member_sessions", "requests", "issues", "push_devices", "passkeys"} {
 		if _, err := tx.ExecContext(ctx, s.q("DELETE FROM "+t+" WHERE member_id = ?"), id); err != nil {
 			return err
 		}

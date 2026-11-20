@@ -46,7 +46,9 @@
     "passwordHint": "Minst 8 tegn.",
     "passwordAgain": "Passord igjen",
     "make": "Opprett kontoen",
-    "signIn": "Logg inn"
+    "signIn": "Logg inn",
+    "code": "Kode fra autentiseringsappen din",
+    "codeHint": "Eller en av gjenopprettingskodene dine."
   },
   "tray": {
     "ready": "{{name}} er klar til å gås gjennom",
@@ -2813,5 +2815,23 @@
     "isMember": "Den slipper inn på ønskesiden.",
     "notMember": "Den slipper ikke inn på ønskesiden.",
     "addMe": "Legg til denne kontoen som administrator"
+  },
+  "code": {
+    "title": "Engangskode",
+    "sub": "Be om en 6-sifret kode fra en autentiseringsapp etter passordet. Innlogging med passnøkkel eller enkel pålogging ber ikke om den.",
+    "setUp": "Sett det opp",
+    "scan": "Skann dette med autentiseringsappen din, eller skriv nøkkelen inn i den. Skriv deretter koden appen viser.",
+    "qr": "QR-kode for autentiseringsappen",
+    "key": "Nøkkel",
+    "enter": "Kode fra appen",
+    "confirm": "Slå på",
+    "recoveryTitle": "Gjenopprettingskoder",
+    "recoveryHint": "Oppbevar dem et trygt sted. Hvis du mister appen, logger hver av dem deg inn én gang i stedet for en kode. De vises ikke igjen.",
+    "copy": "Kopier dem",
+    "saved": "Jeg har tatt vare på dem",
+    "on": "På. Gjenopprettingskoder igjen: {{n}}",
+    "skipped": "Denne serveren er satt til å hoppe over koden (BOXOFFICE_SKIP_SIGN_IN_CODE). Fjern den innstillingen for å be om koden igjen.",
+    "off": "Slå av",
+    "password": "Passordet ditt, for å slå det av"
   }
 }

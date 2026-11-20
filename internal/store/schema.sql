@@ -822,3 +822,19 @@ CREATE TABLE IF NOT EXISTS push_devices (
 	created_at BIGINT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS push_devices_member ON push_devices (member_id);
+
+-- Passkeys people sign in with: the admin's (member_id 0) and request-site
+-- members'. host is the host name one was made at, the only one it works at.
+CREATE TABLE IF NOT EXISTS passkeys (
+	id         INTEGER PRIMARY KEY AUTOINCREMENT,
+	credential TEXT NOT NULL UNIQUE,
+	public_key TEXT NOT NULL,
+	alg        INTEGER NOT NULL,
+	sign_count BIGINT NOT NULL DEFAULT 0,
+	host       TEXT NOT NULL,
+	member_id  BIGINT NOT NULL DEFAULT 0,
+	name       TEXT NOT NULL DEFAULT '',
+	created_at BIGINT NOT NULL,
+	used_at    BIGINT NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS passkeys_member ON passkeys (member_id);

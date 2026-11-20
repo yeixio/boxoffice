@@ -80,5 +80,23 @@
     "refused": "Esse login foi cancelado ou recusado.",
     "notallowed": "Essa conta não tem entrada aqui. Fale com quem administra este servidor.",
     "failed": "Esse login não funcionou. Quem administra este servidor pode ver o motivo no log."
+  },
+  "passkey": {
+    "signIn": "Entrar com uma chave de acesso",
+    "cancelled": "A chave de acesso não foi usada. Tente de novo quando quiser.",
+    "exists": "Este dispositivo já tem uma chave de acesso para esta conta.",
+    "unsupported": "Este navegador não consegue usar chaves de acesso aqui.",
+    "title": "Chaves de acesso",
+    "sub": "Entre com sua impressão digital, seu rosto, o bloqueio de tela ou uma chave de segurança no lugar da senha. Uma chave de acesso só funciona no endereço em que foi criada.",
+    "add": "Adicionar uma chave de acesso",
+    "name": "Nome desta chave de acesso",
+    "none": "Nenhuma chave de acesso ainda.",
+    "unnamed": "Chave de acesso",
+    "added": "Adicionada em {{date}}",
+    "used": "usada pela última vez em {{date}}",
+    "never": "nunca usada",
+    "remove": "Remover",
+    "removeNamed": "Remover {{name}}",
+    "otherHost": "funciona em {{host}}"
   }
 }

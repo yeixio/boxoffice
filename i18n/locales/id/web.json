@@ -44,7 +44,9 @@
     "passwordHint": "Minimal 8 karakter.",
     "passwordAgain": "Kata sandi lagi",
     "make": "Buat akun",
-    "signIn": "Masuk"
+    "signIn": "Masuk",
+    "code": "Kode dari aplikasi autentikator Anda",
+    "codeHint": "Atau salah satu kode pemulihan Anda."
   },
   "tray": {
     "ready": "{{name}} siap ditinjau",
@@ -2690,5 +2692,23 @@
     "isMember": "Diizinkan masuk ke situs permintaan.",
     "notMember": "Tidak diizinkan masuk ke situs permintaan.",
     "addMe": "Tambahkan akun ini sebagai admin"
+  },
+  "code": {
+    "title": "Kode sekali pakai",
+    "sub": "Minta kode 6 digit dari aplikasi autentikator setelah kata sandi. Masuk dengan kunci sandi atau single sign-on tidak memintanya.",
+    "setUp": "Siapkan",
+    "scan": "Pindai ini dengan aplikasi autentikator Anda, atau ketikkan kuncinya ke aplikasi. Lalu ketik kode yang ditampilkan aplikasi.",
+    "qr": "Kode QR untuk aplikasi autentikator",
+    "key": "Kunci",
+    "enter": "Kode dari aplikasi",
+    "confirm": "Nyalakan",
+    "recoveryTitle": "Kode pemulihan",
+    "recoveryHint": "Simpan di tempat yang aman. Jika aplikasi hilang, tiap kode bisa dipakai masuk satu kali sebagai pengganti kode. Kode ini tidak ditampilkan lagi.",
+    "copy": "Salin",
+    "saved": "Sudah saya simpan",
+    "on": "Menyala. Kode pemulihan tersisa: {{n}}",
+    "skipped": "Server ini diatur untuk melewati kode (BOXOFFICE_SKIP_SIGN_IN_CODE). Hapus pengaturan itu agar kode diminta lagi.",
+    "off": "Matikan",
+    "password": "Kata sandi Anda, untuk mematikannya"
   }
 }

@@ -21,6 +21,7 @@ import { ListsCard } from './Lists'
 import { CleanupCard } from './Cleanup'
 import { TimeZoneCard } from './TimeZone'
 import { PhoneCard } from './Phone'
+import { CodeCard, PasskeysCard } from './SignInWays'
 import { SsoCard } from './Sso'
 import { matches, spans, words } from './settingsSearch'
 import { Badge, Button, Card, ErrorNote, Field, Input, Modal, Select, Spinner, Toggle } from '../ui'
@@ -48,6 +49,8 @@ const sections: SectionDef[] = [
       { id: 'time-zone', el: <TimeZoneCard />, terms: ['TZ', 'UTC', 'timezone', 'clock'] },
       { id: 'tmdb', el: <General />, keys: ['settings.tmdbKey'], terms: ['API'] },
       { id: 'password', el: <Account /> },
+      { id: 'passkeys', el: <PasskeysCard />, terms: ['passkey', 'WebAuthn', 'FIDO', 'fingerprint', 'Face ID', 'Touch ID', 'security key', 'YubiKey', 'login'] },
+      { id: 'code', el: <CodeCard />, keys: ['code.setUp', 'code.recoveryTitle'], terms: ['2FA', 'MFA', 'TOTP', 'two-factor', 'two-step', 'authenticator', 'OTP', 'login'] },
       { id: 'sso', el: <SsoCard />, keys: ['sso.issuer', 'sso.clientId', 'sso.secret', 'sso.admins', 'sso.members'], terms: ['SSO', 'OIDC', 'OpenID Connect', 'OAuth', 'Authentik', 'Authelia', 'Keycloak', 'Pocket ID', 'login'] },
       { id: 'phone', el: <PhoneCard />, keys: ['phone.topics.ready', 'phone.topics.requests', 'phone.topics.problems'], terms: ['PWA', 'push', 'iPhone', 'Android', 'Home Screen', 'app'] },
       { id: 'restart', el: <Restart />, keys: ['settings.restartNow'], terms: ['reboot', 'Kubernetes', 'Docker'] },

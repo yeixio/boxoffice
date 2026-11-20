@@ -79,5 +79,23 @@
     "refused": "Inloggningen avbröts eller nekades.",
     "notallowed": "Det kontot släpps inte in här. Fråga den som driver den här servern.",
     "failed": "Inloggningen fungerade inte. Den som driver den här servern kan se varför i loggen."
+  },
+  "passkey": {
+    "signIn": "Logga in med en lösennyckel",
+    "cancelled": "Lösennyckeln användes inte. Försök igen när du är redo.",
+    "exists": "Den här enheten har redan en lösennyckel för det här kontot.",
+    "unsupported": "Den här webbläsaren kan inte använda lösennycklar här.",
+    "title": "Lösennycklar",
+    "sub": "Logga in med fingeravtryck, ansikte, skärmlås eller en säkerhetsnyckel i stället för lösenordet. En lösennyckel fungerar bara på adressen där den skapades.",
+    "add": "Lägg till en lösennyckel",
+    "name": "Namn på den här lösennyckeln",
+    "none": "Inga lösennycklar än.",
+    "unnamed": "Lösennyckel",
+    "added": "Tillagd {{date}}",
+    "used": "senast använd {{date}}",
+    "never": "aldrig använd",
+    "remove": "Ta bort",
+    "removeNamed": "Ta bort {{name}}",
+    "otherHost": "fungerar på {{host}}"
   }
 }

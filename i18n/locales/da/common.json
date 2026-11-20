@@ -79,5 +79,23 @@
     "refused": "Login blev annulleret eller afvist.",
     "notallowed": "Den konto har ikke adgang her. Spørg den, der driver serveren.",
     "failed": "Login virkede ikke. Den, der driver serveren, kan se hvorfor i loggen."
+  },
+  "passkey": {
+    "signIn": "Log ind med en adgangsnøgle",
+    "cancelled": "Adgangsnøglen blev ikke brugt. Prøv igen, når du er klar.",
+    "exists": "Denne enhed har allerede en adgangsnøgle til denne konto.",
+    "unsupported": "Denne browser kan ikke bruge adgangsnøgler her.",
+    "title": "Adgangsnøgler",
+    "sub": "Log ind med fingeraftryk, ansigt, skærmlås eller en sikkerhedsnøgle i stedet for adgangskoden. En adgangsnøgle virker kun på den adresse, den blev lavet på.",
+    "add": "Tilføj en adgangsnøgle",
+    "name": "Navn på denne adgangsnøgle",
+    "none": "Ingen adgangsnøgler endnu.",
+    "unnamed": "Adgangsnøgle",
+    "added": "Tilføjet {{date}}",
+    "used": "sidst brugt {{date}}",
+    "never": "aldrig brugt",
+    "remove": "Fjern",
+    "removeNamed": "Fjern {{name}}",
+    "otherHost": "virker på {{host}}"
   }
 }

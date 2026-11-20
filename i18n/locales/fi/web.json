@@ -46,7 +46,9 @@
     "passwordHint": "Vähintään 8 merkkiä.",
     "passwordAgain": "Salasana uudelleen",
     "make": "Luo tili",
-    "signIn": "Kirjaudu sisään"
+    "signIn": "Kirjaudu sisään",
+    "code": "Koodi todennussovelluksestasi",
+    "codeHint": "Tai jokin palautuskoodeistasi."
   },
   "tray": {
     "ready": "{{name}} on valmis tarkistettavaksi",
@@ -2813,5 +2815,23 @@
     "isMember": "Sillä on pääsy toivesivulle.",
     "notMember": "Sillä ei ole pääsyä toivesivulle.",
     "addMe": "Lisää tämä tili ylläpitäjäksi"
+  },
+  "code": {
+    "title": "Kertakäyttökoodi",
+    "sub": "Pyydä salasanan jälkeen 6-numeroinen koodi todennussovelluksesta. Kirjautuminen pääsyavaimella tai kertakirjautumisella ei kysy sitä.",
+    "setUp": "Ota käyttöön",
+    "scan": "Skannaa tämä todennussovelluksella tai kirjoita avain siihen. Kirjoita sitten sovelluksen näyttämä koodi.",
+    "qr": "QR-koodi todennussovellukselle",
+    "key": "Avain",
+    "enter": "Koodi sovelluksesta",
+    "confirm": "Laita päälle",
+    "recoveryTitle": "Palautuskoodit",
+    "recoveryHint": "Säilytä nämä turvallisessa paikassa. Jos menetät sovelluksen, kukin niistä kirjaa sinut kerran sisään koodin sijasta. Niitä ei näytetä uudelleen.",
+    "copy": "Kopioi ne",
+    "saved": "Olen tallentanut ne",
+    "on": "Päällä. Palautuskoodeja jäljellä: {{n}}",
+    "skipped": "Tämä palvelin on asetettu ohittamaan koodi (BOXOFFICE_SKIP_SIGN_IN_CODE). Poista asetus, niin koodia kysytään taas.",
+    "off": "Laita pois päältä",
+    "password": "Salasanasi, pois päältä laittamiseksi"
   }
 }

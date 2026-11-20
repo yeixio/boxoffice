@@ -79,5 +79,23 @@
     "refused": "Die Anmeldung wurde abgebrochen oder abgelehnt.",
     "notallowed": "Dieses Konto hat hier keinen Zutritt. Frag die Person, die diesen Server betreibt.",
     "failed": "Die Anmeldung hat nicht funktioniert. Wer diesen Server betreibt, findet den Grund im Protokoll."
+  },
+  "passkey": {
+    "signIn": "Mit Passkey anmelden",
+    "cancelled": "Der Passkey wurde nicht verwendet. Versuch es erneut, wenn du bereit bist.",
+    "exists": "Dieses Gerät hat bereits einen Passkey für dieses Konto.",
+    "unsupported": "Dieser Browser kann hier keine Passkeys verwenden.",
+    "title": "Passkeys",
+    "sub": "Melde dich mit Fingerabdruck, Gesicht, Bildschirmsperre oder einem Sicherheitsschlüssel statt mit dem Passwort an. Ein Passkey funktioniert nur unter der Adresse, unter der er erstellt wurde.",
+    "add": "Passkey hinzufügen",
+    "name": "Name für diesen Passkey",
+    "none": "Noch keine Passkeys.",
+    "unnamed": "Passkey",
+    "added": "Hinzugefügt am {{date}}",
+    "used": "zuletzt verwendet am {{date}}",
+    "never": "nie verwendet",
+    "remove": "Entfernen",
+    "removeNamed": "{{name}} entfernen",
+    "otherHost": "funktioniert unter {{host}}"
   }
 }

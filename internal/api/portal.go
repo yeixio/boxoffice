@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/yeixio/boxoffice/internal/catalog"
+	"github.com/yeixio/boxoffice/internal/passkey"
 	"github.com/yeixio/boxoffice/internal/portal"
 	"github.com/yeixio/boxoffice/internal/store"
 )
@@ -141,6 +142,11 @@ func (s *Server) portalSite(w http.ResponseWriter, r *http.Request) error {
 	if st.Enabled {
 		if name, on := s.ssoMembers(r); on {
 			out["sso"] = name
+		}
+		if host, ok := passkey.RPID(r.Host); ok {
+			if has, err := s.Store.HasPasskeys(r.Context(), true, host); err == nil && has {
+				out["passkeys"] = true
+			}
 		}
 		if m, ok := s.member(r); ok {
 			out["member"] = viewMember(m)

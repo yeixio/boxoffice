@@ -89,7 +89,7 @@ export function App() {
   }, [qc])
   if (status.isPending) return <Spinner />
   if (status.isError) return <p className="p-8 text-bad">{t('app.notAnswering', { error: status.error.message })}</p>
-  if (!status.data.setup || !status.data.user) return <SignIn firstRun={!status.data.setup} sso={status.data.sso} />
+  if (!status.data.setup || !status.data.user) return <SignIn firstRun={!status.data.setup} sso={status.data.sso} passkeys={status.data.passkeys} />
   return <Shell status={status.data} />
 }
 

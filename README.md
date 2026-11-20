@@ -269,6 +269,7 @@ Most settings live in the web UI under **Settings**. The server itself takes a f
 | `BOXOFFICE_PLACES_URL` | | GeoNames' `cities15000.zip` | Another copy of the list of towns photos' places are named from (a URL or a file), or `off`. See [Home videos and photos](docs/home-media.md#places) |
 | `BOXOFFICE_EBOOK_CONVERT` | | `ebook-convert` on the `PATH`, if there | Calibre's `ebook-convert`, so ebooks a Kindle won't take by email (AZW3, MOBI) are turned into EPUB before they're sent. See [Sending ebooks to e-readers](docs/ereaders.md) |
 | `TZ` | | the system's zone; UTC in a container | The server's time zone, such as `Europe/Berlin`. The hours of the speed schedule, the day the data cap's month starts, the day daily limits count and the times in messages go by it. The zone picked in **Settings → General → Time zone** wins over it, and setting Box Office up takes your browser's zone when the server's clock is on UTC and `TZ` isn't set |
+| `BOXOFFICE_SKIP_SIGN_IN_CODE` | | off | Set to anything to sign in with the password alone while the one-time code is on, for when the authenticator app and the recovery codes are both gone. Turn the code off in Settings, then take this away |
 | `BOXOFFICE_LOG_FORMAT` | `-log-format` | `text` | `text` or `json` |
 | `BOXOFFICE_DEBUG` | `-debug` | off | Log more. The Health page can also switch debug logging on and off while it runs |
 
@@ -385,6 +386,8 @@ internal/health        the check-up; internal/monitor and internal/alerts for th
 internal/notify        events Matinee passes on as notifications
 internal/push          push notifications to phones and browsers (Web Push)
 internal/sso           single sign-on through an OpenID Connect provider
+internal/passkey       passkeys (WebAuthn)
+internal/otp           one-time codes from an authenticator app
 internal/store         SQLite / PostgreSQL storage and migrations
 web/                   React + Vite web UI
 deploy/helm/boxoffice  Helm chart

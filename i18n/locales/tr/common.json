@@ -79,5 +79,23 @@
     "refused": "Giriş iptal edildi ya da reddedildi.",
     "notallowed": "Bu hesabın buraya girmesine izin yok. Bu sunucuyu işleten kişiye sorun.",
     "failed": "Giriş yapılamadı. Bu sunucuyu işleten kişi nedenini günlükte görebilir."
+  },
+  "passkey": {
+    "signIn": "Geçiş anahtarıyla giriş yap",
+    "cancelled": "Geçiş anahtarı kullanılmadı. Hazır olduğunuzda yeniden deneyin.",
+    "exists": "Bu cihazda bu hesap için zaten bir geçiş anahtarı var.",
+    "unsupported": "Bu tarayıcı burada geçiş anahtarı kullanamıyor.",
+    "title": "Geçiş anahtarları",
+    "sub": "Parola yerine parmak iziniz, yüzünüz, ekran kilidiniz veya bir güvenlik anahtarıyla giriş yapın. Geçiş anahtarı yalnızca oluşturulduğu adreste çalışır.",
+    "add": "Geçiş anahtarı ekle",
+    "name": "Bu geçiş anahtarının adı",
+    "none": "Henüz geçiş anahtarı yok.",
+    "unnamed": "Geçiş anahtarı",
+    "added": "{{date}} tarihinde eklendi",
+    "used": "son kullanım {{date}}",
+    "never": "hiç kullanılmadı",
+    "remove": "Kaldır",
+    "removeNamed": "{{name}} adlısını kaldır",
+    "otherHost": "{{host}} adresinde çalışır"
   }
 }

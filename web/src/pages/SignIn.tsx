@@ -3,18 +3,23 @@ import { useTranslation } from 'react-i18next'
 import { useState, type FormEvent } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { Clapperboard } from 'lucide-react'
-import { post } from '../api'
+import { ApiError, post } from '../api'
 import { browserZone } from '../format'
-import { SsoButton } from '../Sso'
+import { PasskeyButton } from '../Passkeys'
+import { Or, SsoButton } from '../Sso'
 import { Button, ErrorNote, Field, Input } from '../ui'
 
 // SignIn signs an admin in, or on first start makes the first admin.
-export function SignIn({ firstRun, sso }: { firstRun: boolean; sso?: string }) {
+export function SignIn({ firstRun, sso, passkeys }: { firstRun: boolean; sso?: string; passkeys?: boolean }) {
   const { t } = useTranslation()
   const qc = useQueryClient()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
+  // The second step, once the server asks for it: the code from the
+  // authenticator app.
+  const [needsCode, setNeedsCode] = useState(false)
+  const [code, setCode] = useState('')
   const [error, setError] = useState<unknown>(null)
   const [busy, setBusy] = useState(false)
 
@@ -29,10 +34,14 @@ export function SignIn({ firstRun, sso }: { firstRun: boolean; sso?: string }) {
     try {
       // Setting up also says which time zone this browser is in, for a
       // server that doesn't know its own.
-      await post(firstRun ? '/setup' : '/login', firstRun ? { username, password, timeZone: browserZone() } : { username, password })
+      await post(firstRun ? '/setup' : '/login', firstRun ? { username, password, timeZone: browserZone() } : { username, password, code: needsCode ? code : undefined })
       await qc.invalidateQueries({ queryKey: ['status'] })
     } catch (err) {
-      setError(err)
+      // The password was right and a code is wanted: ask for it, without
+      // calling that a mistake.
+      const asked = err instanceof ApiError && (err.data as { needsCode?: boolean } | undefined)?.needsCode === true
+      if (asked && !needsCode) setNeedsCode(true)
+      else setError(err)
     } finally {
       setBusy(false)
     }
@@ -56,10 +65,17 @@ export function SignIn({ firstRun, sso }: { firstRun: boolean; sso?: string }) {
           {firstRun && (
             <Field label={t('signIn.passwordAgain')}>{(id) => <Input id={id} type="password" autoComplete="new-password" value={confirm} onChange={(e) => setConfirm(e.target.value)} required />}</Field>
           )}
+          {needsCode && (
+            <Field label={t('signIn.code')} hint={t('signIn.codeHint')}>
+              {(id) => <Input id={id} inputMode="numeric" autoComplete="one-time-code" maxLength={20} value={code} onChange={(e) => setCode(e.target.value)} required autoFocus />}
+            </Field>
+          )}
           <ErrorNote error={error} />
           <Button variant="primary" type="submit" busy={busy}>
             {firstRun ? t('signIn.make') : t('signIn.signIn')}
           </Button>
+          {!firstRun && (sso || passkeys) && <Or />}
+          {!firstRun && passkeys && <PasskeyButton calls={{ post }} onSignedIn={() => qc.invalidateQueries({ queryKey: ['status'] })} />}
           {!firstRun && <SsoButton name={sso} what="admin" />}
         </div>
         <div className="mt-6 flex justify-center">

@@ -48,7 +48,9 @@
     "passwordHint": "Au moins 8 caractères.",
     "passwordAgain": "Mot de passe à nouveau",
     "make": "Créer le compte",
-    "signIn": "Se connecter"
+    "signIn": "Se connecter",
+    "code": "Code de votre application d'authentification",
+    "codeHint": "Ou l'un de vos codes de récupération."
   },
   "tray": {
     "ready": "{{name}} est prêt à être examiné",
@@ -2936,5 +2938,23 @@
     "isMember": "Il a accès au site de demandes.",
     "notMember": "Il n'a pas accès au site de demandes.",
     "addMe": "Ajouter ce compte comme administrateur"
+  },
+  "code": {
+    "title": "Code à usage unique",
+    "sub": "Demander un code à 6 chiffres d'une application d'authentification après le mot de passe. La connexion avec une clé d'accès ou l'authentification unique ne le demande pas.",
+    "setUp": "Configurer",
+    "scan": "Scannez ceci avec votre application d'authentification, ou saisissez-y la clé. Saisissez ensuite le code affiché par l'application.",
+    "qr": "Code QR pour l'application d'authentification",
+    "key": "Clé",
+    "enter": "Code de l'application",
+    "confirm": "Activer",
+    "recoveryTitle": "Codes de récupération",
+    "recoveryHint": "Gardez-les en lieu sûr. Si vous perdez l'application, chacun vous connecte une fois à la place d'un code. Ils ne seront plus affichés.",
+    "copy": "Les copier",
+    "saved": "Je les ai gardés",
+    "on": "Activé. Codes de récupération restants : {{n}}",
+    "skipped": "Ce serveur est réglé pour ignorer le code (BOXOFFICE_SKIP_SIGN_IN_CODE). Retirez ce réglage pour qu'il soit de nouveau demandé.",
+    "off": "Désactiver",
+    "password": "Votre mot de passe, pour le désactiver"
   }
 }

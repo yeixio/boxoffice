@@ -78,5 +78,23 @@
     "refused": "Lần đăng nhập đó đã bị hủy hoặc bị từ chối.",
     "notallowed": "Tài khoản đó không được vào đây. Hãy hỏi người vận hành máy chủ này.",
     "failed": "Lần đăng nhập đó không thành công. Người vận hành máy chủ này có thể xem lý do trong nhật ký."
+  },
+  "passkey": {
+    "signIn": "Đăng nhập bằng khóa truy cập",
+    "cancelled": "Khóa truy cập chưa được dùng. Hãy thử lại khi bạn sẵn sàng.",
+    "exists": "Thiết bị này đã có khóa truy cập cho tài khoản này.",
+    "unsupported": "Trình duyệt này không dùng được khóa truy cập ở đây.",
+    "title": "Khóa truy cập",
+    "sub": "Đăng nhập bằng vân tay, khuôn mặt, khóa màn hình hoặc khóa bảo mật thay cho mật khẩu. Khóa truy cập chỉ dùng được ở địa chỉ nơi nó được tạo.",
+    "add": "Thêm khóa truy cập",
+    "name": "Tên cho khóa truy cập này",
+    "none": "Chưa có khóa truy cập nào.",
+    "unnamed": "Khóa truy cập",
+    "added": "Đã thêm {{date}}",
+    "used": "dùng lần cuối {{date}}",
+    "never": "chưa từng dùng",
+    "remove": "Xóa",
+    "removeNamed": "Xóa {{name}}",
+    "otherHost": "dùng được ở {{host}}"
   }
 }

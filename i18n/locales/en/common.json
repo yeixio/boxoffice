@@ -79,5 +79,23 @@
     "refused": "That sign-in was cancelled or turned down.",
     "notallowed": "That account isn't let in here. Ask whoever runs this server.",
     "failed": "That sign-in didn't work. Whoever runs this server can see why in its log."
+  },
+  "passkey": {
+    "signIn": "Sign in with a passkey",
+    "cancelled": "The passkey wasn't used. Try again when you're ready.",
+    "exists": "This device already has a passkey for this account.",
+    "unsupported": "This browser can't use passkeys here.",
+    "title": "Passkeys",
+    "sub": "Sign in with your fingerprint, face, screen lock or a security key instead of the password. A passkey works only at the address it was made at.",
+    "add": "Add a passkey",
+    "name": "Name for this passkey",
+    "none": "No passkeys yet.",
+    "unnamed": "Passkey",
+    "added": "Added {{date}}",
+    "used": "last used {{date}}",
+    "never": "never used",
+    "remove": "Remove",
+    "removeNamed": "Remove {{name}}",
+    "otherHost": "works at {{host}}"
   }
 }

@@ -2,7 +2,9 @@
 // every change goes as JSON, which the server requires from a browser.
 
 export class ApiError extends Error {
-  constructor(public status: number, message: string) {
+  // data is the whole answer, for the few callers that read more than
+  // its message.
+  constructor(public status: number, message: string, public data?: unknown) {
     super(message)
   }
 }
@@ -14,7 +16,7 @@ export const onSignedOut = (fn: () => void) => {
   signedOut = fn
 }
 // Signing in answers 401 for a wrong password; that isn't a session ending.
-const signingIn = (path: string) => path === '/login' || path === '/setup' || path === '/logout'
+const signingIn = (path: string) => path === '/login' || path === '/setup' || path === '/logout' || path === '/passkeys/login'
 
 export async function api<T>(method: string, path: string, body?: unknown): Promise<T> {
   const init: RequestInit = { method, headers: { Accept: 'application/json', 'X-Requested-With': 'boxoffice' }, credentials: 'same-origin' }
@@ -36,7 +38,7 @@ export async function api<T>(method: string, path: string, body?: unknown): Prom
   if (!res.ok) {
     if (res.status === 401 && !signingIn(path)) signedOut()
     const msg = (data as { error?: string } | undefined)?.error ?? `Box Office answered ${res.status}`
-    throw new ApiError(res.status, msg)
+    throw new ApiError(res.status, msg, data)
   }
   return data as T
 }
@@ -52,7 +54,7 @@ export const del = (path: string) => api<void>('DELETE', path)
 export type User = { id: number; username: string; language?: string }
 // movedIn is set once an admin has finished moving in from the old apps.
 // sso is the single sign-on provider's name, when the sign-in page offers it.
-export type Status = { setup: boolean; version: string; user?: User; movedIn?: boolean; sso?: string }
+export type Status = { setup: boolean; version: string; user?: User; movedIn?: boolean; sso?: string; passkeys?: boolean }
 
 export type Quality = { id: number; name: string; source: string; resolution: number }
 // locked is the Do not touch profile, which is never picked for a new title on its own.

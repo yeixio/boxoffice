@@ -46,7 +46,9 @@
     "passwordHint": "Legalább 8 karakter.",
     "passwordAgain": "Jelszó újra",
     "make": "Fiók létrehozása",
-    "signIn": "Bejelentkezés"
+    "signIn": "Bejelentkezés",
+    "code": "Kód a hitelesítő alkalmazásból",
+    "codeHint": "Vagy az egyik helyreállítási kódod."
   },
   "tray": {
     "ready": "A(z) {{name}} átnézésre kész",
@@ -2813,5 +2815,23 @@
     "isMember": "Beléphet a kéréses oldalra.",
     "notMember": "Nem léphet be a kéréses oldalra.",
     "addMe": "A fiók hozzáadása adminként"
+  },
+  "code": {
+    "title": "Egyszer használatos kód",
+    "sub": "A jelszó után kérjen 6 számjegyű kódot egy hitelesítő alkalmazásból. Az azonosítókulccsal vagy egyszeri bejelentkezéssel történő belépés nem kéri.",
+    "setUp": "Beállítás",
+    "scan": "Olvasd be ezt a hitelesítő alkalmazással, vagy írd be a kulcsot. Utána írd be az alkalmazás által mutatott kódot.",
+    "qr": "QR-kód a hitelesítő alkalmazáshoz",
+    "key": "Kulcs",
+    "enter": "Kód az alkalmazásból",
+    "confirm": "Bekapcsolás",
+    "recoveryTitle": "Helyreállítási kódok",
+    "recoveryHint": "Tartsd őket biztonságos helyen. Ha elveszíted az alkalmazást, mindegyikkel egyszer beléphetsz a kód helyett. Nem jelennek meg újra.",
+    "copy": "Másolás",
+    "saved": "Eltettem őket",
+    "on": "Bekapcsolva. Megmaradt helyreállítási kódok: {{n}}",
+    "skipped": "Ez a szerver úgy van beállítva, hogy kihagyja a kódot (BOXOFFICE_SKIP_SIGN_IN_CODE). Vedd ki ezt a beállítást, hogy újra kérje.",
+    "off": "Kikapcsolás",
+    "password": "A jelszavad, a kikapcsoláshoz"
   }
 }

@@ -19,7 +19,7 @@ var dumpTables = []string{
 	"home_items", "home_albums", "home_album_items",
 	"media_files", "title_wants", "legacy_ids", "migrations", "jobs",
 	"indexers", "download_clients", "usenet_servers", "blocklist", "imported_settings", "data_usage",
-	"members", "requests", "issues", "problem_fixes", "problem_fix_files", "push_devices",
+	"members", "requests", "issues", "problem_fixes", "problem_fix_files", "push_devices", "passkeys",
 }
 
 // DumpFormat names the backup format, so a restore can tell it's one.

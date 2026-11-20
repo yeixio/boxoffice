@@ -79,5 +79,23 @@
     "refused": "Kirjautuminen peruttiin tai hylättiin.",
     "notallowed": "Tällä tilillä ei ole pääsyä tänne. Kysy palvelimen ylläpitäjältä.",
     "failed": "Kirjautuminen ei onnistunut. Palvelimen ylläpitäjä näkee syyn lokista."
+  },
+  "passkey": {
+    "signIn": "Kirjaudu sisään pääsyavaimella",
+    "cancelled": "Pääsyavainta ei käytetty. Yritä uudelleen, kun olet valmis.",
+    "exists": "Tällä laitteella on jo pääsyavain tälle tilille.",
+    "unsupported": "Tämä selain ei voi käyttää pääsyavaimia täällä.",
+    "title": "Pääsyavaimet",
+    "sub": "Kirjaudu sisään sormenjäljellä, kasvoilla, näytön lukituksella tai suojausavaimella salasanan sijaan. Pääsyavain toimii vain siinä osoitteessa, jossa se luotiin.",
+    "add": "Lisää pääsyavain",
+    "name": "Tämän pääsyavaimen nimi",
+    "none": "Ei vielä pääsyavaimia.",
+    "unnamed": "Pääsyavain",
+    "added": "Lisätty {{date}}",
+    "used": "käytetty viimeksi {{date}}",
+    "never": "ei koskaan käytetty",
+    "remove": "Poista",
+    "removeNamed": "Poista {{name}}",
+    "otherHost": "toimii osoitteessa {{host}}"
   }
 }
