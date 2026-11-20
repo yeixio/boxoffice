@@ -186,7 +186,8 @@
     "blockOneThem": "Blochează versiunea din care provin, ca să nu fie descărcată din nou",
     "blockMany": "Blochează versiunile din care provin, ca să nu fie descărcate din nou",
     "keepThem": "Păstrează-le",
-    "delete": "Șterge {{size}}"
+    "delete": "Șterge {{size}}",
+    "secondKept": "A doua lui copie din {{path}} nu este în acest dosar, așa că rămâne pe disc. Ca să dispară și ea, șterge-o mai întâi din pagina filmului."
   },
   "hooks": {
     "unknown": "Necunoscut"
@@ -2982,5 +2983,21 @@
     "upTo": "Vizionat până la {{episode}}.",
     "later": "Mai târziu",
     "laterHint": "Economisirea de spațiu îl aduce când cineva se apropie de el."
+  },
+  "secondCopy": {
+    "title": "A doua copie",
+    "hint": "Păstrează încă o copie a acestui film la altă calitate, de exemplu una 1080p lângă cea 4K. Are propriul profil de calitate și este căutată și îmbunătățită separat.",
+    "profile": "Profilul de calitate al celei de-a doua copii",
+    "off": "Fără a doua copie",
+    "where": "Unde ajunge",
+    "nextToFirst": "Lângă prima copie",
+    "looking": "Nu este încă aici. Box Office o caută.",
+    "notWatched": "Nu este încă aici, iar acest film nu este urmărit, așa că Box Office nu o caută.",
+    "stopped": "Box Office nu mai caută o a doua copie. Aceasta rămâne până o ștergi.",
+    "delete": "Șterge a doua copie",
+    "filesOf": "A doua copie a filmului {{title}}",
+    "stays": "Filmul și prima lui copie rămân.",
+    "stop": "Nu mai păstra o a doua copie",
+    "again": "Altfel Box Office va căuta o a doua copie și o va descărca din nou."
   }
 }

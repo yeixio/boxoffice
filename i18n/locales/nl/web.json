@@ -172,7 +172,8 @@
     "blockOneThem": "De release waar ze vandaan kwamen blokkeren, zodat die niet opnieuw wordt gegrabd",
     "blockMany": "De releases waar ze vandaan kwamen blokkeren, zodat die niet opnieuw worden gegrabd",
     "keepThem": "Behouden",
-    "delete": "{{size}} verwijderen"
+    "delete": "{{size}} verwijderen",
+    "secondKept": "De tweede kopie in {{path}} staat niet in deze map en blijft dus op de schijf. Moet die ook weg, verwijder haar dan eerst op de pagina van de film."
   },
   "hooks": {
     "unknown": "Onbekend"
@@ -2859,5 +2860,21 @@
     "upTo": "Bekeken tot en met {{episode}}.",
     "later": "Later",
     "laterHint": "Ruimtebesparing haalt deze op zodra iemand er dichterbij komt."
+  },
+  "secondCopy": {
+    "title": "Tweede kopie",
+    "hint": "Bewaar nog een kopie van deze film in een andere kwaliteit, bijvoorbeeld een in 1080p naast die in 4K. Ze heeft een eigen kwaliteitsprofiel en wordt apart gezocht en verbeterd.",
+    "profile": "Kwaliteitsprofiel van de tweede kopie",
+    "off": "Geen tweede kopie",
+    "where": "Waar ze komt",
+    "nextToFirst": "Naast de eerste kopie",
+    "looking": "Ze is er nog niet. Box Office zoekt ernaar.",
+    "notWatched": "Ze is er nog niet, en deze film wordt niet in de gaten gehouden, dus Box Office zoekt er niet naar.",
+    "stopped": "Box Office zoekt niet meer naar een tweede kopie. Deze blijft tot je haar verwijdert.",
+    "delete": "Tweede kopie verwijderen",
+    "filesOf": "Tweede kopie van {{title}}",
+    "stays": "De film en de eerste kopie blijven.",
+    "stop": "Geen tweede kopie meer bewaren",
+    "again": "Anders zoekt Box Office weer een tweede kopie en downloadt die opnieuw."
   }
 }

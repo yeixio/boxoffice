@@ -236,6 +236,8 @@ func (s *Server) Handler() http.Handler {
 		{"GET /api/v1/movies/{id}/removal", true, s.movieRemoval},
 		{"GET /api/v1/movies/{id}/file/removal", true, s.movieFileRemoval},
 		{"DELETE /api/v1/movies/{id}/file", true, s.deleteMovieFile},
+		{"GET /api/v1/movies/{id}/second/removal", true, s.movieSecondRemoval},
+		{"DELETE /api/v1/movies/{id}/second", true, s.deleteMovieSecond},
 		{"POST /api/v1/movies/{id}/search", true, s.searchMovie},
 		{"GET /api/v1/movies/{id}/editions", true, s.movieEditions},
 		{"POST /api/v1/movies/{id}/editions", true, s.askMovieEdition},

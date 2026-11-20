@@ -172,7 +172,8 @@
     "blockOneThem": "Block the release they came from, so it isn't grabbed again",
     "blockMany": "Block the releases they came from, so they aren't grabbed again",
     "keepThem": "Keep them",
-    "delete": "Delete {{size}}"
+    "delete": "Delete {{size}}",
+    "secondKept": "Its second copy at {{path}} isn't in this folder, so it stays on disk. To have it gone too, delete it from the movie's page first."
   },
   "hooks": {
     "unknown": "Unknown"
@@ -2859,5 +2860,21 @@
     "upTo": "Watched up to {{episode}}.",
     "later": "Later",
     "laterHint": "Space saver fetches this once someone gets closer to it."
+  },
+  "secondCopy": {
+    "title": "Second copy",
+    "hint": "Keep another copy of this movie at a different quality, such as a 1080p one next to the 4K one. It has its own quality profile and is looked for and upgraded by itself.",
+    "profile": "Quality profile of the second copy",
+    "off": "No second copy",
+    "where": "Where it goes",
+    "nextToFirst": "Next to the first copy",
+    "looking": "It isn't here yet. Box Office is looking for it.",
+    "notWatched": "It isn't here yet, and this movie isn't being watched for, so Box Office isn't looking for it.",
+    "stopped": "Box Office no longer looks for a second copy. This one stays until you delete it.",
+    "delete": "Delete the second copy",
+    "filesOf": "{{title}}'s second copy",
+    "stays": "The movie and its first copy stay.",
+    "stop": "Stop keeping a second copy",
+    "again": "Otherwise Box Office will look for a second copy and download it again."
   }
 }

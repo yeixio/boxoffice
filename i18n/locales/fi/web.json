@@ -172,7 +172,8 @@
     "blockOneThem": "Estä julkaisu, josta ne tulivat, jotta sitä ei noudeta uudelleen",
     "blockMany": "Estä julkaisut, joista ne tulivat, jotta niitä ei noudeta uudelleen",
     "keepThem": "Säilytä ne",
-    "delete": "Poista {{size}}"
+    "delete": "Poista {{size}}",
+    "secondKept": "Sen toinen kopio polussa {{path}} ei ole tässä kansiossa, joten se jää levylle. Jos senkin pitää lähteä, poista se ensin elokuvan sivulta."
   },
   "hooks": {
     "unknown": "Tuntematon"
@@ -2859,5 +2860,21 @@
     "upTo": "Katsottu jaksoon {{episode}} asti.",
     "later": "Myöhemmin",
     "laterHint": "Tilansäästö hakee sen, kun joku pääsee lähemmäs sitä."
+  },
+  "secondCopy": {
+    "title": "Toinen kopio",
+    "hint": "Säilytä elokuvasta toinen kopio eri laadulla, esimerkiksi 1080p-kopio 4K-kopion rinnalla. Sillä on oma laatuprofiilinsa, ja sitä haetaan ja päivitetään erikseen.",
+    "profile": "Toisen kopion laatuprofiili",
+    "off": "Ei toista kopiota",
+    "where": "Minne se tulee",
+    "nextToFirst": "Ensimmäisen kopion viereen",
+    "looking": "Sitä ei vielä ole. Box Office etsii sitä.",
+    "notWatched": "Sitä ei vielä ole, eikä tätä elokuvaa seurata, joten Box Office ei etsi sitä.",
+    "stopped": "Box Office ei enää etsi toista kopiota. Tämä säilyy, kunnes poistat sen.",
+    "delete": "Poista toinen kopio",
+    "filesOf": "Elokuvan {{title}} toinen kopio",
+    "stays": "Elokuva ja sen ensimmäinen kopio säilyvät.",
+    "stop": "Lopeta toisen kopion säilyttäminen",
+    "again": "Muuten Box Office etsii toisen kopion ja lataa sen uudelleen."
   }
 }

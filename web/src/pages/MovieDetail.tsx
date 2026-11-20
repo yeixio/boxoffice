@@ -7,6 +7,7 @@ import { Releases } from '../Releases'
 import { Editions } from '../Editions'
 import { DeleteFiles, RemoveTitle } from '../RemoveFiles'
 import { AutoUpgradeField } from '../AutoUpgrade'
+import { SecondCopy, type SecondCopyEdit } from '../SecondCopy'
 import { LockedNote, ReportedNote } from '../Bulk'
 import { get, patch, post, type MediaFile, type Movie } from '../api'
 import { bytes, day, runtime } from '../format'
@@ -79,9 +80,10 @@ export function MovieDetail() {
   const [releases, setReleases] = useState(false)
   const [editions, setEditions] = useState(false)
   const [deleteFile, setDeleteFile] = useState(false)
+  const [deleteSecond, setDeleteSecond] = useState(false)
 
   const edit = useMutation({
-    mutationFn: (body: Partial<Pick<Movie, 'monitored' | 'profileId' | 'autoUpgrade'>>) => patch<Movie>(`/movies/${id}`, body),
+    mutationFn: (body: Partial<Pick<Movie, 'monitored' | 'profileId' | 'autoUpgrade'>> & SecondCopyEdit) => patch<Movie>(`/movies/${id}`, body),
     onSuccess: (m) => {
       // The edit's answer is the movie alone; what was reported stays.
       qc.setQueryData(['movie', id], (old: Movie | undefined) => ({ ...m, reported: old?.reported }))
@@ -222,6 +224,7 @@ export function MovieDetail() {
             </>
           )}
         </Card>
+        <SecondCopy movie={m} profiles={profiles.data ?? []} locked={locked} onChange={(e) => edit.mutate(e)} onDelete={() => setDeleteSecond(true)} facts={m.second && <FileFacts f={m.second} />} />
       </div>
 
       {confirmDelete && <RemoveTitle kind="movie" id={m.id} title={m.title} onClose={() => setConfirmDelete(false)} onRemoved={removed} />}
@@ -235,6 +238,19 @@ export function MovieDetail() {
             qc.setQueryData(['movie', id], next)
             qc.invalidateQueries({ queryKey: ['movies'] })
             setDeleteFile(false)
+          }}
+        />
+      )}
+      {deleteSecond && (
+        <DeleteFiles<Movie>
+          path={`/movies/${m.id}/second`}
+          title={t('secondCopy.filesOf', { title: m.title })}
+          what="second"
+          onClose={() => setDeleteSecond(false)}
+          onDone={(next) => {
+            qc.setQueryData(['movie', id], next)
+            qc.invalidateQueries({ queryKey: ['movies'] })
+            setDeleteSecond(false)
           }}
         />
       )}

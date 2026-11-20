@@ -172,7 +172,8 @@
     "blockOneThem": "Tiltsa le a kiadást, amelyből származnak, hogy ne töltse le újra",
     "blockMany": "Tiltsa le a kiadásokat, amelyekből származnak, hogy ne töltse le újra",
     "keepThem": "Megtartás",
-    "delete": "{{size}} törlése"
+    "delete": "{{size}} törlése",
+    "secondKept": "A második példánya ({{path}}) nem ebben a mappában van, ezért a lemezen marad. Ha annak is mennie kell, előbb törölje a film oldaláról."
   },
   "hooks": {
     "unknown": "Ismeretlen"
@@ -2859,5 +2860,21 @@
     "upTo": "Megnézve eddig: {{episode}}.",
     "later": "Később",
     "laterHint": "A helytakarékos mód akkor tölti le, amikor valaki közelebb ér hozzá."
+  },
+  "secondCopy": {
+    "title": "Második példány",
+    "hint": "Tartson meg a filmből egy másik példányt eltérő minőségben, például egy 1080p-set a 4K-s mellett. Saját minőségi profilja van, és külön keresi és frissíti a rendszer.",
+    "profile": "A második példány minőségi profilja",
+    "off": "Nincs második példány",
+    "where": "Hová kerül",
+    "nextToFirst": "Az első példány mellé",
+    "looking": "Még nincs itt. A Box Office keresi.",
+    "notWatched": "Még nincs itt, és ezt a filmet nem figyeli a rendszer, ezért a Box Office nem keresi.",
+    "stopped": "A Box Office már nem keres második példányt. Ez megmarad, amíg nem törli.",
+    "delete": "A második példány törlése",
+    "filesOf": "{{title}} második példánya",
+    "stays": "A film és az első példánya megmarad.",
+    "stop": "Ne maradjon második példány",
+    "again": "Különben a Box Office újra keres egy második példányt, és letölti."
   }
 }

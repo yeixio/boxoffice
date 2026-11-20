@@ -268,6 +268,9 @@ type Wanted struct {
 	// AutoUpgrade is the movie's or the show's own choice about automatic
 	// upgrades: "" to follow Settings, "on" or "off".
 	AutoUpgrade string `json:"autoUpgrade,omitempty"`
+	// Copy is ModeSecond when it's only a movie's second copy that's
+	// missing or due an upgrade: its first copy is fine.
+	Copy string `json:"copy,omitempty"`
 }
 
 // newFor is how long a missing title counts as new.
@@ -320,14 +323,21 @@ func (s *Service) WantedList(ctx context.Context) ([]Wanted, error) {
 			continue
 		}
 		w := Wanted{Kind: "movie", ID: m.ID, Subject: movieSubject(m), Cutoff: p.Cutoff, Searched: searched[m.ID].At, Misses: searched[m.ID].Misses, AutoUpgrade: m.AutoUpgrade}
+		// Its second copy, when it keeps one: wanted like the first.
+		p2, second := profiles[m.SecondProfileID]
+		second = second && m.SecondProfileID != 0 && !p2.Locked
 		switch {
 		case m.File == nil:
 			if !released(m, now) {
 				continue
 			}
 			w.New = releasedSince(m, now.Add(-newFor))
+		case second && m.Second == nil:
+			w.Copy, w.Cutoff = ModeSecond, p2.Cutoff
 		case p.CutoffUnmet(m.File.Quality):
 			w.Upgrade, w.Have = true, m.File.Quality
+		case second && p2.CutoffUnmet(m.Second.Quality):
+			w.Upgrade, w.Have, w.Copy, w.Cutoff = true, m.Second.Quality, ModeSecond, p2.Cutoff
 		default:
 			continue
 		}
@@ -593,15 +603,18 @@ func (s *Service) jobWanted(ctx context.Context, _ string) (jobs.Result, error) 
 			break
 		}
 		if w.Kind == "movie" {
-			if b, err := s.busy(ctx, "movie", w.ID, 0, ""); err != nil {
+			b, err := s.busyFor(ctx, "movie", w.ID, 0, "", w.Copy == ModeSecond)
+			if err != nil {
 				return jobs.Result{}, err
 			} else if b {
 				o.busy++
 				continue
 			}
-			res, err := s.Movie(ctx, w.ID)
-			if errors.Is(err, ErrNoIndexers) {
-				return jobs.Skipped("%s", err.Error()), nil
+			// A movie with a copy missing only has that one fetched here;
+			// upgrades come up as their own turn (w.Upgrade).
+			r, n, got, err := s.findMovie(ctx, w.ID, w.Upgrade)
+			if r.Status == "skipped" && r.Message == ErrNoIndexers.Error() {
+				return r, nil
 			}
 			searchedAny = true
 			if w.Upgrade {
@@ -609,20 +622,15 @@ func (s *Service) jobWanted(ctx context.Context, _ string) (jobs.Result, error) 
 			} else {
 				missing++
 			}
-			if err != nil {
-				o.problems = append(o.problems, fmt.Sprintf("%s: %v", w.Subject, err))
-				continue
-			}
-			if res.Searched > 0 {
+			if n > 0 {
 				o.searches++
 			}
-			r, err := s.pick(ctx, res, "movie", w.ID, 0)
 			if err != nil {
 				o.problems = append(o.problems, fmt.Sprintf("%s: %v", w.Subject, err))
 				continue
 			}
-			if r.Status == "done" && strings.HasPrefix(r.Message, "grabbed ") {
-				o.grabbed++
+			if got > 0 {
+				o.grabbed += got
 				o.got = append(o.got, w.Subject)
 			}
 			continue

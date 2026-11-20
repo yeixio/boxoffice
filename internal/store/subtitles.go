@@ -97,7 +97,7 @@ func (s *Store) subtitleFiles(ctx context.Context, where string) ([]SubtitleFile
 		COALESCE(m.id, t.id, 0), COALESCE(m.tmdb_id, t.tmdb_id, 0), COALESCE(m.imdb_id, t.imdb_id, ''), COALESCE(m.title, t.title, ''),
 		COALESCE(m.year, t.year, 0), COALESCE(e.season, 0), COALESCE(e.number, 0), COALESCE(p.locked, 0)
 		FROM media_files f
-		LEFT JOIN movies m ON f.kind IN ('movie', 'edition') AND m.id = f.owner_id
+		LEFT JOIN movies m ON f.kind IN ('movie', 'edition', 'second') AND m.id = f.owner_id
 		LEFT JOIN episodes e ON f.kind = 'episode' AND e.id = f.owner_id
 		LEFT JOIN series t ON t.id = e.series_id
 		LEFT JOIN quality_profiles p ON p.id = COALESCE(m.profile_id, t.profile_id)

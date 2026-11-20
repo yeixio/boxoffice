@@ -22,6 +22,10 @@ const JobSearchAsked = "search-asked"
 const (
 	ModeReplace   = store.ModeReplace
 	ModeAlongside = store.ModeAlongside
+	// ModeSecond is a movie's second copy, kept at another quality (see
+	// store.Movie.SecondProfileID): judged by that copy's profile, and
+	// moved in to its own place.
+	ModeSecond = store.SecondKind
 )
 
 // Ask is what a search is for, beyond the title's profile.

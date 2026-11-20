@@ -186,7 +186,8 @@
     "blockOneThem": "Bloquear o release de onde vieram, para não ser capturado de novo",
     "blockMany": "Bloquear os releases de onde vieram, para não serem capturados de novo",
     "keepThem": "Manter",
-    "delete": "Excluir {{size}}"
+    "delete": "Excluir {{size}}",
+    "secondKept": "A segunda cópia em {{path}} não está nesta pasta, então fica no disco. Para que ela também suma, exclua-a antes na página do filme."
   },
   "hooks": {
     "unknown": "Desconhecido"
@@ -2982,5 +2983,21 @@
     "upTo": "Assistido até {{episode}}.",
     "later": "Mais tarde",
     "laterHint": "A economia de espaço busca este quando alguém chegar mais perto dele."
+  },
+  "secondCopy": {
+    "title": "Segunda cópia",
+    "hint": "Mantenha outra cópia deste filme em uma qualidade diferente, por exemplo uma em 1080p ao lado da em 4K. Ela tem seu próprio perfil de qualidade e é buscada e melhorada separadamente.",
+    "profile": "Perfil de qualidade da segunda cópia",
+    "off": "Sem segunda cópia",
+    "where": "Onde ela fica",
+    "nextToFirst": "Ao lado da primeira cópia",
+    "looking": "Ela ainda não está aqui. O Box Office está procurando.",
+    "notWatched": "Ela ainda não está aqui, e este filme não está sendo monitorado, então o Box Office não a procura.",
+    "stopped": "O Box Office não procura mais uma segunda cópia. Esta fica até você excluí-la.",
+    "delete": "Excluir a segunda cópia",
+    "filesOf": "Segunda cópia de {{title}}",
+    "stays": "O filme e a primeira cópia ficam.",
+    "stop": "Parar de manter uma segunda cópia",
+    "again": "Senão o Box Office vai procurar uma segunda cópia e baixá-la de novo."
   }
 }

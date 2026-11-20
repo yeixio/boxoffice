@@ -141,6 +141,33 @@ func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir str
 		if err != nil {
 			return "", fmt.Errorf("the movie it was for is gone: %w", err)
 		}
+		if d.Mode == store.SecondKind {
+			// The movie's second copy: next to the first, named for its
+			// quality (the way Plex and Jellyfin tell versions apart), or
+			// in a folder named like the movie's in the library folder
+			// chosen for second copies. It replaces only the second copy
+			// there was.
+			root, folder := m.SecondFolder()
+			if err := checkLibrary(root, folder); err != nil {
+				return "", err
+			}
+			base := fileName(m.Title, m.Year)
+			if folder == m.Path {
+				name := "Second copy"
+				if ql, ok := quality.ByID(q); ok && ql.Name != "" && ql.ID != 0 {
+					name = ql.Name
+				}
+				base += " - " + cleanFileName(name)
+			}
+			dest := filepath.Join(folder, base+strings.ToLower(filepath.Ext(vids[0])))
+			if m.File != nil && m.File.Path == dest {
+				return "", errors.New("the movie's first copy is where its second copy would go")
+			}
+			if err := li.place(ctx, dir, vids[0], dest, root, folder, store.SecondKind, m.ID, q, m.Second); err != nil {
+				return "", err
+			}
+			return dest, nil
+		}
 		if err := checkLibrary(m.RootFolder, m.Path); err != nil {
 			return "", err
 		}

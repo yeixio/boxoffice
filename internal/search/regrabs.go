@@ -122,7 +122,7 @@ func (s *Service) regrabOf(ctx context.Context, c Candidate, upgrade bool) strin
 	if c.kind == "series" && len(c.episodes) > 0 {
 		kind, id = "episode", c.episodes[0]
 	}
-	if tw, err := s.Store.TitleWant(ctx, kind, id); err == nil && tw.Want == store.WantReplace {
+	if tw, err := s.Store.TitleWant(ctx, kind, id); err == nil && tw.Want == store.WantReplace && c.mode != ModeSecond {
 		return RegrabReplace
 	}
 	return RegrabUpgrade

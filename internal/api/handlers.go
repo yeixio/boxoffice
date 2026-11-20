@@ -506,7 +506,7 @@ func (s *Server) movie(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 	m.LabelEditions(s.Store.ReleaseNames(r.Context()))
-	files := []*store.File{m.File}
+	files := []*store.File{m.File, m.Second}
 	for i := range m.Editions {
 		files = append(files, &m.Editions[i])
 	}
@@ -562,6 +562,10 @@ type editInput struct {
 	// A show's space saver: how many episodes past the latest one watched
 	// to fetch, or 0 for off.
 	KeepAhead *int `json:"keepAhead"`
+	// A movie's second copy: the quality profile to keep one at (0 for
+	// none), and the library folder it goes in ("" for next to the first).
+	SecondProfileID *int    `json:"secondProfileId"`
+	SecondRoot      *string `json:"secondRoot"`
 }
 
 func (s *Server) checkEdit(r *http.Request, in editInput, kind string) error {
@@ -580,6 +584,9 @@ func (s *Server) checkEdit(r *http.Request, in editInput, kind string) error {
 		if err := catalog.CheckKeepAhead(*in.KeepAhead); err != nil {
 			return errorf(http.StatusBadRequest, err.Error())
 		}
+	}
+	if (in.SecondProfileID != nil || in.SecondRoot != nil) && kind != "movie" {
+		return errorf(http.StatusBadRequest, "a second copy is for movies")
 	}
 	if in.Path != nil && !filepath.IsAbs(*in.Path) {
 		return errorf(http.StatusBadRequest, "give the folder's full path")
@@ -628,8 +635,18 @@ func (s *Server) editMovie(w http.ResponseWriter, r *http.Request) error {
 	if in.AutoUpgrade != nil {
 		m.AutoUpgrade = *in.AutoUpgrade
 	}
+	look, err := s.editSecond(r.Context(), &m, in)
+	if err != nil {
+		return err
+	}
 	if err := s.Store.UpdateMovie(r.Context(), m); err != nil {
 		return err
+	}
+	if look && m.Monitored && s.Catalog != nil {
+		// Its second copy was just asked for: look for it now.
+		if err := s.Catalog.SearchMovies(r.Context(), m.ID); err != nil {
+			s.Log.Warn("couldn't queue a search for a movie's second copy", "movie", m.Title, "err", err)
+		}
 	}
 	return s.movie(w, r)
 }
