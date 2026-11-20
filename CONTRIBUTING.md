@@ -71,6 +71,7 @@ Run `gofmt -w` on Go files you touch. If you change the Helm chart, run `make he
 - **Detect what you can; explain what you can't.** If Box Office can work out an address, a path or a limit, it should. When someone must type something (an API key, a sign-in), the form says step by step where to find it.
 - In the web UI, use the colors and spacing already in `web/src/index.css` and the parts in `web/src/ui.tsx`, handle loading, error and empty states, and check your change at 390 px wide, in light and dark.
 - UI text is short and plain: "Add movie", not "Click here to add a new movie to your library".
+- Navigation, menus and settings follow the [Navigation & Settings Design Principles](docs/design/navigation-and-settings.md). Before adding a page, menu entry or setting, run through its feature placement questions and design review checklist.
 
 ## Pull requests
 
