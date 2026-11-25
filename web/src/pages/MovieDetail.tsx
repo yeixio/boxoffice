@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Clapperboard, ListFilter, RefreshCw, Search, Trash2 } from 'lucide-react'
 import { Releases } from '../Releases'
+import { WhereToWatch } from '../WhereToWatch'
 import { Editions } from '../Editions'
 import { DeleteFiles, RemoveTitle } from '../RemoveFiles'
 import { AutoUpgradeField } from '../AutoUpgrade'
@@ -141,6 +142,7 @@ export function MovieDetail() {
               ))}
             </dl>
           )}
+          <WhereToWatch kind="movie" tmdbId={m.tmdbId} className="mt-6 max-w-3xl" />
           {locked && <LockedNote />}
           {m.reported && <ReportedNote reported={m.reported} />}
           <div className="flex flex-wrap gap-2 max-md:order-first max-md:mb-4 md:mt-6">

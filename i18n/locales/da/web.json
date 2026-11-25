@@ -3077,5 +3077,17 @@
     "languagesHint": "Sproget, en titel er lavet på, beholdes altid, og det gør spor uden angivet sprog og undertekster på de sprog, der hentes undertekster på. Hvis ingen lyd ville være tilbage, bliver al lyd.",
     "saved": "Sparet indtil nu: {{size}} (filer: {{files}})",
     "noTools": "FFmpeg er ikke installeret her, så ingen spor kan fjernes."
+  },
+  "watch": {
+    "title": "Hvor kan den ses",
+    "country": "Land",
+    "network": "Kanal",
+    "moreFrom": "Mere fra {{name}}",
+    "stream": "Stream",
+    "free": "Gratis",
+    "rent": "Lej",
+    "buy": "Køb",
+    "none": "Kan ikke streames i {{country}}, så vidt vi ved.",
+    "source": "Streamingtjenester fra JustWatch"
   }
 }

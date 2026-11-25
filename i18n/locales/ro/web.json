@@ -3200,5 +3200,17 @@
     "languagesHint": "Limba în care a fost făcut titlul se păstrează mereu, la fel și pistele care nu își spun limba și subtitrările în limbile în care se aduc subtitrări. Dacă n-ar rămâne niciun sunet, rămâne tot.",
     "saved": "Economisit până acum: {{size}} (fișiere: {{files}})",
     "noTools": "FFmpeg nu este instalat aici, așa că nu se pot elimina piste."
+  },
+  "watch": {
+    "title": "Unde poți viziona",
+    "country": "Țară",
+    "network": "Rețea",
+    "moreFrom": "Mai multe de la {{name}}",
+    "stream": "Streaming",
+    "free": "Gratuit",
+    "rent": "Închiriere",
+    "buy": "Cumpărare",
+    "none": "Din câte știm, nu e disponibil în streaming în {{country}}.",
+    "source": "Servicii de streaming de la JustWatch"
   }
 }

@@ -3200,5 +3200,17 @@
     "languagesHint": "O idioma em que o título foi feito é sempre mantido, assim como as faixas que não informam o idioma e as legendas nos idiomas em que legendas são buscadas. Se não sobrasse nenhum áudio, todo o áudio fica.",
     "saved": "Economizado até agora: {{size}} (arquivos: {{files}})",
     "noTools": "O FFmpeg não está instalado aqui, então nenhuma faixa pode ser removida."
+  },
+  "watch": {
+    "title": "Onde assistir",
+    "country": "País",
+    "network": "Emissora",
+    "moreFrom": "Mais de {{name}}",
+    "stream": "Streaming",
+    "free": "Grátis",
+    "rent": "Alugar",
+    "buy": "Comprar",
+    "none": "Não está em streaming em {{country}}, até onde sabemos.",
+    "source": "Serviços de streaming do JustWatch"
   }
 }

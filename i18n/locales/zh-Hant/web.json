@@ -2954,5 +2954,17 @@
     "languagesHint": "影片的原始語言一律保留，未標明語言的軌道以及字幕下載所用語言的字幕也會保留。如果去掉後沒有任何音軌，則保留全部音軌。",
     "saved": "目前已節省：{{size}}（檔案數：{{files}}）",
     "noTools": "這裡沒有安裝 FFmpeg，無法去掉軌道。"
+  },
+  "watch": {
+    "title": "在哪裡觀看",
+    "country": "國家/地區",
+    "network": "電視網",
+    "moreFrom": "{{name}} 的更多內容",
+    "stream": "訂閱",
+    "free": "免費",
+    "rent": "租借",
+    "buy": "購買",
+    "none": "據我們所知，{{country}} 暫無串流。",
+    "source": "串流服務資訊來自 JustWatch"
   }
 }

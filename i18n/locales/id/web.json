@@ -2954,5 +2954,17 @@
     "languagesHint": "Bahasa asli pembuatan judul selalu disimpan, begitu juga trek yang tidak menyebut bahasanya dan subtitle dalam bahasa yang subtitlenya diambil. Jika tidak ada audio yang tersisa, semuanya disimpan.",
     "saved": "Dihemat sejauh ini: {{size}} (berkas: {{files}})",
     "noTools": "FFmpeg tidak terpasang di sini, jadi tidak ada trek yang bisa dibuang."
+  },
+  "watch": {
+    "title": "Tempat menonton",
+    "country": "Negara",
+    "network": "Jaringan",
+    "moreFrom": "Lainnya dari {{name}}",
+    "stream": "Streaming",
+    "free": "Gratis",
+    "rent": "Sewa",
+    "buy": "Beli",
+    "none": "Sejauh yang kami tahu, tidak tersedia streaming di {{country}}.",
+    "source": "Layanan streaming dari JustWatch"
   }
 }

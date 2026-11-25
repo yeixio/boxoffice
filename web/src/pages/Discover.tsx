@@ -22,6 +22,7 @@ import {
 import { pickProfile, useProfiles } from '../hooks'
 import { Button, Empty, ErrorNote, Heading, Input, Modal, Poster, Spinner } from '../ui'
 import { AddOptions } from './AddTitle'
+import { WhereToWatch } from '../WhereToWatch'
 
 // Discover is the home page: what's trending, popular and coming soon on
 // TMDB, titles like the ones in the library, and genres and networks to
@@ -243,6 +244,7 @@ function TitleSheet({
             {t.overview && <p className="mt-2 text-sm leading-relaxed">{t.overview}</p>}
           </div>
         </div>
+        <WhereToWatch kind={t.kind} tmdbId={t.tmdbId} onLeave={onClose} />
         {id ? (
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-line px-4 py-3">
             <span className="text-sm">

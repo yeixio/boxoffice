@@ -3200,5 +3200,17 @@
     "languagesHint": "El idioma en que se hizo el título siempre se conserva, igual que las pistas que no indican idioma y los subtítulos en los idiomas en que se buscan subtítulos. Si no quedara audio, se conserva todo.",
     "saved": "Ahorrado hasta ahora: {{size}} (archivos: {{files}})",
     "noTools": "FFmpeg no está instalado aquí, así que no se pueden quitar pistas."
+  },
+  "watch": {
+    "title": "Dónde verlo",
+    "country": "País",
+    "network": "Cadena",
+    "moreFrom": "Más de {{name}}",
+    "stream": "Streaming",
+    "free": "Gratis",
+    "rent": "Alquilar",
+    "buy": "Comprar",
+    "none": "No está en streaming en {{country}}, que sepamos.",
+    "source": "Servicios de streaming de JustWatch"
   }
 }

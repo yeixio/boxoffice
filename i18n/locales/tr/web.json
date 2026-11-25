@@ -3077,5 +3077,17 @@
     "languagesHint": "Başlığın çekildiği dil her zaman tutulur; dilini belirtmeyen izler ve altyazıların getirildiği dillerdeki altyazılar da öyle. Hiç ses kalmayacaksa tüm sesler kalır.",
     "saved": "Şimdiye kadar kazanılan: {{size}} (dosya: {{files}})",
     "noTools": "FFmpeg burada kurulu değil, bu yüzden iz atılamaz."
+  },
+  "watch": {
+    "title": "Nerede izlenir",
+    "country": "Ülke",
+    "network": "Kanal",
+    "moreFrom": "{{name}} yapımı diğerleri",
+    "stream": "Yayın",
+    "free": "Ücretsiz",
+    "rent": "Kirala",
+    "buy": "Satın al",
+    "none": "Bildiğimiz kadarıyla {{country}} içinde yayında değil.",
+    "source": "Yayın hizmetleri JustWatch'tan"
   }
 }
