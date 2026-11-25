@@ -201,7 +201,8 @@
     "blockMany": "Zablokovat vydání, ze kterých pocházejí, aby se znovu nestáhla",
     "keepThem": "Ponechat je",
     "delete": "Smazat {{size}}",
-    "secondKept": "Jeho druhá kopie v {{path}} není v této složce, takže zůstane na disku. Má-li zmizet i ona, smažte ji nejdřív na stránce filmu."
+    "secondKept": "Jeho druhá kopie v {{path}} není v této složce, takže zůstane na disku. Má-li zmizet i ona, smažte ji nejdřív na stránce filmu.",
+    "secondKeptShow": "Jeho druhé kopie v {{path}} nejsou v této složce, takže zůstanou na disku. Mají-li zmizet i ony, smažte je nejdřív na stránce seriálu."
   },
   "hooks": {
     "unknown": "Neznámé"
@@ -3134,7 +3135,23 @@
     "filesOf": "Druhá kopie filmu {{title}}",
     "stays": "Film a jeho první kopie zůstanou.",
     "stop": "Přestat uchovávat druhou kopii",
-    "again": "Jinak Box Office druhou kopii znovu vyhledá a stáhne."
+    "again": "Jinak Box Office druhou kopii znovu vyhledá a stáhne.",
+    "showTitle": "Druhé kopie",
+    "showHint": "Uchovávejte další kopii každého dílu v jiné kvalitě, třeba 1080p vedle 4K. Mají vlastní profil kvality a hledají se i vylepšují samostatně.",
+    "showProfile": "Profil kvality druhých kopií",
+    "showOff": "Bez druhých kopií",
+    "showWhere": "Kam se uloží",
+    "showNextToFirst": "Vedle prvních kopií",
+    "showCount": "Druhou kopii má {{have}} z {{total}} dílů.",
+    "showLooking": "Box Office hledá zbytek.",
+    "showNotWatched": "Tento seriál se nesleduje, takže Box Office zbytek nehledá.",
+    "showStopped": "Box Office už druhé kopie nehledá. Tyto zůstanou, dokud je nesmažete.",
+    "showDelete": "Smazat druhé kopie",
+    "showFilesOf": "Druhé kopie seriálu {{title}}",
+    "showStays": "Seriál a jeho první kopie zůstanou.",
+    "showStop": "Přestat uchovávat druhé kopie",
+    "showAgain": "Jinak Box Office druhé kopie znovu vyhledá a stáhne.",
+    "episode": "Druhá kopie: {{quality}}"
   },
   "order": {
     "title": "Pořadí stahování",

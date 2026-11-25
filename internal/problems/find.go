@@ -359,10 +359,10 @@ func Find(ctx context.Context, st *store.Store, progress func(done, total int)) 
 		for i := range titles {
 			t := &titles[i]
 			if t.Kind != r.Kind || filepath.Clean(t.Root) != f.root {
-				// A movie kept in another library folder can keep its
-				// second copy in this one.
+				// A movie or show kept in another library folder can keep
+				// its second copies in this one.
 				for _, tf := range t.Files {
-					if p := filepath.Clean(tf.Path); t.Kind == r.Kind && tf.Kind == store.SecondKind && inside(f.root, p) {
+					if p := filepath.Clean(tf.Path); t.Kind == r.Kind && store.IsSecondKind(tf.Kind) && inside(f.root, p) {
 						f.recorded[p] = recorded{t, tf}
 						if rel, err := filepath.Rel(f.root, p); err == nil {
 							f.second[filepath.Join(f.root, strings.Split(rel, string(filepath.Separator))[0])] = true
@@ -507,7 +507,7 @@ func (f *finder) run(ctx context.Context) (Root, []Problem) {
 			continue
 		}
 		fl := File{Path: path, Size: rc.file.Size, Recorded: true}
-		if rc.file.Kind == "episode" {
+		if rc.file.Kind == "episode" || rc.file.Kind == store.SecondEpisodeKind {
 			fl.Episode = episodeCode(rc.file.Season, []int{rc.file.Number})
 		}
 		f.add(Problem{Kind: Missing, Title: ref(rc.title), Detail: fl.Episode, Files: []File{fl},
@@ -775,7 +775,7 @@ func withSubtitles(from, to string) []Move {
 
 // misplaced is a title's recorded copy kept somewhere other than its folder.
 func (f *finder) misplaced(rc recorded, fl File) {
-	if rc.file.Kind == store.SecondKind {
+	if store.IsSecondKind(rc.file.Kind) {
 		return // a second copy is kept where it was put
 	}
 	fl.Recorded = true
@@ -1124,6 +1124,9 @@ func (f *finder) showFolder(t *store.LibraryTitle, videos, discs []entry) {
 	for _, v := range videos {
 		fl := File{Path: v.path, Size: v.size, mtime: v.mtime}
 		var ep *store.Episode
+		if rc, ok := f.recorded[v.path]; ok && rc.file.Kind == store.SecondEpisodeKind {
+			continue // an episode's second copy, wanted next to the first
+		}
 		if rc, ok := f.recorded[v.path]; ok {
 			fl.Recorded = true
 			rec := rc.file.File

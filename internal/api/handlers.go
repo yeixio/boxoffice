@@ -562,7 +562,7 @@ type editInput struct {
 	// A show's space saver: how many episodes past the latest one watched
 	// to fetch, or 0 for off.
 	KeepAhead *int `json:"keepAhead"`
-	// A movie's second copy: the quality profile to keep one at (0 for
+	// A movie's or a show's second copy: the quality profile to keep one at (0 for
 	// none), and the library folder it goes in ("" for next to the first).
 	SecondProfileID *int    `json:"secondProfileId"`
 	SecondRoot      *string `json:"secondRoot"`
@@ -584,9 +584,6 @@ func (s *Server) checkEdit(r *http.Request, in editInput, kind string) error {
 		if err := catalog.CheckKeepAhead(*in.KeepAhead); err != nil {
 			return errorf(http.StatusBadRequest, err.Error())
 		}
-	}
-	if (in.SecondProfileID != nil || in.SecondRoot != nil) && kind != "movie" {
-		return errorf(http.StatusBadRequest, "a second copy is for movies")
 	}
 	if in.Path != nil && !filepath.IsAbs(*in.Path) {
 		return errorf(http.StatusBadRequest, "give the folder's full path")
@@ -829,8 +826,18 @@ func (s *Server) editSeries(w http.ResponseWriter, r *http.Request) error {
 	if saver {
 		t.KeepAhead = *in.KeepAhead
 	}
+	look, err := s.editSeriesSecond(r.Context(), &t, in)
+	if err != nil {
+		return err
+	}
 	if err := s.Store.UpdateSeries(r.Context(), t); err != nil {
 		return err
+	}
+	if look && t.Monitored && s.Catalog != nil {
+		// Second copies were just asked for: look for them now.
+		if err := s.Catalog.SearchSeries(r.Context(), t.ID); err != nil {
+			s.Log.Warn("couldn't queue a search for a show's second copies", "show", t.Title, "err", err)
+		}
 	}
 	// Space saver changed: hold back or let go of episodes, and look for
 	// the ones let go.

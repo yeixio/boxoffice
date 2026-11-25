@@ -173,7 +173,8 @@
     "blockMany": "Tiltsa le a kiadásokat, amelyekből származnak, hogy ne töltse le újra",
     "keepThem": "Megtartás",
     "delete": "{{size}} törlése",
-    "secondKept": "A második példánya ({{path}}) nem ebben a mappában van, ezért a lemezen marad. Ha annak is mennie kell, előbb törölje a film oldaláról."
+    "secondKept": "A második példánya ({{path}}) nem ebben a mappában van, ezért a lemezen marad. Ha annak is mennie kell, előbb törölje a film oldaláról.",
+    "secondKeptShow": "A második példányai ({{path}}) nem ebben a mappában vannak, ezért a lemezen maradnak. Ha azoknak is menniük kell, előbb törölje őket a sorozat oldaláról."
   },
   "hooks": {
     "unknown": "Ismeretlen"
@@ -2888,7 +2889,23 @@
     "filesOf": "{{title}} második példánya",
     "stays": "A film és az első példánya megmarad.",
     "stop": "Ne maradjon második példány",
-    "again": "Különben a Box Office újra keres egy második példányt, és letölti."
+    "again": "Különben a Box Office újra keres egy második példányt, és letölti.",
+    "showTitle": "Második példányok",
+    "showHint": "Tartson meg minden epizódból egy másik példányt eltérő minőségben, például 1080p-seket a 4K-sok mellett. Saját minőségi profiljuk van, és külön keresi és frissíti őket a rendszer.",
+    "showProfile": "A második példányok minőségi profilja",
+    "showOff": "Nincsenek második példányok",
+    "showWhere": "Hová kerülnek",
+    "showNextToFirst": "Az első példányok mellé",
+    "showCount": "{{total}} epizódból {{have}} epizódnak van második példánya.",
+    "showLooking": "A Box Office keresi a többit.",
+    "showNotWatched": "Ezt a sorozatot nem figyeli a rendszer, ezért a Box Office nem keresi a többit.",
+    "showStopped": "A Box Office már nem keres második példányokat. Ezek megmaradnak, amíg nem törli őket.",
+    "showDelete": "A második példányok törlése",
+    "showFilesOf": "{{title}} második példányai",
+    "showStays": "A sorozat és az első példányai megmaradnak.",
+    "showStop": "Ne maradjanak második példányok",
+    "showAgain": "Különben a Box Office újra keres második példányokat, és letölti őket.",
+    "episode": "Második példány: {{quality}}"
   },
   "order": {
     "title": "Letöltési sorrend",

@@ -307,7 +307,8 @@ type Wanted struct {
 	// upgrades: "" to follow Settings, "on" or "off".
 	AutoUpgrade string `json:"autoUpgrade,omitempty"`
 	// Copy is ModeSecond when it's only a movie's second copy that's
-	// missing or due an upgrade: its first copy is fine.
+	// missing or due an upgrade (its first copy is fine), and for an
+	// episode's second copy, which is wanted on its own.
 	Copy string `json:"copy,omitempty"`
 	// Early is a movie or episode that isn't out yet by its dates, which
 	// RSS sync may still grab (see earlyWants); the patrol never searches
@@ -423,6 +424,29 @@ func (s *Service) WantedList(ctx context.Context) ([]Wanted, error) {
 				w.out = *e.AirDate
 			case p.CutoffUnmet(e.File.Quality):
 				w.Upgrade, w.Have = true, e.File.Quality
+			default:
+				continue
+			}
+			out = append(out, w)
+		}
+		// The second copies, for a show that keeps them: wanted the same
+		// way, by their own profile.
+		p2, second := profiles[t.SecondProfileID]
+		if t.SecondProfileID == 0 || !second || p2.Locked {
+			continue
+		}
+		for _, e := range eps {
+			if !e.Monitored || e.Held && e.Second == nil || !seasons[e.Season] || e.AirDate == nil || !e.AirDate.Before(now) {
+				continue
+			}
+			w := Wanted{Kind: "episode", ID: e.ID, SeriesID: t.ID, Subject: fmt.Sprintf("%s S%02dE%02d (second copy)", t.Title, e.Season, e.Number),
+				Cutoff: p2.Cutoff, Searched: searched[e.ID].At, Misses: searched[e.ID].Misses, Season: e.Season, AutoUpgrade: t.AutoUpgrade, Copy: ModeSecond}
+			switch {
+			case e.Second == nil:
+				w.New = e.AirDate.After(now.Add(-newFor))
+				w.out = *e.AirDate
+			case p2.CutoffUnmet(e.Second.Quality):
+				w.Upgrade, w.Have = true, e.Second.Quality
 			default:
 				continue
 			}
@@ -649,11 +673,12 @@ func (s *Service) jobWanted(ctx context.Context, _ string) (jobs.Result, error) 
 	type seasonKey struct {
 		series int64
 		season int
+		copy   string
 	}
 	seasons := map[seasonKey][]int64{}
 	for _, w := range due {
 		if w.Kind == "episode" {
-			k := seasonKey{w.SeriesID, w.Season}
+			k := seasonKey{w.SeriesID, w.Season, w.Copy}
 			seasons[k] = append(seasons[k], w.ID)
 		}
 	}
@@ -746,7 +771,12 @@ func (s *Service) jobWanted(ctx context.Context, _ string) (jobs.Result, error) 
 			}
 			continue
 		}
-		k := seasonKey{w.SeriesID, w.Season}
+		k := seasonKey{w.SeriesID, w.Season, w.Copy}
+		// A show's second copies are looked for as their own turn.
+		ctx := ctx
+		if w.Copy == ModeSecond {
+			ctx = asSecond(ctx)
+		}
 		ids := []int64{w.ID}
 		if len(seasons[k]) >= seasonSearchFrom {
 			if done[k] {
@@ -762,7 +792,7 @@ func (s *Service) jobWanted(ctx context.Context, _ string) (jobs.Result, error) 
 		}
 		var eps []store.Episode
 		for _, id := range ids {
-			e, err := s.Store.Episode(ctx, id)
+			e, err := s.episode(ctx, id)
 			if err != nil {
 				continue
 			}

@@ -92,7 +92,7 @@ export function RemoveTitle({ kind, id, title, onClose, onRemoved }: { kind: 'mo
         {deleteFiles ? '' : ` ${t('remove.filesStay')}`}
       </p>
       {!!p?.downloads && <p className="mt-2 text-sm">{t('remove.downloadsGo', { count: p.downloads })}</p>}
-      {!!p?.secondKept && <p className="mt-2 break-words text-sm">{t('remove.secondKept', { path: p.secondKept })}</p>}
+      {!!p?.secondKept && <p className="mt-2 break-words text-sm">{kind === 'movie' ? t('remove.secondKept', { path: p.secondKept }) : t('remove.secondKeptShow', { path: p.secondKept })}</p>}
       <div className="mt-4 flex flex-col gap-3">
         {plan.isPending ? (
           <Spinner label={t('remove.checkingFolder')} />
@@ -130,9 +130,9 @@ export function RemoveTitle({ kind, id, title, onClose, onRemoved }: { kind: 'mo
 }
 
 // DeleteFiles deletes a movie's, a season's or an episode's files, or a
-// movie's second copy; the title stays on the list. path is the files' API path, such as
+// movie's second copy or a show's second copies; the title stays on the list. path is the files' API path, such as
 // /episodes/7/file or /series/3/seasons/2/files.
-export function DeleteFiles<T>({ path, title, what, onClose, onDone }: { path: string; title: string; what: 'movie' | 'season' | 'episode' | 'second'; onClose: () => void; onDone: (r: T) => void }) {
+export function DeleteFiles<T>({ path, title, what, onClose, onDone }: { path: string; title: string; what: 'movie' | 'season' | 'episode' | 'second' | 'seconds'; onClose: () => void; onDone: (r: T) => void }) {
   const { t } = useTranslation()
   const plan = useQuery({ queryKey: ['removal', path], queryFn: () => get<FileRemoval>(`${path}/removal`), gcTime: 0, staleTime: 0 })
   const [unmonitor, setUnmonitor] = useState(true)
@@ -143,7 +143,7 @@ export function DeleteFiles<T>({ path, title, what, onClose, onDone }: { path: s
     onSuccess: onDone,
     onError: () => plan.refetch(),
   })
-  const many = what === 'season'
+  const many = what === 'season' || what === 'seconds'
   return (
     <Modal title={t('remove.deleteTitle', { title })} onClose={onClose}>
       {plan.isPending ? (
@@ -155,12 +155,12 @@ export function DeleteFiles<T>({ path, title, what, onClose, onDone }: { path: s
       ) : (
         <div className="flex flex-col gap-3">
           <p className="text-sm">
-            {what === 'season' ? t('remove.episodesStay') : what === 'episode' ? t('remove.episodeStays') : what === 'second' ? t('secondCopy.stays') : t('remove.movieStays')} {many ? t('remove.extrasEach') : t('remove.extras')}
+            {what === 'season' ? t('remove.episodesStay') : what === 'seconds' ? t('secondCopy.showStays') : what === 'episode' ? t('remove.episodeStays') : what === 'second' ? t('secondCopy.stays') : t('remove.movieStays')} {many ? t('remove.extrasEach') : t('remove.extras')}
           </p>
           {p!.problem ? <p className="text-sm text-bad">{many ? t('remove.cantDeleteThem', { problem: p!.problem }) : t('remove.cantDeleteIt', { problem: p!.problem })}</p> : <FileList plan={p!} />}
           {p!.watched && (
-            <Check checked={unmonitor} onChange={setUnmonitor} hint={many ? t('remove.againThem') : what === 'second' ? t('secondCopy.again') : t('remove.againIt')}>
-              {many ? t('remove.stopThem') : what === 'second' ? t('secondCopy.stop') : t('remove.stopIt')}
+            <Check checked={unmonitor} onChange={setUnmonitor} hint={what === 'seconds' ? t('secondCopy.showAgain') : many ? t('remove.againThem') : what === 'second' ? t('secondCopy.again') : t('remove.againIt')}>
+              {what === 'seconds' ? t('secondCopy.showStop') : many ? t('remove.stopThem') : what === 'second' ? t('secondCopy.stop') : t('remove.stopIt')}
             </Check>
           )}
           {p!.releases.length > 0 && (

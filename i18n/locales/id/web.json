@@ -159,7 +159,8 @@
     "blockMany": "Blokir rilis-rilis asalnya, agar tidak diambil lagi",
     "keepThem": "Simpan",
     "delete": "Hapus {{size}}",
-    "secondKept": "Salinan keduanya di {{path}} tidak ada di folder ini, jadi tetap ada di disk. Agar ikut hilang, hapus dulu dari halaman film."
+    "secondKept": "Salinan keduanya di {{path}} tidak ada di folder ini, jadi tetap ada di disk. Agar ikut hilang, hapus dulu dari halaman film.",
+    "secondKeptShow": "Salinan keduanya di {{path}} tidak ada di folder ini, jadi tetap ada di disk. Agar ikut hilang, hapus dulu dari halaman serial."
   },
   "hooks": {
     "unknown": "Tidak diketahui"
@@ -2765,7 +2766,23 @@
     "filesOf": "Salinan kedua {{title}}",
     "stays": "Film dan salinan pertamanya tetap ada.",
     "stop": "Berhenti menyimpan salinan kedua",
-    "again": "Jika tidak, Box Office akan mencari salinan kedua dan mengunduhnya lagi."
+    "again": "Jika tidak, Box Office akan mencari salinan kedua dan mengunduhnya lagi.",
+    "showTitle": "Salinan kedua",
+    "showHint": "Simpan salinan lain setiap episode dengan kualitas berbeda, misalnya salinan 1080p di samping salinan 4K. Salinan ini punya profil kualitas sendiri serta dicari dan ditingkatkan secara terpisah.",
+    "showProfile": "Profil kualitas salinan kedua",
+    "showOff": "Tanpa salinan kedua",
+    "showWhere": "Tempatnya",
+    "showNextToFirst": "Di samping salinan pertama",
+    "showCount": "{{have}} dari {{total}} episode punya salinan kedua.",
+    "showLooking": "Box Office sedang mencari sisanya.",
+    "showNotWatched": "Serial ini tidak dipantau, jadi Box Office tidak mencari sisanya.",
+    "showStopped": "Box Office tidak lagi mencari salinan kedua. Salinan-salinan ini tetap ada sampai Anda menghapusnya.",
+    "showDelete": "Hapus semua salinan kedua",
+    "showFilesOf": "Salinan kedua {{title}}",
+    "showStays": "Serial dan salinan pertamanya tetap ada.",
+    "showStop": "Berhenti menyimpan salinan kedua",
+    "showAgain": "Jika tidak, Box Office akan mencari salinan kedua dan mengunduhnya lagi.",
+    "episode": "Salinan kedua: {{quality}}"
   },
   "order": {
     "title": "Urutan unduhan",

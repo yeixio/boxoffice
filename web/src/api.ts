@@ -215,6 +215,11 @@ export type Series = {
   autoUpgrade?: '' | 'on' | 'off'
   // Space saver: fetch only this many episodes past the latest one watched; 0 is off.
   keepAhead: number
+  // Second copies of its episodes kept at another quality: their profile
+  // (0 or unset for none) and the library folder they go in ("" for next
+  // to the first copies).
+  secondProfileId?: number
+  secondRoot?: string
   rootFolder: string
   path: string
   addedAt: string
@@ -239,6 +244,8 @@ export type Episode = {
   // Held back by the show's space saver for now.
   held?: boolean
   file?: MediaFile
+  // Its second copy, when the show keeps them.
+  second?: MediaFile
 }
 
 export type LookupMovie = Omit<Movie, 'id' | 'monitored' | 'profileId' | 'rootFolder' | 'path' | 'addedAt'> & { id?: number }
@@ -663,7 +670,8 @@ export type IndexerCaps = { categories: { id: number; name: string; subs?: { id:
 // title's folder goes; files names up to 200 of them, biggest first.
 export type DeletePlan = { folder?: string; files: { path: string; size: number }[]; count: number; size: number; problem?: string }
 // Removing a movie or a show: its folder, and its downloads that are cancelled.
-// secondKept is a movie's second copy outside the folder that would go.
+// secondKept is a movie's second copy, or the folder of a show's second
+// copies, outside the folder that would go.
 export type TitleRemoval = DeletePlan & { downloads?: number; secondKept?: string }
 // Deleting a movie's, a season's or an episode's files, keeping the title.
 export type FileRemoval = DeletePlan & { releases: { name: string; indexer?: string }[]; watched: boolean }

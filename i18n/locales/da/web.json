@@ -173,7 +173,8 @@
     "blockMany": "Bloker udgivelserne, de kom fra, så de ikke hentes igen",
     "keepThem": "Behold dem",
     "delete": "Slet {{size}}",
-    "secondKept": "Den ekstra kopi i {{path}} ligger ikke i denne mappe, så den bliver på disken. Hvis den også skal væk, så slet den først fra filmens side."
+    "secondKept": "Den ekstra kopi i {{path}} ligger ikke i denne mappe, så den bliver på disken. Hvis den også skal væk, så slet den først fra filmens side.",
+    "secondKeptShow": "De ekstra kopier i {{path}} ligger ikke i denne mappe, så de bliver på disken. Hvis de også skal væk, så slet dem først fra seriens side."
   },
   "hooks": {
     "unknown": "Ukendt"
@@ -2888,7 +2889,23 @@
     "filesOf": "Den ekstra kopi af {{title}}",
     "stays": "Filmen og dens første kopi bliver.",
     "stop": "Hold op med at beholde en ekstra kopi",
-    "again": "Ellers leder Box Office efter en ekstra kopi og henter den igen."
+    "again": "Ellers leder Box Office efter en ekstra kopi og henter den igen.",
+    "showTitle": "Ekstra kopier",
+    "showHint": "Behold en ekstra kopi af hvert afsnit i en anden kvalitet, f.eks. i 1080p ved siden af dem i 4K. De har deres egen kvalitetsprofil og bliver søgt efter og opgraderet for sig.",
+    "showProfile": "Kvalitetsprofil for de ekstra kopier",
+    "showOff": "Ingen ekstra kopier",
+    "showWhere": "Hvor de placeres",
+    "showNextToFirst": "Ved siden af de første kopier",
+    "showCount": "{{have}} af {{total}} afsnit har en ekstra kopi.",
+    "showLooking": "Box Office leder efter resten.",
+    "showNotWatched": "Der holdes ikke øje med serien, så Box Office leder ikke efter resten.",
+    "showStopped": "Box Office leder ikke længere efter ekstra kopier. Disse bliver, til du sletter dem.",
+    "showDelete": "Slet de ekstra kopier",
+    "showFilesOf": "De ekstra kopier af {{title}}",
+    "showStays": "Serien og dens første kopier bliver.",
+    "showStop": "Hold op med at beholde ekstra kopier",
+    "showAgain": "Ellers leder Box Office efter ekstra kopier og henter dem igen.",
+    "episode": "Ekstra kopi: {{quality}}"
   },
   "order": {
     "title": "Downloadrækkefølge",

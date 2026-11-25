@@ -173,7 +173,8 @@
     "blockMany": "Blokker utgivelsene de kom fra, så de ikke hentes igjen",
     "keepThem": "Behold dem",
     "delete": "Slett {{size}}",
-    "secondKept": "Den ekstra kopien i {{path}} ligger ikke i denne mappen, så den blir på disken. Skal den også bort, slett den først fra filmens side."
+    "secondKept": "Den ekstra kopien i {{path}} ligger ikke i denne mappen, så den blir på disken. Skal den også bort, slett den først fra filmens side.",
+    "secondKeptShow": "De ekstra kopiene i {{path}} ligger ikke i denne mappen, så de blir på disken. Skal de også bort, slett dem først fra seriens side."
   },
   "hooks": {
     "unknown": "Ukjent"
@@ -2888,7 +2889,23 @@
     "filesOf": "Den ekstra kopien av {{title}}",
     "stays": "Filmen og den første kopien blir.",
     "stop": "Slutt å beholde en ekstra kopi",
-    "again": "Ellers leter Box Office etter en ekstra kopi og laster den ned igjen."
+    "again": "Ellers leter Box Office etter en ekstra kopi og laster den ned igjen.",
+    "showTitle": "Ekstra kopier",
+    "showHint": "Behold en ekstra kopi av hver episode i en annen kvalitet, for eksempel i 1080p ved siden av dem i 4K. De har sin egen kvalitetsprofil og blir søkt etter og oppgradert for seg.",
+    "showProfile": "Kvalitetsprofil for de ekstra kopiene",
+    "showOff": "Ingen ekstra kopier",
+    "showWhere": "Hvor de legges",
+    "showNextToFirst": "Ved siden av de første kopiene",
+    "showCount": "{{have}} av {{total}} episoder har en ekstra kopi.",
+    "showLooking": "Box Office leter etter resten.",
+    "showNotWatched": "Serien følges ikke med på, så Box Office leter ikke etter resten.",
+    "showStopped": "Box Office leter ikke lenger etter ekstra kopier. Disse blir til du sletter dem.",
+    "showDelete": "Slett de ekstra kopiene",
+    "showFilesOf": "De ekstra kopiene av {{title}}",
+    "showStays": "Serien og de første kopiene blir.",
+    "showStop": "Slutt å beholde ekstra kopier",
+    "showAgain": "Ellers leter Box Office etter ekstra kopier og laster dem ned igjen.",
+    "episode": "Ekstra kopi: {{quality}}"
   },
   "order": {
     "title": "Nedlastingsrekkefølge",

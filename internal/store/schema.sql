@@ -92,7 +92,10 @@ CREATE TABLE IF NOT EXISTS series (
 	-- Space saver: fetch only this many episodes past the latest one
 	-- anyone has watched (Matinee says which), and more as they watch.
 	-- 0 is off.
-	keep_ahead   INTEGER NOT NULL DEFAULT 0
+	keep_ahead   INTEGER NOT NULL DEFAULT 0,
+	-- A second copy of each episode at another quality (see store.Series.SecondProfileID).
+	second_profile_id INTEGER NOT NULL DEFAULT 0, -- 0: no second copies
+	second_root       TEXT NOT NULL DEFAULT ''    -- '' keeps them next to the first copies
 );
 CREATE INDEX IF NOT EXISTS series_tvdb ON series (tvdb_id);
 

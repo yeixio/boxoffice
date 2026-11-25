@@ -201,7 +201,8 @@
     "blockMany": "Zablokuj wydania, z których pochodzą, aby nie zostały znów pobrane",
     "keepThem": "Zachowaj je",
     "delete": "Usuń {{size}}",
-    "secondKept": "Jego druga kopia w {{path}} nie znajduje się w tym folderze, więc zostanie na dysku. Aby też zniknęła, najpierw usuń ją na stronie filmu."
+    "secondKept": "Jego druga kopia w {{path}} nie znajduje się w tym folderze, więc zostanie na dysku. Aby też zniknęła, najpierw usuń ją na stronie filmu.",
+    "secondKeptShow": "Jego drugie kopie w {{path}} nie znajdują się w tym folderze, więc zostaną na dysku. Aby też zniknęły, najpierw usuń je na stronie serialu."
   },
   "hooks": {
     "unknown": "Nieznane"
@@ -3134,7 +3135,23 @@
     "filesOf": "Druga kopia filmu {{title}}",
     "stays": "Film i jego pierwsza kopia zostają.",
     "stop": "Przestań trzymać drugą kopię",
-    "again": "W przeciwnym razie Box Office znów wyszuka drugą kopię i ją pobierze."
+    "again": "W przeciwnym razie Box Office znów wyszuka drugą kopię i ją pobierze.",
+    "showTitle": "Drugie kopie",
+    "showHint": "Zachowaj jeszcze jedną kopię każdego odcinka w innej jakości, na przykład 1080p obok 4K. Mają własny profil jakości i są wyszukiwane oraz ulepszane osobno.",
+    "showProfile": "Profil jakości drugich kopii",
+    "showOff": "Bez drugich kopii",
+    "showWhere": "Gdzie trafią",
+    "showNextToFirst": "Obok pierwszych kopii",
+    "showCount": "Drugą kopię ma {{have}} z {{total}} odcinków.",
+    "showLooking": "Box Office szuka pozostałych.",
+    "showNotWatched": "Ten serial nie jest obserwowany, więc Box Office nie szuka pozostałych.",
+    "showStopped": "Box Office nie szuka już drugich kopii. Te zostaną, dopóki ich nie usuniesz.",
+    "showDelete": "Usuń drugie kopie",
+    "showFilesOf": "Drugie kopie serialu {{title}}",
+    "showStays": "Serial i jego pierwsze kopie zostają.",
+    "showStop": "Przestań trzymać drugie kopie",
+    "showAgain": "W przeciwnym razie Box Office znów wyszuka drugie kopie i je pobierze.",
+    "episode": "Druga kopia: {{quality}}"
   },
   "order": {
     "title": "Kolejność pobierania",

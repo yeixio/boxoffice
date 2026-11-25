@@ -7,6 +7,7 @@ import { AutoUpgradeField } from '../AutoUpgrade'
 import { LockedNote, ReportedNote } from '../Bulk'
 import { Releases } from '../Releases'
 import { DeleteFiles, RemoveTitle } from '../RemoveFiles'
+import { SecondCopy, type SecondCopyEdit } from '../SecondCopy'
 import { SpaceSaverField, type SpaceSaverWatched } from '../SpaceSaver'
 import { get, patch, post, type Episode, type Profile, type Reported, type Series } from '../api'
 import { bytes, day, episodeCode } from '../format'
@@ -26,12 +27,13 @@ export function ShowDetail() {
   const show = useQuery({ queryKey: key, queryFn: () => get<Detail>(`/series/${id}`) })
   const profiles = useProfiles()
   const [confirmDelete, setConfirmDelete] = useState(false)
+  const [deleteSeconds, setDeleteSeconds] = useState(false)
   const [note, setNote] = useState('')
   const set = (d: Detail) => {
     qc.setQueryData(key, d)
     qc.invalidateQueries({ queryKey: ['series'] })
   }
-  const edit = useMutation({ mutationFn: (body: Partial<Pick<Series, 'monitored' | 'profileId' | 'autoUpgrade' | 'keepAhead'>>) => patch<Detail>(`/series/${id}`, body), onSuccess: set })
+  const edit = useMutation({ mutationFn: (body: Partial<Pick<Series, 'monitored' | 'profileId' | 'autoUpgrade' | 'keepAhead'>> & SecondCopyEdit) => patch<Detail>(`/series/${id}`, body), onSuccess: set })
   const season = useMutation({ mutationFn: ({ n, monitored }: { n: number; monitored: boolean }) => patch<Detail>(`/series/${id}/seasons/${n}`, { monitored }), onSuccess: set })
   const action = useMutation({
     mutationFn: (what: 'search' | 'refresh') => post(`/series/${id}/${what}`),
@@ -51,6 +53,7 @@ export function ShowDetail() {
   const seasons = [...s.seasons].sort((a, b) => b.number - a.number)
   const locked = !!profiles.data?.find((p) => p.id === s.profileId)?.locked
   // Episodes still short of subtitles in a language wanted.
+  const seconds = episodes.filter((e) => e.second).length
   const subtitlesMissing = episodes.filter((e) => e.file?.subtitles?.some((x) => x.state === 'missing' || x.state === 'waiting' || x.state === 'pending')).length
 
   return (
@@ -114,6 +117,23 @@ export function ShowDetail() {
         </div>
       </Card>
 
+      <div className="mt-6">
+        <SecondCopy
+          kind="series"
+          title={s}
+          have={seconds > 0}
+          profiles={profiles.data ?? []}
+          locked={locked}
+          onChange={(e) => edit.mutate(e)}
+          onDelete={() => setDeleteSeconds(true)}
+          facts={
+            <>
+              {t('secondCopy.showCount', { have: seconds, total: episodes.length })} {!!s.secondProfileId && seconds < episodes.length && (s.monitored ? t('secondCopy.showLooking') : t('secondCopy.showNotWatched'))}
+            </>
+          }
+        />
+      </div>
+
       <div className="mt-6 flex flex-col gap-3">
         {seasons.map((se) => (
           <SeasonBlock
@@ -136,6 +156,18 @@ export function ShowDetail() {
         ))}
       </div>
 
+      {deleteSeconds && (
+        <DeleteFiles<Detail>
+          path={`/series/${s.id}/second`}
+          title={t('secondCopy.showFilesOf', { title: s.title })}
+          what="seconds"
+          onClose={() => setDeleteSeconds(false)}
+          onDone={(d) => {
+            set(d)
+            setDeleteSeconds(false)
+          }}
+        />
+      )}
       {confirmDelete && <RemoveTitle kind="series" id={s.id} title={s.title} onClose={() => setConfirmDelete(false)} onRemoved={removed} />}
     </div>
   )
@@ -227,6 +259,11 @@ function SeasonBlock({
                   <span className="w-28 text-muted">{day(e.airDate)}</span>
                   <span className="ms-auto flex flex-wrap items-center justify-end gap-2">
                     {e.file && <SubtitleMark subs={e.file.subtitles} />}
+                    {e.second && (
+                      <span title={fileTitle(e.second)}>
+                        <Badge>{t('secondCopy.episode', { quality: qualityName(qualities.data, e.second.quality) })}</Badge>
+                      </span>
+                    )}
                     {e.file ? (
                       <span title={fileTitle(e.file)}>
                         <Badge tone={upgrade ? 'gold' : 'ok'}>
@@ -234,7 +271,7 @@ function SeasonBlock({
                           {qualityName(qualities.data, e.file.quality)} · {bytes(e.file.size)}
                         </Badge>
                       </span>
-                    ) : e.held && e.monitored ? (
+                    ) : e.held && e.monitored && !e.second ? (
                       <span title={t('spaceSaver.laterHint')}>
                         <Badge>{t('spaceSaver.later')}</Badge>
                       </span>

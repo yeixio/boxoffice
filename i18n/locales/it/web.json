@@ -187,7 +187,8 @@
     "blockMany": "Blocca le release da cui provengono, così non vengono prelevate di nuovo",
     "keepThem": "Tienili",
     "delete": "Elimina {{size}}",
-    "secondKept": "La sua seconda copia in {{path}} non è in questa cartella, quindi resta sul disco. Per far sparire anche quella, eliminala prima dalla pagina del film."
+    "secondKept": "La sua seconda copia in {{path}} non è in questa cartella, quindi resta sul disco. Per far sparire anche quella, eliminala prima dalla pagina del film.",
+    "secondKeptShow": "Le sue seconde copie in {{path}} non sono in questa cartella, quindi restano sul disco. Per far sparire anche quelle, eliminale prima dalla pagina della serie."
   },
   "hooks": {
     "unknown": "Sconosciuto"
@@ -3011,7 +3012,23 @@
     "filesOf": "Seconda copia di {{title}}",
     "stays": "Il film e la sua prima copia restano.",
     "stop": "Non tenere più una seconda copia",
-    "again": "Altrimenti Box Office cercherà una seconda copia e la scaricherà di nuovo."
+    "again": "Altrimenti Box Office cercherà una seconda copia e la scaricherà di nuovo.",
+    "showTitle": "Seconde copie",
+    "showHint": "Tieni un’altra copia di ogni episodio in una qualità diversa, per esempio in 1080p accanto a quelle in 4K. Hanno il loro profilo di qualità e vengono cercate e migliorate per conto loro.",
+    "showProfile": "Profilo di qualità delle seconde copie",
+    "showOff": "Nessuna seconda copia",
+    "showWhere": "Dove vanno",
+    "showNextToFirst": "Accanto alle prime copie",
+    "showCount": "{{have}} episodi su {{total}} hanno una seconda copia.",
+    "showLooking": "Box Office sta cercando gli altri.",
+    "showNotWatched": "Questa serie non è tenuta d’occhio, quindi Box Office non cerca gli altri.",
+    "showStopped": "Box Office non cerca più seconde copie. Queste restano finché non le elimini.",
+    "showDelete": "Elimina le seconde copie",
+    "showFilesOf": "Seconde copie di {{title}}",
+    "showStays": "La serie e le sue prime copie restano.",
+    "showStop": "Non tenere più seconde copie",
+    "showAgain": "Altrimenti Box Office cercherà le seconde copie e le scaricherà di nuovo.",
+    "episode": "Seconda copia: {{quality}}"
   },
   "order": {
     "title": "Ordine dei download",
