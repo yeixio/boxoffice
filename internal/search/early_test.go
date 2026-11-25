@@ -124,7 +124,7 @@ func TestRSSGrabsEarly(t *testing.T) {
 	now := time.Now()
 	items := []string{
 		posted("Soon.2026.HDTS.1080p.x264-CAM", "m1", 3e9, now),     // a cinema recording
-		posted("Soon.2026.1080p.WEBRip.x264-GRP", "m2", 3e9, now),  // below the cutoff
+		posted("Soon.2026.1080p.WEBRip.x264-GRP", "m2", 3e9, now),   // below the cutoff
 		posted("Soon.2026.1080p.WEB-DL.DDP5.1-GRP", "m3", 6e9, now), // meets it
 		posted("Faraway.2027.1080p.WEB-DL-GRP", "m4", 6e9, now),     // months off
 		posted("Show.S01E02.1080p.WEB-DL-NTb", "e2", 2e9, now),      // airs tomorrow
