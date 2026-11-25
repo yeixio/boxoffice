@@ -2985,5 +2985,52 @@
     "buy": "購入",
     "none": "{{country}} では配信されていないようです。",
     "source": "配信サービス情報: JustWatch"
+  },
+  "playon": {
+    "title": "PlayOn Cloud",
+    "on": "オン",
+    "off": "オフ",
+    "sub": "PlayOn Cloud は Netflix、Hulu、Disney+、Max などの配信サービスから番組や映画を録画します。いつもどおり PlayOn Cloud アプリで録画を予約してください。録画が終わるたびに Box Office がダウンロードし、「ファイルを取り込む」と同じようにライブラリに入れます。ストレージ料金を払っていない場合、PlayOn は 7 日後に録画を削除するため、Box Office は 15 分ごとに確認します。",
+    "docs": "仕組み",
+    "how": "設定方法",
+    "help": {
+      "1": "PlayOn Cloud に登録し、スマホアプリで何か録画します。",
+      "2": "PlayOn にサインインするメールアドレスとパスワードを入力し、「テスト」を押します。",
+      "3": "「録画を取り込む」をオンにして「保存」を押します。",
+      "4": "二重にダウンロードされないよう、PlayOn Cloud アプリでスマホへのダウンロードをオフにします。"
+    },
+    "email": "PlayOn のメール",
+    "password": "PlayOn のパスワード",
+    "keepPassword": "保存済み（空欄のままで維持）",
+    "test": "テスト",
+    "works": "サインインしました。ダウンロードできる録画: {{count}}",
+    "forget": "アカウントの連携を解除",
+    "bringIn": "録画を取り込む",
+    "bringInHint": "録画が終わるたびにダウンロードしてライブラリに入れます。ダウンロードは月間データ上限に含まれます。",
+    "recordings": "録画",
+    "checking": "PlayOn を確認中…",
+    "checkedAt": "最終確認 {{when}}",
+    "inPlayOn": "PlayOn の予約: {{count}}",
+    "filedCount": "ライブラリ内: {{count}}",
+    "checkCount": "要確認: {{count}}",
+    "expiring": "1 日以内に PlayOn が削除: {{count}}",
+    "downloading": "{{name}} をダウンロード中: {{total}} 中 {{done}}",
+    "checkHint": "いくつかの録画はダウンロードしましたが、Box Office には何なのか確信がありません。「ファイルを取り込む」ページでそれぞれ指定してください。",
+    "openImport": "「ファイルを取り込む」を開く",
+    "checkNow": "今すぐ確認",
+    "none": "録画はまだありません。PlayOn Cloud アプリで録画すると、終わり次第ここに表示されます。",
+    "retry": "再試行",
+    "skip": "スキップ",
+    "filedTo": "{{path}} に保存",
+    "expires": "PlayOn が {{when}} に削除",
+    "state": {
+      "new": "待機中",
+      "downloading": "ダウンロード中",
+      "filed": "ライブラリ内",
+      "check": "要確認",
+      "failed": "失敗",
+      "skipped": "スキップ",
+      "expired": "期限切れ"
+    }
   }
 }

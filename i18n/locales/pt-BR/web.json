@@ -3231,5 +3231,52 @@
     "buy": "Comprar",
     "none": "Não está em streaming em {{country}}, até onde sabemos.",
     "source": "Serviços de streaming do JustWatch"
+  },
+  "playon": {
+    "title": "PlayOn Cloud",
+    "on": "Ligado",
+    "off": "Desligado",
+    "sub": "O PlayOn Cloud grava séries e filmes de serviços de streaming como Netflix, Hulu, Disney+ e Max. Agende gravações no app PlayOn Cloud como de costume: quando cada uma termina, o Box Office baixa e guarda na biblioteca do mesmo jeito que Importar arquivos. O PlayOn apaga as gravações após 7 dias se você não pagar armazenamento, então o Box Office verifica a cada 15 minutos.",
+    "docs": "Como funciona",
+    "how": "Como configurar",
+    "help": {
+      "1": "Crie uma conta no PlayOn Cloud e grave algo no app do celular.",
+      "2": "Digite o e-mail e a senha que você usa no PlayOn e toque em Testar.",
+      "3": "Ligue Trazer gravações e toque em Salvar.",
+      "4": "No app PlayOn Cloud, desligue o download de gravações para o celular, para não baixar duas vezes."
+    },
+    "email": "E-mail do PlayOn",
+    "password": "Senha do PlayOn",
+    "keepPassword": "Salva (deixe vazio para manter)",
+    "test": "Testar",
+    "works": "Conectado. Gravações prontas para baixar: {{count}}",
+    "forget": "Desvincular conta",
+    "bringIn": "Trazer gravações",
+    "bringInHint": "Baixa cada gravação pronta e guarda na biblioteca. Os downloads contam para o limite mensal de dados.",
+    "recordings": "Gravações",
+    "checking": "Consultando o PlayOn…",
+    "checkedAt": "Última verificação {{when}}",
+    "inPlayOn": "Na fila do PlayOn: {{count}}",
+    "filedCount": "Na biblioteca: {{count}}",
+    "checkCount": "Para conferir: {{count}}",
+    "expiring": "Apagadas pelo PlayOn em até um dia: {{count}}",
+    "downloading": "Baixando {{name}}: {{done}} de {{total}}",
+    "checkHint": "Algumas gravações foram baixadas, mas o Box Office não tem certeza do que são. Diga o que é cada uma na página Importar arquivos.",
+    "openImport": "Abrir Importar arquivos",
+    "checkNow": "Verificar agora",
+    "none": "Nenhuma gravação ainda. Grave algo no app PlayOn Cloud e ela aparece aqui quando terminar.",
+    "retry": "Tentar de novo",
+    "skip": "Pular",
+    "filedTo": "Guardada em {{path}}",
+    "expires": "O PlayOn apaga em {{when}}",
+    "state": {
+      "new": "Aguardando",
+      "downloading": "Baixando",
+      "filed": "Na biblioteca",
+      "check": "Para conferir",
+      "failed": "Falhou",
+      "skipped": "Pulada",
+      "expired": "Expirada"
+    }
   }
 }

@@ -3231,5 +3231,52 @@
     "buy": "Cumpărare",
     "none": "Din câte știm, nu e disponibil în streaming în {{country}}.",
     "source": "Servicii de streaming de la JustWatch"
+  },
+  "playon": {
+    "title": "PlayOn Cloud",
+    "on": "Pornit",
+    "off": "Oprit",
+    "sub": "PlayOn Cloud înregistrează seriale și filme de pe servicii de streaming precum Netflix, Hulu, Disney+ și Max. Programează înregistrări în aplicația PlayOn Cloud ca de obicei: când una e gata, Box Office o descarcă și o pune în bibliotecă la fel ca Importă fișiere. PlayOn șterge înregistrările după 7 zile dacă nu plătești stocare, așa că Box Office verifică la fiecare 15 minute.",
+    "docs": "Cum funcționează",
+    "how": "Cum se configurează",
+    "help": {
+      "1": "Înscrie-te la PlayOn Cloud și înregistrează ceva în aplicația de telefon.",
+      "2": "Introdu adresa de e-mail și parola cu care intri în PlayOn, apoi apasă Testează.",
+      "3": "Pornește Adu înregistrările și apasă Salvează.",
+      "4": "În aplicația PlayOn Cloud, oprește descărcarea pe telefon, ca înregistrările să nu fie descărcate de două ori."
+    },
+    "email": "E-mail PlayOn",
+    "password": "Parolă PlayOn",
+    "keepPassword": "Salvată (lasă gol ca s-o păstrezi)",
+    "test": "Testează",
+    "works": "Conectat. Înregistrări gata de descărcat: {{count}}",
+    "forget": "Deconectează contul",
+    "bringIn": "Adu înregistrările",
+    "bringInHint": "Descarcă fiecare înregistrare terminată și o pune în bibliotecă. Descărcările contează la limita lunară de date.",
+    "recordings": "Înregistrări",
+    "checking": "Se verifică PlayOn…",
+    "checkedAt": "Ultima verificare {{when}}",
+    "inPlayOn": "În coadă la PlayOn: {{count}}",
+    "filedCount": "În bibliotecă: {{count}}",
+    "checkCount": "De verificat: {{count}}",
+    "expiring": "Șterse de PlayOn în mai puțin de o zi: {{count}}",
+    "downloading": "Se descarcă {{name}}: {{done}} din {{total}}",
+    "checkHint": "Unele înregistrări au fost descărcate, dar Box Office nu e sigur ce sunt. Spune ce este fiecare pe pagina Importă fișiere.",
+    "openImport": "Deschide Importă fișiere",
+    "checkNow": "Verifică acum",
+    "none": "Încă nu există înregistrări. Înregistrează ceva în aplicația PlayOn Cloud și va apărea aici când e gata.",
+    "retry": "Reîncearcă",
+    "skip": "Sari peste",
+    "filedTo": "Pusă în {{path}}",
+    "expires": "PlayOn o șterge {{when}}",
+    "state": {
+      "new": "În așteptare",
+      "downloading": "Se descarcă",
+      "filed": "În bibliotecă",
+      "check": "De verificat",
+      "failed": "Eșuat",
+      "skipped": "Sărită",
+      "expired": "Expirată"
+    }
   }
 }

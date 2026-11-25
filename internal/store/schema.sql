@@ -900,3 +900,26 @@ CREATE TABLE IF NOT EXISTS title_moves (
 	finished_at BIGINT NOT NULL DEFAULT 0
 );
 CREATE INDEX IF NOT EXISTS title_moves_state ON title_moves (state, id);
+
+-- PlayOn Cloud recordings (package playon): each one PlayOn has finished
+-- recording for the linked account, and what Box Office did with it. A
+-- recording is downloaded once, then filed through Import files; the row
+-- stays so it isn't downloaded again while PlayOn still lists it.
+CREATE TABLE IF NOT EXISTS playon_recordings (
+	id         BIGINT PRIMARY KEY,           -- PlayOn's id
+	name       TEXT NOT NULL,                -- as PlayOn names it
+	series     TEXT NOT NULL DEFAULT '',
+	season     INTEGER NOT NULL DEFAULT 0,
+	episode    INTEGER NOT NULL DEFAULT 0,
+	year       INTEGER NOT NULL DEFAULT 0,
+	provider   TEXT NOT NULL DEFAULT '',     -- the streaming service it was recorded from
+	quality    INTEGER NOT NULL DEFAULT 0,   -- 1: 720p, 2: 1080p
+	expires_at BIGINT NOT NULL DEFAULT 0,    -- when PlayOn deletes it
+	state      TEXT NOT NULL DEFAULT 'new',  -- new, downloading, filed, check, failed, skipped, expired
+	note       TEXT NOT NULL DEFAULT '',
+	filed_to   TEXT NOT NULL DEFAULT '',
+	size       BIGINT NOT NULL DEFAULT 0,
+	tries      INTEGER NOT NULL DEFAULT 0,
+	seen_at    BIGINT NOT NULL,              -- first listed by PlayOn
+	done_at    BIGINT NOT NULL DEFAULT 0
+);

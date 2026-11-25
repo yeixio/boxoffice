@@ -120,6 +120,43 @@ export type FileSubtitle = {
   nextAt?: string
 }
 
+export type PlayOnState = 'new' | 'downloading' | 'filed' | 'check' | 'failed' | 'skipped' | 'expired'
+
+export type PlayOnRecording = {
+  id: number
+  name: string
+  series?: string
+  season?: number
+  episode?: number
+  year?: number
+  provider?: string
+  quality?: number
+  expires?: string
+  state: PlayOnState
+  note?: string
+  filedTo?: string
+  size?: number
+  tries?: number
+  seenAt: string
+  doneAt?: string
+}
+
+export type PlayOnSettings = {
+  config: { on: boolean; email: string; hasPassword: boolean }
+  status: {
+    running: boolean
+    checkedAt?: string
+    nextAt?: string
+    error?: string
+    paused?: string
+    recording: number
+    current?: { id: number; name: string; done: number; total: number }
+  }
+  recordings: PlayOnRecording[]
+  counts: Partial<Record<PlayOnState, number>>
+  expiring: number
+}
+
 export type SubtitleSettings = {
   config: {
     on: boolean

@@ -3108,5 +3108,52 @@
     "buy": "Köp",
     "none": "Går inte att streama i {{country}}, så vitt vi vet.",
     "source": "Streamingtjänster från JustWatch"
+  },
+  "playon": {
+    "title": "PlayOn Cloud",
+    "on": "På",
+    "off": "Av",
+    "sub": "PlayOn Cloud spelar in serier och filmer från streamingtjänster som Netflix, Hulu, Disney+ och Max. Lägg till inspelningar i PlayOn Cloud-appen som vanligt: när en är klar laddar Box Office ner den och lägger den i biblioteket precis som Importera filer. PlayOn raderar inspelningar efter 7 dagar om du inte betalar för lagring, så Box Office kollar var 15:e minut.",
+    "docs": "Så fungerar det",
+    "how": "Så ställer du in det",
+    "help": {
+      "1": "Skaffa PlayOn Cloud och spela in något i mobilappen.",
+      "2": "Ange e-postadressen och lösenordet du loggar in på PlayOn med och tryck på Testa.",
+      "3": "Slå på Hämta inspelningar och tryck på Spara.",
+      "4": "Stäng av nedladdning till mobilen i PlayOn Cloud-appen, så att inspelningar inte laddas ner två gånger."
+    },
+    "email": "PlayOn-e-post",
+    "password": "PlayOn-lösenord",
+    "keepPassword": "Sparat (lämna tomt för att behålla)",
+    "test": "Testa",
+    "works": "Inloggad. Inspelningar redo att laddas ner: {{count}}",
+    "forget": "Koppla bort kontot",
+    "bringIn": "Hämta inspelningar",
+    "bringInHint": "Laddar ner varje färdig inspelning och lägger den i biblioteket. Nedladdningar räknas mot månadens datatak.",
+    "recordings": "Inspelningar",
+    "checking": "Kollar PlayOn…",
+    "checkedAt": "Senast kollat {{when}}",
+    "inPlayOn": "I kö hos PlayOn: {{count}}",
+    "filedCount": "I biblioteket: {{count}}",
+    "checkCount": "Att kontrollera: {{count}}",
+    "expiring": "Raderas av PlayOn inom ett dygn: {{count}}",
+    "downloading": "Laddar ner {{name}}: {{done}} av {{total}}",
+    "checkHint": "Vissa inspelningar laddades ner, men Box Office är inte säkert på vad de är. Ange vad var och en är på sidan Importera filer.",
+    "openImport": "Öppna Importera filer",
+    "checkNow": "Kolla nu",
+    "none": "Inga inspelningar än. Spela in något i PlayOn Cloud-appen så dyker det upp här när det är klart.",
+    "retry": "Försök igen",
+    "skip": "Hoppa över",
+    "filedTo": "Lagd i {{path}}",
+    "expires": "PlayOn raderar den {{when}}",
+    "state": {
+      "new": "Väntar",
+      "downloading": "Laddar ner",
+      "filed": "I biblioteket",
+      "check": "Att kontrollera",
+      "failed": "Misslyckades",
+      "skipped": "Överhoppad",
+      "expired": "Utgången"
+    }
   }
 }

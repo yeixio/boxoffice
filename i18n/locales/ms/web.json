@@ -2985,5 +2985,52 @@
     "buy": "Beli",
     "none": "Setakat yang kami tahu, tiada strim di {{country}}.",
     "source": "Perkhidmatan strim daripada JustWatch"
+  },
+  "playon": {
+    "title": "PlayOn Cloud",
+    "on": "Hidup",
+    "off": "Mati",
+    "sub": "PlayOn Cloud merakam rancangan dan filem daripada perkhidmatan penstriman seperti Netflix, Hulu, Disney+ dan Max. Baris gilirkan rakaman dalam aplikasi PlayOn Cloud seperti biasa: sebaik sahaja satu selesai, Box Office memuat turunnya dan menyimpannya dalam pustaka seperti Import fail. PlayOn memadam rakaman selepas 7 hari melainkan anda membayar storan, jadi Box Office menyemak setiap 15 minit.",
+    "docs": "Cara ia berfungsi",
+    "how": "Cara menyediakannya",
+    "help": {
+      "1": "Daftar PlayOn Cloud dan rakam sesuatu dalam aplikasi telefonnya.",
+      "2": "Masukkan e-mel dan kata laluan yang anda gunakan untuk log masuk ke PlayOn, kemudian tekan Uji.",
+      "3": "Hidupkan Bawa masuk rakaman dan tekan Simpan.",
+      "4": "Dalam aplikasi PlayOn Cloud, matikan muat turun rakaman ke telefon supaya tidak dimuat turun dua kali."
+    },
+    "email": "E-mel PlayOn",
+    "password": "Kata laluan PlayOn",
+    "keepPassword": "Disimpan (biarkan kosong untuk mengekalkannya)",
+    "test": "Uji",
+    "works": "Berjaya log masuk. Rakaman sedia dimuat turun: {{count}}",
+    "forget": "Nyahpaut akaun",
+    "bringIn": "Bawa masuk rakaman",
+    "bringInHint": "Memuat turun setiap rakaman yang siap dan menyimpannya dalam pustaka. Muat turun dikira dalam had data bulanan.",
+    "recordings": "Rakaman",
+    "checking": "Menyemak PlayOn…",
+    "checkedAt": "Kali terakhir disemak {{when}}",
+    "inPlayOn": "Dalam giliran PlayOn: {{count}}",
+    "filedCount": "Dalam pustaka: {{count}}",
+    "checkCount": "Perlu disemak: {{count}}",
+    "expiring": "Dipadam PlayOn dalam sehari: {{count}}",
+    "downloading": "Memuat turun {{name}}: {{done}} daripada {{total}}",
+    "checkHint": "Sesetengah rakaman telah dimuat turun, tetapi Box Office tidak pasti apa ia. Nyatakan setiap satu di halaman Import fail.",
+    "openImport": "Buka Import fail",
+    "checkNow": "Semak sekarang",
+    "none": "Belum ada rakaman. Rakam sesuatu dalam aplikasi PlayOn Cloud dan ia akan muncul di sini apabila siap.",
+    "retry": "Cuba lagi",
+    "skip": "Langkau",
+    "filedTo": "Disimpan di {{path}}",
+    "expires": "PlayOn memadamnya {{when}}",
+    "state": {
+      "new": "Menunggu",
+      "downloading": "Memuat turun",
+      "filed": "Dalam pustaka",
+      "check": "Perlu disemak",
+      "failed": "Gagal",
+      "skipped": "Dilangkau",
+      "expired": "Tamat tempoh"
+    }
   }
 }

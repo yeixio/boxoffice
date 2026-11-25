@@ -3108,5 +3108,52 @@
     "buy": "Satın al",
     "none": "Bildiğimiz kadarıyla {{country}} içinde yayında değil.",
     "source": "Yayın hizmetleri JustWatch'tan"
+  },
+  "playon": {
+    "title": "PlayOn Cloud",
+    "on": "Açık",
+    "off": "Kapalı",
+    "sub": "PlayOn Cloud; Netflix, Hulu, Disney+ ve Max gibi yayın hizmetlerinden dizi ve film kaydeder. Kayıtları her zamanki gibi PlayOn Cloud uygulamasında sıraya koy: her biri bittiğinde Box Office onu indirir ve Dosyaları içe aktar gibi kitaplığa yerleştirir. Depolama için ödeme yapmazsan PlayOn kayıtları 7 gün sonra siler, bu yüzden Box Office her 15 dakikada bir kontrol eder.",
+    "docs": "Nasıl çalışır",
+    "how": "Nasıl kurulur",
+    "help": {
+      "1": "PlayOn Cloud'a kaydol ve telefon uygulamasında bir şey kaydet.",
+      "2": "PlayOn'a giriş yaptığın e-posta adresini ve parolayı gir, ardından Test et'e bas.",
+      "3": "Kayıtları getir'i aç ve Kaydet'e bas.",
+      "4": "PlayOn Cloud uygulamasında telefona indirmeyi kapat, böylece kayıtlar iki kez indirilmez."
+    },
+    "email": "PlayOn e-postası",
+    "password": "PlayOn parolası",
+    "keepPassword": "Kaydedildi (korumak için boş bırak)",
+    "test": "Test et",
+    "works": "Giriş yapıldı. İndirilmeye hazır kayıtlar: {{count}}",
+    "forget": "Hesabın bağlantısını kes",
+    "bringIn": "Kayıtları getir",
+    "bringInHint": "Biten her kaydı indirir ve kitaplığa yerleştirir. İndirmeler aylık veri sınırına sayılır.",
+    "recordings": "Kayıtlar",
+    "checking": "PlayOn kontrol ediliyor…",
+    "checkedAt": "Son kontrol {{when}}",
+    "inPlayOn": "PlayOn'da sırada: {{count}}",
+    "filedCount": "Kitaplıkta: {{count}}",
+    "checkCount": "Kontrol edilecek: {{count}}",
+    "expiring": "Bir gün içinde PlayOn'un sileceği: {{count}}",
+    "downloading": "{{name}} indiriliyor: {{done}} / {{total}}",
+    "checkHint": "Bazı kayıtlar indirildi ama Box Office ne olduklarından emin değil. Dosyaları içe aktar sayfasında her birinin ne olduğunu belirt.",
+    "openImport": "Dosyaları içe aktar'ı aç",
+    "checkNow": "Şimdi kontrol et",
+    "none": "Henüz kayıt yok. PlayOn Cloud uygulamasında bir şey kaydet; bittiğinde burada görünür.",
+    "retry": "Yeniden dene",
+    "skip": "Atla",
+    "filedTo": "{{path}} konumuna yerleştirildi",
+    "expires": "PlayOn {{when}} siliyor",
+    "state": {
+      "new": "Bekliyor",
+      "downloading": "İndiriliyor",
+      "filed": "Kitaplıkta",
+      "check": "Kontrol edilecek",
+      "failed": "Başarısız",
+      "skipped": "Atlandı",
+      "expired": "Süresi doldu"
+    }
   }
 }

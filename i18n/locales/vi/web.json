@@ -2985,5 +2985,52 @@
     "buy": "Mua",
     "none": "Theo chúng tôi biết, không có phát trực tuyến tại {{country}}.",
     "source": "Dịch vụ phát trực tuyến từ JustWatch"
+  },
+  "playon": {
+    "title": "PlayOn Cloud",
+    "on": "Bật",
+    "off": "Tắt",
+    "sub": "PlayOn Cloud ghi lại phim bộ và phim lẻ từ các dịch vụ phát trực tuyến như Netflix, Hulu, Disney+ và Max. Hãy xếp lịch ghi trong ứng dụng PlayOn Cloud như thường lệ: khi một bản ghi xong, Box Office tải về và xếp vào thư viện giống như Nhập tệp. PlayOn xóa bản ghi sau 7 ngày nếu bạn không trả tiền lưu trữ, nên Box Office kiểm tra mỗi 15 phút.",
+    "docs": "Cách hoạt động",
+    "how": "Cách thiết lập",
+    "help": {
+      "1": "Đăng ký PlayOn Cloud và ghi thứ gì đó trong ứng dụng điện thoại.",
+      "2": "Nhập email và mật khẩu bạn dùng để đăng nhập PlayOn, rồi bấm Kiểm tra.",
+      "3": "Bật Lấy bản ghi về và bấm Lưu.",
+      "4": "Trong ứng dụng PlayOn Cloud, tắt tải bản ghi về điện thoại để không bị tải hai lần."
+    },
+    "email": "Email PlayOn",
+    "password": "Mật khẩu PlayOn",
+    "keepPassword": "Đã lưu (để trống để giữ nguyên)",
+    "test": "Kiểm tra",
+    "works": "Đã đăng nhập. Bản ghi sẵn sàng để tải: {{count}}",
+    "forget": "Hủy liên kết tài khoản",
+    "bringIn": "Lấy bản ghi về",
+    "bringInHint": "Tải từng bản ghi đã xong và xếp vào thư viện. Lượt tải được tính vào giới hạn dữ liệu hằng tháng.",
+    "recordings": "Bản ghi",
+    "checking": "Đang kiểm tra PlayOn…",
+    "checkedAt": "Kiểm tra lần cuối {{when}}",
+    "inPlayOn": "Đang chờ trên PlayOn: {{count}}",
+    "filedCount": "Trong thư viện: {{count}}",
+    "checkCount": "Cần kiểm tra: {{count}}",
+    "expiring": "PlayOn sẽ xóa trong vòng một ngày: {{count}}",
+    "downloading": "Đang tải {{name}}: {{done}} / {{total}}",
+    "checkHint": "Một số bản ghi đã được tải, nhưng Box Office không chắc chúng là gì. Hãy cho biết từng cái là gì trên trang Nhập tệp.",
+    "openImport": "Mở Nhập tệp",
+    "checkNow": "Kiểm tra ngay",
+    "none": "Chưa có bản ghi nào. Hãy ghi thứ gì đó trong ứng dụng PlayOn Cloud, nó sẽ hiện ở đây khi xong.",
+    "retry": "Thử lại",
+    "skip": "Bỏ qua",
+    "filedTo": "Đã xếp vào {{path}}",
+    "expires": "PlayOn sẽ xóa vào {{when}}",
+    "state": {
+      "new": "Đang chờ",
+      "downloading": "Đang tải",
+      "filed": "Trong thư viện",
+      "check": "Cần kiểm tra",
+      "failed": "Thất bại",
+      "skipped": "Đã bỏ qua",
+      "expired": "Hết hạn"
+    }
   }
 }

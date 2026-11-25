@@ -68,6 +68,7 @@ Quality check (`#quality-check`), Problem files (`#problems`), the titles file (
 | Download order | Order of grab reasons; new-title window; jump the queue | Settings → Downloads → `#download-order` | Application | Advanced | New episodes, new movies, backlog…, upgrades last; 30 days; no jumping | — | Behaviour |
 | News servers | Usenet servers, connections, block/backup use | Settings → Downloads → `#news-servers` | Resource | Basic | None | — | Security (stores a password) |
 | Download apps | SABnzbd, NZBGet, qBittorrent and the like | Settings → Downloads → `#download-clients` | Resource | Basic | None | — | Security (stores a password or key) |
+| PlayOn Cloud | Bring in finished PlayOn Cloud recordings; the account's email and password | Settings → Downloads → `#playon` | Application | Advanced | Off | A PlayOn Cloud account; counts toward the data cap | Behaviour, Security (stores a password) |
 
 ## Searching
 

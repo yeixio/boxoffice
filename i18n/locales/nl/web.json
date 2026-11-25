@@ -3108,5 +3108,52 @@
     "buy": "Kopen",
     "none": "Voor zover we weten niet te streamen in {{country}}.",
     "source": "Streamingdiensten van JustWatch"
+  },
+  "playon": {
+    "title": "PlayOn Cloud",
+    "on": "Aan",
+    "off": "Uit",
+    "sub": "PlayOn Cloud neemt series en films op van streamingdiensten zoals Netflix, Hulu, Disney+ en Max. Plan opnames zoals altijd in de PlayOn Cloud-app: zodra er een klaar is, downloadt Box Office hem en zet hem in de bibliotheek, net als Bestanden importeren. PlayOn verwijdert opnames na 7 dagen als je niet voor opslag betaalt, dus Box Office kijkt elke 15 minuten.",
+    "docs": "Hoe het werkt",
+    "how": "Zo stel je het in",
+    "help": {
+      "1": "Meld je aan bij PlayOn Cloud en neem iets op in de telefoon-app.",
+      "2": "Vul het e-mailadres en wachtwoord in waarmee je bij PlayOn inlogt en druk op Testen.",
+      "3": "Zet Opnames binnenhalen aan en druk op Opslaan.",
+      "4": "Zet in de PlayOn Cloud-app het downloaden naar je telefoon uit, zodat opnames niet twee keer worden gedownload."
+    },
+    "email": "PlayOn-e-mail",
+    "password": "PlayOn-wachtwoord",
+    "keepPassword": "Opgeslagen (laat leeg om te houden)",
+    "test": "Testen",
+    "works": "Ingelogd. Opnames klaar om te downloaden: {{count}}",
+    "forget": "Account ontkoppelen",
+    "bringIn": "Opnames binnenhalen",
+    "bringInHint": "Downloadt elke klare opname en zet hem in de bibliotheek. Downloads tellen mee voor de maandelijkse datalimiet.",
+    "recordings": "Opnames",
+    "checking": "PlayOn wordt bekeken…",
+    "checkedAt": "Laatst gecontroleerd {{when}}",
+    "inPlayOn": "In de wachtrij bij PlayOn: {{count}}",
+    "filedCount": "In de bibliotheek: {{count}}",
+    "checkCount": "Na te kijken: {{count}}",
+    "expiring": "Binnen een dag door PlayOn verwijderd: {{count}}",
+    "downloading": "{{name}} downloaden: {{done}} van {{total}}",
+    "checkHint": "Sommige opnames zijn gedownload, maar Box Office weet niet zeker wat ze zijn. Geef op de pagina Bestanden importeren aan wat elke opname is.",
+    "openImport": "Bestanden importeren openen",
+    "checkNow": "Nu controleren",
+    "none": "Nog geen opnames. Neem iets op in de PlayOn Cloud-app; het verschijnt hier zodra het klaar is.",
+    "retry": "Opnieuw",
+    "skip": "Overslaan",
+    "filedTo": "Opgeslagen in {{path}}",
+    "expires": "PlayOn verwijdert hem {{when}}",
+    "state": {
+      "new": "Wacht",
+      "downloading": "Downloaden",
+      "filed": "In de bibliotheek",
+      "check": "Na te kijken",
+      "failed": "Mislukt",
+      "skipped": "Overgeslagen",
+      "expired": "Verlopen"
+    }
   }
 }

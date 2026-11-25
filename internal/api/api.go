@@ -38,6 +38,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/migrate"
 	"github.com/yeixio/boxoffice/internal/music"
 	"github.com/yeixio/boxoffice/internal/passkey"
+	"github.com/yeixio/boxoffice/internal/playon"
 	"github.com/yeixio/boxoffice/internal/portal"
 	"github.com/yeixio/boxoffice/internal/problems"
 	"github.com/yeixio/boxoffice/internal/push"
@@ -127,6 +128,9 @@ type Server struct {
 	Lists *lists.Service
 	// Titles adds the titles of a list loaded from a file; nil makes one.
 	Titles *titlelist.Service
+	// PlayOn brings in PlayOn Cloud recordings; nil makes one that only
+	// answers.
+	PlayOn *playon.Service
 	// Restart stops Box Office cleanly and starts it again, for the
 	// Restart button in Settings; nil means it can't.
 	Restart func()
@@ -141,6 +145,7 @@ type Server struct {
 	ereaderOnce  sync.Once
 	subtitleOnce sync.Once
 	listOnce     sync.Once
+	playOnOnce   sync.Once
 	titlesOnce   sync.Once
 	cleanupMu    sync.Mutex // one clean-up run or deletion at a time
 	watchedMu    sync.Mutex // one removal of watched episodes at a time
@@ -350,6 +355,7 @@ func (s *Server) Handler() http.Handler {
 	routes = append(routes, s.subtitleRoutes()...)
 	routes = append(routes, s.trackRoutes()...)
 	routes = append(routes, s.listRoutes()...)
+	routes = append(routes, s.playOnRoutes()...)
 	routes = append(routes, s.titleListRoutes()...)
 	routes = append(routes, s.cleanupRoutes()...)
 	routes = append(routes, s.portalRoutes()...)

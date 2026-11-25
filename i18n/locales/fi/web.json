@@ -3108,5 +3108,52 @@
     "buy": "Osta",
     "none": "Ei tietojemme mukaan suoratoistossa maassa {{country}}.",
     "source": "Suoratoistopalvelut: JustWatch"
+  },
+  "playon": {
+    "title": "PlayOn Cloud",
+    "on": "Päällä",
+    "off": "Pois",
+    "sub": "PlayOn Cloud tallentaa sarjoja ja elokuvia suoratoistopalveluista, kuten Netflixistä, Hulusta, Disney+:sta ja Maxista. Ajasta tallennukset PlayOn Cloud -sovelluksessa tavalliseen tapaan: kun tallennus valmistuu, Box Office lataa sen ja vie sen kirjastoon samoin kuin Tuo tiedostoja. PlayOn poistaa tallennukset 7 päivän kuluttua, ellet maksa tallennustilasta, joten Box Office tarkistaa 15 minuutin välein.",
+    "docs": "Miten se toimii",
+    "how": "Näin otat sen käyttöön",
+    "help": {
+      "1": "Rekisteröidy PlayOn Cloudiin ja tallenna jotain sen puhelinsovelluksella.",
+      "2": "Anna sähköpostiosoite ja salasana, joilla kirjaudut PlayOniin, ja paina Testaa.",
+      "3": "Ota Tuo tallennukset käyttöön ja paina Tallenna.",
+      "4": "Poista PlayOn Cloud -sovelluksesta lataus puhelimeen, jotta tallennuksia ei ladata kahdesti."
+    },
+    "email": "PlayOn-sähköposti",
+    "password": "PlayOn-salasana",
+    "keepPassword": "Tallennettu (jätä tyhjäksi säilyttääksesi)",
+    "test": "Testaa",
+    "works": "Kirjauduttu. Ladattavissa olevat tallennukset: {{count}}",
+    "forget": "Irrota tili",
+    "bringIn": "Tuo tallennukset",
+    "bringInHint": "Lataa jokaisen valmiin tallennuksen ja vie sen kirjastoon. Lataukset lasketaan kuukauden datakattoon.",
+    "recordings": "Tallennukset",
+    "checking": "Tarkistetaan PlayOnia…",
+    "checkedAt": "Viimeksi tarkistettu {{when}}",
+    "inPlayOn": "Jonossa PlayOnissa: {{count}}",
+    "filedCount": "Kirjastossa: {{count}}",
+    "checkCount": "Tarkistettavana: {{count}}",
+    "expiring": "PlayOn poistaa vuorokauden sisällä: {{count}}",
+    "downloading": "Ladataan {{name}}: {{done}} / {{total}}",
+    "checkHint": "Osa tallennuksista ladattiin, mutta Box Office ei ole varma, mitä ne ovat. Kerro Tuo tiedostoja -sivulla, mikä kukin on.",
+    "openImport": "Avaa Tuo tiedostoja",
+    "checkNow": "Tarkista nyt",
+    "none": "Ei vielä tallennuksia. Tallenna jotain PlayOn Cloud -sovelluksella, niin se näkyy täällä valmistuttuaan.",
+    "retry": "Yritä uudelleen",
+    "skip": "Ohita",
+    "filedTo": "Viety kohteeseen {{path}}",
+    "expires": "PlayOn poistaa sen {{when}}",
+    "state": {
+      "new": "Odottaa",
+      "downloading": "Ladataan",
+      "filed": "Kirjastossa",
+      "check": "Tarkistettavana",
+      "failed": "Epäonnistui",
+      "skipped": "Ohitettu",
+      "expired": "Vanhentunut"
+    }
   }
 }

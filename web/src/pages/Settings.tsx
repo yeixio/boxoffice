@@ -19,6 +19,7 @@ import { ProblemsCard } from './Problems'
 import { QualityCheckCard } from './QualityCheck'
 import { SubtitleSettingsCard } from './Subtitles'
 import { ListsCard } from './Lists'
+import { PlayOnCard } from './PlayOn'
 import { TracksCard } from './Tracks'
 import { TitlesFileCard } from './TitlesFile'
 import { IndexerStatsCard } from './IndexerStats'
@@ -104,6 +105,7 @@ const sections: SectionDef[] = [
         keys: ['conn.client.app', 'conn.address', 'conn.port', 'conn.client.https', 'conn.client.urlBase', 'conn.username', 'conn.password', 'conn.client.apiKey', 'conn.client.category'],
         terms: ['SABnzbd', 'NZBGet', 'qBittorrent', 'Transmission', 'Deluge', 'torrent'],
       },
+      { id: 'playon', el: <PlayOnCard />, keys: ['playon.email', 'playon.password', 'playon.bringIn'], terms: ['PlayOn', 'PlayOn Cloud', 'streaming', 'DVR', 'record', 'Netflix', 'Hulu', 'Disney+', 'Max'] },
     ],
   },
   {

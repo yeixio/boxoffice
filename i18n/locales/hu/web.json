@@ -3108,5 +3108,52 @@
     "buy": "Vásárlás",
     "none": "Tudomásunk szerint nem streamelhető itt: {{country}}.",
     "source": "Streamingszolgáltatások a JustWatch-tól"
+  },
+  "playon": {
+    "title": "PlayOn Cloud",
+    "on": "Be",
+    "off": "Ki",
+    "sub": "A PlayOn Cloud sorozatokat és filmeket rögzít streamingszolgáltatásokról, például a Netflixről, a Huluról, a Disney+-ról és a Maxról. Ütemezd a felvételeket a PlayOn Cloud alkalmazásban a szokásos módon: amint egy elkészül, a Box Office letölti és a könyvtárba teszi, ahogy a Fájlok importálása. A PlayOn 7 nap után törli a felvételeket, ha nem fizetsz tárhelyért, ezért a Box Office 15 percenként ellenőriz.",
+    "docs": "Hogyan működik",
+    "how": "Beállítás",
+    "help": {
+      "1": "Regisztrálj a PlayOn Cloudra, és rögzíts valamit a telefonos alkalmazásban.",
+      "2": "Add meg az e-mail-címet és a jelszót, amellyel a PlayOnba belépsz, majd nyomd meg a Teszt gombot.",
+      "3": "Kapcsold be a Felvételek behozása opciót, és nyomd meg a Mentés gombot.",
+      "4": "A PlayOn Cloud alkalmazásban kapcsold ki a telefonra töltést, hogy a felvételek ne töltődjenek le kétszer."
+    },
+    "email": "PlayOn e-mail",
+    "password": "PlayOn jelszó",
+    "keepPassword": "Mentve (hagyd üresen a megtartáshoz)",
+    "test": "Teszt",
+    "works": "Bejelentkezve. Letölthető felvételek: {{count}}",
+    "forget": "Fiók leválasztása",
+    "bringIn": "Felvételek behozása",
+    "bringInHint": "Letölt minden elkészült felvételt, és a könyvtárba teszi. A letöltések beleszámítanak a havi adatkeretbe.",
+    "recordings": "Felvételek",
+    "checking": "A PlayOn ellenőrzése…",
+    "checkedAt": "Utoljára ellenőrizve: {{when}}",
+    "inPlayOn": "Sorban a PlayOnban: {{count}}",
+    "filedCount": "A könyvtárban: {{count}}",
+    "checkCount": "Ellenőrizendő: {{count}}",
+    "expiring": "A PlayOn egy napon belül törli: {{count}}",
+    "downloading": "{{name}} letöltése: {{done}} / {{total}}",
+    "checkHint": "Néhány felvétel letöltődött, de a Box Office nem biztos benne, mik ezek. A Fájlok importálása oldalon add meg, melyik mi.",
+    "openImport": "Fájlok importálása megnyitása",
+    "checkNow": "Ellenőrzés most",
+    "none": "Még nincs felvétel. Rögzíts valamit a PlayOn Cloud alkalmazásban, és itt jelenik meg, amint elkészül.",
+    "retry": "Újra",
+    "skip": "Kihagyás",
+    "filedTo": "Ide került: {{path}}",
+    "expires": "A PlayOn törli: {{when}}",
+    "state": {
+      "new": "Vár",
+      "downloading": "Letöltés",
+      "filed": "A könyvtárban",
+      "check": "Ellenőrizendő",
+      "failed": "Sikertelen",
+      "skipped": "Kihagyva",
+      "expired": "Lejárt"
+    }
   }
 }

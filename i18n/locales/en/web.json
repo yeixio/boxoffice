@@ -3108,5 +3108,52 @@
     "buy": "Buy",
     "none": "Not streaming in {{country}} as far as we know.",
     "source": "Streaming services from JustWatch"
+  },
+  "playon": {
+    "title": "PlayOn Cloud",
+    "on": "On",
+    "off": "Off",
+    "sub": "PlayOn Cloud records shows and movies from streaming services such as Netflix, Hulu, Disney+ and Max. Queue recordings in the PlayOn Cloud app as usual: once each one is finished, Box Office downloads it and files it in the library the way Import files does. PlayOn deletes recordings after 7 days unless you pay for storage, so Box Office checks every 15 minutes.",
+    "docs": "How it works",
+    "how": "How to set it up",
+    "help": {
+      "1": "Sign up for PlayOn Cloud and record something in its phone app.",
+      "2": "Enter the email address and password you sign in to PlayOn with, then press Test.",
+      "3": "Turn on Bring in recordings and press Save.",
+      "4": "In the PlayOn Cloud app, turn off downloading recordings to your phone, so they aren't downloaded twice."
+    },
+    "email": "PlayOn email",
+    "password": "PlayOn password",
+    "keepPassword": "Saved (leave empty to keep it)",
+    "test": "Test",
+    "works": "Signed in. Recordings ready to download: {{count}}",
+    "forget": "Unlink account",
+    "bringIn": "Bring in recordings",
+    "bringInHint": "Downloads each finished recording and files it in the library. Downloads count toward the monthly data cap.",
+    "recordings": "Recordings",
+    "checking": "Checking PlayOn…",
+    "checkedAt": "Last checked {{when}}",
+    "inPlayOn": "Queued in PlayOn: {{count}}",
+    "filedCount": "In the library: {{count}}",
+    "checkCount": "To check: {{count}}",
+    "expiring": "Deleted by PlayOn within a day: {{count}}",
+    "downloading": "Downloading {{name}}: {{done}} of {{total}}",
+    "checkHint": "Some recordings were downloaded, but Box Office isn't sure what they are. Say what each one is on the Import files page.",
+    "openImport": "Open Import files",
+    "checkNow": "Check now",
+    "none": "No recordings yet. Record something in the PlayOn Cloud app and it shows up here once it's finished.",
+    "retry": "Retry",
+    "skip": "Skip",
+    "filedTo": "Filed in {{path}}",
+    "expires": "PlayOn deletes it {{when}}",
+    "state": {
+      "new": "Waiting",
+      "downloading": "Downloading",
+      "filed": "In the library",
+      "check": "To check",
+      "failed": "Failed",
+      "skipped": "Skipped",
+      "expired": "Expired"
+    }
   }
 }

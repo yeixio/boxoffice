@@ -3354,5 +3354,52 @@
     "buy": "Koupit",
     "none": "V zemi {{country}} se podle nás nestreamuje.",
     "source": "Streamovací služby od JustWatch"
+  },
+  "playon": {
+    "title": "PlayOn Cloud",
+    "on": "Zapnuto",
+    "off": "Vypnuto",
+    "sub": "PlayOn Cloud nahrává seriály a filmy ze streamovacích služeb, jako jsou Netflix, Hulu, Disney+ a Max. Nahrávky plánujte v aplikaci PlayOn Cloud jako obvykle: jakmile je některá hotová, Box Office ji stáhne a zařadí do knihovny stejně jako Importovat soubory. PlayOn maže nahrávky po 7 dnech, pokud si nezaplatíte úložiště, proto Box Office kontroluje každých 15 minut.",
+    "docs": "Jak to funguje",
+    "how": "Jak to nastavit",
+    "help": {
+      "1": "Zaregistrujte se do PlayOn Cloud a něco nahrajte v jeho mobilní aplikaci.",
+      "2": "Zadejte e-mail a heslo, kterými se přihlašujete do PlayOn, a stiskněte Otestovat.",
+      "3": "Zapněte Přenášet nahrávky a stiskněte Uložit.",
+      "4": "V aplikaci PlayOn Cloud vypněte stahování nahrávek do telefonu, aby se nestahovaly dvakrát."
+    },
+    "email": "E-mail PlayOn",
+    "password": "Heslo PlayOn",
+    "keepPassword": "Uloženo (nechte prázdné, chcete-li ho zachovat)",
+    "test": "Otestovat",
+    "works": "Přihlášeno. Nahrávky připravené ke stažení: {{count}}",
+    "forget": "Odpojit účet",
+    "bringIn": "Přenášet nahrávky",
+    "bringInHint": "Stáhne každou hotovou nahrávku a zařadí ji do knihovny. Stahování se započítává do měsíčního datového limitu.",
+    "recordings": "Nahrávky",
+    "checking": "Kontroluje se PlayOn…",
+    "checkedAt": "Naposledy zkontrolováno {{when}}",
+    "inPlayOn": "Ve frontě PlayOn: {{count}}",
+    "filedCount": "V knihovně: {{count}}",
+    "checkCount": "Ke kontrole: {{count}}",
+    "expiring": "PlayOn smaže do jednoho dne: {{count}}",
+    "downloading": "Stahuje se {{name}}: {{done}} z {{total}}",
+    "checkHint": "Některé nahrávky se stáhly, ale Box Office si není jistý, co jsou zač. Na stránce Importovat soubory určete, co je každá z nich.",
+    "openImport": "Otevřít Importovat soubory",
+    "checkNow": "Zkontrolovat teď",
+    "none": "Zatím žádné nahrávky. Nahrajte něco v aplikaci PlayOn Cloud a až to bude hotové, objeví se to tady.",
+    "retry": "Zkusit znovu",
+    "skip": "Přeskočit",
+    "filedTo": "Zařazeno do {{path}}",
+    "expires": "PlayOn ji smaže {{when}}",
+    "state": {
+      "new": "Čeká",
+      "downloading": "Stahuje se",
+      "filed": "V knihovně",
+      "check": "Ke kontrole",
+      "failed": "Selhalo",
+      "skipped": "Přeskočeno",
+      "expired": "Vypršelo"
+    }
   }
 }
