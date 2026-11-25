@@ -16,7 +16,7 @@ import (
 
 // checkKinds are the kinds of file the quality check looks inside: movies,
 // a movie's other editions and its second copy, and episodes.
-const checkKinds = "('movie', 'edition', 'second', 'episode')"
+const checkKinds = "('movie', 'edition', 'second', 'episode', 'episode2')"
 
 // ToCheck is a file the quality check hasn't looked inside yet (or that
 // changed size since), with its title's profile.
@@ -35,10 +35,10 @@ const retryAfter = 24 * time.Hour
 // out of time was saved as ffprobe being killed; those are retried too.
 func (s *Store) FilesToCheck(ctx context.Context, n int) ([]ToCheck, error) {
 	rows, err := s.query(ctx, `SELECT f.id, f.kind, f.owner_id, f.path, f.size, f.quality,
-		COALESCE(CASE WHEN f.kind = 'second' THEN m.second_profile_id ELSE m.profile_id END, t.profile_id, 0)
+		COALESCE(CASE WHEN f.kind = 'second' THEN m.second_profile_id ELSE m.profile_id END, CASE WHEN f.kind = 'episode2' THEN t.second_profile_id ELSE t.profile_id END, 0)
 		FROM media_files f
 		LEFT JOIN movies m ON f.kind IN ('movie', 'edition', 'second') AND m.id = f.owner_id
-		LEFT JOIN episodes e ON f.kind = 'episode' AND e.id = f.owner_id
+		LEFT JOIN episodes e ON f.kind IN ('episode', 'episode2') AND e.id = f.owner_id
 		LEFT JOIN series t ON t.id = e.series_id
 		WHERE f.kind IN `+checkKinds+` AND (f.probed_at = 0 OR f.probed_size <> f.size
 			OR f.probed_at < ? AND (f.media LIKE '%"retry":true%' OR f.media LIKE '%"error":"ffprobe: signal: killed"%'))
@@ -126,7 +126,7 @@ func (s *Store) Corrections(ctx context.Context) ([]Correction, error) {
 		COALESCE(m.id, t.id, 0), COALESCE(m.title, t.title, ''), COALESCE(m.year, 0), COALESCE(e.season, 0), COALESCE(e.number, 0)
 		FROM media_files f
 		LEFT JOIN movies m ON f.kind IN ('movie', 'edition', 'second') AND m.id = f.owner_id
-		LEFT JOIN episodes e ON f.kind = 'episode' AND e.id = f.owner_id
+		LEFT JOIN episodes e ON f.kind IN ('episode', 'episode2') AND e.id = f.owner_id
 		LEFT JOIN series t ON t.id = e.series_id
 		WHERE f.kind IN `+checkKinds+` AND f.guessed >= 0
 		ORDER BY f.probed_at DESC, f.id DESC`)

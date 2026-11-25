@@ -159,7 +159,8 @@
     "blockMany": "Chặn các bản phát hành chúng đến từ, để không tải lại",
     "keepThem": "Giữ chúng lại",
     "delete": "Xóa {{size}}",
-    "secondKept": "Bản sao thứ hai tại {{path}} không nằm trong thư mục này nên vẫn ở trên đĩa. Để xóa cả bản đó, hãy xóa nó trước từ trang của phim."
+    "secondKept": "Bản sao thứ hai tại {{path}} không nằm trong thư mục này nên vẫn ở trên đĩa. Để xóa cả bản đó, hãy xóa nó trước từ trang của phim.",
+    "secondKeptShow": "Các bản sao thứ hai tại {{path}} không nằm trong thư mục này nên vẫn ở trên đĩa. Để xóa cả các bản đó, hãy xóa chúng trước từ trang của chương trình."
   },
   "hooks": {
     "unknown": "Không rõ"
@@ -2756,7 +2757,23 @@
     "filesOf": "Bản sao thứ hai của {{title}}",
     "stays": "Phim và bản sao thứ nhất vẫn ở lại.",
     "stop": "Thôi giữ bản sao thứ hai",
-    "again": "Nếu không, Box Office sẽ tìm một bản sao thứ hai và tải lại."
+    "again": "Nếu không, Box Office sẽ tìm một bản sao thứ hai và tải lại.",
+    "showTitle": "Bản sao thứ hai",
+    "showHint": "Giữ thêm một bản sao của mỗi tập ở chất lượng khác, chẳng hạn bản 1080p bên cạnh bản 4K. Các bản này có hồ sơ chất lượng riêng và được tìm, nâng cấp riêng.",
+    "showProfile": "Hồ sơ chất lượng của các bản sao thứ hai",
+    "showOff": "Không có bản sao thứ hai",
+    "showWhere": "Nơi lưu",
+    "showNextToFirst": "Bên cạnh các bản sao thứ nhất",
+    "showCount": "{{have}} trên {{total}} tập có bản sao thứ hai.",
+    "showLooking": "Box Office đang tìm phần còn lại.",
+    "showNotWatched": "Chương trình này không được theo dõi nên Box Office không tìm phần còn lại.",
+    "showStopped": "Box Office không còn tìm bản sao thứ hai nữa. Các bản này vẫn ở lại cho đến khi bạn xóa.",
+    "showDelete": "Xóa các bản sao thứ hai",
+    "showFilesOf": "Các bản sao thứ hai của {{title}}",
+    "showStays": "Chương trình và các bản sao thứ nhất vẫn ở lại.",
+    "showStop": "Thôi giữ bản sao thứ hai",
+    "showAgain": "Nếu không, Box Office sẽ tìm các bản sao thứ hai và tải lại.",
+    "episode": "Bản sao thứ hai: {{quality}}"
   },
   "order": {
     "title": "Thứ tự tải xuống",

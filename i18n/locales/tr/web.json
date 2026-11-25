@@ -173,7 +173,8 @@
     "blockMany": "Geldikleri sürümleri engelle, böylece yeniden indirilmezler",
     "keepThem": "Kalsınlar",
     "delete": "{{size}} sil",
-    "secondKept": "{{path}} konumundaki ikinci kopyası bu klasörde değil, bu yüzden diskte kalır. Onun da gitmesi için önce filmin sayfasından silin."
+    "secondKept": "{{path}} konumundaki ikinci kopyası bu klasörde değil, bu yüzden diskte kalır. Onun da gitmesi için önce filmin sayfasından silin.",
+    "secondKeptShow": "{{path}} konumundaki ikinci kopyaları bu klasörde değil, bu yüzden diskte kalır. Onların da gitmesi için önce dizinin sayfasından silin."
   },
   "hooks": {
     "unknown": "Bilinmiyor"
@@ -2879,7 +2880,23 @@
     "filesOf": "{{title}} filminin ikinci kopyası",
     "stays": "Film ve ilk kopyası kalır.",
     "stop": "İkinci kopya saklamayı bırak",
-    "again": "Yoksa Box Office yeniden bir ikinci kopya arayıp indirir."
+    "again": "Yoksa Box Office yeniden bir ikinci kopya arayıp indirir.",
+    "showTitle": "İkinci kopyalar",
+    "showHint": "Her bölümün başka bir kalitede bir kopyasını daha saklayın; örneğin 4K olanların yanında 1080p kopyalar. Kendi kalite profilleri vardır, ayrı olarak aranır ve yükseltilirler.",
+    "showProfile": "İkinci kopyaların kalite profili",
+    "showOff": "İkinci kopya yok",
+    "showWhere": "Nereye konacaklar",
+    "showNextToFirst": "İlk kopyaların yanına",
+    "showCount": "{{total}} bölümün {{have}} tanesinin ikinci kopyası var.",
+    "showLooking": "Box Office kalanları arıyor.",
+    "showNotWatched": "Bu dizi izlenmiyor, bu yüzden Box Office kalanları aramıyor.",
+    "showStopped": "Box Office artık ikinci kopya aramıyor. Bu kopyalar siz silene kadar kalır.",
+    "showDelete": "İkinci kopyaları sil",
+    "showFilesOf": "{{title}} dizisinin ikinci kopyaları",
+    "showStays": "Dizi ve ilk kopyaları kalır.",
+    "showStop": "İkinci kopya saklamayı bırak",
+    "showAgain": "Yoksa Box Office yeniden ikinci kopyalar arayıp indirir.",
+    "episode": "İkinci kopya: {{quality}}"
   },
   "order": {
     "title": "İndirme sırası",

@@ -173,7 +173,8 @@
     "blockMany": "Block the releases they came from, so they aren't grabbed again",
     "keepThem": "Keep them",
     "delete": "Delete {{size}}",
-    "secondKept": "Its second copy at {{path}} isn't in this folder, so it stays on disk. To have it gone too, delete it from the movie's page first."
+    "secondKept": "Its second copy at {{path}} isn't in this folder, so it stays on disk. To have it gone too, delete it from the movie's page first.",
+    "secondKeptShow": "Its second copies in {{path}} aren't in this folder, so they stay on disk. To have them gone too, delete them from the show's page first."
   },
   "hooks": {
     "unknown": "Unknown"
@@ -2879,7 +2880,23 @@
     "filesOf": "{{title}}'s second copy",
     "stays": "The movie and its first copy stay.",
     "stop": "Stop keeping a second copy",
-    "again": "Otherwise Box Office will look for a second copy and download it again."
+    "again": "Otherwise Box Office will look for a second copy and download it again.",
+    "showTitle": "Second copies",
+    "showHint": "Keep another copy of every episode at a different quality, such as 1080p ones next to the 4K ones. They have their own quality profile and are looked for and upgraded by themselves.",
+    "showProfile": "Quality profile of the second copies",
+    "showOff": "No second copies",
+    "showWhere": "Where they go",
+    "showNextToFirst": "Next to the first copies",
+    "showCount": "{{have}} of {{total}} episodes have a second copy.",
+    "showLooking": "Box Office is looking for the rest.",
+    "showNotWatched": "This show isn't being watched for, so Box Office isn't looking for the rest.",
+    "showStopped": "Box Office no longer looks for second copies. These stay until you delete them.",
+    "showDelete": "Delete the second copies",
+    "showFilesOf": "{{title}}'s second copies",
+    "showStays": "The show and its first copies stay.",
+    "showStop": "Stop keeping second copies",
+    "showAgain": "Otherwise Box Office will look for second copies and download them again.",
+    "episode": "Second copy: {{quality}}"
   },
   "order": {
     "title": "Download order",

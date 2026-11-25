@@ -61,8 +61,10 @@ func (s *Store) LibraryTitles(ctx context.Context) ([]LibraryTitle, error) {
 		}
 	}
 	// Episodes, with their files when they have one.
-	rows, err := s.query(ctx, `SELECT e.id, e.series_id, e.season, e.number, e.title, e.monitored, f.id, f.path, f.size, f.quality, f.added_at
-		FROM episodes e LEFT JOIN media_files f ON f.kind = 'episode' AND f.owner_id = e.id ORDER BY e.series_id, e.season, e.number`)
+	rows, err := s.query(ctx, `SELECT e.id, e.series_id, e.season, e.number, e.title, e.monitored, f.id, f.path, f.size, f.quality, f.added_at,
+		f2.id, f2.path, f2.size, f2.quality, f2.added_at
+		FROM episodes e LEFT JOIN media_files f ON f.kind = 'episode' AND f.owner_id = e.id
+		LEFT JOIN media_files f2 ON f2.kind = 'episode2' AND f2.owner_id = e.id ORDER BY e.series_id, e.season, e.number`)
 	if err != nil {
 		return nil, err
 	}
@@ -71,7 +73,9 @@ func (s *Store) LibraryTitles(ctx context.Context) ([]LibraryTitle, error) {
 		var mon int
 		var fid, fsize, fq, fadded sql.NullInt64
 		var fpath sql.NullString
-		if err := rows.Scan(&e.ID, &e.SeriesID, &e.Season, &e.Number, &e.Title, &mon, &fid, &fpath, &fsize, &fq, &fadded); err != nil {
+		var sid, ssize, sq, sadded sql.NullInt64
+		var spath sql.NullString
+		if err := rows.Scan(&e.ID, &e.SeriesID, &e.Season, &e.Number, &e.Title, &mon, &fid, &fpath, &fsize, &fq, &fadded, &sid, &spath, &ssize, &sq, &sadded); err != nil {
 			rows.Close()
 			return nil, err
 		}
@@ -83,6 +87,11 @@ func (s *Store) LibraryTitles(ctx context.Context) ([]LibraryTitle, error) {
 		if fid.Valid {
 			e.File = &File{ID: fid.Int64, Kind: "episode", OwnerID: e.ID, Path: fpath.String, Size: fsize.Int64, Quality: int(fq.Int64), AddedAt: time.Unix(fadded.Int64, 0).UTC()}
 			out[i].Files = append(out[i].Files, TitleFile{File: *e.File, Season: e.Season, Number: e.Number, EpisodeTitle: e.Title})
+		}
+		if sid.Valid {
+			// Its second copy: a file of the show's, not the episode's copy.
+			out[i].Files = append(out[i].Files, TitleFile{File: File{ID: sid.Int64, Kind: SecondEpisodeKind, OwnerID: e.ID, Path: spath.String, Size: ssize.Int64,
+				Quality: int(sq.Int64), AddedAt: time.Unix(sadded.Int64, 0).UTC()}, Season: e.Season, Number: e.Number, EpisodeTitle: e.Title})
 		}
 		out[i].Episodes = append(out[i].Episodes, e)
 	}

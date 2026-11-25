@@ -187,7 +187,8 @@
     "blockMany": "Blochează versiunile din care provin, ca să nu fie descărcate din nou",
     "keepThem": "Păstrează-le",
     "delete": "Șterge {{size}}",
-    "secondKept": "A doua lui copie din {{path}} nu este în acest dosar, așa că rămâne pe disc. Ca să dispară și ea, șterge-o mai întâi din pagina filmului."
+    "secondKept": "A doua lui copie din {{path}} nu este în acest dosar, așa că rămâne pe disc. Ca să dispară și ea, șterge-o mai întâi din pagina filmului.",
+    "secondKeptShow": "Copiile lui secundare din {{path}} nu sunt în acest dosar, așa că rămân pe disc. Ca să dispară și ele, șterge-le mai întâi din pagina serialului."
   },
   "hooks": {
     "unknown": "Necunoscut"
@@ -3002,7 +3003,23 @@
     "filesOf": "A doua copie a filmului {{title}}",
     "stays": "Filmul și prima lui copie rămân.",
     "stop": "Nu mai păstra o a doua copie",
-    "again": "Altfel Box Office va căuta o a doua copie și o va descărca din nou."
+    "again": "Altfel Box Office va căuta o a doua copie și o va descărca din nou.",
+    "showTitle": "Copii secundare",
+    "showHint": "Păstrează încă o copie a fiecărui episod la altă calitate, de exemplu 1080p lângă cele 4K. Au propriul profil de calitate și sunt căutate și îmbunătățite separat.",
+    "showProfile": "Profilul de calitate al copiilor secundare",
+    "showOff": "Fără copii secundare",
+    "showWhere": "Unde ajung",
+    "showNextToFirst": "Lângă primele copii",
+    "showCount": "{{have}} din {{total}} episoade au o a doua copie.",
+    "showLooking": "Box Office le caută pe celelalte.",
+    "showNotWatched": "Acest serial nu este urmărit, așa că Box Office nu le caută pe celelalte.",
+    "showStopped": "Box Office nu mai caută copii secundare. Acestea rămân până le ștergi.",
+    "showDelete": "Șterge copiile secundare",
+    "showFilesOf": "Copiile secundare ale serialului {{title}}",
+    "showStays": "Serialul și primele lui copii rămân.",
+    "showStop": "Nu mai păstra copii secundare",
+    "showAgain": "Altfel Box Office va căuta copii secundare și le va descărca din nou.",
+    "episode": "A doua copie: {{quality}}"
   },
   "order": {
     "title": "Ordinea descărcărilor",

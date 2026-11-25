@@ -45,10 +45,38 @@ func TestSecondCopyIsNoProblem(t *testing.T) {
 		}
 		t.Fatalf("%d problems, %d before", len(rep.Problems), before)
 	}
+	// A show's second copies: next to the first copy of an episode, and
+	// under a folder named like the show's in another library folder.
+	tvOther := filepath.Join(filepath.Dir(l.tv), "tv-hd")
+	os.MkdirAll(tvOther, 0o755)
+	if _, err := l.st.AddRootFolder(ctx, "series", tvOther); err != nil {
+		t.Fatal(err)
+	}
+	pilot := filepath.Join(l.tv, "Lost (2004)", "Season 01", "Lost (2004) - S01E01 - Pilot - WEB 720p.mkv")
+	touch(t, pilot, 5)
+	l.st.AddFile(ctx, store.File{Kind: store.SecondEpisodeKind, OwnerID: l.episodeIDs["S01E01"], Path: pilot, Size: 5})
+	tabula := filepath.Join(tvOther, "Lost (2004)", "Season 01", "Lost (2004) - S01E03 - Tabula Rasa.mkv")
+	touch(t, tabula, 5)
+	l.st.AddFile(ctx, store.File{Kind: store.SecondEpisodeKind, OwnerID: l.episodeIDs["S01E03"], Path: tabula, Size: 5})
+
 	// Gone from the other folder: missing, and forgotten when asked.
 	os.Remove(se7en)
 	p := find(t, l, Missing, "Se7en")
 	if len(p.Files) != 1 || p.Files[0].Path != se7en || p.Fix == nil || p.Fix.Action != ActForget {
 		t.Fatalf("missing %+v", p)
+	}
+	os.Remove(tabula)
+	rep, err = Find(ctx, l.st, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	found := false
+	for _, p := range byKind(rep, Missing) {
+		if len(p.Files) == 1 && p.Files[0].Path == tabula {
+			found = true
+		}
+	}
+	if !found {
+		t.Fatalf("the episode's second copy that's gone isn't missing: %v", names(byKind(rep, Missing)))
 	}
 }

@@ -159,7 +159,8 @@
     "blockMany": "遮蔽它們來源的各個釋出，以免再次抓取",
     "keepThem": "保留",
     "delete": "刪除 {{size}}",
-    "secondKept": "它在 {{path}} 的第二份副本不在這個資料夾裡，所以會留在磁碟上。要一併刪除，請先在電影頁面刪除它。"
+    "secondKept": "它在 {{path}} 的第二份副本不在這個資料夾裡，所以會留在磁碟上。要一併刪除，請先在電影頁面刪除它。",
+    "secondKeptShow": "它在 {{path}} 的第二份副本不在這個資料夾裡，所以會留在磁碟上。要一併刪除，請先在劇集頁面刪除它們。"
   },
   "hooks": {
     "unknown": "未知"
@@ -2756,7 +2757,23 @@
     "filesOf": "{{title}} 的第二份副本",
     "stays": "電影和它的第一份副本會保留。",
     "stop": "不再保留第二份副本",
-    "again": "否則 Box Office 會再次尋找並下載第二份副本。"
+    "again": "否則 Box Office 會再次尋找並下載第二份副本。",
+    "showTitle": "第二份副本",
+    "showHint": "以不同畫質為每一集再保留一份副本，例如在 4K 副本旁再放一份 1080p 的。它們有自己的畫質配置，並單獨搜尋和升級。",
+    "showProfile": "第二份副本的畫質配置",
+    "showOff": "沒有第二份副本",
+    "showWhere": "放在哪裡",
+    "showNextToFirst": "放在第一份副本旁邊",
+    "showCount": "{{total}} 集中有 {{have}} 集有第二份副本。",
+    "showLooking": "Box Office 正在尋找其餘的。",
+    "showNotWatched": "這部劇集沒有被關注，所以 Box Office 不會尋找其餘的。",
+    "showStopped": "Box Office 不再尋找第二份副本。這些會保留到你刪除為止。",
+    "showDelete": "刪除所有第二份副本",
+    "showFilesOf": "{{title}} 的第二份副本",
+    "showStays": "劇集和它的第一份副本會保留。",
+    "showStop": "不再保留第二份副本",
+    "showAgain": "否則 Box Office 會再次尋找並下載第二份副本。",
+    "episode": "第二份副本：{{quality}}"
   },
   "order": {
     "title": "下載順序",

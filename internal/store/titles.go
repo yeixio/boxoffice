@@ -334,8 +334,14 @@ type Series struct {
 	AutoUpgrade string    `json:"autoUpgrade"` // as Movie's
 	// KeepAhead is the show's space saver: only this many episodes past
 	// the latest one anyone has watched are fetched. 0 is off.
-	KeepAhead int      `json:"keepAhead"`
-	Seasons   []Season `json:"seasons"`
+	KeepAhead int `json:"keepAhead"`
+	// SecondProfileID is the quality profile of a second copy to keep of
+	// each episode (a 1080p one next to the 4K one, say), or 0 for none.
+	// SecondRoot is the library folder those go in, in a folder named
+	// like the show's; "" keeps them next to the first copies.
+	SecondProfileID int      `json:"secondProfileId,omitempty"`
+	SecondRoot      string   `json:"secondRoot,omitempty"`
+	Seasons         []Season `json:"seasons"`
 	// Counts over monitored, aired episodes, leaving out the ones space
 	// saver is holding back that aren't on disk.
 	EpisodeCount int `json:"episodeCount"`
@@ -367,17 +373,19 @@ type Episode struct {
 	// what has been watched to fetch yet.
 	Held bool  `json:"held,omitempty"`
 	File *File `json:"file,omitempty"`
+	// Second is its second copy, for a show that keeps one.
+	Second *File `json:"second,omitempty"`
 }
 
 const seriesCols = `id, tmdb_id, tvdb_id, imdb_id, title, sort_title, year, overview, poster, backdrop, status, network, runtime, rating,
-	monitored, profile_id, root_folder, path, added_at, refreshed_at, auto_upgrade, keep_ahead`
+	monitored, profile_id, root_folder, path, added_at, refreshed_at, auto_upgrade, keep_ahead, second_profile_id, second_root`
 
 func scanSeries(r interface{ Scan(...any) error }) (Series, error) {
 	var t Series
 	var mon int
 	var added, refreshed int64
 	err := r.Scan(&t.ID, &t.TMDBID, &t.TVDBID, &t.IMDBID, &t.Title, &t.SortTitle, &t.Year, &t.Overview, &t.Poster, &t.Backdrop, &t.Status, &t.Network, &t.Runtime, &t.Rating,
-		&mon, &t.ProfileID, &t.RootFolder, &t.Path, &added, &refreshed, &t.AutoUpgrade, &t.KeepAhead)
+		&mon, &t.ProfileID, &t.RootFolder, &t.Path, &added, &refreshed, &t.AutoUpgrade, &t.KeepAhead, &t.SecondProfileID, &t.SecondRoot)
 	if errors.Is(err, sql.ErrNoRows) {
 		return t, ErrNotFound
 	}
@@ -516,8 +524,8 @@ func (s *Store) EnsureSeason(ctx context.Context, seriesID int64, se Season) err
 }
 
 func (s *Store) UpdateSeries(ctx context.Context, t Series) error {
-	res, err := s.exec(ctx, "UPDATE series SET monitored = ?, profile_id = ?, root_folder = ?, path = ?, auto_upgrade = ?, keep_ahead = ? WHERE id = ?",
-		b2i(t.Monitored), t.ProfileID, t.RootFolder, t.Path, t.AutoUpgrade, t.KeepAhead, t.ID)
+	res, err := s.exec(ctx, "UPDATE series SET monitored = ?, profile_id = ?, root_folder = ?, path = ?, auto_upgrade = ?, keep_ahead = ?, second_profile_id = ?, second_root = ? WHERE id = ?",
+		b2i(t.Monitored), t.ProfileID, t.RootFolder, t.Path, t.AutoUpgrade, t.KeepAhead, t.SecondProfileID, t.SecondRoot, t.ID)
 	if err != nil {
 		return err
 	}
@@ -535,7 +543,7 @@ func (s *Store) RefreshSeries(ctx context.Context, t Series) error {
 }
 
 func (s *Store) DeleteSeries(ctx context.Context, id int64) error {
-	if _, err := s.exec(ctx, "DELETE FROM media_files WHERE kind = 'episode' AND owner_id IN (SELECT id FROM episodes WHERE series_id = ?)", id); err != nil {
+	if _, err := s.exec(ctx, "DELETE FROM media_files WHERE kind IN ('episode', 'episode2') AND owner_id IN (SELECT id FROM episodes WHERE series_id = ?)", id); err != nil {
 		return err
 	}
 	if _, err := s.exec(ctx, "DELETE FROM episodes WHERE series_id = ?", id); err != nil {
@@ -557,9 +565,28 @@ func (s *Store) DeleteSeries(ctx context.Context, id int64) error {
 // ---- episodes ----
 
 const episodeCols = `e.id, e.series_id, e.season, e.number, e.title, e.overview, e.air_date, e.monitored, e.held,
-	f.id, f.path, f.size, f.quality, f.added_at, f.media, f.guessed`
+	f.id, f.path, f.size, f.quality, f.added_at, f.media, f.guessed,
+	f2.id, f2.path, f2.size, f2.quality, f2.added_at, f2.media, f2.guessed`
 
-const episodeFrom = ` FROM episodes e LEFT JOIN media_files f ON f.kind = 'episode' AND f.owner_id = e.id`
+const episodeFrom = ` FROM episodes e LEFT JOIN media_files f ON f.kind = 'episode' AND f.owner_id = e.id
+	LEFT JOIN media_files f2 ON f2.kind = 'episode2' AND f2.owner_id = e.id`
+
+// SecondEpisodeKind is the kind of an episode's second copy among recorded
+// files (see Series.SecondProfileID); it's owned by the episode.
+const SecondEpisodeKind = "episode2"
+
+// IsSecondKind says whether a recorded file's kind is a second copy: a
+// movie's or an episode's.
+func IsSecondKind(kind string) bool { return kind == SecondKind || kind == SecondEpisodeKind }
+
+// SecondFolder is the folder a show's second copies are kept in: the
+// show's own, or one named like it in the library folder chosen for them.
+func (t Series) SecondFolder() (root, folder string) {
+	if t.SecondRoot == "" || filepath.Clean(t.SecondRoot) == filepath.Clean(t.RootFolder) {
+		return t.RootFolder, t.Path
+	}
+	return t.SecondRoot, filepath.Join(t.SecondRoot, filepath.Base(t.Path))
+}
 
 func scanEpisode(r interface{ Scan(...any) error }) (Episode, error) {
 	var e Episode
@@ -567,7 +594,10 @@ func scanEpisode(r interface{ Scan(...any) error }) (Episode, error) {
 	var mon, held int
 	var fid, fsize, fq, fadded, fguessed sql.NullInt64
 	var fpath, fmedia sql.NullString
-	err := r.Scan(&e.ID, &e.SeriesID, &e.Season, &e.Number, &e.Title, &e.Overview, &air, &mon, &held, &fid, &fpath, &fsize, &fq, &fadded, &fmedia, &fguessed)
+	var sid, ssize, sq, sadded, sguessed sql.NullInt64
+	var spath, smedia sql.NullString
+	err := r.Scan(&e.ID, &e.SeriesID, &e.Season, &e.Number, &e.Title, &e.Overview, &air, &mon, &held, &fid, &fpath, &fsize, &fq, &fadded, &fmedia, &fguessed,
+		&sid, &spath, &ssize, &sq, &sadded, &smedia, &sguessed)
 	if errors.Is(err, sql.ErrNoRows) {
 		return e, ErrNotFound
 	}
@@ -578,6 +608,10 @@ func scanEpisode(r interface{ Scan(...any) error }) (Episode, error) {
 	if fid.Valid {
 		e.File = &File{ID: fid.Int64, Kind: "episode", OwnerID: e.ID, Path: fpath.String, Size: fsize.Int64, Quality: int(fq.Int64), AddedAt: time.Unix(fadded.Int64, 0).UTC()}
 		e.File.checked(fmedia, fguessed)
+	}
+	if sid.Valid {
+		e.Second = &File{ID: sid.Int64, Kind: SecondEpisodeKind, OwnerID: e.ID, Path: spath.String, Size: ssize.Int64, Quality: int(sq.Int64), AddedAt: time.Unix(sadded.Int64, 0).UTC()}
+		e.Second.checked(smedia, sguessed)
 	}
 	return e, nil
 }

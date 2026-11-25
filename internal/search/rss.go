@@ -261,10 +261,15 @@ func (s *Service) takeFromFeed(ctx context.Context, releases []Release, skip fun
 		per  map[int]int // wanted episodes by season
 		p    quality.Profile
 		norm string
+		ctx  context.Context // asSecond for the show's second copies
+	}
+	type showKey struct {
+		id   int64
+		copy string
 	}
 	movies := map[int64]store.Movie{}
 	upgrades := map[int64]bool{} // movies whose copies on disk may be upgraded
-	shows := map[int64]*showWant{}
+	shows := map[showKey]*showWant{}
 	for _, w := range list {
 		if skip(w) {
 			continue
@@ -278,16 +283,25 @@ func (s *Service) takeFromFeed(ctx context.Context, releases []Release, skip fun
 			movies[m.ID] = m
 			upgrades[m.ID] = w.Upgrade
 		case "episode":
-			sw, ok := shows[w.SeriesID]
+			// A show's second copies are matched as their own want, by
+			// their own profile.
+			ctx := ctx
+			if w.Copy == ModeSecond {
+				ctx = asSecond(ctx)
+			}
+			sw, ok := shows[showKey{w.SeriesID, w.Copy}]
 			if !ok {
 				t, err := s.Store.Series(ctx, w.SeriesID)
 				if err != nil {
 					continue
 				}
-				sw = &showWant{t: t, per: map[int]int{}, p: profiles[t.ProfileID], norm: normalize(t.Title)}
-				shows[w.SeriesID] = sw
+				sw = &showWant{t: t, per: map[int]int{}, p: profiles[t.ProfileID], norm: normalize(t.Title), ctx: ctx}
+				if w.Copy == ModeSecond {
+					sw.p = profiles[t.SecondProfileID]
+				}
+				shows[showKey{w.SeriesID, w.Copy}] = sw
 			}
-			e, err := s.Store.Episode(ctx, w.ID)
+			e, err := s.episode(ctx, w.ID)
 			if err != nil {
 				continue
 			}
@@ -320,7 +334,11 @@ func (s *Service) takeFromFeed(ctx context.Context, releases []Release, skip fun
 	for _, r := range releases {
 		r.Protocol = "usenet"
 		if season, eps, ok := releaseEpisode(r.Title); ok {
+			var matched int64 // the one show it's taken for
 			for _, sw := range shows {
+				if matched != 0 && sw.t.ID != matched {
+					continue
+				}
 				if r.TVDBID > 0 && sw.t.TVDBID > 0 {
 					if r.TVDBID != sw.t.TVDBID {
 						continue
@@ -329,11 +347,12 @@ func (s *Service) takeFromFeed(ctx context.Context, releases []Release, skip fun
 					continue
 				}
 				packs := len(eps) == 0 && sw.per[season] >= seasonSearchFrom
-				c := s.judgeEpisodes(ctx, r, sw.t, sw.p, sw.eps, blocked("series", sw.t.ID), packs, false)
+				c := s.judgeEpisodes(sw.ctx, r, sw.t, sw.p, sw.eps, blocked("series", sw.t.ID), packs, false)
 				if c.Accepted {
 					out.Releases = append(out.Releases, c)
 				}
-				break
+				// Its second copies, when it keeps them, may want it too.
+				matched = sw.t.ID
 			}
 			continue
 		}
@@ -396,7 +415,7 @@ func (s *Service) takeFromFeed(ctx context.Context, releases []Release, skip fun
 			keys = []string{fmt.Sprintf("m%d%s", c.titleID, c.mode)}
 		} else {
 			for _, id := range c.episodes {
-				keys = append(keys, fmt.Sprintf("e%d", id))
+				keys = append(keys, fmt.Sprintf("e%d%s", id, c.mode))
 			}
 		}
 		if slices.ContainsFunc(keys, func(k string) bool { return taken[k] }) {
@@ -411,7 +430,7 @@ func (s *Service) takeFromFeed(ctx context.Context, releases []Release, skip fun
 			busy = b
 		} else {
 			for _, id := range c.episodes {
-				b, err := s.busy(ctx, "series", c.titleID, id, c.Title)
+				b, err := s.busyFor(ctx, "series", c.titleID, id, c.Title, c.mode == ModeSecond)
 				if err != nil {
 					return got, problems, err
 				}

@@ -173,7 +173,8 @@
     "blockMany": "Blockera releaserna de kom från, så att de inte hämtas igen",
     "keepThem": "Behåll dem",
     "delete": "Radera {{size}}",
-    "secondKept": "Dess extra kopia i {{path}} ligger inte i den här mappen, så den blir kvar på disken. Ska den också bort, radera den först från filmens sida."
+    "secondKept": "Dess extra kopia i {{path}} ligger inte i den här mappen, så den blir kvar på disken. Ska den också bort, radera den först från filmens sida.",
+    "secondKeptShow": "Dess extra kopior i {{path}} ligger inte i den här mappen, så de blir kvar på disken. Ska de också bort, radera dem först från seriens sida."
   },
   "hooks": {
     "unknown": "Okänd"
@@ -2879,7 +2880,23 @@
     "filesOf": "Den extra kopian av {{title}}",
     "stays": "Filmen och dess första kopia finns kvar.",
     "stop": "Sluta behålla en extra kopia",
-    "again": "Annars letar Box Office efter en extra kopia och laddar ner den igen."
+    "again": "Annars letar Box Office efter en extra kopia och laddar ner den igen.",
+    "showTitle": "Extra kopior",
+    "showHint": "Behåll en extra kopia av varje avsnitt i en annan kvalitet, till exempel i 1080p bredvid dem i 4K. De har en egen kvalitetsprofil och söks och uppgraderas för sig.",
+    "showProfile": "Kvalitetsprofil för de extra kopiorna",
+    "showOff": "Inga extra kopior",
+    "showWhere": "Var de hamnar",
+    "showNextToFirst": "Bredvid de första kopiorna",
+    "showCount": "{{have}} av {{total}} avsnitt har en extra kopia.",
+    "showLooking": "Box Office letar efter resten.",
+    "showNotWatched": "Serien bevakas inte, så Box Office letar inte efter resten.",
+    "showStopped": "Box Office letar inte längre efter extra kopior. De här finns kvar tills du raderar dem.",
+    "showDelete": "Radera de extra kopiorna",
+    "showFilesOf": "De extra kopiorna av {{title}}",
+    "showStays": "Serien och dess första kopior finns kvar.",
+    "showStop": "Sluta behålla extra kopior",
+    "showAgain": "Annars letar Box Office efter extra kopior och laddar ner dem igen.",
+    "episode": "Extra kopia: {{quality}}"
   },
   "order": {
     "title": "Nedladdningsordning",

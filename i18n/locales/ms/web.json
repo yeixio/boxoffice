@@ -159,7 +159,8 @@
     "blockMany": "Sekat keluaran-keluaran asalnya, supaya ia tidak diambil semula",
     "keepThem": "Simpan",
     "delete": "Padam {{size}}",
-    "secondKept": "Salinan keduanya di {{path}} tiada dalam folder ini, jadi ia kekal pada cakera. Untuk membuangnya juga, padamkannya dahulu dari halaman filem."
+    "secondKept": "Salinan keduanya di {{path}} tiada dalam folder ini, jadi ia kekal pada cakera. Untuk membuangnya juga, padamkannya dahulu dari halaman filem.",
+    "secondKeptShow": "Salinan keduanya di {{path}} tiada dalam folder ini, jadi ia kekal pada cakera. Untuk membuangnya juga, padamkannya dahulu dari halaman rancangan."
   },
   "hooks": {
     "unknown": "Tidak diketahui"
@@ -2756,7 +2757,23 @@
     "filesOf": "Salinan kedua {{title}}",
     "stays": "Filem dan salinan pertamanya kekal.",
     "stop": "Berhenti menyimpan salinan kedua",
-    "again": "Jika tidak, Box Office akan mencari salinan kedua dan memuat turunnya semula."
+    "again": "Jika tidak, Box Office akan mencari salinan kedua dan memuat turunnya semula.",
+    "showTitle": "Salinan kedua",
+    "showHint": "Simpan satu lagi salinan setiap episod pada kualiti berbeza, contohnya salinan 1080p di sebelah salinan 4K. Ia mempunyai profil kualiti sendiri serta dicari dan dinaik taraf secara berasingan.",
+    "showProfile": "Profil kualiti salinan kedua",
+    "showOff": "Tiada salinan kedua",
+    "showWhere": "Tempat ia disimpan",
+    "showNextToFirst": "Di sebelah salinan pertama",
+    "showCount": "{{have}} daripada {{total}} episod mempunyai salinan kedua.",
+    "showLooking": "Box Office sedang mencari yang selebihnya.",
+    "showNotWatched": "Rancangan ini tidak dipantau, jadi Box Office tidak mencari yang selebihnya.",
+    "showStopped": "Box Office tidak lagi mencari salinan kedua. Salinan-salinan ini kekal sehingga anda memadamnya.",
+    "showDelete": "Padam semua salinan kedua",
+    "showFilesOf": "Salinan kedua {{title}}",
+    "showStays": "Rancangan dan salinan pertamanya kekal.",
+    "showStop": "Berhenti menyimpan salinan kedua",
+    "showAgain": "Jika tidak, Box Office akan mencari salinan kedua dan memuat turunnya semula.",
+    "episode": "Salinan kedua: {{quality}}"
   },
   "order": {
     "title": "Susunan muat turun",

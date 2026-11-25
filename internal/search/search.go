@@ -411,7 +411,7 @@ func (s *Service) Episode(ctx context.Context, id int64) (Results, error) {
 // EpisodeFor searches for one episode as asked: a better or replacement
 // copy (see Ask). Episodes have no editions.
 func (s *Service) EpisodeFor(ctx context.Context, id int64, ask Ask) (Results, error) {
-	e, err := s.Store.Episode(ctx, id)
+	e, err := s.episode(ctx, id)
 	if err != nil {
 		return Results{}, err
 	}
@@ -434,7 +434,7 @@ func (s *Service) EpisodeFor(ctx context.Context, id int64, ask Ask) (Results, e
 	if err != nil {
 		return Results{}, err
 	}
-	p, err := s.profile(ctx, t.ProfileID)
+	p, err := s.showProfile(ctx, t)
 	if err != nil {
 		return Results{}, err
 	}
@@ -442,11 +442,17 @@ func (s *Service) EpisodeFor(ctx context.Context, id int64, ask Ask) (Results, e
 	if err != nil {
 		return Results{}, err
 	}
-	tw, err := s.Store.TitleWant(ctx, "episode", e.ID)
-	if err != nil {
-		return Results{}, err
+	if isSecond(ctx) {
+		// What was asked of the episode's first copy (a better one, a
+		// replacement) isn't asked of its second.
+		ask = Ask{}
+	} else {
+		tw, err := s.Store.TitleWant(ctx, "episode", e.ID)
+		if err != nil {
+			return Results{}, err
+		}
+		ask = ask.with(tw)
 	}
-	ask = ask.with(tw)
 	ask.Edition, ask.Mode = "", ""
 	have := 0
 	if e.File != nil {
@@ -457,7 +463,10 @@ func (s *Service) EpisodeFor(ctx context.Context, id int64, ask Ask) (Results, e
 		e.File = nil
 	}
 	same := s.replaceSameQuality(ctx)
-	fixes := s.fixes(ctx, e.File, e.Season, e.Number)
+	var fixes *fixCheck
+	if !isSecond(ctx) {
+		fixes = s.fixes(ctx, e.File, e.Season, e.Number)
+	}
 	out := Results{Errors: notes, Searched: n}
 	for _, r := range rs {
 		ep := e
@@ -814,7 +823,7 @@ func (s *Service) autoUpgradeAllowed(ctx context.Context, c Candidate) (bool, er
 	case c.kind == "series" && c.titleID != 0 && len(c.episodes) > 0:
 		for _, id := range c.episodes {
 			e, err := s.Store.Episode(ctx, id)
-			if err != nil || e.File == nil {
+			if err != nil || c.mode != ModeSecond && e.File == nil || c.mode == ModeSecond && e.Second == nil {
 				return false, nil
 			}
 		}
@@ -920,10 +929,10 @@ func (s *Service) pick(ctx context.Context, res Results, kind string, titleID, e
 // busy says whether a movie, or one episode of a show, has a download on
 // the way already, or release name was grabbed for it before.
 func (s *Service) busy(ctx context.Context, kind string, titleID, episodeID int64, name string) (bool, error) {
-	return s.busyFor(ctx, kind, titleID, episodeID, name, false)
+	return s.busyFor(ctx, kind, titleID, episodeID, name, isSecond(ctx))
 }
 
-// busyFor is busy for a movie's copy, or (second) for its second copy:
+// busyFor is busy for a movie's or an episode's copy, or (second) for its second copy:
 // a download for the one doesn't keep the other waiting.
 func (s *Service) busyFor(ctx context.Context, kind string, titleID, episodeID int64, name string, second bool) (bool, error) {
 	pending, err := s.Store.Pending(ctx, kind, titleID)
@@ -931,7 +940,7 @@ func (s *Service) busyFor(ctx context.Context, kind string, titleID, episodeID i
 		return false, err
 	}
 	for _, d := range pending {
-		if kind == "movie" && (d.Mode == ModeSecond) != second {
+		if (kind == "movie" || kind == "series") && (d.Mode == ModeSecond) != second {
 			continue
 		}
 		if episodeID == 0 || len(d.EpisodeIDs) == 0 || slices.Contains(d.EpisodeIDs, episodeID) {
@@ -1025,13 +1034,30 @@ func (s *Service) jobEpisode(ctx context.Context, payload string) (jobs.Result, 
 	if err != nil {
 		return jobs.Result{}, err
 	}
+	t, err := s.Store.Series(ctx, e.SeriesID)
+	if err != nil {
+		return jobs.Result{}, err
+	}
 	if payloadByHand(payload) {
 		ctx = byHand(ctx)
-	} else if e.File != nil {
-		t, err := s.Store.Series(ctx, e.SeriesID)
-		if err != nil {
-			return jobs.Result{}, err
-		}
+	}
+	first, err := s.episodePass(ctx, t, id)
+	if err != nil || !s.keepsSecond(ctx, t) {
+		return first, err
+	}
+	second, err := s.episodePass(asSecond(ctx), t, id)
+	return bothCopies(first, second), err
+}
+
+// episodePass searches for one episode's copy (its second one under
+// asSecond) and grabs the best release. Not started by hand, a copy
+// that's there is only upgraded when the automatic upgrade rules allow.
+func (s *Service) episodePass(ctx context.Context, t store.Series, id int64) (jobs.Result, error) {
+	e, err := s.episode(ctx, id)
+	if err != nil {
+		return jobs.Result{}, err
+	}
+	if e.File != nil {
 		if skip, err := s.upgradeSkipped(ctx, t.AutoUpgrade); err != nil || skip != "" {
 			return jobs.Skipped("%s", skip), err
 		}
@@ -1044,6 +1070,19 @@ func (s *Service) jobEpisode(ctx context.Context, payload string) (jobs.Result, 
 		return jobs.Result{}, err
 	}
 	return s.pick(ctx, res, "series", e.SeriesID, e.ID)
+}
+
+// bothCopies is one result for a search of a title's first and second
+// copies: done if either got somewhere.
+func bothCopies(first, second jobs.Result) jobs.Result {
+	if second.Status == "" {
+		return first
+	}
+	if second.Status == "done" {
+		first.Status = second.Status
+	}
+	first.Message += "; second copies: " + second.Message
+	return first
 }
 
 // maxSearches caps how many searches one show search makes, to be kind to
@@ -1061,14 +1100,29 @@ func (s *Service) jobSeries(ctx context.Context, payload string) (jobs.Result, e
 	if err != nil {
 		return jobs.Result{}, err
 	}
-	p, err := s.profile(ctx, t.ProfileID)
+	if payloadByHand(payload) {
+		ctx = byHand(ctx)
+	}
+	first, err := s.seriesPass(ctx, t)
+	if err != nil || !s.keepsSecond(ctx, t) {
+		return first, err
+	}
+	second, err := s.seriesPass(asSecond(ctx), t)
+	return bothCopies(first, second), err
+}
+
+// seriesPass is jobSeries for the show's first copies, or under asSecond
+// for its second ones.
+func (s *Service) seriesPass(ctx context.Context, t store.Series) (jobs.Result, error) {
+	id := t.ID
+	p, err := s.showProfile(ctx, t)
 	if err != nil {
 		return jobs.Result{}, err
 	}
 	if p.Locked {
 		return jobs.Skipped("%s", store.ErrLocked.Error()), nil
 	}
-	eps, err := s.Store.Episodes(ctx, id)
+	eps, err := s.episodes(ctx, id)
 	if err != nil {
 		return jobs.Result{}, err
 	}
@@ -1088,9 +1142,6 @@ func (s *Service) jobSeries(ctx context.Context, payload string) (jobs.Result, e
 		case p.CutoffUnmet(e.File.Quality):
 			upgrades = append(upgrades, e)
 		}
-	}
-	if payloadByHand(payload) {
-		ctx = byHand(ctx)
 	}
 	// Not started by hand (a show just added, or Matinee asking): upgrades
 	// follow the automatic upgrade rules.

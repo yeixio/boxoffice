@@ -173,7 +173,8 @@
     "blockMany": "Estä julkaisut, joista ne tulivat, jotta niitä ei noudeta uudelleen",
     "keepThem": "Säilytä ne",
     "delete": "Poista {{size}}",
-    "secondKept": "Sen toinen kopio polussa {{path}} ei ole tässä kansiossa, joten se jää levylle. Jos senkin pitää lähteä, poista se ensin elokuvan sivulta."
+    "secondKept": "Sen toinen kopio polussa {{path}} ei ole tässä kansiossa, joten se jää levylle. Jos senkin pitää lähteä, poista se ensin elokuvan sivulta.",
+    "secondKeptShow": "Sen toiset kopiot polussa {{path}} eivät ole tässä kansiossa, joten ne jäävät levylle. Jos niidenkin pitää lähteä, poista ne ensin sarjan sivulta."
   },
   "hooks": {
     "unknown": "Tuntematon"
@@ -2879,7 +2880,23 @@
     "filesOf": "Elokuvan {{title}} toinen kopio",
     "stays": "Elokuva ja sen ensimmäinen kopio säilyvät.",
     "stop": "Lopeta toisen kopion säilyttäminen",
-    "again": "Muuten Box Office etsii toisen kopion ja lataa sen uudelleen."
+    "again": "Muuten Box Office etsii toisen kopion ja lataa sen uudelleen.",
+    "showTitle": "Toiset kopiot",
+    "showHint": "Säilytä jokaisesta jaksosta toinen kopio eri laadulla, esimerkiksi 1080p-kopiot 4K-kopioiden rinnalla. Niillä on oma laatuprofiilinsa, ja niitä haetaan ja päivitetään erikseen.",
+    "showProfile": "Toisten kopioiden laatuprofiili",
+    "showOff": "Ei toisia kopioita",
+    "showWhere": "Minne ne tulevat",
+    "showNextToFirst": "Ensimmäisten kopioiden viereen",
+    "showCount": "Toinen kopio on {{have}} jaksolla {{total}} jaksosta.",
+    "showLooking": "Box Office etsii loppuja.",
+    "showNotWatched": "Tätä sarjaa ei seurata, joten Box Office ei etsi loppuja.",
+    "showStopped": "Box Office ei enää etsi toisia kopioita. Nämä säilyvät, kunnes poistat ne.",
+    "showDelete": "Poista toiset kopiot",
+    "showFilesOf": "Sarjan {{title}} toiset kopiot",
+    "showStays": "Sarja ja sen ensimmäiset kopiot säilyvät.",
+    "showStop": "Lopeta toisten kopioiden säilyttäminen",
+    "showAgain": "Muuten Box Office etsii toiset kopiot ja lataa ne uudelleen.",
+    "episode": "Toinen kopio: {{quality}}"
   },
   "order": {
     "title": "Latausjärjestys",

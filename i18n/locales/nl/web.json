@@ -173,7 +173,8 @@
     "blockMany": "De releases waar ze vandaan kwamen blokkeren, zodat die niet opnieuw worden gegrabd",
     "keepThem": "Behouden",
     "delete": "{{size}} verwijderen",
-    "secondKept": "De tweede kopie in {{path}} staat niet in deze map en blijft dus op de schijf. Moet die ook weg, verwijder haar dan eerst op de pagina van de film."
+    "secondKept": "De tweede kopie in {{path}} staat niet in deze map en blijft dus op de schijf. Moet die ook weg, verwijder haar dan eerst op de pagina van de film.",
+    "secondKeptShow": "De tweede kopieën in {{path}} staan niet in deze map en blijven dus op de schijf. Moeten die ook weg, verwijder ze dan eerst op de pagina van de serie."
   },
   "hooks": {
     "unknown": "Onbekend"
@@ -2879,7 +2880,23 @@
     "filesOf": "Tweede kopie van {{title}}",
     "stays": "De film en de eerste kopie blijven.",
     "stop": "Geen tweede kopie meer bewaren",
-    "again": "Anders zoekt Box Office weer een tweede kopie en downloadt die opnieuw."
+    "again": "Anders zoekt Box Office weer een tweede kopie en downloadt die opnieuw.",
+    "showTitle": "Tweede kopieën",
+    "showHint": "Bewaar van elke aflevering nog een kopie in een andere kwaliteit, bijvoorbeeld in 1080p naast die in 4K. Ze hebben een eigen kwaliteitsprofiel en worden apart gezocht en verbeterd.",
+    "showProfile": "Kwaliteitsprofiel van de tweede kopieën",
+    "showOff": "Geen tweede kopieën",
+    "showWhere": "Waar ze komen",
+    "showNextToFirst": "Naast de eerste kopieën",
+    "showCount": "{{have}} van de {{total}} afleveringen hebben een tweede kopie.",
+    "showLooking": "Box Office zoekt naar de rest.",
+    "showNotWatched": "Deze serie wordt niet in de gaten gehouden, dus Box Office zoekt niet naar de rest.",
+    "showStopped": "Box Office zoekt niet meer naar tweede kopieën. Deze blijven tot je ze verwijdert.",
+    "showDelete": "Tweede kopieën verwijderen",
+    "showFilesOf": "Tweede kopieën van {{title}}",
+    "showStays": "De serie en de eerste kopieën blijven.",
+    "showStop": "Geen tweede kopieën meer bewaren",
+    "showAgain": "Anders zoekt Box Office weer tweede kopieën en downloadt die opnieuw.",
+    "episode": "Tweede kopie: {{quality}}"
   },
   "order": {
     "title": "Downloadvolgorde",

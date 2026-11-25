@@ -248,6 +248,9 @@ func (s *Server) seriesRemoval(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
+	if tr.SecondKept, err = s.seriesSecondKept(r.Context(), t); err != nil {
+		return err
+	}
 	return writeJSON(w, http.StatusOK, tr)
 }
 

@@ -19,49 +19,164 @@ import (
 // library folder (movies.second_root). The first copy never counts as the
 // second or the other way round.
 
-// editSecond takes the second copy asked for in an edit, and says whether
-// it should be looked for now. Turning it off leaves the copy on disk and
-// on the movie's page; deleting it is DELETE /movies/{id}/second.
+// editSecond takes the second copy asked for in an edit of a movie, and
+// says whether it should be looked for now. Turning it off leaves the copy
+// on disk and on the movie's page; deleting it is DELETE
+// /movies/{id}/second.
 func (s *Server) editSecond(ctx context.Context, m *store.Movie, in editInput) (look bool, err error) {
-	was, wasRoot := m.SecondProfileID, m.SecondRoot
+	return s.setSecond(ctx, "movie", m.ProfileID, m.RootFolder, &m.SecondProfileID, &m.SecondRoot, m.Second != nil, in)
+}
+
+// editSeriesSecond is editSecond for a show's second copies.
+func (s *Server) editSeriesSecond(ctx context.Context, t *store.Series, in editInput) (look bool, err error) {
+	onDisk := false
+	if in.SecondRoot != nil {
+		files, err := s.seriesSeconds(ctx, t.ID)
+		if err != nil {
+			return false, err
+		}
+		onDisk = len(files) > 0
+	}
+	return s.setSecond(ctx, "series", t.ProfileID, t.RootFolder, &t.SecondProfileID, &t.SecondRoot, onDisk, in)
+}
+
+// setSecond checks and sets a title's second copy as an edit asks:
+// profile and root are the title's own, second and secondRoot what's kept
+// for its second copy, and onDisk whether one is there already.
+func (s *Server) setSecond(ctx context.Context, kind string, profile int, root string, second *int, secondRoot *string, onDisk bool, in editInput) (look bool, err error) {
+	was, wasRoot := *second, *secondRoot
 	if in.SecondProfileID != nil {
-		m.SecondProfileID = *in.SecondProfileID
+		*second = *in.SecondProfileID
 	}
 	if in.SecondRoot != nil {
-		m.SecondRoot = *in.SecondRoot
+		*secondRoot = *in.SecondRoot
 	}
-	if m.SecondRoot != "" && filepath.Clean(m.SecondRoot) == filepath.Clean(m.RootFolder) {
-		m.SecondRoot = ""
+	if *secondRoot != "" && filepath.Clean(*secondRoot) == filepath.Clean(root) {
+		*secondRoot = ""
 	}
-	if m.SecondProfileID == 0 {
+	if onDisk && *secondRoot != wasRoot {
+		return false, errorf(http.StatusConflict, "there's a second copy on disk already; delete it first to keep it somewhere else")
+	}
+	if *second == 0 {
 		return false, nil
 	}
-	if m.SecondProfileID == was && m.SecondRoot == wasRoot && in.ProfileID == nil {
+	if *second == was && *secondRoot == wasRoot && in.ProfileID == nil {
 		return false, nil
 	}
-	p, err := s.Store.Profile(ctx, m.SecondProfileID)
+	p, err := s.Store.Profile(ctx, *second)
 	if err != nil {
 		return false, errorf(http.StatusBadRequest, "there's no such quality profile for the second copy")
 	}
 	if p.Locked {
 		return false, errorf(http.StatusBadRequest, "a second copy needs a profile that takes downloads, not Do not touch")
 	}
-	if m.SecondProfileID == m.ProfileID {
+	if *second == profile {
 		return false, errorf(http.StatusBadRequest, "pick another quality profile for the second copy than the first copy's")
 	}
-	if m.SecondRoot != "" {
-		fs, err := s.Store.RootFolders(ctx, "movie")
+	if *secondRoot != "" {
+		fs, err := s.Store.RootFolders(ctx, kind)
 		if err != nil {
 			return false, err
 		}
-		if !slices.ContainsFunc(fs, func(f store.RootFolder) bool { return f.Path == m.SecondRoot }) {
-			return false, errorf(http.StatusBadRequest, "the second copy's folder isn't one of the movie root folders")
+		if !slices.ContainsFunc(fs, func(f store.RootFolder) bool { return f.Path == *secondRoot }) {
+			return false, errorf(http.StatusBadRequest, "the second copy's folder isn't one of the root folders")
 		}
 	}
-	if m.Second != nil && m.SecondRoot != wasRoot {
-		return false, errorf(http.StatusConflict, "the second copy is on disk already; delete it first to keep it somewhere else")
+	return *second != was || *secondRoot != wasRoot && !onDisk, nil
+}
+
+// seriesSeconds are the second copies a show has on disk.
+func (s *Server) seriesSeconds(ctx context.Context, id int64) ([]store.File, error) {
+	eps, err := s.Store.Episodes(ctx, id)
+	if err != nil {
+		return nil, err
 	}
-	return m.Second == nil && (m.SecondProfileID != was || m.SecondRoot != wasRoot), nil
+	var files []store.File
+	for _, e := range eps {
+		if e.Second != nil {
+			files = append(files, *e.Second)
+		}
+	}
+	return files, nil
+}
+
+// seriesSecondPlan is the plan for deleting all of a show's second copies.
+func (s *Server) seriesSecondPlan(r *http.Request) (store.Series, []store.File, fileRemoval, error) {
+	id, err := pathID(r, "id")
+	if err != nil {
+		return store.Series{}, nil, fileRemoval{}, err
+	}
+	t, err := s.Store.Series(r.Context(), id)
+	if err != nil {
+		return t, nil, fileRemoval{}, err
+	}
+	files, err := s.seriesSeconds(r.Context(), id)
+	if err != nil {
+		return t, nil, fileRemoval{}, err
+	}
+	root, folder := t.SecondFolder()
+	fr := fileRemoval{Plan: library.FilesPlan(root, folder, files), Releases: []release{}, Watched: t.SecondProfileID != 0}
+	if err := s.lockPlan(r.Context(), "series", t.ID, &fr.Plan); err != nil {
+		return t, nil, fileRemoval{}, err
+	}
+	return t, files, fr, nil
+}
+
+// seriesSecondRemoval is GET /api/v1/series/{id}/second/removal: what
+// deleting the show's second copies would take.
+func (s *Server) seriesSecondRemoval(w http.ResponseWriter, r *http.Request) error {
+	_, _, p, err := s.seriesSecondPlan(r)
+	if err != nil {
+		return err
+	}
+	return writeJSON(w, http.StatusOK, p)
+}
+
+// deleteSeriesSecond is DELETE /api/v1/series/{id}/second: delete all of
+// the show's second copies, as planned and shown (expectFiles,
+// expectSize). unmonitor=true stops keeping second copies, so they aren't
+// fetched again. The first copies are never touched.
+func (s *Server) deleteSeriesSecond(w http.ResponseWriter, r *http.Request) error {
+	t, files, p, err := s.seriesSecondPlan(r)
+	if err != nil {
+		return err
+	}
+	if err := s.carryOut(r, p.Plan, t.Title+" (second copies)"); err != nil {
+		return err
+	}
+	ctx := r.Context()
+	for _, f := range files {
+		if err := s.Store.DeleteFile(ctx, f.ID); err != nil && err != store.ErrNotFound {
+			return err
+		}
+	}
+	if flag(r, "unmonitor") && t.SecondProfileID != 0 {
+		t.SecondProfileID = 0
+		if err := s.Store.UpdateSeries(ctx, t); err != nil {
+			return err
+		}
+	}
+	return s.series(w, r)
+}
+
+// seriesSecondKept is the folder a show's second copies are in when it's
+// outside the show's folder, so removing the show with its folder leaves
+// them on disk; "" when it has none there.
+func (s *Server) seriesSecondKept(ctx context.Context, t store.Series) (string, error) {
+	files, err := s.seriesSeconds(ctx, t.ID)
+	if err != nil {
+		return "", err
+	}
+	for _, f := range files {
+		if !inFolder(t.Path, f.Path) {
+			_, folder := t.SecondFolder()
+			if !inFolder(folder, f.Path) {
+				folder = filepath.Dir(f.Path)
+			}
+			return folder, nil
+		}
+	}
+	return "", nil
 }
 
 // secondPlan is the plan for deleting a movie's second copy.

@@ -224,7 +224,7 @@ export function MovieDetail() {
             </>
           )}
         </Card>
-        <SecondCopy movie={m} profiles={profiles.data ?? []} locked={locked} onChange={(e) => edit.mutate(e)} onDelete={() => setDeleteSecond(true)} facts={m.second && <FileFacts f={m.second} />} />
+        <SecondCopy kind="movie" title={m} have={!!m.second} profiles={profiles.data ?? []} locked={locked} onChange={(e) => edit.mutate(e)} onDelete={() => setDeleteSecond(true)} facts={m.second && <FileFacts f={m.second} />} />
       </div>
 
       {confirmDelete && <RemoveTitle kind="movie" id={m.id} title={m.title} onClose={() => setConfirmDelete(false)} onRemoved={removed} />}

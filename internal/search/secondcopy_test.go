@@ -2,6 +2,7 @@ package search
 
 import (
 	"context"
+	"fmt"
 	"strings"
 	"testing"
 
@@ -139,5 +140,81 @@ func TestSecondCopyBothMissing(t *testing.T) {
 	}
 	if len(list) != 2 || modes[""] != "The.Matrix.1999.1080p.BluRay.x264-GRP" || modes[ModeSecond] != "The.Matrix.1999.2160p.WEB-DL.x265-GRP" {
 		t.Fatalf("downloads %+v", modes)
+	}
+}
+
+// A show that keeps second copies has each episode looked for twice: the
+// first copies by the show's profile, the second by the second copies'.
+// Each pass has its own downloads, and an episode's second copy is wanted
+// until it's in.
+func TestSecondCopyShow(t *testing.T) {
+	srv, _ := indexer(t,
+		item("Show.S01.1080p.WEB-DL-GRP", "hd", 20e9),
+		item("Show.S01.2160p.WEB-DL-GRP", "uhd", 60e9),
+		item("Show.S01E04.2160p.WEB-DL-GRP", "uhd4", 15e9),
+		item("Show.S01E04.1080p.WEB-DL-GRP", "hd4", 5e9),
+	)
+	s, st, m := setup(t, srv.URL)
+	ctx := context.Background()
+	downloader.SaveSettings(ctx, st, downloader.Settings{Enabled: true})
+	st.SetSetting(ctx, SettingMinAge, "0")
+	ps, _ := st.Profiles(ctx)
+	show, eps := showWithEpisodes(t, st, m.ProfileID, 4)
+	show.SecondProfileID = ps[2].ID
+	if err := st.UpdateSeries(ctx, show); err != nil {
+		t.Fatal(err)
+	}
+	if got, _ := st.Series(ctx, show.ID); got.SecondProfileID != ps[2].ID {
+		t.Fatalf("show %+v", got)
+	}
+
+	r, err := s.jobSeries(ctx, fmt.Sprintf(`{"id":%d}`, show.ID))
+	if err != nil || !strings.Contains(r.Message, "; second copies: ") {
+		t.Fatalf("searched: %q %v", r.Message, err)
+	}
+	list, _ := st.Pending(ctx, "series", show.ID)
+	modes := map[string]string{}
+	for _, d := range list {
+		modes[d.Mode] = d.Name
+	}
+	if len(list) != 2 || modes[""] != "Show.S01.1080p.WEB-DL-GRP" || modes[ModeSecond] != "Show.S01.2160p.WEB-DL-GRP" {
+		t.Fatalf("downloads %+v", modes)
+	}
+	// Both on their way: nothing more is grabbed.
+	if _, err := s.jobSeries(ctx, fmt.Sprintf(`{"id":%d}`, show.ID)); err != nil {
+		t.Fatal(err)
+	}
+	if list, _ := st.Pending(ctx, "series", show.ID); len(list) != 2 {
+		t.Fatalf("%d downloads", len(list))
+	}
+	// In: every first copy, and all but the last episode's second copy.
+	for _, d := range list {
+		st.SetDownloadStatus(ctx, d.ID, "completed", "")
+		st.SetDownloadImported(ctx, d.ID, "/tv/Show/Season 01")
+	}
+	for i, e := range eps {
+		st.AddFile(ctx, store.File{Kind: "episode", OwnerID: e.ID, Path: fmt.Sprintf("/tv/Show/Season 01/e%d.mkv", i+1), Quality: 10})
+	}
+	for i, e := range eps[:3] {
+		st.AddFile(ctx, store.File{Kind: store.SecondEpisodeKind, OwnerID: e.ID, Path: fmt.Sprintf("/tv/Show/Season 01/e%d - WEB 2160p.mkv", i+1), Quality: 15})
+	}
+	eps, _ = st.Episodes(ctx, show.ID)
+	if eps[0].File == nil || eps[0].File.Quality != 10 || eps[0].Second == nil || eps[0].Second.Quality != 15 || eps[3].Second != nil {
+		t.Fatalf("copies %+v %+v", eps[0], eps[3])
+	}
+	w, err := s.WantedList(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(w) != 1 || w[0].Copy != ModeSecond || w[0].ID != eps[3].ID || w[0].Upgrade {
+		t.Fatalf("wanted %+v", w)
+	}
+	// Searching the one episode fetches its second copy alone.
+	if _, err := s.jobEpisode(ctx, fmt.Sprintf(`{"id":%d}`, eps[3].ID)); err != nil {
+		t.Fatal(err)
+	}
+	list, _ = st.Pending(ctx, "series", show.ID)
+	if len(list) != 1 || list[0].Mode != ModeSecond || list[0].Name != "Show.S01E04.2160p.WEB-DL-GRP" {
+		t.Fatalf("downloads %+v", list)
 	}
 }

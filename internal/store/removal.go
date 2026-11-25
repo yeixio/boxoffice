@@ -34,10 +34,10 @@ func (s *Store) OtherTitleIn(ctx context.Context, folder, kind string, id int64)
 	var path string
 	var err error
 	if kind == "movie" {
-		err = s.row(ctx, "SELECT path FROM media_files WHERE substr(path, 1, ?) = ? AND NOT (kind = 'movie' AND owner_id = ?) LIMIT 1", n, prefix, id).Scan(&path)
+		err = s.row(ctx, "SELECT path FROM media_files WHERE substr(path, 1, ?) = ? AND NOT (kind IN ('movie', 'edition', 'second') AND owner_id = ?) LIMIT 1", n, prefix, id).Scan(&path)
 	} else {
 		err = s.row(ctx, `SELECT path FROM media_files WHERE substr(path, 1, ?) = ?
-			AND NOT (kind = 'episode' AND owner_id IN (SELECT id FROM episodes WHERE series_id = ?)) LIMIT 1`, n, prefix, id).Scan(&path)
+			AND NOT (kind IN ('episode', 'episode2') AND owner_id IN (SELECT id FROM episodes WHERE series_id = ?)) LIMIT 1`, n, prefix, id).Scan(&path)
 	}
 	if err == nil {
 		return "another title's file " + filepath.Base(path), nil
