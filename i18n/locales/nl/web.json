@@ -35,7 +35,8 @@
   "app": {
     "notAnswering": "Box Office reageert niet: {{error}}",
     "closeMenu": "Menu sluiten",
-    "menu": "Menu"
+    "menu": "Menu",
+    "typeOff": "{{name}} staat uit. Zet het aan onder <link>Instellingen → Bibliotheek</link>."
   },
   "signIn": {
     "mismatch": "De wachtwoorden komen niet overeen.",
@@ -1048,7 +1049,7 @@
     "more": "Meer dan films en tv",
     "moreSub": "Zet de andere soorten media aan waar Box Office voor moet zorgen. Elke soort staat uit tot je hem aanzet, en later uitzetten bewaart de mappen en instellingen. Box Office wijzigt nooit bestanden die al in deze bibliotheken staan.",
     "inPlaceOf": "(in plaats van {{app}})",
-    "pickRoot": "Kies hieronder een hoofdmap voor elke soort die je hebt aangezet. Toevoegen en zoeken voor deze soorten komt in de volgende updates van Box Office.",
+    "pickRoot": "Kies hieronder een hoofdmap voor elke soort die je hebt aangezet.",
     "roots": {
       "movie": "Hoofdmappen voor films",
       "series": "Hoofdmappen voor tv",

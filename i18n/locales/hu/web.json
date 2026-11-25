@@ -35,7 +35,8 @@
   "app": {
     "notAnswering": "A Box Office nem válaszol: {{error}}",
     "closeMenu": "Menü bezárása",
-    "menu": "Menü"
+    "menu": "Menü",
+    "typeOff": "{{name}}: ez a rész ki van kapcsolva. Itt kapcsolhatod be: <link>Beállítások → Könyvtár</link>."
   },
   "signIn": {
     "mismatch": "A jelszavak nem egyeznek.",
@@ -1048,7 +1049,7 @@
     "more": "Több mint filmek és TV",
     "moreSub": "Kapcsold be a többi médiatípust, amelyet a Box Office-ra szeretnél bízni. Mindegyik ki van kapcsolva, amíg be nem kapcsolod, és ha később kikapcsolod, megtartja a mappáit és beállításait. A Box Office soha nem módosítja az ezekben a könyvtárakban már meglévő fájlokat.",
     "inPlaceOf": "({{app}} helyett)",
-    "pickRoot": "Lent válassz gyökérmappát minden bekapcsolt típushoz. Ezek hozzáadása és keresése a Box Office következő frissítéseiben érkezik.",
+    "pickRoot": "Lent válassz gyökérmappát minden bekapcsolt típushoz.",
     "roots": {
       "movie": "Film gyökérmappák",
       "series": "TV gyökérmappák",

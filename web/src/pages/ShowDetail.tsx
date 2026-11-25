@@ -282,7 +282,7 @@ function SeasonBlock({
                     )}
                     {!locked && aired && e.monitored && !(e.held && !e.file) && (!e.file || upgrade) && (
                       <button
-                        className="rounded px-1.5 py-0.5 text-xs text-marquee hover:bg-line"
+                        className="inline-flex min-h-11 items-center rounded px-2 py-0.5 text-xs font-medium text-ink underline decoration-line underline-offset-4 hover:bg-line sm:min-h-0 sm:px-1.5"
                         onClick={() => search.mutate(e)}
                         title={e.file ? t('show.betterCopy') : t('show.grabBest')}
                       >
@@ -291,7 +291,7 @@ function SeasonBlock({
                     )}
                     {aired && !locked && (
                       <button
-                        className="flex items-center gap-1 rounded px-1.5 py-0.5 text-xs text-muted hover:bg-line hover:text-ink"
+                        className="flex min-h-11 items-center gap-1 rounded px-2 py-0.5 text-xs text-muted hover:bg-line hover:text-ink sm:min-h-0 sm:px-1.5"
                         onClick={() => setReleases(e)}
                         aria-label={t('show.chooseFor', { episode: episodeCode(e.season, e.number) })}
                       >
@@ -300,7 +300,7 @@ function SeasonBlock({
                     )}
                     {e.file && !locked && (
                       <button
-                        className="rounded p-1 text-muted hover:bg-line hover:text-bad"
+                        className="flex min-h-11 min-w-11 items-center justify-center rounded p-1 text-muted hover:bg-line hover:text-bad sm:min-h-0 sm:min-w-0"
                         onClick={() => setDeleting(e)}
                         aria-label={t('show.deleteEpisode', { episode: episodeCode(e.season, e.number) })}
                         title={t('show.deleteItsFile')}

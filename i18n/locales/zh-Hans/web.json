@@ -33,7 +33,8 @@
   "app": {
     "notAnswering": "Box Office 没有响应：{{error}}",
     "closeMenu": "关闭菜单",
-    "menu": "菜单"
+    "menu": "菜单",
+    "typeOff": "{{name}}已关闭。请在<link>设置 → 媒体库</link>中打开。"
   },
   "signIn": {
     "mismatch": "两次输入的密码不一致。",
@@ -974,7 +975,7 @@
     "more": "不只电影和电视",
     "moreSub": "打开你希望 Box Office 管理的其他媒体类型。每种在打开前都是关闭的，之后关闭也会保留其文件夹和设置。Box Office 从不更改这些媒体库中已有的文件。",
     "inPlaceOf": "（代替 {{app}}）",
-    "pickRoot": "为你打开的每种类型在下方选择一个根文件夹。添加和搜索这些内容将在 Box Office 的后续更新中推出。",
+    "pickRoot": "为你打开的每种类型在下方选择一个根文件夹。",
     "roots": {
       "movie": "电影根文件夹",
       "series": "电视根文件夹",

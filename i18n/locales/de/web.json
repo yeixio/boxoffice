@@ -35,7 +35,8 @@
   "app": {
     "notAnswering": "Box Office antwortet nicht: {{error}}",
     "closeMenu": "Menü schließen",
-    "menu": "Menü"
+    "menu": "Menü",
+    "typeOff": "{{name}} ist ausgeschaltet. Schalte es unter <link>Einstellungen → Mediathek</link> ein."
   },
   "signIn": {
     "mismatch": "Die Passwörter stimmen nicht überein.",
@@ -1048,7 +1049,7 @@
     "more": "Mehr als Filme und TV",
     "moreSub": "Schalte die anderen Medienarten ein, um die sich Box Office kümmern soll. Jede ist aus, bis du sie einschaltest, und wenn du eine später ausschaltest, bleiben ihre Ordner und Einstellungen erhalten. Box Office ändert nie Dateien, die schon in diesen Bibliotheken liegen.",
     "inPlaceOf": "(anstelle von {{app}})",
-    "pickRoot": "Wähle unten für jede eingeschaltete Art einen Stammordner. Hinzufügen und Suchen dafür kommt mit den nächsten Updates von Box Office.",
+    "pickRoot": "Wähle unten für jede eingeschaltete Art einen Stammordner.",
     "roots": {
       "movie": "Film-Stammordner",
       "series": "TV-Stammordner",

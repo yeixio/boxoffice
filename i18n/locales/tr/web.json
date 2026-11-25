@@ -35,7 +35,8 @@
   "app": {
     "notAnswering": "Box Office yanıt vermiyor: {{error}}",
     "closeMenu": "Menüyü kapat",
-    "menu": "Menü"
+    "menu": "Menü",
+    "typeOff": "{{name}} kapalı. <link>Ayarlar → Kütüphane</link> altından açın."
   },
   "signIn": {
     "mismatch": "Parolalar eşleşmiyor.",
@@ -1048,7 +1049,7 @@
     "more": "Filmler ve TV'den fazlası",
     "moreSub": "Box Office'in ilgilenmesini istediğiniz diğer medya türlerini açın. Her biri siz açana kadar kapalıdır ve daha sonra kapatırsanız klasörlerini ve ayarlarını korur. Box Office bu kütüphanelerde zaten bulunan dosyaları asla değiştirmez.",
     "inPlaceOf": "({{app}} yerine)",
-    "pickRoot": "Açtığınız her biri için aşağıdan bir kök klasör seçin. Bunları ekleme ve arama bir sonraki Box Office güncellemelerinde geliyor.",
+    "pickRoot": "Açtığınız her biri için aşağıdan bir kök klasör seçin.",
     "roots": {
       "movie": "Film kök klasörleri",
       "series": "TV kök klasörleri",

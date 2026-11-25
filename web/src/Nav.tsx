@@ -87,7 +87,9 @@ export function useNav(status: Status) {
   const rate = dl?.settings.enabled && !dl.settings.paused ? dl.speed : 0
   const counts = useRequestCounts().data
   const waiting = counts ? counts.requests + counts.issues : 0
-  return { groups, problems, rate, waiting }
+  // Downloads still to come in, for the browser tab's title.
+  const queued = dl?.queue?.length ?? 0
+  return { groups, problems, rate, waiting, queued, on, ready: !!settings.data }
 }
 
 type Nav = ReturnType<typeof useNav>
@@ -122,7 +124,7 @@ export function Logo({ compact, small }: { compact?: boolean; small?: boolean })
       <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-marquee text-marquee-ink">
         <Clapperboard className="size-4.5" aria-hidden />
       </span>
-      {!compact && <span className={`truncate font-display font-bold uppercase ${small ? 'text-base tracking-[0.14em]' : 'text-lg tracking-[0.18em]'}`}>Box Office</span>}
+      {!compact && <span className={`truncate font-display max-[359px]:sr-only font-bold uppercase ${small ? 'text-base tracking-[0.14em]' : 'text-lg tracking-[0.18em]'}`}>Box Office</span>}
     </NavLink>
   )
 }

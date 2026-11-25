@@ -5,7 +5,7 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { AlertTriangle, CircleCheck, Info, RefreshCw, XCircle } from 'lucide-react'
 import { get, type Health as HealthData, type HealthIssue, type LogLevel } from '../api'
 import { when } from '../format'
-import { Button, Card, ErrorNote, Heading, Spinner } from '../ui'
+import { Button, Card, ErrorNote, Heading, Spinner, TabRow } from '../ui'
 import { ServerMonitor } from './ServerMonitor'
 import { LogViewer, type LogSearch } from './LogViewer'
 import { AlertSettings } from './AlertSettings'
@@ -55,7 +55,7 @@ export function Health() {
   return (
     <>
       <Heading title={t('nav.health')} sub={t(subs[tab])} actions={tab === 'checkup' ? <CheckAgain /> : undefined} />
-      <div className="mb-6 flex gap-1 overflow-x-auto border-b border-line" role="tablist" aria-label={t('nav.health')}>
+      <TabRow selected={tab} label={t('nav.health')}>
         {tabs.map((x) => (
           <button
             key={x.id}
@@ -67,7 +67,7 @@ export function Health() {
             {t(x.label)}
           </button>
         ))}
-      </div>
+      </TabRow>
       <div role="tabpanel">
         {tab === 'checkup' && <Checkup />}
         {tab === 'server' && <ServerMonitor onShowLog={showLog} />}

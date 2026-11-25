@@ -35,7 +35,8 @@
   "app": {
     "notAnswering": "Box Office isn't answering: {{error}}",
     "closeMenu": "Close menu",
-    "menu": "Menu"
+    "menu": "Menu",
+    "typeOff": "{{name}} is turned off. Turn it on under <link>Settings → Library</link>."
   },
   "signIn": {
     "mismatch": "The passwords don't match.",
@@ -1048,7 +1049,7 @@
     "more": "More than movies and TV",
     "moreSub": "Turn on the other kinds of media you want Box Office to look after. Each is off until you turn it on, and turning one off later keeps its folders and settings. Box Office never changes files already in these libraries.",
     "inPlaceOf": "(in place of {{app}})",
-    "pickRoot": "Pick a root folder for each one you turned on, below. Adding and searching for these arrives in the next Box Office updates.",
+    "pickRoot": "Pick a root folder for each one you turned on, below.",
     "roots": {
       "movie": "Movie root folders",
       "series": "TV root folders",
