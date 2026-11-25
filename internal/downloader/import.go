@@ -274,6 +274,28 @@ func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir str
 		for _, m := range mainVideos(dir, vids, true) {
 			main[m.name] = true
 		}
+		if !named && t.Numbering == store.NumberingAbsolute && d.Mode != ModeEpisode {
+			// Anime numbered straight through: "[Group] Show - 137.mkv" is
+			// the show's 137th episode. Only episodes the download was
+			// grabbed for are taken, when it was grabbed for some.
+			byNumber := store.AbsoluteNumbers(eps)
+			for _, v := range vids {
+				base := filepath.Base(v)
+				var t2 target
+				for i, n := range quality.AbsoluteEpisodes(strings.TrimSuffix(base, filepath.Ext(base)), t.Title, true) {
+					e, ok := byNumber[n]
+					if !ok || (i > 0 && e.Season != t2.season) || (len(d.EpisodeIDs) > 0 && !slices.Contains(d.EpisodeIDs, e.ID)) {
+						t2.numbers = nil
+						break
+					}
+					t2.season, t2.numbers = e.Season, append(t2.numbers, e.Number)
+				}
+				if len(t2.numbers) > 0 {
+					targets[v] = t2
+					named = true
+				}
+			}
+		}
 		if d.Mode == ModeEpisode {
 			i := -1
 			if len(d.EpisodeIDs) == 1 {

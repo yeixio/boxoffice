@@ -465,7 +465,16 @@
     "choose": "चुनें",
     "deleteEpisode": "{{episode}} की फ़ाइल डिस्क से हटाएँ",
     "deleteItsFile": "इसकी फ़ाइल डिस्क से हटाएँ",
-    "seasonOf": "{{show}} {{season}}"
+    "seasonOf": "{{show}} {{season}}",
+    "numbering": "रिलीज़ में एपिसोड की गिनती",
+    "numberingHint": "“Show - 137” जैसे नाम वाली रिलीज़ उनके सीज़न और एपिसोड से मिलाई जाती हैं। हर एपिसोड नाम और संख्या से भी खोजा जाता है, जिसमें एक खोज और लगती है।",
+    "numberingStandard": "सीज़न और एपिसोड से (S02E05)",
+    "numberingAbsolute": "लगातार, जैसे एनीमे में (Show - 137)",
+    "audio": "डब या सबटाइटल",
+    "audioHint": "रिलीज़ के नाम पर चलता है: Dubbed, Dual Audio, MULTi, Subbed। जिस नाम में कुछ नहीं लिखा, उसे मूल आवाज़ माना जाता है।",
+    "audioAny": "कोई भी",
+    "audioDub": "डब, या दोनों के साथ",
+    "audioSub": "मूल आवाज़"
   },
   "health": {
     "error": "काम नहीं कर रहा",

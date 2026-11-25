@@ -437,7 +437,16 @@
     "choose": "Pilih",
     "deleteEpisode": "Hapus file {{episode}} dari disk",
     "deleteItsFile": "Hapus filenya dari disk",
-    "seasonOf": "{{show}} {{season}}"
+    "seasonOf": "{{show}} {{season}}",
+    "numbering": "Penomoran episode pada rilis",
+    "numberingHint": "Rilis bernama seperti “Show - 137” dicocokkan dengan musim dan episodenya. Tiap episode juga dicari menurut nama dan nomor, yang memakan satu pencarian lagi.",
+    "numberingStandard": "Menurut musim dan episode (S02E05)",
+    "numberingAbsolute": "Berurutan, seperti anime (Show - 137)",
+    "audio": "Sulih suara atau subtitle",
+    "audioHint": "Mengikuti apa yang tertulis di nama rilis: Dubbed, Dual Audio, MULTi, Subbed. Nama yang tidak menyebut apa pun dianggap suara asli.",
+    "audioAny": "Yang mana saja",
+    "audioDub": "Sulih suara, atau keduanya",
+    "audioSub": "Suara asli"
   },
   "health": {
     "error": "Tidak berjalan",

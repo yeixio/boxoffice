@@ -437,7 +437,16 @@
     "choose": "고르기",
     "deleteEpisode": "디스크에서 {{episode}} 파일 삭제",
     "deleteItsFile": "디스크에서 파일 삭제",
-    "seasonOf": "{{show}} {{season}}"
+    "seasonOf": "{{show}} {{season}}",
+    "numbering": "릴리스의 에피소드 번호 방식",
+    "numberingHint": "“Show - 137” 같은 이름의 릴리스를 해당 시즌과 에피소드에 맞춰요. 각 에피소드를 이름과 번호로도 검색해서 검색이 한 번 더 들어요.",
+    "numberingStandard": "시즌과 에피소드 (S02E05)",
+    "numberingAbsolute": "애니메이션처럼 통째로 이어서 (Show - 137)",
+    "audio": "더빙 또는 자막",
+    "audioHint": "릴리스 이름에 적힌 Dubbed, Dual Audio, MULTi, Subbed를 따라요. 아무 표시가 없는 이름은 원음으로 봐요.",
+    "audioAny": "상관없음",
+    "audioDub": "더빙, 또는 둘 다 포함",
+    "audioSub": "원음"
   },
   "health": {
     "error": "작동 안 함",

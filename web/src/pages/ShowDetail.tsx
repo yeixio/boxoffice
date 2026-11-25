@@ -33,7 +33,7 @@ export function ShowDetail() {
     qc.setQueryData(key, d)
     qc.invalidateQueries({ queryKey: ['series'] })
   }
-  const edit = useMutation({ mutationFn: (body: Partial<Pick<Series, 'monitored' | 'profileId' | 'autoUpgrade' | 'keepAhead'>> & SecondCopyEdit) => patch<Detail>(`/series/${id}`, body), onSuccess: set })
+  const edit = useMutation({ mutationFn: (body: Partial<Pick<Series, 'monitored' | 'profileId' | 'autoUpgrade' | 'keepAhead' | 'numbering' | 'audio'>> & SecondCopyEdit) => patch<Detail>(`/series/${id}`, body), onSuccess: set })
   const season = useMutation({ mutationFn: ({ n, monitored }: { n: number; monitored: boolean }) => patch<Detail>(`/series/${id}/seasons/${n}`, { monitored }), onSuccess: set })
   const action = useMutation({
     mutationFn: (what: 'search' | 'refresh') => post(`/series/${id}/${what}`),
@@ -110,6 +110,37 @@ export function ShowDetail() {
           </Field>
           {!locked && <AutoUpgradeField value={s.autoUpgrade} onChange={(v) => edit.mutate({ autoUpgrade: v as Series['autoUpgrade'] })} upgradeOK={!!profiles.data?.find((p) => p.id === s.profileId)?.upgrade} />}
           {!locked && <SpaceSaverField value={s.keepAhead} onChange={(n) => edit.mutate({ keepAhead: n })} watched={show.data.watched} />}
+          {!locked && (
+            <Field label={t('show.numbering')} hint={s.numbering === 'absolute' ? t('show.numberingHint') : undefined}>
+              {(fid) => (
+                <Select
+                  id={fid}
+                  value={s.numbering ?? ''}
+                  onChange={(v) => edit.mutate({ numbering: v as Series['numbering'] })}
+                  options={[
+                    { value: '', label: t('show.numberingStandard') },
+                    { value: 'absolute', label: t('show.numberingAbsolute') },
+                  ]}
+                />
+              )}
+            </Field>
+          )}
+          {!locked && (
+            <Field label={t('show.audio')} hint={s.audio ? t('show.audioHint') : undefined}>
+              {(fid) => (
+                <Select
+                  id={fid}
+                  value={s.audio ?? ''}
+                  onChange={(v) => edit.mutate({ audio: v as Series['audio'] })}
+                  options={[
+                    { value: '', label: t('show.audioAny') },
+                    { value: 'dub', label: t('show.audioDub') },
+                    { value: 'sub', label: t('show.audioSub') },
+                  ]}
+                />
+              )}
+            </Field>
+          )}
         </div>
         <div className="mt-3 text-sm">
           <span className="text-muted">{t('title.folder')} </span>

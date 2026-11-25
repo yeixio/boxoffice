@@ -216,6 +216,10 @@ export type Series = {
   autoUpgrade?: '' | 'on' | 'off'
   // Space saver: fetch only this many episodes past the latest one watched; 0 is off.
   keepAhead: number
+  // How its releases number episodes ('' is S02E05; absolute is anime's
+  // "Show - 137"), and the sound wanted ('' is either).
+  numbering?: '' | 'absolute'
+  audio?: '' | 'dub' | 'sub'
   // Second copies of its episodes kept at another quality: their profile
   // (0 or unset for none) and the library folder they go in ("" for next
   // to the first copies).

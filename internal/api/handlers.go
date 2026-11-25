@@ -566,6 +566,10 @@ type editInput struct {
 	// none), and the library folder it goes in ("" for next to the first).
 	SecondProfileID *int    `json:"secondProfileId"`
 	SecondRoot      *string `json:"secondRoot"`
+	// A show's releases: "" numbered by season and episode, or "absolute"
+	// (anime); and the sound wanted: "" for either, "dub" or "sub".
+	Numbering *string `json:"numbering"`
+	Audio     *string `json:"audio"`
 }
 
 func (s *Server) checkEdit(r *http.Request, in editInput, kind string) error {
@@ -576,6 +580,17 @@ func (s *Server) checkEdit(r *http.Request, in editInput, kind string) error {
 	}
 	if in.AutoUpgrade != nil && *in.AutoUpgrade != "" && *in.AutoUpgrade != "on" && *in.AutoUpgrade != "off" {
 		return errorf(http.StatusBadRequest, `automatic upgrades are "on", "off", or "" to follow Settings`)
+	}
+	if in.Numbering != nil || in.Audio != nil {
+		if kind != "series" {
+			return errorf(http.StatusBadRequest, "episode numbering and dubbing are for shows")
+		}
+		if in.Numbering != nil && *in.Numbering != "" && *in.Numbering != store.NumberingAbsolute {
+			return errorf(http.StatusBadRequest, `numbering is "" for season and episode, or "absolute"`)
+		}
+		if in.Audio != nil && *in.Audio != "" && *in.Audio != store.AudioDubbed && *in.Audio != store.AudioOriginal {
+			return errorf(http.StatusBadRequest, `audio is "" for either, "dub" or "sub"`)
+		}
 	}
 	if in.KeepAhead != nil {
 		if kind != "series" {
@@ -821,6 +836,12 @@ func (s *Server) editSeries(w http.ResponseWriter, r *http.Request) error {
 	}
 	if in.AutoUpgrade != nil {
 		t.AutoUpgrade = *in.AutoUpgrade
+	}
+	if in.Numbering != nil {
+		t.Numbering = *in.Numbering
+	}
+	if in.Audio != nil {
+		t.Audio = *in.Audio
 	}
 	saver := in.KeepAhead != nil && *in.KeepAhead != t.KeepAhead
 	if saver {

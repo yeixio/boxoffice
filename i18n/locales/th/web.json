@@ -437,7 +437,16 @@
     "choose": "เลือก",
     "deleteEpisode": "ลบไฟล์ของ {{episode}} ออกจากดิสก์",
     "deleteItsFile": "ลบไฟล์ออกจากดิสก์",
-    "seasonOf": "{{show}} {{season}}"
+    "seasonOf": "{{show}} {{season}}",
+    "numbering": "การนับตอนในรีลีส",
+    "numberingHint": "รีลีสที่ตั้งชื่อแบบ “Show - 137” จะถูกจับคู่กับซีซันและตอนของมัน แต่ละตอนจะถูกค้นหาด้วยชื่อและเลขตอนด้วย ซึ่งใช้การค้นหาเพิ่มอีกหนึ่งครั้ง",
+    "numberingStandard": "ตามซีซันและตอน (S02E05)",
+    "numberingAbsolute": "นับต่อเนื่องแบบอนิเมะ (Show - 137)",
+    "audio": "พากย์หรือซับ",
+    "audioHint": "ดูจากชื่อรีลีส: Dubbed, Dual Audio, MULTi, Subbed ชื่อที่ไม่ระบุอะไรถือว่าเป็นเสียงต้นฉบับ",
+    "audioAny": "แบบใดก็ได้",
+    "audioDub": "พากย์ หรือมีทั้งสองอย่าง",
+    "audioSub": "เสียงต้นฉบับ"
   },
   "health": {
     "error": "ใช้งานไม่ได้",

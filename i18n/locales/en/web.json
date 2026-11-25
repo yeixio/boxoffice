@@ -465,7 +465,16 @@
     "choose": "Choose",
     "deleteEpisode": "Delete {{episode}}'s file from disk",
     "deleteItsFile": "Delete its file from disk",
-    "seasonOf": "{{show}} {{season}}"
+    "seasonOf": "{{show}} {{season}}",
+    "numbering": "Episode numbering in releases",
+    "numberingHint": "Releases named like “Show - 137” are matched to their season and episode. Each episode is also searched for by name and number, which takes one more search.",
+    "numberingStandard": "By season and episode (S02E05)",
+    "numberingAbsolute": "Straight through, as anime is (Show - 137)",
+    "audio": "Dubbed or subtitled",
+    "audioHint": "Goes by what a release's name says: Dubbed, Dual Audio, MULTi, Subbed. A name that says nothing counts as original sound.",
+    "audioAny": "Either",
+    "audioDub": "Dubbed, or with both",
+    "audioSub": "Original sound"
   },
   "health": {
     "error": "Not working",

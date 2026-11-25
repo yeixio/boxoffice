@@ -521,7 +521,16 @@
     "choose": "Wybierz",
     "deleteEpisode": "Usuń z dysku plik {{episode}}",
     "deleteItsFile": "Usuń jego plik z dysku",
-    "seasonOf": "{{show}} {{season}}"
+    "seasonOf": "{{show}} {{season}}",
+    "numbering": "Numeracja odcinków w wydaniach",
+    "numberingHint": "Wydania o nazwach typu „Show - 137” są dopasowywane do sezonu i odcinka. Każdy odcinek jest też wyszukiwany po nazwie i numerze, co kosztuje jedno wyszukiwanie więcej.",
+    "numberingStandard": "Według sezonu i odcinka (S02E05)",
+    "numberingAbsolute": "Ciągła, jak w anime (Show - 137)",
+    "audio": "Dubbing czy napisy",
+    "audioHint": "Zależy od tego, co mówi nazwa wydania: Dubbed, Dual Audio, MULTi, Subbed. Nazwa, która nic nie mówi, liczy się jako oryginalny dźwięk.",
+    "audioAny": "Dowolnie",
+    "audioDub": "Z dubbingiem albo z obydwoma",
+    "audioSub": "Oryginalny dźwięk"
   },
   "health": {
     "error": "Nie działa",

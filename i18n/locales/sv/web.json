@@ -465,7 +465,16 @@
     "choose": "Välj",
     "deleteEpisode": "Radera filen för {{episode}} från disken",
     "deleteItsFile": "Radera filen från disken",
-    "seasonOf": "{{show}} {{season}}"
+    "seasonOf": "{{show}} {{season}}",
+    "numbering": "Avsnittsnumrering i släpp",
+    "numberingHint": "Släpp med namn som ”Show - 137” matchas mot rätt säsong och avsnitt. Varje avsnitt söks också efter namn och nummer, vilket kostar en sökning till.",
+    "numberingStandard": "Efter säsong och avsnitt (S02E05)",
+    "numberingAbsolute": "Löpande, som anime (Show - 137)",
+    "audio": "Dubbat eller textat",
+    "audioHint": "Går efter vad släppets namn säger: Dubbed, Dual Audio, MULTi, Subbed. Ett namn som inte säger något räknas som originalljud.",
+    "audioAny": "Vilket som",
+    "audioDub": "Dubbat, eller med båda",
+    "audioSub": "Originalljud"
   },
   "health": {
     "error": "Fungerar inte",

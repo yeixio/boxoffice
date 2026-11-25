@@ -437,7 +437,16 @@
     "choose": "選擇",
     "deleteEpisode": "從磁碟刪除 {{episode}} 的檔案",
     "deleteItsFile": "從磁碟刪除它的檔案",
-    "seasonOf": "{{show}} {{season}}"
+    "seasonOf": "{{show}} {{season}}",
+    "numbering": "發布中的集數編號方式",
+    "numberingHint": "名稱類似「Show - 137」的發布會對應到所屬的季和集。每一集還會依名稱和編號再搜尋一次，因此多用一次搜尋。",
+    "numberingStandard": "依季和集 (S02E05)",
+    "numberingAbsolute": "連續編號，動畫常用 (Show - 137)",
+    "audio": "配音還是字幕",
+    "audioHint": "依據發布名稱中的標示：Dubbed、Dual Audio、MULTi、Subbed。名稱中沒有標示的視為原音。",
+    "audioAny": "都可以",
+    "audioDub": "配音，或兩者都有",
+    "audioSub": "原音"
   },
   "health": {
     "error": "無法使用",

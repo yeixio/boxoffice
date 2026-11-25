@@ -437,7 +437,16 @@
     "choose": "Pilih",
     "deleteEpisode": "Padam fail {{episode}} daripada cakera",
     "deleteItsFile": "Padam failnya daripada cakera",
-    "seasonOf": "{{show}} {{season}}"
+    "seasonOf": "{{show}} {{season}}",
+    "numbering": "Penomboran episod dalam keluaran",
+    "numberingHint": "Keluaran bernama seperti “Show - 137” dipadankan dengan musim dan episodnya. Setiap episod juga dicari mengikut nama dan nombor, yang memerlukan satu carian lagi.",
+    "numberingStandard": "Mengikut musim dan episod (S02E05)",
+    "numberingAbsolute": "Berterusan, seperti anime (Show - 137)",
+    "audio": "Alih suara atau sari kata",
+    "audioHint": "Mengikut apa yang dinyatakan pada nama keluaran: Dubbed, Dual Audio, MULTi, Subbed. Nama yang tidak menyatakan apa-apa dikira sebagai suara asal.",
+    "audioAny": "Mana-mana",
+    "audioDub": "Alih suara, atau kedua-duanya",
+    "audioSub": "Suara asal"
   },
   "health": {
     "error": "Tidak berfungsi",

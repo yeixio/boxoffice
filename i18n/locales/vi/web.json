@@ -437,7 +437,16 @@
     "choose": "Chọn",
     "deleteEpisode": "Xóa tệp của {{episode}} khỏi ổ đĩa",
     "deleteItsFile": "Xóa tệp của nó khỏi ổ đĩa",
-    "seasonOf": "{{show}} {{season}}"
+    "seasonOf": "{{show}} {{season}}",
+    "numbering": "Cách đánh số tập trong bản phát hành",
+    "numberingHint": "Bản phát hành có tên kiểu “Show - 137” được khớp với mùa và tập của nó. Mỗi tập cũng được tìm theo tên và số, tốn thêm một lượt tìm.",
+    "numberingStandard": "Theo mùa và tập (S02E05)",
+    "numberingAbsolute": "Liền mạch, như anime (Show - 137)",
+    "audio": "Lồng tiếng hay phụ đề",
+    "audioHint": "Dựa vào tên bản phát hành: Dubbed, Dual Audio, MULTi, Subbed. Tên không ghi gì được coi là âm thanh gốc.",
+    "audioAny": "Loại nào cũng được",
+    "audioDub": "Lồng tiếng, hoặc có cả hai",
+    "audioSub": "Âm thanh gốc"
   },
   "health": {
     "error": "Không hoạt động",

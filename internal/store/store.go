@@ -142,6 +142,8 @@ func migrateSchema(ctx context.Context, db schemaRunner, postgres bool) error {
 		{"movies", "second_root", "TEXT NOT NULL DEFAULT ''"},
 		{"series", "second_profile_id", "INTEGER NOT NULL DEFAULT 0"},
 		{"series", "second_root", "TEXT NOT NULL DEFAULT ''"},
+		{"series", "numbering", "TEXT NOT NULL DEFAULT ''"},
+		{"series", "audio", "TEXT NOT NULL DEFAULT ''"},
 		{"downloads", "edition", "TEXT NOT NULL DEFAULT ''"},
 		{"downloads", "mode", "TEXT NOT NULL DEFAULT ''"},
 		{"authors", "locked", "INTEGER NOT NULL DEFAULT 0"},

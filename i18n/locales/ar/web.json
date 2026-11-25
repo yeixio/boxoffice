@@ -577,7 +577,16 @@
     "choose": "اختيار",
     "deleteEpisode": "حذف ملف {{episode}} من القرص",
     "deleteItsFile": "حذف ملفه من القرص",
-    "seasonOf": "{{show}} {{season}}"
+    "seasonOf": "{{show}} {{season}}",
+    "numbering": "ترقيم الحلقات في الإصدارات",
+    "numberingHint": "الإصدارات المسماة مثل «Show - 137» تُطابَق مع موسمها وحلقتها. يُبحث عن كل حلقة أيضًا بالاسم والرقم، ما يتطلب بحثًا إضافيًا واحدًا.",
+    "numberingStandard": "حسب الموسم والحلقة (S02E05)",
+    "numberingAbsolute": "متتابع كما في الأنمي (Show - 137)",
+    "audio": "مدبلج أم مترجم",
+    "audioHint": "يُعتمد على ما يقوله اسم الإصدار: Dubbed أو Dual Audio أو MULTi أو Subbed. الاسم الذي لا يذكر شيئًا يُعدّ بالصوت الأصلي.",
+    "audioAny": "أيٌّ منهما",
+    "audioDub": "مدبلج، أو بكليهما",
+    "audioSub": "الصوت الأصلي"
   },
   "health": {
     "error": "لا يعمل",

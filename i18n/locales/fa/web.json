@@ -465,7 +465,16 @@
     "choose": "انتخاب",
     "deleteEpisode": "حذف فایل {{episode}} از دیسک",
     "deleteItsFile": "حذف فایلش از دیسک",
-    "seasonOf": "{{show}} {{season}}"
+    "seasonOf": "{{show}} {{season}}",
+    "numbering": "شماره‌گذاری قسمت‌ها در انتشارها",
+    "numberingHint": "انتشارهایی با نام‌هایی مانند «Show - 137» با فصل و قسمتشان تطبیق داده می‌شوند. هر قسمت با نام و شماره هم جست‌وجو می‌شود که یک جست‌وجوی بیشتر می‌برد.",
+    "numberingStandard": "بر اساس فصل و قسمت (S02E05)",
+    "numberingAbsolute": "پیوسته، مانند انیمه (Show - 137)",
+    "audio": "دوبله یا زیرنویس",
+    "audioHint": "بر پایهٔ چیزی است که نام انتشار می‌گوید: Dubbed، Dual Audio، MULTi، Subbed. نامی که چیزی نمی‌گوید صدای اصلی به شمار می‌آید.",
+    "audioAny": "هرکدام",
+    "audioDub": "دوبله، یا هر دو",
+    "audioSub": "صدای اصلی"
   },
   "health": {
     "error": "کار نمی‌کند",

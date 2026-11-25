@@ -56,14 +56,30 @@ func (s *Service) judgeEpisodes(ctx context.Context, r Release, t store.Series, 
 		c.Key += "2"
 	}
 	season, eps, ok := releaseEpisode(r.Title)
+	absolute := t.Numbering == store.NumberingAbsolute
+	named := false // its name was read as the show's, numbered straight through
+	if !ok && absolute {
+		// Found by the show's id, it may go by the show's name in another
+		// language, so "Any Name - 137" is read too.
+		trusted := t.TVDBID > 0 && (byID || r.TVDBID == t.TVDBID)
+		season, eps, ok, named = s.absoluteEpisode(ctx, t, r.Title, trusted)
+	}
 	switch {
 	case r.TVDBID > 0 && t.TVDBID > 0:
 		if r.TVDBID != t.TVDBID {
 			c.reject("it's for another show")
 		}
 	case byID && t.TVDBID > 0:
+	case named:
+	case absolute && titleMatches(quality.StripLeadTags(r.Title), t.Title):
 	case !titleMatches(r.Title, t.Title):
 		c.reject("its name doesn't match the show's")
+	}
+	switch dubbed, original := quality.Dubbing(r.Title); {
+	case t.Audio == store.AudioDubbed && !dubbed:
+		c.reject("its name doesn't say it's dubbed, and the show is wanted dubbed")
+	case t.Audio == store.AudioOriginal && dubbed && !original:
+		c.reject("it's dubbed only, and the show is wanted with its original sound")
 	}
 	switch {
 	case !ok:
@@ -101,6 +117,60 @@ func (s *Service) judgeEpisodes(ctx context.Context, r Release, t store.Series, 
 	return c
 }
 
+// absoluteEpisode reads a release that numbers the show's episodes
+// straight through ("Show - 137") as the season and episodes those are.
+// named says the number followed the show's own title. Numbers the show
+// doesn't have, or that fall in more than one season, aren't read.
+func (s *Service) absoluteEpisode(ctx context.Context, t store.Series, name string, loose bool) (season int, eps []int, ok, named bool) {
+	nums := quality.AbsoluteEpisodes(name, t.Title, false)
+	named = nums != nil
+	if nums == nil && loose {
+		nums = quality.AbsoluteEpisodes(name, t.Title, true)
+	}
+	if nums == nil {
+		return 0, nil, false, false
+	}
+	byNumber := s.absoluteNumbers(ctx, t.ID)
+	for i, n := range nums {
+		e, has := byNumber[n]
+		if !has || (i > 0 && e.Season != season) {
+			return 0, nil, false, false
+		}
+		season = e.Season
+		eps = append(eps, e.Number)
+	}
+	return season, eps, true, named
+}
+
+// absoluteNumbers is a show's episodes by their number counted straight
+// through, kept a minute: every release of a search is read against it.
+func (s *Service) absoluteNumbers(ctx context.Context, seriesID int64) map[int]store.Episode {
+	s.mu.Lock()
+	have, ok := s.absolute[seriesID]
+	s.mu.Unlock()
+	if ok && time.Now().Before(have.expires) {
+		return have.byNumber
+	}
+	eps, err := s.Store.Episodes(ctx, seriesID)
+	if err != nil {
+		s.logger().Warn("couldn't read a show's episodes to number them", "show", seriesID, "err", err)
+		return nil
+	}
+	m := store.AbsoluteNumbers(eps)
+	s.mu.Lock()
+	if s.absolute == nil {
+		s.absolute = map[int64]absoluteCache{}
+	}
+	s.absolute[seriesID] = absoluteCache{m, time.Now().Add(time.Minute)}
+	s.mu.Unlock()
+	return m
+}
+
+type absoluteCache struct {
+	byNumber map[int]store.Episode
+	expires  time.Time
+}
+
 // Season searches for a season of a show, judging packs and single
 // episodes against the wanted episodes of it.
 func (s *Service) Season(ctx context.Context, t store.Series, season int, want []store.Episode) (Results, error) {
@@ -128,8 +198,28 @@ func (s *Service) Season(ctx context.Context, t store.Series, season int, want [
 		return Results{}, err
 	}
 	out := Results{Errors: notes, Searched: n}
+	seen := map[string]bool{}
 	for _, r := range rs {
+		seen[key(r)] = true
 		out.Releases = append(out.Releases, s.judgeEpisodes(ctx, r, t, p, want, blocked, true, true))
+	}
+	if t.Numbering == store.NumberingAbsolute && season > 0 {
+		// Anime numbered straight through isn't filed by season: ask for
+		// the show by name too, and read each release's number.
+		more, notes, _, err := s.ask(ctx, func(ix store.Indexer) Query {
+			return Query{Type: "search", Text: searchText(t.Title), Cats: cats(ix, 5000, 5999, 5000)}
+		})
+		if err != nil {
+			out.Errors = append(out.Errors, err.Error())
+		} else {
+			out.Errors = append(out.Errors, notes...)
+			for _, r := range more {
+				if !seen[key(r)] {
+					seen[key(r)] = true
+					out.Releases = append(out.Releases, s.judgeEpisodes(ctx, r, t, p, want, blocked, true, false))
+				}
+			}
+		}
 	}
 	s.rank(ctx, &out)
 	if out.Searched > 0 {
