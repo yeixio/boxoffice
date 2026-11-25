@@ -395,6 +395,9 @@ func (s *Service) AddSeriesInfo(ctx context.Context, info tmdb.Show, o AddOption
 // are monitored unless monitor says otherwise: "future" leaves out those
 // that already aired, "none" leaves out all.
 func (s *Service) syncEpisodes(ctx context.Context, t store.Series, info tmdb.Show, monitor string) error {
+	if yearNumbered(t.Seasons) {
+		return s.syncYearEpisodes(ctx, t, info, monitor)
+	}
 	c := s.TMDB(ctx)
 	now := time.Now()
 	for _, se := range info.Seasons {
