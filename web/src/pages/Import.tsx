@@ -672,12 +672,12 @@ function Finished({ app, matinee, onAgain }: { app: MigrationApp; matinee: Switc
         ) : (
           !noMatinee(app) && (
             <li>
-              <Trans i18nKey="move.done.stillUses" values={{ app: name }} components={{ link: <Link className="font-medium text-marquee" to="/settings?tab=apps#matinee" /> }} />
+              <Trans i18nKey="move.done.stillUses" values={{ app: name }} components={{ link: <Link className="font-medium text-marquee" to="/settings#matinee" /> }} />
             </li>
           )
         )}
         <li>
-          <Trans i18nKey="move.done.shutDown" values={{ app: name }} components={{ link: <Link className="font-medium text-marquee" to="/backups" /> }} />
+          <Trans i18nKey="move.done.shutDown" values={{ app: name }} components={{ link: <Link className="font-medium text-marquee" to="/settings#backups" /> }} />
         </li>
         <li>{t('move.done.backsUp')}</li>
       </ul>

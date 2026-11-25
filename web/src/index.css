@@ -83,3 +83,19 @@ body {
   background-color: color-mix(in srgb, var(--gold) 40%, transparent);
   color: inherit;
 }
+
+/* Someone who has asked their device for less motion gets none: changes
+   happen at once instead of sliding or fading, and scrolling jumps. Only
+   spinners still turn, to show something is happening. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  *:not(.animate-spin) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

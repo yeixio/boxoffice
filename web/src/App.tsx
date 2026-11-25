@@ -69,7 +69,6 @@ const Activity = page(() => import('./pages/Activity'), 'Activity')
 const Downloads = page(() => import('./pages/Downloads'), 'Downloads')
 const Import = page(() => import('./pages/Import'), 'Import')
 const ImportFiles = page(() => import('./pages/ImportFiles'), 'ImportFiles')
-const Backups = page(() => import('./pages/Backups'), 'Backups')
 const Settings = page(() => import('./pages/Settings'), 'Settings')
 const Problems = page(() => import('./pages/Problems'), 'Problems')
 const Health = page(() => import('./pages/Health'), 'Health')
@@ -233,7 +232,8 @@ function Shell({ status }: { status: Status }) {
           <Route path="/health" element={<Health />} />
           <Route path="/import" element={<Import />} />
           <Route path="/import-files" element={<ImportFiles />} />
-          <Route path="/backups" element={<Backups />} />
+          {/* Backups moved into Settings → System (docs/design/ui-audit-2026-11.md); old links still land. */}
+          <Route path="/backups" element={<Navigate to="/settings?tab=system#backups" replace />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/problems" element={<Problems />} />
           <Route path="*" element={<Navigate to="/discover" replace />} />

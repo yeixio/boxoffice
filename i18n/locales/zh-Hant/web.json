@@ -28,7 +28,8 @@
     "version": "Box Office {{version}}",
     "games": "遊戲",
     "importFiles": "匯入檔案",
-    "photos": "照片和影片"
+    "photos": "照片和影片",
+    "yourAccount": "你的帳戶({{name}})"
   },
   "app": {
     "notAnswering": "Box Office 沒有響應：{{error}}",
@@ -472,7 +473,7 @@
       "checkup": "Box Office 會自行檢查你能修復的問題：金鑰、資料夾、檔案、連線、備份和任務。",
       "server": "過去一小時 Box Office 及其主機的繁忙程度、磁碟，以及它記錄的問題。",
       "log": "Box Office 做過的事，用來查明某件事為什麼發生或沒有發生。",
-      "alerts": "透過郵件、Discord、ntfy 或 Home Assistant 獲知問題，並連線 Prometheus。"
+      "alerts": "現在出了什麼問題,以及透過電子郵件、Discord、ntfy 或 Home Assistant 傳送的警示。"
     },
     "checkAgain": "重新檢查",
     "checking": "正在檢查…",
@@ -588,7 +589,9 @@
     "addTo": "新增到 prometheus.yml",
     "k8s": "在 Kubernetes 中，Prometheus 可以透過叢集內的服務地址（服務名、名稱空間和埠 7272）訪問 Box Office，而不必使用上面的地址。",
     "newToken": "新權杖",
-    "tokenLabel": "權杖"
+    "tokenLabel": "權杖",
+    "seeSent": "查看已傳送的警示",
+    "change": "變更要提醒你的內容"
   },
   "backups": {
     "reason": {
@@ -994,7 +997,7 @@
     "more": "不只電影和電視",
     "moreSub": "開啟你希望 Box Office 管理的其他媒體型別。每種在開啟前都是關閉的，之後關閉也會保留其資料夾和設定。Box Office 從不更改這些媒體庫中已有的檔案。",
     "inPlaceOf": "（代替 {{app}}）",
-    "pickRoot": "為你開啟的每種型別在下方選擇一個根資料夾。",
+    "pickRootLibrary": "在<link>媒體庫</link>中為你開啟的每種類型選擇一個根資料夾。",
     "roots": {
       "movie": "電影根資料夾",
       "series": "電視根資料夾",
@@ -1076,11 +1079,11 @@
     "sections": {
       "general": {
         "label": "一般",
-        "sub": "你的語言和密碼、Box Office 用來查詢影片的 TMDB 金鑰,以及重新啟動 Box Office。"
+        "sub": "Box Office 的時鐘,以及它管理哪些媒體類型。"
       },
       "library": {
         "label": "媒體庫",
-        "sub": "Box Office 管理哪些媒體類型、每個媒體庫在哪裡,以及如何整理。"
+        "sub": "每個媒體庫的位置、新影片如何加入,以及 Box Office 如何整理。"
       },
       "downloads": {
         "label": "下載",
@@ -1090,9 +1093,21 @@
         "label": "搜尋",
         "sub": "Box Office 在哪裡尋找發行、想要什麼畫質,以及搜尋的頻率和數量。"
       },
-      "apps": {
-        "label": "應用程式與裝置",
-        "sub": "連接 Matinee、把電子書傳送到閱讀器,以及從 Radarr、Sonarr、Lidarr 或 Readarr 搬過來。"
+      "notifications": {
+        "label": "通知",
+        "sub": "透過電子郵件、Discord、ntfy 或 Home Assistant 傳送的警示、Prometheus,以及手機和電腦上的通知。"
+      },
+      "connections": {
+        "label": "連線",
+        "sub": "連接 Matinee 和 TMDB,把電子書傳送到閱讀器,並從 Radarr、Sonarr、Lidarr 或 Readarr 搬入。"
+      },
+      "system": {
+        "label": "系統",
+        "sub": "備份、所有人的單一登入、重新啟動、資料庫,以及這是哪個 Box Office。"
+      },
+      "account": {
+        "label": "你的帳戶",
+        "sub": "你的語言、密碼、通行金鑰和一次性代碼。只屬於你:其他管理員有各自的。"
       },
       "elsewhere": {
         "label": "其他頁面"
@@ -1164,7 +1179,14 @@
     "prefsNever": "絕不取得",
     "prefsWordsHint": "用逗號分隔各個詞。詞要在名稱中標題之後的部分整詞相符，不區分大小寫。",
     "prefsNeverHint": "含有其中任何一個詞的發布會被拒絕。你仍然可以自己選擇它。",
-    "prefsOn": "，有發布偏好"
+    "prefsOn": "，有發布偏好",
+    "about": {
+      "title": "關於",
+      "guide": "指南",
+      "changes": "更新內容",
+      "licence": "授權"
+    },
+    "elsewhereSite": "誰可以請求影片、請求如何核准,以及請求網站的外觀。"
   },
   "mediaTypes": {
     "music": {
@@ -2030,10 +2052,10 @@
     "add": "新增閱讀器",
     "kobo": "Kobo、Tolino 和 Boox 閱讀器無法透過電子郵件接收書籍，所以 Box Office 無法傳給它們。",
     "sendFrom": "如何傳送書籍",
-    "sameAsAlerts": "使用 健康 → 警示 中的郵件伺服器",
+    "sameAsAlerts": "使用 設定 → 通知 中的郵件伺服器",
     "sameAsAlertsHint": "書籍和警示一樣透過 {{host}} 寄出。",
-    "noAlertMail": "健康 → 警示 中還沒有郵件伺服器。請在那裡設定，或在下面填寫。",
-    "setUpAlerts": "在 健康 → 警示 中設定電子郵件",
+    "noAlertMail": "設定 → 通知 中還沒有郵件伺服器。請在那裡設定，或在下面填寫。",
+    "setUpAlerts": "在 設定 → 通知 中設定電子郵件",
     "from": "書籍寄件地址",
     "fromSameHint": "留空則使用警示的寄件地址。你的郵件伺服器必須允許你用這個地址寄信。",
     "fromHint": "通常與使用者名稱相同。你的郵件伺服器必須允許你用這個地址寄信。",

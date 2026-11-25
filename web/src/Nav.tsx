@@ -1,12 +1,11 @@
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState, type ComponentType } from 'react'
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import {
   CalendarDays,
   Clapperboard,
   Compass,
-  DatabaseBackup,
   Download as DownloadIcon,
   Film,
   Gamepad2,
@@ -22,8 +21,8 @@ import {
   PanelLeftOpen,
   Settings as Cog,
   Truck,
-  Upload,
   Tv,
+  UserRound,
 } from 'lucide-react'
 import { get, type MediaTypeKey, type Settings as SettingsData, type Status } from './api'
 import { Tray } from './Tray'
@@ -31,13 +30,16 @@ import { speed, useDownloads } from './pages/Downloads'
 import { needsAttention, useHealth } from './pages/Health'
 import { useRequestCounts } from './pages/Requests'
 
-// label and a group's label are catalog keys.
-type Item = { to: string; label: string; icon: ComponentType<{ className?: string }>; type?: MediaTypeKey }
+// label and a group's label are catalog keys. also lists other pages that
+// belong to an item, which keep it marked as the one you're in.
+type Item = { to: string; label: string; icon: ComponentType<{ className?: string }>; type?: MediaTypeKey; also?: string[] }
 type Group = { label: string; items: Item[] }
 
 // The sections, grouped so a long list still reads at a glance. A section
 // with a media type shows only once that type is turned on in Settings, so
 // audiobooks, ebooks, comics, games and home media slot in here the same way as music.
+// Only things people do are here; Settings and the signed-in person's own
+// account sit at the foot, apart from them (docs/design/ui-audit-2026-11.md).
 const allGroups: Group[] = [
   {
     label: 'nav.library',
@@ -51,25 +53,20 @@ const allGroups: Group[] = [
       { to: '/games', label: 'nav.games', icon: Gamepad2, type: 'game' },
       { to: '/photos', label: 'nav.photos', icon: Images, type: 'home' },
       { to: '/calendar', label: 'nav.calendar', icon: CalendarDays },
-      { to: '/import-files', label: 'nav.importFiles', icon: Upload },
     ],
   },
   {
     label: 'nav.status',
     items: [
       { to: '/requests', label: 'nav.requests', icon: Inbox },
-      { to: '/downloads', label: 'nav.downloads', icon: DownloadIcon },
+      { to: '/downloads', label: 'nav.downloads', icon: DownloadIcon, also: ['/import-files'] },
       { to: '/activity', label: 'nav.activity', icon: History },
       { to: '/health', label: 'nav.health', icon: HeartPulse },
     ],
   },
   {
     label: 'nav.setup',
-    items: [
-      { to: '/import', label: 'nav.import', icon: Truck },
-      { to: '/backups', label: 'nav.backups', icon: DatabaseBackup },
-      { to: '/settings', label: 'nav.settings', icon: Cog },
-    ],
+    items: [{ to: '/import', label: 'nav.import', icon: Truck }],
   },
 ]
 
@@ -93,6 +90,18 @@ export function useNav(status: Status) {
 }
 
 type Nav = ReturnType<typeof useNav>
+
+// useHere says whether a link is to the page shown. Settings and Your
+// account are the same page on different tabs, so the tab tells them apart.
+function useHere() {
+  const { pathname, search } = useLocation()
+  const account = pathname === '/settings' && new URLSearchParams(search).get('tab') === 'account'
+  return (to: string, also: string[] = []) => {
+    if (to === '/settings?tab=account') return account
+    if (to === '/settings') return pathname === '/settings' && !account
+    return [to, ...also].some((p) => pathname === p || pathname.startsWith(p + '/'))
+  }
+}
 
 function Badge({ to, nav, dot }: { to: string; nav: Nav; dot?: boolean }) {
   const { t } = useTranslation()
@@ -160,6 +169,30 @@ export function Sidebar({ status, nav, signOut }: { status: Status; nav: Nav; si
   const wide = useWide()
   const [narrowed, setNarrowed] = useState(load)
   const narrow = narrowed || !wide
+  const here = useHere()
+  const look = (on: boolean) => (on ? 'bg-ink text-paper' : 'text-muted hover:bg-line/50 hover:text-ink')
+  const name = status.user?.username ?? ''
+  // On the icons-only rail, a name shows beside an icon at once when it's
+  // pointed at or reached with the keyboard, since not every icon speaks
+  // for itself. It's placed on the page, as the rail's list would clip it.
+  const [tip, setTip] = useState<{ text: string; top: number; left: number } | null>(null)
+  const tipFor = (text: string) =>
+    narrow
+      ? {
+          onMouseEnter: (e: { currentTarget: HTMLElement }) => show(e.currentTarget, text),
+          onFocus: (e: { currentTarget: HTMLElement }) => show(e.currentTarget, text),
+          onMouseLeave: () => setTip(null),
+          onBlur: () => setTip(null),
+        }
+      : {}
+  const show = (el: HTMLElement, text: string) => {
+    const r = el.getBoundingClientRect()
+    const rtl = getComputedStyle(el).direction === 'rtl'
+    setTip({ text, top: r.top + r.height / 2, left: rtl ? r.left - 8 : r.right + 8 })
+  }
+  useEffect(() => {
+    if (!narrow) setTip(null)
+  }, [narrow])
   const toggle = () => {
     setNarrowed(!narrowed)
     try {
@@ -187,22 +220,19 @@ export function Sidebar({ status, nav, signOut }: { status: Status; nav: Nav; si
                 <div className="mb-1 px-3 text-xs font-semibold uppercase tracking-wider text-muted">{t(g.label)}</div>
               )}
               <ul className="flex flex-col gap-0.5">
-                {g.items.map(({ to, label, icon: Icon }) => (
+                {g.items.map(({ to, label, icon: Icon, also }) => (
                   <li key={to}>
-                    <NavLink
+                    <Link
                       to={to}
-                      title={narrow ? t(label) : undefined}
                       aria-label={narrow ? t(label) : undefined}
-                      className={({ isActive }) =>
-                        `relative flex items-center gap-3 rounded-md py-2 text-sm font-medium transition ${narrow ? 'justify-center px-2' : 'px-3'} ${
-                          isActive ? 'bg-ink text-paper' : 'text-muted hover:bg-line/50 hover:text-ink'
-                        }`
-                      }
+                      aria-current={here(to, also) ? 'page' : undefined}
+                      {...tipFor(t(label))}
+                      className={`relative flex items-center gap-3 rounded-md py-2 text-sm font-medium transition ${narrow ? 'justify-center px-2' : 'px-3'} ${look(here(to, also))}`}
                     >
                       <Icon className="size-4.5 shrink-0" aria-hidden />
                       {!narrow && <span className="truncate">{t(label)}</span>}
                       <Badge to={to} nav={nav} dot={narrow} />
-                    </NavLink>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -210,22 +240,43 @@ export function Sidebar({ status, nav, signOut }: { status: Status; nav: Nav; si
           ))}
         </nav>
         <div className={`flex flex-col gap-0.5 border-t border-line px-3 py-3 ${narrow ? 'items-center' : ''}`}>
-          <button
-            onClick={signOut}
-            className={`flex items-center gap-3 rounded-md py-2 text-sm text-muted hover:bg-line/50 hover:text-ink ${narrow ? 'px-2' : 'px-3'}`}
-            title={t('nav.signedInAs', { name: status.user?.username })}
-            aria-label={t('nav.signOut')}
+          <Link
+            to="/settings"
+            aria-current={here('/settings') ? 'page' : undefined}
+            aria-label={narrow ? t('nav.settings') : undefined}
+            {...tipFor(t('nav.settings'))}
+            className={`flex items-center gap-3 rounded-md py-2 text-sm font-medium transition ${narrow ? 'px-2' : 'px-3'} ${look(here('/settings'))}`}
           >
-            <LogOut className="size-4.5 shrink-0" aria-hidden />
-            {!narrow && <span className="truncate">{t('nav.signOutName', { name: status.user?.username })}</span>}
-          </button>
+            <Cog className="size-4.5 shrink-0" aria-hidden />
+            {!narrow && <span className="truncate">{t('nav.settings')}</span>}
+          </Link>
+          <div className={`flex items-center gap-0.5 ${narrow ? 'flex-col' : ''}`}>
+            <Link
+              to="/settings?tab=account"
+              aria-current={here('/settings?tab=account') ? 'page' : undefined}
+              aria-label={t('nav.yourAccount', { name })}
+              {...tipFor(t('nav.yourAccount', { name }))}
+              className={`flex min-w-0 flex-1 items-center gap-3 rounded-md py-2 text-sm font-medium transition ${narrow ? 'px-2' : 'px-3'} ${look(here('/settings?tab=account'))}`}
+            >
+              <UserRound className="size-4.5 shrink-0" aria-hidden />
+              {!narrow && <span className="truncate">{name}</span>}
+            </Link>
+            <button
+              onClick={signOut}
+              className="flex shrink-0 items-center rounded-md p-2 text-muted hover:bg-line/50 hover:text-ink"
+              aria-label={t('nav.signOutName', { name })}
+              {...(narrow ? tipFor(t('nav.signOutName', { name })) : { title: t('nav.signOutName', { name }) })}
+            >
+              <LogOut className="size-4.5 shrink-0" aria-hidden />
+            </button>
+          </div>
           {wide && (
             <button
               onClick={toggle}
               className={`flex items-center gap-3 rounded-md py-2 text-sm text-muted hover:bg-line/50 hover:text-ink ${narrow ? 'px-2' : 'px-3'}`}
-              title={narrow ? t('nav.showNames') : t('nav.iconsOnly')}
               aria-label={narrow ? t('nav.showNames') : t('nav.iconsOnly')}
               aria-pressed={narrow}
+              {...tipFor(t('nav.showNames'))}
             >
               {narrow ? <PanelLeftOpen className="size-4.5 shrink-0" aria-hidden /> : <PanelLeftClose className="size-4.5 shrink-0" aria-hidden />}
               {!narrow && t('nav.iconsOnly')}
@@ -235,6 +286,15 @@ export function Sidebar({ status, nav, signOut }: { status: Status; nav: Nav; si
         </div>
       </div>
       <div className="perforated-y" aria-hidden />
+      {narrow && tip && (
+        <span
+          aria-hidden
+          style={{ top: tip.top, left: tip.left }}
+          className="pointer-events-none fixed z-50 -translate-y-1/2 whitespace-nowrap rounded-md bg-ink px-2 py-1 text-xs font-medium text-paper shadow-md rtl:-translate-x-full"
+        >
+          {tip.text}
+        </span>
+      )}
     </aside>
   )
 }
@@ -244,31 +304,40 @@ export function Sidebar({ status, nav, signOut }: { status: Status; nav: Nav; si
 // misses the menu doesn't sign anyone out.
 export function PhoneNav({ nav, status, signOut }: { nav: Nav; status: Status; signOut: () => void }) {
   const { t } = useTranslation()
+  const here = useHere()
+  const row = 'flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-start text-base font-medium'
+  const look = (on: boolean) => (on ? 'bg-ink text-paper' : 'text-ink hover:bg-line/50')
+  const name = status.user?.username ?? ''
   return (
     <nav id="mobile-nav" className="flex max-h-[calc(100dvh-4rem)] flex-col overflow-y-auto border-t border-line px-4 py-2 md:hidden" aria-label={t('nav.main')}>
       {nav.groups.map((g) => (
         <div key={g.label} className="py-1">
           <div className="px-3 pb-1 pt-2 text-xs font-semibold uppercase tracking-wider text-muted">{t(g.label)}</div>
           <ul className="flex flex-col gap-1">
-            {g.items.map(({ to, label, icon: Icon }) => (
+            {g.items.map(({ to, label, icon: Icon, also }) => (
               <li key={to}>
-                <NavLink
-                  to={to}
-                  className={({ isActive }) => `flex items-center gap-3 rounded-md px-3 py-2.5 text-base font-medium ${isActive ? 'bg-ink text-paper' : 'text-ink hover:bg-line/50'}`}
-                >
+                <Link to={to} aria-current={here(to, also) ? 'page' : undefined} className={`${row} ${look(here(to, also))}`}>
                   <Icon className="size-5" aria-hidden />
                   {t(label)}
                   <Badge to={to} nav={nav} />
-                </NavLink>
+                </Link>
               </li>
             ))}
           </ul>
         </div>
       ))}
-      <div className="mt-1 border-t border-line py-2">
-        <button onClick={signOut} className="flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-start text-base font-medium text-ink hover:bg-line/50">
+      <div className="mt-1 flex flex-col gap-1 border-t border-line py-2">
+        <Link to="/settings" aria-current={here('/settings') ? 'page' : undefined} className={`${row} ${look(here('/settings'))}`}>
+          <Cog className="size-5" aria-hidden />
+          {t('nav.settings')}
+        </Link>
+        <Link to="/settings?tab=account" aria-current={here('/settings?tab=account') ? 'page' : undefined} className={`${row} ${look(here('/settings?tab=account'))}`}>
+          <UserRound className="size-5" aria-hidden />
+          {t('nav.yourAccount', { name })}
+        </Link>
+        <button onClick={signOut} className={`${row} text-ink hover:bg-line/50`}>
           <LogOut className="size-5" aria-hidden />
-          {t('nav.signOutName', { name: status.user?.username })}
+          {t('nav.signOutName', { name })}
         </button>
         <div className="px-3 pt-1 text-xs text-muted">{t('nav.version', { version: status.version })}</div>
       </div>

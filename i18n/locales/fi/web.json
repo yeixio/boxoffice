@@ -30,7 +30,8 @@
     "version": "Box Office {{version}}",
     "games": "Pelit",
     "importFiles": "Tuo tiedostoja",
-    "photos": "Kuvat ja videot"
+    "photos": "Kuvat ja videot",
+    "yourAccount": "Tilisi ({{name}})"
   },
   "app": {
     "notAnswering": "Box Office ei vastaa: {{error}}",
@@ -500,7 +501,7 @@
       "checkup": "Box Office tarkistaa itsensä ongelmien varalta, jotka voit korjata: avaimet, kansiot, tiedostot, yhteydet, varmuuskopiot ja tehtävät.",
       "server": "Kuinka kiireisiä Box Office ja sen kone ovat olleet viimeisen tunnin aikana, sen levyt ja sen kirjaamat ongelmat.",
       "log": "Mitä Box Office on tehnyt, jotta voit selvittää, miksi jotain tapahtui tai ei tapahtunut.",
-      "alerts": "Saat tiedon ongelmista sähköpostilla, Discordissa, ntfy:ssä tai Home Assistantissa, ja voit yhdistää Prometheuksen."
+      "alerts": "Mikä on nyt vialla ja sähköpostilla, Discordissa, ntfyssä tai Home Assistantissa lähetetyt hälytykset."
     },
     "checkAgain": "Tarkista uudelleen",
     "checking": "Tarkistetaan…",
@@ -620,7 +621,9 @@
     "addTo": "Lisää tiedostoon prometheus.yml",
     "k8s": "Kubernetesissa Prometheus tavoittaa Box Officen sen klusterin sisäisestä palveluosoitteesta (palvelun nimi, nimiavaruus ja portti 7272) yllä olevan osoitteen sijaan.",
     "newToken": "Uusi tunnus",
-    "tokenLabel": "Tunnus"
+    "tokenLabel": "Tunnus",
+    "seeSent": "Katso lähetetyt hälytykset",
+    "change": "Muuta, mistä sinua hälytetään"
   },
   "backups": {
     "reason": {
@@ -1068,7 +1071,7 @@
     "more": "Muutakin kuin elokuvia ja TV:tä",
     "moreSub": "Kytke päälle muut mediatyypit, joista haluat Box Officen huolehtivan. Kukin on pois, kunnes kytket sen päälle, ja myöhemmin pois kytkeminen säilyttää sen kansiot ja asetukset. Box Office ei koskaan muuta näissä kirjastoissa jo olevia tiedostoja.",
     "inPlaceOf": "({{app}}:n tilalla)",
-    "pickRoot": "Valitse alta juurikansio jokaiselle päälle kytkemällesi.",
+    "pickRootLibrary": "Valitse juurikansio jokaiselle päälle kytkemällesi kohdassa <link>Kirjasto</link>.",
     "roots": {
       "movie": "Elokuvien juurikansiot",
       "series": "TV:n juurikansiot",
@@ -1153,11 +1156,11 @@
     "sections": {
       "general": {
         "label": "Yleiset",
-        "sub": "Kielesi ja salasanasi, TMDB-avain, jolla Box Office hakee nimikkeiden tiedot, sekä Box Officen uudelleenkäynnistys."
+        "sub": "Box Officen kello ja mistä medialajeista se huolehtii."
       },
       "library": {
         "label": "Kirjasto",
-        "sub": "Mitä medialajeja Box Office hoitaa, missä kukin kirjasto on ja miten se siivoaa."
+        "sub": "Missä kukin kirjasto on, miten uudet nimikkeet tulevat ja miten Box Office siivoaa."
       },
       "downloads": {
         "label": "Lataukset",
@@ -1167,9 +1170,21 @@
         "label": "Haku",
         "sub": "Mistä Box Office etsii julkaisuja, mitä laatuja se haluaa ja kuinka usein ja paljon se hakee."
       },
-      "apps": {
-        "label": "Sovellukset ja laitteet",
-        "sub": "Yhdistä Matinee, lähetä e-kirjoja lukulaitteisiin ja muuta Radarrista, Sonarrista, Lidarrista tai Readarrista."
+      "notifications": {
+        "label": "Ilmoitukset",
+        "sub": "Hälytykset sähköpostilla, Discordissa, ntfyssä tai Home Assistantissa, Prometheus sekä ilmoitukset puhelimiin ja tietokoneisiin."
+      },
+      "connections": {
+        "label": "Yhteydet",
+        "sub": "Yhdistä Matinee ja TMDB, lähetä e-kirjoja lukulaitteisiin ja muuta Radarrista, Sonarrista, Lidarrista tai Readarrista."
+      },
+      "system": {
+        "label": "Järjestelmä",
+        "sub": "Varmuuskopiot, kertakirjautuminen kaikille, uudelleenkäynnistys, tietokanta ja mikä Box Office tämä on."
+      },
+      "account": {
+        "label": "Tilisi",
+        "sub": "Kielesi, salasanasi, pääsyavaimesi ja kertakäyttökoodisi. Ne ovat vain sinun: muilla ylläpitäjillä on omansa."
       },
       "elsewhere": {
         "label": "Muilla sivuilla"
@@ -1241,7 +1256,14 @@
     "prefsNever": "Älä ota koskaan",
     "prefsWordsHint": "Erota sanat pilkuilla. Sanan on täsmättävä kokonaan, isoilla tai pienillä kirjaimilla, nimen siinä osassa, joka tulee otsikon jälkeen.",
     "prefsNeverHint": "Julkaisu, jossa on jokin näistä, hylätään. Voit silti valita sen itse.",
-    "prefsOn": ", julkaisumieltymykset"
+    "prefsOn": ", julkaisumieltymykset",
+    "about": {
+      "title": "Tietoja",
+      "guide": "Opas",
+      "changes": "Mitä uutta",
+      "licence": "Lisenssi"
+    },
+    "elsewhereSite": "Kuka voi pyytää nimikkeitä, miten pyynnöt hyväksytään ja miltä pyyntösivu näyttää."
   },
   "mediaTypes": {
     "music": {
@@ -2129,10 +2151,10 @@
     "add": "Lisää lukulaite",
     "kobo": "Kobo-, Tolino- ja Boox-lukulaitteet eivät voi vastaanottaa kirjoja sähköpostilla, joten Box Office ei voi lähettää niille.",
     "sendFrom": "Miten kirjat lähetetään",
-    "sameAsAlerts": "Käytä kohdan Kunto → Hälytykset postipalvelinta",
+    "sameAsAlerts": "Käytä kohdan Asetukset → Ilmoitukset postipalvelinta",
     "sameAsAlertsHint": "Kirjat lähtevät palvelimen {{host}} kautta, kuten hälytykset.",
-    "noAlertMail": "Kohdassa Kunto → Hälytykset ei ole vielä postipalvelinta. Määritä se siellä tai kirjoita se alle.",
-    "setUpAlerts": "Määritä sähköposti kohdassa Kunto → Hälytykset",
+    "noAlertMail": "Kohdassa Asetukset → Ilmoitukset ei ole vielä postipalvelinta. Määritä se siellä tai kirjoita se alle.",
+    "setUpAlerts": "Määritä sähköposti kohdassa Asetukset → Ilmoitukset",
     "from": "Kirjat tulevat osoitteesta",
     "fromSameHint": "Jätä tyhjäksi, niin käytetään hälytysten osoitetta. Postipalvelimesi täytyy sallia lähettäminen tällä osoitteella.",
     "fromHint": "Yleensä sama kuin käyttäjänimi. Postipalvelimesi täytyy sallia lähettäminen tällä osoitteella.",

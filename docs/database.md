@@ -35,7 +35,7 @@ The new database must be **empty**:
 
 ## In Settings
 
-Move the database in **Settings → General → Database** (`/settings#database`), which says which database Box Office uses now.
+Move the database in **Settings → System → Database** (`/settings#database`), which says which database Box Office uses now.
 
 1. Pick **PostgreSQL** or **SQLite file** and type the new database's address or file.
 2. Press **Check**. Box Office connects to it and makes sure it isn't the database in use and has none of Box Office's data yet. Nothing is copied or changed. If something's wrong, such as a wrong password or a database that doesn't exist yet, it says so.
@@ -52,14 +52,14 @@ Settings then shows where the database came from and how many rows were copied. 
 - **Docker or a binary**: set `BOXOFFICE_DATABASE_URL` to the new PostgreSQL address and restart Box Office. For a move back to SQLite, take `BOXOFFICE_DATABASE_URL` out; Box Office uses `boxoffice.db` in its data folder.
 - **Kubernetes with the Helm chart**: see [below](#on-kubernetes).
 
-Once Box Office runs with its settings naming the new database, you can remove the old one. Backups in **Backups** keep working the same way with either database.
+Once Box Office runs with its settings naming the new database, you can remove the old one. Backups in **Settings → System → Backups** keep working the same way with either database.
 
 ## On Kubernetes
 
 Box Office's data folder is on its own volume, so the SQLite file and the note in it survive the pod being replaced. To move to a PostgreSQL server, such as one on your NAS:
 
 1. Make an empty database there, as [above](#before-you-start), that the cluster can reach.
-2. Move to it in **Settings → General → Database**. Box Office's pod restarts in place and opens on the new database.
+2. Move to it in **Settings → System → Database**. Box Office's pod restarts in place and opens on the new database.
 3. Put the new database in the chart's values, and turn the bundled one off if you used it:
 
    ```yaml

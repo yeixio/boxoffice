@@ -1,14 +1,17 @@
 import { useTranslation } from 'react-i18next'
 import { useEffect, useState, type FormEvent, type ReactNode } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { AlertTriangle, BellRing, CircleCheck, Copy, Info, Plus, Send, Trash2, XCircle } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { AlertTriangle, ArrowRight, BellRing, CircleCheck, Copy, Info, Plus, Send, Trash2, XCircle } from 'lucide-react'
 import { del, get, post, put, type Alert, type AlertSettings as Settings, type AlertWebhook, type MetricsSettings, type RateRule, type WebhookKind } from '../api'
 import { ago } from './ServerMonitor'
 import { Button, Card, ErrorNote, Field, Input, Select, Toggle } from '../ui'
 
 // Alerts: an email or a message when something needs the admin, straight
 // from Box Office to their own mail server or webhooks. Prometheus metrics
-// are switched on here too.
+// are switched on here too. What to alert on and where alerts go are set in
+// Settings → Notifications (AlertSettings); what was sent is on Health →
+// Alerts (AlertHistory), since one is configuration and the other status.
 
 const kinds: { value: WebhookKind; label: string }[] = [
   { value: 'discord', label: 'Discord' },
@@ -93,17 +96,16 @@ export function AlertSettings() {
 
   return (
     <div className="flex max-w-3xl flex-col gap-8">
-      <p className="text-muted">
-        {t('alerts.intro')}
-        {data.forwarded && ` ${t('alerts.forwarded')}`}
-      </p>
-
-      {data.firing.length > 0 && (
-        <section className="flex flex-col gap-3">
-          <h2 className="font-display text-lg font-semibold">{t('alerts.now')}</h2>
-          <AlertList alerts={data.firing} />
-        </section>
-      )}
+      <div>
+        <h2 className="mb-1 font-display text-xl font-semibold">{t('health.tabs.alerts')}</h2>
+        <p className="text-muted">
+          {t('alerts.intro')}
+          {data.forwarded && ` ${t('alerts.forwarded')}`}
+        </p>
+        <Link to="/health?tab=alerts" className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-marquee hover:underline">
+          {t('alerts.seeSent')} <ArrowRight className="size-4 rtl:-scale-x-100" aria-hidden />
+        </Link>
+      </div>
 
       <form onSubmit={submit} className="flex flex-col gap-8">
         <section className="flex flex-col gap-3">
@@ -268,12 +270,32 @@ export function AlertSettings() {
         </div>
       </form>
 
+      <Metrics />
+    </div>
+  )
+}
+
+// AlertHistory is Health → Alerts: what's wrong now and the alerts sent,
+// with the way to what's alerted on and where alerts go.
+export function AlertHistory() {
+  const { t } = useTranslation()
+  const { data, error } = useQuery({ queryKey: ['alerts'], queryFn: () => get<Settings>('/admin/alerts'), refetchInterval: 30_000 })
+  if (!data) return <ErrorNote error={error} />
+  return (
+    <div className="flex max-w-3xl flex-col gap-8">
+      <Link to="/settings?tab=notifications#alerts" className="inline-flex items-center gap-1 self-start text-sm font-medium text-marquee hover:underline">
+        {t('alerts.change')} <ArrowRight className="size-4 rtl:-scale-x-100" aria-hidden />
+      </Link>
+      {data.firing.length > 0 && (
+        <section className="flex flex-col gap-3">
+          <h2 className="font-display text-lg font-semibold">{t('alerts.now')}</h2>
+          <AlertList alerts={data.firing} />
+        </section>
+      )}
       <section className="flex flex-col gap-3">
         <h2 className="font-display text-lg font-semibold">{t('alerts.recent')}</h2>
         {data.history.length === 0 ? <Card className="text-sm text-muted">{t('alerts.none')}</Card> : <AlertList alerts={data.history} />}
       </section>
-
-      <Metrics />
     </div>
   )
 }

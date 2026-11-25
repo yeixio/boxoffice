@@ -21,3 +21,4 @@ Fixes #
 - [ ] No real indexers, release names or links to content (placeholders only)
 - [ ] `/radarr` and `/sonarr` changes only add fields or routes (Matinee depends on them)
 - [ ] Nothing new deletes files without showing what first
+- [ ] A new page, menu entry or setting answers the [feature placement questions](../docs/design/navigation-and-settings.md#9-feature-placement-guidelines), passes the [design review checklist](../docs/design/navigation-and-settings.md#11-design-review-checklist), and has a row in the [settings inventory](../docs/design/settings-inventory.md)

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { useEffect, useId, useRef, useState, type ButtonHTMLAttributes, type InputHTMLAttributes, type ReactNode } from 'react'
+import { useEffect, useId, useRef, useState, type ButtonHTMLAttributes, type InputHTMLAttributes, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react'
 import { Film, LoaderCircle, X } from 'lucide-react'
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & { variant?: 'primary' | 'plain' | 'danger' | 'ghost'; busy?: boolean }
@@ -23,8 +23,10 @@ export function Button({ variant = 'plain', busy, className = '', children, disa
   )
 }
 
-export function Card({ children, className = '' }: { children: ReactNode; className?: string }) {
-  return <section className={`rounded-xl border border-line bg-card p-5 ${className}`}>{children}</section>
+// A card with tone "danger" holds something that stops, deletes or moves
+// things, and its red edge keeps it apart from ordinary preferences.
+export function Card({ children, className = '', tone }: { children: ReactNode; className?: string; tone?: 'danger' }) {
+  return <section className={`rounded-xl border bg-card p-5 ${tone === 'danger' ? 'border-bad/40' : 'border-line'} ${className}`}>{children}</section>
 }
 
 export function Heading({ title, sub, actions }: { title: string; sub?: ReactNode; actions?: ReactNode }) {
@@ -184,12 +186,43 @@ export function Backdrop({ src }: { src?: string }) {
   )
 }
 
+// useTabKeys makes a row of role="tab" buttons work the way a tab row
+// does everywhere else: the row is one stop for Tab, at the chosen tab, and
+// the arrow keys (flipped for right-to-left), Home and End move to another
+// tab and choose it. Spread what it returns onto the tablist element.
+export function useTabKeys<T extends HTMLElement>() {
+  const ref = useRef<T>(null)
+  useEffect(() => {
+    const tabs = [...(ref.current?.querySelectorAll<HTMLElement>('[role="tab"]') ?? [])]
+    const chosen = tabs.find((x) => x.getAttribute('aria-selected') === 'true') ?? tabs[0]
+    for (const x of tabs) x.tabIndex = x === chosen ? 0 : -1
+  })
+  const onKeyDown = (e: ReactKeyboardEvent<T>) => {
+    const el = ref.current
+    if (!el || e.altKey || e.ctrlKey || e.metaKey) return
+    const tabs = [...el.querySelectorAll<HTMLElement>('[role="tab"]')]
+    const at = tabs.indexOf(document.activeElement as HTMLElement)
+    if (at < 0) return
+    const rtl = getComputedStyle(el).direction === 'rtl'
+    const step = { ArrowRight: rtl ? -1 : 1, ArrowLeft: rtl ? 1 : -1, ArrowDown: 0, ArrowUp: 0 }[e.key as 'ArrowRight']
+    let to = -1
+    if (e.key === 'Home') to = 0
+    else if (e.key === 'End') to = tabs.length - 1
+    else if (step) to = (at + step + tabs.length) % tabs.length
+    if (to < 0) return
+    e.preventDefault()
+    tabs[to].focus()
+    tabs[to].click()
+  }
+  return { ref, onKeyDown }
+}
+
 // TabRow is a row of tabs that scrolls sideways when it's wider than the
 // screen (a phone, or long names in another language). The edge it can
 // still scroll toward fades out, so it's plain there's more, and the
 // chosen tab is brought into view. selected is the chosen tab's id.
 export function TabRow({ label, selected, children }: { label?: string; selected: string; children: ReactNode }) {
-  const ref = useRef<HTMLDivElement>(null)
+  const { ref, onKeyDown } = useTabKeys<HTMLDivElement>()
   const [more, setMore] = useState({ start: false, end: false })
   useEffect(() => {
     const el = ref.current
@@ -221,7 +254,7 @@ export function TabRow({ label, selected, children }: { label?: string; selected
   const edge = 'pointer-events-none absolute inset-y-0 w-8 from-paper to-transparent transition-opacity'
   return (
     <div className="relative mb-6">
-      <div ref={ref} className="flex gap-1 overflow-x-auto border-b border-line [scrollbar-width:none]" role="tablist" aria-label={label}>
+      <div ref={ref} onKeyDown={onKeyDown} className="flex gap-1 overflow-x-auto border-b border-line [scrollbar-width:none]" role="tablist" aria-label={label}>
         {children}
       </div>
       <span aria-hidden className={`${edge} start-0 bg-gradient-to-r rtl:bg-gradient-to-l ${more.start ? 'opacity-100' : 'opacity-0'}`} />

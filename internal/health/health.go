@@ -243,7 +243,7 @@ func (c *Checker) backups(ctx context.Context) ([]Issue, error) {
 	if err != nil {
 		return nil, err
 	}
-	link := &Link{To: "/backups", Label: "Open Backups"}
+	link := &Link{To: "/settings#backups", Label: "Open Backups"}
 	if s.EveryHours == 0 {
 		return []Issue{{
 			ID: "backups-off", Level: "warning", Title: "Scheduled backups are off",

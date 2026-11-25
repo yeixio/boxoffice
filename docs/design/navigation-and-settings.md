@@ -406,6 +406,8 @@ Each setting should document:
 
 This inventory serves as the source of truth for settings organization and helps prevent configuration sprawl.
 
+Box Office's inventory is [settings-inventory.md](settings-inventory.md). The first audit against this standard is [ui-audit-2026-11.md](ui-audit-2026-11.md).
+
 ## 11. Design Review Checklist
 
 Before approving new navigation or settings functionality, evaluate it against the following checklist.

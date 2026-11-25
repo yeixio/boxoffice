@@ -28,7 +28,8 @@
     "version": "Box Office {{version}}",
     "games": "게임",
     "importFiles": "파일 가져오기",
-    "photos": "사진 및 동영상"
+    "photos": "사진 및 동영상",
+    "yourAccount": "내 계정 ({{name}})"
   },
   "app": {
     "notAnswering": "Box Office가 응답하지 않아요: {{error}}",
@@ -472,7 +473,7 @@
       "checkup": "Box Office는 직접 고칠 수 있는 문제를 스스로 점검해요: 키, 폴더, 파일, 연결, 백업, 작업.",
       "server": "지난 1시간 동안 Box Office와 머신의 부하, 디스크, 기록된 문제예요.",
       "log": "Box Office가 해 온 일로, 어떤 일이 왜 일어났는지 또는 왜 일어나지 않았는지 알아볼 수 있어요.",
-      "alerts": "이메일, Discord, ntfy, Home Assistant로 문제 알림을 받고, Prometheus를 연결하세요."
+      "alerts": "지금 문제가 있는 것과 이메일, Discord, ntfy, Home Assistant로 보낸 경고."
     },
     "checkAgain": "다시 확인",
     "checking": "확인 중…",
@@ -588,7 +589,9 @@
     "addTo": "prometheus.yml에 추가",
     "k8s": "Kubernetes에서는 위 주소 대신 클러스터 안의 서비스 주소(서비스 이름, 네임스페이스, 포트 7272)로 Prometheus가 Box Office에 접근할 수 있어요.",
     "newToken": "새 토큰",
-    "tokenLabel": "토큰"
+    "tokenLabel": "토큰",
+    "seeSent": "보낸 경고 보기",
+    "change": "경고 받을 항목 바꾸기"
   },
   "backups": {
     "reason": {
@@ -994,7 +997,7 @@
     "more": "영화와 TV 그 이상",
     "moreSub": "Box Office가 관리할 다른 미디어를 켜세요. 각각 켜기 전까지는 꺼져 있고, 나중에 꺼도 폴더와 설정은 남아요. Box Office는 이 라이브러리에 이미 있는 파일을 바꾸지 않아요.",
     "inPlaceOf": "({{app}} 대신)",
-    "pickRoot": "켠 것마다 아래에서 루트 폴더를 고르세요.",
+    "pickRootLibrary": "켠 항목마다 <link>라이브러리</link>에서 루트 폴더를 고르세요.",
     "roots": {
       "movie": "영화 루트 폴더",
       "series": "TV 루트 폴더",
@@ -1076,11 +1079,11 @@
     "sections": {
       "general": {
         "label": "일반",
-        "sub": "내 언어와 비밀번호, Box Office가 작품을 찾을 때 쓰는 TMDB 키, 그리고 Box Office 다시 시작."
+        "sub": "Box Office의 시계와 관리하는 미디어 종류."
       },
       "library": {
         "label": "라이브러리",
-        "sub": "Box Office가 관리하는 미디어 종류, 각 라이브러리 위치, 정리 방법."
+        "sub": "각 라이브러리의 위치, 새 타이틀이 들어오는 방식, Box Office의 정리 방식."
       },
       "downloads": {
         "label": "다운로드",
@@ -1090,9 +1093,21 @@
         "label": "검색",
         "sub": "Box Office가 릴리스를 찾는 곳, 원하는 화질, 검색 빈도와 양."
       },
-      "apps": {
-        "label": "앱 및 기기",
-        "sub": "Matinee 연결, 전자책 리더로 보내기, Radarr·Sonarr·Lidarr·Readarr에서 이사하기."
+      "notifications": {
+        "label": "알림",
+        "sub": "이메일, Discord, ntfy, Home Assistant 경고, Prometheus, 휴대폰과 컴퓨터 알림."
+      },
+      "connections": {
+        "label": "연결",
+        "sub": "Matinee와 TMDB 연결, 전자책 리더로 보내기, Radarr·Sonarr·Lidarr·Readarr에서 옮겨 오기."
+      },
+      "system": {
+        "label": "시스템",
+        "sub": "백업, 모두를 위한 통합 로그인, 재시작, 데이터베이스, 이 Box Office의 정보."
+      },
+      "account": {
+        "label": "내 계정",
+        "sub": "내 언어, 비밀번호, 패스키, 일회용 코드. 나만의 것이며 다른 관리자는 각자 가지고 있습니다."
       },
       "elsewhere": {
         "label": "다른 페이지"
@@ -1164,7 +1179,14 @@
     "prefsNever": "절대 받지 않음",
     "prefsWordsHint": "단어는 쉼표로 구분합니다. 단어는 이름에서 제목 뒤 부분에서, 대소문자 구분 없이 단어 단위로 일치해야 합니다.",
     "prefsNeverHint": "이 중 하나가 들어 있는 릴리스는 거절됩니다. 직접 고를 수는 있습니다.",
-    "prefsOn": ", 릴리스 선호 설정"
+    "prefsOn": ", 릴리스 선호 설정",
+    "about": {
+      "title": "정보",
+      "guide": "가이드",
+      "changes": "변경 사항",
+      "licence": "라이선스"
+    },
+    "elsewhereSite": "누가 타이틀을 요청할 수 있는지, 요청 승인 방식, 요청 사이트의 모습."
   },
   "mediaTypes": {
     "music": {
@@ -2030,10 +2052,10 @@
     "add": "전자책 리더 추가",
     "kobo": "Kobo, Tolino, Boox 리더는 이메일로 책을 받을 수 없어서 Box Office가 보낼 수 없습니다.",
     "sendFrom": "책을 보내는 방법",
-    "sameAsAlerts": "상태 → 알림의 메일 서버 사용",
+    "sameAsAlerts": "설정 → 알림의 메일 서버 사용",
     "sameAsAlertsHint": "알림처럼 {{host}}를 통해 책을 보냅니다.",
-    "noAlertMail": "상태 → 알림에 아직 메일 서버가 없습니다. 거기서 설정하거나 아래에 입력하세요.",
-    "setUpAlerts": "상태 → 알림에서 이메일 설정",
+    "noAlertMail": "설정 → 알림에 아직 메일 서버가 없습니다. 거기서 설정하거나 아래에 입력하세요.",
+    "setUpAlerts": "설정 → 알림에서 이메일 설정",
     "from": "책을 보내는 주소",
     "fromSameHint": "비워 두면 알림을 보내는 주소를 씁니다. 메일 서버가 이 주소로 보내는 것을 허용해야 합니다.",
     "fromHint": "보통 사용자 이름과 같습니다. 메일 서버가 이 주소로 보내는 것을 허용해야 합니다.",

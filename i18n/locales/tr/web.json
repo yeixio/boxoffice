@@ -30,7 +30,8 @@
     "version": "Box Office {{version}}",
     "games": "Oyunlar",
     "importFiles": "Dosya içe aktar",
-    "photos": "Fotoğraflar ve videolar"
+    "photos": "Fotoğraflar ve videolar",
+    "yourAccount": "Hesabın ({{name}})"
   },
   "app": {
     "notAnswering": "Box Office yanıt vermiyor: {{error}}",
@@ -500,7 +501,7 @@
       "checkup": "Box Office düzeltebileceğiniz sorunlar için kendini denetler: anahtarlar, klasörler, dosyalar, bağlantılar, yedekler ve görevler.",
       "server": "Box Office ve makinesinin son bir saatteki yoğunluğu, diskleri ve günlüğe kaydettiği sorunlar.",
       "log": "Box Office'in yaptıkları; bir şeyin neden olduğunu veya olmadığını öğrenmek için.",
-      "alerts": "Sorunlardan e-posta, Discord, ntfy veya Home Assistant ile haberdar olun ve Prometheus'u bağlayın."
+      "alerts": "Şu an neyin yanlış olduğu ve e-posta, Discord, ntfy veya Home Assistant ile gönderilen uyarılar."
     },
     "checkAgain": "Yeniden kontrol et",
     "checking": "Denetleniyor…",
@@ -620,7 +621,9 @@
     "addTo": "prometheus.yml dosyasına ekle",
     "k8s": "Kubernetes'te Prometheus, Box Office'e yukarıdaki adres yerine küme içindeki hizmet adresinden (hizmet adı, ad alanı ve 7272 portu) ulaşabilir.",
     "newToken": "Yeni belirteç",
-    "tokenLabel": "Belirteç"
+    "tokenLabel": "Belirteç",
+    "seeSent": "Gönderilen uyarıları gör",
+    "change": "Neler için uyarılacağını değiştir"
   },
   "backups": {
     "reason": {
@@ -1068,7 +1071,7 @@
     "more": "Filmler ve TV'den fazlası",
     "moreSub": "Box Office'in ilgilenmesini istediğiniz diğer medya türlerini açın. Her biri siz açana kadar kapalıdır ve daha sonra kapatırsanız klasörlerini ve ayarlarını korur. Box Office bu kütüphanelerde zaten bulunan dosyaları asla değiştirmez.",
     "inPlaceOf": "({{app}} yerine)",
-    "pickRoot": "Açtığınız her biri için aşağıdan bir kök klasör seçin.",
+    "pickRootLibrary": "Açtığın her tür için <link>Kütüphane</link> altında bir kök klasör seç.",
     "roots": {
       "movie": "Film kök klasörleri",
       "series": "TV kök klasörleri",
@@ -1153,11 +1156,11 @@
     "sections": {
       "general": {
         "label": "Genel",
-        "sub": "Diliniz ve parolanız, Box Office'in başlıkları aradığı TMDB anahtarı ve Box Office'i yeniden başlatma."
+        "sub": "Box Office'in saati ve ilgilendiği medya türleri."
       },
       "library": {
         "label": "Kütüphane",
-        "sub": "Box Office'in hangi medya türleriyle ilgilendiği, her kitaplığın nerede olduğu ve nasıl toparladığı."
+        "sub": "Her kütüphanenin yeri, yeni başlıkların nasıl geldiği ve Box Office'in nasıl toparladığı."
       },
       "downloads": {
         "label": "İndirilenler",
@@ -1167,9 +1170,21 @@
         "label": "Arama",
         "sub": "Box Office'in sürümleri nerede aradığı, hangi kaliteleri istediği, ne sıklıkla ve ne kadar aradığı."
       },
-      "apps": {
-        "label": "Uygulamalar ve cihazlar",
-        "sub": "Matinee'yi bağlayın, e-kitapları okuyuculara gönderin ve Radarr, Sonarr, Lidarr veya Readarr'dan taşının."
+      "notifications": {
+        "label": "Bildirimler",
+        "sub": "E-posta, Discord, ntfy veya Home Assistant ile uyarılar, Prometheus ve telefon ile bilgisayarlarda bildirimler."
+      },
+      "connections": {
+        "label": "Bağlantılar",
+        "sub": "Matinee ve TMDB'yi bağla, e-kitapları okuyuculara gönder ve Radarr, Sonarr, Lidarr ya da Readarr'dan taşın."
+      },
+      "system": {
+        "label": "Sistem",
+        "sub": "Yedekler, herkes için tek oturum açma, yeniden başlatma, veritabanı ve bunun hangi Box Office olduğu."
+      },
+      "account": {
+        "label": "Hesabın",
+        "sub": "Dilin, parolan, geçiş anahtarların ve tek kullanımlık kodun. Yalnızca senindir: diğer yöneticilerin kendileri vardır."
       },
       "elsewhere": {
         "label": "Diğer sayfalarda"
@@ -1241,7 +1256,14 @@
     "prefsNever": "Asla alma",
     "prefsWordsHint": "Sözcükleri virgülle ayırın. Sözcük, adın başlıktan sonraki bölümünde, büyük veya küçük harfle, bütün olarak eşleşmelidir.",
     "prefsNeverHint": "Bunlardan birini içeren sürüm reddedilir. Yine de kendiniz seçebilirsiniz.",
-    "prefsOn": ", sürüm tercihleri"
+    "prefsOn": ", sürüm tercihleri",
+    "about": {
+      "title": "Hakkında",
+      "guide": "Kılavuz",
+      "changes": "Neler değişti",
+      "licence": "Lisans"
+    },
+    "elsewhereSite": "Kimlerin başlık isteyebileceği, isteklerin nasıl onaylandığı ve istek sitesinin görünümü."
   },
   "mediaTypes": {
     "music": {
@@ -2129,10 +2151,10 @@
     "add": "Okuyucu ekle",
     "kobo": "Kobo, Tolino ve Boox okuyucular e-postayla kitap alamaz, bu yüzden Box Office onlara gönderemez.",
     "sendFrom": "Kitaplar nasıl gönderilir",
-    "sameAsAlerts": "Durum → Uyarılar bölümündeki posta sunucusunu kullan",
+    "sameAsAlerts": "Ayarlar → Bildirimler bölümündeki posta sunucusunu kullan",
     "sameAsAlertsHint": "Kitaplar, uyarılar gibi {{host}} üzerinden gider.",
-    "noAlertMail": "Durum → Uyarılar bölümünde henüz posta sunucusu yok. Orada bir tane kurun ya da aşağıya girin.",
-    "setUpAlerts": "E-postayı Durum → Uyarılar bölümünde kur",
+    "noAlertMail": "Ayarlar → Bildirimler bölümünde henüz posta sunucusu yok. Orada bir tane kurun ya da aşağıya girin.",
+    "setUpAlerts": "E-postayı Ayarlar → Bildirimler bölümünde kur",
     "from": "Kitapların geldiği adres",
     "fromSameHint": "Uyarıların adresini kullanmak için boş bırakın. Posta sunucunuz bu adresle göndermenize izin vermeli.",
     "fromHint": "Genellikle kullanıcı adıyla aynı. Posta sunucunuz bu adresle göndermenize izin vermeli.",

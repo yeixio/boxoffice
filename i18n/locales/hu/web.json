@@ -30,7 +30,8 @@
     "version": "Box Office {{version}}",
     "games": "Játékok",
     "importFiles": "Fájlok importálása",
-    "photos": "Fotók és videók"
+    "photos": "Fotók és videók",
+    "yourAccount": "Fiókod ({{name}})"
   },
   "app": {
     "notAnswering": "A Box Office nem válaszol: {{error}}",
@@ -500,7 +501,7 @@
       "checkup": "A Box Office ellenőrzi magát olyan problémákra, amelyeket kijavíthatsz: kulcsok, mappák, fájlok, kapcsolatok, biztonsági mentések és feladatok.",
       "server": "Mennyire volt leterhelve a Box Office és a gépe az elmúlt órában, a lemezei, és az általa naplózott problémák.",
       "log": "Mit csinált a Box Office, hogy kiderítsd, miért történt vagy nem történt meg valami.",
-      "alerts": "Értesülj a problémákról e-mailben, Discordon, ntfy-on vagy Home Assistantben, és csatlakoztasd a Prometheust."
+      "alerts": "Mi a baj most, és az e-mailben, Discordon, ntfy-on vagy Home Assistantben küldött riasztások."
     },
     "checkAgain": "Újraellenőrzés",
     "checking": "Ellenőrzés…",
@@ -620,7 +621,9 @@
     "addTo": "Hozzáadás a prometheus.yml fájlhoz",
     "k8s": "Kubernetesben a Prometheus a fürtön belüli szolgáltatáscímén éri el a Box Office-t (szolgáltatásnév, névtér és 7272-es port) a fenti cím helyett.",
     "newToken": "Új token",
-    "tokenLabel": "Token"
+    "tokenLabel": "Token",
+    "seeSent": "Elküldött riasztások megtekintése",
+    "change": "Annak módosítása, miről kapsz riasztást"
   },
   "backups": {
     "reason": {
@@ -1068,7 +1071,7 @@
     "more": "Több mint filmek és TV",
     "moreSub": "Kapcsold be a többi médiatípust, amelyet a Box Office-ra szeretnél bízni. Mindegyik ki van kapcsolva, amíg be nem kapcsolod, és ha később kikapcsolod, megtartja a mappáit és beállításait. A Box Office soha nem módosítja az ezekben a könyvtárakban már meglévő fájlokat.",
     "inPlaceOf": "({{app}} helyett)",
-    "pickRoot": "Lent válassz gyökérmappát minden bekapcsolt típushoz.",
+    "pickRootLibrary": "Válassz gyökérmappát minden bekapcsolt típushoz a <link>Könyvtár</link> lapon.",
     "roots": {
       "movie": "Film gyökérmappák",
       "series": "TV gyökérmappák",
@@ -1153,11 +1156,11 @@
     "sections": {
       "general": {
         "label": "Általános",
-        "sub": "A nyelved és jelszavad, a TMDB-kulcs, amellyel a Box Office a címeket keresi, és a Box Office újraindítása."
+        "sub": "A Box Office órája, és hogy milyen médiatípusokkal foglalkozik."
       },
       "library": {
         "label": "Könyvtár",
-        "sub": "Milyen médiatípusokat kezel a Box Office, hol van az egyes könyvtárak helye, és hogyan rendet rak."
+        "sub": "Hol van az egyes könyvtárak helye, hogyan érkeznek új címek, és hogyan rendet rak a Box Office."
       },
       "downloads": {
         "label": "Letöltések",
@@ -1167,9 +1170,21 @@
         "label": "Keresés",
         "sub": "Hol keres a Box Office kiadásokat, milyen minőséget szeretne, és milyen gyakran és mennyit keres."
       },
-      "apps": {
-        "label": "Alkalmazások és eszközök",
-        "sub": "Kapcsold össze a Matinee-t, küldj e-könyveket olvasókra, és költözz át a Radarrból, Sonarrból, Lidarrból vagy Readarrból."
+      "notifications": {
+        "label": "Értesítések",
+        "sub": "Riasztások e-mailben, Discordon, ntfy-on vagy Home Assistantben, Prometheus és értesítések telefonokon és számítógépeken."
+      },
+      "connections": {
+        "label": "Kapcsolatok",
+        "sub": "Kösd össze a Matinee-t és a TMDB-t, küldj e-könyveket olvasókra, és költözz át a Radarrból, Sonarrból, Lidarrból vagy Readarrból."
+      },
+      "system": {
+        "label": "Rendszer",
+        "sub": "Biztonsági mentések, egyszeri bejelentkezés mindenkinek, újraindítás, az adatbázis, és hogy melyik Box Office ez."
+      },
+      "account": {
+        "label": "Fiókod",
+        "sub": "A nyelved, jelszavad, hozzáférési kulcsaid és egyszer használatos kódod. Csak a tieid: más adminoknak sajátjuk van."
       },
       "elsewhere": {
         "label": "Más oldalakon"
@@ -1241,7 +1256,14 @@
     "prefsNever": "Soha ne vegye",
     "prefsWordsHint": "A szavakat vesszővel válaszd el. A szónak egészben kell egyeznie, kis- vagy nagybetűvel, a név cím utáni részében.",
     "prefsNeverHint": "Az ilyen szót tartalmazó kiadást elutasítjuk. Magad továbbra is kiválaszthatod.",
-    "prefsOn": ", kiadási preferenciák"
+    "prefsOn": ", kiadási preferenciák",
+    "about": {
+      "title": "Névjegy",
+      "guide": "Útmutató",
+      "changes": "Újdonságok",
+      "licence": "Licenc"
+    },
+    "elsewhereSite": "Ki kérhet címeket, hogyan hagyják jóvá a kéréseket, és hogyan néz ki a kérési oldal."
   },
   "mediaTypes": {
     "music": {
@@ -2129,10 +2151,10 @@
     "add": "E-olvasó hozzáadása",
     "kobo": "A Kobo, Tolino és Boox olvasók nem fogadnak könyvet e-mailben, ezért a Box Office nem tud nekik küldeni.",
     "sendFrom": "Hogyan mennek ki a könyvek",
-    "sameAsAlerts": "A(z) Állapot → Riasztások levelezőszerverének használata",
+    "sameAsAlerts": "A(z) Beállítások → Értesítések levelezőszerverének használata",
     "sameAsAlertsHint": "A könyvek a(z) {{host}} szerveren mennek ki, ahogy a riasztások is.",
-    "noAlertMail": "A(z) Állapot → Riasztások alatt még nincs levelezőszerver. Állíts be egyet ott, vagy add meg lent.",
-    "setUpAlerts": "E-mail beállítása itt: Állapot → Riasztások",
+    "noAlertMail": "A(z) Beállítások → Értesítések alatt még nincs levelezőszerver. Állíts be egyet ott, vagy add meg lent.",
+    "setUpAlerts": "E-mail beállítása itt: Beállítások → Értesítések",
     "from": "A könyvek feladója",
     "fromSameHint": "Hagyd üresen a riasztások címének használatához. A levelezőszervernek engedélyeznie kell, hogy erről a címről küldj.",
     "fromHint": "Általában ugyanaz, mint a felhasználónév. A levelezőszervernek engedélyeznie kell, hogy erről a címről küldj.",

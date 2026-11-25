@@ -28,7 +28,8 @@
     "version": "Box Office {{version}}",
     "games": "Trò chơi",
     "importFiles": "Nhập tệp",
-    "photos": "Ảnh và video"
+    "photos": "Ảnh và video",
+    "yourAccount": "Tài khoản của bạn ({{name}})"
   },
   "app": {
     "notAnswering": "Box Office không phản hồi: {{error}}",
@@ -472,7 +473,7 @@
       "checkup": "Box Office tự kiểm tra các sự cố bạn có thể sửa: khóa, thư mục, tệp, kết nối, bản sao lưu và tác vụ.",
       "server": "Box Office và máy của nó bận thế nào trong giờ qua, các ổ đĩa của nó và các sự cố nó đã ghi lại.",
       "log": "Những gì Box Office đã làm, để tìm hiểu vì sao một việc đã hoặc không xảy ra.",
-      "alerts": "Nhận thông báo sự cố qua email, Discord, ntfy hoặc Home Assistant, và kết nối Prometheus."
+      "alerts": "Điều gì đang sai lúc này và các cảnh báo đã gửi qua email, Discord, ntfy hoặc Home Assistant."
     },
     "checkAgain": "Kiểm tra lại",
     "checking": "Đang kiểm tra…",
@@ -588,7 +589,9 @@
     "addTo": "Thêm vào prometheus.yml",
     "k8s": "Trong Kubernetes, Prometheus có thể truy cập Box Office qua địa chỉ dịch vụ trong cụm (tên dịch vụ, namespace và cổng 7272) thay cho địa chỉ ở trên.",
     "newToken": "Mã mới",
-    "tokenLabel": "Mã"
+    "tokenLabel": "Mã",
+    "seeSent": "Xem các cảnh báo đã gửi",
+    "change": "Đổi những gì bạn được cảnh báo"
   },
   "backups": {
     "reason": {
@@ -994,7 +997,7 @@
     "more": "Không chỉ phim và TV",
     "moreSub": "Bật các loại nội dung khác bạn muốn Box Office chăm lo. Mỗi loại đều tắt cho đến khi bạn bật, và tắt sau này vẫn giữ thư mục và cài đặt của nó. Box Office không bao giờ thay đổi các tệp đã có trong các thư viện này.",
     "inPlaceOf": "(thay cho {{app}})",
-    "pickRoot": "Chọn thư mục gốc cho mỗi loại bạn đã bật, bên dưới.",
+    "pickRootLibrary": "Chọn thư mục gốc cho mỗi loại bạn đã bật, trong <link>Thư viện</link>.",
     "roots": {
       "movie": "Thư mục gốc phim",
       "series": "Thư mục gốc TV",
@@ -1076,11 +1079,11 @@
     "sections": {
       "general": {
         "label": "Chung",
-        "sub": "Ngôn ngữ và mật khẩu của bạn, khóa TMDB mà Box Office dùng để tra cứu tựa phim, và khởi động lại Box Office."
+        "sub": "Đồng hồ của Box Office và các loại nội dung nó quản lý."
       },
       "library": {
         "label": "Thư viện",
-        "sub": "Box Office quản lý những loại nội dung nào, mỗi thư viện nằm ở đâu và cách nó dọn dẹp."
+        "sub": "Nơi mỗi thư viện nằm, cách tựa mới được thêm vào và cách Box Office dọn dẹp."
       },
       "downloads": {
         "label": "Tải xuống",
@@ -1090,9 +1093,21 @@
         "label": "Tìm kiếm",
         "sub": "Box Office tìm bản phát hành ở đâu, muốn chất lượng nào, và tìm thường xuyên và nhiều đến mức nào."
       },
-      "apps": {
-        "label": "Ứng dụng và thiết bị",
-        "sub": "Kết nối Matinee, gửi sách điện tử tới máy đọc sách và chuyển từ Radarr, Sonarr, Lidarr hoặc Readarr sang."
+      "notifications": {
+        "label": "Thông báo",
+        "sub": "Cảnh báo qua email, Discord, ntfy hoặc Home Assistant, Prometheus và thông báo trên điện thoại, máy tính."
+      },
+      "connections": {
+        "label": "Kết nối",
+        "sub": "Kết nối Matinee và TMDB, gửi sách điện tử tới máy đọc và chuyển từ Radarr, Sonarr, Lidarr hoặc Readarr."
+      },
+      "system": {
+        "label": "Hệ thống",
+        "sub": "Sao lưu, đăng nhập một lần cho mọi người, khởi động lại, cơ sở dữ liệu và thông tin Box Office này."
+      },
+      "account": {
+        "label": "Tài khoản của bạn",
+        "sub": "Ngôn ngữ, mật khẩu, khóa truy cập và mã một lần của bạn. Chúng chỉ là của bạn: quản trị viên khác có của riêng họ."
       },
       "elsewhere": {
         "label": "Ở trang khác"
@@ -1164,7 +1179,14 @@
     "prefsNever": "Không bao giờ lấy",
     "prefsWordsHint": "Phân cách các từ bằng dấu phẩy. Từ phải khớp trọn vẹn, viết hoa hay thường đều được, trong phần tên nằm sau tiêu đề.",
     "prefsNeverHint": "Bản phát hành có một trong các từ này sẽ bị từ chối. Bạn vẫn có thể tự chọn nó.",
-    "prefsOn": ", ưu tiên bản phát hành"
+    "prefsOn": ", ưu tiên bản phát hành",
+    "about": {
+      "title": "Giới thiệu",
+      "guide": "Hướng dẫn",
+      "changes": "Có gì mới",
+      "licence": "Giấy phép"
+    },
+    "elsewhereSite": "Ai có thể yêu cầu tựa, cách duyệt yêu cầu và giao diện trang yêu cầu."
   },
   "mediaTypes": {
     "music": {
@@ -2030,10 +2052,10 @@
     "add": "Thêm máy đọc",
     "kobo": "Máy đọc Kobo, Tolino và Boox không nhận sách qua email, nên Box Office không gửi đến chúng được.",
     "sendFrom": "Cách gửi sách",
-    "sameAsAlerts": "Dùng máy chủ thư trong Tình trạng → Cảnh báo",
+    "sameAsAlerts": "Dùng máy chủ thư trong Cài đặt → Thông báo",
     "sameAsAlertsHint": "Sách được gửi qua {{host}}, giống như cảnh báo.",
-    "noAlertMail": "Chưa có máy chủ thư trong Tình trạng → Cảnh báo. Hãy thiết lập ở đó, hoặc nhập bên dưới.",
-    "setUpAlerts": "Thiết lập email trong Tình trạng → Cảnh báo",
+    "noAlertMail": "Chưa có máy chủ thư trong Cài đặt → Thông báo. Hãy thiết lập ở đó, hoặc nhập bên dưới.",
+    "setUpAlerts": "Thiết lập email trong Cài đặt → Thông báo",
     "from": "Sách được gửi từ",
     "fromSameHint": "Để trống để dùng địa chỉ của cảnh báo. Máy chủ thư phải cho phép bạn gửi bằng địa chỉ này.",
     "fromHint": "Thường giống tên người dùng. Máy chủ thư phải cho phép bạn gửi bằng địa chỉ này.",

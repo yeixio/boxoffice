@@ -30,7 +30,8 @@
     "version": "Box Office {{version}}",
     "games": "Games",
     "importFiles": "Bestanden importeren",
-    "photos": "Foto's en video's"
+    "photos": "Foto's en video's",
+    "yourAccount": "Je account ({{name}})"
   },
   "app": {
     "notAnswering": "Box Office reageert niet: {{error}}",
@@ -500,7 +501,7 @@
       "checkup": "Box Office controleert zichzelf op problemen die je kunt verhelpen: sleutels, mappen, bestanden, verbindingen, back-ups en taken.",
       "server": "Hoe druk Box Office en zijn machine het afgelopen uur waren, zijn schijven en de problemen die het heeft gelogd.",
       "log": "Wat Box Office heeft gedaan, om uit te zoeken waarom iets wel of niet gebeurde.",
-      "alerts": "Hoor over problemen via e-mail, Discord, ntfy of Home Assistant, en koppel Prometheus."
+      "alerts": "Wat er nu mis is en de waarschuwingen verstuurd via e-mail, Discord, ntfy of Home Assistant."
     },
     "checkAgain": "Opnieuw controleren",
     "checking": "Controleren…",
@@ -620,7 +621,9 @@
     "addTo": "Toevoegen aan prometheus.yml",
     "k8s": "In Kubernetes kan Prometheus Box Office bereiken op zijn serviceadres in het cluster (servicenaam, namespace en poort 7272) in plaats van het adres hierboven.",
     "newToken": "Nieuw token",
-    "tokenLabel": "Token"
+    "tokenLabel": "Token",
+    "seeSent": "Verstuurde waarschuwingen bekijken",
+    "change": "Wijzigen waarvoor je gewaarschuwd wordt"
   },
   "backups": {
     "reason": {
@@ -1068,7 +1071,7 @@
     "more": "Meer dan films en tv",
     "moreSub": "Zet de andere soorten media aan waar Box Office voor moet zorgen. Elke soort staat uit tot je hem aanzet, en later uitzetten bewaart de mappen en instellingen. Box Office wijzigt nooit bestanden die al in deze bibliotheken staan.",
     "inPlaceOf": "(in plaats van {{app}})",
-    "pickRoot": "Kies hieronder een hoofdmap voor elke soort die je hebt aangezet.",
+    "pickRootLibrary": "Kies een hoofdmap voor elk soort dat je hebt aangezet, onder <link>Bibliotheek</link>.",
     "roots": {
       "movie": "Hoofdmappen voor films",
       "series": "Hoofdmappen voor tv",
@@ -1153,11 +1156,11 @@
     "sections": {
       "general": {
         "label": "Algemeen",
-        "sub": "Je taal en wachtwoord, de TMDB-sleutel waarmee Box Office titels opzoekt, en het herstarten van Box Office."
+        "sub": "De klok van Box Office en welke soorten media het beheert."
       },
       "library": {
         "label": "Bibliotheek",
-        "sub": "Welke soorten media Box Office beheert, waar elke bibliotheek staat en hoe het opruimt."
+        "sub": "Waar elke bibliotheek staat, hoe nieuwe titels binnenkomen en hoe Box Office opruimt."
       },
       "downloads": {
         "label": "Downloads",
@@ -1167,9 +1170,21 @@
         "label": "Zoeken",
         "sub": "Waar Box Office naar releases zoekt, welke kwaliteiten het wil en hoe vaak en hoeveel het zoekt."
       },
-      "apps": {
-        "label": "Apps en apparaten",
-        "sub": "Koppel Matinee, stuur e-books naar e-readers en verhuis vanuit Radarr, Sonarr, Lidarr of Readarr."
+      "notifications": {
+        "label": "Meldingen",
+        "sub": "Waarschuwingen via e-mail, Discord, ntfy of Home Assistant, Prometheus en meldingen op telefoons en computers."
+      },
+      "connections": {
+        "label": "Verbindingen",
+        "sub": "Koppel Matinee en TMDB, stuur e-books naar e-readers en verhuis vanuit Radarr, Sonarr, Lidarr of Readarr."
+      },
+      "system": {
+        "label": "Systeem",
+        "sub": "Back-ups, eenmalige aanmelding voor iedereen, herstarten, de database en welke Box Office dit is."
+      },
+      "account": {
+        "label": "Je account",
+        "sub": "Je taal, wachtwoord, toegangssleutels en eenmalige code. Ze zijn alleen van jou: andere beheerders hebben hun eigen."
       },
       "elsewhere": {
         "label": "Op andere pagina's"
@@ -1241,7 +1256,14 @@
     "prefsNever": "Nooit nemen",
     "prefsWordsHint": "Scheid woorden met komma's. Een woord moet in zijn geheel overeenkomen, met of zonder hoofdletters, in het deel van de naam na de titel.",
     "prefsNeverHint": "Een release met een van deze woorden wordt afgewezen. Je kunt hem nog steeds zelf kiezen.",
-    "prefsOn": ", releasevoorkeuren"
+    "prefsOn": ", releasevoorkeuren",
+    "about": {
+      "title": "Over",
+      "guide": "Handleiding",
+      "changes": "Wat is er nieuw",
+      "licence": "Licentie"
+    },
+    "elsewhereSite": "Wie titels mag aanvragen, hoe aanvragen worden goedgekeurd en hoe de aanvraagsite eruitziet."
   },
   "mediaTypes": {
     "music": {
@@ -2129,10 +2151,10 @@
     "add": "E-reader toevoegen",
     "kobo": "Kobo-, Tolino- en Boox-e-readers kunnen geen boeken per e-mail ontvangen, dus Box Office kan er niet naar sturen.",
     "sendFrom": "Hoe boeken verstuurd worden",
-    "sameAsAlerts": "De mailserver van Gezondheid → Meldingen gebruiken",
+    "sameAsAlerts": "De mailserver van Instellingen → Meldingen gebruiken",
     "sameAsAlertsHint": "Boeken gaan via {{host}}, net als meldingen.",
-    "noAlertMail": "Er is nog geen mailserver bij Gezondheid → Meldingen. Stel er daar een in, of vul hieronder een in.",
-    "setUpAlerts": "E-mail instellen bij Gezondheid → Meldingen",
+    "noAlertMail": "Er is nog geen mailserver bij Instellingen → Meldingen. Stel er daar een in, of vul hieronder een in.",
+    "setUpAlerts": "E-mail instellen bij Instellingen → Meldingen",
     "from": "Boeken komen van",
     "fromSameHint": "Laat leeg om het adres van de meldingen te gebruiken. Je mailserver moet je als dit adres laten versturen.",
     "fromHint": "Meestal hetzelfde als de gebruikersnaam. Je mailserver moet je als dit adres laten versturen.",
