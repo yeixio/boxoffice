@@ -70,7 +70,7 @@ func TestBackoff(t *testing.T) {
 	}
 	ix := testIndexer(t, st)
 	status, _ := st.IndexerStatus(ctx, ix.ID)
-	if !status.Resting(time.Now()) || status.RestingUntil.Sub(time.Now()) < 110*time.Second || status.Failures != 1 {
+	if !status.Resting(time.Now()) || time.Until(status.RestingUntil) < 110*time.Second || status.Failures != 1 {
 		t.Fatalf("after a 429: %+v", status)
 	}
 	// While it rests, it isn't asked, and searches say why.

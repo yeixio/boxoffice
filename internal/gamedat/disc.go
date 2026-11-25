@@ -185,7 +185,6 @@ func (fs *isoFS) readFile(p string, max int64) ([]byte, error) {
 type cueTrack struct {
 	file string // its file, next to the sheet
 	data bool   // a data track, not audio
-	at   int64  // where it starts in its file
 }
 
 // readCue reads a .cue sheet's tracks.

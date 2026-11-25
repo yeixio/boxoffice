@@ -105,7 +105,7 @@ func TestRepair(t *testing.T) {
 }
 
 func TestRepairInSmallPieces(t *testing.T) {
-	dir, want := setup(t)
+	dir, _ := setup(t)
 	ctx := context.Background()
 	os.Remove(filepath.Join(dir, "movie.mkv")) // 25 slices: more than there are blocks
 	s := load(t, dir, "set.par2", "set.vol0+4.par2", "set.vol4+5.par2")
@@ -117,7 +117,7 @@ func TestRepairInSmallPieces(t *testing.T) {
 		t.Fatalf("got %v", err)
 	}
 	// The sample (5 slices) can be rebuilt, here 4 KiB of memory at a time.
-	dir, want = setup(t)
+	dir, want := setup(t)
 	os.Remove(filepath.Join(dir, "sample.mkv"))
 	s = load(t, dir, "set.par2", "set.vol4+5.par2")
 	rep, _ = s.Verify(ctx, dir)

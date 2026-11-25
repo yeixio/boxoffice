@@ -248,6 +248,15 @@ func run() error {
 		Restart:    func() { restartNow(errRestart) },
 		SkipCode:   os.Getenv("BOXOFFICE_SKIP_SIGN_IN_CODE") != "",
 	}
+	// Behind a reverse proxy every request comes from the proxy's address,
+	// unless Box Office is told which proxies to believe about that.
+	if list := os.Getenv("BOXOFFICE_TRUSTED_PROXIES"); list != "" {
+		proxies, err := api.ParseProxies(list)
+		if err != nil {
+			log.Warn("BOXOFFICE_TRUSTED_PROXIES isn't a list of addresses or ranges like 10.42.0.0/16, so no proxy is trusted", "value", list, "err", err)
+		}
+		srv.TrustedProxies = proxies
+	}
 	// The same news goes to the phones and browsers that asked for push
 	// notifications. Sending waits on the browser makers' push services,
 	// so it doesn't hold up what caused the news.
@@ -297,7 +306,7 @@ func run() error {
 	var wg sync.WaitGroup
 	for _, loop := range []func(context.Context){runner.Run, backups.Run, downloads.Run, mon.Monitor.Run, alerter.Run,
 		func(ctx context.Context) { cat.RefreshEvery(ctx, cfg.Refresh) }, func(ctx context.Context) { finder.AutoSearchEvery(ctx, runner) },
-		finder.RSSEvery, finder.HeldEvery, finder.RegrabsEvery, finder.PruneEvery, shelf.DetailsEvery, finds.Run, checker.Run, subs.Run, follower.Run, mover.Run, gameShelf.Run, homeShelf.Run, func(ctx context.Context) { api.RecycleSweepEvery(ctx, db, log) }, srv.RunCleanup,
+		finder.RSSEvery, finder.HeldEvery, finder.RegrabsEvery, finder.PruneEvery, shelf.DetailsEvery, finds.Run, checker.Run, subs.Run, follower.Run, mover.Run, gameShelf.Run, homeShelf.Run, func(ctx context.Context) { api.RecycleSweepEvery(ctx, db, log) }, func(ctx context.Context) { api.SessionSweepEvery(ctx, db, log) }, srv.RunCleanup,
 		func(ctx context.Context) { retryImports(ctx, downloads, log) }} {
 		wg.Add(1)
 		go func() { defer wg.Done(); loop(ctx) }()

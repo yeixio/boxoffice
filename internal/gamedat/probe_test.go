@@ -47,13 +47,12 @@ func makeSFO(vals map[string]string) []byte {
 // folder A), as 2048-byte sectors, or raw 2352-byte ones.
 func makeISO(system string, files map[string][]byte, raw bool) []byte {
 	type node struct {
-		name  string
-		dir   bool
-		data  []byte
-		kids  []*node
-		lba   int
-		size  int
-		isDir bool
+		name string
+		dir  bool
+		data []byte
+		kids []*node
+		lba  int
+		size int
 	}
 	root := &node{dir: true}
 	names := make([]string, 0, len(files))

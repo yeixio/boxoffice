@@ -1,6 +1,7 @@
 .DEFAULT_GOAL := help
 VERSION ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo dev)
 LDFLAGS := -s -w -X github.com/yeixio/boxoffice/internal/version.Version=$(VERSION)
+STATICCHECK ?= 2026.2.2
 
 .PHONY: help web build run dev test test-postgres lint docker helm-lint
 
@@ -26,9 +27,10 @@ test: ## Go and web tests
 test-postgres: ## Go tests against PostgreSQL (set BOXOFFICE_TEST_DATABASE_URL)
 	go test -count=1 ./...
 
-lint: ## go vet and gofmt
+lint: ## go vet, gofmt and staticcheck (its checks are in staticcheck.conf)
 	go vet ./...
 	@test -z "$$(gofmt -l .)" || (gofmt -l . && exit 1)
+	go run honnef.co/go/tools/cmd/staticcheck@$(STATICCHECK) ./...
 
 docker: ## Build the Docker image
 	docker build --build-arg VERSION=$(VERSION) -t ghcr.io/yeixio/boxoffice:$(VERSION) .

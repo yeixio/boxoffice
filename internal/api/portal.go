@@ -193,29 +193,23 @@ func (s *Server) memberLogin(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 	name := store.MemberName(in.Username)
-	fv, _ := s.failures.LoadOrStore("member:"+name, &failure{})
-	f := fv.(*failure)
+	key := s.clientIP(r) + " member:" + name
+	f := s.failures.entry(key, time.Now())
 	f.mu.Lock()
-	wait := time.Until(f.until)
-	f.mu.Unlock()
-	if wait > 0 {
+	defer f.mu.Unlock()
+	if wait := time.Until(f.until); wait > 0 {
 		w.Header().Set("Retry-After", strconv.Itoa(int(wait.Seconds())+1))
 		return errorf(http.StatusTooManyRequests, "too many wrong passwords; try again in a few minutes")
 	}
 	m, err := s.Portal.SignIn(r.Context(), in.Username, in.Password, in.Matinee)
 	if errors.Is(err, portal.ErrBadSignIn) {
-		f.mu.Lock()
-		f.count++
-		if f.count >= 5 {
-			f.until = time.Now().Add(time.Duration(min(f.count-4, 15)) * time.Minute)
-		}
-		f.mu.Unlock()
-		s.Log.Warn("wrong request site sign-in", "username", name, "matinee", in.Matinee, "from", clientIP(r))
+		f.wrong(time.Now())
+		s.Log.Warn("wrong request site sign-in", "username", name, "matinee", in.Matinee, "from", s.clientIP(r))
 	}
 	if err != nil {
 		return portalErr(err)
 	}
-	s.failures.Delete("member:" + name)
+	s.failures.clear(key)
 	return s.memberSignedIn(w, r, m)
 }
 
@@ -227,7 +221,7 @@ func (s *Server) memberSignUp(w http.ResponseWriter, r *http.Request) error {
 	if err := readJSON(r, &in); err != nil {
 		return err
 	}
-	from := clientIP(r)
+	from := s.clientIP(r)
 	if wait := s.signUps.try(from, time.Now()); wait > 0 {
 		w.Header().Set("Retry-After", strconv.Itoa(int(wait.Seconds())+1))
 		s.Log.Warn("too many sign-ups for the request site; this one was turned away", "from", from)

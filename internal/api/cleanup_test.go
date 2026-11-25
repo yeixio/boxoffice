@@ -216,7 +216,7 @@ func TestCleanupDeletesByItself(t *testing.T) {
 	os.Rename(gone.Path, gone.Path+".away")
 	touch(t, filepath.Join(c.Path, "C.nfo"), 5)
 	due()
-	items = e.items()
+	e.items()
 	left := 0
 	for _, m := range []store.Movie{a, b} {
 		if there(m.Path) {
@@ -235,7 +235,7 @@ func TestCleanupDeletesByItself(t *testing.T) {
 	// Tomorrow the other goes.
 	s.Store.SetSetting(e.ctx, settingCleanupToday, "")
 	due()
-	items = e.items()
+	e.items()
 	if there(a.Path) || there(b.Path) {
 		t.Fatal("A and B should both be gone")
 	}

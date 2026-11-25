@@ -236,7 +236,7 @@ func (s *Server) passkeyAdd(w http.ResponseWriter, r *http.Request, o pkOwner) e
 	if err != nil {
 		return err
 	}
-	s.Log.Info("a passkey was added", "account", o.name, "member", o.member != 0, "host", site, "from", clientIP(r))
+	s.Log.Info("a passkey was added", "account", o.name, "member", o.member != 0, "host", site, "from", s.clientIP(r))
 	return writeJSON(w, http.StatusOK, p)
 }
 
@@ -292,7 +292,7 @@ func (s *Server) passkeyLogin(w http.ResponseWriter, r *http.Request, members bo
 	unknown := errorf(http.StatusUnauthorized, "that passkey isn't one that signs in here")
 	p, err := s.Store.PasskeyByCredential(ctx, in.ID)
 	if errors.Is(err, store.ErrNotFound) || (err == nil && ((p.MemberID != 0) != members || p.Host != site)) {
-		s.Log.Warn("sign-in with a passkey that isn't known", "from", clientIP(r))
+		s.Log.Warn("sign-in with a passkey that isn't known", "from", s.clientIP(r))
 		return unknown
 	}
 	if err != nil {
@@ -304,7 +304,7 @@ func (s *Server) passkeyLogin(w http.ResponseWriter, r *http.Request, members bo
 	}
 	count, err := passkey.Verify(in, passkey.Credential{ID: p.Credential, PublicKey: key, Alg: p.Alg, SignCount: p.SignCount, RPID: p.Host}, challenge, origin(r))
 	if err != nil {
-		s.Log.Warn("sign-in with a passkey was turned down", "passkey", p.Name, "why", err.Error(), "from", clientIP(r))
+		s.Log.Warn("sign-in with a passkey was turned down", "passkey", p.Name, "why", err.Error(), "from", s.clientIP(r))
 		if errors.Is(err, passkey.ErrCopied) {
 			return errorf(http.StatusUnauthorized, "that passkey looks like a copy of one used since; remove it and add it again")
 		}
@@ -387,7 +387,7 @@ func (s *Server) useCode(r *http.Request, code string) (bool, error) {
 	for i, x := range c.Recovery {
 		if x == h {
 			c.Recovery = append(c.Recovery[:i:i], c.Recovery[i+1:]...)
-			s.Log.Warn("a recovery code was used to sign in", "left", len(c.Recovery), "from", clientIP(r))
+			s.Log.Warn("a recovery code was used to sign in", "left", len(c.Recovery), "from", s.clientIP(r))
 			return true, s.saveCode(r, c)
 		}
 	}
@@ -451,7 +451,7 @@ func (s *Server) codeConfirm(w http.ResponseWriter, r *http.Request, _ pkOwner) 
 	if err := s.saveCode(r, c); err != nil {
 		return err
 	}
-	s.Log.Info("the one-time code for signing in was turned on", "from", clientIP(r))
+	s.Log.Info("the one-time code for signing in was turned on", "from", s.clientIP(r))
 	return writeJSON(w, http.StatusOK, map[string]any{"recovery": codes})
 }
 
@@ -472,7 +472,7 @@ func (s *Server) codeOff(w http.ResponseWriter, r *http.Request, _ pkOwner) erro
 	if err := s.Store.SetSetting(r.Context(), settingCode, ""); err != nil {
 		return err
 	}
-	s.Log.Info("the one-time code for signing in was turned off", "from", clientIP(r))
+	s.Log.Info("the one-time code for signing in was turned off", "from", s.clientIP(r))
 	w.WriteHeader(http.StatusNoContent)
 	return nil
 }

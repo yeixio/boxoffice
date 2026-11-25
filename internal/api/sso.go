@@ -267,7 +267,7 @@ func (s *Server) ssoCallback(w http.ResponseWriter, r *http.Request) error {
 	switch {
 	case visit.State == "" || !constEq(q.Get("state"), visit.State):
 		// Not an answer to a visit this browser started.
-		s.Log.Warn("single sign-on answer without a matching visit", "from", clientIP(r))
+		s.Log.Warn("single sign-on answer without a matching visit", "from", s.clientIP(r))
 		s.ssoBack(w, r, what, "failed")
 		return nil
 	case q.Get("error") != "":
@@ -289,7 +289,7 @@ func (s *Server) ssoCallback(w http.ResponseWriter, r *http.Request) error {
 	switch what {
 	case "admin":
 		if _, on := s.ssoAdmins(r); !on || s.portalHost(r) || !found.Admin {
-			s.Log.Warn("single sign-on account isn't an admin", "subject", id.Subject, "username", id.Username, "email", id.Email, "from", clientIP(r))
+			s.Log.Warn("single sign-on account isn't an admin", "subject", id.Subject, "username", id.Username, "email", id.Email, "from", s.clientIP(r))
 			s.ssoBack(w, r, what, "notallowed")
 			return nil
 		}
@@ -308,7 +308,7 @@ func (s *Server) ssoCallback(w http.ResponseWriter, r *http.Request) error {
 			return err
 		}
 		if _, on := s.ssoMembers(r); !on || !ps.Enabled || !found.Member {
-			s.Log.Warn("single sign-on account isn't let in to the request site", "subject", id.Subject, "username", id.Username, "from", clientIP(r))
+			s.Log.Warn("single sign-on account isn't let in to the request site", "subject", id.Subject, "username", id.Username, "from", s.clientIP(r))
 			s.ssoBack(w, r, what, "notallowed")
 			return nil
 		}

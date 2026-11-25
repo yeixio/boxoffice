@@ -52,14 +52,21 @@ func extractUnrar(ctx context.Context, bin string, a Archive, dir, password stri
 		return Result{}, err
 	}
 	defer os.RemoveAll(out)
+	// The password is never an argument, where the process list would show
+	// it to anything else on the host: a bare -p has unrar ask for it, and
+	// it reads the answer from its standard input when that isn't a
+	// terminal. -p- is "no password; don't ask".
 	pw := "-p-"
 	if password != "" {
-		pw = "-p" + password
+		pw = "-p"
 	}
 	// x: with paths; -o+: replace; -y: yes to all; -idcdp: quiet.
 	cmd := exec.CommandContext(ctx, bin, "x", "-o+", "-y", "-idcdp", pw, "--", first, out+string(filepath.Separator))
 	var stderr bytes.Buffer
 	cmd.Stdout, cmd.Stderr = &stderr, &stderr
+	if password != "" {
+		cmd.Stdin = strings.NewReader(password + "\n")
+	}
 	if err := cmd.Run(); err != nil {
 		if ctx.Err() != nil {
 			return Result{}, ctx.Err()

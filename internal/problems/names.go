@@ -1,8 +1,6 @@
 package problems
 
 import (
-	"strings"
-
 	"github.com/yeixio/boxoffice/internal/namefix"
 )
 
@@ -16,8 +14,3 @@ func Repair(name string) string { return namefix.Repair(name) }
 
 // Garbled says a name is written wrong on disk. See namefix.Garbled.
 func Garbled(name string) bool { return namefix.Garbled(name) }
-
-// same says two names are the same once repaired, ignoring case.
-func same(a, b string) bool {
-	return strings.EqualFold(Repair(a), Repair(b))
-}

@@ -104,6 +104,22 @@ func (s *Store) SessionUser(ctx context.Context, token string) (User, error) {
 	return u, err
 }
 
+// DeleteExpiredSessions clears the admin and request site sessions that
+// have run out, and says how many there were.
+func (s *Store) DeleteExpiredSessions(ctx context.Context) (int64, error) {
+	var n int64
+	for _, table := range []string{"sessions", "member_sessions"} {
+		res, err := s.exec(ctx, "DELETE FROM "+table+" WHERE expires_at < ?", now())
+		if err != nil {
+			return n, err
+		}
+		if k, err := res.RowsAffected(); err == nil {
+			n += k
+		}
+	}
+	return n, nil
+}
+
 func (s *Store) DeleteSession(ctx context.Context, token string) error {
 	_, err := s.exec(ctx, "DELETE FROM sessions WHERE token_hash = ? OR expires_at < ?", hashToken(token), now())
 	return err

@@ -26,6 +26,9 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
+      # The unrar fallback's tests are skipped without it.
+      - name: Install unrar
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq unrar
       - name: Lint
         run: make lint
       - name: Test
