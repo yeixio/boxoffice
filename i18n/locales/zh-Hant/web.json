@@ -1030,6 +1030,8 @@
     "qualities": "畫質，從差到好",
     "goodEnough": "夠好",
     "setGoodEnough": "設為夠好",
+    "beforeRelease": "上映前",
+    "beforeReleaseHint": "在電影正式發行前出現的版本：戲院偷拍（Cam、Telesync、Telecine）、未完成的剪輯（Workprint）、提前發行的海外 DVD（Regional），或寄給影評人和評獎投票者的 screener。每一種都排在所有正式版本之下，所以開啟升級後，正式版本出來時仍會被取得。",
     "upgradeUntil": "升級到夠好的畫質為止",
     "delete": "刪除",
     "password": "你的密碼",

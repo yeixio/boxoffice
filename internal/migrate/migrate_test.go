@@ -12,6 +12,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 	"sync"
 	"testing"
@@ -482,5 +483,21 @@ func TestMapProfileGroupCutoff(t *testing.T) {
 	}
 	if p.CutoffUnmet(quality.Parse("WEBRip-1080p").ID) || !p.CutoffUnmet(quality.Parse("HDTV-720p").ID) {
 		t.Fatal("cutoff judged wrong")
+	}
+}
+
+func TestMapProfilePreRelease(t *testing.T) {
+	var lp lProfile
+	if err := json.Unmarshal([]byte(`{"id": 5, "name": "Early", "upgradeAllowed": true, "cutoff": 3, "items": [
+		{"quality": {"id": 1, "name": "CAM"}, "allowed": false},
+		{"quality": {"id": 9, "name": "DVDSCR"}, "allowed": true},
+		{"quality": {"id": 10, "name": "REGIONAL"}, "allowed": true},
+		{"quality": {"id": 3, "name": "WEBDL-1080p"}, "allowed": true}]}`), &lp); err != nil {
+		t.Fatal(err)
+	}
+	p := mapProfile(lp)
+	want := []int{quality.Parse("REGIONAL").ID, quality.Parse("DVDSCR").ID, quality.Parse("WEBDL-1080p").ID}
+	if !slices.Equal(p.Allowed, want) || p.Cutoff != want[2] {
+		t.Fatalf("profile %+v, want allowed %v", p, want)
 	}
 }

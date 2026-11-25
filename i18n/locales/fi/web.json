@@ -1107,6 +1107,8 @@
     "qualities": "Laadut, huonoimmasta parhaaseen",
     "goodEnough": "riittävä",
     "setGoodEnough": "aseta riittäväksi",
+    "beforeRelease": "Ennen julkaisua",
+    "beforeReleaseHint": "Kopiot, jotka ilmestyvät ennen elokuvaa: kuvattu teatterissa (Cam, Telesync, Telecine), keskeneräinen versio (Workprint), varhainen ulkomainen DVD (Regional) tai kriitikoille ja palkintojen äänestäjille lähetetty screener. Jokainen on kaikkien oikeiden kopioiden alapuolella, joten päivitysten ollessa päällä oikea kopio haetaan silti, kun se ilmestyy.",
     "upgradeUntil": "Päivitä riittävään laatuun asti",
     "delete": "Poista",
     "password": "Salasanasi",

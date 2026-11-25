@@ -53,7 +53,7 @@ func Nearest(source string, res int) Quality {
 		source = "web"
 	}
 	if source == "dvd" || source == "remux" && res < 1080 {
-		return All[2] // a DVD, or a DVD's own copy
+		return dvd // a DVD, or a DVD's own copy
 	}
 	for _, q := range All {
 		if q.Source == source && q.Resolution == res {
@@ -61,7 +61,7 @@ func Nearest(source string, res int) Quality {
 		}
 	}
 	for _, q := range slices.Backward(All) {
-		if q.Resolution == res {
+		if q.Resolution == res && !q.PreRelease {
 			return q
 		}
 	}
@@ -86,6 +86,19 @@ func Correct(current int, name string, m Media, p Profile) int {
 		return current
 	}
 	cur, ok := ByID(current)
+	// A copy made before release looks like any other inside, so it stays
+	// one: only a screener's size can be put right.
+	if !ok || current == 0 {
+		if q, pre := preRelease(name); pre {
+			cur, ok, current = q, true, q.ID
+		}
+	}
+	if ok && cur.PreRelease {
+		if cur.Source == "screener" {
+			return screenerAt(res).ID
+		}
+		return current
+	}
 	if ok && current != 0 && cur.Resolution == res {
 		return current
 	}
@@ -104,7 +117,7 @@ func Correct(current int, name string, m Media, p Profile) int {
 	// The qualities the profile takes at this size.
 	var fits []Quality
 	for _, id := range p.Allowed {
-		if q, ok := ByID(id); ok && q.ID != 0 && q.Resolution == res {
+		if q, ok := ByID(id); ok && q.ID != 0 && !q.PreRelease && q.Resolution == res {
 			fits = append(fits, q)
 		}
 	}

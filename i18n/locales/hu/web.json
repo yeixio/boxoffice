@@ -1107,6 +1107,8 @@
     "qualities": "Minőségek, a legrosszabbtól a legjobbig",
     "goodEnough": "elég jó",
     "setGoodEnough": "beállítás elég jónak",
+    "beforeRelease": "Megjelenés előtt",
+    "beforeReleaseHint": "A film előtt megjelenő másolatok: moziban felvett (Cam, Telesync, Telecine), befejezetlen változat (Workprint), korai külföldi DVD (Regional) vagy kritikusoknak és díjszavazóknak küldött screener. Mindegyik minden valódi másolat alatt áll, így bekapcsolt frissítéssel a valódi másolat is letöltődik, amikor megjelenik.",
     "upgradeUntil": "Minőségjavítás az elég jó minőségig",
     "delete": "Törlés",
     "password": "A jelszavad",

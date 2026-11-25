@@ -1030,6 +1030,8 @@
     "qualities": "화질, 나쁜 것부터 좋은 것 순",
     "goodEnough": "충분",
     "setGoodEnough": "충분으로 설정",
+    "beforeRelease": "개봉 전",
+    "beforeReleaseHint": "영화가 나오기 전에 풀리는 사본: 극장에서 촬영한 것(Cam, Telesync, Telecine), 미완성 편집본(Workprint), 먼저 나온 해외 DVD(Regional), 평론가와 시상식 투표자에게 보낸 스크리너. 모두 진짜 사본보다 아래 순위라서, 업그레이드가 켜져 있으면 진짜 사본이 나올 때 그대로 받아 옵니다.",
     "upgradeUntil": "충분한 화질까지 업그레이드",
     "delete": "삭제",
     "password": "내 비밀번호",

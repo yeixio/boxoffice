@@ -1261,6 +1261,8 @@
     "qualities": "Jakości, od najgorszej do najlepszej",
     "goodEnough": "wystarczająca",
     "setGoodEnough": "ustaw jako wystarczającą",
+    "beforeRelease": "Przed premierą",
+    "beforeReleaseHint": "Kopie, które pojawiają się przed filmem: nagrane w kinie (Cam, Telesync, Telecine), niedokończona wersja (Workprint), wczesne zagraniczne DVD (Regional) albo screener wysłany krytykom i jurorom nagród. Każda jest niżej niż każda prawdziwa kopia, więc przy włączonych ulepszeniach prawdziwa kopia i tak zostanie pobrana po premierze.",
     "upgradeUntil": "Ulepszaj do wystarczającej jakości",
     "delete": "Usuń",
     "password": "Twoje hasło",

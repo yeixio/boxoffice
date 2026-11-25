@@ -1030,6 +1030,8 @@
     "qualities": "Kualitas, terburuk ke terbaik",
     "goodEnough": "cukup baik",
     "setGoodEnough": "jadikan cukup baik",
+    "beforeRelease": "Sebelum rilis",
+    "beforeReleaseHint": "Salinan yang keluar sebelum filmnya: direkam di bioskop (Cam, Telesync, Telecine), potongan yang belum selesai (Workprint), DVD luar negeri yang lebih awal (Regional), atau screener untuk kritikus dan juri penghargaan. Masing-masing berada di bawah setiap salinan asli, jadi dengan peningkatan aktif salinan asli tetap diambil saat keluar.",
     "upgradeUntil": "Tingkatkan sampai kualitas cukup baik",
     "delete": "Hapus",
     "password": "Kata sandi Anda",

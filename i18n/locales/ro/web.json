@@ -1184,6 +1184,8 @@
     "qualities": "Calități, de la cea mai slabă la cea mai bună",
     "goodEnough": "suficient de bună",
     "setGoodEnough": "setează ca suficient de bună",
+    "beforeRelease": "Înainte de lansare",
+    "beforeReleaseHint": "Copii care apar înaintea filmului: filmate în cinema (Cam, Telesync, Telecine), o versiune neterminată (Workprint), un DVD străin timpuriu (Regional) sau un screener trimis criticilor și votanților de premii. Fiecare stă sub orice copie reală, așa că, cu îmbunătățirile pornite, copia reală tot e luată când apare.",
     "upgradeUntil": "Îmbunătățește până la calitatea suficient de bună",
     "delete": "Șterge",
     "password": "Parola ta",

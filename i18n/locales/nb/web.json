@@ -1107,6 +1107,8 @@
     "qualities": "Kvaliteter, dårligst til best",
     "goodEnough": "god nok",
     "setGoodEnough": "angi som god nok",
+    "beforeRelease": "Før premieren",
+    "beforeReleaseHint": "Kopier som kommer før filmen: filmet på kino (Cam, Telesync, Telecine), en uferdig versjon (Workprint), en tidlig utenlandsk DVD (Regional) eller en screener sendt til kritikere og prisjuryer. Hver rangeres under alle ekte kopier, så med oppgraderinger på hentes den ekte kopien likevel når den kommer.",
     "upgradeUntil": "Oppgrader til god nok-kvaliteten",
     "delete": "Slett",
     "password": "Passordet ditt",

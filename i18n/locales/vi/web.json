@@ -1030,6 +1030,8 @@
     "qualities": "Mức chất lượng, từ kém nhất đến tốt nhất",
     "goodEnough": "đủ tốt",
     "setGoodEnough": "đặt là đủ tốt",
+    "beforeRelease": "Trước khi phát hành",
+    "beforeReleaseHint": "Bản ra trước khi phim phát hành: quay lén trong rạp (Cam, Telesync, Telecine), bản dựng chưa hoàn chỉnh (Workprint), DVD nước ngoài ra sớm (Regional) hoặc bản screener gửi cho nhà phê bình và người bầu giải. Mỗi bản đều xếp dưới mọi bản thật, nên khi bật nâng cấp, bản thật vẫn được tải khi ra mắt.",
     "upgradeUntil": "Nâng cấp đến mức chất lượng đủ tốt",
     "delete": "Xóa",
     "password": "Mật khẩu của bạn",

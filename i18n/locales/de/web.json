@@ -1107,6 +1107,8 @@
     "qualities": "Qualitäten, von schlechtester bis bester",
     "goodEnough": "gut genug",
     "setGoodEnough": "als gut genug festlegen",
+    "beforeRelease": "Vor dem Kinostart",
+    "beforeReleaseHint": "Kopien, die vor dem Film erscheinen: im Kino abgefilmt (Cam, Telesync, Telecine), eine unfertige Fassung (Workprint), eine frühe ausländische DVD (Regional) oder ein Screener für Kritiker und Preisjurys. Jede steht unter jeder echten Kopie, daher wird bei aktivierten Upgrades die echte Kopie trotzdem geholt, sobald sie erscheint.",
     "upgradeUntil": "Upgraden bis zur Gut-genug-Qualität",
     "delete": "Löschen",
     "password": "Dein Passwort",
