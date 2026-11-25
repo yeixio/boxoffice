@@ -301,6 +301,16 @@ func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir str
 				}
 			}
 		}
+		if !named && d.Mode != ModeEpisode {
+			// Talk shows and news are named by the day they aired:
+			// "Show.2026.11.19.mkv" is the episode that aired then.
+			for _, v := range vids {
+				if e, ok := airedOn(eps, filepath.Base(v)); ok {
+					targets[v] = target{e.Season, []int{e.Number}}
+					named = true
+				}
+			}
+		}
 		if d.Mode == ModeEpisode {
 			i := -1
 			if len(d.EpisodeIDs) == 1 {
@@ -629,12 +639,33 @@ func releaseEpisode(d store.Download, eps []store.Episode) (int, []int) {
 	if s, n := episodeNumbers(d.Name); len(n) > 0 {
 		return s, n
 	}
+	if e, ok := airedOn(eps, d.Name); ok {
+		return e.Season, []int{e.Number}
+	}
 	if len(d.EpisodeIDs) == 1 {
 		if i := slices.IndexFunc(eps, func(e store.Episode) bool { return e.ID == d.EpisodeIDs[0] }); i >= 0 {
 			return eps[i].Season, []int{eps[i].Number}
 		}
 	}
 	return 0, nil
+}
+
+// airedOn is the one episode (specials aside) that aired on the day a
+// release or file is named for ("Show.2026.11.19"), as daily shows are.
+func airedOn(eps []store.Episode, name string) (store.Episode, bool) {
+	day, ok := quality.AirDate(name)
+	if !ok {
+		return store.Episode{}, false
+	}
+	var found store.Episode
+	n := 0
+	for _, e := range eps {
+		if e.Season > 0 && e.AirDate != nil && quality.SameDay(*e.AirDate, day) {
+			found = e
+			n++
+		}
+	}
+	return found, n == 1
 }
 
 func episodeNumbers(name string) (int, []int) {

@@ -37,6 +37,8 @@ type Service struct {
 	absolute map[int64]absoluteCache
 	// places is the places shows' chosen episode orders give out.
 	places map[int64]placesCache
+	// shows is shows' episodes, for reading releases named by date.
+	shows map[int64]episodesCache
 	// regrabMu keeps two replacements from both taking the day's last room.
 	regrabMu sync.Mutex
 }
@@ -500,6 +502,25 @@ func (s *Service) EpisodeFor(ctx context.Context, id int64, ask Ask) (Results, e
 		}
 	}
 	judge(rs, true)
+	if s.daily(ctx, e) {
+		// A daily show's releases are named by the day they aired, and
+		// indexers file them that way: ask by the day too.
+		more, notes, _, err := s.ask(ctx, func(ix store.Indexer) Query {
+			q := Query{Type: "tvsearch", Season: e.AirDate.UTC().Year(), Day: e.AirDate.UTC().Format("01/02"), Cats: cats(ix, 5000, 5999, 5000)}
+			if t.TVDBID > 0 {
+				q.TVDBID = t.TVDBID
+			} else {
+				q.Text = searchText(t.Title)
+			}
+			return q
+		})
+		if err != nil {
+			out.Errors = append(out.Errors, err.Error())
+		} else {
+			out.Errors = append(out.Errors, notes...)
+			judge(more, true)
+		}
+	}
 	if n := s.absoluteNumber(ctx, t, e); n > 0 {
 		// Anime is mostly posted as "Show - 137", which a search by season
 		// and episode misses: ask for it by name and number too.

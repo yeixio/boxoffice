@@ -380,6 +380,35 @@ func (s *Service) takeFromFeed(ctx context.Context, a AutoSettings, releases []R
 			}
 			continue
 		}
+		// Named by the day it aired, as talk shows and news are.
+		if _, dated := quality.AirDate(r.Title); dated {
+			var matched int64
+			for _, sw := range shows {
+				if matched != 0 && sw.t.ID != matched {
+					continue
+				}
+				if r.TVDBID > 0 && sw.t.TVDBID > 0 {
+					if r.TVDBID != sw.t.TVDBID {
+						continue
+					}
+				} else if !titleMatches(r.Title, sw.t.Title) {
+					continue
+				}
+				c := s.judgeEpisodes(sw.ctx, r, sw.t, sw.p, sw.eps, blocked("series", sw.t.ID), false, false)
+				if c.Accepted && slices.ContainsFunc(c.episodes, func(id int64) bool { return earlyEps[id] }) {
+					if why := earlyMiss(a.Early, sw.p, c); why != "" {
+						c.reject(why)
+					}
+				}
+				if c.Accepted {
+					out.Releases = append(out.Releases, c)
+				}
+				matched = sw.t.ID
+			}
+			if matched != 0 {
+				continue
+			}
+		}
 		// Anime numbered straight through ("Show - 137"), for the shows
 		// that say their releases are.
 		taken := false
