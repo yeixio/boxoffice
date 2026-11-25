@@ -2993,5 +2993,28 @@
     "notMoved": "Nicht verschoben: {{count}}",
     "moveAll": "Titel verschieben",
     "moveTo": "Verschieben nach…"
+  },
+  "titlesFile": {
+    "title": "Titel als Datei",
+    "sub": "Speichere die Liste dessen, was Box Office verwaltet (Filme, Serien, Künstler und Autoren und wie jeder Titel beobachtet wird), als Datei, die du lesen, aufbewahren oder teilen kannst. Beim Laden einer Datei werden die Titel hinzugefügt, die hier noch fehlen. Ein vorhandener Titel wird dabei nie geändert oder entfernt, und keine Datei auf der Festplatte wird angefasst.",
+    "saveJson": "Als JSON speichern",
+    "saveCsv": "Als CSV speichern",
+    "load": "Datei laden",
+    "loadHint": "Lade eine hier gespeicherte Datei oder deine eigene, als CSV gespeicherte Tabelle. Die erste Zeile benennt die Spalten: kind (movie, show, artist, author), title, und eine ID: tmdb_id / imdb_id (Filme), tmdb_id / tvdb_id (Serien), musicbrainz_id (Künstler), openlibrary_key (Autoren).",
+    "lookTitle": "{{name}} laden",
+    "inFile": "Titel in der Datei",
+    "toAdd": "Hinzuzufügen",
+    "have": "Schon vorhanden, bleiben unverändert",
+    "cant": "Können nicht hinzugefügt werden",
+    "nothing": "Alles aus der Datei ist schon vorhanden.",
+    "otherProfile": "{{n}} verwenden ein Qualitätsprofil, das es hier nicht gibt. Sie bekommen das Standardprofil oder das, das deine Regeln für neue Titel wählen.",
+    "otherFolder": "{{n}} liegen in einem Stammordner, den es hier nicht gibt. Sie kommen in den Standardordner oder in den, den deine Regeln für neue Titel wählen.",
+    "more": "und {{n}} weitere",
+    "search": "Nach jedem Titel suchen, sobald er hinzugefügt ist",
+    "searchHint": "Ist das aus, finden die regelmäßigen Suchen nach fehlenden Titeln sie in ihrem üblichen Tempo.",
+    "add": "Diese Titel hinzufügen",
+    "queued": "{{n}} Titel werden im Hintergrund nacheinander hinzugefügt. Verfolge es unter <link>Aktivität</link>.",
+    "artists": "Künstler",
+    "authors": "Autoren"
   }
 }

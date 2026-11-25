@@ -47,6 +47,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/sso"
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/subtitles"
+	"github.com/yeixio/boxoffice/internal/titlelist"
 	"github.com/yeixio/boxoffice/internal/tmdb"
 )
 
@@ -120,6 +121,8 @@ type Server struct {
 	Subtitles *subtitles.Service
 	// Lists follows lists kept elsewhere; nil makes one that only answers.
 	Lists *lists.Service
+	// Titles adds the titles of a list loaded from a file; nil makes one.
+	Titles *titlelist.Service
 	// Restart stops Box Office cleanly and starts it again, for the
 	// Restart button in Settings; nil means it can't.
 	Restart func()
@@ -134,6 +137,7 @@ type Server struct {
 	ereaderOnce  sync.Once
 	subtitleOnce sync.Once
 	listOnce     sync.Once
+	titlesOnce   sync.Once
 	cleanupMu    sync.Mutex // one clean-up run or deletion at a time
 	started      time.Time
 	failures     lockouts // client address and username -> wrong tries
@@ -338,6 +342,7 @@ func (s *Server) Handler() http.Handler {
 	routes = append(routes, s.qualityCheckRoutes()...)
 	routes = append(routes, s.subtitleRoutes()...)
 	routes = append(routes, s.listRoutes()...)
+	routes = append(routes, s.titleListRoutes()...)
 	routes = append(routes, s.cleanupRoutes()...)
 	routes = append(routes, s.portalRoutes()...)
 	routes = append(routes, s.pushRoutes()...)

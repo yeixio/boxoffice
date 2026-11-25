@@ -3239,5 +3239,28 @@
     "notMoved": "Nepřesunuto: {{count}}",
     "moveAll": "Přesunout tituly",
     "moveTo": "Přesunout do…"
+  },
+  "titlesFile": {
+    "title": "Tituly jako soubor",
+    "sub": "Uložte seznam toho, co Box Office spravuje (filmy, seriály, interprety a autory a to, jak se každý sleduje), jako soubor, který si můžete přečíst, uschovat nebo sdílet. Načtení souboru přidá tituly, které tu ještě nejsou. Nikdy nezmění ani neodebere titul, který tu už je, a nikdy nesáhne na soubor na disku.",
+    "saveJson": "Uložit jako JSON",
+    "saveCsv": "Uložit jako CSV",
+    "load": "Načíst soubor",
+    "loadHint": "Načtěte soubor uložený zde nebo vlastní tabulku uloženou jako CSV. První řádek pojmenovává sloupce: kind (movie, show, artist, author), title, a identifikátor: tmdb_id / imdb_id (Filmy), tmdb_id / tvdb_id (Seriály), musicbrainz_id (Interpreti), openlibrary_key (Autoři).",
+    "lookTitle": "Načíst {{name}}",
+    "inFile": "Titulů v souboru",
+    "toAdd": "K přidání",
+    "have": "Už tu jsou, zůstanou beze změny",
+    "cant": "Nelze přidat",
+    "nothing": "Vše ze souboru už tu je.",
+    "otherProfile": "{{n}} používá profil kvality, který tu není. Dostanou výchozí, nebo ten, který vyberou vaše pravidla pro nové tituly.",
+    "otherFolder": "{{n}} je v kořenové složce, která tu není. Půjdou do výchozí složky, nebo do té, kterou vyberou vaše pravidla pro nové tituly.",
+    "more": "a {{n}} dalších",
+    "search": "Po přidání každý titul vyhledat",
+    "searchHint": "Když je to vypnuté, najdou je běžná hledání chybějících titulů svým obvyklým tempem.",
+    "add": "Přidat tyto tituly",
+    "queued": "Na pozadí se přidává {{n}} titulů, jeden po druhém. Sledujte to v sekci <link>Aktivita</link>.",
+    "artists": "Interpreti",
+    "authors": "Autoři"
   }
 }

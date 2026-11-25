@@ -2993,5 +2993,28 @@
     "notMoved": "Nem sikerült áthelyezni: {{count}}",
     "moveAll": "Címek áthelyezése",
     "moveTo": "Áthelyezés ide…"
+  },
+  "titlesFile": {
+    "title": "Címek fájlként",
+    "sub": "Mentsd el fájlba annak a listáját, amit a Box Office kezel (filmek, sorozatok, előadók és szerzők, és hogy melyiket hogyan figyeli), hogy elolvashasd, megőrizhesd vagy megoszthasd. Egy fájl betöltése hozzáadja azokat a címeket, amelyek itt még nincsenek meg. Soha nem módosít vagy távolít el már meglévő címet, és soha nem nyúl a lemezen lévő fájlokhoz.",
+    "saveJson": "Mentés JSON-ként",
+    "saveCsv": "Mentés CSV-ként",
+    "load": "Fájl betöltése",
+    "loadHint": "Tölts be egy itt mentett fájlt vagy egy saját, CSV-ként mentett táblázatot. Az első sora nevezi meg az oszlopokat: kind (movie, show, artist, author), title, és egy azonosító: tmdb_id / imdb_id (Filmek), tmdb_id / tvdb_id (Sorozatok), musicbrainz_id (Előadók), openlibrary_key (Szerzők).",
+    "lookTitle": "{{name}} betöltése",
+    "inFile": "Címek a fájlban",
+    "toAdd": "Hozzáadandó",
+    "have": "Már megvan, változatlan marad",
+    "cant": "Nem adható hozzá",
+    "nothing": "A fájlban minden megvan már itt.",
+    "otherProfile": "{{n}} olyan minőségprofilt használ, amely itt nincs. Az alapértelmezettet kapják, vagy azt, amelyet az új címekre vonatkozó szabályaid választanak.",
+    "otherFolder": "{{n}} olyan gyökérmappában van, amely itt nincs. Az alapértelmezett mappába kerülnek, vagy abba, amelyet az új címekre vonatkozó szabályaid választanak.",
+    "more": "és még {{n}}",
+    "search": "Minden cím keresése a hozzáadás után",
+    "searchHint": "Kikapcsolva a hiányzó címek szokásos keresései találják meg őket a megszokott ütemben.",
+    "add": "Ezeknek a címeknek a hozzáadása",
+    "queued": "{{n}} cím hozzáadása folyik a háttérben, egyenként. Kövesd itt: <link>Tevékenység</link>.",
+    "artists": "Előadók",
+    "authors": "Szerzők"
   }
 }

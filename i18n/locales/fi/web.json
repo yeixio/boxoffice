@@ -2993,5 +2993,28 @@
     "notMoved": "Ei siirretty: {{count}}",
     "moveAll": "Siirrä nimikkeitä",
     "moveTo": "Siirrä kohteeseen…"
+  },
+  "titlesFile": {
+    "title": "Nimikkeet tiedostona",
+    "sub": "Tallenna luettelo siitä, mitä Box Office ylläpitää (elokuvat, sarjat, artistit ja kirjailijat sekä se, miten kutakin seurataan), tiedostoksi, jonka voit lukea, säilyttää tai jakaa. Tiedoston lataaminen lisää nimikkeet, joita täällä ei vielä ole. Se ei koskaan muuta tai poista täällä jo olevaa nimikettä eikä koske levyllä oleviin tiedostoihin.",
+    "saveJson": "Tallenna JSON-muodossa",
+    "saveCsv": "Tallenna CSV-muodossa",
+    "load": "Lataa tiedosto",
+    "loadHint": "Lataa täällä tallennettu tiedosto tai oma CSV-muotoon tallennettu taulukkosi. Ensimmäinen rivi nimeää sarakkeet: kind (movie, show, artist, author), title, ja tunniste: tmdb_id / imdb_id (Elokuvat), tmdb_id / tvdb_id (Sarjat), musicbrainz_id (Artistit), openlibrary_key (Kirjailijat).",
+    "lookTitle": "Lataa {{name}}",
+    "inFile": "Nimikkeitä tiedostossa",
+    "toAdd": "Lisättävät",
+    "have": "Jo täällä, jätetään ennalleen",
+    "cant": "Ei voida lisätä",
+    "nothing": "Kaikki tiedostossa oleva on jo täällä.",
+    "otherProfile": "{{n}} käyttää laatuprofiilia, jota täällä ei ole. Ne saavat oletusprofiilin tai sen, jonka uusien nimikkeiden sääntösi valitsevat.",
+    "otherFolder": "{{n}} on juurikansiossa, jota täällä ei ole. Ne menevät oletuskansioon tai siihen, jonka uusien nimikkeiden sääntösi valitsevat.",
+    "more": "ja {{n}} muuta",
+    "search": "Hae jokaista nimikettä, kun se on lisätty",
+    "searchHint": "Jos tämä on pois päältä, tavalliset puuttuvien nimikkeiden haut löytävät ne omaan tahtiinsa.",
+    "add": "Lisää nämä nimikkeet",
+    "queued": "Lisätään {{n}} nimikettä taustalla yksi kerrallaan. Seuraa kohdassa <link>Toiminta</link>.",
+    "artists": "Artistit",
+    "authors": "Kirjailijat"
   }
 }

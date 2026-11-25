@@ -2870,5 +2870,28 @@
     "notMoved": "無法移動：{{count}}",
     "moveAll": "移動作品",
     "moveTo": "移到…"
+  },
+  "titlesFile": {
+    "title": "將片單存為檔案",
+    "sub": "把 Box Office 管理的清單（電影、節目、藝人和作者，以及各自的追蹤方式）儲存為一個可以閱讀、保留或分享的檔案。載入檔案會加入這裡還沒有的項目。它絕不會變更或移除已有的項目，也絕不會動到磁碟上的檔案。",
+    "saveJson": "儲存為 JSON",
+    "saveCsv": "儲存為 CSV",
+    "load": "載入檔案",
+    "loadHint": "載入在這裡儲存的檔案，或你自己儲存為 CSV 的試算表。 第一列是各欄的名稱: kind (movie, show, artist, author), title, 以及一個 ID: tmdb_id / imdb_id (電影), tmdb_id / tvdb_id (劇集), musicbrainz_id (藝人), openlibrary_key (作者).",
+    "lookTitle": "載入 {{name}}",
+    "inFile": "檔案中的項目",
+    "toAdd": "將加入",
+    "have": "已存在，維持不變",
+    "cant": "無法加入",
+    "nothing": "檔案裡的內容這裡都已經有了。",
+    "otherProfile": "{{n}} 個項目使用了這裡沒有的品質設定檔。它們將使用預設設定檔，或你的新項目規則所選的設定檔。",
+    "otherFolder": "{{n}} 個項目位於這裡沒有的根資料夾。它們將放入預設資料夾，或你的新項目規則所選的資料夾。",
+    "more": "還有 {{n}} 個",
+    "search": "加入後搜尋每個項目",
+    "searchHint": "關閉時，針對缺少項目的例行搜尋會以平常的步調找到它們。",
+    "add": "加入這些項目",
+    "queued": "正在背景逐一加入 {{n}} 個項目。可在<link>活動</link>查看進度。",
+    "artists": "藝人",
+    "authors": "作者"
   }
 }

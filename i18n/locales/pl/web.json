@@ -3239,5 +3239,28 @@
     "notMoved": "Nie przeniesiono: {{count}}",
     "moveAll": "Przenieś tytuły",
     "moveTo": "Przenieś do…"
+  },
+  "titlesFile": {
+    "title": "Tytuły jako plik",
+    "sub": "Zapisz listę tego, czym zajmuje się Box Office (filmy, seriale, wykonawcy i autorzy oraz sposób śledzenia każdego z nich), jako plik, który możesz przeczytać, zachować lub udostępnić. Wczytanie pliku dodaje tytuły, których tu jeszcze nie ma. Nigdy nie zmienia ani nie usuwa tytułu, który już tu jest, i nigdy nie rusza plików na dysku.",
+    "saveJson": "Zapisz jako JSON",
+    "saveCsv": "Zapisz jako CSV",
+    "load": "Wczytaj plik",
+    "loadHint": "Wczytaj plik zapisany tutaj albo własny arkusz zapisany jako CSV. Pierwszy wiersz nazywa kolumny: kind (movie, show, artist, author), title, oraz identyfikator: tmdb_id / imdb_id (Filmy), tmdb_id / tvdb_id (Seriale), musicbrainz_id (Wykonawcy), openlibrary_key (Autorzy).",
+    "lookTitle": "Wczytaj {{name}}",
+    "inFile": "Tytuły w pliku",
+    "toAdd": "Do dodania",
+    "have": "Już tu są, zostają bez zmian",
+    "cant": "Nie można dodać",
+    "nothing": "Wszystko z pliku już tu jest.",
+    "otherProfile": "{{n}} używa profilu jakości, którego tu nie ma. Dostaną domyślny albo ten, który wybiorą twoje reguły dla nowych tytułów.",
+    "otherFolder": "{{n}} jest w folderze głównym, którego tu nie ma. Trafią do folderu domyślnego albo tego, który wybiorą twoje reguły dla nowych tytułów.",
+    "more": "i jeszcze {{n}}",
+    "search": "Wyszukaj każdy tytuł po dodaniu",
+    "searchHint": "Gdy wyłączone, zwykłe wyszukiwania brakujących tytułów znajdą je w swoim normalnym tempie.",
+    "add": "Dodaj te tytuły",
+    "queued": "Dodawanie {{n}} tytułów w tle, po jednym. Śledź to w sekcji <link>Aktywność</link>.",
+    "artists": "Wykonawcy",
+    "authors": "Autorzy"
   }
 }

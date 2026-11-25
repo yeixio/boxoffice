@@ -2870,5 +2870,28 @@
     "notMoved": "Tidak bisa dipindahkan: {{count}}",
     "moveAll": "Pindahkan judul",
     "moveTo": "Pindahkan ke…"
+  },
+  "titlesFile": {
+    "title": "Judul sebagai berkas",
+    "sub": "Simpan daftar yang dikelola Box Office (film, acara, artis, dan penulis, serta cara masing-masing dipantau) sebagai berkas yang bisa Anda baca, simpan, atau bagikan. Memuat berkas menambahkan judul yang belum ada di sini. Ini tidak pernah mengubah atau menghapus judul yang sudah ada, dan tidak pernah menyentuh berkas di disk.",
+    "saveJson": "Simpan sebagai JSON",
+    "saveCsv": "Simpan sebagai CSV",
+    "load": "Muat berkas",
+    "loadHint": "Muat berkas yang disimpan di sini, atau spreadsheet Anda sendiri yang disimpan sebagai CSV. Baris pertamanya menamai kolom: kind (movie, show, artist, author), title, dan sebuah id: tmdb_id / imdb_id (Film), tmdb_id / tvdb_id (Acara), musicbrainz_id (Artis), openlibrary_key (Penulis).",
+    "lookTitle": "Muat {{name}}",
+    "inFile": "Judul dalam berkas",
+    "toAdd": "Akan ditambahkan",
+    "have": "Sudah ada, dibiarkan apa adanya",
+    "cant": "Tidak bisa ditambahkan",
+    "nothing": "Semua yang ada di berkas sudah ada di sini.",
+    "otherProfile": "{{n}} memakai profil kualitas yang tidak ada di sini. Mereka mendapat profil bawaan, atau yang dipilih aturan Anda untuk judul baru.",
+    "otherFolder": "{{n}} berada di folder root yang tidak ada di sini. Mereka masuk ke folder bawaan, atau yang dipilih aturan Anda untuk judul baru.",
+    "more": "dan {{n}} lainnya",
+    "search": "Cari setiap judul setelah ditambahkan",
+    "searchHint": "Jika dimatikan, pencarian rutin untuk judul yang belum ada akan menemukannya dengan laju biasa.",
+    "add": "Tambahkan judul ini",
+    "queued": "Menambahkan {{n}} judul di latar belakang, satu per satu. Ikuti di <link>Aktivitas</link>.",
+    "artists": "Artis",
+    "authors": "Penulis"
   }
 }

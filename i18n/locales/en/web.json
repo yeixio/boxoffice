@@ -2993,5 +2993,28 @@
     "notMoved": "Couldn't move: {{count}}",
     "moveAll": "Move titles",
     "moveTo": "Move to…"
+  },
+  "titlesFile": {
+    "title": "Titles as a file",
+    "sub": "Save the list of what Box Office keeps (movies, shows, artists and authors, and how each is watched) as a file you can read, keep or share. Loading a file adds the titles that aren't here yet. It never changes or removes a title that's already here, and never touches a file on disk.",
+    "saveJson": "Save as JSON",
+    "saveCsv": "Save as CSV",
+    "load": "Load a file",
+    "loadHint": "Load a file saved here, or your own spreadsheet saved as CSV. Its first row names the columns: kind (movie, show, artist, author), title, and an id: tmdb_id / imdb_id (Movies), tmdb_id / tvdb_id (Shows), musicbrainz_id (Artists), openlibrary_key (Authors).",
+    "lookTitle": "Load {{name}}",
+    "inFile": "Titles in the file",
+    "toAdd": "To add",
+    "have": "Already here, left as they are",
+    "cant": "Can't be added",
+    "nothing": "Everything in the file is already here.",
+    "otherProfile": "{{n}} with a quality profile that isn't here: the default one is used, or the one your rules for new titles pick.",
+    "otherFolder": "{{n}} in a root folder that isn't here: the default folder is used, or the one your rules for new titles pick.",
+    "more": "and {{n}} more",
+    "search": "Search for each title once it's added",
+    "searchHint": "Left off, the regular searches for missing titles find them at their usual pace.",
+    "add": "Add these titles",
+    "queued": "Adding {{n}} titles in the background, one at a time. Follow along in <link>Activity</link>.",
+    "artists": "Artists",
+    "authors": "Authors"
   }
 }

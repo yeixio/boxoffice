@@ -2870,5 +2870,28 @@
     "notMoved": "无法移动：{{count}}",
     "moveAll": "移动作品",
     "moveTo": "移到…"
+  },
+  "titlesFile": {
+    "title": "将片单存为文件",
+    "sub": "把 Box Office 管理的清单（电影、剧集、艺人和作者，以及各自的追踪方式）保存为一个可以阅读、保留或分享的文件。加载文件会添加这里还没有的条目。它绝不会更改或移除已有的条目，也绝不会碰磁盘上的文件。",
+    "saveJson": "保存为 JSON",
+    "saveCsv": "保存为 CSV",
+    "load": "加载文件",
+    "loadHint": "加载在这里保存的文件，或你自己保存为 CSV 的表格。 第一行是各列的名称: kind (movie, show, artist, author), title, 以及一个 ID: tmdb_id / imdb_id (电影), tmdb_id / tvdb_id (剧集), musicbrainz_id (艺人), openlibrary_key (作者).",
+    "lookTitle": "加载 {{name}}",
+    "inFile": "文件中的条目",
+    "toAdd": "将添加",
+    "have": "已存在，保持不变",
+    "cant": "无法添加",
+    "nothing": "文件里的内容这里都已经有了。",
+    "otherProfile": "{{n}} 个条目使用了这里没有的质量配置。它们将使用默认配置，或你的新条目规则所选的配置。",
+    "otherFolder": "{{n}} 个条目位于这里没有的根文件夹。它们将放入默认文件夹，或你的新条目规则所选的文件夹。",
+    "more": "还有 {{n}} 个",
+    "search": "添加后搜索每个条目",
+    "searchHint": "关闭时，针对缺失条目的常规搜索会按平常的节奏找到它们。",
+    "add": "添加这些条目",
+    "queued": "正在后台逐个添加 {{n}} 个条目。可在<link>活动</link>中查看进度。",
+    "artists": "艺人",
+    "authors": "作者"
   }
 }

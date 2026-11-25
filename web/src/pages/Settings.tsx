@@ -19,6 +19,7 @@ import { ProblemsCard } from './Problems'
 import { QualityCheckCard } from './QualityCheck'
 import { SubtitleSettingsCard } from './Subtitles'
 import { ListsCard } from './Lists'
+import { TitlesFileCard } from './TitlesFile'
 import { CleanupCard } from './Cleanup'
 import { TimeZoneCard } from './TimeZone'
 import { PhoneCard } from './Phone'
@@ -70,6 +71,7 @@ const sections: SectionDef[] = [
       { id: 'new-shows', el: <NewShows /> },
       { id: 'add-rules', el: <AddRulesCard />, keys: ['rules.genres', 'rules.language'], terms: ['anime', 'kids', 'override rules', 'Seerr'] },
       { id: 'lists', el: <ListsCard />, keys: ['lists.address', 'lists.ask', 'lists.traktClient'], terms: ['Trakt', 'Plex', 'TMDB', 'watchlist', 'import list', 'Watchlistarr'] },
+      { id: 'titles-file', el: <TitlesFileCard />, keys: ['titlesFile.toAdd', 'titlesFile.search'], terms: ['CSV', 'JSON', 'export', 'import', 'spreadsheet', 'Excel'] },
       { id: 'problems', el: <ProblemsCard /> },
       { id: 'quality-check', el: <QualityCheckCard />, keys: ['title.quality', 'qualityCheck.corrections'], terms: ['ffprobe', 'FFmpeg', 'HDR', 'Dolby Vision', 'MediaInfo', '4K', '1080p'] },
       { id: 'subtitles', el: <SubtitleSettingsCard />, keys: ['subtitles.languages', 'subtitles.preferSdh', 'subtitles.dailyLimit', 'subtitles.apiKey'], terms: ['Bazarr', 'OpenSubtitles', 'Podnapisi', 'SRT', 'SDH', 'captions', 'CC'] },

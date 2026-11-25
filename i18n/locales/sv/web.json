@@ -2993,5 +2993,28 @@
     "notMoved": "Kunde inte flyttas: {{count}}",
     "moveAll": "Flytta titlar",
     "moveTo": "Flytta till…"
+  },
+  "titlesFile": {
+    "title": "Titlar som fil",
+    "sub": "Spara listan över det Box Office håller reda på (filmer, serier, artister och författare, och hur var och en bevakas) som en fil du kan läsa, spara eller dela. När du läser in en fil läggs de titlar till som inte finns här ännu. Det ändrar eller tar aldrig bort en titel som redan finns här, och rör aldrig en fil på disken.",
+    "saveJson": "Spara som JSON",
+    "saveCsv": "Spara som CSV",
+    "load": "Läs in en fil",
+    "loadHint": "Läs in en fil som sparats här, eller ditt eget kalkylblad sparat som CSV. Första raden namnger kolumnerna: kind (movie, show, artist, author), title, och ett id: tmdb_id / imdb_id (Filmer), tmdb_id / tvdb_id (Serier), musicbrainz_id (Artister), openlibrary_key (Författare).",
+    "lookTitle": "Läs in {{name}}",
+    "inFile": "Titlar i filen",
+    "toAdd": "Läggs till",
+    "have": "Finns redan, lämnas som de är",
+    "cant": "Kan inte läggas till",
+    "nothing": "Allt i filen finns redan här.",
+    "otherProfile": "{{n}} använder en kvalitetsprofil som inte finns här. De får standardprofilen, eller den som dina regler för nya titlar väljer.",
+    "otherFolder": "{{n}} ligger i en rotmapp som inte finns här. De hamnar i standardmappen, eller den som dina regler för nya titlar väljer.",
+    "more": "och {{n}} till",
+    "search": "Sök efter varje titel när den lagts till",
+    "searchHint": "Om det är av hittar de vanliga sökningarna efter saknade titlar dem i sin vanliga takt.",
+    "add": "Lägg till de här titlarna",
+    "queued": "Lägger till {{n}} titlar i bakgrunden, en i taget. Följ med i <link>Aktivitet</link>.",
+    "artists": "Artister",
+    "authors": "Författare"
   }
 }
