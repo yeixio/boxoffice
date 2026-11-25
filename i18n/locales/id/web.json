@@ -159,7 +159,8 @@
     "blockMany": "Blokir rilis-rilis asalnya, agar tidak diambil lagi",
     "keepThem": "Simpan",
     "delete": "Hapus {{size}}",
-    "secondKept": "Salinan keduanya di {{path}} tidak ada di folder ini, jadi tetap ada di disk. Agar ikut hilang, hapus dulu dari halaman film."
+    "secondKept": "Salinan keduanya di {{path}} tidak ada di folder ini, jadi tetap ada di disk. Agar ikut hilang, hapus dulu dari halaman film.",
+    "secondKeptShow": "Salinan keduanya di {{path}} tidak ada di folder ini, jadi tetap ada di disk. Agar ikut hilang, hapus dulu dari halaman serial."
   },
   "hooks": {
     "unknown": "Tidak diketahui"
@@ -1270,7 +1271,16 @@
       "notSearching": "Tidak mencari: {{reason}}.",
       "searchNow": "Cari sekarang",
       "lastSearch": "Pencarian terakhir {{when}}: {{what}}",
-      "runningNow": "sedang berjalan"
+      "runningNow": "sedang berjalan",
+      "searchOrder": "Urutan pencarian",
+      "searchOrderHint": "Judul yang kurang dulu membagi pencarian menurut urutan unduhan: film dan episode yang kurang didahulukan sebelum peningkatan, dan peningkatan mendapat sisanya. Bergantian memberi judul yang kurang dan peningkatan masing-masing satu dari dua pencarian.",
+      "orderPriority": "Judul yang kurang dulu (urutan unduhan)",
+      "orderTurns": "Judul yang kurang dan peningkatan bergantian",
+      "early": "Ambil sebelum tanggal rilis",
+      "earlyHint": "Jika rilis muncul lebih awal untuk film yang tersedia untuk dibeli atau di-stream dalam sebulan (atau sedang tayang di bioskop), atau untuk episode yang tayang dalam 3 hari, sinkronisasi RSS bisa mengambilnya. Rekaman bioskop dan screener tidak pernah diambil lebih awal. Ini tidak memakai pencarian.",
+      "earlyCutoff": "Saat kualitasnya mencapai batas profil",
+      "earlyAny": "Kualitas apa pun yang diterima profil",
+      "earlyOff": "Mati: tunggu tanggal rilis"
     },
     "edit": "Edit {{name}}",
     "remove": "Hapus {{name}}",
@@ -2758,7 +2768,23 @@
     "filesOf": "Salinan kedua {{title}}",
     "stays": "Film dan salinan pertamanya tetap ada.",
     "stop": "Berhenti menyimpan salinan kedua",
-    "again": "Jika tidak, Box Office akan mencari salinan kedua dan mengunduhnya lagi."
+    "again": "Jika tidak, Box Office akan mencari salinan kedua dan mengunduhnya lagi.",
+    "showTitle": "Salinan kedua",
+    "showHint": "Simpan salinan lain setiap episode dengan kualitas berbeda, misalnya salinan 1080p di samping salinan 4K. Salinan ini punya profil kualitas sendiri serta dicari dan ditingkatkan secara terpisah.",
+    "showProfile": "Profil kualitas salinan kedua",
+    "showOff": "Tanpa salinan kedua",
+    "showWhere": "Tempatnya",
+    "showNextToFirst": "Di samping salinan pertama",
+    "showCount": "{{have}} dari {{total}} episode punya salinan kedua.",
+    "showLooking": "Box Office sedang mencari sisanya.",
+    "showNotWatched": "Serial ini tidak dipantau, jadi Box Office tidak mencari sisanya.",
+    "showStopped": "Box Office tidak lagi mencari salinan kedua. Salinan-salinan ini tetap ada sampai Anda menghapusnya.",
+    "showDelete": "Hapus semua salinan kedua",
+    "showFilesOf": "Salinan kedua {{title}}",
+    "showStays": "Serial dan salinan pertamanya tetap ada.",
+    "showStop": "Berhenti menyimpan salinan kedua",
+    "showAgain": "Jika tidak, Box Office akan mencari salinan kedua dan mengunduhnya lagi.",
+    "episode": "Salinan kedua: {{quality}}"
   },
   "order": {
     "title": "Urutan unduhan",
@@ -2784,7 +2810,8 @@
     "newDays": "Hari sebuah rilis dianggap baru",
     "newDaysHint": "Film atau episode dianggap baru selama sekian hari setelah tayang atau rilis untuk dibeli atau di-streaming. Setelah itu menjadi yang hilang lebih lama.",
     "preempt": "Hentikan unduhan yang berjalan demi yang berperingkat lebih tinggi",
-    "preemptHint": "Yang dihentikan lanjut dari posisinya nanti. Jika mati, yang baru menunggu gilirannya."
+    "preemptHint": "Yang dihentikan lanjut dari posisinya nanti. Jika mati, yang baru menunggu gilirannya.",
+    "searches": "Pencarian otomatis juga mengikuti urutan ini, jadi judul yang kurang dicari sebelum peningkatan. Anda bisa mengubahnya di Judul yang kurang dan peningkatan."
   },
   "relocate": {
     "title": "Pindahkan ke folder akar lain",

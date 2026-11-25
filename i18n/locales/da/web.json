@@ -173,7 +173,8 @@
     "blockMany": "Bloker udgivelserne, de kom fra, så de ikke hentes igen",
     "keepThem": "Behold dem",
     "delete": "Slet {{size}}",
-    "secondKept": "Den ekstra kopi i {{path}} ligger ikke i denne mappe, så den bliver på disken. Hvis den også skal væk, så slet den først fra filmens side."
+    "secondKept": "Den ekstra kopi i {{path}} ligger ikke i denne mappe, så den bliver på disken. Hvis den også skal væk, så slet den først fra filmens side.",
+    "secondKeptShow": "De ekstra kopier i {{path}} ligger ikke i denne mappe, så de bliver på disken. Hvis de også skal væk, så slet dem først fra seriens side."
   },
   "hooks": {
     "unknown": "Ukendt"
@@ -1353,7 +1354,16 @@
       "notSearching": "Søger ikke: {{reason}}.",
       "searchNow": "Søg nu",
       "lastSearch": "Seneste søgning {{when}}: {{what}}",
-      "runningNow": "kører nu"
+      "runningNow": "kører nu",
+      "searchOrder": "Søgerækkefølge",
+      "searchOrderHint": "Manglende titler først fordeler søgningerne efter downloadrækkefølgen: manglende film og afsnit kommer før opgraderinger, som får resten. Skiftevis giver manglende titler og opgraderinger hver anden søgning.",
+      "orderPriority": "Manglende titler først (downloadrækkefølgen)",
+      "orderTurns": "Manglende titler og opgraderinger på skift",
+      "early": "Hent før udgivelsesdatoen",
+      "earlyHint": "Når en udgivelse dukker tidligt op for en film, der kan købes eller streames inden for en måned (eller går i biografen nu), eller for et afsnit, der sendes inden for 3 dage, kan RSS-synkroniseringen hente den. Biografoptagelser og screenere hentes aldrig tidligt. Det koster ingen søgninger.",
+      "earlyCutoff": "Når kvaliteten når profilens grænse",
+      "earlyAny": "Enhver kvalitet, profilen tager",
+      "earlyOff": "Fra: vent på udgivelsesdatoen"
     },
     "edit": "Rediger {{name}}",
     "remove": "Fjern {{name}}",
@@ -2881,7 +2891,23 @@
     "filesOf": "Den ekstra kopi af {{title}}",
     "stays": "Filmen og dens første kopi bliver.",
     "stop": "Hold op med at beholde en ekstra kopi",
-    "again": "Ellers leder Box Office efter en ekstra kopi og henter den igen."
+    "again": "Ellers leder Box Office efter en ekstra kopi og henter den igen.",
+    "showTitle": "Ekstra kopier",
+    "showHint": "Behold en ekstra kopi af hvert afsnit i en anden kvalitet, f.eks. i 1080p ved siden af dem i 4K. De har deres egen kvalitetsprofil og bliver søgt efter og opgraderet for sig.",
+    "showProfile": "Kvalitetsprofil for de ekstra kopier",
+    "showOff": "Ingen ekstra kopier",
+    "showWhere": "Hvor de placeres",
+    "showNextToFirst": "Ved siden af de første kopier",
+    "showCount": "{{have}} af {{total}} afsnit har en ekstra kopi.",
+    "showLooking": "Box Office leder efter resten.",
+    "showNotWatched": "Der holdes ikke øje med serien, så Box Office leder ikke efter resten.",
+    "showStopped": "Box Office leder ikke længere efter ekstra kopier. Disse bliver, til du sletter dem.",
+    "showDelete": "Slet de ekstra kopier",
+    "showFilesOf": "De ekstra kopier af {{title}}",
+    "showStays": "Serien og dens første kopier bliver.",
+    "showStop": "Hold op med at beholde ekstra kopier",
+    "showAgain": "Ellers leder Box Office efter ekstra kopier og henter dem igen.",
+    "episode": "Ekstra kopi: {{quality}}"
   },
   "order": {
     "title": "Downloadrækkefølge",
@@ -2907,7 +2933,8 @@
     "newDays": "Dage en udgivelse tæller som ny",
     "newDaysHint": "En film eller et afsnit er nyt så mange dage efter det er sendt eller udkommet til køb eller streaming. Derefter er det et ældre manglende.",
     "preempt": "Stop den igangværende download for en, der rangerer højere",
-    "preemptHint": "Den stoppede fortsætter bagefter, hvor den var. Slået fra venter den nye på sin tur."
+    "preemptHint": "Den stoppede fortsætter bagefter, hvor den var. Slået fra venter den nye på sin tur.",
+    "searches": "Automatiske søgninger følger også denne rækkefølge, så manglende titler søges før opgraderinger. Du kan ændre det under Manglende titler og opgraderinger."
   },
   "relocate": {
     "title": "Flyt til en anden rodmappe",

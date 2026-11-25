@@ -173,7 +173,8 @@
     "blockMany": "Die Releases, aus denen sie stammen, sperren, damit sie nicht erneut geholt werden",
     "keepThem": "Behalten",
     "delete": "{{size}} löschen",
-    "secondKept": "Seine zweite Kopie unter {{path}} liegt nicht in diesem Ordner und bleibt daher auf der Festplatte. Soll sie auch weg, lösche sie zuerst auf der Seite des Films."
+    "secondKept": "Seine zweite Kopie unter {{path}} liegt nicht in diesem Ordner und bleibt daher auf der Festplatte. Soll sie auch weg, lösche sie zuerst auf der Seite des Films.",
+    "secondKeptShow": "Ihre zweiten Kopien unter {{path}} liegen nicht in diesem Ordner und bleiben daher auf der Festplatte. Sollen sie auch weg, lösche sie zuerst auf der Seite der Serie."
   },
   "hooks": {
     "unknown": "Unbekannt"
@@ -1353,7 +1354,16 @@
       "notSearching": "Keine Suche: {{reason}}.",
       "searchNow": "Jetzt suchen",
       "lastSearch": "Letzte Suche {{when}}: {{what}}",
-      "runningNow": "läuft gerade"
+      "runningNow": "läuft gerade",
+      "searchOrder": "Suchreihenfolge",
+      "searchOrderHint": "Fehlende Titel zuerst verteilt die Suchen nach der Download-Reihenfolge: Fehlende Filme und Episoden kommen vor Upgrades, und Upgrades bekommen, was übrig bleibt. Abwechselnd gibt fehlenden Titeln und Upgrades jede zweite Suche.",
+      "orderPriority": "Fehlende Titel zuerst (Download-Reihenfolge)",
+      "orderTurns": "Fehlende Titel und Upgrades abwechselnd",
+      "early": "Vor dem Erscheinungsdatum grabben",
+      "earlyHint": "Taucht eine Veröffentlichung früh auf, für einen Film, der innerhalb eines Monats zum Kaufen oder Streamen erscheint (oder gerade im Kino läuft), oder für eine Episode, die innerhalb von 3 Tagen ausgestrahlt wird, kann die RSS-Synchronisierung sie grabben. Kinoaufnahmen und Screener werden nie früh gegrabbt. Das kostet keine Suchen.",
+      "earlyCutoff": "Wenn die Qualität den Grenzwert des Profils erreicht",
+      "earlyAny": "Jede Qualität, die das Profil nimmt",
+      "earlyOff": "Aus: auf das Erscheinungsdatum warten"
     },
     "edit": "{{name}} bearbeiten",
     "remove": "{{name}} entfernen",
@@ -2881,7 +2891,23 @@
     "filesOf": "Zweite Kopie von {{title}}",
     "stays": "Der Film und seine erste Kopie bleiben.",
     "stop": "Keine zweite Kopie mehr behalten",
-    "again": "Sonst sucht Box Office wieder nach einer zweiten Kopie und lädt sie erneut herunter."
+    "again": "Sonst sucht Box Office wieder nach einer zweiten Kopie und lädt sie erneut herunter.",
+    "showTitle": "Zweite Kopien",
+    "showHint": "Behalte von jeder Folge eine weitere Kopie in einer anderen Qualität, etwa in 1080p neben denen in 4K. Sie haben ihr eigenes Qualitätsprofil und werden für sich gesucht und verbessert.",
+    "showProfile": "Qualitätsprofil der zweiten Kopien",
+    "showOff": "Keine zweiten Kopien",
+    "showWhere": "Wohin sie kommen",
+    "showNextToFirst": "Neben die ersten Kopien",
+    "showCount": "{{have}} von {{total}} Folgen haben eine zweite Kopie.",
+    "showLooking": "Box Office sucht nach den übrigen.",
+    "showNotWatched": "Nach dieser Serie wird nicht Ausschau gehalten, daher sucht Box Office nicht nach den übrigen.",
+    "showStopped": "Box Office sucht nicht mehr nach zweiten Kopien. Diese bleiben, bis du sie löschst.",
+    "showDelete": "Zweite Kopien löschen",
+    "showFilesOf": "Zweite Kopien von {{title}}",
+    "showStays": "Die Serie und ihre ersten Kopien bleiben.",
+    "showStop": "Keine zweiten Kopien mehr behalten",
+    "showAgain": "Sonst sucht Box Office wieder nach zweiten Kopien und lädt sie erneut herunter.",
+    "episode": "Zweite Kopie: {{quality}}"
   },
   "order": {
     "title": "Download-Reihenfolge",
@@ -2907,7 +2933,8 @@
     "newDays": "Tage, die eine Veröffentlichung als neu gilt",
     "newDaysHint": "Ein Film oder eine Folge gilt so viele Tage nach Ausstrahlung oder Erscheinen zum Kaufen oder Streamen als neu. Danach gilt er als älterer fehlender Titel.",
     "preempt": "Laufenden Download für einen höher eingestuften anhalten",
-    "preemptHint": "Der angehaltene macht danach dort weiter, wo er war. Wenn aus, wartet der neue, bis er dran ist."
+    "preemptHint": "Der angehaltene macht danach dort weiter, wo er war. Wenn aus, wartet der neue, bis er dran ist.",
+    "searches": "Automatische Suchen folgen auch dieser Reihenfolge, fehlende Titel werden also vor Upgrades gesucht. Ändern kannst du das unter Fehlende Titel und Upgrades."
   },
   "relocate": {
     "title": "In einen anderen Stammordner verschieben",

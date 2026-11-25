@@ -173,7 +173,8 @@
     "blockMany": "Block the releases they came from, so they aren't grabbed again",
     "keepThem": "Keep them",
     "delete": "Delete {{size}}",
-    "secondKept": "Its second copy at {{path}} isn't in this folder, so it stays on disk. To have it gone too, delete it from the movie's page first."
+    "secondKept": "Its second copy at {{path}} isn't in this folder, so it stays on disk. To have it gone too, delete it from the movie's page first.",
+    "secondKeptShow": "Its second copies in {{path}} aren't in this folder, so they stay on disk. To have them gone too, delete them from the show's page first."
   },
   "hooks": {
     "unknown": "Unknown"
@@ -1353,7 +1354,16 @@
       "notSearching": "Not searching: {{reason}}.",
       "searchNow": "Search now",
       "lastSearch": "Last search {{when}}: {{what}}",
-      "runningNow": "running now"
+      "runningNow": "running now",
+      "searchOrder": "Search order",
+      "searchOrderHint": "Missing titles first spends the searches in the download order, so missing movies and episodes get them before upgrades, and upgrades get what's left. Take turns gives missing titles and upgrades every other search.",
+      "orderPriority": "Missing titles first (the download order)",
+      "orderTurns": "Missing titles and upgrades take turns",
+      "early": "Grab before the release date",
+      "earlyHint": "When a release turns up early for a movie that's out to buy or stream within a month (or is in cinemas now), or for an episode that airs within 3 days, RSS sync can grab it. Cinema recordings and screeners are never grabbed early. This uses no searches.",
+      "earlyCutoff": "When its quality meets the profile's cutoff",
+      "earlyAny": "Any quality the profile takes",
+      "earlyOff": "Off: wait for the release date"
     },
     "edit": "Edit {{name}}",
     "remove": "Remove {{name}}",
@@ -2881,7 +2891,23 @@
     "filesOf": "{{title}}'s second copy",
     "stays": "The movie and its first copy stay.",
     "stop": "Stop keeping a second copy",
-    "again": "Otherwise Box Office will look for a second copy and download it again."
+    "again": "Otherwise Box Office will look for a second copy and download it again.",
+    "showTitle": "Second copies",
+    "showHint": "Keep another copy of every episode at a different quality, such as 1080p ones next to the 4K ones. They have their own quality profile and are looked for and upgraded by themselves.",
+    "showProfile": "Quality profile of the second copies",
+    "showOff": "No second copies",
+    "showWhere": "Where they go",
+    "showNextToFirst": "Next to the first copies",
+    "showCount": "{{have}} of {{total}} episodes have a second copy.",
+    "showLooking": "Box Office is looking for the rest.",
+    "showNotWatched": "This show isn't being watched for, so Box Office isn't looking for the rest.",
+    "showStopped": "Box Office no longer looks for second copies. These stay until you delete them.",
+    "showDelete": "Delete the second copies",
+    "showFilesOf": "{{title}}'s second copies",
+    "showStays": "The show and its first copies stay.",
+    "showStop": "Stop keeping second copies",
+    "showAgain": "Otherwise Box Office will look for second copies and download them again.",
+    "episode": "Second copy: {{quality}}"
   },
   "order": {
     "title": "Download order",
@@ -2907,7 +2933,8 @@
     "newDays": "Days a release counts as new",
     "newDaysHint": "A movie or episode is new for this many days after it airs or comes out to buy or stream. After that, it's an older missing one.",
     "preempt": "Stop the download that's on for one ranked ahead of it",
-    "preemptHint": "The one stopped carries on from where it was afterwards. When off, the new one waits its turn."
+    "preemptHint": "The one stopped carries on from where it was afterwards. When off, the new one waits its turn.",
+    "searches": "Automatic searches follow this order too, so missing titles are searched for before upgrades. You can change that under Missing titles and upgrades."
   },
   "relocate": {
     "title": "Move to another root folder",

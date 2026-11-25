@@ -159,7 +159,8 @@
     "blockMany": "遮蔽它們來源的各個釋出，以免再次抓取",
     "keepThem": "保留",
     "delete": "刪除 {{size}}",
-    "secondKept": "它在 {{path}} 的第二份副本不在這個資料夾裡，所以會留在磁碟上。要一併刪除，請先在電影頁面刪除它。"
+    "secondKept": "它在 {{path}} 的第二份副本不在這個資料夾裡，所以會留在磁碟上。要一併刪除，請先在電影頁面刪除它。",
+    "secondKeptShow": "它在 {{path}} 的第二份副本不在這個資料夾裡，所以會留在磁碟上。要一併刪除，請先在劇集頁面刪除它們。"
   },
   "hooks": {
     "unknown": "未知"
@@ -1270,7 +1271,16 @@
       "notSearching": "未搜尋：{{reason}}。",
       "searchNow": "立即搜尋",
       "lastSearch": "上次搜尋 {{when}}：{{what}}",
-      "runningNow": "正在執行"
+      "runningNow": "正在執行",
+      "searchOrder": "搜尋順序",
+      "searchOrderHint": "「缺少的優先」按下載順序分配搜尋:缺少的電影和集數排在升級之前,升級使用剩下的搜尋。「輪流」讓缺少的作品和升級每隔一次搜尋輪流進行。",
+      "orderPriority": "缺少的作品優先(下載順序)",
+      "orderTurns": "缺少的作品和升級輪流",
+      "early": "在發行日期前抓取",
+      "earlyHint": "如果某部一個月內上架購買或串流(或正在戲院上映)的電影,或三天內播出的集數提早出現了發布,RSS 同步可以抓取它。戲院錄製版和試映版絕不會提早抓取。這不消耗搜尋次數。",
+      "earlyCutoff": "畫質達到設定檔的目標時",
+      "earlyAny": "設定檔接受的任何畫質",
+      "earlyOff": "關閉:等到發行日期"
     },
     "edit": "編輯「{{name}}」",
     "remove": "移除{{name}}",
@@ -2758,7 +2768,23 @@
     "filesOf": "{{title}} 的第二份副本",
     "stays": "電影和它的第一份副本會保留。",
     "stop": "不再保留第二份副本",
-    "again": "否則 Box Office 會再次尋找並下載第二份副本。"
+    "again": "否則 Box Office 會再次尋找並下載第二份副本。",
+    "showTitle": "第二份副本",
+    "showHint": "以不同畫質為每一集再保留一份副本，例如在 4K 副本旁再放一份 1080p 的。它們有自己的畫質配置，並單獨搜尋和升級。",
+    "showProfile": "第二份副本的畫質配置",
+    "showOff": "沒有第二份副本",
+    "showWhere": "放在哪裡",
+    "showNextToFirst": "放在第一份副本旁邊",
+    "showCount": "{{total}} 集中有 {{have}} 集有第二份副本。",
+    "showLooking": "Box Office 正在尋找其餘的。",
+    "showNotWatched": "這部劇集沒有被關注，所以 Box Office 不會尋找其餘的。",
+    "showStopped": "Box Office 不再尋找第二份副本。這些會保留到你刪除為止。",
+    "showDelete": "刪除所有第二份副本",
+    "showFilesOf": "{{title}} 的第二份副本",
+    "showStays": "劇集和它的第一份副本會保留。",
+    "showStop": "不再保留第二份副本",
+    "showAgain": "否則 Box Office 會再次尋找並下載第二份副本。",
+    "episode": "第二份副本：{{quality}}"
   },
   "order": {
     "title": "下載順序",
@@ -2784,7 +2810,8 @@
     "newDays": "發行被視為新的天數",
     "newDaysHint": "電影或劇集在播出或上架購買、串流後的這麼多天內視為新的。之後就是較早缺少的。",
     "preempt": "有排在前面的下載時停止目前下載",
-    "preemptHint": "被停止的下載之後會從原處繼續。關閉時，新的下載會排隊等候。"
+    "preemptHint": "被停止的下載之後會從原處繼續。關閉時，新的下載會排隊等候。",
+    "searches": "自動搜尋也依照這個順序,因此缺少的作品會在升級之前搜尋。可以在「缺少的作品和升級」中更改。"
   },
   "relocate": {
     "title": "移到另一個根資料夾",

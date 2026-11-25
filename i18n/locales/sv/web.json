@@ -173,7 +173,8 @@
     "blockMany": "Blockera releaserna de kom från, så att de inte hämtas igen",
     "keepThem": "Behåll dem",
     "delete": "Radera {{size}}",
-    "secondKept": "Dess extra kopia i {{path}} ligger inte i den här mappen, så den blir kvar på disken. Ska den också bort, radera den först från filmens sida."
+    "secondKept": "Dess extra kopia i {{path}} ligger inte i den här mappen, så den blir kvar på disken. Ska den också bort, radera den först från filmens sida.",
+    "secondKeptShow": "Dess extra kopior i {{path}} ligger inte i den här mappen, så de blir kvar på disken. Ska de också bort, radera dem först från seriens sida."
   },
   "hooks": {
     "unknown": "Okänd"
@@ -1353,7 +1354,16 @@
       "notSearching": "Söker inte: {{reason}}.",
       "searchNow": "Sök nu",
       "lastSearch": "Senaste sökning {{when}}: {{what}}",
-      "runningNow": "körs nu"
+      "runningNow": "körs nu",
+      "searchOrder": "Sökordning",
+      "searchOrderHint": "Saknade titlar först fördelar sökningarna efter nedladdningsordningen: saknade filmer och avsnitt går före uppgraderingar, som får det som blir över. Turas om ger saknade titlar och uppgraderingar varannan sökning.",
+      "orderPriority": "Saknade titlar först (nedladdningsordningen)",
+      "orderTurns": "Saknade titlar och uppgraderingar turas om",
+      "early": "Hämta före premiärdatumet",
+      "earlyHint": "När en release dyker upp tidigt för en film som går att köpa eller strömma inom en månad (eller går på bio nu), eller för ett avsnitt som sänds inom 3 dagar, kan RSS-synken hämta den. Biografinspelningar och screeners hämtas aldrig tidigt. Det kostar inga sökningar.",
+      "earlyCutoff": "När kvaliteten når profilens gräns",
+      "earlyAny": "All kvalitet profilen tar",
+      "earlyOff": "Av: vänta på premiärdatumet"
     },
     "edit": "Redigera {{name}}",
     "remove": "Ta bort {{name}}",
@@ -2881,7 +2891,23 @@
     "filesOf": "Den extra kopian av {{title}}",
     "stays": "Filmen och dess första kopia finns kvar.",
     "stop": "Sluta behålla en extra kopia",
-    "again": "Annars letar Box Office efter en extra kopia och laddar ner den igen."
+    "again": "Annars letar Box Office efter en extra kopia och laddar ner den igen.",
+    "showTitle": "Extra kopior",
+    "showHint": "Behåll en extra kopia av varje avsnitt i en annan kvalitet, till exempel i 1080p bredvid dem i 4K. De har en egen kvalitetsprofil och söks och uppgraderas för sig.",
+    "showProfile": "Kvalitetsprofil för de extra kopiorna",
+    "showOff": "Inga extra kopior",
+    "showWhere": "Var de hamnar",
+    "showNextToFirst": "Bredvid de första kopiorna",
+    "showCount": "{{have}} av {{total}} avsnitt har en extra kopia.",
+    "showLooking": "Box Office letar efter resten.",
+    "showNotWatched": "Serien bevakas inte, så Box Office letar inte efter resten.",
+    "showStopped": "Box Office letar inte längre efter extra kopior. De här finns kvar tills du raderar dem.",
+    "showDelete": "Radera de extra kopiorna",
+    "showFilesOf": "De extra kopiorna av {{title}}",
+    "showStays": "Serien och dess första kopior finns kvar.",
+    "showStop": "Sluta behålla extra kopior",
+    "showAgain": "Annars letar Box Office efter extra kopior och laddar ner dem igen.",
+    "episode": "Extra kopia: {{quality}}"
   },
   "order": {
     "title": "Nedladdningsordning",
@@ -2907,7 +2933,8 @@
     "newDays": "Dagar en release räknas som ny",
     "newDaysHint": "En film eller ett avsnitt är nytt så många dagar efter att det sänts eller släppts för köp eller streaming. Därefter är det ett äldre saknat.",
     "preempt": "Stoppa pågående nedladdning för en som rankas före den",
-    "preemptHint": "Den stoppade fortsätter sedan där den var. Av: den nya väntar på sin tur."
+    "preemptHint": "Den stoppade fortsätter sedan där den var. Av: den nya väntar på sin tur.",
+    "searches": "Automatiska sökningar följer också den här ordningen, så saknade titlar söks före uppgraderingar. Du kan ändra det under Saknade titlar och uppgraderingar."
   },
   "relocate": {
     "title": "Flytta till en annan rotmapp",

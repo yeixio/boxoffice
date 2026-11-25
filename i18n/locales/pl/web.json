@@ -201,7 +201,8 @@
     "blockMany": "Zablokuj wydania, z których pochodzą, aby nie zostały znów pobrane",
     "keepThem": "Zachowaj je",
     "delete": "Usuń {{size}}",
-    "secondKept": "Jego druga kopia w {{path}} nie znajduje się w tym folderze, więc zostanie na dysku. Aby też zniknęła, najpierw usuń ją na stronie filmu."
+    "secondKept": "Jego druga kopia w {{path}} nie znajduje się w tym folderze, więc zostanie na dysku. Aby też zniknęła, najpierw usuń ją na stronie filmu.",
+    "secondKeptShow": "Jego drugie kopie w {{path}} nie znajdują się w tym folderze, więc zostaną na dysku. Aby też zniknęły, najpierw usuń je na stronie serialu."
   },
   "hooks": {
     "unknown": "Nieznane"
@@ -1519,7 +1520,16 @@
       "notSearching": "Bez wyszukiwania: {{reason}}.",
       "searchNow": "Szukaj teraz",
       "lastSearch": "Ostatnie wyszukiwanie {{when}}: {{what}}",
-      "runningNow": "trwa teraz"
+      "runningNow": "trwa teraz",
+      "searchOrder": "Kolejność wyszukiwania",
+      "searchOrderHint": "Najpierw brakujące rozdziela wyszukiwania według kolejności pobierania: brakujące filmy i odcinki idą przed ulepszeniami, a ulepszenia dostają resztę. Na zmianę daje brakującym tytułom i ulepszeniom co drugie wyszukiwanie.",
+      "orderPriority": "Najpierw brakujące tytuły (kolejność pobierania)",
+      "orderTurns": "Brakujące tytuły i ulepszenia na zmianę",
+      "early": "Pobieraj przed datą premiery",
+      "earlyHint": "Gdy wydanie pojawi się wcześniej dla filmu, który w ciągu miesiąca trafi do sprzedaży lub streamingu (albo jest teraz w kinach), lub dla odcinka emitowanego w ciągu 3 dni, synchronizacja RSS może je pobrać. Nagrania z kina i screenery nigdy nie są pobierane wcześniej. Nie zużywa to wyszukiwań.",
+      "earlyCutoff": "Gdy jakość osiąga próg profilu",
+      "earlyAny": "Każda jakość, którą przyjmuje profil",
+      "earlyOff": "Wyłączone: czekaj na datę premiery"
     },
     "edit": "Edytuj {{name}}",
     "remove": "Usuń: {{name}}",
@@ -3127,7 +3137,23 @@
     "filesOf": "Druga kopia filmu {{title}}",
     "stays": "Film i jego pierwsza kopia zostają.",
     "stop": "Przestań trzymać drugą kopię",
-    "again": "W przeciwnym razie Box Office znów wyszuka drugą kopię i ją pobierze."
+    "again": "W przeciwnym razie Box Office znów wyszuka drugą kopię i ją pobierze.",
+    "showTitle": "Drugie kopie",
+    "showHint": "Zachowaj jeszcze jedną kopię każdego odcinka w innej jakości, na przykład 1080p obok 4K. Mają własny profil jakości i są wyszukiwane oraz ulepszane osobno.",
+    "showProfile": "Profil jakości drugich kopii",
+    "showOff": "Bez drugich kopii",
+    "showWhere": "Gdzie trafią",
+    "showNextToFirst": "Obok pierwszych kopii",
+    "showCount": "Drugą kopię ma {{have}} z {{total}} odcinków.",
+    "showLooking": "Box Office szuka pozostałych.",
+    "showNotWatched": "Ten serial nie jest obserwowany, więc Box Office nie szuka pozostałych.",
+    "showStopped": "Box Office nie szuka już drugich kopii. Te zostaną, dopóki ich nie usuniesz.",
+    "showDelete": "Usuń drugie kopie",
+    "showFilesOf": "Drugie kopie serialu {{title}}",
+    "showStays": "Serial i jego pierwsze kopie zostają.",
+    "showStop": "Przestań trzymać drugie kopie",
+    "showAgain": "W przeciwnym razie Box Office znów wyszuka drugie kopie i je pobierze.",
+    "episode": "Druga kopia: {{quality}}"
   },
   "order": {
     "title": "Kolejność pobierania",
@@ -3153,7 +3179,8 @@
     "newDays": "Dni, przez które wydanie jest nowe",
     "newDaysHint": "Film lub odcinek jest nowy przez tyle dni od emisji lub premiery do kupienia lub streamingu. Potem jest starszym brakującym.",
     "preempt": "Zatrzymaj bieżące pobieranie dla wyżej ustawionego",
-    "preemptHint": "Zatrzymane wznowi się potem od miejsca, w którym było. Gdy wyłączone, nowe czeka na swoją kolej."
+    "preemptHint": "Zatrzymane wznowi się potem od miejsca, w którym było. Gdy wyłączone, nowe czeka na swoją kolej.",
+    "searches": "Automatyczne wyszukiwania też idą w tej kolejności, więc brakujące tytuły są szukane przed ulepszeniami. Możesz to zmienić w sekcji Brakujące tytuły i ulepszenia."
   },
   "relocate": {
     "title": "Przenieś do innego folderu głównego",

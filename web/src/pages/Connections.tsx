@@ -333,6 +333,19 @@ export function AutoSearchSettings() {
             </>
           }
         />
+        <Field label={t('conn.auto.searchOrder')} hint={t('conn.auto.searchOrderHint')}>
+          {(id) => (
+            <Select
+              id={id}
+              value={s.searchOrder}
+              onChange={(v) => save.mutate({ searchOrder: v as 'priority' | 'turns' })}
+              options={[
+                { value: 'priority', label: t('conn.auto.orderPriority') },
+                { value: 'turns', label: t('conn.auto.orderTurns') },
+              ]}
+            />
+          )}
+        </Field>
         <Toggle
           checked={s.upgrades}
           onChange={(v) => save.mutate({ upgrades: v })}
@@ -398,6 +411,20 @@ export function AutoSearchSettings() {
             </ul>
           </div>
         )}
+        <Field label={t('conn.auto.early')} hint={t('conn.auto.earlyHint')}>
+          {(id) => (
+            <Select
+              id={id}
+              value={s.early}
+              onChange={(v) => save.mutate({ early: v as 'cutoff' | 'any' | 'off' })}
+              options={[
+                { value: 'cutoff', label: t('conn.auto.earlyCutoff') },
+                { value: 'any', label: t('conn.auto.earlyAny') },
+                { value: 'off', label: t('conn.auto.earlyOff') },
+              ]}
+            />
+          )}
+        </Field>
         <NumberField
           label={t('conn.auto.minAge')}
           suffix={t('conn.auto.minAgeUnit')}

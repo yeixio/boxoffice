@@ -30,6 +30,11 @@ func episodeCovers(c Candidate, p quality.Profile, season int, eps []int, want [
 		if has {
 			have = e.File.Quality
 		}
+		// A second copy of the first copy's quality isn't taken: the two
+		// are kept to be different (want is seen as copyOf gives it).
+		if c.mode == ModeSecond && e.Second != nil && e.Second.Quality == c.Quality {
+			continue
+		}
 		if p.Wants(has, have, c.Quality) {
 			out = append(out, e.ID)
 		}
@@ -44,6 +49,12 @@ func episodeCovers(c Candidate, p quality.Profile, season int, eps []int, want [
 func (s *Service) judgeEpisodes(ctx context.Context, r Release, t store.Series, p quality.Profile, want []store.Episode, blocked map[string]bool, packs, byID bool) Candidate {
 	c := s.judge(ctx, r, p, false, 0, blocked)
 	c.kind, c.titleID = "series", t.ID
+	if isSecond(ctx) {
+		// For the show's second copies, with its own key so a release
+		// shown for the first copies isn't grabbed by hand in their place.
+		c.mode = ModeSecond
+		c.Key += "2"
+	}
 	season, eps, ok := releaseEpisode(r.Title)
 	switch {
 	case r.TVDBID > 0 && t.TVDBID > 0:
@@ -108,7 +119,7 @@ func (s *Service) Season(ctx context.Context, t store.Series, season int, want [
 	if err != nil {
 		return Results{}, err
 	}
-	p, err := s.profile(ctx, t.ProfileID)
+	p, err := s.showProfile(ctx, t)
 	if err != nil {
 		return Results{}, err
 	}

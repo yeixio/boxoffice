@@ -201,7 +201,8 @@
     "blockMany": "Zablokovat vydání, ze kterých pocházejí, aby se znovu nestáhla",
     "keepThem": "Ponechat je",
     "delete": "Smazat {{size}}",
-    "secondKept": "Jeho druhá kopie v {{path}} není v této složce, takže zůstane na disku. Má-li zmizet i ona, smažte ji nejdřív na stránce filmu."
+    "secondKept": "Jeho druhá kopie v {{path}} není v této složce, takže zůstane na disku. Má-li zmizet i ona, smažte ji nejdřív na stránce filmu.",
+    "secondKeptShow": "Jeho druhé kopie v {{path}} nejsou v této složce, takže zůstanou na disku. Mají-li zmizet i ony, smažte je nejdřív na stránce seriálu."
   },
   "hooks": {
     "unknown": "Neznámé"
@@ -1519,7 +1520,16 @@
       "notSearching": "Nehledá se: {{reason}}.",
       "searchNow": "Hledat teď",
       "lastSearch": "Poslední hledání {{when}}: {{what}}",
-      "runningNow": "právě běží"
+      "runningNow": "právě běží",
+      "searchOrder": "Pořadí hledání",
+      "searchOrderHint": "Nejdřív chybějící rozděluje hledání podle pořadí stahování: chybějící filmy a epizody jdou před vylepšeními, která dostanou zbytek. Střídavě dává chybějícím titulům a vylepšením každé druhé hledání.",
+      "orderPriority": "Nejdřív chybějící tituly (pořadí stahování)",
+      "orderTurns": "Chybějící tituly a vylepšení střídavě",
+      "early": "Stáhnout před datem vydání",
+      "earlyHint": "Když se vydání objeví dřív u filmu, který do měsíce vyjde ke koupi nebo streamování (nebo je teď v kinech), nebo u epizody, která se vysílá do 3 dnů, synchronizace RSS ho může stáhnout. Záznamy z kina a screenery se nikdy nestahují dřív. Nestojí to žádná hledání.",
+      "earlyCutoff": "Když kvalita dosáhne hranice profilu",
+      "earlyAny": "Jakákoli kvalita, kterou profil bere",
+      "earlyOff": "Vypnuto: čekat na datum vydání"
     },
     "edit": "Upravit {{name}}",
     "remove": "Odebrat {{name}}",
@@ -3127,7 +3137,23 @@
     "filesOf": "Druhá kopie filmu {{title}}",
     "stays": "Film a jeho první kopie zůstanou.",
     "stop": "Přestat uchovávat druhou kopii",
-    "again": "Jinak Box Office druhou kopii znovu vyhledá a stáhne."
+    "again": "Jinak Box Office druhou kopii znovu vyhledá a stáhne.",
+    "showTitle": "Druhé kopie",
+    "showHint": "Uchovávejte další kopii každého dílu v jiné kvalitě, třeba 1080p vedle 4K. Mají vlastní profil kvality a hledají se i vylepšují samostatně.",
+    "showProfile": "Profil kvality druhých kopií",
+    "showOff": "Bez druhých kopií",
+    "showWhere": "Kam se uloží",
+    "showNextToFirst": "Vedle prvních kopií",
+    "showCount": "Druhou kopii má {{have}} z {{total}} dílů.",
+    "showLooking": "Box Office hledá zbytek.",
+    "showNotWatched": "Tento seriál se nesleduje, takže Box Office zbytek nehledá.",
+    "showStopped": "Box Office už druhé kopie nehledá. Tyto zůstanou, dokud je nesmažete.",
+    "showDelete": "Smazat druhé kopie",
+    "showFilesOf": "Druhé kopie seriálu {{title}}",
+    "showStays": "Seriál a jeho první kopie zůstanou.",
+    "showStop": "Přestat uchovávat druhé kopie",
+    "showAgain": "Jinak Box Office druhé kopie znovu vyhledá a stáhne.",
+    "episode": "Druhá kopie: {{quality}}"
   },
   "order": {
     "title": "Pořadí stahování",
@@ -3153,7 +3179,8 @@
     "newDays": "Dny, kdy je vydání nové",
     "newDaysHint": "Film nebo díl je nový tolik dní po odvysílání nebo vydání ke koupi či streamování. Potom je to starší chybějící.",
     "preempt": "Zastavit běžící stahování kvůli výše zařazenému",
-    "preemptHint": "Zastavené potom pokračuje tam, kde bylo. Když je vypnuto, nové čeká, až na něj přijde řada."
+    "preemptHint": "Zastavené potom pokračuje tam, kde bylo. Když je vypnuto, nové čeká, až na něj přijde řada.",
+    "searches": "Automatická hledání se také řídí tímto pořadím, takže chybějící tituly se hledají před vylepšeními. Změnit to můžete v části Chybějící tituly a vylepšení."
   },
   "relocate": {
     "title": "Přesunout do jiné kořenové složky",

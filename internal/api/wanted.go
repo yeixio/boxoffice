@@ -96,6 +96,12 @@ func (s *Server) saveAutoSearch(w http.ResponseWriter, r *http.Request) error {
 	if in.RegrabsPerDay < 0 || in.RegrabsPerDay > search.MaxRegrabsPerDay {
 		return errorf(http.StatusBadRequest, fmt.Sprintf("make the most replacements a day between 0 (no limit) and %d", search.MaxRegrabsPerDay))
 	}
+	if in.SearchOrder != search.OrderPriority && in.SearchOrder != search.OrderTurns {
+		return errorf(http.StatusBadRequest, "the search order is priority (the download order) or turns")
+	}
+	if in.Early != search.EarlyCutoff && in.Early != search.EarlyAny && in.Early != search.EarlyOff {
+		return errorf(http.StatusBadRequest, "early grabs are cutoff, any or off")
+	}
 	if err := search.SaveAutoSettings(r.Context(), s.Store, in); err != nil {
 		return err
 	}

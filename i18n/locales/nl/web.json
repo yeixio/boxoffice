@@ -173,7 +173,8 @@
     "blockMany": "De releases waar ze vandaan kwamen blokkeren, zodat die niet opnieuw worden gegrabd",
     "keepThem": "Behouden",
     "delete": "{{size}} verwijderen",
-    "secondKept": "De tweede kopie in {{path}} staat niet in deze map en blijft dus op de schijf. Moet die ook weg, verwijder haar dan eerst op de pagina van de film."
+    "secondKept": "De tweede kopie in {{path}} staat niet in deze map en blijft dus op de schijf. Moet die ook weg, verwijder haar dan eerst op de pagina van de film.",
+    "secondKeptShow": "De tweede kopieën in {{path}} staan niet in deze map en blijven dus op de schijf. Moeten die ook weg, verwijder ze dan eerst op de pagina van de serie."
   },
   "hooks": {
     "unknown": "Onbekend"
@@ -1353,7 +1354,16 @@
       "notSearching": "Niet aan het zoeken: {{reason}}.",
       "searchNow": "Nu zoeken",
       "lastSearch": "Laatste zoekopdracht {{when}}: {{what}}",
-      "runningNow": "nu bezig"
+      "runningNow": "nu bezig",
+      "searchOrder": "Zoekvolgorde",
+      "searchOrderHint": "Ontbrekende titels eerst verdeelt de zoekopdrachten volgens de downloadvolgorde: ontbrekende films en afleveringen gaan voor upgrades, en upgrades krijgen wat overblijft. Om de beurt geeft ontbrekende titels en upgrades elk de helft.",
+      "orderPriority": "Ontbrekende titels eerst (de downloadvolgorde)",
+      "orderTurns": "Ontbrekende titels en upgrades om de beurt",
+      "early": "Ophalen vóór de releasedatum",
+      "earlyHint": "Als een release vroeg opduikt voor een film die binnen een maand te koop of te streamen is (of nu in de bioscoop draait), of voor een aflevering die binnen 3 dagen uitkomt, kan de RSS-sync hem ophalen. Bioscoopopnames en screeners worden nooit vroeg opgehaald. Dit kost geen zoekopdrachten.",
+      "earlyCutoff": "Als de kwaliteit de grens van het profiel haalt",
+      "earlyAny": "Elke kwaliteit die het profiel accepteert",
+      "earlyOff": "Uit: wachten op de releasedatum"
     },
     "edit": "{{name}} bewerken",
     "remove": "{{name}} verwijderen",
@@ -2881,7 +2891,23 @@
     "filesOf": "Tweede kopie van {{title}}",
     "stays": "De film en de eerste kopie blijven.",
     "stop": "Geen tweede kopie meer bewaren",
-    "again": "Anders zoekt Box Office weer een tweede kopie en downloadt die opnieuw."
+    "again": "Anders zoekt Box Office weer een tweede kopie en downloadt die opnieuw.",
+    "showTitle": "Tweede kopieën",
+    "showHint": "Bewaar van elke aflevering nog een kopie in een andere kwaliteit, bijvoorbeeld in 1080p naast die in 4K. Ze hebben een eigen kwaliteitsprofiel en worden apart gezocht en verbeterd.",
+    "showProfile": "Kwaliteitsprofiel van de tweede kopieën",
+    "showOff": "Geen tweede kopieën",
+    "showWhere": "Waar ze komen",
+    "showNextToFirst": "Naast de eerste kopieën",
+    "showCount": "{{have}} van de {{total}} afleveringen hebben een tweede kopie.",
+    "showLooking": "Box Office zoekt naar de rest.",
+    "showNotWatched": "Deze serie wordt niet in de gaten gehouden, dus Box Office zoekt niet naar de rest.",
+    "showStopped": "Box Office zoekt niet meer naar tweede kopieën. Deze blijven tot je ze verwijdert.",
+    "showDelete": "Tweede kopieën verwijderen",
+    "showFilesOf": "Tweede kopieën van {{title}}",
+    "showStays": "De serie en de eerste kopieën blijven.",
+    "showStop": "Geen tweede kopieën meer bewaren",
+    "showAgain": "Anders zoekt Box Office weer tweede kopieën en downloadt die opnieuw.",
+    "episode": "Tweede kopie: {{quality}}"
   },
   "order": {
     "title": "Downloadvolgorde",
@@ -2907,7 +2933,8 @@
     "newDays": "Dagen dat een release als nieuw telt",
     "newDaysHint": "Een film of aflevering is zoveel dagen nieuw nadat hij is uitgezonden of te koop of te streamen is. Daarna is het een oudere ontbrekende.",
     "preempt": "Lopende download stoppen voor een hoger gerangschikte",
-    "preemptHint": "De gestopte gaat daarna verder waar hij was. Uit: de nieuwe wacht op zijn beurt."
+    "preemptHint": "De gestopte gaat daarna verder waar hij was. Uit: de nieuwe wacht op zijn beurt.",
+    "searches": "Automatische zoekopdrachten volgen ook deze volgorde, dus ontbrekende titels worden vóór upgrades gezocht. Je kunt dat wijzigen bij Ontbrekende titels en upgrades."
   },
   "relocate": {
     "title": "Naar een andere hoofdmap verplaatsen",

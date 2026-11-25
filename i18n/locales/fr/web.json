@@ -187,7 +187,8 @@
     "blockMany": "Bloquer les releases dont ils viennent, pour qu’elles ne soient pas récupérées à nouveau",
     "keepThem": "Les garder",
     "delete": "Supprimer {{size}}",
-    "secondKept": "Sa deuxième copie dans {{path}} n’est pas dans ce dossier, elle reste donc sur le disque. Pour qu’elle disparaisse aussi, supprimez-la d’abord depuis la page du film."
+    "secondKept": "Sa deuxième copie dans {{path}} n’est pas dans ce dossier, elle reste donc sur le disque. Pour qu’elle disparaisse aussi, supprimez-la d’abord depuis la page du film.",
+    "secondKeptShow": "Ses deuxièmes copies dans {{path}} ne sont pas dans ce dossier, elles restent donc sur le disque. Pour qu’elles disparaissent aussi, supprimez-les d’abord depuis la page de la série."
   },
   "hooks": {
     "unknown": "Inconnu"
@@ -1436,7 +1437,16 @@
       "notSearching": "Pas de recherche : {{reason}}.",
       "searchNow": "Rechercher maintenant",
       "lastSearch": "Dernière recherche {{when}} : {{what}}",
-      "runningNow": "en cours"
+      "runningNow": "en cours",
+      "searchOrder": "Ordre de recherche",
+      "searchOrderHint": "Titres manquants d'abord répartit les recherches selon l'ordre de téléchargement : les films et épisodes manquants passent avant les mises à niveau, qui reçoivent le reste. Chacun son tour donne une recherche sur deux aux titres manquants et aux mises à niveau.",
+      "orderPriority": "Titres manquants d'abord (l'ordre de téléchargement)",
+      "orderTurns": "Titres manquants et mises à niveau chacun son tour",
+      "early": "Récupérer avant la date de sortie",
+      "earlyHint": "Quand une sortie apparaît en avance pour un film disponible à l'achat ou en streaming d'ici un mois (ou en salles en ce moment), ou pour un épisode diffusé d'ici 3 jours, la synchro RSS peut la récupérer. Les enregistrements en salle et les screeners ne sont jamais récupérés en avance. Cela ne coûte aucune recherche.",
+      "earlyCutoff": "Quand sa qualité atteint le seuil du profil",
+      "earlyAny": "Toute qualité acceptée par le profil",
+      "earlyOff": "Désactivé : attendre la date de sortie"
     },
     "edit": "Modifier {{name}}",
     "remove": "Retirer {{name}}",
@@ -3004,7 +3014,23 @@
     "filesOf": "Deuxième copie de {{title}}",
     "stays": "Le film et sa première copie restent.",
     "stop": "Ne plus garder de deuxième copie",
-    "again": "Sinon, Box Office recherchera une deuxième copie et la téléchargera à nouveau."
+    "again": "Sinon, Box Office recherchera une deuxième copie et la téléchargera à nouveau.",
+    "showTitle": "Deuxièmes copies",
+    "showHint": "Gardez une autre copie de chaque épisode dans une qualité différente, par exemple en 1080p à côté de celles en 4K. Elles ont leur propre profil de qualité et sont recherchées et améliorées séparément.",
+    "showProfile": "Profil de qualité des deuxièmes copies",
+    "showOff": "Pas de deuxièmes copies",
+    "showWhere": "Où elles vont",
+    "showNextToFirst": "À côté des premières copies",
+    "showCount": "{{have}} épisodes sur {{total}} ont une deuxième copie.",
+    "showLooking": "Box Office recherche les autres.",
+    "showNotWatched": "Cette série n’est pas surveillée, donc Box Office ne recherche pas les autres.",
+    "showStopped": "Box Office ne recherche plus de deuxièmes copies. Celles-ci restent jusqu’à ce que vous les supprimiez.",
+    "showDelete": "Supprimer les deuxièmes copies",
+    "showFilesOf": "Deuxièmes copies de {{title}}",
+    "showStays": "La série et ses premières copies restent.",
+    "showStop": "Ne plus garder de deuxièmes copies",
+    "showAgain": "Sinon, Box Office recherchera des deuxièmes copies et les téléchargera à nouveau.",
+    "episode": "Deuxième copie : {{quality}}"
   },
   "order": {
     "title": "Ordre des téléchargements",
@@ -3030,7 +3056,8 @@
     "newDays": "Jours pendant lesquels une sortie est nouvelle",
     "newDaysHint": "Un film ou un épisode est nouveau pendant ce nombre de jours après sa diffusion ou sa sortie à l'achat ou en streaming. Ensuite, c'est un ancien manquant.",
     "preempt": "Arrêter le téléchargement en cours pour un mieux classé",
-    "preemptHint": "Celui arrêté reprend ensuite là où il en était. Désactivé, le nouveau attend son tour."
+    "preemptHint": "Celui arrêté reprend ensuite là où il en était. Désactivé, le nouveau attend son tour.",
+    "searches": "Les recherches automatiques suivent aussi cet ordre : les titres manquants sont cherchés avant les mises à niveau. Vous pouvez le changer dans Titres manquants et mises à niveau."
   },
   "relocate": {
     "title": "Déplacer vers un autre dossier racine",

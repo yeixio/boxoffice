@@ -199,7 +199,7 @@ func (s *Store) ReleaseOf(ctx context.Context, f File) string {
 	if d, err := s.DownloadImportedTo(ctx, f.Path); err == nil {
 		return d.Name
 	}
-	if f.Kind == "episode" {
+	if f.Kind == "episode" || f.Kind == SecondEpisodeKind {
 		list, err := s.downloads(ctx, "imported_to = ? AND kind = 'series' ORDER BY finished_at DESC, id DESC LIMIT 20", filepath.Dir(f.Path))
 		if err == nil {
 			for _, d := range list {

@@ -36,3 +36,36 @@ func TestFolderPrefixesWithAccents(t *testing.T) {
 		t.Fatalf("file not moved along: %q", f.Path)
 	}
 }
+
+// A title's own other copies in its folder (a movie's edition or second
+// copy, an episode's second copy) aren't another title's files.
+func TestOwnCopiesArentAnotherTitles(t *testing.T) {
+	ctx := context.Background()
+	st := storetest.Open(t)
+	profiles, _ := st.Profiles(ctx)
+	m, _ := st.AddMovie(ctx, store.Movie{TMDBID: 1, Title: "Heat", ProfileID: profiles[0].ID, RootFolder: "/m", Path: "/m/Heat"})
+	for _, kind := range []string{"movie", "edition", store.SecondKind} {
+		if _, err := st.AddFile(ctx, store.File{Kind: kind, OwnerID: m.ID, Path: "/m/Heat/" + kind + ".mkv"}); err != nil {
+			t.Fatal(err)
+		}
+	}
+	show, _ := st.AddSeries(ctx, store.Series{TMDBID: 2, Title: "Show", ProfileID: profiles[0].ID, RootFolder: "/tv", Path: "/tv/Show"})
+	st.UpsertEpisode(ctx, store.Episode{SeriesID: show.ID, Season: 1, Number: 1})
+	eps, _ := st.Episodes(ctx, show.ID)
+	for _, kind := range []string{"episode", store.SecondEpisodeKind} {
+		if _, err := st.AddFile(ctx, store.File{Kind: kind, OwnerID: eps[0].ID, Path: "/tv/Show/" + kind + ".mkv"}); err != nil {
+			t.Fatal(err)
+		}
+	}
+	for kind, at := range map[string]struct {
+		path string
+		id   int64
+	}{"movie": {m.Path, m.ID}, "series": {show.Path, show.ID}} {
+		if why, err := st.OtherTitleIn(ctx, at.path, kind, at.id); err != nil || why != "" {
+			t.Fatalf("%s OtherTitleIn: %q %v", kind, why, err)
+		}
+		if why, err := st.OthersFilesIn(ctx, at.path, kind, at.id); err != nil || why != "" {
+			t.Fatalf("%s OthersFilesIn: %q %v", kind, why, err)
+		}
+	}
+}

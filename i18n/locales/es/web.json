@@ -187,7 +187,8 @@
     "blockMany": "Bloquear los releases de los que salieron, para que no se vuelvan a obtener",
     "keepThem": "Conservarlos",
     "delete": "Borrar {{size}}",
-    "secondKept": "Su segunda copia en {{path}} no está en esta carpeta, así que se queda en el disco. Para que también desaparezca, bórrala antes desde la página de la película."
+    "secondKept": "Su segunda copia en {{path}} no está en esta carpeta, así que se queda en el disco. Para que también desaparezca, bórrala antes desde la página de la película.",
+    "secondKeptShow": "Sus segundas copias en {{path}} no están en esta carpeta, así que se quedan en el disco. Para que también desaparezcan, bórralas antes desde la página de la serie."
   },
   "hooks": {
     "unknown": "Desconocido"
@@ -1436,7 +1437,16 @@
       "notSearching": "Sin buscar: {{reason}}.",
       "searchNow": "Buscar ahora",
       "lastSearch": "Última búsqueda {{when}}: {{what}}",
-      "runningNow": "en curso ahora"
+      "runningNow": "en curso ahora",
+      "searchOrder": "Orden de búsqueda",
+      "searchOrderHint": "Títulos que faltan primero reparte las búsquedas según el orden de descarga: las películas y episodios que faltan van antes que las mejoras, que reciben lo que sobra. Por turnos da una búsqueda de cada dos a los títulos que faltan y a las mejoras.",
+      "orderPriority": "Títulos que faltan primero (el orden de descarga)",
+      "orderTurns": "Títulos que faltan y mejoras por turnos",
+      "early": "Descargar antes de la fecha de estreno",
+      "earlyHint": "Si aparece pronto una publicación de una película que sale a la venta o en streaming en menos de un mes (o que está en cines ahora), o de un episodio que se emite en menos de 3 días, la sincronización RSS puede descargarla. Las grabaciones de cine y los screeners nunca se descargan antes. No gasta búsquedas.",
+      "earlyCutoff": "Cuando su calidad alcanza el límite del perfil",
+      "earlyAny": "Cualquier calidad que acepte el perfil",
+      "earlyOff": "Desactivado: esperar a la fecha de estreno"
     },
     "edit": "Editar {{name}}",
     "remove": "Quitar {{name}}",
@@ -3004,7 +3014,23 @@
     "filesOf": "Segunda copia de {{title}}",
     "stays": "La película y su primera copia se quedan.",
     "stop": "Dejar de conservar una segunda copia",
-    "again": "Si no, Box Office buscará una segunda copia y la descargará otra vez."
+    "again": "Si no, Box Office buscará una segunda copia y la descargará otra vez.",
+    "showTitle": "Segundas copias",
+    "showHint": "Conserva otra copia de cada episodio con una calidad distinta, por ejemplo en 1080p junto a las de 4K. Tienen su propio perfil de calidad y se buscan y se mejoran por separado.",
+    "showProfile": "Perfil de calidad de las segundas copias",
+    "showOff": "Sin segundas copias",
+    "showWhere": "Dónde van",
+    "showNextToFirst": "Junto a las primeras copias",
+    "showCount": "{{have}} de {{total}} episodios tienen una segunda copia.",
+    "showLooking": "Box Office está buscando el resto.",
+    "showNotWatched": "Esta serie no se está vigilando, así que Box Office no busca el resto.",
+    "showStopped": "Box Office ya no busca segundas copias. Estas se quedan hasta que las borres.",
+    "showDelete": "Borrar las segundas copias",
+    "showFilesOf": "Segundas copias de {{title}}",
+    "showStays": "La serie y sus primeras copias se quedan.",
+    "showStop": "Dejar de conservar segundas copias",
+    "showAgain": "Si no, Box Office buscará segundas copias y las descargará otra vez.",
+    "episode": "Segunda copia: {{quality}}"
   },
   "order": {
     "title": "Orden de descargas",
@@ -3030,7 +3056,8 @@
     "newDays": "Días que un estreno cuenta como nuevo",
     "newDaysHint": "Una película o episodio es nuevo durante estos días después de emitirse o salir a la venta o en streaming. Después, es uno antiguo que falta.",
     "preempt": "Detener la descarga en curso por una con más prioridad",
-    "preemptHint": "La detenida sigue después desde donde estaba. Si está desactivado, la nueva espera su turno."
+    "preemptHint": "La detenida sigue después desde donde estaba. Si está desactivado, la nueva espera su turno.",
+    "searches": "Las búsquedas automáticas también siguen este orden, así que los títulos que faltan se buscan antes que las mejoras. Puedes cambiarlo en Títulos que faltan y mejoras."
   },
   "relocate": {
     "title": "Mover a otra carpeta raíz",

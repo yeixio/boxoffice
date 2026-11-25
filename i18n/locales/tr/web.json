@@ -173,7 +173,8 @@
     "blockMany": "Geldikleri sürümleri engelle, böylece yeniden indirilmezler",
     "keepThem": "Kalsınlar",
     "delete": "{{size}} sil",
-    "secondKept": "{{path}} konumundaki ikinci kopyası bu klasörde değil, bu yüzden diskte kalır. Onun da gitmesi için önce filmin sayfasından silin."
+    "secondKept": "{{path}} konumundaki ikinci kopyası bu klasörde değil, bu yüzden diskte kalır. Onun da gitmesi için önce filmin sayfasından silin.",
+    "secondKeptShow": "{{path}} konumundaki ikinci kopyaları bu klasörde değil, bu yüzden diskte kalır. Onların da gitmesi için önce dizinin sayfasından silin."
   },
   "hooks": {
     "unknown": "Bilinmiyor"
@@ -1353,7 +1354,16 @@
       "notSearching": "Aranmıyor: {{reason}}.",
       "searchNow": "Şimdi ara",
       "lastSearch": "Son arama {{when}}: {{what}}",
-      "runningNow": "şimdi çalışıyor"
+      "runningNow": "şimdi çalışıyor",
+      "searchOrder": "Arama sırası",
+      "searchOrderHint": "Önce eksikler, aramaları indirme sırasına göre dağıtır: eksik filmler ve bölümler yükseltmelerden önce gelir, yükseltmeler kalanı alır. Sırayla, eksik başlıklara ve yükseltmelere her iki aramadan birini verir.",
+      "orderPriority": "Önce eksik başlıklar (indirme sırası)",
+      "orderTurns": "Eksik başlıklar ve yükseltmeler sırayla",
+      "early": "Çıkış tarihinden önce indir",
+      "earlyHint": "Bir ay içinde satın almaya veya yayına çıkacak (ya da şu an sinemada olan) bir film veya 3 gün içinde yayınlanacak bir bölüm için bir sürüm erken çıkarsa RSS eşitleme onu indirebilir. Sinema kayıtları ve screener'lar asla erken indirilmez. Arama harcamaz.",
+      "earlyCutoff": "Kalitesi profilin sınırına ulaştığında",
+      "earlyAny": "Profilin kabul ettiği her kalite",
+      "earlyOff": "Kapalı: çıkış tarihini bekle"
     },
     "edit": "{{name}} düzenle",
     "remove": "{{name}} kaldır",
@@ -2881,7 +2891,23 @@
     "filesOf": "{{title}} filminin ikinci kopyası",
     "stays": "Film ve ilk kopyası kalır.",
     "stop": "İkinci kopya saklamayı bırak",
-    "again": "Yoksa Box Office yeniden bir ikinci kopya arayıp indirir."
+    "again": "Yoksa Box Office yeniden bir ikinci kopya arayıp indirir.",
+    "showTitle": "İkinci kopyalar",
+    "showHint": "Her bölümün başka bir kalitede bir kopyasını daha saklayın; örneğin 4K olanların yanında 1080p kopyalar. Kendi kalite profilleri vardır, ayrı olarak aranır ve yükseltilirler.",
+    "showProfile": "İkinci kopyaların kalite profili",
+    "showOff": "İkinci kopya yok",
+    "showWhere": "Nereye konacaklar",
+    "showNextToFirst": "İlk kopyaların yanına",
+    "showCount": "{{total}} bölümün {{have}} tanesinin ikinci kopyası var.",
+    "showLooking": "Box Office kalanları arıyor.",
+    "showNotWatched": "Bu dizi izlenmiyor, bu yüzden Box Office kalanları aramıyor.",
+    "showStopped": "Box Office artık ikinci kopya aramıyor. Bu kopyalar siz silene kadar kalır.",
+    "showDelete": "İkinci kopyaları sil",
+    "showFilesOf": "{{title}} dizisinin ikinci kopyaları",
+    "showStays": "Dizi ve ilk kopyaları kalır.",
+    "showStop": "İkinci kopya saklamayı bırak",
+    "showAgain": "Yoksa Box Office yeniden ikinci kopyalar arayıp indirir.",
+    "episode": "İkinci kopya: {{quality}}"
   },
   "order": {
     "title": "İndirme sırası",
@@ -2907,7 +2933,8 @@
     "newDays": "Bir sürümün yeni sayıldığı gün sayısı",
     "newDaysHint": "Bir film veya bölüm, yayınlanmasından ya da satın alma veya yayın için çıkmasından sonra bu kadar gün yeni sayılır. Sonra eski bir eksik olur.",
     "preempt": "Önde sıralanan biri için süren indirmeyi durdur",
-    "preemptHint": "Durdurulan sonra kaldığı yerden devam eder. Kapalıyken yeni olan sırasını bekler."
+    "preemptHint": "Durdurulan sonra kaldığı yerden devam eder. Kapalıyken yeni olan sırasını bekler.",
+    "searches": "Otomatik aramalar da bu sırayı izler, yani eksik başlıklar yükseltmelerden önce aranır. Bunu Eksik başlıklar ve yükseltmeler bölümünden değiştirebilirsin."
   },
   "relocate": {
     "title": "Başka bir kök klasöre taşı",

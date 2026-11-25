@@ -234,7 +234,17 @@ func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir str
 		if err != nil {
 			return "", fmt.Errorf("the show it was for is gone: %w", err)
 		}
-		if err := checkLibrary(t.RootFolder, t.Path); err != nil {
+		// The show's second copies go next to the first ones, named for
+		// their quality, or into a folder named like the show's in the
+		// library folder chosen for them; they replace only the second
+		// copies there were.
+		second := d.Mode == store.SecondKind
+		root, showPath, kind := t.RootFolder, t.Path, "episode"
+		if second {
+			root, showPath = t.SecondFolder()
+			kind = store.SecondEpisodeKind
+		}
+		if err := checkLibrary(root, showPath); err != nil {
 			return "", err
 		}
 		eps, err := li.Store.Episodes(ctx, t.ID)
@@ -322,9 +332,23 @@ func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir str
 			if ep.Title != "" {
 				name += " - " + cleanFileName(ep.Title)
 			}
-			folder := library.SeasonFolder(t.Path, season, fmt.Sprintf("Season %02d", season))
-			dest := filepath.Join(t.Path, folder, name+strings.ToLower(filepath.Ext(v)))
-			if err := li.place(ctx, dir, v, dest, t.RootFolder, t.Path, "episode", ep.ID, q, ep.File); err != nil {
+			old := ep.File
+			if second {
+				old = ep.Second
+				if showPath == t.Path {
+					label := "Second copy"
+					if ql, ok := quality.ByID(q); ok && ql.ID != 0 && ql.Name != "" {
+						label = ql.Name
+					}
+					name += " - " + cleanFileName(label)
+				}
+			}
+			folder := library.SeasonFolder(showPath, season, fmt.Sprintf("Season %02d", season))
+			dest := filepath.Join(showPath, folder, name+strings.ToLower(filepath.Ext(v)))
+			if second && ep.File != nil && ep.File.Path == dest {
+				return "", errors.New("the episode's first copy is where its second copy would go")
+			}
+			if err := li.place(ctx, dir, v, dest, root, showPath, kind, ep.ID, q, old); err != nil {
 				return "", err
 			}
 			placed = append(placed, dest)
