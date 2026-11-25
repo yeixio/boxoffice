@@ -3292,5 +3292,14 @@
     "today": "Wyszukiwania dzisiaj",
     "note": "Wyszukiwania obejmują sprawdzenia RSS. Pobierania usunięte z historii nie są liczone.",
     "none": "Dodaj indekser, aby zobaczyć tutaj jego liczby."
+  },
+  "tracks": {
+    "title": "Niechciane ścieżki",
+    "sub": "Remuksy i wydania internetowe często zawierają kilkanaście ścieżek dźwiękowych i napisów. Box Office może usuwać te w językach, których nikt tu nie używa, gdy przychodzi film lub odcinek, bez ponownego kodowania obrazu i zachowanych ścieżek. Plik w oryginalnej postaci trafia do folderu kosza, a tytuły z profilem Nie ruszaj zostają nietknięte. Obsługiwane są tylko pliki MKV.",
+    "on": "Usuwaj niechciane ścieżki dźwiękowe i napisy",
+    "languages": "Zachowywane języki",
+    "languagesHint": "Język, w którym powstał tytuł, zostaje zawsze, podobnie jak ścieżki bez podanego języka i napisy w językach, w których pobierane są napisy. Gdyby nie został żaden dźwięk, zostaje cały.",
+    "saved": "Zaoszczędzono dotąd: {{size}} (pliki: {{files}})",
+    "noTools": "FFmpeg nie jest tu zainstalowany, więc nie można usuwać ścieżek."
   }
 }

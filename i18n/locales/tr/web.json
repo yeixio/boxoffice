@@ -3046,5 +3046,14 @@
     "today": "Bugünkü aramalar",
     "note": "Aramalara RSS denetimleri de dahildir. Geçmişten kaldırılan indirmeler sayılmaz.",
     "none": "Rakamlarını burada görmek için bir dizinleyici ekleyin."
+  },
+  "tracks": {
+    "title": "İstenmeyen izler",
+    "sub": "Remux'lar ve web sürümleri çoğu zaman bir düzine ses ve altyazı izi taşır. Box Office, her film ve bölüm geldiğinde burada kimsenin kullanmadığı dillerdeki izleri, görüntüyü ya da tutulan izleri yeniden kodlamadan atabilir. Dosyanın geldiği hali geri dönüşüm klasörüne gider, Dokunma olarak işaretli başlıklara dokunulmaz. Yalnızca MKV dosyaları işlenir.",
+    "on": "İstenmeyen ses ve altyazı izlerini at",
+    "languages": "Tutulacak diller",
+    "languagesHint": "Başlığın çekildiği dil her zaman tutulur; dilini belirtmeyen izler ve altyazıların getirildiği dillerdeki altyazılar da öyle. Hiç ses kalmayacaksa tüm sesler kalır.",
+    "saved": "Şimdiye kadar kazanılan: {{size}} (dosya: {{files}})",
+    "noTools": "FFmpeg burada kurulu değil, bu yüzden iz atılamaz."
   }
 }

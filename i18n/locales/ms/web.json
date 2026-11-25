@@ -2923,5 +2923,14 @@
     "today": "Carian hari ini",
     "note": "Carian termasuk semakan RSS. Muat turun yang dibuang daripada sejarah tidak dikira.",
     "none": "Tambah pengindeks untuk melihat angkanya di sini."
+  },
+  "tracks": {
+    "title": "Trek yang tidak diingini",
+    "sub": "Remux dan keluaran web sering membawa sedozen trek audio dan sari kata. Box Office boleh membuang trek dalam bahasa yang tiada sesiapa gunakan di sini apabila setiap filem dan episod masuk, tanpa mengekod semula gambar atau trek yang disimpan. Fail asal pergi ke folder kitar semula, dan tajuk bertanda Jangan sentuh dibiarkan. Hanya fail MKV dikendalikan.",
+    "on": "Buang trek audio dan sari kata yang tidak diingini",
+    "languages": "Bahasa yang disimpan",
+    "languagesHint": "Bahasa asal tajuk dibuat sentiasa disimpan, begitu juga trek yang tidak menyatakan bahasanya dan sari kata dalam bahasa yang sari katanya diambil. Jika tiada audio yang tinggal, semuanya disimpan.",
+    "saved": "Dijimatkan setakat ini: {{size}} (fail: {{files}})",
+    "noTools": "FFmpeg tidak dipasang di sini, jadi tiada trek boleh dibuang."
   }
 }

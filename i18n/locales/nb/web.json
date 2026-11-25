@@ -3046,5 +3046,14 @@
     "today": "Søk i dag",
     "note": "Søk inkluderer RSS-sjekker. Nedlastinger som er fjernet fra historikken, telles ikke.",
     "none": "Legg til en indekser for å se tallene her."
+  },
+  "tracks": {
+    "title": "Uønskede spor",
+    "sub": "Remuxer og nettutgivelser har ofte et dusin lyd- og tekstspor. Box Office kan fjerne dem på språk ingen her bruker når hver film og episode kommer inn, uten å kode om bildet eller sporene som beholdes. Filen slik den kom, legges i papirkurvmappen, og titler på Ikke rør lar den være. Bare MKV-filer håndteres.",
+    "on": "Fjern uønskede lyd- og tekstspor",
+    "languages": "Språk som beholdes",
+    "languagesHint": "Språket en tittel er laget på, beholdes alltid, og det gjør også spor uten oppgitt språk og undertekster på språkene det hentes undertekster på. Hvis ingen lyd ville bli igjen, beholdes all lyd.",
+    "saved": "Spart så langt: {{size}} (filer: {{files}})",
+    "noTools": "FFmpeg er ikke installert her, så ingen spor kan fjernes."
   }
 }

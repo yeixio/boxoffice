@@ -3046,5 +3046,14 @@
     "today": "Sökningar i dag",
     "note": "Sökningar inkluderar RSS-kontroller. Nedladdningar som tagits bort ur historiken räknas inte.",
     "none": "Lägg till en indexerare för att se dess siffror här."
+  },
+  "tracks": {
+    "title": "Oönskade spår",
+    "sub": "Remuxar och webbsläpp har ofta ett dussin ljud- och undertextspår. Box Office kan ta bort dem på språk som ingen här använder när varje film och avsnitt kommer in, utan att koda om bilden eller spåren som behålls. Filen som den kom läggs i papperskorgsmappen, och titlar på Rör inte lämnas orörda. Bara MKV-filer hanteras.",
+    "on": "Ta bort oönskade ljud- och undertextspår",
+    "languages": "Språk som behålls",
+    "languagesHint": "Språket en titel gjordes på behålls alltid, liksom spår utan angivet språk och undertexter på de språk som undertexter hämtas på. Om inget ljud skulle bli kvar behålls allt ljud.",
+    "saved": "Sparat hittills: {{size}} (filer: {{files}})",
+    "noTools": "FFmpeg är inte installerat här, så inga spår kan tas bort."
   }
 }

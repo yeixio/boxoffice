@@ -3046,5 +3046,14 @@
     "today": "Søgninger i dag",
     "note": "Søgninger omfatter RSS-tjek. Downloads, der er fjernet fra historikken, tælles ikke med.",
     "none": "Tilføj en indexer for at se dens tal her."
+  },
+  "tracks": {
+    "title": "Uønskede spor",
+    "sub": "Remuxer og web-udgivelser har ofte et dusin lyd- og undertekstspor. Box Office kan fjerne dem på sprog, ingen her bruger, når hver film og hvert afsnit kommer ind, uden at omkode billedet eller de spor, der beholdes. Filen, som den kom, lægges i papirkurvsmappen, og titler på Rør ikke lades være. Kun MKV-filer håndteres.",
+    "on": "Fjern uønskede lyd- og undertekstspor",
+    "languages": "Sprog, der beholdes",
+    "languagesHint": "Sproget, en titel er lavet på, beholdes altid, og det gør spor uden angivet sprog og undertekster på de sprog, der hentes undertekster på. Hvis ingen lyd ville være tilbage, bliver al lyd.",
+    "saved": "Sparet indtil nu: {{size}} (filer: {{files}})",
+    "noTools": "FFmpeg er ikke installeret her, så ingen spor kan fjernes."
   }
 }

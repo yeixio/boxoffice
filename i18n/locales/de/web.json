@@ -3046,5 +3046,14 @@
     "today": "Suchen heute",
     "note": "Zu den Suchen zählen auch RSS-Abfragen. Aus dem Verlauf entfernte Downloads werden nicht mitgezählt.",
     "none": "Füge einen Indexer hinzu, um hier seine Zahlen zu sehen."
+  },
+  "tracks": {
+    "title": "Unerwünschte Spuren",
+    "sub": "Remuxe und Web-Releases enthalten oft ein Dutzend Ton- und Untertitelspuren. Box Office kann die in Sprachen, die hier niemand nutzt, entfernen, sobald ein Film oder eine Episode eintrifft, ohne Bild oder behaltene Spuren neu zu kodieren. Die Datei im Originalzustand kommt in den Papierkorb-Ordner, und Titel mit „Nicht anfassen“ bleiben unberührt. Nur MKV-Dateien werden bearbeitet.",
+    "on": "Unerwünschte Ton- und Untertitelspuren entfernen",
+    "languages": "Sprachen, die bleiben",
+    "languagesHint": "Die Sprache, in der ein Titel gedreht wurde, bleibt immer, ebenso Spuren ohne Sprachangabe und Untertitel in den Sprachen, in denen Untertitel geholt werden. Bliebe kein Ton übrig, bleibt der ganze Ton.",
+    "saved": "Bisher gespart: {{size}} (Dateien: {{files}})",
+    "noTools": "FFmpeg ist hier nicht installiert, daher können keine Spuren entfernt werden."
   }
 }

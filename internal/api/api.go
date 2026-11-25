@@ -49,6 +49,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/subtitles"
 	"github.com/yeixio/boxoffice/internal/titlelist"
 	"github.com/yeixio/boxoffice/internal/tmdb"
+	"github.com/yeixio/boxoffice/internal/tracks"
 )
 
 // SettingAPIKey is where the API key is kept.
@@ -119,6 +120,9 @@ type Server struct {
 	Ereaders *ereader.Service
 	// Subtitles fetches subtitles; nil makes one that only answers.
 	Subtitles *subtitles.Service
+	// Tracks drops unwanted audio and subtitle tracks from files as they
+	// come in; nil makes one that only answers.
+	Tracks *tracks.Service
 	// Lists follows lists kept elsewhere; nil makes one that only answers.
 	Lists *lists.Service
 	// Titles adds the titles of a list loaded from a file; nil makes one.
@@ -343,6 +347,7 @@ func (s *Server) Handler() http.Handler {
 	routes = append(routes, s.problemRoutes()...)
 	routes = append(routes, s.qualityCheckRoutes()...)
 	routes = append(routes, s.subtitleRoutes()...)
+	routes = append(routes, s.trackRoutes()...)
 	routes = append(routes, s.listRoutes()...)
 	routes = append(routes, s.titleListRoutes()...)
 	routes = append(routes, s.cleanupRoutes()...)

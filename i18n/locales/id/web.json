@@ -2923,5 +2923,14 @@
     "today": "Pencarian hari ini",
     "note": "Pencarian mencakup pemeriksaan RSS. Unduhan yang dihapus dari riwayat tidak dihitung.",
     "none": "Tambahkan pengindeks untuk melihat angkanya di sini."
+  },
+  "tracks": {
+    "title": "Trek yang tidak diinginkan",
+    "sub": "Remux dan rilis web sering membawa selusin trek audio dan subtitle. Box Office dapat membuang trek berbahasa yang tidak dipakai siapa pun di sini saat tiap film dan episode masuk, tanpa mengodekan ulang gambar atau trek yang disimpan. Berkas aslinya masuk ke folder daur ulang, dan judul bertanda Jangan disentuh dibiarkan. Hanya berkas MKV yang ditangani.",
+    "on": "Buang trek audio dan subtitle yang tidak diinginkan",
+    "languages": "Bahasa yang disimpan",
+    "languagesHint": "Bahasa asli pembuatan judul selalu disimpan, begitu juga trek yang tidak menyebut bahasanya dan subtitle dalam bahasa yang subtitlenya diambil. Jika tidak ada audio yang tersisa, semuanya disimpan.",
+    "saved": "Dihemat sejauh ini: {{size}} (berkas: {{files}})",
+    "noTools": "FFmpeg tidak terpasang di sini, jadi tidak ada trek yang bisa dibuang."
   }
 }

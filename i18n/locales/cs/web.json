@@ -3292,5 +3292,14 @@
     "today": "Hledání dnes",
     "note": "Hledání zahrnují i kontroly RSS. Stahování odebraná z historie se nepočítají.",
     "none": "Přidejte indexer a jeho čísla se zobrazí zde."
+  },
+  "tracks": {
+    "title": "Nechtěné stopy",
+    "sub": "Remuxy a webová vydání často obsahují tucet zvukových a titulkových stop. Box Office umí při příchodu každého filmu a epizody zahodit ty v jazycích, které tu nikdo nepoužívá, bez překódování obrazu i ponechaných stop. Soubor v původní podobě jde do koše a tituly s profilem Nesahat zůstanou být. Zpracovávají se jen soubory MKV.",
+    "on": "Zahazovat nechtěné zvukové a titulkové stopy",
+    "languages": "Ponechané jazyky",
+    "languagesHint": "Jazyk, ve kterém titul vznikl, zůstává vždy, stejně jako stopy bez uvedeného jazyka a titulky v jazycích, ve kterých se titulky stahují. Kdyby nezbyl žádný zvuk, zůstane všechen.",
+    "saved": "Dosud ušetřeno: {{size}} (souborů: {{files}})",
+    "noTools": "FFmpeg tu není nainstalovaný, takže žádné stopy zahodit nelze."
   }
 }

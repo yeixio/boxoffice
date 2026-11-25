@@ -3046,5 +3046,14 @@
     "today": "Mai keresések",
     "note": "A keresések közé az RSS-ellenőrzések is beleszámítanak. Az előzményekből eltávolított letöltések nem számítanak.",
     "none": "Adj hozzá egy indexelőt, hogy itt lásd a számait."
+  },
+  "tracks": {
+    "title": "Nem kívánt sávok",
+    "sub": "A remuxok és webes kiadások gyakran tucatnyi hang- és feliratsávot tartalmaznak. A Box Office minden film és epizód érkezésekor el tudja dobni azokat, amelyek nyelvét itt senki sem használja, a kép és a megtartott sávok újrakódolása nélkül. A fájl eredeti formájában a lomtár mappába kerül, a „Ne nyúlj hozzá” címek érintetlenek maradnak. Csak MKV-fájlokkal működik.",
+    "on": "Nem kívánt hang- és feliratsávok eldobása",
+    "languages": "Megtartott nyelvek",
+    "languagesHint": "A cím eredeti nyelve mindig megmarad, ahogy a nyelvet nem jelölő sávok és azoknak a nyelveknek a feliratai is, amelyeken feliratokat tölt le. Ha nem maradna hang, az összes hang megmarad.",
+    "saved": "Eddig megtakarítva: {{size}} (fájlok: {{files}})",
+    "noTools": "Az FFmpeg nincs telepítve, ezért nem lehet sávokat eldobni."
   }
 }

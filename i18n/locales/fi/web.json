@@ -3046,5 +3046,14 @@
     "today": "Haut tänään",
     "note": "Hakuihin lasketaan myös RSS-tarkistukset. Historiasta poistettuja latauksia ei lasketa.",
     "none": "Lisää indeksoija, niin sen luvut näkyvät täällä."
+  },
+  "tracks": {
+    "title": "Ei-toivotut raidat",
+    "sub": "Remuxeissa ja verkkojulkaisuissa on usein kymmenkunta ääni- ja tekstitysraitaa. Box Office voi pudottaa pois ne, joiden kieltä kukaan täällä ei käytä, kun elokuva tai jakso saapuu, koodaamatta kuvaa tai säilytettäviä raitoja uudelleen. Tiedosto sellaisenaan menee roskakorikansioon, ja Älä koske -nimikkeet jätetään rauhaan. Vain MKV-tiedostot käsitellään.",
+    "on": "Pudota ei-toivotut ääni- ja tekstitysraidat",
+    "languages": "Säilytettävät kielet",
+    "languagesHint": "Kieli, jolla nimike on tehty, säilyy aina, samoin raidat, jotka eivät kerro kieltään, ja tekstitykset kielillä, joilla tekstityksiä haetaan. Jos ääntä ei jäisi lainkaan, kaikki ääni säilyy.",
+    "saved": "Säästetty tähän mennessä: {{size}} (tiedostoja: {{files}})",
+    "noTools": "FFmpegiä ei ole asennettu, joten raitoja ei voi pudottaa."
   }
 }

@@ -51,6 +51,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/subtitles"
 	"github.com/yeixio/boxoffice/internal/titlelist"
+	"github.com/yeixio/boxoffice/internal/tracks"
 	"github.com/yeixio/boxoffice/internal/version"
 	"github.com/yeixio/boxoffice/internal/wikidata"
 	"github.com/yeixio/boxoffice/internal/zone"
@@ -287,12 +288,29 @@ func run() error {
 	srv.Titles = &titlelist.Service{Store: db, Catalog: cat, Music: tunes, Books: shelf, Jobs: runner}
 	srv.Titles.Register()
 	srv.Portal.Subtitles = subs.Reported
+	// Audio and subtitle tracks nobody here wants are dropped from each
+	// movie and episode as it comes in, when that's turned on.
+	strip := &tracks.Service{Store: db, Log: log, Enter: mover.Enter,
+		Original: func(ctx context.Context, kind string, tmdbID int64) (string, error) {
+			if kind == "movie" {
+				m, err := cat.TMDB(ctx).Movie(ctx, tmdbID)
+				return m.Language, err
+			}
+			t, err := cat.TMDB(ctx).Show(ctx, tmdbID)
+			return t.Language, err
+		}}
+	srv.Tracks = strip
 	downloads.Imported = func(ctx context.Context, d store.Download) {
 		switch d.Kind {
 		case store.Ebook:
 			go readers.Imported(ctx, d)
 		case "movie", "series":
-			go subs.Imported(ctx, d)
+			go func() {
+				// Tracks first: subtitles are then looked for by what's
+				// left inside the file.
+				strip.Imported(ctx, d)
+				subs.Imported(ctx, d)
+			}()
 		}
 	}
 	// Admin alerts reach Matinee's admins too, with download news.
