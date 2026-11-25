@@ -59,6 +59,10 @@ func (s *Service) judgeEpisodes(ctx context.Context, r Release, t store.Series, 
 	// each episode's place in it.
 	want = s.inOrder(ctx, t, want)
 	season, eps, ok := releaseEpisode(r.Title)
+	if !ok {
+		// Named by the day it aired, as talk shows and news are.
+		season, eps, ok = s.datedEpisode(ctx, t, r.Title)
+	}
 	absolute := t.Numbering == store.NumberingAbsolute
 	named := false // its name was read as the show's, numbered straight through
 	if !ok && absolute {
@@ -167,6 +171,87 @@ func (s *Service) absoluteNumbers(ctx context.Context, seriesID int64) map[int]s
 	s.absolute[seriesID] = absoluteCache{m, time.Now().Add(time.Minute)}
 	s.mu.Unlock()
 	return m
+}
+
+// datedEpisode reads a release named by the day it aired
+// ("Show.2026.11.19") as the season and episode that aired that day, as
+// the show's releases number them. A day when none or several of the
+// show's episodes aired isn't read.
+func (s *Service) datedEpisode(ctx context.Context, t store.Series, name string) (season int, eps []int, ok bool) {
+	day, has := quality.AirDate(name)
+	if !has {
+		return 0, nil, false
+	}
+	e, has := airedOn(s.showEpisodes(ctx, t.ID), day)
+	if !has {
+		return 0, nil, false
+	}
+	in := s.inOrder(ctx, t, []store.Episode{e})[0]
+	if in.Season < 0 {
+		return 0, nil, false
+	}
+	return in.Season, []int{in.Number}, true
+}
+
+// airedOn is the one episode of a show (specials aside) that aired on a
+// day.
+func airedOn(eps []store.Episode, day time.Time) (store.Episode, bool) {
+	var found store.Episode
+	n := 0
+	for _, e := range eps {
+		if e.Season > 0 && e.AirDate != nil && quality.SameDay(*e.AirDate, day) {
+			found = e
+			n++
+		}
+	}
+	return found, n == 1
+}
+
+// dailySeason is how many episodes a season has from which its show is
+// taken for a daily one, whose releases are named by date.
+const dailySeason = 40
+
+// daily says whether an episode is one of a daily show's: one of a
+// season of dailySeason episodes or more.
+func (s *Service) daily(ctx context.Context, e store.Episode) bool {
+	if e.Season <= 0 || e.AirDate == nil {
+		return false
+	}
+	n := 0
+	for _, x := range s.showEpisodes(ctx, e.SeriesID) {
+		if x.Season == e.Season {
+			n++
+		}
+	}
+	return n >= dailySeason
+}
+
+// showEpisodes is a show's episodes, kept a minute: every release of a
+// search may be read against them.
+func (s *Service) showEpisodes(ctx context.Context, seriesID int64) []store.Episode {
+	s.mu.Lock()
+	have, ok := s.shows[seriesID]
+	s.mu.Unlock()
+	if ok && time.Now().Before(have.expires) {
+		return have.eps
+	}
+	eps, err := s.Store.Episodes(ctx, seriesID)
+	if err != nil {
+		s.logger().Warn("couldn't read a show's episodes", "show", seriesID, "err", err)
+		return nil
+	}
+	s.mu.Lock()
+	if s.shows == nil {
+		s.shows = map[int64]episodesCache{}
+	}
+	s.shows[seriesID] = episodesCache{eps, time.Now().Add(time.Minute)}
+	s.mu.Unlock()
+	return eps
+}
+
+type episodesCache struct {
+	eps     []store.Episode
+	expires time.Time
 }
 
 // inOrder is some of a show's episodes numbered the way its releases

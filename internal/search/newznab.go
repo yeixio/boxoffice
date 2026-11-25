@@ -50,8 +50,11 @@ type Query struct {
 	TVDBID  int64
 	Season  int
 	Episode int
-	Cats    []int
-	Offset  int // to page through results
+	// Day asks for a daily show's episode by the day it aired, as "11/19"
+	// with the year as Season.
+	Day    string
+	Cats   []int
+	Offset int // to page through results
 }
 
 type rss struct {
@@ -287,6 +290,9 @@ func (c *Client) Query(ctx context.Context, ix store.Indexer, q Query) ([]Releas
 	}
 	if q.Episode > 0 {
 		p.Set("ep", strconv.Itoa(q.Episode))
+	}
+	if q.Day != "" {
+		p.Set("ep", q.Day)
 	}
 	if len(q.Cats) > 0 {
 		var s []string

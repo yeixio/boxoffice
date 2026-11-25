@@ -453,3 +453,30 @@ func TestImportEpisodeOrder(t *testing.T) {
 		}
 	}
 }
+
+// A daily show's file named by the day it aired goes in as the episode
+// that aired then.
+func TestImportByAirDate(t *testing.T) {
+	st := storetest.Open(t)
+	ctx := context.Background()
+	lib := t.TempDir()
+	profiles, _ := st.Profiles(ctx)
+	show, err := st.AddSeries(ctx, store.Series{TMDBID: 7, Title: "The Nightly", Year: 2020, ProfileID: profiles[0].ID, RootFolder: lib, Path: filepath.Join(lib, "The Nightly (2020)"),
+		Monitored: true, Seasons: []store.Season{{Number: 7, Monitored: true}}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	for n := 1; n <= 3; n++ {
+		aired := time.Date(2026, 11, 16+n, 0, 0, 0, 0, time.UTC)
+		st.UpsertEpisode(ctx, store.Episode{SeriesID: show.ID, Season: 7, Number: 30 + n, Title: fmt.Sprintf("Guest %d", n), AirDate: &aired, Monitored: true})
+	}
+	dl := t.TempDir()
+	os.WriteFile(filepath.Join(dl, "the.nightly.2026.11.19.some.guest.1080p.web.h264-grp.mkv"), make([]byte, 4000), 0o644)
+	li := &LibraryImporter{Store: st}
+	if _, err := li.Import(ctx, store.Download{Name: "The.Nightly.2026.11.19.Some.Guest.1080p.WEB.h264-GRP", Kind: "series", TitleID: show.ID}, dl, listFiles(dl)); err != nil {
+		t.Fatal(err)
+	}
+	if !fileExists(filepath.Join(show.Path, "Season 07", "The Nightly (2020) - S07E33 - Guest 3.mkv")) {
+		t.Fatal("the episode that aired that day didn't get the file")
+	}
+}
