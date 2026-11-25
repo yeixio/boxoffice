@@ -33,7 +33,8 @@
   "app": {
     "notAnswering": "Box Office tidak menjawab: {{error}}",
     "closeMenu": "Tutup menu",
-    "menu": "Menu"
+    "menu": "Menu",
+    "typeOff": "{{name}} dimatikan. Aktifkan di <link>Pengaturan → Perpustakaan</link>."
   },
   "signIn": {
     "mismatch": "Kata sandi tidak cocok.",
@@ -974,7 +975,7 @@
     "more": "Lebih dari film dan TV",
     "moreSub": "Aktifkan jenis media lain yang ingin diurus Box Office. Masing-masing nonaktif sampai Anda mengaktifkannya, dan menonaktifkannya nanti tetap menyimpan folder dan pengaturannya. Box Office tidak pernah mengubah file yang sudah ada di perpustakaan ini.",
     "inPlaceOf": "(menggantikan {{app}})",
-    "pickRoot": "Pilih folder akar untuk setiap jenis yang Anda aktifkan, di bawah. Penambahan dan pencarian untuk jenis ini hadir di pembaruan Box Office berikutnya.",
+    "pickRoot": "Pilih folder akar untuk setiap jenis yang Anda aktifkan, di bawah.",
     "roots": {
       "movie": "Folder akar film",
       "series": "Folder akar TV",

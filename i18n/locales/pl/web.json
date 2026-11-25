@@ -39,7 +39,8 @@
   "app": {
     "notAnswering": "Box Office nie odpowiada: {{error}}",
     "closeMenu": "Zamknij menu",
-    "menu": "Menu"
+    "menu": "Menu",
+    "typeOff": "{{name}}: ta sekcja jest wyłączona. Włącz ją w <link>Ustawienia → Biblioteka</link>."
   },
   "signIn": {
     "mismatch": "Hasła się nie zgadzają.",
@@ -1196,7 +1197,7 @@
     "more": "Więcej niż filmy i TV",
     "moreSub": "Włącz inne rodzaje mediów, którymi ma się zajmować Box Office. Każdy jest wyłączony, dopóki go nie włączysz, a późniejsze wyłączenie zachowuje jego foldery i ustawienia. Box Office nigdy nie zmienia plików już obecnych w tych bibliotekach.",
     "inPlaceOf": "(zamiast {{app}})",
-    "pickRoot": "Wybierz poniżej folder główny dla każdego włączonego rodzaju. Dodawanie i wyszukiwanie dla nich pojawi się w następnych aktualizacjach Box Office.",
+    "pickRoot": "Wybierz poniżej folder główny dla każdego włączonego rodzaju.",
     "roots": {
       "movie": "Foldery główne filmów",
       "series": "Foldery główne seriali",

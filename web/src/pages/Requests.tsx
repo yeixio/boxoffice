@@ -8,7 +8,7 @@ import { useProfiles, useRootFolders } from '../hooks'
 import { useRuleFor } from './AddRules'
 import { formatLocale } from '../i18n'
 import { problemLabel, stateText, type Issue, type Request } from '../portal/papi'
-import { Badge, Button, Card, Empty, ErrorNote, Field, Heading, Input, Modal, Poster, Select, Spinner, Toggle } from '../ui'
+import { Badge, Button, Card, Empty, ErrorNote, Field, Heading, Input, Modal, Poster, Select, Spinner, Toggle, TabRow } from '../ui'
 
 // Requests is the admin side of the request site: what people asked for,
 // the problems they reported, who can sign in, and how the site looks and
@@ -67,7 +67,7 @@ export function Requests() {
   return (
     <>
       <Heading title={t('req.title')} sub={t('req.sub')} />
-      <div className="mb-6 flex gap-1 overflow-x-auto border-b border-line" role="tablist">
+      <TabRow selected={tab} label={t('req.title')}>
         {tabs.map((tb) => {
           const n = tb.id === 'requests' ? counts.data?.requests : tb.id === 'problems' ? counts.data?.issues : 0
           return (
@@ -83,7 +83,7 @@ export function Requests() {
             </button>
           )
         })}
-      </div>
+      </TabRow>
       {tab === 'requests' && <RequestList />}
       {tab === 'problems' && <ProblemList />}
       {tab === 'people' && <People />}

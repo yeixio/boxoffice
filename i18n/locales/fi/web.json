@@ -35,7 +35,8 @@
   "app": {
     "notAnswering": "Box Office ei vastaa: {{error}}",
     "closeMenu": "Sulje valikko",
-    "menu": "Valikko"
+    "menu": "Valikko",
+    "typeOff": "{{name}} on pois päältä. Ota se käyttöön kohdassa <link>Asetukset → Kirjasto</link>."
   },
   "signIn": {
     "mismatch": "Salasanat eivät täsmää.",
@@ -1048,7 +1049,7 @@
     "more": "Muutakin kuin elokuvia ja TV:tä",
     "moreSub": "Kytke päälle muut mediatyypit, joista haluat Box Officen huolehtivan. Kukin on pois, kunnes kytket sen päälle, ja myöhemmin pois kytkeminen säilyttää sen kansiot ja asetukset. Box Office ei koskaan muuta näissä kirjastoissa jo olevia tiedostoja.",
     "inPlaceOf": "({{app}}:n tilalla)",
-    "pickRoot": "Valitse alta juurikansio jokaiselle päälle kytkemällesi. Näiden lisääminen ja haku tulevat Box Officen seuraavissa päivityksissä.",
+    "pickRoot": "Valitse alta juurikansio jokaiselle päälle kytkemällesi.",
     "roots": {
       "movie": "Elokuvien juurikansiot",
       "series": "TV:n juurikansiot",

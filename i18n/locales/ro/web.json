@@ -37,7 +37,8 @@
   "app": {
     "notAnswering": "Box Office nu răspunde: {{error}}",
     "closeMenu": "Închide meniul",
-    "menu": "Meniu"
+    "menu": "Meniu",
+    "typeOff": "{{name}}: secțiunea este oprită. Pornește-o din <link>Setări → Bibliotecă</link>."
   },
   "signIn": {
     "mismatch": "Parolele nu se potrivesc.",
@@ -1122,7 +1123,7 @@
     "more": "Mai mult decât filme și TV",
     "moreSub": "Pornește celelalte tipuri de media de care vrei să aibă grijă Box Office. Fiecare e oprit până îl pornești, iar dacă îl oprești mai târziu își păstrează dosarele și setările. Box Office nu modifică niciodată fișierele aflate deja în aceste biblioteci.",
     "inPlaceOf": "(în loc de {{app}})",
-    "pickRoot": "Alege mai jos un dosar rădăcină pentru fiecare tip pornit. Adăugarea și căutarea pentru acestea vin în următoarele actualizări Box Office.",
+    "pickRoot": "Alege mai jos un dosar rădăcină pentru fiecare tip pornit.",
     "roots": {
       "movie": "Dosare rădăcină pentru filme",
       "series": "Dosare rădăcină TV",

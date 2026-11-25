@@ -35,7 +35,8 @@
   "app": {
     "notAnswering": "Box Office svarer ikke: {{error}}",
     "closeMenu": "Luk menuen",
-    "menu": "Menu"
+    "menu": "Menu",
+    "typeOff": "{{name}} er slået fra. Slå det til under <link>Indstillinger → Bibliotek</link>."
   },
   "signIn": {
     "mismatch": "Adgangskoderne er ikke ens.",
@@ -1048,7 +1049,7 @@
     "more": "Mere end film og tv",
     "moreSub": "Slå de andre medietyper til, som du vil have Box Office til at tage sig af. Hver er slået fra, indtil du slår den til, og at slå den fra senere bevarer dens mapper og indstillinger. Box Office ændrer aldrig filer, der allerede er i disse biblioteker.",
     "inPlaceOf": "(i stedet for {{app}})",
-    "pickRoot": "Vælg en rodmappe for hver, du slog til, nedenfor. Tilføjelse og søgning for disse kommer i de næste Box Office-opdateringer.",
+    "pickRoot": "Vælg en rodmappe for hver, du slog til, nedenfor.",
     "roots": {
       "movie": "Rodmapper til film",
       "series": "Rodmapper til tv",

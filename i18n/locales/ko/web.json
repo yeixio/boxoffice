@@ -33,7 +33,8 @@
   "app": {
     "notAnswering": "Box Office가 응답하지 않아요: {{error}}",
     "closeMenu": "메뉴 닫기",
-    "menu": "메뉴"
+    "menu": "메뉴",
+    "typeOff": "{{name}}이(가) 꺼져 있어요. <link>설정 → 라이브러리</link>에서 켜세요."
   },
   "signIn": {
     "mismatch": "비밀번호가 일치하지 않아요.",
@@ -974,7 +975,7 @@
     "more": "영화와 TV 그 이상",
     "moreSub": "Box Office가 관리할 다른 미디어를 켜세요. 각각 켜기 전까지는 꺼져 있고, 나중에 꺼도 폴더와 설정은 남아요. Box Office는 이 라이브러리에 이미 있는 파일을 바꾸지 않아요.",
     "inPlaceOf": "({{app}} 대신)",
-    "pickRoot": "켠 것마다 아래에서 루트 폴더를 고르세요. 이것들의 추가와 검색은 다음 Box Office 업데이트에서 지원돼요.",
+    "pickRoot": "켠 것마다 아래에서 루트 폴더를 고르세요.",
     "roots": {
       "movie": "영화 루트 폴더",
       "series": "TV 루트 폴더",

@@ -44,7 +44,7 @@ export function Backups() {
       {make.data?.warning && <p className="mb-4 text-sm text-gold">{make.data.warning}</p>}
       <ErrorNote error={make.error} />
       {d.remoteError && <p className="mb-4 text-sm text-bad">{t('backups.remoteError', { error: d.remoteError })}</p>}
-      <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+      <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr] [&>*]:min-w-0">
         <Card className="p-0">
           {d.backups.length === 0 ? (
             <p className="p-5 text-sm text-muted">{t('backups.none')}</p>
@@ -126,7 +126,7 @@ function BackupSettings({ data }: { data: BackupsData }) {
           <Field label={t('backups.keep')}>{(id) => <Input id={id} type="number" min={1} value={keep} onChange={(e) => setKeep(Number(e.target.value))} />}</Field>
         </div>
         <p className="text-xs text-muted">
-          <Trans i18nKey="backups.onServer" values={{ dir: data.dir }} components={{ code: <code /> }} />
+          <Trans i18nKey="backups.onServer" values={{ dir: data.dir }} components={{ code: <code className="break-all" /> }} />
         </p>
         <Field label={t('backups.alsoSend')}>
           {(id) => (

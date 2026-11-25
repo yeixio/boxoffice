@@ -39,7 +39,8 @@
   "app": {
     "notAnswering": "Box Office neodpovídá: {{error}}",
     "closeMenu": "Zavřít nabídku",
-    "menu": "Nabídka"
+    "menu": "Nabídka",
+    "typeOff": "{{name}}: tato sekce je vypnutá. Zapněte ji v <link>Nastavení → Knihovna</link>."
   },
   "signIn": {
     "mismatch": "Hesla se neshodují.",
@@ -1196,7 +1197,7 @@
     "more": "Víc než filmy a TV",
     "moreSub": "Zapněte další druhy médií, o které se má Box Office starat. Každý je vypnutý, dokud ho nezapnete, a pozdější vypnutí zachová jeho složky a nastavení. Box Office nikdy nemění soubory, které už v těchto knihovnách jsou.",
     "inPlaceOf": "(místo {{app}})",
-    "pickRoot": "Níže vyberte kořenovou složku pro každý zapnutý druh. Přidávání a hledání pro ně přijde v dalších aktualizacích Box Office.",
+    "pickRoot": "Níže vyberte kořenovou složku pro každý zapnutý druh.",
     "roots": {
       "movie": "Kořenové složky filmů",
       "series": "Kořenové složky TV",

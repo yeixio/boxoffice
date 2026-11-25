@@ -183,3 +183,49 @@ export function Backdrop({ src }: { src?: string }) {
     </div>
   )
 }
+
+// TabRow is a row of tabs that scrolls sideways when it's wider than the
+// screen (a phone, or long names in another language). The edge it can
+// still scroll toward fades out, so it's plain there's more, and the
+// chosen tab is brought into view. selected is the chosen tab's id.
+export function TabRow({ label, selected, children }: { label?: string; selected: string; children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [more, setMore] = useState({ start: false, end: false })
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const update = () => {
+      const max = el.scrollWidth - el.clientWidth
+      const x = Math.abs(el.scrollLeft)
+      setMore((m) => (m.start === x > 1 && m.end === x < max - 1 ? m : { start: x > 1, end: x < max - 1 }))
+    }
+    update()
+    el.addEventListener('scroll', update, { passive: true })
+    const ro = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(update)
+    ro?.observe(el)
+    return () => {
+      el.removeEventListener('scroll', update)
+      ro?.disconnect()
+    }
+  }, [])
+  useEffect(() => {
+    const el = ref.current
+    const tab = el?.querySelector<HTMLElement>('[aria-selected="true"]')
+    if (!el || !tab) return
+    // Only the row moves, never the page.
+    const row = el.getBoundingClientRect()
+    const at = tab.getBoundingClientRect()
+    if (at.left < row.left) el.scrollLeft -= row.left - at.left + 24
+    else if (at.right > row.right) el.scrollLeft += at.right - row.right + 24
+  }, [selected])
+  const edge = 'pointer-events-none absolute inset-y-0 w-8 from-paper to-transparent transition-opacity'
+  return (
+    <div className="relative mb-6">
+      <div ref={ref} className="flex gap-1 overflow-x-auto border-b border-line [scrollbar-width:none]" role="tablist" aria-label={label}>
+        {children}
+      </div>
+      <span aria-hidden className={`${edge} start-0 bg-gradient-to-r rtl:bg-gradient-to-l ${more.start ? 'opacity-100' : 'opacity-0'}`} />
+      <span aria-hidden className={`${edge} end-0 bg-gradient-to-l rtl:bg-gradient-to-r ${more.end ? 'opacity-100' : 'opacity-0'}`} />
+    </div>
+  )
+}

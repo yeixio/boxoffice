@@ -37,7 +37,8 @@
   "app": {
     "notAnswering": "Box Office non risponde: {{error}}",
     "closeMenu": "Chiudi menu",
-    "menu": "Menu"
+    "menu": "Menu",
+    "typeOff": "{{name}} è disattivato. Attivalo in <link>Impostazioni → Libreria</link>."
   },
   "signIn": {
     "mismatch": "Le password non corrispondono.",
@@ -1122,7 +1123,7 @@
     "more": "Non solo film e serie",
     "moreSub": "Attiva gli altri tipi di media di cui vuoi che Box Office si occupi. Ognuno è disattivo finché non lo attivi, e disattivarlo in seguito conserva le sue cartelle e impostazioni. Box Office non modifica mai i file già presenti in queste librerie.",
     "inPlaceOf": "(al posto di {{app}})",
-    "pickRoot": "Scegli qui sotto una cartella principale per ognuno che hai attivato. L’aggiunta e la ricerca per questi arrivano nei prossimi aggiornamenti di Box Office.",
+    "pickRoot": "Scegli qui sotto una cartella principale per ognuno che hai attivato.",
     "roots": {
       "movie": "Cartelle principali dei film",
       "series": "Cartelle principali delle serie",

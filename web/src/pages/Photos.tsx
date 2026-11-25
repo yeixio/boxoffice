@@ -33,7 +33,7 @@ import {
 } from '../api'
 import { bytes } from '../format'
 import { useRootFolders } from '../hooks'
-import { Badge, Button, Card, Empty, ErrorNote, Field, Heading, Input, Modal, Select, Spinner } from '../ui'
+import { Badge, Button, Card, Empty, ErrorNote, Field, Heading, Input, Modal, Select, Spinner, TabRow } from '../ui'
 
 // Taken times are the camera's clock, sent as Unix seconds read as UTC,
 // so they're shown in UTC: 14:30 on the camera is 14:30 here.
@@ -162,7 +162,7 @@ export function Photos() {
       )}
       {!!roots.data?.length && s && !empty && (
         <>
-          <div className="mb-6 flex gap-1 overflow-x-auto border-b border-line" role="tablist" aria-label={t('nav.photos')}>
+          <TabRow selected={tab} label={t('nav.photos')}>
             {tabs.map((x) => (
               <button
                 key={x.id}
@@ -174,7 +174,7 @@ export function Photos() {
                 {t(x.label)}
               </button>
             ))}
-          </div>
+          </TabRow>
           <div role="tabpanel">
             {tab === 'timeline' && <Timeline />}
             {tab === 'albums' && <Albums />}

@@ -35,7 +35,8 @@
   "app": {
     "notAnswering": "Box Office svarar inte: {{error}}",
     "closeMenu": "Stäng menyn",
-    "menu": "Meny"
+    "menu": "Meny",
+    "typeOff": "{{name}} är avstängt. Slå på det under <link>Inställningar → Bibliotek</link>."
   },
   "signIn": {
     "mismatch": "Lösenorden stämmer inte överens.",
@@ -1048,7 +1049,7 @@
     "more": "Mer än filmer och tv",
     "moreSub": "Slå på de andra mediatyper du vill att Box Office ska ta hand om. Var och en är av tills du slår på den, och att slå av den senare behåller dess mappar och inställningar. Box Office ändrar aldrig filer som redan finns i de här biblioteken.",
     "inPlaceOf": "(i stället för {{app}})",
-    "pickRoot": "Välj en rotmapp för var och en du slog på, nedan. Att lägga till och söka efter dessa kommer i nästa uppdateringar av Box Office.",
+    "pickRoot": "Välj en rotmapp för var och en du slog på, nedan.",
     "roots": {
       "movie": "Rotmappar för filmer",
       "series": "Rotmappar för tv",

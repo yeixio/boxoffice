@@ -33,7 +33,8 @@
   "app": {
     "notAnswering": "Box Office tidak menjawab: {{error}}",
     "closeMenu": "Tutup menu",
-    "menu": "Menu"
+    "menu": "Menu",
+    "typeOff": "{{name}} dimatikan. Hidupkannya di <link>Tetapan → Pustaka</link>."
   },
   "signIn": {
     "mismatch": "Kata laluan tidak sepadan.",
@@ -974,7 +975,7 @@
     "more": "Lebih daripada filem dan TV",
     "moreSub": "Hidupkan jenis media lain yang anda mahu Box Office uruskan. Setiap satu mati sehingga anda menghidupkannya, dan mematikannya kemudian mengekalkan folder dan tetapannya. Box Office tidak pernah mengubah fail yang sudah ada dalam pustaka ini.",
     "inPlaceOf": "(menggantikan {{app}})",
-    "pickRoot": "Pilih folder akar untuk setiap jenis yang anda hidupkan, di bawah. Penambahan dan carian untuk jenis ini akan tiba dalam kemas kini Box Office seterusnya.",
+    "pickRoot": "Pilih folder akar untuk setiap jenis yang anda hidupkan, di bawah.",
     "roots": {
       "movie": "Folder akar filem",
       "series": "Folder akar TV",

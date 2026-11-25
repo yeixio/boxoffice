@@ -37,7 +37,8 @@
   "app": {
     "notAnswering": "Box Office no responde: {{error}}",
     "closeMenu": "Cerrar menú",
-    "menu": "Menú"
+    "menu": "Menú",
+    "typeOff": "{{name}} está desactivado. Actívalo en <link>Ajustes → Biblioteca</link>."
   },
   "signIn": {
     "mismatch": "Las contraseñas no coinciden.",
@@ -1122,7 +1123,7 @@
     "more": "Más que películas y TV",
     "moreSub": "Activa los demás tipos de contenido que quieres que gestione Box Office. Cada uno está desactivado hasta que lo actives, y desactivarlo más tarde conserva sus carpetas y ajustes. Box Office nunca cambia los archivos que ya están en estas bibliotecas.",
     "inPlaceOf": "(en lugar de {{app}})",
-    "pickRoot": "Elige abajo una carpeta raíz para cada uno que hayas activado. Añadirlos y buscarlos llega en las próximas actualizaciones de Box Office.",
+    "pickRoot": "Elige abajo una carpeta raíz para cada uno que hayas activado.",
     "roots": {
       "movie": "Carpetas raíz de películas",
       "series": "Carpetas raíz de TV",

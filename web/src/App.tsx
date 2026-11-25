@@ -1,11 +1,11 @@
 import { LanguageSync } from './i18n/sync'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { lazy, Suspense, useCallback, useEffect, useState, type ComponentType } from 'react'
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
-import { get, onSignedOut, post, put, type Status } from './api'
-import { Spinner } from './ui'
+import { get, onSignedOut, post, put, type MediaTypeKey, type Status } from './api'
+import { Card, Spinner } from './ui'
 import { Tray } from './Tray'
 import { PageBoundary, SkipLink } from './Broken'
 import { Logo, PhoneNav, Sidebar, useNav } from './Nav'
@@ -87,10 +87,68 @@ export function App() {
     })
     return () => onSignedOut(() => {})
   }, [qc])
+  // Signed out, the tab is just Box Office again.
+  const signedIn = !!status.data?.user
+  useEffect(() => {
+    if (!signedIn) document.title = 'Box Office'
+  }, [signedIn])
   if (status.isPending) return <Spinner />
   if (status.isError) return <p className="p-8 text-bad">{t('app.notAnswering', { error: status.error.message })}</p>
   if (!status.data.setup || !status.data.user) return <SignIn firstRun={!status.data.setup} sso={status.data.sso} passkeys={status.data.passkeys} />
   return <Shell status={status.data} />
+}
+
+// TabTitle names the browser tab after the page shown, so several tabs,
+// bookmarks and history entries can be told apart: the page's heading
+// ("Movies", a title's name), then Box Office. Downloads adds how many are
+// queued. The heading is read off the page, so every page is covered,
+// in the person's language.
+function TabTitle({ queued }: { queued: number }) {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    const main = document.getElementById('content')
+    if (!main) return
+    const set = () => {
+      const h = main.querySelector('h1')
+      const name = (h?.innerText ?? h?.textContent ?? '').replace(/\s+/g, ' ').trim()
+      const n = pathname === '/downloads' && queued > 0 ? ` (${queued})` : ''
+      const next = name ? `${name}${n} · Box Office` : 'Box Office'
+      if (document.title !== next) document.title = next
+    }
+    set()
+    if (typeof MutationObserver === 'undefined') return
+    const o = new MutationObserver(set)
+    o.observe(main, { childList: true, subtree: true, characterData: true })
+    return () => o.disconnect()
+  }, [pathname, queued])
+  return null
+}
+
+// A section for a kind of media that's turned off (opened by a link or a
+// bookmark) says so once, with the way to turn it on, and asks the server
+// nothing.
+const sections: { under: string; type: MediaTypeKey; label: string }[] = [
+  { under: '/music', type: 'music', label: 'nav.music' },
+  { under: '/books', type: 'ebook', label: 'nav.books' },
+  { under: '/audiobooks', type: 'audiobook', label: 'nav.audiobooks' },
+  { under: '/games', type: 'game', label: 'nav.games' },
+  { under: '/photos', type: 'home', label: 'nav.photos' },
+]
+
+export function turnedOff(pathname: string, on: (type: MediaTypeKey) => boolean) {
+  return sections.find((s) => (pathname === s.under || pathname.startsWith(s.under + '/')) && !on(s.type))
+}
+
+function TurnedOff({ label }: { label: string }) {
+  const { t } = useTranslation()
+  return (
+    <Card>
+      <h1 className="mb-2 font-display text-2xl font-bold tracking-tight">{t(label)}</h1>
+      <p className="text-sm">
+        <Trans i18nKey="app.typeOff" values={{ name: t(label) }} components={{ link: <Link to="/settings?tab=library#media-types" className="font-medium text-marquee" /> }} />
+      </p>
+    </Card>
+  )
 }
 
 function Shell({ status }: { status: Status }) {
@@ -101,6 +159,7 @@ function Shell({ status }: { status: Status }) {
   const [menu, setMenu] = useState(false)
   const location = useLocation()
   useEffect(() => setMenu(false), [location.pathname, location.search])
+  const off = turnedOff(location.pathname, nav.on)
   // A language picked on the sign-in page becomes the account's.
   const adopt = useCallback(
     (language: string) => void put('/me/language', { language }).then(() => qc.invalidateQueries({ queryKey: ['status'] })),
@@ -138,8 +197,12 @@ function Shell({ status }: { status: Status }) {
         <div className="perforated" aria-hidden />
       </header>
       <main id="content" tabIndex={-1} className="mx-auto max-w-7xl px-4 py-8 outline-none md:px-8">
+        <TabTitle queued={nav.queued} />
         <PageBoundary at={location.pathname}>
         <Suspense fallback={<Spinner />}>
+        {off ? (
+          nav.ready ? <TurnedOff label={off.label} /> : <Spinner />
+        ) : (
         <Routes>
           <Route path="/" element={<Navigate to="/discover" replace />} />
           <Route path="/discover" element={<Discover />} />
@@ -175,6 +238,7 @@ function Shell({ status }: { status: Status }) {
           <Route path="/problems" element={<Problems />} />
           <Route path="*" element={<Navigate to="/discover" replace />} />
         </Routes>
+        )}
         </Suspense>
         </PageBoundary>
       </main>

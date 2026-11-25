@@ -375,10 +375,26 @@ function Row({ it, systems, onFix }: { it: ImportItem; systems: GameSystemInfo[]
   const qc = useQueryClient()
   const remove = useMutation({
     mutationFn: () => del('/import/item?path=' + encodeURIComponent(it.path)),
+    onSuccess: () => setAsking(false),
     onSettled: () => qc.invalidateQueries({ queryKey: ['import'] }),
   })
+  const [asking, setAsking] = useState(false)
   return (
     <li className="flex flex-col gap-2 px-5 py-3 sm:flex-row sm:items-center">
+      {asking && (
+        <Modal title={t('importFiles.remove')} onClose={() => setAsking(false)}>
+          <p className="break-words text-sm">{t('importFiles.removeAsk', { name: it.name })}</p>
+          <ErrorNote error={remove.error} />
+          <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+            <Button variant="ghost" onClick={() => setAsking(false)}>
+              {t('common.cancel')}
+            </Button>
+            <Button variant="danger" busy={remove.isPending} onClick={() => remove.mutate()}>
+              <Trash2 className="size-4" aria-hidden /> {t('importFiles.remove')}
+            </Button>
+          </div>
+        </Modal>
+      )}
       <div className="flex min-w-0 flex-1 gap-3">
         <div className="pt-0.5 text-muted">{it.dir ? <Folder className="size-5" aria-hidden /> : <FileIcon className="size-5" aria-hidden />}</div>
         <div className="flex min-w-0 flex-col gap-1">
@@ -415,7 +431,7 @@ function Row({ it, systems, onFix }: { it: ImportItem; systems: GameSystemInfo[]
           <Button className="px-2.5 py-1.5 text-xs" onClick={onFix}>
             {t('importFiles.change')}
           </Button>
-          <Button variant="ghost" className="px-2 py-1.5 text-xs" busy={remove.isPending} onClick={() => confirm(t('importFiles.removeAsk', { name: it.name })) && remove.mutate()} aria-label={t('importFiles.remove')}>
+          <Button variant="ghost" className="px-2 py-1.5 text-xs" busy={remove.isPending} onClick={() => setAsking(true)} aria-label={t('importFiles.remove')}>
             <Trash2 className="size-4" aria-hidden />
           </Button>
         </div>

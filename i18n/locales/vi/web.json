@@ -33,7 +33,8 @@
   "app": {
     "notAnswering": "Box Office không phản hồi: {{error}}",
     "closeMenu": "Đóng menu",
-    "menu": "Menu"
+    "menu": "Menu",
+    "typeOff": "{{name}} đang tắt. Bật trong <link>Cài đặt → Thư viện</link>."
   },
   "signIn": {
     "mismatch": "Mật khẩu không khớp.",
@@ -974,7 +975,7 @@
     "more": "Không chỉ phim và TV",
     "moreSub": "Bật các loại nội dung khác bạn muốn Box Office chăm lo. Mỗi loại đều tắt cho đến khi bạn bật, và tắt sau này vẫn giữ thư mục và cài đặt của nó. Box Office không bao giờ thay đổi các tệp đã có trong các thư viện này.",
     "inPlaceOf": "(thay cho {{app}})",
-    "pickRoot": "Chọn thư mục gốc cho mỗi loại bạn đã bật, bên dưới. Việc thêm và tìm kiếm cho các loại này sẽ có trong các bản cập nhật Box Office tiếp theo.",
+    "pickRoot": "Chọn thư mục gốc cho mỗi loại bạn đã bật, bên dưới.",
     "roots": {
       "movie": "Thư mục gốc phim",
       "series": "Thư mục gốc TV",

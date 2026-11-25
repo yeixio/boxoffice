@@ -33,7 +33,8 @@
   "app": {
     "notAnswering": "Box Office 沒有響應：{{error}}",
     "closeMenu": "關閉選單",
-    "menu": "選單"
+    "menu": "選單",
+    "typeOff": "{{name}}已關閉。請在<link>設定 → 媒體庫</link>中開啟。"
   },
   "signIn": {
     "mismatch": "兩次輸入的密碼不一致。",
@@ -974,7 +975,7 @@
     "more": "不只電影和電視",
     "moreSub": "開啟你希望 Box Office 管理的其他媒體型別。每種在開啟前都是關閉的，之後關閉也會保留其資料夾和設定。Box Office 從不更改這些媒體庫中已有的檔案。",
     "inPlaceOf": "（代替 {{app}}）",
-    "pickRoot": "為你開啟的每種型別在下方選擇一個根資料夾。新增和搜尋這些內容將在 Box Office 的後續更新中推出。",
+    "pickRoot": "為你開啟的每種型別在下方選擇一個根資料夾。",
     "roots": {
       "movie": "電影根資料夾",
       "series": "電視根資料夾",
