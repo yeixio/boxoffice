@@ -530,7 +530,17 @@
     "audioHint": "Zależy od tego, co mówi nazwa wydania: Dubbed, Dual Audio, MULTi, Subbed. Nazwa, która nic nie mówi, liczy się jako oryginalny dźwięk.",
     "audioAny": "Dowolnie",
     "audioDub": "Z dubbingiem albo z obydwoma",
-    "audioSub": "Oryginalny dźwięk"
+    "audioSub": "Oryginalny dźwięk",
+    "orderOption": "{{kind}}: {{name}}",
+    "orderHint": "Wydania są wyszukiwane i odczytywane według numeru każdego odcinka w tej kolejności, która pochodzi z TMDB. Pliki zachowują sezon i odcinek z emisji.",
+    "placeIn": "W wydaniach {{code}}",
+    "orderKind1": "Kolejność emisji",
+    "orderKind2": "Kolejność bezwzględna",
+    "orderKind3": "Kolejność DVD",
+    "orderKind4": "Kolejność cyfrowa",
+    "orderKind5": "Wątki fabularne",
+    "orderKind6": "Kolejność produkcji",
+    "orderKind7": "Kolejność telewizyjna"
   },
   "health": {
     "error": "Nie działa",

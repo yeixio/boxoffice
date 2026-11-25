@@ -502,7 +502,17 @@
     "audioHint": "Se guía por lo que dice el nombre del lanzamiento: Dubbed, Dual Audio, MULTi, Subbed. Un nombre que no dice nada cuenta como audio original.",
     "audioAny": "Cualquiera",
     "audioDub": "Doblado, o con ambos",
-    "audioSub": "Audio original"
+    "audioSub": "Audio original",
+    "orderOption": "{{kind}}: {{name}}",
+    "orderHint": "Los lanzamientos se buscan y se leen por el número de cada episodio en este orden, que viene de TMDB. Los archivos conservan la temporada y el episodio con que se emitieron.",
+    "placeIn": "{{code}} en los lanzamientos",
+    "orderKind1": "Orden de emisión",
+    "orderKind2": "Orden absoluto",
+    "orderKind3": "Orden de DVD",
+    "orderKind4": "Orden digital",
+    "orderKind5": "Arcos argumentales",
+    "orderKind6": "Orden de producción",
+    "orderKind7": "Orden de TV"
   },
   "health": {
     "error": "No funciona",

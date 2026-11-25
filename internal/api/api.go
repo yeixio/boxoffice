@@ -260,6 +260,7 @@ func (s *Server) Handler() http.Handler {
 		{"POST /api/v1/series/bulk", true, s.bulkSeries},
 		{"PATCH /api/v1/series/{id}", true, s.editSeries},
 		{"DELETE /api/v1/series/{id}", true, s.deleteSeries},
+		{"GET /api/v1/series/{id}/orders", true, s.seriesOrders},
 		{"GET /api/v1/series/{id}/removal", true, s.seriesRemoval},
 		{"GET /api/v1/series/{id}/seasons/{number}/files/removal", true, s.seasonFilesRemoval},
 		{"DELETE /api/v1/series/{id}/seasons/{number}/files", true, s.deleteSeasonFiles},

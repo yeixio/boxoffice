@@ -136,6 +136,8 @@ func migrateSchema(ctx context.Context, db schemaRunner, postgres bool) error {
 		{"members", "subject", "TEXT NOT NULL DEFAULT ''"},
 		{"series", "keep_ahead", "INTEGER NOT NULL DEFAULT 0"},
 		{"episodes", "held", "INTEGER NOT NULL DEFAULT 0"},
+		{"episodes", "place_season", "INTEGER"},
+		{"episodes", "place_number", "INTEGER"},
 		{"watched", "furthest_season", "INTEGER NOT NULL DEFAULT 0"},
 		{"watched", "furthest_episode", "INTEGER NOT NULL DEFAULT 0"},
 		{"movies", "second_profile_id", "INTEGER NOT NULL DEFAULT 0"},

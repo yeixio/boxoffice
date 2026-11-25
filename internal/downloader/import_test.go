@@ -393,3 +393,63 @@ func TestImportAbsoluteNumbers(t *testing.T) {
 		t.Fatal("an episode it wasn't grabbed for went in")
 	}
 }
+
+// A show whose releases follow another episode order: a file named by
+// its place in that order goes in under the season and number it aired
+// as.
+func TestImportEpisodeOrder(t *testing.T) {
+	st := storetest.Open(t)
+	ctx := context.Background()
+	lib := t.TempDir()
+	profiles, _ := st.Profiles(ctx)
+	show, err := st.AddSeries(ctx, store.Series{TMDBID: 9, Title: "Frieren", Year: 2023, ProfileID: profiles[0].ID, RootFolder: lib, Path: filepath.Join(lib, "Frieren (2023)"),
+		Monitored: true, Seasons: []store.Season{{Number: 1, Monitored: true}, {Number: 2, Monitored: true}}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	for season := 1; season <= 2; season++ {
+		for n := 1; n <= 3; n++ {
+			st.UpsertEpisode(ctx, store.Episode{SeriesID: show.ID, Season: season, Number: n, Title: fmt.Sprintf("Ep %d-%d", season, n), Monitored: true})
+		}
+	}
+	// The discs hold the six episodes as one season.
+	show.Numbering = store.OrderNumbering("dvd1")
+	if err := st.UpdateSeries(ctx, show); err != nil {
+		t.Fatal(err)
+	}
+	eps, _ := st.Episodes(ctx, show.ID)
+	places := map[int64]store.Place{}
+	var ids []int64
+	for _, e := range eps {
+		places[e.ID] = store.Place{Season: 1, Number: (e.Season-1)*3 + e.Number}
+		if e.Season == 2 {
+			ids = append(ids, e.ID)
+		}
+	}
+	if err := st.SetEpisodePlaces(ctx, show.ID, places); err != nil {
+		t.Fatal(err)
+	}
+	dl := t.TempDir()
+	os.WriteFile(filepath.Join(dl, "Frieren.S01E04.1080p.BluRay-GRP.mkv"), make([]byte, 4000), 0o644)
+	os.WriteFile(filepath.Join(dl, "Frieren.S01E05E06.1080p.BluRay-GRP.mkv"), make([]byte, 5000), 0o644)
+	// Not one it was grabbed for: the first season's copy is left be.
+	os.WriteFile(filepath.Join(dl, "Frieren.S01E02.1080p.BluRay-GRP.mkv"), make([]byte, 2000), 0o644)
+	li := &LibraryImporter{Store: st}
+	if _, err = li.Import(ctx, store.Download{Name: "Frieren.S01.1080p.BluRay-GRP", Kind: "series", TitleID: show.ID, EpisodeIDs: ids}, dl, listFiles(dl)); err != nil {
+		t.Fatal(err)
+	}
+	for name, size := range map[string]int64{"Frieren (2023) - S02E01 - Ep 2-1.mkv": 4000, "Frieren (2023) - S02E02E03 - Ep 2-2.mkv": 5000} {
+		if info, _ := os.Stat(filepath.Join(show.Path, "Season 02", name)); info == nil || info.Size() != size {
+			t.Fatalf("%s isn't the right file: %v", name, info)
+		}
+	}
+	if fileExists(filepath.Join(show.Path, "Season 01")) {
+		t.Fatal("an episode it wasn't grabbed for went in")
+	}
+	got, _ := st.Episodes(ctx, show.ID)
+	for _, e := range got {
+		if has := e.File != nil; has != (e.Season == 2 && e.Number <= 2) {
+			t.Fatalf("S%02dE%02d has a file: %v", e.Season, e.Number, has)
+		}
+	}
+}

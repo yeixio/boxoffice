@@ -35,6 +35,8 @@ type Service struct {
 	rss   rssState
 	// absolute is shows' episodes numbered straight through (anime).
 	absolute map[int64]absoluteCache
+	// places is the places shows' chosen episode orders give out.
+	places map[int64]placesCache
 	// regrabMu keeps two replacements from both taking the day's last room.
 	regrabMu sync.Mutex
 }
@@ -424,8 +426,14 @@ func (s *Service) EpisodeFor(ctx context.Context, id int64, ask Ask) (Results, e
 	if err := s.Store.CheckUnlocked(ctx, "series", t.ID); err != nil {
 		return Results{}, err
 	}
+	// Asked for by its place in the episode order the show's releases
+	// follow, when they follow another than the one it aired in.
+	in := s.inOrder(ctx, t, []store.Episode{e})[0]
+	if in.Season < 0 {
+		return Results{}, errors.New("the episode order chosen for the show doesn't list this episode, and gives its number to another")
+	}
 	rs, notes, n, err := s.ask(ctx, func(ix store.Indexer) Query {
-		q := Query{Type: "tvsearch", Season: e.Season, Episode: e.Number, Cats: cats(ix, 5000, 5999, 5000)}
+		q := Query{Type: "tvsearch", Season: in.Season, Episode: in.Number, Cats: cats(ix, 5000, 5999, 5000)}
 		if t.TVDBID > 0 {
 			q.TVDBID = t.TVDBID
 		} else {
@@ -467,7 +475,7 @@ func (s *Service) EpisodeFor(ctx context.Context, id int64, ask Ask) (Results, e
 	same := s.replaceSameQuality(ctx)
 	var fixes *fixCheck
 	if !isSecond(ctx) {
-		fixes = s.fixes(ctx, e.File, e.Season, e.Number)
+		fixes = s.fixes(ctx, e.File, in.Season, in.Number)
 	}
 	out := Results{Errors: notes, Searched: n}
 	seen := map[string]bool{}

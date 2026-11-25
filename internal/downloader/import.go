@@ -247,10 +247,15 @@ func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir str
 		if err := checkLibrary(root, showPath); err != nil {
 			return "", err
 		}
-		eps, err := li.Store.Episodes(ctx, t.ID)
+		real, err := li.Store.Episodes(ctx, t.ID)
 		if err != nil {
 			return "", err
 		}
+		// Names are read the way the show's releases number its episodes:
+		// by each one's place in the episode order chosen for the show,
+		// when one is. eps and real list the same episodes in step, and
+		// the files are named by real, as the episodes aired.
+		eps := store.InOrder(real)
 		// Obfuscated posts can name the video anything. When no video says
 		// which episode it is, the videos' own tags are read next (web
 		// releases carry the store's synopsis), and failing that the
@@ -345,11 +350,16 @@ func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir str
 			}) {
 				continue
 			}
-			ep := eps[i]
-			code := fmt.Sprintf("S%02dE%02d", season, numbers[0])
+			ep := real[i]
+			code := fmt.Sprintf("S%02dE%02d", ep.Season, ep.Number)
 			for _, n := range numbers[1:] {
-				code += fmt.Sprintf("E%02d", n)
+				// The file's other episodes, when they aired in the same
+				// season as its first.
+				if j := slices.IndexFunc(eps, func(e store.Episode) bool { return e.Season == season && e.Number == n }); j >= 0 && real[j].Season == ep.Season {
+					code += fmt.Sprintf("E%02d", real[j].Number)
+				}
 			}
+			season = ep.Season
 			name := fmt.Sprintf("%s - %s", fileName(t.Title, t.Year), code)
 			if ep.Title != "" {
 				name += " - " + cleanFileName(ep.Title)

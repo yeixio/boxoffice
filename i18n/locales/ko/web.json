@@ -446,7 +446,17 @@
     "audioHint": "릴리스 이름에 적힌 Dubbed, Dual Audio, MULTi, Subbed를 따라요. 아무 표시가 없는 이름은 원음으로 봐요.",
     "audioAny": "상관없음",
     "audioDub": "더빙, 또는 둘 다 포함",
-    "audioSub": "원음"
+    "audioSub": "원음",
+    "orderOption": "{{kind}}: {{name}}",
+    "orderHint": "릴리스를 TMDB에서 가져온 이 순서의 에피소드 번호로 검색하고 읽어요. 파일은 방영된 시즌과 에피소드를 그대로 유지해요.",
+    "placeIn": "릴리스에서는 {{code}}",
+    "orderKind1": "방영 순서",
+    "orderKind2": "절대 순서",
+    "orderKind3": "DVD 순서",
+    "orderKind4": "디지털 순서",
+    "orderKind5": "스토리 아크",
+    "orderKind6": "제작 순서",
+    "orderKind7": "TV 순서"
   },
   "health": {
     "error": "작동 안 함",

@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"regexp"
 	"runtime"
 	"slices"
 	"strconv"
@@ -586,7 +587,9 @@ func (s *Server) checkEdit(r *http.Request, in editInput, kind string) error {
 			return errorf(http.StatusBadRequest, "episode numbering and dubbing are for shows")
 		}
 		if in.Numbering != nil && *in.Numbering != "" && *in.Numbering != store.NumberingAbsolute {
-			return errorf(http.StatusBadRequest, `numbering is "" for season and episode, or "absolute"`)
+			if id, ok := (store.Series{Numbering: *in.Numbering}).Order(); !ok || !orderID.MatchString(id) {
+				return errorf(http.StatusBadRequest, `numbering is "" for season and episode as aired, "absolute", or "order:" and one of the show's episode orders`)
+			}
 		}
 		if in.Audio != nil && *in.Audio != "" && *in.Audio != store.AudioDubbed && *in.Audio != store.AudioOriginal {
 			return errorf(http.StatusBadRequest, `audio is "" for either, "dub" or "sub"`)
@@ -837,8 +840,12 @@ func (s *Server) editSeries(w http.ResponseWriter, r *http.Request) error {
 	if in.AutoUpgrade != nil {
 		t.AutoUpgrade = *in.AutoUpgrade
 	}
-	if in.Numbering != nil {
+	if in.Numbering != nil && *in.Numbering != t.Numbering {
 		t.Numbering = *in.Numbering
+		// Its episodes take their places in the order, or lose them.
+		if err := s.Catalog.PlaceEpisodes(r.Context(), t); err != nil {
+			return err
+		}
 	}
 	if in.Audio != nil {
 		t.Audio = *in.Audio
@@ -868,6 +875,23 @@ func (s *Server) editSeries(w http.ResponseWriter, r *http.Request) error {
 		}
 	}
 	return s.series(w, r)
+}
+
+// orderID is the shape of a TMDB episode order's id.
+var orderID = regexp.MustCompile(`^[0-9A-Za-z]{1,64}$`)
+
+// seriesOrders lists the other episode orders TMDB has for a show, for
+// choosing the one its releases follow.
+func (s *Server) seriesOrders(w http.ResponseWriter, r *http.Request) error {
+	id, err := pathID(r, "id")
+	if err != nil {
+		return err
+	}
+	orders, err := s.Catalog.Orders(r.Context(), id)
+	if err != nil {
+		return err
+	}
+	return writeJSON(w, http.StatusOK, orders)
 }
 
 // deleteSeries takes a show off the list, cancelling its downloads. Its

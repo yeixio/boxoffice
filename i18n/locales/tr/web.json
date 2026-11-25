@@ -474,7 +474,17 @@
     "audioHint": "Sürüm adının söylediğine göre karar verilir: Dubbed, Dual Audio, MULTi, Subbed. Hiçbir şey söylemeyen ad özgün ses sayılır.",
     "audioAny": "Fark etmez",
     "audioDub": "Dublajlı veya ikisi birden",
-    "audioSub": "Özgün ses"
+    "audioSub": "Özgün ses",
+    "orderOption": "{{kind}}: {{name}}",
+    "orderHint": "Sürümler, her bölümün TMDB'den gelen bu sıradaki numarasına göre aranır ve okunur. Dosyalar yayınlandıkları sezon ve bölümü korur.",
+    "placeIn": "Sürümlerde {{code}}",
+    "orderKind1": "Yayın sırası",
+    "orderKind2": "Mutlak sıra",
+    "orderKind3": "DVD sırası",
+    "orderKind4": "Dijital sıra",
+    "orderKind5": "Hikâye yayları",
+    "orderKind6": "Yapım sırası",
+    "orderKind7": "TV sırası"
   },
   "health": {
     "error": "Çalışmıyor",

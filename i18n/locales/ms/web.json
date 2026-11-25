@@ -446,7 +446,17 @@
     "audioHint": "Mengikut apa yang dinyatakan pada nama keluaran: Dubbed, Dual Audio, MULTi, Subbed. Nama yang tidak menyatakan apa-apa dikira sebagai suara asal.",
     "audioAny": "Mana-mana",
     "audioDub": "Alih suara, atau kedua-duanya",
-    "audioSub": "Suara asal"
+    "audioSub": "Suara asal",
+    "orderOption": "{{kind}}: {{name}}",
+    "orderHint": "Keluaran dicari dan dibaca mengikut nombor setiap episod dalam susunan ini, yang datang daripada TMDB. Fail mengekalkan musim dan episod semasa ditayangkan.",
+    "placeIn": "{{code}} dalam keluaran",
+    "orderKind1": "Susunan tayangan",
+    "orderKind2": "Susunan mutlak",
+    "orderKind3": "Susunan DVD",
+    "orderKind4": "Susunan digital",
+    "orderKind5": "Arka cerita",
+    "orderKind6": "Susunan produksi",
+    "orderKind7": "Susunan TV"
   },
   "health": {
     "error": "Tidak berfungsi",

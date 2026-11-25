@@ -502,7 +502,17 @@
     "audioHint": "לפי מה ששם השחרור אומר: Dubbed,‏ Dual Audio,‏ MULTi,‏ Subbed. שם שאינו אומר דבר נחשב לפסקול המקורי.",
     "audioAny": "שניהם",
     "audioDub": "מדובב, או עם שניהם",
-    "audioSub": "פסקול מקורי"
+    "audioSub": "פסקול מקורי",
+    "orderOption": "{{kind}}: {{name}}",
+    "orderHint": "שחרורים מחופשים ונקראים לפי מספר כל פרק בסדר הזה, שמגיע מ־TMDB. הקבצים שומרים על העונה והפרק שבהם שודרו.",
+    "placeIn": "{{code}} בשחרורים",
+    "orderKind1": "סדר השידור",
+    "orderKind2": "סדר מוחלט",
+    "orderKind3": "סדר ה־DVD",
+    "orderKind4": "סדר דיגיטלי",
+    "orderKind5": "קשתות עלילה",
+    "orderKind6": "סדר ההפקה",
+    "orderKind7": "סדר טלוויזיה"
   },
   "health": {
     "error": "לא עובדת",
