@@ -3262,5 +3262,16 @@
     "queued": "Dodawanie {{n}} tytułów w tle, po jednym. Śledź to w sekcji <link>Aktywność</link>.",
     "artists": "Wykonawcy",
     "authors": "Autorzy"
+  },
+  "indexerStats": {
+    "title": "Statystyki indekserów",
+    "sub": "O co pytano każdy indekser w ciągu ostatnich {{days}} dni, jak odpowiadał i jak skończyły się pobrane z niego pobierania. Pomaga to zdecydować, które indeksery warto zachować.",
+    "searches": "Wyszukiwania",
+    "auto": "{{n}} wykonał sam Box Office",
+    "answer": "Czas odpowiedzi",
+    "grabbed": "Pobrane NZB",
+    "today": "Wyszukiwania dzisiaj",
+    "note": "Wyszukiwania obejmują sprawdzenia RSS. Pobierania usunięte z historii nie są liczone.",
+    "none": "Dodaj indekser, aby zobaczyć tutaj jego liczby."
   }
 }

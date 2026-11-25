@@ -3262,5 +3262,16 @@
     "queued": "Na pozadí se přidává {{n}} titulů, jeden po druhém. Sledujte to v sekci <link>Aktivita</link>.",
     "artists": "Interpreti",
     "authors": "Autoři"
+  },
+  "indexerStats": {
+    "title": "Statistiky indexerů",
+    "sub": "Na co byl každý indexer dotázán za posledních {{days}} dní, jak odpovídal a jak dopadla stahování, která z něj pocházejí. Pomáhá to rozhodnout, které indexery má cenu si nechat.",
+    "searches": "Hledání",
+    "auto": "{{n}} provedl Box Office sám",
+    "answer": "Doba odpovědi",
+    "grabbed": "Staženo NZB",
+    "today": "Hledání dnes",
+    "note": "Hledání zahrnují i kontroly RSS. Stahování odebraná z historie se nepočítají.",
+    "none": "Přidejte indexer a jeho čísla se zobrazí zde."
   }
 }

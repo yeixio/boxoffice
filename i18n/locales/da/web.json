@@ -3016,5 +3016,16 @@
     "queued": "Tilføjer {{n}} titler i baggrunden, én ad gangen. Følg med i <link>Aktivitet</link>.",
     "artists": "Kunstnere",
     "authors": "Forfattere"
+  },
+  "indexerStats": {
+    "title": "Indexerstatistik",
+    "sub": "Hvad hver indexer er blevet spurgt om de seneste {{days}} dage, hvordan den svarede, og hvordan de downloads, der blev hentet fra den, endte. Det hjælper med at afgøre, hvilke indexere der er værd at beholde.",
+    "searches": "Søgninger",
+    "auto": "{{n}} af Box Office selv",
+    "answer": "Svartid",
+    "grabbed": "Hentet",
+    "today": "Søgninger i dag",
+    "note": "Søgninger omfatter RSS-tjek. Downloads, der er fjernet fra historikken, tælles ikke med.",
+    "none": "Tilføj en indexer for at se dens tal her."
   }
 }

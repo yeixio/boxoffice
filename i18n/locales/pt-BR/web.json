@@ -3139,5 +3139,16 @@
     "queued": "Adicionando {{n}} títulos em segundo plano, um de cada vez. Acompanhe em <link>Atividade</link>.",
     "artists": "Artistas",
     "authors": "Autores"
+  },
+  "indexerStats": {
+    "title": "Estatísticas dos indexadores",
+    "sub": "O que foi pedido a cada indexador nos últimos {{days}} dias, como ele respondeu e como terminaram os downloads obtidos dele. Ajuda a decidir quais indexadores vale a pena manter.",
+    "searches": "Buscas",
+    "auto": "{{n}} feitas pelo próprio Box Office",
+    "answer": "Tempo de resposta",
+    "grabbed": "Obtidos",
+    "today": "Buscas hoje",
+    "note": "As buscas incluem as verificações de RSS. Downloads removidos do histórico não são contados.",
+    "none": "Adicione um indexador para ver os números dele aqui."
   }
 }

@@ -309,6 +309,7 @@ func (s *Server) Handler() http.Handler {
 		{"POST /api/v1/matinee/switch", true, s.switchMatinee},
 
 		{"GET /api/v1/connections", true, s.connections},
+		{"GET /api/v1/indexers/stats", true, s.indexerStats},
 		{"DELETE /api/v1/indexers/{id}", true, s.deleteConnection(func(r *http.Request, id int64) error { return s.Store.DeleteIndexer(r.Context(), id) })},
 		{"DELETE /api/v1/downloadclients/{id}", true, s.deleteConnection(func(r *http.Request, id int64) error { return s.Store.DeleteDownloadClient(r.Context(), id) })},
 		{"DELETE /api/v1/usenetservers/{id}", true, s.deleteConnection(func(r *http.Request, id int64) error { return s.Store.DeleteUsenetServer(r.Context(), id) })},

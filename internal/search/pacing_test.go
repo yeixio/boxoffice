@@ -524,3 +524,52 @@ func TestSpecialsSearch(t *testing.T) {
 		t.Fatalf("queue %+v", q)
 	}
 }
+
+// Statistics add up what an indexer was asked, how it answered, and how
+// what was grabbed from it ended.
+func TestIndexerStatistics(t *testing.T) {
+	down := true
+	srv, _ := fakeIndexer(t, func(r *http.Request) (int, string) {
+		if down {
+			return 502, "bad gateway"
+		}
+		return 200, feedOf(item("The.Matrix.1999.1080p.WEB-DL-GRP", "a", 5e9))
+	})
+	s, st, m := setup(t, srv.URL)
+	ctx := context.Background()
+	downloader.SaveSettings(ctx, st, downloader.Settings{Enabled: true})
+	s.Movie(ctx, m.ID)
+	down = false
+	res, err := s.Movie(automatic(ctx), m.ID)
+	if err != nil || len(res.Releases) == 0 {
+		t.Fatal(res, err)
+	}
+	d, err := s.grab(ctx, res.Releases[0])
+	if err != nil {
+		t.Fatal(err)
+	}
+	rows, err := s.IndexerStatistics(ctx)
+	if err != nil || len(rows) == 0 || rows[0].Name != "Test" {
+		t.Fatal(rows, err)
+	}
+	got := rows[0]
+	if got.Name != "Test" || got.Queries != 2 || got.Auto != 1 || got.Errors != 1 || got.NZBs != 1 || got.Today != 2 ||
+		got.Grabbed != 1 || got.Completed != 0 || got.Failed != 0 || got.AnswerMs < 0 {
+		t.Fatalf("stats %+v", got)
+	}
+	if err := st.SetDownloadStatus(ctx, d.ID, store.DownloadFailed, "gone"); err != nil {
+		t.Fatal(err)
+	}
+	if rows, _ = s.IndexerStatistics(ctx); rows[0].Failed != 1 || rows[0].Grabbed != 1 {
+		t.Fatalf("after it failed %+v", rows[0])
+	}
+	// Usage from before the days covered isn't counted.
+	old := store.UsageDay(time.Now().AddDate(0, 0, -StatsDays-5))
+	totals, _ := st.IndexerTotalsSince(ctx, old)
+	if totals[got.ID].Queries != 2 {
+		t.Fatalf("totals %+v", totals)
+	}
+	if later, _ := st.IndexerTotalsSince(ctx, store.UsageDay(time.Now().AddDate(0, 0, 1))); len(later) != 0 {
+		t.Fatalf("from tomorrow on: %+v", later)
+	}
+}

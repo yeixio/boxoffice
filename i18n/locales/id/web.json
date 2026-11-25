@@ -2893,5 +2893,16 @@
     "queued": "Menambahkan {{n}} judul di latar belakang, satu per satu. Ikuti di <link>Aktivitas</link>.",
     "artists": "Artis",
     "authors": "Penulis"
+  },
+  "indexerStats": {
+    "title": "Statistik pengindeks",
+    "sub": "Apa yang ditanyakan ke tiap pengindeks selama {{days}} hari terakhir, bagaimana jawabannya, dan bagaimana akhir unduhan yang diambil darinya. Ini membantu memutuskan pengindeks mana yang layak dipertahankan.",
+    "searches": "Pencarian",
+    "auto": "{{n}} oleh Box Office sendiri",
+    "answer": "Waktu jawab",
+    "grabbed": "Diambil",
+    "today": "Pencarian hari ini",
+    "note": "Pencarian mencakup pemeriksaan RSS. Unduhan yang dihapus dari riwayat tidak dihitung.",
+    "none": "Tambahkan pengindeks untuk melihat angkanya di sini."
   }
 }
