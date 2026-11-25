@@ -1109,6 +1109,8 @@
     "qualities": "Kwaliteiten, van slechtst naar best",
     "goodEnough": "goed genoeg",
     "setGoodEnough": "als goed genoeg instellen",
+    "beforeRelease": "Voor de release",
+    "beforeReleaseHint": "Kopieën die uitkomen voordat de film uit is: in de bioscoop gefilmd (Cam, Telesync, Telecine), een onafgemaakte versie (Workprint), een vroege buitenlandse dvd (Regional) of een screener voor critici en prijsjury's. Elke staat onder elke echte kopie, dus met upgrades aan wordt de echte kopie alsnog gehaald zodra die uit is.",
     "upgradeUntil": "Upgraden tot de goed-genoeg-kwaliteit",
     "delete": "Wissen",
     "password": "Je wachtwoord",

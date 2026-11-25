@@ -1186,6 +1186,8 @@
     "qualities": "Qualités, de la pire à la meilleure",
     "goodEnough": "suffisante",
     "setGoodEnough": "définir comme suffisante",
+    "beforeRelease": "Avant la sortie",
+    "beforeReleaseHint": "Copies qui sortent avant le film : filmées en salle (Cam, Telesync, Telecine), un montage inachevé (Workprint), un DVD étranger précoce (Regional) ou un screener envoyé aux critiques et aux votants des prix. Chacune se classe sous toute vraie copie : avec les améliorations activées, la vraie copie est quand même récupérée à sa sortie.",
     "upgradeUntil": "Améliorer jusqu’à la qualité suffisante",
     "delete": "Effacer",
     "password": "Votre mot de passe",

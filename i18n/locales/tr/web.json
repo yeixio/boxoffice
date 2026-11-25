@@ -1109,6 +1109,8 @@
     "qualities": "Kaliteler, en kötüden en iyiye",
     "goodEnough": "yeterince iyi",
     "setGoodEnough": "yeterince iyi olarak ayarla",
+    "beforeRelease": "Vizyondan önce",
+    "beforeReleaseHint": "Filmden önce çıkan kopyalar: sinemada çekilmiş (Cam, Telesync, Telecine), bitmemiş bir kurgu (Workprint), erken çıkan yabancı bir DVD (Regional) ya da eleştirmenlere ve ödül oy verenlerine gönderilen bir screener. Her biri tüm gerçek kopyaların altında sıralanır; yükseltmeler açıkken gerçek kopya çıktığında yine indirilir.",
     "upgradeUntil": "Yeterince iyi kaliteye kadar yükselt",
     "delete": "Sil",
     "password": "Parolanız",

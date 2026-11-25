@@ -184,3 +184,39 @@ func TestEarlyMovie(t *testing.T) {
 		}
 	}
 }
+
+// A profile that takes HD screeners gets one early; a cinema recording it
+// doesn't take still waits.
+func TestRSSGrabsScreenerEarly(t *testing.T) {
+	ctx := context.Background()
+	now := time.Now()
+	items := []string{
+		posted("Soon.2026.HDTS.1080p.x264-GRP", "m1", 3e9, now),
+		posted("Soon.2026.BDSCR.1080p.x264-GRP", "m2", 3e9, now),
+	}
+	s, st := earlyFeed(t, EarlyAny, items...)
+	ps, _ := st.Profiles(ctx)
+	for _, p := range ps {
+		if !p.Locked {
+			p.Allowed = append([]int{24}, p.Allowed...)
+			if err := st.UpdateProfile(ctx, p); err != nil {
+				t.Fatal(err)
+			}
+		}
+	}
+	if res := s.SyncRSS(ctx); !slices.Equal(res.Grabbed, []string{"Soon.2026.BDSCR.1080p.x264-GRP"}) {
+		t.Fatalf("grabbed %v (%v), want the screener", res.Grabbed, res.Problems)
+	}
+	// With the cutoff rule a screener isn't good enough.
+	s, st = earlyFeed(t, EarlyCutoff, items...)
+	ps, _ = st.Profiles(ctx)
+	for _, p := range ps {
+		if !p.Locked {
+			p.Allowed = append([]int{24}, p.Allowed...)
+			st.UpdateProfile(ctx, p)
+		}
+	}
+	if res := s.SyncRSS(ctx); len(res.Grabbed) != 0 {
+		t.Fatalf("grabbed %v below the cutoff", res.Grabbed)
+	}
+}

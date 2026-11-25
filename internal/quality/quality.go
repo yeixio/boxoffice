@@ -15,31 +15,43 @@ import (
 type Quality struct {
 	ID         int    `json:"id"`
 	Name       string `json:"name"`
-	Source     string `json:"source"`     // tv, web, webrip, dvd, bluray, remux, unknown
-	Resolution int    `json:"resolution"` // vertical lines; 0 when unknown
+	Source     string `json:"source"`     // tv, web, webrip, dvd, bluray, remux, a pre-release source, unknown
+	Resolution int    `json:"resolution"` // vertical lines; 0 when unknown or beside the point
+	// PreRelease is a copy made before the film came out for people to
+	// watch at home: filmed in a cinema, or a screener sent out for awards.
+	// Each ranks below every real copy, so a profile that takes one still
+	// looks for the real copy once it's out.
+	PreRelease bool `json:"preRelease,omitempty"`
 }
 
 // All lists every quality from worst to best. IDs never change: profiles
-// store them.
+// store them. New ones get new IDs wherever they rank.
 var All = []Quality{
-	{0, "Unknown", "unknown", 0},
-	{1, "SDTV", "tv", 480},
-	{2, "DVD", "dvd", 480},
-	{3, "WEB 480p", "web", 480},
-	{4, "HDTV 720p", "tv", 720},
-	{5, "WEBRip 720p", "webrip", 720},
-	{6, "WEB 720p", "web", 720},
-	{7, "Blu-ray 720p", "bluray", 720},
-	{8, "HDTV 1080p", "tv", 1080},
-	{9, "WEBRip 1080p", "webrip", 1080},
-	{10, "WEB 1080p", "web", 1080},
-	{11, "Blu-ray 1080p", "bluray", 1080},
-	{12, "Remux 1080p", "remux", 1080},
-	{13, "HDTV 2160p", "tv", 2160},
-	{14, "WEBRip 2160p", "webrip", 2160},
-	{15, "WEB 2160p", "web", 2160},
-	{16, "Blu-ray 2160p", "bluray", 2160},
-	{17, "Remux 2160p", "remux", 2160},
+	{0, "Unknown", "unknown", 0, false},
+	{18, "Cam", "cam", 0, true},
+	{19, "Telesync", "telesync", 0, true},
+	{20, "Telecine", "telecine", 0, true},
+	{21, "Workprint", "workprint", 0, true},
+	{22, "Regional", "regional", 480, true},
+	{23, "Screener SD", "screener", 480, true},
+	{24, "Screener HD", "screener", 1080, true},
+	{1, "SDTV", "tv", 480, false},
+	{2, "DVD", "dvd", 480, false},
+	{3, "WEB 480p", "web", 480, false},
+	{4, "HDTV 720p", "tv", 720, false},
+	{5, "WEBRip 720p", "webrip", 720, false},
+	{6, "WEB 720p", "web", 720, false},
+	{7, "Blu-ray 720p", "bluray", 720, false},
+	{8, "HDTV 1080p", "tv", 1080, false},
+	{9, "WEBRip 1080p", "webrip", 1080, false},
+	{10, "WEB 1080p", "web", 1080, false},
+	{11, "Blu-ray 1080p", "bluray", 1080, false},
+	{12, "Remux 1080p", "remux", 1080, false},
+	{13, "HDTV 2160p", "tv", 2160, false},
+	{14, "WEBRip 2160p", "webrip", 2160, false},
+	{15, "WEB 2160p", "web", 2160, false},
+	{16, "Blu-ray 2160p", "bluray", 2160, false},
+	{17, "Remux 2160p", "remux", 2160, false},
 }
 
 // ByID finds a quality.
@@ -78,7 +90,12 @@ const DoNotTouchName = "Do not touch"
 
 // DoNotTouch is the profile for media Box Office must leave as it is.
 func DoNotTouch() Profile {
-	return Profile{Name: DoNotTouchName, Allowed: ids(0, 17), Cutoff: 0, Locked: true}
+	var all []int
+	for _, q := range All {
+		all = append(all, q.ID)
+	}
+	slices.Sort(all)
+	return Profile{Name: DoNotTouchName, Allowed: all, Cutoff: 0, Locked: true}
 }
 
 // Check says what's wrong with a profile, if anything.
@@ -157,19 +174,11 @@ var (
 
 // Parse guesses a release's or file's quality from its name.
 func Parse(name string) Quality {
+	if q, ok := preRelease(name); ok {
+		return q
+	}
 	name = strings.NewReplacer(".", " ", "_", " ").Replace(name)
-	res := 0
-	if m := reRes.FindStringSubmatch(name); m != nil {
-		switch {
-		case m[2] != "":
-			res = 2160
-		default:
-			fmt.Sscan(m[1], &res)
-		}
-	}
-	if res == 576 {
-		res = 480
-	}
+	res := resolutionOf(name)
 	source := sourceOf(name)
 	if source == "" && res == 0 {
 		return All[0]
@@ -184,7 +193,7 @@ func Parse(name string) Quality {
 		res = 1080
 	}
 	if source == "dvd" {
-		return All[2]
+		return dvd
 	}
 	for _, q := range All {
 		if q.Source == source && q.Resolution == res {
@@ -193,11 +202,29 @@ func Parse(name string) Quality {
 	}
 	// Combinations the list doesn't have, like 480p Blu-ray, go to the nearest.
 	for _, q := range slices.Backward(All) {
-		if q.Resolution == res {
+		if q.Resolution == res && !q.PreRelease {
 			return q
 		}
 	}
 	return All[0]
+}
+
+// resolutionOf is the picture size a name gives (480, 720, 1080 or 2160),
+// or 0 when it doesn't say.
+func resolutionOf(name string) int {
+	res := 0
+	if m := reRes.FindStringSubmatch(name); m != nil {
+		switch {
+		case m[2] != "":
+			res = 2160
+		default:
+			fmt.Sscan(m[1], &res)
+		}
+	}
+	if res == 576 {
+		res = 480
+	}
+	return res
 }
 
 // SourceOf is where a release's or file's name says the copy came from

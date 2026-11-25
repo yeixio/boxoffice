@@ -1032,6 +1032,8 @@
     "qualities": "Kualiti, terburuk ke terbaik",
     "goodEnough": "cukup baik",
     "setGoodEnough": "tetapkan sebagai cukup baik",
+    "beforeRelease": "Sebelum tayangan",
+    "beforeReleaseHint": "Salinan yang keluar sebelum filem: dirakam di pawagam (Cam, Telesync, Telecine), suntingan yang belum siap (Workprint), DVD luar negara yang awal (Regional), atau screener untuk pengkritik dan pengundi anugerah. Setiap satu berada di bawah setiap salinan sebenar, jadi dengan naik taraf dihidupkan salinan sebenar tetap diambil apabila ia keluar.",
     "upgradeUntil": "Naik taraf sehingga kualiti cukup baik",
     "delete": "Padam",
     "password": "Kata laluan anda",

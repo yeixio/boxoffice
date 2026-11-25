@@ -1109,6 +1109,8 @@
     "qualities": "Qualities, worst to best",
     "goodEnough": "good enough",
     "setGoodEnough": "set as good enough",
+    "beforeRelease": "Before release",
+    "beforeReleaseHint": "Copies that come out before the film does: filmed in a cinema (Cam, Telesync, Telecine), an unfinished cut (Workprint), an early foreign DVD (Regional), or a screener sent to critics and awards voters. Each ranks below every real copy, so with upgrades on the real copy is still grabbed once it's out.",
     "upgradeUntil": "Upgrade until the good-enough quality",
     "delete": "Delete",
     "password": "Your password",

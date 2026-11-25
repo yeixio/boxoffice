@@ -1263,6 +1263,8 @@
     "qualities": "Kvality, od nejhorší po nejlepší",
     "goodEnough": "dostačující",
     "setGoodEnough": "nastavit jako dostačující",
+    "beforeRelease": "Před premiérou",
+    "beforeReleaseHint": "Kopie, které vyjdou dřív než film: natočené v kině (Cam, Telesync, Telecine), nedokončená verze (Workprint), rané zahraniční DVD (Regional) nebo screener poslaný kritikům a porotám cen. Každá je pod každou skutečnou kopií, takže se zapnutými vylepšeními se skutečná kopie stejně stáhne, jakmile vyjde.",
     "upgradeUntil": "Vylepšovat do dostačující kvality",
     "delete": "Smazat",
     "password": "Vaše heslo",
