@@ -465,7 +465,16 @@
     "choose": "Valitse",
     "deleteEpisode": "Poista jakson {{episode}} tiedosto levyltä",
     "deleteItsFile": "Poista sen tiedosto levyltä",
-    "seasonOf": "{{show}} {{season}}"
+    "seasonOf": "{{show}} {{season}}",
+    "numbering": "Jaksojen numerointi julkaisuissa",
+    "numberingHint": "Julkaisut, joiden nimi on muotoa ”Show - 137”, yhdistetään oikeaan kauteen ja jaksoon. Jokaista jaksoa haetaan myös nimellä ja numerolla, mikä vie yhden haun lisää.",
+    "numberingStandard": "Kauden ja jakson mukaan (S02E05)",
+    "numberingAbsolute": "Juokseva, kuten animessa (Show - 137)",
+    "audio": "Dubattu vai tekstitetty",
+    "audioHint": "Perustuu siihen, mitä julkaisun nimi kertoo: Dubbed, Dual Audio, MULTi, Subbed. Nimi, joka ei kerro mitään, lasketaan alkuperäiseksi ääneksi.",
+    "audioAny": "Kumpi tahansa",
+    "audioDub": "Dubattu tai molemmat",
+    "audioSub": "Alkuperäinen ääni"
   },
   "health": {
     "error": "Ei toimi",

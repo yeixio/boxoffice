@@ -465,7 +465,16 @@
     "choose": "Kiezen",
     "deleteEpisode": "Bestand van {{episode}} van schijf verwijderen",
     "deleteItsFile": "Het bestand van schijf verwijderen",
-    "seasonOf": "{{show}} {{season}}"
+    "seasonOf": "{{show}} {{season}}",
+    "numbering": "Afleveringsnummering in releases",
+    "numberingHint": "Releases met namen als “Show - 137” worden aan hun seizoen en aflevering gekoppeld. Elke aflevering wordt ook op naam en nummer gezocht, wat één zoekactie extra kost.",
+    "numberingStandard": "Per seizoen en aflevering (S02E05)",
+    "numberingAbsolute": "Doorlopend, zoals bij anime (Show - 137)",
+    "audio": "Nagesynchroniseerd of ondertiteld",
+    "audioHint": "Gaat af op wat de naam van de release zegt: Dubbed, Dual Audio, MULTi, Subbed. Een naam die niets zegt, telt als origineel geluid.",
+    "audioAny": "Beide",
+    "audioDub": "Nagesynchroniseerd, of met beide",
+    "audioSub": "Origineel geluid"
   },
   "health": {
     "error": "Werkt niet",

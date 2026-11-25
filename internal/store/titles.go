@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"path/filepath"
+	"sort"
 	"time"
 
 	"github.com/yeixio/boxoffice/internal/quality"
@@ -339,9 +340,16 @@ type Series struct {
 	// each episode (a 1080p one next to the 4K one, say), or 0 for none.
 	// SecondRoot is the library folder those go in, in a folder named
 	// like the show's; "" keeps them next to the first copies.
-	SecondProfileID int      `json:"secondProfileId,omitempty"`
-	SecondRoot      string   `json:"secondRoot,omitempty"`
-	Seasons         []Season `json:"seasons"`
+	SecondProfileID int    `json:"secondProfileId,omitempty"`
+	SecondRoot      string `json:"secondRoot,omitempty"`
+	// Numbering is how releases of the show number its episodes: "" for
+	// season and episode (S02E05), or NumberingAbsolute for straight
+	// through from the first episode (anime: "Show - 137").
+	Numbering string `json:"numbering"`
+	// Audio is the sound wanted of a show that's released both dubbed
+	// and subtitled: "" for either, AudioDubbed or AudioOriginal.
+	Audio   string   `json:"audio"`
+	Seasons []Season `json:"seasons"`
 	// Counts over monitored, aired episodes, leaving out the ones space
 	// saver is holding back that aren't on disk.
 	EpisodeCount int `json:"episodeCount"`
@@ -351,6 +359,36 @@ type Series struct {
 	// The latest episode to have aired, and the next one to air.
 	LastAired  *time.Time `json:"lastAired,omitempty"`
 	NextAiring *time.Time `json:"nextAiring,omitempty"`
+}
+
+const (
+	NumberingAbsolute = "absolute"
+	AudioDubbed       = "dub"
+	AudioOriginal     = "sub"
+)
+
+// AbsoluteNumbers numbers a show's episodes straight through, the way
+// anime releases do: the first episode of season 1 is 1, and each season
+// carries on from the one before. Specials have no number. It gives each
+// number's episode.
+func AbsoluteNumbers(eps []Episode) map[int]Episode {
+	in := make([]Episode, 0, len(eps))
+	for _, e := range eps {
+		if e.Season > 0 {
+			in = append(in, e)
+		}
+	}
+	sort.SliceStable(in, func(i, j int) bool {
+		if in[i].Season != in[j].Season {
+			return in[i].Season < in[j].Season
+		}
+		return in[i].Number < in[j].Number
+	})
+	out := make(map[int]Episode, len(in))
+	for i, e := range in {
+		out[i+1] = e
+	}
+	return out
 }
 
 // Season is one season of a show, and whether its episodes are wanted.
@@ -378,14 +416,14 @@ type Episode struct {
 }
 
 const seriesCols = `id, tmdb_id, tvdb_id, imdb_id, title, sort_title, year, overview, poster, backdrop, status, network, runtime, rating,
-	monitored, profile_id, root_folder, path, added_at, refreshed_at, auto_upgrade, keep_ahead, second_profile_id, second_root`
+	monitored, profile_id, root_folder, path, added_at, refreshed_at, auto_upgrade, keep_ahead, second_profile_id, second_root, numbering, audio`
 
 func scanSeries(r interface{ Scan(...any) error }) (Series, error) {
 	var t Series
 	var mon int
 	var added, refreshed int64
 	err := r.Scan(&t.ID, &t.TMDBID, &t.TVDBID, &t.IMDBID, &t.Title, &t.SortTitle, &t.Year, &t.Overview, &t.Poster, &t.Backdrop, &t.Status, &t.Network, &t.Runtime, &t.Rating,
-		&mon, &t.ProfileID, &t.RootFolder, &t.Path, &added, &refreshed, &t.AutoUpgrade, &t.KeepAhead, &t.SecondProfileID, &t.SecondRoot)
+		&mon, &t.ProfileID, &t.RootFolder, &t.Path, &added, &refreshed, &t.AutoUpgrade, &t.KeepAhead, &t.SecondProfileID, &t.SecondRoot, &t.Numbering, &t.Audio)
 	if errors.Is(err, sql.ErrNoRows) {
 		return t, ErrNotFound
 	}
@@ -524,8 +562,8 @@ func (s *Store) EnsureSeason(ctx context.Context, seriesID int64, se Season) err
 }
 
 func (s *Store) UpdateSeries(ctx context.Context, t Series) error {
-	res, err := s.exec(ctx, "UPDATE series SET monitored = ?, profile_id = ?, root_folder = ?, path = ?, auto_upgrade = ?, keep_ahead = ?, second_profile_id = ?, second_root = ? WHERE id = ?",
-		b2i(t.Monitored), t.ProfileID, t.RootFolder, t.Path, t.AutoUpgrade, t.KeepAhead, t.SecondProfileID, t.SecondRoot, t.ID)
+	res, err := s.exec(ctx, "UPDATE series SET monitored = ?, profile_id = ?, root_folder = ?, path = ?, auto_upgrade = ?, keep_ahead = ?, second_profile_id = ?, second_root = ?, numbering = ?, audio = ? WHERE id = ?",
+		b2i(t.Monitored), t.ProfileID, t.RootFolder, t.Path, t.AutoUpgrade, t.KeepAhead, t.SecondProfileID, t.SecondRoot, t.Numbering, t.Audio, t.ID)
 	if err != nil {
 		return err
 	}

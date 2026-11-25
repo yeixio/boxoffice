@@ -437,7 +437,16 @@
     "choose": "选择",
     "deleteEpisode": "从磁盘删除 {{episode}} 的文件",
     "deleteItsFile": "从磁盘删除它的文件",
-    "seasonOf": "{{show}} {{season}}"
+    "seasonOf": "{{show}} {{season}}",
+    "numbering": "发布中的剧集编号方式",
+    "numberingHint": "名称类似“Show - 137”的发布会对应到所属的季和集。每一集还会按名称和编号再搜索一次，因此多用一次搜索。",
+    "numberingStandard": "按季和集 (S02E05)",
+    "numberingAbsolute": "连续编号，动画常用 (Show - 137)",
+    "audio": "配音还是字幕",
+    "audioHint": "依据发布名称中的标注：Dubbed、Dual Audio、MULTi、Subbed。名称中没有标注的视为原声。",
+    "audioAny": "都可以",
+    "audioDub": "配音，或两者都有",
+    "audioSub": "原声"
   },
   "health": {
     "error": "不可用",

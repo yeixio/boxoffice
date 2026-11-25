@@ -361,7 +361,8 @@ func (s *Service) takeFromFeed(ctx context.Context, a AutoSettings, releases []R
 					if r.TVDBID != sw.t.TVDBID {
 						continue
 					}
-				} else if !titleMatches(r.Title, sw.t.Title) {
+				} else if !titleMatches(r.Title, sw.t.Title) &&
+					!(sw.t.Numbering == store.NumberingAbsolute && titleMatches(quality.StripLeadTags(r.Title), sw.t.Title)) {
 					continue
 				}
 				packs := len(eps) == 0 && sw.per[season] >= seasonSearchFrom
@@ -377,6 +378,34 @@ func (s *Service) takeFromFeed(ctx context.Context, a AutoSettings, releases []R
 				// Its second copies, when it keeps them, may want it too.
 				matched = sw.t.ID
 			}
+			continue
+		}
+		// Anime numbered straight through ("Show - 137"), for the shows
+		// that say their releases are.
+		taken := false
+		for _, sw := range shows {
+			if sw.t.Numbering != store.NumberingAbsolute {
+				continue
+			}
+			if r.TVDBID > 0 && sw.t.TVDBID > 0 {
+				if r.TVDBID != sw.t.TVDBID {
+					continue
+				}
+			} else if quality.AbsoluteEpisodes(r.Title, sw.t.Title, false) == nil {
+				continue
+			}
+			c := s.judgeEpisodes(sw.ctx, r, sw.t, sw.p, sw.eps, blocked("series", sw.t.ID), false, false)
+			if c.Accepted && slices.ContainsFunc(c.episodes, func(id int64) bool { return earlyEps[id] }) {
+				if why := earlyMiss(a.Early, sw.p, c); why != "" {
+					c.reject(why)
+				}
+			}
+			if c.Accepted {
+				out.Releases = append(out.Releases, c)
+			}
+			taken = true
+		}
+		if taken {
 			continue
 		}
 		year := releaseYear(r.Title)

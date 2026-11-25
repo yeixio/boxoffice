@@ -95,7 +95,9 @@ CREATE TABLE IF NOT EXISTS series (
 	keep_ahead   INTEGER NOT NULL DEFAULT 0,
 	-- A second copy of each episode at another quality (see store.Series.SecondProfileID).
 	second_profile_id INTEGER NOT NULL DEFAULT 0, -- 0: no second copies
-	second_root       TEXT NOT NULL DEFAULT ''    -- '' keeps them next to the first copies
+	second_root       TEXT NOT NULL DEFAULT '',   -- '' keeps them next to the first copies
+	numbering         TEXT NOT NULL DEFAULT '',   -- '' for S02E05, or absolute (anime)
+	audio             TEXT NOT NULL DEFAULT ''    -- '' for either, dub or sub
 );
 CREATE INDEX IF NOT EXISTS series_tvdb ON series (tvdb_id);
 

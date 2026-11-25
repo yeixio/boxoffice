@@ -493,7 +493,16 @@
     "choose": "Alege",
     "deleteEpisode": "Șterge fișierul lui {{episode}} de pe disc",
     "deleteItsFile": "Șterge fișierul de pe disc",
-    "seasonOf": "{{show}} {{season}}"
+    "seasonOf": "{{show}} {{season}}",
+    "numbering": "Numerotarea episoadelor în lansări",
+    "numberingHint": "Lansările cu nume precum „Show - 137” sunt potrivite cu sezonul și episodul lor. Fiecare episod este căutat și după nume și număr, ceea ce costă o căutare în plus.",
+    "numberingStandard": "După sezon și episod (S02E05)",
+    "numberingAbsolute": "Continuă, ca la anime (Show - 137)",
+    "audio": "Dublat sau subtitrat",
+    "audioHint": "Se ia după ce spune numele lansării: Dubbed, Dual Audio, MULTi, Subbed. Un nume care nu spune nimic contează ca sunet original.",
+    "audioAny": "Oricare",
+    "audioDub": "Dublat sau cu ambele",
+    "audioSub": "Sunet original"
   },
   "health": {
     "error": "Nu funcționează",

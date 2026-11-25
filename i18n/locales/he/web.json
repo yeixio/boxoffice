@@ -493,7 +493,16 @@
     "choose": "בחירה",
     "deleteEpisode": "מחיקת הקובץ של {{episode}} מהדיסק",
     "deleteItsFile": "מחיקת הקובץ שלו מהדיסק",
-    "seasonOf": "{{show}} {{season}}"
+    "seasonOf": "{{show}} {{season}}",
+    "numbering": "מספור פרקים בשחרורים",
+    "numberingHint": "שחרורים בשמות כמו ‎“Show - 137”‎ מותאמים לעונה ולפרק שלהם. כל פרק מחופש גם לפי שם ומספר, מה שעולה חיפוש נוסף אחד.",
+    "numberingStandard": "לפי עונה ופרק (S02E05)",
+    "numberingAbsolute": "רציף, כמו באנימה (Show - 137)",
+    "audio": "מדובב או עם כתוביות",
+    "audioHint": "לפי מה ששם השחרור אומר: Dubbed,‏ Dual Audio,‏ MULTi,‏ Subbed. שם שאינו אומר דבר נחשב לפסקול המקורי.",
+    "audioAny": "שניהם",
+    "audioDub": "מדובב, או עם שניהם",
+    "audioSub": "פסקול מקורי"
   },
   "health": {
     "error": "לא עובדת",

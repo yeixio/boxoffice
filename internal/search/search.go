@@ -33,6 +33,8 @@ type Service struct {
 	mu    sync.Mutex
 	found map[string]cached // releases shown in a search, by key, to grab by hand
 	rss   rssState
+	// absolute is shows' episodes numbered straight through (anime).
+	absolute map[int64]absoluteCache
 	// regrabMu keeps two replacements from both taking the day's last room.
 	regrabMu sync.Mutex
 }
@@ -468,24 +470,60 @@ func (s *Service) EpisodeFor(ctx context.Context, id int64, ask Ask) (Results, e
 		fixes = s.fixes(ctx, e.File, e.Season, e.Number)
 	}
 	out := Results{Errors: notes, Searched: n}
-	for _, r := range rs {
-		ep := e
-		fix := fixes.of(r)
-		if fix {
-			ep.File = nil // judged as if it weren't there: the fix takes its place
+	seen := map[string]bool{}
+	judge := func(rs []Release, byID bool) {
+		for _, r := range rs {
+			if seen[key(r)] {
+				continue
+			}
+			seen[key(r)] = true
+			ep := e
+			fix := fixes.of(r)
+			if fix {
+				ep.File = nil // judged as if it weren't there: the fix takes its place
+			}
+			c := s.judgeEpisodes(ctx, r, t, p, []store.Episode{ep}, blocked, false, byID)
+			if fix {
+				markFix(&c)
+			}
+			ask.judgeLanguage(&c)
+			ask.judgeReplacement(&c, have, same)
+			out.Releases = append(out.Releases, c)
 		}
-		c := s.judgeEpisodes(ctx, r, t, p, []store.Episode{ep}, blocked, false, true)
-		if fix {
-			markFix(&c)
+	}
+	judge(rs, true)
+	if n := s.absoluteNumber(ctx, t, e); n > 0 {
+		// Anime is mostly posted as "Show - 137", which a search by season
+		// and episode misses: ask for it by name and number too.
+		more, notes, _, err := s.ask(ctx, func(ix store.Indexer) Query {
+			return Query{Type: "search", Text: fmt.Sprintf("%s %02d", searchText(t.Title), n), Cats: cats(ix, 5000, 5999, 5000)}
+		})
+		if err != nil {
+			out.Errors = append(out.Errors, err.Error())
+		} else {
+			out.Errors = append(out.Errors, notes...)
+			judge(more, false)
 		}
-		ask.judgeLanguage(&c)
-		ask.judgeReplacement(&c, have, same)
-		out.Releases = append(out.Releases, c)
 	}
 	s.rank(ctx, &out)
 	s.markSearched(ctx, "episode", e.ID, out)
 	s.logResults(fmt.Sprintf("%s S%02dE%02d", t.Title, e.Season, e.Number), out)
 	return out, nil
+}
+
+// absoluteNumber is an episode's number counted straight through the
+// show, when the show's releases are numbered that way; 0 otherwise, and
+// for specials.
+func (s *Service) absoluteNumber(ctx context.Context, t store.Series, e store.Episode) int {
+	if t.Numbering != store.NumberingAbsolute || e.Season == 0 {
+		return 0
+	}
+	for n, have := range s.absoluteNumbers(ctx, t.ID) {
+		if have.ID == e.ID {
+			return n
+		}
+	}
+	return 0
 }
 
 // markSearched notes the search and whether it found something to take,

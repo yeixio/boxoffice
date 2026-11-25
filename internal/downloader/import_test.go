@@ -343,3 +343,53 @@ func TestImportChosenEpisode(t *testing.T) {
 		t.Fatalf("%s %v", to, err)
 	}
 }
+
+// A batch of an anime numbered straight through: each file goes to the
+// episode its number is, for a show that says its releases are numbered so.
+func TestImportAbsoluteNumbers(t *testing.T) {
+	st := storetest.Open(t)
+	ctx := context.Background()
+	lib := t.TempDir()
+	profiles, _ := st.Profiles(ctx)
+	show, err := st.AddSeries(ctx, store.Series{TMDBID: 9, Title: "Frieren", Year: 2023, ProfileID: profiles[0].ID, RootFolder: lib, Path: filepath.Join(lib, "Frieren (2023)"),
+		Monitored: true, Seasons: []store.Season{{Number: 1, Monitored: true}, {Number: 2, Monitored: true}}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	for season := 1; season <= 2; season++ {
+		for n := 1; n <= 3; n++ {
+			st.UpsertEpisode(ctx, store.Episode{SeriesID: show.ID, Season: season, Number: n, Title: fmt.Sprintf("Ep %d", n), Monitored: true})
+		}
+	}
+	show.Numbering = store.NumberingAbsolute
+	if err := st.UpdateSeries(ctx, show); err != nil {
+		t.Fatal(err)
+	}
+	eps, _ := st.Episodes(ctx, show.ID)
+	var ids []int64
+	for _, e := range eps {
+		if e.Season == 2 && e.Number <= 2 {
+			ids = append(ids, e.ID)
+		}
+	}
+	dl := t.TempDir()
+	os.WriteFile(filepath.Join(dl, "[Group] Frieren - 04 [1080p].mkv"), make([]byte, 4000), 0o644)
+	os.WriteFile(filepath.Join(dl, "[Group] Frieren - 05v2 [1080p].mkv"), make([]byte, 5000), 0o644)
+	// Not one it was grabbed for: left where it is.
+	os.WriteFile(filepath.Join(dl, "[Group] Frieren - 06 [1080p].mkv"), make([]byte, 6000), 0o644)
+	li := &LibraryImporter{Store: st}
+	_, err = li.Import(ctx, store.Download{Name: "[Group] Frieren - 04-05 [1080p]", Kind: "series", TitleID: show.ID, EpisodeIDs: ids}, dl, listFiles(dl))
+	var left *LeftOverError
+	if err != nil && !errors.As(err, &left) {
+		t.Fatal(err)
+	}
+	for n, size := range map[int]int64{1: 4000, 2: 5000} {
+		p := filepath.Join(show.Path, "Season 02", fmt.Sprintf("Frieren (2023) - S02E%02d - Ep %d.mkv", n, n))
+		if info, _ := os.Stat(p); info == nil || info.Size() != size {
+			t.Fatalf("S02E%02d isn't the right file: %v", n, info)
+		}
+	}
+	if fileExists(filepath.Join(show.Path, "Season 02", "Frieren (2023) - S02E03 - Ep 3.mkv")) {
+		t.Fatal("an episode it wasn't grabbed for went in")
+	}
+}

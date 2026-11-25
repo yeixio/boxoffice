@@ -465,7 +465,16 @@
     "choose": "Kiválaszt",
     "deleteEpisode": "{{episode}} fájljának törlése a lemezről",
     "deleteItsFile": "Fájljának törlése a lemezről",
-    "seasonOf": "{{show}} {{season}}"
+    "seasonOf": "{{show}} {{season}}",
+    "numbering": "Epizódszámozás a kiadásokban",
+    "numberingHint": "A „Show - 137” formájú kiadások a megfelelő évadhoz és epizódhoz kerülnek. Minden epizódot név és szám szerint is keres, ami eggyel több keresést jelent.",
+    "numberingStandard": "Évad és epizód szerint (S02E05)",
+    "numberingAbsolute": "Folyamatosan, mint az animéknél (Show - 137)",
+    "audio": "Szinkronos vagy feliratos",
+    "audioHint": "A kiadás neve alapján dönt: Dubbed, Dual Audio, MULTi, Subbed. Ha a név semmit sem mond, eredeti hangnak számít.",
+    "audioAny": "Bármelyik",
+    "audioDub": "Szinkronos, vagy mindkettő",
+    "audioSub": "Eredeti hang"
   },
   "health": {
     "error": "Nem működik",

@@ -493,7 +493,16 @@
     "choose": "Choisir",
     "deleteEpisode": "Supprimer du disque le fichier de {{episode}}",
     "deleteItsFile": "Supprimer son fichier du disque",
-    "seasonOf": "{{show}} {{season}}"
+    "seasonOf": "{{show}} {{season}}",
+    "numbering": "Numérotation des épisodes dans les releases",
+    "numberingHint": "Les releases nommées comme « Show - 137 » sont associées à leur saison et à leur épisode. Chaque épisode est aussi recherché par nom et numéro, ce qui coûte une recherche de plus.",
+    "numberingStandard": "Par saison et épisode (S02E05)",
+    "numberingAbsolute": "En continu, comme les animes (Show - 137)",
+    "audio": "Doublé ou sous-titré",
+    "audioHint": "Se fie à ce que dit le nom de la release : Dubbed, Dual Audio, MULTi, Subbed. Un nom qui ne dit rien compte comme son d'origine.",
+    "audioAny": "Les deux",
+    "audioDub": "Doublé, ou avec les deux",
+    "audioSub": "Son d'origine"
   },
   "health": {
     "error": "Ne fonctionne pas",

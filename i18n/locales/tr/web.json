@@ -465,7 +465,16 @@
     "choose": "Seç",
     "deleteEpisode": "{{episode}} dosyasını diskten sil",
     "deleteItsFile": "Dosyasını diskten sil",
-    "seasonOf": "{{show}} {{season}}"
+    "seasonOf": "{{show}} {{season}}",
+    "numbering": "Sürümlerde bölüm numaralandırma",
+    "numberingHint": "“Show - 137” gibi adlandırılan sürümler sezon ve bölümleriyle eşleştirilir. Her bölüm ad ve numarayla da aranır; bu bir arama daha harcar.",
+    "numberingStandard": "Sezon ve bölüme göre (S02E05)",
+    "numberingAbsolute": "Kesintisiz, animelerdeki gibi (Show - 137)",
+    "audio": "Dublajlı mı altyazılı mı",
+    "audioHint": "Sürüm adının söylediğine göre karar verilir: Dubbed, Dual Audio, MULTi, Subbed. Hiçbir şey söylemeyen ad özgün ses sayılır.",
+    "audioAny": "Fark etmez",
+    "audioDub": "Dublajlı veya ikisi birden",
+    "audioSub": "Özgün ses"
   },
   "health": {
     "error": "Çalışmıyor",

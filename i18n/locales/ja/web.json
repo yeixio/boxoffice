@@ -437,7 +437,16 @@
     "choose": "選ぶ",
     "deleteEpisode": "{{episode}} のファイルをディスクから削除",
     "deleteItsFile": "ファイルをディスクから削除",
-    "seasonOf": "{{show}} {{season}}"
+    "seasonOf": "{{show}} {{season}}",
+    "numbering": "リリースでの話数の付け方",
+    "numberingHint": "「Show - 137」のような名前のリリースを、該当するシーズンとエピソードに対応させます。各エピソードは名前と話数でも検索するため、検索が 1 回増えます。",
+    "numberingStandard": "シーズンとエピソード (S02E05)",
+    "numberingAbsolute": "通し番号、アニメ向け (Show - 137)",
+    "audio": "吹き替えか字幕か",
+    "audioHint": "リリース名の表記 (Dubbed、Dual Audio、MULTi、Subbed) で判断します。何も書かれていない名前は原音として扱います。",
+    "audioAny": "どちらでも",
+    "audioDub": "吹き替え、または両方入り",
+    "audioSub": "原音"
   },
   "health": {
     "error": "動作していません",

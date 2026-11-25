@@ -521,7 +521,16 @@
     "choose": "Vybrat",
     "deleteEpisode": "Smazat soubor {{episode}} z disku",
     "deleteItsFile": "Smazat jeho soubor z disku",
-    "seasonOf": "{{show}} {{season}}"
+    "seasonOf": "{{show}} {{season}}",
+    "numbering": "Číslování epizod ve vydáních",
+    "numberingHint": "Vydání pojmenovaná jako „Show - 137“ se přiřadí ke správné sérii a epizodě. Každá epizoda se navíc hledá podle názvu a čísla, což stojí jedno hledání navíc.",
+    "numberingStandard": "Podle série a epizody (S02E05)",
+    "numberingAbsolute": "Průběžně jako u anime (Show - 137)",
+    "audio": "Dabing, nebo titulky",
+    "audioHint": "Řídí se tím, co říká název vydání: Dubbed, Dual Audio, MULTi, Subbed. Název, který neříká nic, se počítá jako původní zvuk.",
+    "audioAny": "Obojí",
+    "audioDub": "S dabingem, nebo s obojím",
+    "audioSub": "Původní zvuk"
   },
   "health": {
     "error": "Nefunguje",
