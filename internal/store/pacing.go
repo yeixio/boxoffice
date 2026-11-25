@@ -200,6 +200,87 @@ func (s *Store) IndexerUsageOn(ctx context.Context, day string) (map[int64]Index
 	return out, rows.Err()
 }
 
+// NoteIndexerAnswer records how a query to an indexer went today: how long
+// the answer took, or that it failed.
+func (s *Store) NoteIndexerAnswer(ctx context.Context, id int64, took time.Duration, failed bool) error {
+	day := UsageDay(time.Now())
+	if err := s.ensureUsage(ctx, id, day); err != nil {
+		return err
+	}
+	if failed {
+		_, err := s.exec(ctx, "UPDATE indexer_usage SET errors = errors + 1 WHERE indexer_id = ? AND day = ?", id, day)
+		return err
+	}
+	_, err := s.exec(ctx, "UPDATE indexer_usage SET answered = answered + 1, answer_ms = answer_ms + ? WHERE indexer_id = ? AND day = ?",
+		took.Milliseconds(), id, day)
+	return err
+}
+
+// IndexerTotals is what an indexer was asked over some days, and how it
+// answered.
+type IndexerTotals struct {
+	Queries int `json:"queries"` // API calls: searches and RSS
+	Auto    int `json:"auto"`    // of them, searches Box Office made by itself
+	NZBs    int `json:"nzbs"`    // NZBs downloaded from it
+	Errors  int `json:"errors"`  // queries that failed
+	// AnswerMs is how long an answer took on average, in milliseconds;
+	// 0 when none was timed.
+	AnswerMs int64 `json:"answerMs"`
+}
+
+// IndexerTotalsSince adds up every indexer's usage from a day on, by
+// indexer.
+func (s *Store) IndexerTotalsSince(ctx context.Context, day string) (map[int64]IndexerTotals, error) {
+	rows, err := s.query(ctx, `SELECT indexer_id, SUM(queries), SUM(auto), SUM(grabs), SUM(errors), SUM(answered), CAST(SUM(answer_ms) AS BIGINT)
+		FROM indexer_usage WHERE day >= ? GROUP BY indexer_id`, day)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	out := map[int64]IndexerTotals{}
+	for rows.Next() {
+		var id, answered, ms int64
+		var t IndexerTotals
+		if err := rows.Scan(&id, &t.Queries, &t.Auto, &t.NZBs, &t.Errors, &answered, &ms); err != nil {
+			return nil, err
+		}
+		if answered > 0 {
+			t.AnswerMs = ms / answered
+		}
+		out[id] = t
+	}
+	return out, rows.Err()
+}
+
+// GrabOutcomes is how the downloads grabbed from an indexer ended.
+type GrabOutcomes struct {
+	Grabbed   int `json:"grabbed"`
+	Completed int `json:"completed"`
+	Failed    int `json:"failed"`
+}
+
+// GrabOutcomesSince counts the downloads added since a time that are still
+// in the queue or the history, by the name of the indexer they came from.
+func (s *Store) GrabOutcomesSince(ctx context.Context, since time.Time) (map[string]GrabOutcomes, error) {
+	rows, err := s.query(ctx, `SELECT indexer, COUNT(*),
+			SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END), SUM(CASE WHEN status = 'failed' THEN 1 ELSE 0 END)
+		FROM downloads WHERE indexer <> '' AND added_at >= ? GROUP BY indexer`, since.Unix())
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	out := map[string]GrabOutcomes{}
+	for rows.Next() {
+		var name string
+		var g GrabOutcomes
+		if err := rows.Scan(&name, &g.Grabbed, &g.Completed, &g.Failed); err != nil {
+			return nil, err
+		}
+		out[name] = g
+	}
+	return out, rows.Err()
+}
+
 // PruneIndexerUsage forgets usage from before a day.
 func (s *Store) PruneIndexerUsage(ctx context.Context, before string) error {
 	_, err := s.exec(ctx, "DELETE FROM indexer_usage WHERE day < ?", before)

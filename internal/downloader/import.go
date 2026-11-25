@@ -247,10 +247,15 @@ func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir str
 		if err := checkLibrary(root, showPath); err != nil {
 			return "", err
 		}
-		eps, err := li.Store.Episodes(ctx, t.ID)
+		real, err := li.Store.Episodes(ctx, t.ID)
 		if err != nil {
 			return "", err
 		}
+		// Names are read the way the show's releases number its episodes:
+		// by each one's place in the episode order chosen for the show,
+		// when one is. eps and real list the same episodes in step, and
+		// the files are named by real, as the episodes aired.
+		eps := store.InOrder(real)
 		// Obfuscated posts can name the video anything. When no video says
 		// which episode it is, the videos' own tags are read next (web
 		// releases carry the store's synopsis), and failing that the
@@ -273,6 +278,38 @@ func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir str
 		main := map[string]bool{}
 		for _, m := range mainVideos(dir, vids, true) {
 			main[m.name] = true
+		}
+		if !named && t.Numbering == store.NumberingAbsolute && d.Mode != ModeEpisode {
+			// Anime numbered straight through: "[Group] Show - 137.mkv" is
+			// the show's 137th episode. Only episodes the download was
+			// grabbed for are taken, when it was grabbed for some.
+			byNumber := store.AbsoluteNumbers(eps)
+			for _, v := range vids {
+				base := filepath.Base(v)
+				var t2 target
+				for i, n := range quality.AbsoluteEpisodes(strings.TrimSuffix(base, filepath.Ext(base)), t.Title, true) {
+					e, ok := byNumber[n]
+					if !ok || (i > 0 && e.Season != t2.season) || (len(d.EpisodeIDs) > 0 && !slices.Contains(d.EpisodeIDs, e.ID)) {
+						t2.numbers = nil
+						break
+					}
+					t2.season, t2.numbers = e.Season, append(t2.numbers, e.Number)
+				}
+				if len(t2.numbers) > 0 {
+					targets[v] = t2
+					named = true
+				}
+			}
+		}
+		if !named && d.Mode != ModeEpisode {
+			// Talk shows and news are named by the day they aired:
+			// "Show.2026.11.19.mkv" is the episode that aired then.
+			for _, v := range vids {
+				if e, ok := airedOn(eps, filepath.Base(v)); ok {
+					targets[v] = target{e.Season, []int{e.Number}}
+					named = true
+				}
+			}
 		}
 		if d.Mode == ModeEpisode {
 			i := -1
@@ -323,11 +360,16 @@ func (li *LibraryImporter) Import(ctx context.Context, d store.Download, dir str
 			}) {
 				continue
 			}
-			ep := eps[i]
-			code := fmt.Sprintf("S%02dE%02d", season, numbers[0])
+			ep := real[i]
+			code := fmt.Sprintf("S%02dE%02d", ep.Season, ep.Number)
 			for _, n := range numbers[1:] {
-				code += fmt.Sprintf("E%02d", n)
+				// The file's other episodes, when they aired in the same
+				// season as its first.
+				if j := slices.IndexFunc(eps, func(e store.Episode) bool { return e.Season == season && e.Number == n }); j >= 0 && real[j].Season == ep.Season {
+					code += fmt.Sprintf("E%02d", real[j].Number)
+				}
 			}
+			season = ep.Season
 			name := fmt.Sprintf("%s - %s", fileName(t.Title, t.Year), code)
 			if ep.Title != "" {
 				name += " - " + cleanFileName(ep.Title)
@@ -597,12 +639,33 @@ func releaseEpisode(d store.Download, eps []store.Episode) (int, []int) {
 	if s, n := episodeNumbers(d.Name); len(n) > 0 {
 		return s, n
 	}
+	if e, ok := airedOn(eps, d.Name); ok {
+		return e.Season, []int{e.Number}
+	}
 	if len(d.EpisodeIDs) == 1 {
 		if i := slices.IndexFunc(eps, func(e store.Episode) bool { return e.ID == d.EpisodeIDs[0] }); i >= 0 {
 			return eps[i].Season, []int{eps[i].Number}
 		}
 	}
 	return 0, nil
+}
+
+// airedOn is the one episode (specials aside) that aired on the day a
+// release or file is named for ("Show.2026.11.19"), as daily shows are.
+func airedOn(eps []store.Episode, name string) (store.Episode, bool) {
+	day, ok := quality.AirDate(name)
+	if !ok {
+		return store.Episode{}, false
+	}
+	var found store.Episode
+	n := 0
+	for _, e := range eps {
+		if e.Season > 0 && e.AirDate != nil && quality.SameDay(*e.AirDate, day) {
+			found = e
+			n++
+		}
+	}
+	return found, n == 1
 }
 
 func episodeNumbers(name string) (int, []int) {

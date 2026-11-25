@@ -47,7 +47,9 @@ import (
 	"github.com/yeixio/boxoffice/internal/sso"
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/subtitles"
+	"github.com/yeixio/boxoffice/internal/titlelist"
 	"github.com/yeixio/boxoffice/internal/tmdb"
+	"github.com/yeixio/boxoffice/internal/tracks"
 )
 
 // SettingAPIKey is where the API key is kept.
@@ -118,8 +120,13 @@ type Server struct {
 	Ereaders *ereader.Service
 	// Subtitles fetches subtitles; nil makes one that only answers.
 	Subtitles *subtitles.Service
+	// Tracks drops unwanted audio and subtitle tracks from files as they
+	// come in; nil makes one that only answers.
+	Tracks *tracks.Service
 	// Lists follows lists kept elsewhere; nil makes one that only answers.
 	Lists *lists.Service
+	// Titles adds the titles of a list loaded from a file; nil makes one.
+	Titles *titlelist.Service
 	// Restart stops Box Office cleanly and starts it again, for the
 	// Restart button in Settings; nil means it can't.
 	Restart func()
@@ -134,6 +141,7 @@ type Server struct {
 	ereaderOnce  sync.Once
 	subtitleOnce sync.Once
 	listOnce     sync.Once
+	titlesOnce   sync.Once
 	cleanupMu    sync.Mutex // one clean-up run or deletion at a time
 	started      time.Time
 	failures     lockouts // client address and username -> wrong tries
@@ -256,6 +264,7 @@ func (s *Server) Handler() http.Handler {
 		{"POST /api/v1/series/bulk", true, s.bulkSeries},
 		{"PATCH /api/v1/series/{id}", true, s.editSeries},
 		{"DELETE /api/v1/series/{id}", true, s.deleteSeries},
+		{"GET /api/v1/series/{id}/orders", true, s.seriesOrders},
 		{"GET /api/v1/series/{id}/removal", true, s.seriesRemoval},
 		{"GET /api/v1/series/{id}/seasons/{number}/files/removal", true, s.seasonFilesRemoval},
 		{"DELETE /api/v1/series/{id}/seasons/{number}/files", true, s.deleteSeasonFiles},
@@ -305,6 +314,7 @@ func (s *Server) Handler() http.Handler {
 		{"POST /api/v1/matinee/switch", true, s.switchMatinee},
 
 		{"GET /api/v1/connections", true, s.connections},
+		{"GET /api/v1/indexers/stats", true, s.indexerStats},
 		{"DELETE /api/v1/indexers/{id}", true, s.deleteConnection(func(r *http.Request, id int64) error { return s.Store.DeleteIndexer(r.Context(), id) })},
 		{"DELETE /api/v1/downloadclients/{id}", true, s.deleteConnection(func(r *http.Request, id int64) error { return s.Store.DeleteDownloadClient(r.Context(), id) })},
 		{"DELETE /api/v1/usenetservers/{id}", true, s.deleteConnection(func(r *http.Request, id int64) error { return s.Store.DeleteUsenetServer(r.Context(), id) })},
@@ -337,7 +347,9 @@ func (s *Server) Handler() http.Handler {
 	routes = append(routes, s.problemRoutes()...)
 	routes = append(routes, s.qualityCheckRoutes()...)
 	routes = append(routes, s.subtitleRoutes()...)
+	routes = append(routes, s.trackRoutes()...)
 	routes = append(routes, s.listRoutes()...)
+	routes = append(routes, s.titleListRoutes()...)
 	routes = append(routes, s.cleanupRoutes()...)
 	routes = append(routes, s.portalRoutes()...)
 	routes = append(routes, s.pushRoutes()...)

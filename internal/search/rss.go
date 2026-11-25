@@ -323,7 +323,7 @@ func (s *Service) takeFromFeed(ctx context.Context, a AutoSettings, releases []R
 				// Not counted toward a season pack: one isn't out yet.
 				earlyEps[e.ID] = true
 			} else {
-				sw.per[e.Season]++
+				sw.per[s.inOrder(ctx, sw.t, []store.Episode{e})[0].Season]++
 			}
 		}
 	}
@@ -361,7 +361,8 @@ func (s *Service) takeFromFeed(ctx context.Context, a AutoSettings, releases []R
 					if r.TVDBID != sw.t.TVDBID {
 						continue
 					}
-				} else if !titleMatches(r.Title, sw.t.Title) {
+				} else if !titleMatches(r.Title, sw.t.Title) &&
+					!(sw.t.Numbering == store.NumberingAbsolute && titleMatches(quality.StripLeadTags(r.Title), sw.t.Title)) {
 					continue
 				}
 				packs := len(eps) == 0 && sw.per[season] >= seasonSearchFrom
@@ -377,6 +378,63 @@ func (s *Service) takeFromFeed(ctx context.Context, a AutoSettings, releases []R
 				// Its second copies, when it keeps them, may want it too.
 				matched = sw.t.ID
 			}
+			continue
+		}
+		// Named by the day it aired, as talk shows and news are.
+		if _, dated := quality.AirDate(r.Title); dated {
+			var matched int64
+			for _, sw := range shows {
+				if matched != 0 && sw.t.ID != matched {
+					continue
+				}
+				if r.TVDBID > 0 && sw.t.TVDBID > 0 {
+					if r.TVDBID != sw.t.TVDBID {
+						continue
+					}
+				} else if !titleMatches(r.Title, sw.t.Title) {
+					continue
+				}
+				c := s.judgeEpisodes(sw.ctx, r, sw.t, sw.p, sw.eps, blocked("series", sw.t.ID), false, false)
+				if c.Accepted && slices.ContainsFunc(c.episodes, func(id int64) bool { return earlyEps[id] }) {
+					if why := earlyMiss(a.Early, sw.p, c); why != "" {
+						c.reject(why)
+					}
+				}
+				if c.Accepted {
+					out.Releases = append(out.Releases, c)
+				}
+				matched = sw.t.ID
+			}
+			if matched != 0 {
+				continue
+			}
+		}
+		// Anime numbered straight through ("Show - 137"), for the shows
+		// that say their releases are.
+		taken := false
+		for _, sw := range shows {
+			if sw.t.Numbering != store.NumberingAbsolute {
+				continue
+			}
+			if r.TVDBID > 0 && sw.t.TVDBID > 0 {
+				if r.TVDBID != sw.t.TVDBID {
+					continue
+				}
+			} else if quality.AbsoluteEpisodes(r.Title, sw.t.Title, false) == nil {
+				continue
+			}
+			c := s.judgeEpisodes(sw.ctx, r, sw.t, sw.p, sw.eps, blocked("series", sw.t.ID), false, false)
+			if c.Accepted && slices.ContainsFunc(c.episodes, func(id int64) bool { return earlyEps[id] }) {
+				if why := earlyMiss(a.Early, sw.p, c); why != "" {
+					c.reject(why)
+				}
+			}
+			if c.Accepted {
+				out.Releases = append(out.Releases, c)
+			}
+			taken = true
+		}
+		if taken {
 			continue
 		}
 		year := releaseYear(r.Title)

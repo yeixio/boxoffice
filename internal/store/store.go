@@ -136,12 +136,16 @@ func migrateSchema(ctx context.Context, db schemaRunner, postgres bool) error {
 		{"members", "subject", "TEXT NOT NULL DEFAULT ''"},
 		{"series", "keep_ahead", "INTEGER NOT NULL DEFAULT 0"},
 		{"episodes", "held", "INTEGER NOT NULL DEFAULT 0"},
+		{"episodes", "place_season", "INTEGER"},
+		{"episodes", "place_number", "INTEGER"},
 		{"watched", "furthest_season", "INTEGER NOT NULL DEFAULT 0"},
 		{"watched", "furthest_episode", "INTEGER NOT NULL DEFAULT 0"},
 		{"movies", "second_profile_id", "INTEGER NOT NULL DEFAULT 0"},
 		{"movies", "second_root", "TEXT NOT NULL DEFAULT ''"},
 		{"series", "second_profile_id", "INTEGER NOT NULL DEFAULT 0"},
 		{"series", "second_root", "TEXT NOT NULL DEFAULT ''"},
+		{"series", "numbering", "TEXT NOT NULL DEFAULT ''"},
+		{"series", "audio", "TEXT NOT NULL DEFAULT ''"},
 		{"downloads", "edition", "TEXT NOT NULL DEFAULT ''"},
 		{"downloads", "mode", "TEXT NOT NULL DEFAULT ''"},
 		{"authors", "locked", "INTEGER NOT NULL DEFAULT 0"},
@@ -168,6 +172,9 @@ func migrateSchema(ctx context.Context, db schemaRunner, postgres bool) error {
 		{"books", "series_pos", "TEXT NOT NULL DEFAULT ''"},
 		{"games", "serial", "TEXT NOT NULL DEFAULT ''"},
 		{"game_wants", "serial", "TEXT NOT NULL DEFAULT ''"},
+		{"indexer_usage", "errors", "INTEGER NOT NULL DEFAULT 0"},
+		{"indexer_usage", "answered", "INTEGER NOT NULL DEFAULT 0"},
+		{"indexer_usage", "answer_ms", "BIGINT NOT NULL DEFAULT 0"},
 	} {
 		has, err := hasColumn(ctx, db, postgres, c.table, c.column)
 		if err != nil {

@@ -9,7 +9,7 @@ import { Releases } from '../Releases'
 import { DeleteFiles, RemoveTitle } from '../RemoveFiles'
 import { SecondCopy, type SecondCopyEdit } from '../SecondCopy'
 import { SpaceSaverField, type SpaceSaverWatched } from '../SpaceSaver'
-import { get, patch, post, type Episode, type Profile, type Reported, type Series } from '../api'
+import { get, patch, post, type Episode, type EpisodeOrder, type Profile, type Reported, type Series } from '../api'
 import { bytes, day, episodeCode } from '../format'
 import { qualityName, useProfiles, useQualities } from '../hooks'
 import { pictureText } from './QualityCheck'
@@ -25,6 +25,8 @@ export function ShowDetail() {
   const nav = useNavigate()
   const key = ['show', id]
   const show = useQuery({ queryKey: key, queryFn: () => get<Detail>(`/series/${id}`) })
+  // The other episode orders TMDB has for it; the picker does without them when TMDB can't be asked.
+  const orders = useQuery({ queryKey: ['series', id, 'orders'], queryFn: () => get<EpisodeOrder[]>(`/series/${id}/orders`), staleTime: 3600_000, retry: false })
   const profiles = useProfiles()
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [deleteSeconds, setDeleteSeconds] = useState(false)
@@ -33,7 +35,7 @@ export function ShowDetail() {
     qc.setQueryData(key, d)
     qc.invalidateQueries({ queryKey: ['series'] })
   }
-  const edit = useMutation({ mutationFn: (body: Partial<Pick<Series, 'monitored' | 'profileId' | 'autoUpgrade' | 'keepAhead'>> & SecondCopyEdit) => patch<Detail>(`/series/${id}`, body), onSuccess: set })
+  const edit = useMutation({ mutationFn: (body: Partial<Pick<Series, 'monitored' | 'profileId' | 'autoUpgrade' | 'keepAhead' | 'numbering' | 'audio'>> & SecondCopyEdit) => patch<Detail>(`/series/${id}`, body), onSuccess: set })
   const season = useMutation({ mutationFn: ({ n, monitored }: { n: number; monitored: boolean }) => patch<Detail>(`/series/${id}/seasons/${n}`, { monitored }), onSuccess: set })
   const action = useMutation({
     mutationFn: (what: 'search' | 'refresh') => post(`/series/${id}/${what}`),
@@ -110,6 +112,38 @@ export function ShowDetail() {
           </Field>
           {!locked && <AutoUpgradeField value={s.autoUpgrade} onChange={(v) => edit.mutate({ autoUpgrade: v as Series['autoUpgrade'] })} upgradeOK={!!profiles.data?.find((p) => p.id === s.profileId)?.upgrade} />}
           {!locked && <SpaceSaverField value={s.keepAhead} onChange={(n) => edit.mutate({ keepAhead: n })} watched={show.data.watched} />}
+          {!locked && (
+            <Field label={t('show.numbering')} hint={s.numbering === 'absolute' ? t('show.numberingHint') : s.numbering ? t('show.orderHint') : undefined}>
+              {(fid) => (
+                <Select
+                  id={fid}
+                  value={s.numbering ?? ''}
+                  onChange={(v) => edit.mutate({ numbering: v as Series['numbering'] })}
+                  options={[
+                    { value: '', label: t('show.numberingStandard') },
+                    { value: 'absolute', label: t('show.numberingAbsolute') },
+                    ...orderOptions(orders.data, s.numbering).map((o) => ({ value: `order:${o.id}`, label: t('show.orderOption', { kind: t(`show.orderKind${o.kind >= 1 && o.kind <= 7 ? o.kind : 1}`), name: o.name }) })),
+                  ]}
+                />
+              )}
+            </Field>
+          )}
+          {!locked && (
+            <Field label={t('show.audio')} hint={s.audio ? t('show.audioHint') : undefined}>
+              {(fid) => (
+                <Select
+                  id={fid}
+                  value={s.audio ?? ''}
+                  onChange={(v) => edit.mutate({ audio: v as Series['audio'] })}
+                  options={[
+                    { value: '', label: t('show.audioAny') },
+                    { value: 'dub', label: t('show.audioDub') },
+                    { value: 'sub', label: t('show.audioSub') },
+                  ]}
+                />
+              )}
+            </Field>
+          )}
         </div>
         <div className="mt-3 text-sm">
           <span className="text-muted">{t('title.folder')} </span>
@@ -255,7 +289,12 @@ function SeasonBlock({
                 <li key={e.id} className="flex flex-wrap items-center gap-x-4 gap-y-2 px-5 py-2.5 text-sm">
                   <input type="checkbox" checked={e.monitored} onChange={() => toggle.mutate(e)} aria-label={t('show.watchEpisode', { episode: episodeCode(e.season, e.number) })} className="accent-[var(--marquee)]" />
                   <span className="w-16 font-mono text-xs text-muted">{episodeCode(e.season, e.number)}</span>
-                  <span className="min-w-0 flex-1 basis-40 truncate">{e.title || t('show.tba')}</span>
+                  <span className="min-w-0 flex-1 basis-40 truncate">
+                    {e.title || t('show.tba')}
+                    {e.place && (e.place.season !== e.season || e.place.number !== e.number) && (
+                      <span className="ms-2 text-xs text-muted">{t('show.placeIn', { code: episodeCode(e.place.season, e.place.number) })}</span>
+                    )}
+                  </span>
                   <span className="w-28 text-muted">{day(e.airDate)}</span>
                   <span className="ms-auto flex flex-wrap items-center justify-end gap-2">
                     {e.file && <SubtitleMark subs={e.file.subtitles} />}
@@ -346,4 +385,13 @@ function SeasonBlock({
       )}
     </Card>
   )
+}
+
+// orderOptions are the episode orders to offer: TMDB's for the show, and
+// the one chosen even when TMDB's list hasn't come (or has lost it).
+function orderOptions(orders: EpisodeOrder[] | undefined, numbering?: string): EpisodeOrder[] {
+  const list = orders ?? []
+  const chosen = numbering?.startsWith('order:') ? numbering.slice(6) : ''
+  if (!chosen || list.some((o) => o.id === chosen)) return list
+  return [...list, { id: chosen, name: chosen, kind: 1, seasons: 0, episodes: 0 }]
 }

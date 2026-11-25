@@ -343,3 +343,140 @@ func TestImportChosenEpisode(t *testing.T) {
 		t.Fatalf("%s %v", to, err)
 	}
 }
+
+// A batch of an anime numbered straight through: each file goes to the
+// episode its number is, for a show that says its releases are numbered so.
+func TestImportAbsoluteNumbers(t *testing.T) {
+	st := storetest.Open(t)
+	ctx := context.Background()
+	lib := t.TempDir()
+	profiles, _ := st.Profiles(ctx)
+	show, err := st.AddSeries(ctx, store.Series{TMDBID: 9, Title: "Frieren", Year: 2023, ProfileID: profiles[0].ID, RootFolder: lib, Path: filepath.Join(lib, "Frieren (2023)"),
+		Monitored: true, Seasons: []store.Season{{Number: 1, Monitored: true}, {Number: 2, Monitored: true}}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	for season := 1; season <= 2; season++ {
+		for n := 1; n <= 3; n++ {
+			st.UpsertEpisode(ctx, store.Episode{SeriesID: show.ID, Season: season, Number: n, Title: fmt.Sprintf("Ep %d", n), Monitored: true})
+		}
+	}
+	show.Numbering = store.NumberingAbsolute
+	if err := st.UpdateSeries(ctx, show); err != nil {
+		t.Fatal(err)
+	}
+	eps, _ := st.Episodes(ctx, show.ID)
+	var ids []int64
+	for _, e := range eps {
+		if e.Season == 2 && e.Number <= 2 {
+			ids = append(ids, e.ID)
+		}
+	}
+	dl := t.TempDir()
+	os.WriteFile(filepath.Join(dl, "[Group] Frieren - 04 [1080p].mkv"), make([]byte, 4000), 0o644)
+	os.WriteFile(filepath.Join(dl, "[Group] Frieren - 05v2 [1080p].mkv"), make([]byte, 5000), 0o644)
+	// Not one it was grabbed for: left where it is.
+	os.WriteFile(filepath.Join(dl, "[Group] Frieren - 06 [1080p].mkv"), make([]byte, 6000), 0o644)
+	li := &LibraryImporter{Store: st}
+	_, err = li.Import(ctx, store.Download{Name: "[Group] Frieren - 04-05 [1080p]", Kind: "series", TitleID: show.ID, EpisodeIDs: ids}, dl, listFiles(dl))
+	var left *LeftOverError
+	if err != nil && !errors.As(err, &left) {
+		t.Fatal(err)
+	}
+	for n, size := range map[int]int64{1: 4000, 2: 5000} {
+		p := filepath.Join(show.Path, "Season 02", fmt.Sprintf("Frieren (2023) - S02E%02d - Ep %d.mkv", n, n))
+		if info, _ := os.Stat(p); info == nil || info.Size() != size {
+			t.Fatalf("S02E%02d isn't the right file: %v", n, info)
+		}
+	}
+	if fileExists(filepath.Join(show.Path, "Season 02", "Frieren (2023) - S02E03 - Ep 3.mkv")) {
+		t.Fatal("an episode it wasn't grabbed for went in")
+	}
+}
+
+// A show whose releases follow another episode order: a file named by
+// its place in that order goes in under the season and number it aired
+// as.
+func TestImportEpisodeOrder(t *testing.T) {
+	st := storetest.Open(t)
+	ctx := context.Background()
+	lib := t.TempDir()
+	profiles, _ := st.Profiles(ctx)
+	show, err := st.AddSeries(ctx, store.Series{TMDBID: 9, Title: "Frieren", Year: 2023, ProfileID: profiles[0].ID, RootFolder: lib, Path: filepath.Join(lib, "Frieren (2023)"),
+		Monitored: true, Seasons: []store.Season{{Number: 1, Monitored: true}, {Number: 2, Monitored: true}}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	for season := 1; season <= 2; season++ {
+		for n := 1; n <= 3; n++ {
+			st.UpsertEpisode(ctx, store.Episode{SeriesID: show.ID, Season: season, Number: n, Title: fmt.Sprintf("Ep %d-%d", season, n), Monitored: true})
+		}
+	}
+	// The discs hold the six episodes as one season.
+	show.Numbering = store.OrderNumbering("dvd1")
+	if err := st.UpdateSeries(ctx, show); err != nil {
+		t.Fatal(err)
+	}
+	eps, _ := st.Episodes(ctx, show.ID)
+	places := map[int64]store.Place{}
+	var ids []int64
+	for _, e := range eps {
+		places[e.ID] = store.Place{Season: 1, Number: (e.Season-1)*3 + e.Number}
+		if e.Season == 2 {
+			ids = append(ids, e.ID)
+		}
+	}
+	if err := st.SetEpisodePlaces(ctx, show.ID, places); err != nil {
+		t.Fatal(err)
+	}
+	dl := t.TempDir()
+	os.WriteFile(filepath.Join(dl, "Frieren.S01E04.1080p.BluRay-GRP.mkv"), make([]byte, 4000), 0o644)
+	os.WriteFile(filepath.Join(dl, "Frieren.S01E05E06.1080p.BluRay-GRP.mkv"), make([]byte, 5000), 0o644)
+	// Not one it was grabbed for: the first season's copy is left be.
+	os.WriteFile(filepath.Join(dl, "Frieren.S01E02.1080p.BluRay-GRP.mkv"), make([]byte, 2000), 0o644)
+	li := &LibraryImporter{Store: st}
+	if _, err = li.Import(ctx, store.Download{Name: "Frieren.S01.1080p.BluRay-GRP", Kind: "series", TitleID: show.ID, EpisodeIDs: ids}, dl, listFiles(dl)); err != nil {
+		t.Fatal(err)
+	}
+	for name, size := range map[string]int64{"Frieren (2023) - S02E01 - Ep 2-1.mkv": 4000, "Frieren (2023) - S02E02E03 - Ep 2-2.mkv": 5000} {
+		if info, _ := os.Stat(filepath.Join(show.Path, "Season 02", name)); info == nil || info.Size() != size {
+			t.Fatalf("%s isn't the right file: %v", name, info)
+		}
+	}
+	if fileExists(filepath.Join(show.Path, "Season 01")) {
+		t.Fatal("an episode it wasn't grabbed for went in")
+	}
+	got, _ := st.Episodes(ctx, show.ID)
+	for _, e := range got {
+		if has := e.File != nil; has != (e.Season == 2 && e.Number <= 2) {
+			t.Fatalf("S%02dE%02d has a file: %v", e.Season, e.Number, has)
+		}
+	}
+}
+
+// A daily show's file named by the day it aired goes in as the episode
+// that aired then.
+func TestImportByAirDate(t *testing.T) {
+	st := storetest.Open(t)
+	ctx := context.Background()
+	lib := t.TempDir()
+	profiles, _ := st.Profiles(ctx)
+	show, err := st.AddSeries(ctx, store.Series{TMDBID: 7, Title: "The Nightly", Year: 2020, ProfileID: profiles[0].ID, RootFolder: lib, Path: filepath.Join(lib, "The Nightly (2020)"),
+		Monitored: true, Seasons: []store.Season{{Number: 7, Monitored: true}}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	for n := 1; n <= 3; n++ {
+		aired := time.Date(2026, 11, 16+n, 0, 0, 0, 0, time.UTC)
+		st.UpsertEpisode(ctx, store.Episode{SeriesID: show.ID, Season: 7, Number: 30 + n, Title: fmt.Sprintf("Guest %d", n), AirDate: &aired, Monitored: true})
+	}
+	dl := t.TempDir()
+	os.WriteFile(filepath.Join(dl, "the.nightly.2026.11.19.some.guest.1080p.web.h264-grp.mkv"), make([]byte, 4000), 0o644)
+	li := &LibraryImporter{Store: st}
+	if _, err := li.Import(ctx, store.Download{Name: "The.Nightly.2026.11.19.Some.Guest.1080p.WEB.h264-GRP", Kind: "series", TitleID: show.ID}, dl, listFiles(dl)); err != nil {
+		t.Fatal(err)
+	}
+	if !fileExists(filepath.Join(show.Path, "Season 07", "The Nightly (2020) - S07E33 - Guest 3.mkv")) {
+		t.Fatal("the episode that aired that day didn't get the file")
+	}
+}

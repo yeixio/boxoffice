@@ -19,6 +19,9 @@ import { ProblemsCard } from './Problems'
 import { QualityCheckCard } from './QualityCheck'
 import { SubtitleSettingsCard } from './Subtitles'
 import { ListsCard } from './Lists'
+import { TracksCard } from './Tracks'
+import { TitlesFileCard } from './TitlesFile'
+import { IndexerStatsCard } from './IndexerStats'
 import { CleanupCard } from './Cleanup'
 import { TimeZoneCard } from './TimeZone'
 import { PhoneCard } from './Phone'
@@ -70,9 +73,11 @@ const sections: SectionDef[] = [
       { id: 'new-shows', el: <NewShows /> },
       { id: 'add-rules', el: <AddRulesCard />, keys: ['rules.genres', 'rules.language'], terms: ['anime', 'kids', 'override rules', 'Seerr'] },
       { id: 'lists', el: <ListsCard />, keys: ['lists.address', 'lists.ask', 'lists.traktClient'], terms: ['Trakt', 'Plex', 'TMDB', 'watchlist', 'import list', 'Watchlistarr'] },
+      { id: 'titles-file', el: <TitlesFileCard />, keys: ['titlesFile.toAdd', 'titlesFile.search'], terms: ['CSV', 'JSON', 'export', 'import', 'spreadsheet', 'Excel'] },
       { id: 'problems', el: <ProblemsCard /> },
       { id: 'quality-check', el: <QualityCheckCard />, keys: ['title.quality', 'qualityCheck.corrections'], terms: ['ffprobe', 'FFmpeg', 'HDR', 'Dolby Vision', 'MediaInfo', '4K', '1080p'] },
       { id: 'subtitles', el: <SubtitleSettingsCard />, keys: ['subtitles.languages', 'subtitles.preferSdh', 'subtitles.dailyLimit', 'subtitles.apiKey'], terms: ['Bazarr', 'OpenSubtitles', 'Podnapisi', 'SRT', 'SDH', 'captions', 'CC'] },
+      { id: 'tracks', el: <TracksCard />, keys: ['tracks.on', 'tracks.languages'], terms: ['Muxarr', 'striptracks', 'Tdarr', 'remux', 'audio tracks', 'dub', 'MKVToolNix', 'mkvmerge'] },
       { id: 'cleanup', el: <CleanupCard />, keys: ['cleanup.watched', 'cleanup.days', 'cleanup.auto', 'cleanup.leavingSoon'], terms: ['Maintainerr', 'Janitorr', 'delete watched', 'free space', 'disk space', 'purge'] },
       { id: 'recycle', el: <RecycleFolders /> },
     ],
@@ -109,6 +114,7 @@ const sections: SectionDef[] = [
         keys: ['conn.address', 'conn.indexer.apiKey', 'conn.indexer.kind', 'conn.indexer.categories', 'conn.indexer.apiPath', 'conn.indexer.priority', 'conn.auto.perDay', 'conn.indexer.grabs', 'conn.indexer.forSearch', 'conn.indexer.forRss'],
         terms: ['Prowlarr', 'Newznab', 'Torznab', 'NZB', 'API'],
       },
+      { id: 'indexer-stats', el: <IndexerStatsCard />, keys: ['indexerStats.answer', 'indexerStats.grabbed'], terms: ['Prowlarr', 'stats', 'statistics'] },
       { id: 'profiles', el: <Profiles />, keys: ['settings.newProfileTitle', 'settings.qualities', 'settings.goodEnough', 'settings.upgradeUntil', 'settings.sizes', 'settings.prefs'] },
       { id: 'automatic-searches', el: <AutoSearchSettings />, inner: true, terms: ['RSS'] },
       { id: 'data-cap', el: <DataCapSettingsCard />, inner: true },

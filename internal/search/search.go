@@ -33,6 +33,12 @@ type Service struct {
 	mu    sync.Mutex
 	found map[string]cached // releases shown in a search, by key, to grab by hand
 	rss   rssState
+	// absolute is shows' episodes numbered straight through (anime).
+	absolute map[int64]absoluteCache
+	// places is the places shows' chosen episode orders give out.
+	places map[int64]placesCache
+	// shows is shows' episodes, for reading releases named by date.
+	shows map[int64]episodesCache
 	// regrabMu keeps two replacements from both taking the day's last room.
 	regrabMu sync.Mutex
 }
@@ -422,8 +428,14 @@ func (s *Service) EpisodeFor(ctx context.Context, id int64, ask Ask) (Results, e
 	if err := s.Store.CheckUnlocked(ctx, "series", t.ID); err != nil {
 		return Results{}, err
 	}
+	// Asked for by its place in the episode order the show's releases
+	// follow, when they follow another than the one it aired in.
+	in := s.inOrder(ctx, t, []store.Episode{e})[0]
+	if in.Season < 0 {
+		return Results{}, errors.New("the episode order chosen for the show doesn't list this episode, and gives its number to another")
+	}
 	rs, notes, n, err := s.ask(ctx, func(ix store.Indexer) Query {
-		q := Query{Type: "tvsearch", Season: e.Season, Episode: e.Number, Cats: cats(ix, 5000, 5999, 5000)}
+		q := Query{Type: "tvsearch", Season: in.Season, Episode: in.Number, Cats: cats(ix, 5000, 5999, 5000)}
 		if t.TVDBID > 0 {
 			q.TVDBID = t.TVDBID
 		} else {
@@ -465,27 +477,82 @@ func (s *Service) EpisodeFor(ctx context.Context, id int64, ask Ask) (Results, e
 	same := s.replaceSameQuality(ctx)
 	var fixes *fixCheck
 	if !isSecond(ctx) {
-		fixes = s.fixes(ctx, e.File, e.Season, e.Number)
+		fixes = s.fixes(ctx, e.File, in.Season, in.Number)
 	}
 	out := Results{Errors: notes, Searched: n}
-	for _, r := range rs {
-		ep := e
-		fix := fixes.of(r)
-		if fix {
-			ep.File = nil // judged as if it weren't there: the fix takes its place
+	seen := map[string]bool{}
+	judge := func(rs []Release, byID bool) {
+		for _, r := range rs {
+			if seen[key(r)] {
+				continue
+			}
+			seen[key(r)] = true
+			ep := e
+			fix := fixes.of(r)
+			if fix {
+				ep.File = nil // judged as if it weren't there: the fix takes its place
+			}
+			c := s.judgeEpisodes(ctx, r, t, p, []store.Episode{ep}, blocked, false, byID)
+			if fix {
+				markFix(&c)
+			}
+			ask.judgeLanguage(&c)
+			ask.judgeReplacement(&c, have, same)
+			out.Releases = append(out.Releases, c)
 		}
-		c := s.judgeEpisodes(ctx, r, t, p, []store.Episode{ep}, blocked, false, true)
-		if fix {
-			markFix(&c)
+	}
+	judge(rs, true)
+	if s.daily(ctx, e) {
+		// A daily show's releases are named by the day they aired, and
+		// indexers file them that way: ask by the day too.
+		more, notes, _, err := s.ask(ctx, func(ix store.Indexer) Query {
+			q := Query{Type: "tvsearch", Season: e.AirDate.UTC().Year(), Day: e.AirDate.UTC().Format("01/02"), Cats: cats(ix, 5000, 5999, 5000)}
+			if t.TVDBID > 0 {
+				q.TVDBID = t.TVDBID
+			} else {
+				q.Text = searchText(t.Title)
+			}
+			return q
+		})
+		if err != nil {
+			out.Errors = append(out.Errors, err.Error())
+		} else {
+			out.Errors = append(out.Errors, notes...)
+			judge(more, true)
 		}
-		ask.judgeLanguage(&c)
-		ask.judgeReplacement(&c, have, same)
-		out.Releases = append(out.Releases, c)
+	}
+	if n := s.absoluteNumber(ctx, t, e); n > 0 {
+		// Anime is mostly posted as "Show - 137", which a search by season
+		// and episode misses: ask for it by name and number too.
+		more, notes, _, err := s.ask(ctx, func(ix store.Indexer) Query {
+			return Query{Type: "search", Text: fmt.Sprintf("%s %02d", searchText(t.Title), n), Cats: cats(ix, 5000, 5999, 5000)}
+		})
+		if err != nil {
+			out.Errors = append(out.Errors, err.Error())
+		} else {
+			out.Errors = append(out.Errors, notes...)
+			judge(more, false)
+		}
 	}
 	s.rank(ctx, &out)
 	s.markSearched(ctx, "episode", e.ID, out)
 	s.logResults(fmt.Sprintf("%s S%02dE%02d", t.Title, e.Season, e.Number), out)
 	return out, nil
+}
+
+// absoluteNumber is an episode's number counted straight through the
+// show, when the show's releases are numbered that way; 0 otherwise, and
+// for specials.
+func (s *Service) absoluteNumber(ctx context.Context, t store.Series, e store.Episode) int {
+	if t.Numbering != store.NumberingAbsolute || e.Season == 0 {
+		return 0
+	}
+	for n, have := range s.absoluteNumbers(ctx, t.ID) {
+		if have.ID == e.ID {
+			return n
+		}
+	}
+	return 0
 }
 
 // markSearched notes the search and whether it found something to take,

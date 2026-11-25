@@ -183,12 +183,13 @@ func (s *Service) takeFixes(ctx context.Context, releases []Release) ([]string, 
 					}
 					episodes[t.ID] = list
 				}
-				i := slices.IndexFunc(list, func(e store.Episode) bool { return e.Season == season && e.Number == eps[0] })
+				// Found by its number as the show's releases give it.
+				i := slices.IndexFunc(store.InOrder(list), func(e store.Episode) bool { return e.Season == season && e.Number == eps[0] })
 				if i < 0 || list[i].File == nil {
 					break
 				}
 				e := list[i]
-				if !s.fixes(ctx, e.File, e.Season, e.Number).of(r) {
+				if !s.fixes(ctx, e.File, season, eps[0]).of(r) {
 					break
 				}
 				blocked, err := s.blocked(ctx, "series", t.ID)
