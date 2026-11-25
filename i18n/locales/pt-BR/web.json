@@ -3116,5 +3116,28 @@
     "notMoved": "Não movidos: {{count}}",
     "moveAll": "Mover títulos",
     "moveTo": "Mover para…"
+  },
+  "titlesFile": {
+    "title": "Títulos em arquivo",
+    "sub": "Salve a lista do que o Box Office mantém (filmes, séries, artistas e autores, e como cada um é acompanhado) em um arquivo que você pode ler, guardar ou compartilhar. Carregar um arquivo adiciona os títulos que ainda não estão aqui. Nunca altera nem remove um título que já está aqui, e nunca toca em um arquivo no disco.",
+    "saveJson": "Salvar como JSON",
+    "saveCsv": "Salvar como CSV",
+    "load": "Carregar um arquivo",
+    "loadHint": "Carregue um arquivo salvo aqui ou sua própria planilha salva como CSV. A primeira linha dá nome às colunas: kind (movie, show, artist, author), title, e um identificador: tmdb_id / imdb_id (Filmes), tmdb_id / tvdb_id (Séries), musicbrainz_id (Artistas), openlibrary_key (Autores).",
+    "lookTitle": "Carregar {{name}}",
+    "inFile": "Títulos no arquivo",
+    "toAdd": "A adicionar",
+    "have": "Já estão aqui, ficam como estão",
+    "cant": "Não podem ser adicionados",
+    "nothing": "Tudo o que está no arquivo já está aqui.",
+    "otherProfile": "{{n}} usam um perfil de qualidade que não existe aqui. Eles recebem o padrão, ou o que suas regras para novos títulos escolherem.",
+    "otherFolder": "{{n}} estão em uma pasta raiz que não existe aqui. Eles vão para a pasta padrão, ou a que suas regras para novos títulos escolherem.",
+    "more": "e mais {{n}}",
+    "search": "Buscar cada título depois de adicionado",
+    "searchHint": "Se ficar desligado, as buscas regulares por títulos ausentes os encontram no ritmo de sempre.",
+    "add": "Adicionar estes títulos",
+    "queued": "Adicionando {{n}} títulos em segundo plano, um de cada vez. Acompanhe em <link>Atividade</link>.",
+    "artists": "Artistas",
+    "authors": "Autores"
   }
 }

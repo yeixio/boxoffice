@@ -3116,5 +3116,28 @@
     "notMoved": "Nu s-au putut muta: {{count}}",
     "moveAll": "Mută titluri",
     "moveTo": "Mută în…"
+  },
+  "titlesFile": {
+    "title": "Titluri ca fișier",
+    "sub": "Salvează lista a ceea ce ține Box Office (filme, seriale, artiști și autori și cum este urmărit fiecare) într-un fișier pe care îl poți citi, păstra sau partaja. Încărcarea unui fișier adaugă titlurile care nu sunt încă aici. Nu modifică și nu elimină niciodată un titlu care este deja aici și nu atinge niciodată un fișier de pe disc.",
+    "saveJson": "Salvează ca JSON",
+    "saveCsv": "Salvează ca CSV",
+    "load": "Încarcă un fișier",
+    "loadHint": "Încarcă un fișier salvat aici sau propria foaie de calcul salvată ca CSV. Primul rând denumește coloanele: kind (movie, show, artist, author), title, și un identificator: tmdb_id / imdb_id (Filme), tmdb_id / tvdb_id (Seriale), musicbrainz_id (Artiști), openlibrary_key (Autori).",
+    "lookTitle": "Încarcă {{name}}",
+    "inFile": "Titluri în fișier",
+    "toAdd": "De adăugat",
+    "have": "Sunt deja aici, rămân neschimbate",
+    "cant": "Nu pot fi adăugate",
+    "nothing": "Tot ce este în fișier este deja aici.",
+    "otherProfile": "{{n}} folosesc un profil de calitate care nu există aici. Primesc profilul implicit sau pe cel ales de regulile tale pentru titluri noi.",
+    "otherFolder": "{{n}} sunt într-un dosar rădăcină care nu există aici. Ajung în dosarul implicit sau în cel ales de regulile tale pentru titluri noi.",
+    "more": "și încă {{n}}",
+    "search": "Caută fiecare titlu după ce este adăugat",
+    "searchHint": "Dacă rămâne oprit, căutările obișnuite după titluri lipsă le găsesc în ritmul lor normal.",
+    "add": "Adaugă aceste titluri",
+    "queued": "Se adaugă {{n}} titluri în fundal, unul câte unul. Urmărește în <link>Activitate</link>.",
+    "artists": "Artiști",
+    "authors": "Autori"
   }
 }

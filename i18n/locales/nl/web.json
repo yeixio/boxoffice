@@ -2993,5 +2993,28 @@
     "notMoved": "Niet verplaatst: {{count}}",
     "moveAll": "Titels verplaatsen",
     "moveTo": "Verplaatsen naar…"
+  },
+  "titlesFile": {
+    "title": "Titels als bestand",
+    "sub": "Sla de lijst op van wat Box Office bijhoudt (films, series, artiesten en auteurs, en hoe elk wordt gevolgd) als een bestand dat je kunt lezen, bewaren of delen. Een bestand laden voegt de titels toe die hier nog niet staan. Het wijzigt of verwijdert nooit een titel die er al is, en raakt nooit een bestand op schijf aan.",
+    "saveJson": "Opslaan als JSON",
+    "saveCsv": "Opslaan als CSV",
+    "load": "Bestand laden",
+    "loadHint": "Laad een bestand dat hier is opgeslagen, of je eigen spreadsheet opgeslagen als CSV. De eerste rij benoemt de kolommen: kind (movie, show, artist, author), title, en een id: tmdb_id / imdb_id (Films), tmdb_id / tvdb_id (Series), musicbrainz_id (Artiesten), openlibrary_key (Auteurs).",
+    "lookTitle": "{{name}} laden",
+    "inFile": "Titels in het bestand",
+    "toAdd": "Toe te voegen",
+    "have": "Staan er al, blijven zoals ze zijn",
+    "cant": "Kunnen niet worden toegevoegd",
+    "nothing": "Alles in het bestand staat hier al.",
+    "otherProfile": "{{n}} gebruiken een kwaliteitsprofiel dat hier niet bestaat. Ze krijgen het standaardprofiel, of het profiel dat je regels voor nieuwe titels kiezen.",
+    "otherFolder": "{{n}} staan in een hoofdmap die hier niet bestaat. Ze komen in de standaardmap, of de map die je regels voor nieuwe titels kiezen.",
+    "more": "en nog {{n}}",
+    "search": "Zoek naar elke titel zodra die is toegevoegd",
+    "searchHint": "Staat dit uit, dan vinden de gewone zoekacties naar ontbrekende titels ze in hun normale tempo.",
+    "add": "Deze titels toevoegen",
+    "queued": "{{n}} titels worden op de achtergrond één voor één toegevoegd. Volg het in <link>Activiteit</link>.",
+    "artists": "Artiesten",
+    "authors": "Auteurs"
   }
 }

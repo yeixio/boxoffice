@@ -3116,5 +3116,28 @@
     "notMoved": "Non déplacés : {{count}}",
     "moveAll": "Déplacer des titres",
     "moveTo": "Déplacer vers…"
+  },
+  "titlesFile": {
+    "title": "Titres dans un fichier",
+    "sub": "Enregistrez la liste de ce que Box Office gère (films, séries, artistes et auteurs, et la façon dont chacun est suivi) dans un fichier que vous pouvez lire, conserver ou partager. Charger un fichier ajoute les titres qui ne sont pas encore ici. Cela ne modifie ni ne retire jamais un titre déjà présent, et ne touche jamais à un fichier sur le disque.",
+    "saveJson": "Enregistrer en JSON",
+    "saveCsv": "Enregistrer en CSV",
+    "load": "Charger un fichier",
+    "loadHint": "Chargez un fichier enregistré ici, ou votre propre feuille de calcul enregistrée en CSV. Sa première ligne nomme les colonnes: kind (movie, show, artist, author), title, et un identifiant: tmdb_id / imdb_id (Films), tmdb_id / tvdb_id (Séries), musicbrainz_id (Artistes), openlibrary_key (Auteurs).",
+    "lookTitle": "Charger {{name}}",
+    "inFile": "Titres dans le fichier",
+    "toAdd": "À ajouter",
+    "have": "Déjà ici, laissés tels quels",
+    "cant": "Impossibles à ajouter",
+    "nothing": "Tout ce que contient le fichier est déjà ici.",
+    "otherProfile": "{{n}} utilisent un profil de qualité qui n'existe pas ici. Ils reçoivent celui par défaut, ou celui que choisissent vos règles pour les nouveaux titres.",
+    "otherFolder": "{{n}} sont dans un dossier racine qui n'existe pas ici. Ils vont dans le dossier par défaut, ou celui que choisissent vos règles pour les nouveaux titres.",
+    "more": "et {{n}} de plus",
+    "search": "Rechercher chaque titre une fois ajouté",
+    "searchHint": "Si c'est désactivé, les recherches habituelles de titres manquants les trouvent à leur rythme normal.",
+    "add": "Ajouter ces titres",
+    "queued": "Ajout de {{n}} titres en arrière-plan, un par un. Suivez-le dans <link>Activité</link>.",
+    "artists": "Artistes",
+    "authors": "Auteurs"
   }
 }

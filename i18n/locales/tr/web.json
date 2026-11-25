@@ -2993,5 +2993,28 @@
     "notMoved": "Taşınamayan: {{count}}",
     "moveAll": "Başlıkları taşı",
     "moveTo": "Taşı…"
+  },
+  "titlesFile": {
+    "title": "Dosya olarak başlıklar",
+    "sub": "Box Office'in tuttuğu listeyi (filmler, diziler, sanatçılar ve yazarlar ile her birinin nasıl izlendiği) okuyabileceğiniz, saklayabileceğiniz veya paylaşabileceğiniz bir dosya olarak kaydedin. Bir dosya yüklemek, burada henüz olmayan başlıkları ekler. Zaten burada olan bir başlığı asla değiştirmez veya kaldırmaz ve diskteki hiçbir dosyaya dokunmaz.",
+    "saveJson": "JSON olarak kaydet",
+    "saveCsv": "CSV olarak kaydet",
+    "load": "Dosya yükle",
+    "loadHint": "Burada kaydedilmiş bir dosyayı veya CSV olarak kaydettiğiniz kendi tablonuzu yükleyin. İlk satırı sütunları adlandırır: kind (movie, show, artist, author), title, ve bir kimlik: tmdb_id / imdb_id (Filmler), tmdb_id / tvdb_id (Diziler), musicbrainz_id (Sanatçılar), openlibrary_key (Yazarlar).",
+    "lookTitle": "{{name}} dosyasını yükle",
+    "inFile": "Dosyadaki başlıklar",
+    "toAdd": "Eklenecek",
+    "have": "Zaten burada, olduğu gibi kalır",
+    "cant": "Eklenemiyor",
+    "nothing": "Dosyadaki her şey zaten burada.",
+    "otherProfile": "{{n}} tanesi burada olmayan bir kalite profili kullanıyor. Varsayılanı veya yeni başlık kurallarınızın seçtiğini alırlar.",
+    "otherFolder": "{{n}} tanesi burada olmayan bir kök klasörde. Varsayılan klasöre veya yeni başlık kurallarınızın seçtiği klasöre giderler.",
+    "more": "ve {{n}} tane daha",
+    "search": "Eklendikten sonra her başlığı ara",
+    "searchHint": "Kapalıyken, eksik başlıklar için yapılan olağan aramalar onları her zamanki hızında bulur.",
+    "add": "Bu başlıkları ekle",
+    "queued": "{{n}} başlık arka planda birer birer ekleniyor. <link>Etkinlik</link> bölümünden izleyin.",
+    "artists": "Sanatçılar",
+    "authors": "Yazarlar"
   }
 }

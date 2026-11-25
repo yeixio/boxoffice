@@ -2870,5 +2870,28 @@
     "notMoved": "Tidak dapat dialihkan: {{count}}",
     "moveAll": "Alihkan tajuk",
     "moveTo": "Alihkan ke…"
+  },
+  "titlesFile": {
+    "title": "Tajuk sebagai fail",
+    "sub": "Simpan senarai apa yang disimpan oleh Box Office (filem, rancangan, artis dan pengarang, serta cara setiap satu dipantau) sebagai fail yang boleh anda baca, simpan atau kongsi. Memuatkan fail menambah tajuk yang belum ada di sini. Ia tidak sekali-kali mengubah atau membuang tajuk yang sudah ada, dan tidak sekali-kali menyentuh fail pada cakera.",
+    "saveJson": "Simpan sebagai JSON",
+    "saveCsv": "Simpan sebagai CSV",
+    "load": "Muatkan fail",
+    "loadHint": "Muatkan fail yang disimpan di sini, atau hamparan anda sendiri yang disimpan sebagai CSV. Baris pertamanya menamakan lajur: kind (movie, show, artist, author), title, dan satu id: tmdb_id / imdb_id (Filem), tmdb_id / tvdb_id (Rancangan), musicbrainz_id (Artis), openlibrary_key (Pengarang).",
+    "lookTitle": "Muatkan {{name}}",
+    "inFile": "Tajuk dalam fail",
+    "toAdd": "Untuk ditambah",
+    "have": "Sudah ada, dibiarkan seperti sedia ada",
+    "cant": "Tidak boleh ditambah",
+    "nothing": "Semua dalam fail sudah ada di sini.",
+    "otherProfile": "{{n}} menggunakan profil kualiti yang tiada di sini. Ia mendapat profil lalai, atau yang dipilih oleh peraturan anda untuk tajuk baharu.",
+    "otherFolder": "{{n}} berada dalam folder akar yang tiada di sini. Ia masuk ke folder lalai, atau yang dipilih oleh peraturan anda untuk tajuk baharu.",
+    "more": "dan {{n}} lagi",
+    "search": "Cari setiap tajuk selepas ditambah",
+    "searchHint": "Jika dimatikan, carian biasa untuk tajuk yang tiada akan menemuinya pada kadar biasa.",
+    "add": "Tambah tajuk ini",
+    "queued": "Menambah {{n}} tajuk di latar belakang, satu demi satu. Ikuti di <link>Aktiviti</link>.",
+    "artists": "Artis",
+    "authors": "Pengarang"
   }
 }

@@ -2870,5 +2870,28 @@
     "notMoved": "Không chuyển được: {{count}}",
     "moveAll": "Chuyển tựa",
     "moveTo": "Chuyển tới…"
+  },
+  "titlesFile": {
+    "title": "Danh sách tựa dưới dạng tệp",
+    "sub": "Lưu danh sách những gì Box Office đang giữ (phim, chương trình, nghệ sĩ và tác giả, cùng cách theo dõi từng mục) thành một tệp bạn có thể đọc, giữ hoặc chia sẻ. Tải một tệp lên sẽ thêm các tựa chưa có ở đây. Việc này không bao giờ thay đổi hay gỡ một tựa đã có, và không bao giờ đụng đến tệp trên đĩa.",
+    "saveJson": "Lưu dạng JSON",
+    "saveCsv": "Lưu dạng CSV",
+    "load": "Tải tệp lên",
+    "loadHint": "Tải lên một tệp đã lưu ở đây, hoặc bảng tính của riêng bạn được lưu dạng CSV. Hàng đầu tiên đặt tên các cột: kind (movie, show, artist, author), title, và một mã định danh: tmdb_id / imdb_id (Phim), tmdb_id / tvdb_id (Chương trình), musicbrainz_id (Nghệ sĩ), openlibrary_key (Tác giả).",
+    "lookTitle": "Tải {{name}}",
+    "inFile": "Số tựa trong tệp",
+    "toAdd": "Sẽ thêm",
+    "have": "Đã có, giữ nguyên",
+    "cant": "Không thể thêm",
+    "nothing": "Mọi thứ trong tệp đều đã có ở đây.",
+    "otherProfile": "{{n}} mục dùng hồ sơ chất lượng không có ở đây. Chúng sẽ nhận hồ sơ mặc định, hoặc hồ sơ mà quy tắc cho tựa mới của bạn chọn.",
+    "otherFolder": "{{n}} mục nằm trong thư mục gốc không có ở đây. Chúng sẽ vào thư mục mặc định, hoặc thư mục mà quy tắc cho tựa mới của bạn chọn.",
+    "more": "và {{n}} mục nữa",
+    "search": "Tìm từng tựa sau khi thêm",
+    "searchHint": "Nếu tắt, các lượt tìm thường kỳ cho tựa còn thiếu sẽ tìm thấy chúng theo nhịp thông thường.",
+    "add": "Thêm các tựa này",
+    "queued": "Đang thêm {{n}} tựa trong nền, từng tựa một. Theo dõi tại <link>Hoạt động</link>.",
+    "artists": "Nghệ sĩ",
+    "authors": "Tác giả"
   }
 }

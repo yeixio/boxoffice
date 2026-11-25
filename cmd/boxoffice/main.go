@@ -50,6 +50,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/search"
 	"github.com/yeixio/boxoffice/internal/store"
 	"github.com/yeixio/boxoffice/internal/subtitles"
+	"github.com/yeixio/boxoffice/internal/titlelist"
 	"github.com/yeixio/boxoffice/internal/version"
 	"github.com/yeixio/boxoffice/internal/wikidata"
 	"github.com/yeixio/boxoffice/internal/zone"
@@ -282,6 +283,9 @@ func run() error {
 	// Lists kept elsewhere (TMDB, Trakt, Plex) are read every few hours.
 	follower := &lists.Service{Store: db, Catalog: cat, Log: log, UserAgent: "BoxOffice/" + version.Version}
 	srv.Lists = follower
+	// A list of titles loaded from a file is added one title at a time.
+	srv.Titles = &titlelist.Service{Store: db, Catalog: cat, Music: tunes, Books: shelf, Jobs: runner}
+	srv.Titles.Register()
 	srv.Portal.Subtitles = subs.Reported
 	downloads.Imported = func(ctx context.Context, d store.Download) {
 		switch d.Kind {

@@ -2993,5 +2993,28 @@
     "notMoved": "Ikke flyttet: {{count}}",
     "moveAll": "Flytt titler",
     "moveTo": "Flytt til…"
+  },
+  "titlesFile": {
+    "title": "Titler som fil",
+    "sub": "Lagre listen over det Box Office holder orden på (filmer, serier, artister og forfattere, og hvordan hver følges) som en fil du kan lese, ta vare på eller dele. Når du laster inn en fil, legges titlene som ikke er her ennå, til. Det endrer eller fjerner aldri en tittel som allerede er her, og rører aldri en fil på disken.",
+    "saveJson": "Lagre som JSON",
+    "saveCsv": "Lagre som CSV",
+    "load": "Last inn en fil",
+    "loadHint": "Last inn en fil som er lagret her, eller ditt eget regneark lagret som CSV. Første rad gir kolonnene navn: kind (movie, show, artist, author), title, og en ID: tmdb_id / imdb_id (Filmer), tmdb_id / tvdb_id (Serier), musicbrainz_id (Artister), openlibrary_key (Forfattere).",
+    "lookTitle": "Last inn {{name}}",
+    "inFile": "Titler i filen",
+    "toAdd": "Legges til",
+    "have": "Er her allerede, blir som de er",
+    "cant": "Kan ikke legges til",
+    "nothing": "Alt i filen er her allerede.",
+    "otherProfile": "{{n}} bruker en kvalitetsprofil som ikke finnes her. De får standardprofilen, eller den reglene dine for nye titler velger.",
+    "otherFolder": "{{n}} ligger i en rotmappe som ikke finnes her. De legges i standardmappen, eller den reglene dine for nye titler velger.",
+    "more": "og {{n}} til",
+    "search": "Søk etter hver tittel når den er lagt til",
+    "searchHint": "Er dette av, finner de vanlige søkene etter manglende titler dem i sitt vanlige tempo.",
+    "add": "Legg til disse titlene",
+    "queued": "Legger til {{n}} titler i bakgrunnen, én om gangen. Følg med i <link>Aktivitet</link>.",
+    "artists": "Artister",
+    "authors": "Forfattere"
   }
 }
