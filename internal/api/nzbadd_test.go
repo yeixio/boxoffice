@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"compress/gzip"
 	"context"
+	"crypto/rand"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -122,5 +123,75 @@ func TestAddNZBByHand(t *testing.T) {
 	}
 	if code := call(t, hs, "POST", "/api/v1/downloads/nzb/add", fmt.Sprintf(`{"token":%q,"for":"/movies/999/releases"}`, c.Token), nil); code != 404 {
 		t.Fatalf("for a movie that isn't there %d", code)
+	}
+}
+
+// An indexer's API key goes only to the indexer's own address: the same
+// scheme, host and port. An http link to an https indexer is fetched over
+// https, and a link that already carries a key is left alone.
+func TestIndexerKeyOnlyToItsAddress(t *testing.T) {
+	for _, c := range []struct{ link, indexer, want string }{
+		{"https://nzb.example/getnzb/1.nzb", "https://nzb.example/api", "https://nzb.example/getnzb/1.nzb?apikey=k"},
+		{"https://NZB.example:443/getnzb/1.nzb", "https://nzb.example", "https://NZB.example:443/getnzb/1.nzb?apikey=k"},
+		{"http://nzb.example/getnzb/1.nzb", "https://nzb.example", "https://nzb.example/getnzb/1.nzb?apikey=k"},
+		{"http://nzb.example:8080/getnzb/1.nzb", "https://nzb.example", "http://nzb.example:8080/getnzb/1.nzb"},
+		{"http://nzb.example/getnzb/1.nzb", "https://nzb.example:8443", "http://nzb.example/getnzb/1.nzb"},
+		{"https://nzb.example:9999/getnzb/1.nzb", "https://nzb.example", "https://nzb.example:9999/getnzb/1.nzb"},
+		{"https://nzb.example/getnzb/1.nzb", "http://nzb.example", "https://nzb.example/getnzb/1.nzb"},
+		{"http://nzb.example:5075/getnzb/1.nzb", "http://nzb.example:5075/", "http://nzb.example:5075/getnzb/1.nzb?apikey=k"},
+		{"https://other.example/getnzb/1.nzb", "https://nzb.example", "https://other.example/getnzb/1.nzb"},
+		{"https://nzb.example/getnzb/1.nzb?apikey=mine", "https://nzb.example", "https://nzb.example/getnzb/1.nzb?apikey=mine"},
+	} {
+		u, err := url.Parse(c.link)
+		if err != nil {
+			t.Fatal(err)
+		}
+		withIndexerKey(u, c.indexer, "k")
+		if u.String() != c.want {
+			t.Errorf("%s for %s: %s, want %s", c.link, c.indexer, u, c.want)
+		}
+	}
+}
+
+// Checked NZBs wait packed, and the oldest go once there are too many or
+// they take too much room.
+func TestNZBHoldIsCapped(t *testing.T) {
+	var h nzbHold
+	body := bytes.Repeat([]byte(`<segment bytes="716800" number="1">abc@example</segment>`), 2000)
+	first := h.put(body, "first")
+	got, ok := h.get(first)
+	if !ok || !bytes.Equal(got.data, body) || got.name != "first" {
+		t.Fatalf("held %v %d bytes", ok, len(got.data))
+	}
+	if len(got.packed) >= len(body)/5 {
+		t.Fatalf("kept %d bytes of %d", len(got.packed), len(body))
+	}
+	var last string
+	for i := 0; i < maxHeld; i++ {
+		last = h.put(body, "more")
+	}
+	if len(h.held) != maxHeld {
+		t.Fatalf("%d held", len(h.held))
+	}
+	if _, ok := h.get(first); ok {
+		t.Fatal("the oldest wasn't dropped")
+	}
+	if _, ok := h.get(last); !ok {
+		t.Fatal("the newest was dropped")
+	}
+	// Too much room: random bytes don't pack, so two of these are over.
+	big := make([]byte, maxHeldBytes/2+1)
+	rand.Read(big)
+	a := h.put(big, "a")
+	b := h.put(big, "b")
+	if _, ok := h.get(a); ok {
+		t.Fatal("over the size cap, the older stayed")
+	}
+	if _, ok := h.get(b); !ok || len(h.held) != 1 {
+		t.Fatalf("after the big ones: %v, %d held", ok, len(h.held))
+	}
+	h.drop(b)
+	if len(h.held) != 0 {
+		t.Fatal("not dropped")
 	}
 }

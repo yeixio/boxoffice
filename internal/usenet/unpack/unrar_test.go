@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+	"time"
 )
 
 func needUnrar(t *testing.T) {
@@ -89,5 +90,27 @@ func TestUnrarDirect(t *testing.T) {
 	}
 	if got := sum(t, filepath.Join(dir, "movie.mkv")); got != movieMD5 {
 		t.Fatalf("md5 %s", got)
+	}
+}
+
+// unrar is given the password on its standard input, never as an
+// argument: the right one opens the archive, a wrong one or none is
+// ErrPassword, and none of them waits for someone to type.
+func TestUnrarPassword(t *testing.T) {
+	needUnrar(t)
+	dir := copyTestdata(t, "locked.rar")
+	a := Archive{Path: filepath.Join(dir, "locked.rar"), Kind: "rar"}
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+	for _, pw := range []string{"", "wrong"} {
+		if _, err := extractUnrar(ctx, unrarPath(), a, dir, pw); !errors.Is(err, ErrPassword) {
+			t.Fatalf("password %q: %v", pw, err)
+		}
+	}
+	if _, err := extractUnrar(ctx, unrarPath(), a, dir, "secret"); err != nil {
+		t.Fatal(err)
+	}
+	if b, _ := os.ReadFile(filepath.Join(dir, "readme.txt")); string(b) != "hello from box office\n" {
+		t.Fatalf("got %q", b)
 	}
 }

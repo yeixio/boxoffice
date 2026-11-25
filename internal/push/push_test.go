@@ -96,10 +96,13 @@ func TestSendIsSealedAndSigned(t *testing.T) {
 		t.Errorf("claims %+v", claims)
 	}
 	point := un(t, k)
-	key := ecdsa.PublicKey{Curve: elliptic.P256(), X: new(big.Int).SetBytes(point[1:33]), Y: new(big.Int).SetBytes(point[33:])}
+	key, err := ecdsa.ParseUncompressedPublicKey(elliptic.P256(), point)
+	if err != nil {
+		t.Fatal(err)
+	}
 	sig := un(t, parts[2])
 	sum := sha256.Sum256([]byte(parts[0] + "." + parts[1]))
-	if len(sig) != 64 || !ecdsa.Verify(&key, sum[:], new(big.Int).SetBytes(sig[:32]), new(big.Int).SetBytes(sig[32:])) {
+	if len(sig) != 64 || !ecdsa.Verify(key, sum[:], new(big.Int).SetBytes(sig[:32]), new(big.Int).SetBytes(sig[32:])) {
 		t.Error("the signature doesn't match the key")
 	}
 	// The key stays the same, or every device would be cut off.

@@ -97,7 +97,7 @@ func TestImportAlbum(t *testing.T) {
 }
 
 func TestFindAlbums(t *testing.T) {
-	st, a, albums := albumFixture(t)
+	st, a, _ := albumFixture(t)
 	ctx := context.Background()
 	mk := func(dir string, files ...string) {
 		os.MkdirAll(filepath.Join(a.Path, dir), 0o755)
@@ -113,7 +113,7 @@ func TestFindAlbums(t *testing.T) {
 	if n, err := FindAlbums(ctx, st, a); err != nil || n != 3 {
 		t.Fatalf("found %d %v", n, err)
 	}
-	albums, _ = st.Albums(ctx, a.ID)
+	albums, _ := st.Albums(ctx, a.ID)
 	for _, c := range []struct {
 		title, kind, dir string
 	}{

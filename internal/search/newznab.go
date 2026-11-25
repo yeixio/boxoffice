@@ -302,11 +302,6 @@ func (c *Client) Query(ctx context.Context, ix store.Indexer, q Query) ([]Releas
 	return parseFeed(body, ix)
 }
 
-func parseRSS(body []byte, ix store.Indexer) ([]Release, error) {
-	rs, _, err := parseFeed(body, ix)
-	return rs, err
-}
-
 func parseFeed(body []byte, ix store.Indexer) ([]Release, Limits, error) {
 	var feed rss
 	dec := xml.NewDecoder(strings.NewReader(string(body)))

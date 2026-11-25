@@ -34,20 +34,34 @@ import (
 // maxNZB is the biggest NZB taken: a big season pack's is a few MB.
 const maxNZB = 64 << 20
 
-// heldNZB is a checked NZB waiting to be added.
+// heldNZB is a checked NZB waiting to be added. It's kept gzipped: an NZB
+// is XML that packs to about a tenth of its size.
 type heldNZB struct {
-	data    []byte
+	data    []byte // as it was sent; filled by get
+	packed  []byte
 	name    string
+	added   time.Time
 	expires time.Time
 }
 
-// nzbHold keeps checked NZBs for an hour, at most a few dozen.
+// The hold keeps checked NZBs for an hour: at most maxHeld of them and
+// maxHeldBytes in all, packed, so a pile of NZBs dropped and left can't
+// fill a small server's memory. The oldest go first.
+const (
+	maxHeld      = 40
+	maxHeldBytes = 48 << 20
+)
+
 type nzbHold struct {
 	mu   sync.Mutex
 	held map[string]heldNZB
 }
 
 func (h *nzbHold) put(data []byte, name string) string {
+	var packed bytes.Buffer
+	zw := gzip.NewWriter(&packed)
+	zw.Write(data)
+	zw.Close()
 	b := make([]byte, 12)
 	rand.Read(b)
 	token := hex.EncodeToString(b)
@@ -57,20 +71,40 @@ func (h *nzbHold) put(data []byte, name string) string {
 		h.held = map[string]heldNZB{}
 	}
 	now := time.Now()
+	total := packed.Len()
 	for k, v := range h.held {
-		if now.After(v.expires) || len(h.held) > 40 {
+		if now.After(v.expires) {
 			delete(h.held, k)
+			continue
 		}
+		total += len(v.packed)
 	}
-	h.held[token] = heldNZB{data: data, name: name, expires: now.Add(time.Hour)}
+	for len(h.held) > 0 && (len(h.held) >= maxHeld || total > maxHeldBytes) {
+		oldest := ""
+		for k, v := range h.held {
+			if oldest == "" || v.added.Before(h.held[oldest].added) {
+				oldest = k
+			}
+		}
+		total -= len(h.held[oldest].packed)
+		delete(h.held, oldest)
+	}
+	h.held[token] = heldNZB{packed: packed.Bytes(), name: name, added: now, expires: now.Add(time.Hour)}
 	return token
 }
 
 func (h *nzbHold) get(token string) (heldNZB, bool) {
 	h.mu.Lock()
-	defer h.mu.Unlock()
 	v, ok := h.held[token]
+	h.mu.Unlock()
 	if !ok || time.Now().After(v.expires) {
+		return heldNZB{}, false
+	}
+	zr, err := gzip.NewReader(bytes.NewReader(v.packed))
+	if err != nil {
+		return heldNZB{}, false
+	}
+	if v.data, err = io.ReadAll(zr); err != nil {
 		return heldNZB{}, false
 	}
 	return v, true
@@ -191,12 +225,8 @@ func (s *Server) fetchNZB(ctx context.Context, link string) ([]byte, string, err
 		return nil, "", errors.New("paste a link that starts with http:// or https://")
 	}
 	if ixs, err := s.Store.Indexers(ctx); err == nil {
-		q := u.Query()
 		for _, ix := range ixs {
-			iu, err := url.Parse(ix.URL)
-			if err == nil && strings.EqualFold(iu.Hostname(), u.Hostname()) && ix.APIKey != "" && q.Get("apikey") == "" && q.Get("r") == "" && q.Get("i") == "" {
-				q.Set("apikey", ix.APIKey)
-				u.RawQuery = q.Encode()
+			if withIndexerKey(u, ix.URL, ix.APIKey) {
 				break
 			}
 		}
@@ -238,6 +268,44 @@ func (s *Server) fetchNZB(ctx context.Context, link string) ([]byte, string, err
 		}
 	}
 	return data, name, nil
+}
+
+// withIndexerKey adds an indexer's API key to a link to that indexer that
+// has none, and says whether the link is the indexer's. The key only goes
+// to the indexer's own address: the same scheme, host and port as it's
+// saved with. A plain http link to an indexer saved with https is fetched
+// over https instead, so the key is never sent unencrypted; any other
+// mismatch (another port, http where the indexer is https on its own
+// port) leaves the link as it is, without the key.
+func withIndexerKey(u *url.URL, indexer, key string) bool {
+	iu, err := url.Parse(indexer)
+	if err != nil || key == "" || !strings.EqualFold(iu.Hostname(), u.Hostname()) {
+		return false
+	}
+	q := u.Query()
+	if q.Get("apikey") != "" || q.Get("r") != "" || q.Get("i") != "" {
+		return false
+	}
+	if strings.EqualFold(iu.Scheme, "https") && u.Scheme == "http" && portOf(u) == "80" && portOf(iu) == "443" {
+		u.Scheme, u.Host = "https", iu.Host
+	}
+	if !strings.EqualFold(iu.Scheme, u.Scheme) || portOf(iu) != portOf(u) {
+		return false
+	}
+	q.Set("apikey", key)
+	u.RawQuery = q.Encode()
+	return true
+}
+
+// portOf is the port an address is reached at, given or by its scheme.
+func portOf(u *url.URL) string {
+	if p := u.Port(); p != "" {
+		return p
+	}
+	if strings.EqualFold(u.Scheme, "https") {
+		return "443"
+	}
+	return "80"
 }
 
 // unwrapURL drops the "Get <url>:" from a fetch's error, so an API key in

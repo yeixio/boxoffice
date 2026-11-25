@@ -13,8 +13,8 @@ import (
 	"io"
 	"io/fs"
 	"log/slog"
-	"net"
 	"net/http"
+	"net/netip"
 	"path"
 	"strconv"
 	"strings"
@@ -124,6 +124,10 @@ type Server struct {
 	// Restart button in Settings; nil means it can't.
 	Restart func()
 
+	// TrustedProxies are the reverse proxies whose X-Forwarded-For says
+	// where a request really came from (see clientIP).
+	TrustedProxies []netip.Prefix
+
 	// nzbs holds NZBs checked on the Downloads page until they're added.
 	nzbs nzbHold
 
@@ -132,15 +136,9 @@ type Server struct {
 	listOnce     sync.Once
 	cleanupMu    sync.Mutex // one clean-up run or deletion at a time
 	started      time.Time
-	failures     sync.Map // username -> *failure
+	failures     lockouts // client address and username -> wrong tries
 	signUps      signUpLimit
 	healthCount  healthCount
-}
-
-type failure struct {
-	mu    sync.Mutex
-	count int
-	until time.Time
 }
 
 // APIKey is the key the API and the Radarr and Sonarr APIs take. One is
@@ -723,12 +721,13 @@ func (s *Server) login(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 	name := strings.TrimSpace(c.Username)
-	fv, _ := s.failures.LoadOrStore(strings.ToLower(name), &failure{})
-	f := fv.(*failure)
+	key := s.clientIP(r) + " " + strings.ToLower(name)
+	f := s.failures.entry(key, time.Now())
+	// Held while the password is checked, so tries sent together count
+	// one after the other.
 	f.mu.Lock()
-	wait := time.Until(f.until)
-	f.mu.Unlock()
-	if wait > 0 {
+	defer f.mu.Unlock()
+	if wait := time.Until(f.until); wait > 0 {
 		w.Header().Set("Retry-After", strconv.Itoa(int(wait.Seconds())+1))
 		return errorf(http.StatusTooManyRequests, "too many wrong passwords; try again in a few minutes")
 	}
@@ -738,13 +737,8 @@ func (s *Server) login(w http.ResponseWriter, r *http.Request) error {
 		hash = []byte(u.PasswordHash())
 	}
 	if bcrypt.CompareHashAndPassword(hash, []byte(c.Password)) != nil || err != nil {
-		f.mu.Lock()
-		f.count++
-		if f.count >= 5 {
-			f.until = time.Now().Add(time.Duration(min(f.count-4, 15)) * time.Minute)
-		}
-		f.mu.Unlock()
-		s.Log.Warn("wrong sign-in", "username", name, "from", clientIP(r))
+		f.wrong(time.Now())
+		s.Log.Warn("wrong sign-in", "username", name, "from", s.clientIP(r))
 		return errorf(http.StatusUnauthorized, "that username and password don't match")
 	}
 	// The second step, when it's on: the code the authenticator app shows.
@@ -759,26 +753,13 @@ func (s *Server) login(w http.ResponseWriter, r *http.Request) error {
 			return err
 		}
 		if !ok {
-			f.mu.Lock()
-			f.count++
-			if f.count >= 5 {
-				f.until = time.Now().Add(time.Duration(min(f.count-4, 15)) * time.Minute)
-			}
-			f.mu.Unlock()
-			s.Log.Warn("wrong one-time code at sign-in", "username", name, "from", clientIP(r))
+			f.wrong(time.Now())
+			s.Log.Warn("wrong one-time code at sign-in", "username", name, "from", s.clientIP(r))
 			return writeJSON(w, http.StatusUnauthorized, map[string]any{"error": "that code isn't right", "needsCode": true})
 		}
 	}
-	s.failures.Delete(strings.ToLower(name))
+	s.failures.clear(key)
 	return s.signIn(w, r, u)
-}
-
-func clientIP(r *http.Request) string {
-	host, _, err := net.SplitHostPort(r.RemoteAddr)
-	if err != nil {
-		return r.RemoteAddr
-	}
-	return host
 }
 
 func (s *Server) logout(w http.ResponseWriter, r *http.Request) error {
