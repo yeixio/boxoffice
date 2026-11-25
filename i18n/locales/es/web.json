@@ -1435,7 +1435,16 @@
       "notSearching": "Sin buscar: {{reason}}.",
       "searchNow": "Buscar ahora",
       "lastSearch": "Última búsqueda {{when}}: {{what}}",
-      "runningNow": "en curso ahora"
+      "runningNow": "en curso ahora",
+      "searchOrder": "Orden de búsqueda",
+      "searchOrderHint": "Títulos que faltan primero reparte las búsquedas según el orden de descarga: las películas y episodios que faltan van antes que las mejoras, que reciben lo que sobra. Por turnos da una búsqueda de cada dos a los títulos que faltan y a las mejoras.",
+      "orderPriority": "Títulos que faltan primero (el orden de descarga)",
+      "orderTurns": "Títulos que faltan y mejoras por turnos",
+      "early": "Descargar antes de la fecha de estreno",
+      "earlyHint": "Si aparece pronto una publicación de una película que sale a la venta o en streaming en menos de un mes (o que está en cines ahora), o de un episodio que se emite en menos de 3 días, la sincronización RSS puede descargarla. Las grabaciones de cine y los screeners nunca se descargan antes. No gasta búsquedas.",
+      "earlyCutoff": "Cuando su calidad alcanza el límite del perfil",
+      "earlyAny": "Cualquier calidad que acepte el perfil",
+      "earlyOff": "Desactivado: esperar a la fecha de estreno"
     },
     "edit": "Editar {{name}}",
     "remove": "Quitar {{name}}",
@@ -3045,7 +3054,8 @@
     "newDays": "Días que un estreno cuenta como nuevo",
     "newDaysHint": "Una película o episodio es nuevo durante estos días después de emitirse o salir a la venta o en streaming. Después, es uno antiguo que falta.",
     "preempt": "Detener la descarga en curso por una con más prioridad",
-    "preemptHint": "La detenida sigue después desde donde estaba. Si está desactivado, la nueva espera su turno."
+    "preemptHint": "La detenida sigue después desde donde estaba. Si está desactivado, la nueva espera su turno.",
+    "searches": "Las búsquedas automáticas también siguen este orden, así que los títulos que faltan se buscan antes que las mejoras. Puedes cambiarlo en Títulos que faltan y mejoras."
   },
   "relocate": {
     "title": "Mover a otra carpeta raíz",

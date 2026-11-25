@@ -1352,7 +1352,16 @@
       "notSearching": "Søger ikke: {{reason}}.",
       "searchNow": "Søg nu",
       "lastSearch": "Seneste søgning {{when}}: {{what}}",
-      "runningNow": "kører nu"
+      "runningNow": "kører nu",
+      "searchOrder": "Søgerækkefølge",
+      "searchOrderHint": "Manglende titler først fordeler søgningerne efter downloadrækkefølgen: manglende film og afsnit kommer før opgraderinger, som får resten. Skiftevis giver manglende titler og opgraderinger hver anden søgning.",
+      "orderPriority": "Manglende titler først (downloadrækkefølgen)",
+      "orderTurns": "Manglende titler og opgraderinger på skift",
+      "early": "Hent før udgivelsesdatoen",
+      "earlyHint": "Når en udgivelse dukker tidligt op for en film, der kan købes eller streames inden for en måned (eller går i biografen nu), eller for et afsnit, der sendes inden for 3 dage, kan RSS-synkroniseringen hente den. Biografoptagelser og screenere hentes aldrig tidligt. Det koster ingen søgninger.",
+      "earlyCutoff": "Når kvaliteten når profilens grænse",
+      "earlyAny": "Enhver kvalitet, profilen tager",
+      "earlyOff": "Fra: vent på udgivelsesdatoen"
     },
     "edit": "Rediger {{name}}",
     "remove": "Fjern {{name}}",
@@ -2922,7 +2931,8 @@
     "newDays": "Dage en udgivelse tæller som ny",
     "newDaysHint": "En film eller et afsnit er nyt så mange dage efter det er sendt eller udkommet til køb eller streaming. Derefter er det et ældre manglende.",
     "preempt": "Stop den igangværende download for en, der rangerer højere",
-    "preemptHint": "Den stoppede fortsætter bagefter, hvor den var. Slået fra venter den nye på sin tur."
+    "preemptHint": "Den stoppede fortsætter bagefter, hvor den var. Slået fra venter den nye på sin tur.",
+    "searches": "Automatiske søgninger følger også denne rækkefølge, så manglende titler søges før opgraderinger. Du kan ændre det under Manglende titler og opgraderinger."
   },
   "relocate": {
     "title": "Flyt til en anden rodmappe",

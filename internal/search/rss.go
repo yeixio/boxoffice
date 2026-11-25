@@ -182,7 +182,7 @@ func (s *Service) takeNew(ctx context.Context, c downloader.CapState, releases [
 	skip := func(w Wanted) bool {
 		return w.Upgrade && (c.Level == downloader.CapUpgrades || left == 0 || !a.upgradeOn(w.AutoUpgrade))
 	}
-	got, problems, err := s.takeFromFeed(ctx, releases, skip, movies...)
+	got, problems, err := s.takeFromFeed(ctx, a, releases, skip, movies...)
 	if err != nil {
 		problems = append(problems, err.Error())
 	}
@@ -242,11 +242,23 @@ func (s *Service) readFeed(ctx context.Context, ix store.Indexer, st store.Index
 // grabs the best for each.
 // Missing movies named in also are looked at too, whether out by their
 // dates or not (see takeNew).
-func (s *Service) takeFromFeed(ctx context.Context, releases []Release, skip func(Wanted) bool, also ...int64) ([]string, []string, error) {
+//
+// Movies and episodes that aren't out yet but soon will be (earlyWants)
+// are looked at too, unless a.Early is off; a release of one is only
+// taken when earlyMiss lets it.
+func (s *Service) takeFromFeed(ctx context.Context, a AutoSettings, releases []Release, skip func(Wanted) bool, also ...int64) ([]string, []string, error) {
 	list, err := s.WantedList(ctx)
 	if err != nil {
 		return nil, nil, err
 	}
+	if a.Early != EarlyOff {
+		more, err := s.earlyWants(ctx, time.Now())
+		if err != nil {
+			return nil, nil, err
+		}
+		list = append(list, more...)
+	}
+	earlyMovies, earlyEps := map[int64]bool{}, map[int64]bool{}
 	ps, err := s.Store.Profiles(ctx)
 	if err != nil {
 		return nil, nil, err
@@ -282,6 +294,7 @@ func (s *Service) takeFromFeed(ctx context.Context, releases []Release, skip fun
 			}
 			movies[m.ID] = m
 			upgrades[m.ID] = w.Upgrade
+			earlyMovies[m.ID] = w.Early
 		case "episode":
 			// A show's second copies are matched as their own want, by
 			// their own profile.
@@ -306,7 +319,12 @@ func (s *Service) takeFromFeed(ctx context.Context, releases []Release, skip fun
 				continue
 			}
 			sw.eps = append(sw.eps, e)
-			sw.per[e.Season]++
+			if w.Early {
+				// Not counted toward a season pack: one isn't out yet.
+				earlyEps[e.ID] = true
+			} else {
+				sw.per[e.Season]++
+			}
 		}
 	}
 	for _, id := range also {
@@ -348,6 +366,11 @@ func (s *Service) takeFromFeed(ctx context.Context, releases []Release, skip fun
 				}
 				packs := len(eps) == 0 && sw.per[season] >= seasonSearchFrom
 				c := s.judgeEpisodes(sw.ctx, r, sw.t, sw.p, sw.eps, blocked("series", sw.t.ID), packs, false)
+				if c.Accepted && slices.ContainsFunc(c.episodes, func(id int64) bool { return earlyEps[id] }) {
+					if why := earlyMiss(a.Early, sw.p, c); why != "" {
+						c.reject(why)
+					}
+				}
 				if c.Accepted {
 					out.Releases = append(out.Releases, c)
 				}
@@ -378,12 +401,17 @@ func (s *Service) takeFromFeed(ctx context.Context, releases []Release, skip fun
 				c := s.judge(ctx, r, profiles[m.ProfileID], has, have, blocked("movie", m.ID))
 				c.kind, c.titleID = "movie", m.ID
 				c.sized(profiles[m.ProfileID], m.Runtime)
+				if c.Accepted && earlyMovies[m.ID] {
+					if why := earlyMiss(a.Early, profiles[m.ProfileID], c); why != "" {
+						c.reject(why)
+					}
+				}
 				if c.Accepted {
 					out.Releases = append(out.Releases, c)
 				}
 			}
-			// Its second copy, when it keeps one.
-			if p2, ok := profiles[m.SecondProfileID]; ok && m.SecondProfileID != 0 && !p2.Locked && (m.Second == nil || upgrades[m.ID]) {
+			// Its second copy, when it keeps one (not before it's out).
+			if p2, ok := profiles[m.SecondProfileID]; ok && m.SecondProfileID != 0 && !p2.Locked && !earlyMovies[m.ID] && (m.Second == nil || upgrades[m.ID]) {
 				if c := s.judgeSecond(ctx, r, m, p2, blocked("movie", m.ID)); c.Accepted {
 					out.Releases = append(out.Releases, c)
 				}

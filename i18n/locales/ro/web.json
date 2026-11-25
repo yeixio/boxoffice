@@ -1435,7 +1435,16 @@
       "notSearching": "Nu se caută: {{reason}}.",
       "searchNow": "Caută acum",
       "lastSearch": "Ultima căutare {{when}}: {{what}}",
-      "runningNow": "rulează acum"
+      "runningNow": "rulează acum",
+      "searchOrder": "Ordinea căutărilor",
+      "searchOrderHint": "Întâi titlurile lipsă împarte căutările după ordinea descărcărilor: filmele și episoadele lipsă trec înaintea îmbunătățirilor, care primesc ce rămâne. Pe rând dă titlurilor lipsă și îmbunătățirilor câte o căutare din două.",
+      "orderPriority": "Întâi titlurile lipsă (ordinea descărcărilor)",
+      "orderTurns": "Titluri lipsă și îmbunătățiri pe rând",
+      "early": "Descarcă înainte de data lansării",
+      "earlyHint": "Când o lansare apare devreme pentru un film care iese la vânzare sau pe streaming în cel mult o lună (sau rulează acum în cinematografe), ori pentru un episod difuzat în cel mult 3 zile, sincronizarea RSS o poate descărca. Înregistrările din cinema și screenerele nu sunt descărcate niciodată mai devreme. Nu consumă căutări.",
+      "earlyCutoff": "Când calitatea atinge pragul profilului",
+      "earlyAny": "Orice calitate acceptată de profil",
+      "earlyOff": "Oprit: așteaptă data lansării"
     },
     "edit": "Editează {{name}}",
     "remove": "Elimină {{name}}",
@@ -3045,7 +3054,8 @@
     "newDays": "Zile în care o lansare e nouă",
     "newDaysHint": "Un film sau episod e nou atâtea zile după difuzare sau apariția pentru cumpărare ori streaming. După aceea e unul lipsă mai vechi.",
     "preempt": "Oprește descărcarea în curs pentru una clasată înaintea ei",
-    "preemptHint": "Cea oprită continuă apoi de unde a rămas. Dezactivat, cea nouă își așteaptă rândul."
+    "preemptHint": "Cea oprită continuă apoi de unde a rămas. Dezactivat, cea nouă își așteaptă rândul.",
+    "searches": "Și căutările automate urmează această ordine, deci titlurile lipsă sunt căutate înaintea îmbunătățirilor. Poți schimba asta la Titluri lipsă și îmbunătățiri."
   },
   "relocate": {
     "title": "Mută în alt dosar rădăcină",

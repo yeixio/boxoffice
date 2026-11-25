@@ -741,3 +741,28 @@ func (s *Store) SetRefreshed(ctx context.Context, kind string, id int64, at time
 	_, err := s.exec(ctx, "UPDATE "+table+" SET refreshed_at = ? WHERE id = ?", at.Unix(), id)
 	return err
 }
+
+// DropNumberedSeasons clears a show's seasons numbered 1 to 1899 that hold
+// no files: the ones TMDB's 1, 2, 3 numbering added next to the seasons
+// TheTVDB, the indexers and the files number by year. Episodes with a file
+// stay, and so does their season.
+func (s *Store) DropNumberedSeasons(ctx context.Context, seriesID int64) (int, error) {
+	const bare = `SELECT e.id FROM episodes e WHERE e.series_id = ? AND e.season > 0 AND e.season < 1900
+		AND NOT EXISTS (SELECT 1 FROM media_files f WHERE f.kind = 'episode' AND f.owner_id = e.id)`
+	if _, err := s.exec(ctx, "DELETE FROM title_wants WHERE kind = 'episode' AND owner_id IN ("+bare+")", seriesID); err != nil {
+		return 0, err
+	}
+	if _, err := s.exec(ctx, "DELETE FROM searched WHERE kind = 'episode' AND id IN ("+bare+")", seriesID); err != nil {
+		return 0, err
+	}
+	if _, err := s.exec(ctx, "DELETE FROM episodes WHERE id IN (SELECT id FROM ("+bare+") gone)", seriesID); err != nil {
+		return 0, err
+	}
+	res, err := s.exec(ctx, `DELETE FROM seasons WHERE series_id = ? AND number > 0 AND number < 1900
+		AND NOT EXISTS (SELECT 1 FROM episodes e WHERE e.series_id = seasons.series_id AND e.season = seasons.number)`, seriesID)
+	if err != nil {
+		return 0, err
+	}
+	n, err := res.RowsAffected()
+	return int(n), err
+}

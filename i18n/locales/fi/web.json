@@ -1352,7 +1352,16 @@
       "notSearching": "Ei haeta: {{reason}}.",
       "searchNow": "Hae nyt",
       "lastSearch": "Viimeisin haku {{when}}: {{what}}",
-      "runningNow": "käynnissä nyt"
+      "runningNow": "käynnissä nyt",
+      "searchOrder": "Hakujärjestys",
+      "searchOrderHint": "Puuttuvat ensin jakaa haut latausjärjestyksen mukaan: puuttuvat elokuvat ja jaksot menevät päivitysten edelle, ja päivitykset saavat loput. Vuorotellen antaa puuttuville ja päivityksille joka toisen haun.",
+      "orderPriority": "Puuttuvat ensin (latausjärjestys)",
+      "orderTurns": "Puuttuvat ja päivitykset vuorotellen",
+      "early": "Nappaa ennen julkaisupäivää",
+      "earlyHint": "Kun julkaisu ilmestyy etuajassa elokuvalle, joka tulee ostettavaksi tai suoratoistoon kuukauden sisällä (tai on nyt elokuvateattereissa), tai jaksolle, joka esitetään 3 päivän sisällä, RSS-synkronointi voi napata sen. Teatteritallenteita ja screenereitä ei koskaan napata etuajassa. Tämä ei kuluta hakuja.",
+      "earlyCutoff": "Kun laatu yltää profiilin rajaan",
+      "earlyAny": "Mikä tahansa laatu, jonka profiili hyväksyy",
+      "earlyOff": "Pois: odota julkaisupäivää"
     },
     "edit": "Muokkaa: {{name}}",
     "remove": "Poista {{name}}",
@@ -2922,7 +2931,8 @@
     "newDays": "Päivät, jotka julkaisu on uusi",
     "newDaysHint": "Elokuva tai jakso on uusi näin monta päivää esityksen tai osto- tai suoratoistojulkaisun jälkeen. Sen jälkeen se on vanhempi puuttuva.",
     "preempt": "Pysäytä käynnissä oleva lataus korkeammalle sijoitetun tieltä",
-    "preemptHint": "Pysäytetty jatkaa myöhemmin siitä, mihin jäi. Pois päältä uusi odottaa vuoroaan."
+    "preemptHint": "Pysäytetty jatkaa myöhemmin siitä, mihin jäi. Pois päältä uusi odottaa vuoroaan.",
+    "searches": "Automaattiset haut noudattavat myös tätä järjestystä, joten puuttuvia haetaan ennen päivityksiä. Voit muuttaa sen kohdassa Puuttuvat nimikkeet ja päivitykset."
   },
   "relocate": {
     "title": "Siirrä toiseen juurikansioon",

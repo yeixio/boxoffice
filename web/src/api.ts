@@ -280,7 +280,7 @@ export type Upcoming = {
 }
 
 export type AutoSearch = {
-  settings: { enabled: boolean; perDay: number; rss: boolean; rssMinutes: number; upgrades: boolean; upgradesPerMonth: number; replaceSameQuality: boolean; propers: boolean; minAgeMinutes: number; regrabsPerDay: number }
+  settings: { enabled: boolean; perDay: number; rss: boolean; rssMinutes: number; upgrades: boolean; upgradesPerMonth: number; replaceSameQuality: boolean; propers: boolean; minAgeMinutes: number; regrabsPerDay: number; searchOrder: 'priority' | 'turns'; early: 'cutoff' | 'any' | 'off' }
   missing: number
   upgrades: number
   upgradesThisMonth: number

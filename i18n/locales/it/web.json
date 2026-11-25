@@ -1435,7 +1435,16 @@
       "notSearching": "Nessuna ricerca: {{reason}}.",
       "searchNow": "Cerca ora",
       "lastSearch": "Ultima ricerca {{when}}: {{what}}",
-      "runningNow": "in corso ora"
+      "runningNow": "in corso ora",
+      "searchOrder": "Ordine di ricerca",
+      "searchOrderHint": "Prima i titoli mancanti distribuisce le ricerche secondo l'ordine dei download: film ed episodi mancanti vengono prima dei miglioramenti, che ricevono ciò che resta. A turno dà una ricerca su due ai titoli mancanti e ai miglioramenti.",
+      "orderPriority": "Prima i titoli mancanti (l'ordine dei download)",
+      "orderTurns": "Titoli mancanti e miglioramenti a turno",
+      "early": "Scarica prima della data di uscita",
+      "earlyHint": "Se una release compare in anticipo per un film in vendita o in streaming entro un mese (o ora al cinema), o per un episodio in onda entro 3 giorni, la sincronizzazione RSS può scaricarla. Registrazioni al cinema e screener non vengono mai scaricati in anticipo. Non usa ricerche.",
+      "earlyCutoff": "Quando la qualità raggiunge la soglia del profilo",
+      "earlyAny": "Qualsiasi qualità accettata dal profilo",
+      "earlyOff": "Disattivato: aspetta la data di uscita"
     },
     "edit": "Modifica {{name}}",
     "remove": "Rimuovi {{name}}",
@@ -3045,7 +3054,8 @@
     "newDays": "Giorni in cui un'uscita conta come nuova",
     "newDaysHint": "Un film o un episodio è nuovo per questi giorni dopo la messa in onda o l'uscita in vendita o in streaming. Dopo, è un mancante più vecchio.",
     "preempt": "Ferma il download in corso per uno con priorità più alta",
-    "preemptHint": "Quello fermato riprende poi da dove era. Se disattivato, il nuovo aspetta il suo turno."
+    "preemptHint": "Quello fermato riprende poi da dove era. Se disattivato, il nuovo aspetta il suo turno.",
+    "searches": "Anche le ricerche automatiche seguono questo ordine, quindi i titoli mancanti vengono cercati prima dei miglioramenti. Puoi cambiarlo in Titoli mancanti e miglioramenti."
   },
   "relocate": {
     "title": "Sposta in un'altra cartella principale",

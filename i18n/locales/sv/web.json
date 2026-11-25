@@ -1352,7 +1352,16 @@
       "notSearching": "Söker inte: {{reason}}.",
       "searchNow": "Sök nu",
       "lastSearch": "Senaste sökning {{when}}: {{what}}",
-      "runningNow": "körs nu"
+      "runningNow": "körs nu",
+      "searchOrder": "Sökordning",
+      "searchOrderHint": "Saknade titlar först fördelar sökningarna efter nedladdningsordningen: saknade filmer och avsnitt går före uppgraderingar, som får det som blir över. Turas om ger saknade titlar och uppgraderingar varannan sökning.",
+      "orderPriority": "Saknade titlar först (nedladdningsordningen)",
+      "orderTurns": "Saknade titlar och uppgraderingar turas om",
+      "early": "Hämta före premiärdatumet",
+      "earlyHint": "När en release dyker upp tidigt för en film som går att köpa eller strömma inom en månad (eller går på bio nu), eller för ett avsnitt som sänds inom 3 dagar, kan RSS-synken hämta den. Biografinspelningar och screeners hämtas aldrig tidigt. Det kostar inga sökningar.",
+      "earlyCutoff": "När kvaliteten når profilens gräns",
+      "earlyAny": "All kvalitet profilen tar",
+      "earlyOff": "Av: vänta på premiärdatumet"
     },
     "edit": "Redigera {{name}}",
     "remove": "Ta bort {{name}}",
@@ -2922,7 +2931,8 @@
     "newDays": "Dagar en release räknas som ny",
     "newDaysHint": "En film eller ett avsnitt är nytt så många dagar efter att det sänts eller släppts för köp eller streaming. Därefter är det ett äldre saknat.",
     "preempt": "Stoppa pågående nedladdning för en som rankas före den",
-    "preemptHint": "Den stoppade fortsätter sedan där den var. Av: den nya väntar på sin tur."
+    "preemptHint": "Den stoppade fortsätter sedan där den var. Av: den nya väntar på sin tur.",
+    "searches": "Automatiska sökningar följer också den här ordningen, så saknade titlar söks före uppgraderingar. Du kan ändra det under Saknade titlar och uppgraderingar."
   },
   "relocate": {
     "title": "Flytta till en annan rotmapp",
