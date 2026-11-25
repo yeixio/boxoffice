@@ -69,7 +69,9 @@ export function DownloadOrderCard() {
       <h2 id="download-order" className="mb-1 scroll-mt-24 font-display text-lg font-semibold">
         {t('order.title')}
       </h2>
-      <p className="mb-4 text-sm text-muted">{t('order.sub')}</p>
+      <p className="mb-4 text-sm text-muted">
+        {t('order.sub')} {t('order.searches')}
+      </p>
       <div className="flex flex-col gap-4">
         <ol className="flex flex-col gap-1.5">
           {p.order.map((g, i) => (

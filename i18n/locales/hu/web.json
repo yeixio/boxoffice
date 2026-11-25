@@ -1351,7 +1351,16 @@
       "notSearching": "Nincs keresés: {{reason}}.",
       "searchNow": "Keresés most",
       "lastSearch": "Legutóbbi keresés {{when}}: {{what}}",
-      "runningNow": "most fut"
+      "runningNow": "most fut",
+      "searchOrder": "Keresési sorrend",
+      "searchOrderHint": "A hiányzók először a letöltési sorrend szerint osztja el a kereséseket: a hiányzó filmek és epizódok a frissítések előtt jönnek, a frissítések a maradékot kapják. Felváltva minden második keresést a hiányzóknak és a frissítéseknek adja.",
+      "orderPriority": "Hiányzó címek először (a letöltési sorrend)",
+      "orderTurns": "Hiányzó címek és frissítések felváltva",
+      "early": "Letöltés a megjelenés előtt",
+      "earlyHint": "Ha egy kiadás korán felbukkan egy olyan filmhez, amely egy hónapon belül megvásárolható vagy streamelhető lesz (vagy most megy a mozikban), vagy egy 3 napon belül adásba kerülő epizódhoz, az RSS-szinkron letöltheti. Mozis felvételeket és screenereket soha nem tölt le korán. Ez nem használ keresést.",
+      "earlyCutoff": "Ha a minősége eléri a profil határát",
+      "earlyAny": "Bármilyen minőség, amit a profil elfogad",
+      "earlyOff": "Ki: várjon a megjelenés dátumára"
     },
     "edit": "{{name}} szerkesztése",
     "remove": "{{name}} eltávolítása",
@@ -2905,7 +2914,8 @@
     "newDays": "Napok, ameddig egy kiadás újnak számít",
     "newDaysHint": "Egy film vagy epizód ennyi napig új a sugárzása vagy megvásárolható, streamelhető megjelenése után. Utána régebbi hiányzó.",
     "preempt": "A futó letöltés leállítása egy előrébb soroltért",
-    "preemptHint": "A leállított utána onnan folytatja, ahol tartott. Kikapcsolva az új kivárja a sorát."
+    "preemptHint": "A leállított utána onnan folytatja, ahol tartott. Kikapcsolva az új kivárja a sorát.",
+    "searches": "Az automatikus keresések is ezt a sorrendet követik, így a hiányzó címeket a frissítések előtt keresi. Ezt a Hiányzó címek és frissítések alatt módosíthatod."
   },
   "relocate": {
     "title": "Áthelyezés másik gyökérmappába",

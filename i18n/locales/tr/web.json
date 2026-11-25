@@ -1351,7 +1351,16 @@
       "notSearching": "Aranmıyor: {{reason}}.",
       "searchNow": "Şimdi ara",
       "lastSearch": "Son arama {{when}}: {{what}}",
-      "runningNow": "şimdi çalışıyor"
+      "runningNow": "şimdi çalışıyor",
+      "searchOrder": "Arama sırası",
+      "searchOrderHint": "Önce eksikler, aramaları indirme sırasına göre dağıtır: eksik filmler ve bölümler yükseltmelerden önce gelir, yükseltmeler kalanı alır. Sırayla, eksik başlıklara ve yükseltmelere her iki aramadan birini verir.",
+      "orderPriority": "Önce eksik başlıklar (indirme sırası)",
+      "orderTurns": "Eksik başlıklar ve yükseltmeler sırayla",
+      "early": "Çıkış tarihinden önce indir",
+      "earlyHint": "Bir ay içinde satın almaya veya yayına çıkacak (ya da şu an sinemada olan) bir film veya 3 gün içinde yayınlanacak bir bölüm için bir sürüm erken çıkarsa RSS eşitleme onu indirebilir. Sinema kayıtları ve screener'lar asla erken indirilmez. Arama harcamaz.",
+      "earlyCutoff": "Kalitesi profilin sınırına ulaştığında",
+      "earlyAny": "Profilin kabul ettiği her kalite",
+      "earlyOff": "Kapalı: çıkış tarihini bekle"
     },
     "edit": "{{name}} düzenle",
     "remove": "{{name}} kaldır",
@@ -2905,7 +2914,8 @@
     "newDays": "Bir sürümün yeni sayıldığı gün sayısı",
     "newDaysHint": "Bir film veya bölüm, yayınlanmasından ya da satın alma veya yayın için çıkmasından sonra bu kadar gün yeni sayılır. Sonra eski bir eksik olur.",
     "preempt": "Önde sıralanan biri için süren indirmeyi durdur",
-    "preemptHint": "Durdurulan sonra kaldığı yerden devam eder. Kapalıyken yeni olan sırasını bekler."
+    "preemptHint": "Durdurulan sonra kaldığı yerden devam eder. Kapalıyken yeni olan sırasını bekler.",
+    "searches": "Otomatik aramalar da bu sırayı izler, yani eksik başlıklar yükseltmelerden önce aranır. Bunu Eksik başlıklar ve yükseltmeler bölümünden değiştirebilirsin."
   },
   "relocate": {
     "title": "Başka bir kök klasöre taşı",

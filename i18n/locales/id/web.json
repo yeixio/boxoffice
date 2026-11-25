@@ -1268,7 +1268,16 @@
       "notSearching": "Tidak mencari: {{reason}}.",
       "searchNow": "Cari sekarang",
       "lastSearch": "Pencarian terakhir {{when}}: {{what}}",
-      "runningNow": "sedang berjalan"
+      "runningNow": "sedang berjalan",
+      "searchOrder": "Urutan pencarian",
+      "searchOrderHint": "Judul yang kurang dulu membagi pencarian menurut urutan unduhan: film dan episode yang kurang didahulukan sebelum peningkatan, dan peningkatan mendapat sisanya. Bergantian memberi judul yang kurang dan peningkatan masing-masing satu dari dua pencarian.",
+      "orderPriority": "Judul yang kurang dulu (urutan unduhan)",
+      "orderTurns": "Judul yang kurang dan peningkatan bergantian",
+      "early": "Ambil sebelum tanggal rilis",
+      "earlyHint": "Jika rilis muncul lebih awal untuk film yang tersedia untuk dibeli atau di-stream dalam sebulan (atau sedang tayang di bioskop), atau untuk episode yang tayang dalam 3 hari, sinkronisasi RSS bisa mengambilnya. Rekaman bioskop dan screener tidak pernah diambil lebih awal. Ini tidak memakai pencarian.",
+      "earlyCutoff": "Saat kualitasnya mencapai batas profil",
+      "earlyAny": "Kualitas apa pun yang diterima profil",
+      "earlyOff": "Mati: tunggu tanggal rilis"
     },
     "edit": "Edit {{name}}",
     "remove": "Hapus {{name}}",
@@ -2782,7 +2791,8 @@
     "newDays": "Hari sebuah rilis dianggap baru",
     "newDaysHint": "Film atau episode dianggap baru selama sekian hari setelah tayang atau rilis untuk dibeli atau di-streaming. Setelah itu menjadi yang hilang lebih lama.",
     "preempt": "Hentikan unduhan yang berjalan demi yang berperingkat lebih tinggi",
-    "preemptHint": "Yang dihentikan lanjut dari posisinya nanti. Jika mati, yang baru menunggu gilirannya."
+    "preemptHint": "Yang dihentikan lanjut dari posisinya nanti. Jika mati, yang baru menunggu gilirannya.",
+    "searches": "Pencarian otomatis juga mengikuti urutan ini, jadi judul yang kurang dicari sebelum peningkatan. Anda bisa mengubahnya di Judul yang kurang dan peningkatan."
   },
   "relocate": {
     "title": "Pindahkan ke folder akar lain",

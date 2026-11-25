@@ -1268,7 +1268,16 @@
       "notSearching": "Tidak mencari: {{reason}}.",
       "searchNow": "Cari sekarang",
       "lastSearch": "Carian terakhir {{when}}: {{what}}",
-      "runningNow": "sedang berjalan"
+      "runningNow": "sedang berjalan",
+      "searchOrder": "Susunan carian",
+      "searchOrderHint": "Tajuk yang tiada dahulu membahagi carian ikut susunan muat turun: filem dan episod yang tiada didahulukan sebelum naik taraf, dan naik taraf mendapat bakinya. Bergilir memberi tajuk yang tiada dan naik taraf satu daripada setiap dua carian.",
+      "orderPriority": "Tajuk yang tiada dahulu (susunan muat turun)",
+      "orderTurns": "Tajuk yang tiada dan naik taraf bergilir",
+      "early": "Ambil sebelum tarikh keluaran",
+      "earlyHint": "Apabila keluaran muncul awal untuk filem yang boleh dibeli atau distrim dalam masa sebulan (atau sedang ditayangkan di pawagam), atau untuk episod yang disiarkan dalam masa 3 hari, penyegerakan RSS boleh mengambilnya. Rakaman pawagam dan screener tidak pernah diambil awal. Ini tidak menggunakan carian.",
+      "earlyCutoff": "Apabila kualitinya mencapai had profil",
+      "earlyAny": "Apa-apa kualiti yang diterima profil",
+      "earlyOff": "Mati: tunggu tarikh keluaran"
     },
     "edit": "Edit {{name}}",
     "remove": "Buang {{name}}",
@@ -2782,7 +2791,8 @@
     "newDays": "Hari sesuatu keluaran dikira baharu",
     "newDaysHint": "Filem atau episod dikira baharu selama bilangan hari ini selepas disiarkan atau keluar untuk dibeli atau distrim. Selepas itu ia yang hilang lebih lama.",
     "preempt": "Hentikan muat turun semasa untuk yang berkedudukan lebih tinggi",
-    "preemptHint": "Yang dihentikan akan bersambung dari tempatnya kemudian. Jika dimatikan, yang baharu menunggu gilirannya."
+    "preemptHint": "Yang dihentikan akan bersambung dari tempatnya kemudian. Jika dimatikan, yang baharu menunggu gilirannya.",
+    "searches": "Carian automatik juga mengikut susunan ini, jadi tajuk yang tiada dicari sebelum naik taraf. Anda boleh mengubahnya di Tajuk yang tiada dan naik taraf."
   },
   "relocate": {
     "title": "Alihkan ke folder akar lain",

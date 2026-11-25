@@ -1517,7 +1517,16 @@
       "notSearching": "Nehledá se: {{reason}}.",
       "searchNow": "Hledat teď",
       "lastSearch": "Poslední hledání {{when}}: {{what}}",
-      "runningNow": "právě běží"
+      "runningNow": "právě běží",
+      "searchOrder": "Pořadí hledání",
+      "searchOrderHint": "Nejdřív chybějící rozděluje hledání podle pořadí stahování: chybějící filmy a epizody jdou před vylepšeními, která dostanou zbytek. Střídavě dává chybějícím titulům a vylepšením každé druhé hledání.",
+      "orderPriority": "Nejdřív chybějící tituly (pořadí stahování)",
+      "orderTurns": "Chybějící tituly a vylepšení střídavě",
+      "early": "Stáhnout před datem vydání",
+      "earlyHint": "Když se vydání objeví dřív u filmu, který do měsíce vyjde ke koupi nebo streamování (nebo je teď v kinech), nebo u epizody, která se vysílá do 3 dnů, synchronizace RSS ho může stáhnout. Záznamy z kina a screenery se nikdy nestahují dřív. Nestojí to žádná hledání.",
+      "earlyCutoff": "Když kvalita dosáhne hranice profilu",
+      "earlyAny": "Jakákoli kvalita, kterou profil bere",
+      "earlyOff": "Vypnuto: čekat na datum vydání"
     },
     "edit": "Upravit {{name}}",
     "remove": "Odebrat {{name}}",
@@ -3151,7 +3160,8 @@
     "newDays": "Dny, kdy je vydání nové",
     "newDaysHint": "Film nebo díl je nový tolik dní po odvysílání nebo vydání ke koupi či streamování. Potom je to starší chybějící.",
     "preempt": "Zastavit běžící stahování kvůli výše zařazenému",
-    "preemptHint": "Zastavené potom pokračuje tam, kde bylo. Když je vypnuto, nové čeká, až na něj přijde řada."
+    "preemptHint": "Zastavené potom pokračuje tam, kde bylo. Když je vypnuto, nové čeká, až na něj přijde řada.",
+    "searches": "Automatická hledání se také řídí tímto pořadím, takže chybějící tituly se hledají před vylepšeními. Změnit to můžete v části Chybějící tituly a vylepšení."
   },
   "relocate": {
     "title": "Přesunout do jiné kořenové složky",

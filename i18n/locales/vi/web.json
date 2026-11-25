@@ -1268,7 +1268,16 @@
       "notSearching": "Không tìm: {{reason}}.",
       "searchNow": "Tìm ngay",
       "lastSearch": "Lần tìm gần nhất {{when}}: {{what}}",
-      "runningNow": "đang chạy"
+      "runningNow": "đang chạy",
+      "searchOrder": "Thứ tự tìm kiếm",
+      "searchOrderHint": "Còn thiếu trước chia lượt tìm theo thứ tự tải: phim và tập còn thiếu được ưu tiên trước nâng cấp, nâng cấp dùng phần còn lại. Luân phiên chia đều từng lượt cho mục còn thiếu và nâng cấp.",
+      "orderPriority": "Mục còn thiếu trước (thứ tự tải)",
+      "orderTurns": "Mục còn thiếu và nâng cấp luân phiên",
+      "early": "Tải trước ngày phát hành",
+      "earlyHint": "Khi một bản phát hành xuất hiện sớm cho phim sẽ bán hoặc phát trực tuyến trong vòng một tháng (hoặc đang chiếu rạp), hay cho tập phát sóng trong vòng 3 ngày, đồng bộ RSS có thể tải nó. Bản quay rạp và screener không bao giờ được tải sớm. Việc này không tốn lượt tìm.",
+      "earlyCutoff": "Khi chất lượng đạt mức của hồ sơ",
+      "earlyAny": "Bất kỳ chất lượng nào hồ sơ nhận",
+      "earlyOff": "Tắt: chờ ngày phát hành"
     },
     "edit": "Sửa {{name}}",
     "remove": "Xóa {{name}}",
@@ -2782,7 +2791,8 @@
     "newDays": "Số ngày một bản phát hành được coi là mới",
     "newDaysHint": "Phim hoặc tập được coi là mới trong số ngày này sau khi phát sóng hoặc ra mắt để mua hay xem trực tuyến. Sau đó là mục còn thiếu cũ hơn.",
     "preempt": "Dừng lượt tải đang chạy cho lượt được xếp trước",
-    "preemptHint": "Lượt bị dừng sẽ tiếp tục từ chỗ cũ sau đó. Khi tắt, lượt mới chờ đến lượt."
+    "preemptHint": "Lượt bị dừng sẽ tiếp tục từ chỗ cũ sau đó. Khi tắt, lượt mới chờ đến lượt.",
+    "searches": "Tìm kiếm tự động cũng theo thứ tự này, nên mục còn thiếu được tìm trước nâng cấp. Bạn có thể đổi ở Mục còn thiếu và nâng cấp."
   },
   "relocate": {
     "title": "Chuyển sang thư mục gốc khác",
