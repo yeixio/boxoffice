@@ -55,6 +55,9 @@ func (s *Service) judgeEpisodes(ctx context.Context, r Release, t store.Series, 
 		c.mode = ModeSecond
 		c.Key += "2"
 	}
+	// A show whose releases follow another episode order is judged by
+	// each episode's place in it.
+	want = s.inOrder(ctx, t, want)
 	season, eps, ok := releaseEpisode(r.Title)
 	absolute := t.Numbering == store.NumberingAbsolute
 	named := false // its name was read as the show's, numbered straight through
@@ -95,7 +98,7 @@ func (s *Service) judgeEpisodes(ctx context.Context, r Release, t store.Series, 
 		// all of them.
 		n := len(eps)
 		if c.Pack {
-			n = s.seasonLength(ctx, t.ID, season)
+			n = s.seasonLength(ctx, t, season)
 		}
 		c.sized(p, t.Runtime*n)
 	}
@@ -166,6 +169,66 @@ func (s *Service) absoluteNumbers(ctx context.Context, seriesID int64) map[int]s
 	return m
 }
 
+// inOrder is some of a show's episodes numbered the way its releases
+// are (see store.InOrder); as they are, for a show that follows no other
+// episode order.
+func (s *Service) inOrder(ctx context.Context, t store.Series, eps []store.Episode) []store.Episode {
+	if _, ok := t.Order(); !ok || len(eps) == 0 {
+		return eps
+	}
+	return store.InOrderOf(eps, s.placesTaken(ctx, t.ID))
+}
+
+// placesTaken is the places a show's chosen episode order gives its
+// episodes, kept a minute: every release of a search is read against it.
+func (s *Service) placesTaken(ctx context.Context, seriesID int64) map[store.Place]bool {
+	s.mu.Lock()
+	have, ok := s.places[seriesID]
+	s.mu.Unlock()
+	if ok && time.Now().Before(have.expires) {
+		return have.taken
+	}
+	eps, err := s.Store.Episodes(ctx, seriesID)
+	if err != nil {
+		s.logger().Warn("couldn't read a show's episodes to place them", "show", seriesID, "err", err)
+		return nil
+	}
+	taken := store.PlacesTaken(eps)
+	s.mu.Lock()
+	if s.places == nil {
+		s.places = map[int64]placesCache{}
+	}
+	s.places[seriesID] = placesCache{taken, time.Now().Add(time.Minute)}
+	s.mu.Unlock()
+	return taken
+}
+
+type placesCache struct {
+	taken   map[store.Place]bool
+	expires time.Time
+}
+
+// orderSeasons is the seasons to ask indexers for when season's wanted
+// episodes are looked for: season itself, or for a show whose releases
+// follow another episode order, the seasons those episodes have in it
+// (three at most, so a search stays a few questions).
+func (s *Service) orderSeasons(ctx context.Context, t store.Series, season int, want []store.Episode) []int {
+	if _, ok := t.Order(); !ok {
+		return []int{season}
+	}
+	var out []int
+	for _, e := range s.inOrder(ctx, t, want) {
+		if e.Season >= 0 && !slices.Contains(out, e.Season) {
+			out = append(out, e.Season)
+		}
+	}
+	slices.Sort(out)
+	if len(out) == 0 {
+		return []int{season}
+	}
+	return out[:min(len(out), 3)]
+}
+
 type absoluteCache struct {
 	byNumber map[int]store.Episode
 	expires  time.Time
@@ -177,17 +240,29 @@ func (s *Service) Season(ctx context.Context, t store.Series, season int, want [
 	if err := s.Store.CheckUnlocked(ctx, "series", t.ID); err != nil {
 		return Results{}, err
 	}
-	rs, notes, n, err := s.ask(ctx, func(ix store.Indexer) Query {
-		q := Query{Type: "tvsearch", Season: season, Cats: cats(ix, 5000, 5999, 5000)}
-		if t.TVDBID > 0 {
-			q.TVDBID = t.TVDBID
-		} else {
-			q.Text = searchText(t.Title)
+	// A show whose releases follow another episode order is asked for by
+	// the seasons the wanted episodes have in it.
+	var rs []Release
+	var notes []string
+	n := 0
+	for i, in := range s.orderSeasons(ctx, t, season, want) {
+		got, more, asked, err := s.ask(ctx, func(ix store.Indexer) Query {
+			q := Query{Type: "tvsearch", Season: in, Cats: cats(ix, 5000, 5999, 5000)}
+			if t.TVDBID > 0 {
+				q.TVDBID = t.TVDBID
+			} else {
+				q.Text = searchText(t.Title)
+			}
+			return q
+		})
+		if err != nil && i == 0 {
+			return Results{}, err
 		}
-		return q
-	})
-	if err != nil {
-		return Results{}, err
+		if err != nil {
+			notes = append(notes, err.Error())
+			continue
+		}
+		rs, notes, n = append(rs, got...), append(notes, more...), max(n, asked)
 	}
 	p, err := s.showProfile(ctx, t)
 	if err != nil {
@@ -200,6 +275,9 @@ func (s *Service) Season(ctx context.Context, t store.Series, season int, want [
 	out := Results{Errors: notes, Searched: n}
 	seen := map[string]bool{}
 	for _, r := range rs {
+		if seen[key(r)] {
+			continue
+		}
 		seen[key(r)] = true
 		out.Releases = append(out.Releases, s.judgeEpisodes(ctx, r, t, p, want, blocked, true, true))
 	}
@@ -437,15 +515,15 @@ func compactProblems(ps []string) string {
 	return strings.Join(slices.Compact(ps), "; ")
 }
 
-// seasonLength is how many episodes a season has, or 0 when that can't be
-// told.
-func (s *Service) seasonLength(ctx context.Context, seriesID int64, season int) int {
-	eps, err := s.Store.Episodes(ctx, seriesID)
+// seasonLength is how many episodes a season has (as the show's releases
+// number them), or 0 when that can't be told.
+func (s *Service) seasonLength(ctx context.Context, t store.Series, season int) int {
+	eps, err := s.Store.Episodes(ctx, t.ID)
 	if err != nil {
 		return 0
 	}
 	n := 0
-	for _, e := range eps {
+	for _, e := range store.InOrder(eps) {
 		if e.Season == season {
 			n++
 		}

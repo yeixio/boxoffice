@@ -530,7 +530,17 @@
     "audioHint": "Řídí se tím, co říká název vydání: Dubbed, Dual Audio, MULTi, Subbed. Název, který neříká nic, se počítá jako původní zvuk.",
     "audioAny": "Obojí",
     "audioDub": "S dabingem, nebo s obojím",
-    "audioSub": "Původní zvuk"
+    "audioSub": "Původní zvuk",
+    "orderOption": "{{kind}}: {{name}}",
+    "orderHint": "Vydání se hledají a čtou podle čísla každé epizody v tomto pořadí, které pochází z TMDB. Soubory si ponechají sérii a epizodu, pod kterými byly odvysílány.",
+    "placeIn": "Ve vydáních {{code}}",
+    "orderKind1": "Pořadí vysílání",
+    "orderKind2": "Absolutní pořadí",
+    "orderKind3": "Pořadí na DVD",
+    "orderKind4": "Digitální pořadí",
+    "orderKind5": "Příběhové oblouky",
+    "orderKind6": "Produkční pořadí",
+    "orderKind7": "Televizní pořadí"
   },
   "health": {
     "error": "Nefunguje",

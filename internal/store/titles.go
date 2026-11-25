@@ -6,7 +6,9 @@ import (
 	"encoding/json"
 	"errors"
 	"path/filepath"
+	"slices"
 	"sort"
+	"strings"
 	"time"
 
 	"github.com/yeixio/boxoffice/internal/quality"
@@ -365,7 +367,84 @@ const (
 	NumberingAbsolute = "absolute"
 	AudioDubbed       = "dub"
 	AudioOriginal     = "sub"
+	// numberingOrder starts a Numbering that names one of TMDB's other
+	// episode orders (its episode groups), such as the DVD order.
+	numberingOrder = "order:"
 )
+
+// OrderNumbering is the Numbering for one of TMDB's episode orders.
+func OrderNumbering(id string) string { return numberingOrder + id }
+
+// Order is the TMDB episode order a show's releases are numbered by,
+// when its Numbering names one.
+func (t Series) Order() (id string, ok bool) {
+	id, ok = strings.CutPrefix(t.Numbering, numberingOrder)
+	return id, ok && id != ""
+}
+
+// Place is where an episode sits in the episode order chosen for its
+// show's releases.
+type Place struct {
+	Season int `json:"season"`
+	Number int `json:"number"`
+}
+
+// PlacesTaken is the seasons and numbers a show's chosen episode order
+// gives its episodes; empty when it follows none.
+func PlacesTaken(eps []Episode) map[Place]bool {
+	taken := map[Place]bool{}
+	for _, e := range eps {
+		if e.Place != nil {
+			taken[*e.Place] = true
+		}
+	}
+	return taken
+}
+
+// InOrder is a show's episodes numbered the way its releases are: an
+// episode with a place in the chosen order takes that season and
+// number. One without keeps its own unless a placed episode has taken
+// them, and then it can't be told from a release's name (season -1, and
+// a number below 0 of its own).
+// Without a chosen order, eps come back as they are.
+func InOrder(eps []Episode) []Episode { return InOrderOf(eps, PlacesTaken(eps)) }
+
+// InOrderOf is InOrder for some of a show's episodes, given the places
+// taken among all of them.
+func InOrderOf(eps []Episode, taken map[Place]bool) []Episode {
+	if len(taken) == 0 {
+		return eps
+	}
+	out := slices.Clone(eps)
+	for i, e := range out {
+		switch {
+		case e.Place != nil:
+			out[i].Season, out[i].Number = e.Place.Season, e.Place.Number
+		case taken[Place{e.Season, e.Number}]:
+			out[i].Season, out[i].Number = -1, -i-1
+		}
+	}
+	return out
+}
+
+// SetEpisodePlaces saves where a show's episodes sit in the order chosen
+// for its releases, by episode id; its other episodes have no place.
+func (s *Store) SetEpisodePlaces(ctx context.Context, seriesID int64, places map[int64]Place) error {
+	tx, err := s.db.BeginTx(ctx, nil)
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+	if _, err := tx.ExecContext(ctx, s.q("UPDATE episodes SET place_season = NULL, place_number = NULL WHERE series_id = ? AND place_season IS NOT NULL"), seriesID); err != nil {
+		return err
+	}
+	for id, p := range places {
+		if _, err := tx.ExecContext(ctx, s.q("UPDATE episodes SET place_season = ?, place_number = ? WHERE id = ? AND series_id = ?"), p.Season, p.Number, id, seriesID); err != nil {
+			return err
+		}
+	}
+	return tx.Commit()
+}
 
 // AbsoluteNumbers numbers a show's episodes straight through, the way
 // anime releases do: the first episode of season 1 is 1, and each season
@@ -413,6 +492,9 @@ type Episode struct {
 	File *File `json:"file,omitempty"`
 	// Second is its second copy, for a show that keeps one.
 	Second *File `json:"second,omitempty"`
+	// Place is where it sits in the episode order chosen for the show's
+	// releases, when one is and it lists the episode.
+	Place *Place `json:"place,omitempty"`
 }
 
 const seriesCols = `id, tmdb_id, tvdb_id, imdb_id, title, sort_title, year, overview, poster, backdrop, status, network, runtime, rating,
@@ -602,7 +684,7 @@ func (s *Store) DeleteSeries(ctx context.Context, id int64) error {
 
 // ---- episodes ----
 
-const episodeCols = `e.id, e.series_id, e.season, e.number, e.title, e.overview, e.air_date, e.monitored, e.held,
+const episodeCols = `e.id, e.series_id, e.season, e.number, e.title, e.overview, e.air_date, e.monitored, e.held, e.place_season, e.place_number,
 	f.id, f.path, f.size, f.quality, f.added_at, f.media, f.guessed,
 	f2.id, f2.path, f2.size, f2.quality, f2.added_at, f2.media, f2.guessed`
 
@@ -634,7 +716,8 @@ func scanEpisode(r interface{ Scan(...any) error }) (Episode, error) {
 	var fpath, fmedia sql.NullString
 	var sid, ssize, sq, sadded, sguessed sql.NullInt64
 	var spath, smedia sql.NullString
-	err := r.Scan(&e.ID, &e.SeriesID, &e.Season, &e.Number, &e.Title, &e.Overview, &air, &mon, &held, &fid, &fpath, &fsize, &fq, &fadded, &fmedia, &fguessed,
+	var ps, pn sql.NullInt64
+	err := r.Scan(&e.ID, &e.SeriesID, &e.Season, &e.Number, &e.Title, &e.Overview, &air, &mon, &held, &ps, &pn, &fid, &fpath, &fsize, &fq, &fadded, &fmedia, &fguessed,
 		&sid, &spath, &ssize, &sq, &sadded, &smedia, &sguessed)
 	if errors.Is(err, sql.ErrNoRows) {
 		return e, ErrNotFound
@@ -643,6 +726,9 @@ func scanEpisode(r interface{ Scan(...any) error }) (Episode, error) {
 		return e, err
 	}
 	e.AirDate, e.Monitored, e.Held = unix(air), mon == 1, held == 1
+	if ps.Valid && pn.Valid {
+		e.Place = &Place{int(ps.Int64), int(pn.Int64)}
+	}
 	if fid.Valid {
 		e.File = &File{ID: fid.Int64, Kind: "episode", OwnerID: e.ID, Path: fpath.String, Size: fsize.Int64, Quality: int(fq.Int64), AddedAt: time.Unix(fadded.Int64, 0).UTC()}
 		e.File.checked(fmedia, fguessed)

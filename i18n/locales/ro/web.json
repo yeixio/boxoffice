@@ -502,7 +502,17 @@
     "audioHint": "Se ia după ce spune numele lansării: Dubbed, Dual Audio, MULTi, Subbed. Un nume care nu spune nimic contează ca sunet original.",
     "audioAny": "Oricare",
     "audioDub": "Dublat sau cu ambele",
-    "audioSub": "Sunet original"
+    "audioSub": "Sunet original",
+    "orderOption": "{{kind}}: {{name}}",
+    "orderHint": "Lansările sunt căutate și citite după numărul fiecărui episod în această ordine, care vine de la TMDB. Fișierele păstrează sezonul și episodul cu care au fost difuzate.",
+    "placeIn": "{{code}} în lansări",
+    "orderKind1": "Ordinea difuzării",
+    "orderKind2": "Ordine absolută",
+    "orderKind3": "Ordinea DVD",
+    "orderKind4": "Ordine digitală",
+    "orderKind5": "Arcuri narative",
+    "orderKind6": "Ordinea producției",
+    "orderKind7": "Ordinea TV"
   },
   "health": {
     "error": "Nu funcționează",

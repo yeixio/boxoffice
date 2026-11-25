@@ -474,7 +474,17 @@
     "audioHint": "Går efter det, udgivelsens navn siger: Dubbed, Dual Audio, MULTi, Subbed. Et navn, der intet siger, tæller som original lyd.",
     "audioAny": "Begge dele",
     "audioDub": "Dubbet, eller med begge",
-    "audioSub": "Original lyd"
+    "audioSub": "Original lyd",
+    "orderOption": "{{kind}}: {{name}}",
+    "orderHint": "Udgivelser søges og læses efter hvert afsnits nummer i denne rækkefølge, som kommer fra TMDB. Filerne beholder den sæson og det afsnit, de blev sendt som.",
+    "placeIn": "{{code}} i udgivelser",
+    "orderKind1": "Sendt rækkefølge",
+    "orderKind2": "Absolut rækkefølge",
+    "orderKind3": "DVD-rækkefølge",
+    "orderKind4": "Digital rækkefølge",
+    "orderKind5": "Historiebuer",
+    "orderKind6": "Produktionsrækkefølge",
+    "orderKind7": "Tv-rækkefølge"
   },
   "health": {
     "error": "Virker ikke",

@@ -446,7 +446,17 @@
     "audioHint": "Dựa vào tên bản phát hành: Dubbed, Dual Audio, MULTi, Subbed. Tên không ghi gì được coi là âm thanh gốc.",
     "audioAny": "Loại nào cũng được",
     "audioDub": "Lồng tiếng, hoặc có cả hai",
-    "audioSub": "Âm thanh gốc"
+    "audioSub": "Âm thanh gốc",
+    "orderOption": "{{kind}}: {{name}}",
+    "orderHint": "Bản phát hành được tìm và đọc theo số của từng tập trong thứ tự này, lấy từ TMDB. Tệp vẫn giữ mùa và tập như khi phát sóng.",
+    "placeIn": "{{code}} trong bản phát hành",
+    "orderKind1": "Thứ tự phát sóng",
+    "orderKind2": "Thứ tự tuyệt đối",
+    "orderKind3": "Thứ tự DVD",
+    "orderKind4": "Thứ tự kỹ thuật số",
+    "orderKind5": "Mạch truyện",
+    "orderKind6": "Thứ tự sản xuất",
+    "orderKind7": "Thứ tự TV"
   },
   "health": {
     "error": "Không hoạt động",

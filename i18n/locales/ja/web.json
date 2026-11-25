@@ -446,7 +446,17 @@
     "audioHint": "リリース名の表記 (Dubbed、Dual Audio、MULTi、Subbed) で判断します。何も書かれていない名前は原音として扱います。",
     "audioAny": "どちらでも",
     "audioDub": "吹き替え、または両方入り",
-    "audioSub": "原音"
+    "audioSub": "原音",
+    "orderOption": "{{kind}}: {{name}}",
+    "orderHint": "リリースは、TMDB によるこの順序での各エピソードの番号で検索し、読み取ります。ファイルは放送時のシーズンとエピソードのままです。",
+    "placeIn": "リリースでは {{code}}",
+    "orderKind1": "放送順",
+    "orderKind2": "通し番号順",
+    "orderKind3": "DVD 順",
+    "orderKind4": "デジタル配信順",
+    "orderKind5": "ストーリーアーク",
+    "orderKind6": "制作順",
+    "orderKind7": "テレビ放送順"
   },
   "health": {
     "error": "動作していません",

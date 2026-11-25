@@ -474,7 +474,17 @@
     "audioHint": "Richtet sich nach dem Namen des Releases: Dubbed, Dual Audio, MULTi, Subbed. Ein Name ohne Angabe zählt als Originalton.",
     "audioAny": "Beides",
     "audioDub": "Synchronisiert oder mit beidem",
-    "audioSub": "Originalton"
+    "audioSub": "Originalton",
+    "orderOption": "{{kind}}: {{name}}",
+    "orderHint": "Releases werden nach der Nummer jeder Episode in dieser Reihenfolge von TMDB gesucht und gelesen. Dateien behalten Staffel und Episode der Ausstrahlung.",
+    "placeIn": "In Releases {{code}}",
+    "orderKind1": "Ausstrahlungsreihenfolge",
+    "orderKind2": "Absolute Reihenfolge",
+    "orderKind3": "DVD-Reihenfolge",
+    "orderKind4": "Digitale Reihenfolge",
+    "orderKind5": "Handlungsbögen",
+    "orderKind6": "Produktionsreihenfolge",
+    "orderKind7": "TV-Reihenfolge"
   },
   "health": {
     "error": "Funktioniert nicht",

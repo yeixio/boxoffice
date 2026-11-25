@@ -474,7 +474,17 @@
     "audioHint": "A kiadás neve alapján dönt: Dubbed, Dual Audio, MULTi, Subbed. Ha a név semmit sem mond, eredeti hangnak számít.",
     "audioAny": "Bármelyik",
     "audioDub": "Szinkronos, vagy mindkettő",
-    "audioSub": "Eredeti hang"
+    "audioSub": "Eredeti hang",
+    "orderOption": "{{kind}}: {{name}}",
+    "orderHint": "A kiadásokat az egyes epizódok e sorrend szerinti száma alapján keresi és olvassa; a sorrend a TMDB-ről származik. A fájlok megtartják az adás szerinti évadot és epizódot.",
+    "placeIn": "A kiadásokban {{code}}",
+    "orderKind1": "Adási sorrend",
+    "orderKind2": "Abszolút sorrend",
+    "orderKind3": "DVD-sorrend",
+    "orderKind4": "Digitális sorrend",
+    "orderKind5": "Történetívek",
+    "orderKind6": "Gyártási sorrend",
+    "orderKind7": "Tévés sorrend"
   },
   "health": {
     "error": "Nem működik",

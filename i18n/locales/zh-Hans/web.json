@@ -446,7 +446,17 @@
     "audioHint": "依据发布名称中的标注：Dubbed、Dual Audio、MULTi、Subbed。名称中没有标注的视为原声。",
     "audioAny": "都可以",
     "audioDub": "配音，或两者都有",
-    "audioSub": "原声"
+    "audioSub": "原声",
+    "orderOption": "{{kind}}：{{name}}",
+    "orderHint": "发布按每一集在此顺序中的编号搜索和识别，该顺序来自 TMDB。文件仍保留播出时的季和集。",
+    "placeIn": "发布中为 {{code}}",
+    "orderKind1": "播出顺序",
+    "orderKind2": "绝对顺序",
+    "orderKind3": "DVD 顺序",
+    "orderKind4": "数字发行顺序",
+    "orderKind5": "故事线",
+    "orderKind6": "制作顺序",
+    "orderKind7": "电视顺序"
   },
   "health": {
     "error": "不可用",

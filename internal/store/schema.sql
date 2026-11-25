@@ -121,6 +121,10 @@ CREATE TABLE IF NOT EXISTS episodes (
 	-- watched to fetch yet. A held episode that isn't on disk isn't
 	-- wanted, whatever monitored says.
 	held      INTEGER NOT NULL DEFAULT 0,
+	-- Where it sits in the episode order chosen for the show's releases
+	-- (series.numbering names one of TMDB's), when that lists it.
+	place_season INTEGER,
+	place_number INTEGER,
 	UNIQUE (series_id, season, number)
 );
 CREATE INDEX IF NOT EXISTS episodes_air ON episodes (air_date);

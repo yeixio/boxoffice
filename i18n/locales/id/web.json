@@ -446,7 +446,17 @@
     "audioHint": "Mengikuti apa yang tertulis di nama rilis: Dubbed, Dual Audio, MULTi, Subbed. Nama yang tidak menyebut apa pun dianggap suara asli.",
     "audioAny": "Yang mana saja",
     "audioDub": "Sulih suara, atau keduanya",
-    "audioSub": "Suara asli"
+    "audioSub": "Suara asli",
+    "orderOption": "{{kind}}: {{name}}",
+    "orderHint": "Rilis dicari dan dibaca menurut nomor tiap episode dalam urutan ini, yang berasal dari TMDB. Berkas tetap memakai musim dan episode saat ditayangkan.",
+    "placeIn": "{{code}} pada rilis",
+    "orderKind1": "Urutan tayang",
+    "orderKind2": "Urutan absolut",
+    "orderKind3": "Urutan DVD",
+    "orderKind4": "Urutan digital",
+    "orderKind5": "Alur cerita",
+    "orderKind6": "Urutan produksi",
+    "orderKind7": "Urutan TV"
   },
   "health": {
     "error": "Tidak berjalan",

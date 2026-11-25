@@ -218,7 +218,9 @@ export type Series = {
   keepAhead: number
   // How its releases number episodes ('' is S02E05; absolute is anime's
   // "Show - 137"), and the sound wanted ('' is either).
-  numbering?: '' | 'absolute'
+  // How releases number its episodes: as aired, straight through, or by
+  // one of TMDB's other episode orders (order:<id>).
+  numbering?: '' | 'absolute' | `order:${string}`
   audio?: '' | 'dub' | 'sub'
   // Second copies of its episodes kept at another quality: their profile
   // (0 or unset for none) and the library folder they go in ("" for next
@@ -251,7 +253,13 @@ export type Episode = {
   file?: MediaFile
   // Its second copy, when the show keeps them.
   second?: MediaFile
+  // Its season and number in the episode order chosen for the show's
+  // releases.
+  place?: { season: number; number: number }
 }
+
+// One of the other orders TMDB lists a show's episodes in.
+export type EpisodeOrder = { id: string; name: string; kind: number; seasons: number; episodes: number }
 
 export type LookupMovie = Omit<Movie, 'id' | 'monitored' | 'profileId' | 'rootFolder' | 'path' | 'addedAt'> & { id?: number }
 export type LookupShow = {

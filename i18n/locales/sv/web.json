@@ -474,7 +474,17 @@
     "audioHint": "Går efter vad släppets namn säger: Dubbed, Dual Audio, MULTi, Subbed. Ett namn som inte säger något räknas som originalljud.",
     "audioAny": "Vilket som",
     "audioDub": "Dubbat, eller med båda",
-    "audioSub": "Originalljud"
+    "audioSub": "Originalljud",
+    "orderOption": "{{kind}}: {{name}}",
+    "orderHint": "Släpp söks och läses efter varje avsnitts nummer i den här ordningen, som kommer från TMDB. Filerna behåller säsongen och avsnittet de sändes som.",
+    "placeIn": "{{code}} i släpp",
+    "orderKind1": "Sändningsordning",
+    "orderKind2": "Absolut ordning",
+    "orderKind3": "DVD-ordning",
+    "orderKind4": "Digital ordning",
+    "orderKind5": "Berättelsebågar",
+    "orderKind6": "Produktionsordning",
+    "orderKind7": "Tv-ordning"
   },
   "health": {
     "error": "Fungerar inte",

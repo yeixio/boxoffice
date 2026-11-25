@@ -441,6 +441,12 @@ func (s *Service) RefreshSeries(ctx context.Context, id int64) error {
 	if err := s.syncEpisodes(ctx, t, info, ""); err != nil {
 		return err
 	}
+	if _, ok := t.Order(); ok {
+		// New episodes take their places in the order its releases follow.
+		if err := s.placeEpisodes(ctx, t); err != nil {
+			s.Log.Warn("couldn't bring a show's episode order up to date; the places it had are kept", "title", t.Title, "err", err)
+		}
+	}
 	// New episodes of a show with space saver on wait their turn.
 	if t.KeepAhead > 0 {
 		_, err = s.HoldAhead(ctx, t.ID)

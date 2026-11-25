@@ -474,7 +474,17 @@
     "audioHint": "Perustuu siihen, mitä julkaisun nimi kertoo: Dubbed, Dual Audio, MULTi, Subbed. Nimi, joka ei kerro mitään, lasketaan alkuperäiseksi ääneksi.",
     "audioAny": "Kumpi tahansa",
     "audioDub": "Dubattu tai molemmat",
-    "audioSub": "Alkuperäinen ääni"
+    "audioSub": "Alkuperäinen ääni",
+    "orderOption": "{{kind}}: {{name}}",
+    "orderHint": "Julkaisuja haetaan ja luetaan kunkin jakson numerolla tässä TMDB:stä tulevassa järjestyksessä. Tiedostot säilyttävät kauden ja jakson, joilla ne esitettiin.",
+    "placeIn": "Julkaisuissa {{code}}",
+    "orderKind1": "Esitysjärjestys",
+    "orderKind2": "Absoluuttinen järjestys",
+    "orderKind3": "DVD-järjestys",
+    "orderKind4": "Digitaalinen järjestys",
+    "orderKind5": "Tarinakaaret",
+    "orderKind6": "Tuotantojärjestys",
+    "orderKind7": "TV-järjestys"
   },
   "health": {
     "error": "Ei toimi",

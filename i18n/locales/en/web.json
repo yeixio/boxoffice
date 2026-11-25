@@ -474,7 +474,17 @@
     "audioHint": "Goes by what a release's name says: Dubbed, Dual Audio, MULTi, Subbed. A name that says nothing counts as original sound.",
     "audioAny": "Either",
     "audioDub": "Dubbed, or with both",
-    "audioSub": "Original sound"
+    "audioSub": "Original sound",
+    "orderOption": "{{kind}}: {{name}}",
+    "orderHint": "Releases are searched for and read by each episode's number in this order, which comes from TMDB. Files keep the season and episode they aired as.",
+    "placeIn": "{{code}} in releases",
+    "orderKind1": "Aired order",
+    "orderKind2": "Absolute order",
+    "orderKind3": "DVD order",
+    "orderKind4": "Digital order",
+    "orderKind5": "Story arcs",
+    "orderKind6": "Production order",
+    "orderKind7": "TV order"
   },
   "health": {
     "error": "Not working",

@@ -474,7 +474,17 @@
     "audioHint": "Gaat af op wat de naam van de release zegt: Dubbed, Dual Audio, MULTi, Subbed. Een naam die niets zegt, telt als origineel geluid.",
     "audioAny": "Beide",
     "audioDub": "Nagesynchroniseerd, of met beide",
-    "audioSub": "Origineel geluid"
+    "audioSub": "Origineel geluid",
+    "orderOption": "{{kind}}: {{name}}",
+    "orderHint": "Releases worden gezocht en gelezen op het nummer van elke aflevering in deze volgorde, die van TMDB komt. Bestanden houden het seizoen en de aflevering van de uitzending.",
+    "placeIn": "{{code}} in releases",
+    "orderKind1": "Uitzendvolgorde",
+    "orderKind2": "Absolute volgorde",
+    "orderKind3": "Dvd-volgorde",
+    "orderKind4": "Digitale volgorde",
+    "orderKind5": "Verhaallijnen",
+    "orderKind6": "Productievolgorde",
+    "orderKind7": "Tv-volgorde"
   },
   "health": {
     "error": "Werkt niet",

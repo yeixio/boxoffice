@@ -323,7 +323,7 @@ func (s *Service) takeFromFeed(ctx context.Context, a AutoSettings, releases []R
 				// Not counted toward a season pack: one isn't out yet.
 				earlyEps[e.ID] = true
 			} else {
-				sw.per[e.Season]++
+				sw.per[s.inOrder(ctx, sw.t, []store.Episode{e})[0].Season]++
 			}
 		}
 	}
