@@ -2917,7 +2917,26 @@
     "notStarted": "Nobody has started this show yet.",
     "upTo": "Watched up to {{episode}}.",
     "later": "Later",
-    "laterHint": "Space saver fetches this once someone gets closer to it."
+    "laterHint": "Space saver fetches this once someone gets closer to it.",
+    "remove": {
+      "label": "Watched episodes",
+      "on": "Remove from this show",
+      "off": "Keep for this show",
+      "hint": "Removing moves the episodes that everyone watching this show has finished in Matinee to the recycle folder, and stops watching for them. Someone who hasn't started the show isn't counted. Specials stay.",
+      "upTo": "Everyone watching has finished up to {{episode}}.",
+      "notYet": "Nothing has been finished by everyone watching yet.",
+      "all": "Remove watched episodes from every show",
+      "allHint": "Off unless you turn it on here. Episodes that everyone watching a show has finished in Matinee move to the recycle folder and are no longer watched for. Someone who hasn't started the show isn't counted, and specials stay. Each show can have its own choice on its page, which wins over this one.",
+      "own": "Shows with their own choice: {{on}} remove, {{off}} keep.",
+      "confirmTitle": "Remove watched episodes?",
+      "shows": "Shows: {{shows}}.",
+      "goesNow": "Moving to the recycle folder now. Episodes: {{episodes}}. Files: {{files}}. Size: {{size}}.",
+      "nothingNow": "Nothing to move right now.",
+      "later": "After this, episodes go as everyone watching finishes them, {{n}} a day at most.",
+      "emptied": "The recycle folder is emptied after {{days}} days, which is when the space is freed. Until then you can move an episode back by hand.",
+      "kept": "The recycle folder is kept until you empty it in Settings, which is when the space is freed.",
+      "stale": "Matinee hasn't said what was watched in the last day. Nothing is removed until it does."
+    }
   },
   "secondCopy": {
     "title": "Second copy",

@@ -2917,7 +2917,26 @@
     "notStarted": "Ezt a sorozatot még senki sem kezdte el.",
     "upTo": "Megnézve eddig: {{episode}}.",
     "later": "Később",
-    "laterHint": "A helytakarékos mód akkor tölti le, amikor valaki közelebb ér hozzá."
+    "laterHint": "A helytakarékos mód akkor tölti le, amikor valaki közelebb ér hozzá.",
+    "remove": {
+      "label": "Megnézett epizódok",
+      "on": "Eltávolítás ennél a sorozatnál",
+      "off": "Megtartás ennél a sorozatnál",
+      "hint": "Az eltávolítás a lomtár mappába teszi azokat az epizódokat, amelyeket a sorozatot a Matinee-ben nézők mindegyike befejezett, és többé nem figyeli őket. Aki még nem kezdte el a sorozatot, nem számít. A különkiadások maradnak.",
+      "upTo": "Mindenki, aki nézi, a(z) {{episode}} epizódig végzett.",
+      "notYet": "Még nincs olyan epizód, amelyet mindenki befejezett, aki nézi.",
+      "all": "Megnézett epizódok eltávolítása minden sorozatból",
+      "allHint": "Ki van kapcsolva, amíg itt be nem kapcsolod. Azok az epizódok, amelyeket egy sorozat minden nézője befejezett a Matinee-ben, a lomtár mappába kerülnek, és többé nem figyeljük őket. Aki még nem kezdte el a sorozatot, nem számít, a különkiadások pedig maradnak. Minden sorozatnak lehet saját beállítása az oldalán, és az az erősebb.",
+      "own": "Saját beállítású sorozatok: {{on}} eltávolít, {{off}} megtart.",
+      "confirmTitle": "Eltávolítod a megnézett epizódokat?",
+      "shows": "Sorozatok: {{shows}}.",
+      "goesNow": "Most a lomtár mappába kerül. Epizódok: {{episodes}}. Fájlok: {{files}}. Méret: {{size}}.",
+      "nothingNow": "Most nincs mit áthelyezni.",
+      "later": "Ezután az epizódok akkor tűnnek el, amikor mindenki befejezte őket, naponta legfeljebb {{n}}.",
+      "emptied": "A lomtár mappa {{days}} nap után ürül, a hely csak akkor szabadul fel. Addig kézzel visszatehetsz egy epizódot.",
+      "kept": "A lomtár mappa megmarad, amíg ki nem üríted a Beállításokban, a hely csak akkor szabadul fel.",
+      "stale": "A Matinee az elmúlt napban nem közölte, mit néztek meg. Amíg nem teszi, semmi sem kerül eltávolításra."
+    }
   },
   "secondCopy": {
     "title": "Második példány",

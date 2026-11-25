@@ -2794,7 +2794,26 @@
     "notStarted": "Belum ada sesiapa yang memulakan rancangan ini.",
     "upTo": "Ditonton sehingga {{episode}}.",
     "later": "Kemudian",
-    "laterHint": "Penjimat ruang mengambilnya apabila seseorang semakin hampir dengannya."
+    "laterHint": "Penjimat ruang mengambilnya apabila seseorang semakin hampir dengannya.",
+    "remove": {
+      "label": "Episod yang telah ditonton",
+      "on": "Buang daripada rancangan ini",
+      "off": "Simpan untuk rancangan ini",
+      "hint": "Membuang memindahkan episod yang telah dihabiskan oleh semua orang yang menonton rancangan ini di Matinee ke folder kitar semula, dan berhenti memantaunya. Orang yang belum memulakan rancangan tidak dikira. Episod khas kekal.",
+      "upTo": "Semua yang menontonnya telah habis sehingga {{episode}}.",
+      "notYet": "Belum ada apa-apa yang dihabiskan oleh semua yang menontonnya.",
+      "all": "Buang episod yang telah ditonton daripada semua rancangan",
+      "allHint": "Mati melainkan anda menghidupkannya di sini. Episod yang telah dihabiskan oleh semua orang yang menonton sesuatu rancangan di Matinee dipindahkan ke folder kitar semula dan tidak lagi dipantau. Orang yang belum memulakan rancangan tidak dikira, dan episod khas kekal. Setiap rancangan boleh mempunyai pilihannya sendiri di halamannya, yang mengatasi tetapan ini.",
+      "own": "Rancangan dengan pilihan sendiri: {{on}} buang, {{off}} simpan.",
+      "confirmTitle": "Buang episod yang telah ditonton?",
+      "shows": "Rancangan: {{shows}}.",
+      "goesNow": "Dipindahkan ke folder kitar semula sekarang. Episod: {{episodes}}. Fail: {{files}}. Saiz: {{size}}.",
+      "nothingNow": "Tiada apa-apa untuk dipindahkan sekarang.",
+      "later": "Selepas ini, episod pergi apabila semua orang menghabiskannya, paling banyak {{n}} sehari.",
+      "emptied": "Folder kitar semula dikosongkan selepas {{days}} hari, dan ketika itulah ruang dibebaskan. Sehingga itu anda boleh memulangkan episod secara manual.",
+      "kept": "Folder kitar semula disimpan sehingga anda mengosongkannya di Tetapan, dan ketika itulah ruang dibebaskan.",
+      "stale": "Matinee belum memberitahu apa yang ditonton dalam sehari yang lalu. Tiada apa-apa dibuang sehingga ia berbuat demikian."
+    }
   },
   "secondCopy": {
     "title": "Salinan kedua",

@@ -3163,7 +3163,26 @@
     "notStarted": "Tento seriál zatím nikdo nezačal.",
     "upTo": "Zhlédnuto po {{episode}}.",
     "later": "Později",
-    "laterHint": "Úspora místa ho stáhne, až se k němu někdo přiblíží."
+    "laterHint": "Úspora místa ho stáhne, až se k němu někdo přiblíží.",
+    "remove": {
+      "label": "Zhlédnuté díly",
+      "on": "Odebírat u tohoto seriálu",
+      "off": "Ponechat u tohoto seriálu",
+      "hint": "Odebrání přesune díly, které v Matinee dokoukal každý, kdo seriál sleduje, do složky koše a přestane je hlídat. Kdo seriál ještě nezačal, se nepočítá. Speciály zůstávají.",
+      "upTo": "Všichni, kdo ho sledují, dokoukali po {{episode}}.",
+      "notYet": "Zatím není díl, který by dokoukali všichni, kdo ho sledují.",
+      "all": "Odebírat zhlédnuté díly ze všech seriálů",
+      "allHint": "Vypnuto, dokud to tady nezapnete. Díly, které v Matinee dokoukal každý, kdo seriál sleduje, se přesunou do složky koše a už se nehlídají. Kdo seriál ještě nezačal, se nepočítá, a speciály zůstávají. Každý seriál může mít na své stránce vlastní volbu, která má přednost.",
+      "own": "Seriály s vlastní volbou: {{on}} odebírat, {{off}} ponechat.",
+      "confirmTitle": "Odebírat zhlédnuté díly?",
+      "shows": "Seriály: {{shows}}.",
+      "goesNow": "Do složky koše se teď přesune. Díly: {{episodes}}. Soubory: {{files}}. Velikost: {{size}}.",
+      "nothingNow": "Teď není co přesouvat.",
+      "later": "Potom díly odcházejí, jak je všichni dokoukají, nejvýš {{n}} denně.",
+      "emptied": "Složka koše se vyprazdňuje po {{days}} dnech a teprve tím se místo uvolní. Do té doby můžete díl ručně vrátit.",
+      "kept": "Složka koše zůstává, dokud ji nevyprázdníte v Nastavení, a teprve tím se místo uvolní.",
+      "stale": "Matinee za poslední den neřeklo, co se sledovalo. Dokud to neudělá, nic se neodebere."
+    }
   },
   "secondCopy": {
     "title": "Druhá kopie",

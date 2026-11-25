@@ -338,6 +338,10 @@ type Series struct {
 	// KeepAhead is the show's space saver: only this many episodes past
 	// the latest one anyone has watched are fetched. 0 is off.
 	KeepAhead int `json:"keepAhead"`
+	// RemoveWatched says whether episodes everyone watching has finished
+	// are removed from the library: "" to follow Settings, or "on" or
+	// "off" for this show.
+	RemoveWatched string `json:"removeWatched"`
 	// SecondProfileID is the quality profile of a second copy to keep of
 	// each episode (a 1080p one next to the 4K one, say), or 0 for none.
 	// SecondRoot is the library folder those go in, in a folder named
@@ -498,14 +502,14 @@ type Episode struct {
 }
 
 const seriesCols = `id, tmdb_id, tvdb_id, imdb_id, title, sort_title, year, overview, poster, backdrop, status, network, runtime, rating,
-	monitored, profile_id, root_folder, path, added_at, refreshed_at, auto_upgrade, keep_ahead, second_profile_id, second_root, numbering, audio`
+	monitored, profile_id, root_folder, path, added_at, refreshed_at, auto_upgrade, keep_ahead, second_profile_id, second_root, numbering, audio, remove_watched`
 
 func scanSeries(r interface{ Scan(...any) error }) (Series, error) {
 	var t Series
 	var mon int
 	var added, refreshed int64
 	err := r.Scan(&t.ID, &t.TMDBID, &t.TVDBID, &t.IMDBID, &t.Title, &t.SortTitle, &t.Year, &t.Overview, &t.Poster, &t.Backdrop, &t.Status, &t.Network, &t.Runtime, &t.Rating,
-		&mon, &t.ProfileID, &t.RootFolder, &t.Path, &added, &refreshed, &t.AutoUpgrade, &t.KeepAhead, &t.SecondProfileID, &t.SecondRoot, &t.Numbering, &t.Audio)
+		&mon, &t.ProfileID, &t.RootFolder, &t.Path, &added, &refreshed, &t.AutoUpgrade, &t.KeepAhead, &t.SecondProfileID, &t.SecondRoot, &t.Numbering, &t.Audio, &t.RemoveWatched)
 	if errors.Is(err, sql.ErrNoRows) {
 		return t, ErrNotFound
 	}
@@ -644,8 +648,8 @@ func (s *Store) EnsureSeason(ctx context.Context, seriesID int64, se Season) err
 }
 
 func (s *Store) UpdateSeries(ctx context.Context, t Series) error {
-	res, err := s.exec(ctx, "UPDATE series SET monitored = ?, profile_id = ?, root_folder = ?, path = ?, auto_upgrade = ?, keep_ahead = ?, second_profile_id = ?, second_root = ?, numbering = ?, audio = ? WHERE id = ?",
-		b2i(t.Monitored), t.ProfileID, t.RootFolder, t.Path, t.AutoUpgrade, t.KeepAhead, t.SecondProfileID, t.SecondRoot, t.Numbering, t.Audio, t.ID)
+	res, err := s.exec(ctx, "UPDATE series SET monitored = ?, profile_id = ?, root_folder = ?, path = ?, auto_upgrade = ?, keep_ahead = ?, second_profile_id = ?, second_root = ?, numbering = ?, audio = ?, remove_watched = ? WHERE id = ?",
+		b2i(t.Monitored), t.ProfileID, t.RootFolder, t.Path, t.AutoUpgrade, t.KeepAhead, t.SecondProfileID, t.SecondRoot, t.Numbering, t.Audio, t.RemoveWatched, t.ID)
 	if err != nil {
 		return err
 	}

@@ -3040,7 +3040,26 @@
     "notStarted": "Ninguém começou esta série ainda.",
     "upTo": "Assistido até {{episode}}.",
     "later": "Mais tarde",
-    "laterHint": "A economia de espaço busca este quando alguém chegar mais perto dele."
+    "laterHint": "A economia de espaço busca este quando alguém chegar mais perto dele.",
+    "remove": {
+      "label": "Episódios assistidos",
+      "on": "Remover desta série",
+      "off": "Manter nesta série",
+      "hint": "Remover move para a pasta de reciclagem os episódios que todos os que assistem a esta série terminaram no Matinee, e para de vigiá-los. Quem não começou a série não é contado. Os especiais ficam.",
+      "upTo": "Todos os que assistem terminaram até {{episode}}.",
+      "notYet": "Ainda não há nada que todos os que assistem tenham terminado.",
+      "all": "Remover episódios assistidos de todas as séries",
+      "allHint": "Desligado, a menos que você ligue aqui. Os episódios que todos os que assistem a uma série terminaram no Matinee vão para a pasta de reciclagem e deixam de ser vigiados. Quem não começou a série não é contado, e os especiais ficam. Cada série pode ter sua própria escolha na página dela, que vale mais que esta.",
+      "own": "Séries com escolha própria: {{on}} removem, {{off}} mantêm.",
+      "confirmTitle": "Remover episódios assistidos?",
+      "shows": "Séries: {{shows}}.",
+      "goesNow": "Movido agora para a pasta de reciclagem. Episódios: {{episodes}}. Arquivos: {{files}}. Tamanho: {{size}}.",
+      "nothingNow": "Não há nada para mover agora.",
+      "later": "Depois disso, os episódios saem conforme todos os terminam, no máximo {{n}} por dia.",
+      "emptied": "A pasta de reciclagem é esvaziada após {{days}} dias, e é aí que o espaço é liberado. Até lá você pode devolver um episódio manualmente.",
+      "kept": "A pasta de reciclagem é mantida até você esvaziá-la em Configurações, e é aí que o espaço é liberado.",
+      "stale": "O Matinee não disse o que foi assistido no último dia. Nada é removido até que diga."
+    }
   },
   "secondCopy": {
     "title": "Segunda cópia",

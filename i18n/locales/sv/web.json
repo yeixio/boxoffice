@@ -2917,7 +2917,26 @@
     "notStarted": "Ingen har börjat på den här serien än.",
     "upTo": "Sett till och med {{episode}}.",
     "later": "Senare",
-    "laterHint": "Utrymmessparare hämtar det när någon kommer närmare."
+    "laterHint": "Utrymmessparare hämtar det när någon kommer närmare.",
+    "remove": {
+      "label": "Sedda avsnitt",
+      "on": "Ta bort från den här serien",
+      "off": "Behåll för den här serien",
+      "hint": "Borttagning flyttar de avsnitt som alla som tittar på serien har sett klart i Matinee till papperskorgsmappen och slutar bevaka dem. Den som inte har börjat på serien räknas inte. Specialavsnitt blir kvar.",
+      "upTo": "Alla som tittar har sett klart till och med {{episode}}.",
+      "notYet": "Det finns ännu inget som alla som tittar har sett klart.",
+      "all": "Ta bort sedda avsnitt från alla serier",
+      "allHint": "Av om du inte slår på det här. Avsnitt som alla som tittar på en serie har sett klart i Matinee flyttas till papperskorgsmappen och bevakas inte längre. Den som inte har börjat på serien räknas inte, och specialavsnitt blir kvar. Varje serie kan ha sitt eget val på sin sida, och det går före det här.",
+      "own": "Serier med eget val: {{on}} tar bort, {{off}} behåller.",
+      "confirmTitle": "Ta bort sedda avsnitt?",
+      "shows": "Serier: {{shows}}.",
+      "goesNow": "Flyttas till papperskorgsmappen nu. Avsnitt: {{episodes}}. Filer: {{files}}. Storlek: {{size}}.",
+      "nothingNow": "Det finns inget att flytta just nu.",
+      "later": "Därefter försvinner avsnitt allteftersom alla har sett klart dem, högst {{n}} om dagen.",
+      "emptied": "Papperskorgsmappen töms efter {{days}} dagar, och först då frigörs utrymmet. Fram till dess kan du flytta tillbaka ett avsnitt för hand.",
+      "kept": "Papperskorgsmappen behålls tills du tömmer den i Inställningar, och först då frigörs utrymmet.",
+      "stale": "Matinee har inte berättat vad som har setts det senaste dygnet. Inget tas bort förrän det sker."
+    }
   },
   "secondCopy": {
     "title": "Extra kopia",

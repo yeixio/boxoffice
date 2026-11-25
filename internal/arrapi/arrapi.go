@@ -58,7 +58,9 @@ type Handler struct {
 	// Requests takes the requests people make in Matinee, for the
 	// Requests page; nil takes none, and Matinee adds titles itself.
 	Requests *portal.Service
-	mux      *http.ServeMux
+	// Watched hears that Matinee has said what was watched of the shows.
+	Watched func(ctx context.Context)
+	mux     *http.ServeMux
 }
 
 // New makes the handler for an app.

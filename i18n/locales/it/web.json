@@ -3040,7 +3040,26 @@
     "notStarted": "Nessuno ha ancora iniziato questa serie.",
     "upTo": "Guardato fino a {{episode}}.",
     "later": "Più tardi",
-    "laterHint": "Il risparmio spazio lo scarica quando qualcuno ci si avvicina."
+    "laterHint": "Il risparmio spazio lo scarica quando qualcuno ci si avvicina.",
+    "remove": {
+      "label": "Episodi visti",
+      "on": "Rimuovi da questa serie",
+      "off": "Tieni per questa serie",
+      "hint": "La rimozione sposta nella cartella del cestino gli episodi che tutti quelli che guardano questa serie hanno finito in Matinee, e smette di tenerli d’occhio. Chi non ha iniziato la serie non conta. Gli speciali restano.",
+      "upTo": "Tutti quelli che la guardano hanno finito fino a {{episode}}.",
+      "notYet": "Non c’è ancora nulla che tutti quelli che la guardano abbiano finito.",
+      "all": "Rimuovi gli episodi visti da tutte le serie",
+      "allHint": "Disattivato finché non lo attivi qui. Gli episodi che tutti quelli che guardano una serie hanno finito in Matinee vanno nella cartella del cestino e non vengono più tenuti d’occhio. Chi non ha iniziato la serie non conta, e gli speciali restano. Ogni serie può avere la propria scelta nella sua pagina, che prevale su questa.",
+      "own": "Serie con una scelta propria: {{on}} rimuovono, {{off}} tengono.",
+      "confirmTitle": "Rimuovere gli episodi visti?",
+      "shows": "Serie: {{shows}}.",
+      "goesNow": "Spostato ora nella cartella del cestino. Episodi: {{episodes}}. File: {{files}}. Dimensione: {{size}}.",
+      "nothingNow": "Non c’è niente da spostare in questo momento.",
+      "later": "Dopo, gli episodi se ne vanno man mano che tutti li finiscono, al massimo {{n}} al giorno.",
+      "emptied": "La cartella del cestino viene svuotata dopo {{days}} giorni, ed è allora che lo spazio si libera. Fino ad allora puoi rimettere a posto un episodio a mano.",
+      "kept": "La cartella del cestino resta finché non la svuoti nelle Impostazioni, ed è allora che lo spazio si libera.",
+      "stale": "Matinee non ha detto cosa è stato visto nell’ultimo giorno. Non viene rimosso nulla finché non lo fa."
+    }
   },
   "secondCopy": {
     "title": "Seconda copia",

@@ -3040,7 +3040,26 @@
     "notStarted": "Nadie ha empezado esta serie todavía.",
     "upTo": "Visto hasta {{episode}}.",
     "later": "Más tarde",
-    "laterHint": "El ahorro de espacio lo trae cuando alguien se acerque a él."
+    "laterHint": "El ahorro de espacio lo trae cuando alguien se acerque a él.",
+    "remove": {
+      "label": "Episodios vistos",
+      "on": "Quitar de esta serie",
+      "off": "Conservar en esta serie",
+      "hint": "Quitar mueve a la carpeta de reciclaje los episodios que han terminado en Matinee todos los que ven esta serie, y deja de vigilarlos. Quien no ha empezado la serie no cuenta. Los especiales se quedan.",
+      "upTo": "Todos los que la ven han terminado hasta {{episode}}.",
+      "notYet": "Todavía no hay nada que hayan terminado todos los que la ven.",
+      "all": "Quitar los episodios vistos de todas las series",
+      "allHint": "Desactivado salvo que lo actives aquí. Los episodios que han terminado en Matinee todos los que ven una serie pasan a la carpeta de reciclaje y dejan de vigilarse. Quien no ha empezado la serie no cuenta, y los especiales se quedan. Cada serie puede tener su propia opción en su página, que manda sobre esta.",
+      "own": "Series con su propia opción: {{on}} quitan, {{off}} conservan.",
+      "confirmTitle": "¿Quitar los episodios vistos?",
+      "shows": "Series: {{shows}}.",
+      "goesNow": "Se mueve ahora a la carpeta de reciclaje. Episodios: {{episodes}}. Archivos: {{files}}. Tamaño: {{size}}.",
+      "nothingNow": "No hay nada que mover ahora mismo.",
+      "later": "Después, los episodios se van a medida que todos los terminan, como máximo {{n}} al día.",
+      "emptied": "La carpeta de reciclaje se vacía a los {{days}} días, y es entonces cuando se libera el espacio. Hasta entonces puedes devolver un episodio a mano.",
+      "kept": "La carpeta de reciclaje se conserva hasta que la vacíes en Ajustes, y es entonces cuando se libera el espacio.",
+      "stale": "Matinee no ha dicho qué se ha visto en el último día. No se quita nada hasta que lo haga."
+    }
   },
   "secondCopy": {
     "title": "Segunda copia",

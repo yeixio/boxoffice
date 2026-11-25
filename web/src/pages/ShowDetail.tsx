@@ -9,7 +9,7 @@ import { LockedNote, ReportedNote } from '../Bulk'
 import { Releases } from '../Releases'
 import { DeleteFiles, RemoveTitle } from '../RemoveFiles'
 import { SecondCopy, type SecondCopyEdit } from '../SecondCopy'
-import { SpaceSaverField, type SpaceSaverWatched } from '../SpaceSaver'
+import { ConfirmRemoveWatched, RemoveWatchedField, SpaceSaverField, type SpaceSaverWatched, type WatchedShown } from '../SpaceSaver'
 import { get, patch, post, type Episode, type EpisodeOrder, type Profile, type Reported, type Series } from '../api'
 import { bytes, day, episodeCode } from '../format'
 import { qualityName, useProfiles, useQualities } from '../hooks'
@@ -17,7 +17,8 @@ import { pictureText } from './QualityCheck'
 import { FindSubtitles, SubtitleMark } from './Subtitles'
 import { Backdrop, Badge, Button, Card, ErrorNote, Field, Poster, Select, Spinner, Toggle } from '../ui'
 
-type Detail = { series: Series; episodes: Episode[]; reported?: Reported[]; watched?: SpaceSaverWatched }
+// removeWatched is what Settings says about removing watched episodes.
+type Detail = { series: Series; episodes: Episode[]; reported?: Reported[]; watched?: SpaceSaverWatched; removeWatched?: boolean }
 
 export function ShowDetail() {
   const { t } = useTranslation()
@@ -36,7 +37,16 @@ export function ShowDetail() {
     qc.setQueryData(key, d)
     qc.invalidateQueries({ queryKey: ['series'] })
   }
-  const edit = useMutation({ mutationFn: (body: Partial<Pick<Series, 'monitored' | 'profileId' | 'autoUpgrade' | 'keepAhead' | 'numbering' | 'audio'>> & SecondCopyEdit) => patch<Detail>(`/series/${id}`, body), onSuccess: set })
+  const edit = useMutation({ mutationFn: (body: Partial<Pick<Series, 'monitored' | 'profileId' | 'autoUpgrade' | 'keepAhead' | 'numbering' | 'audio' | 'removeWatched'>> & SecondCopyEdit) => patch<Detail>(`/series/${id}`, body), onSuccess: set })
+  // Removing watched episodes is turned on through a dialog that shows what goes first.
+  const [removeWatched, setRemoveWatched] = useState<Series['removeWatched'] | null>(null)
+  const turnOn = useMutation({
+    mutationFn: (body: Pick<Series, 'removeWatched'> & WatchedShown) => patch<Detail>(`/series/${id}`, body),
+    onSuccess: (d) => {
+      set(d)
+      setRemoveWatched(null)
+    },
+  })
   const season = useMutation({ mutationFn: ({ n, monitored }: { n: number; monitored: boolean }) => patch<Detail>(`/series/${id}/seasons/${n}`, { monitored }), onSuccess: set })
   const action = useMutation({
     mutationFn: (what: 'search' | 'refresh') => post(`/series/${id}/${what}`),
@@ -114,6 +124,15 @@ export function ShowDetail() {
           </Field>
           {!locked && <AutoUpgradeField value={s.autoUpgrade} onChange={(v) => edit.mutate({ autoUpgrade: v as Series['autoUpgrade'] })} upgradeOK={!!profiles.data?.find((p) => p.id === s.profileId)?.upgrade} />}
           {!locked && <SpaceSaverField value={s.keepAhead} onChange={(n) => edit.mutate({ keepAhead: n })} watched={show.data.watched} />}
+          {!locked && (
+            <RemoveWatchedField
+              value={s.removeWatched ?? ''}
+              settings={!!show.data.removeWatched}
+              watched={show.data.watched}
+              onChange={(v) => edit.mutate({ removeWatched: v as Series['removeWatched'] })}
+              onTurnOn={(v) => setRemoveWatched(v as Series['removeWatched'])}
+            />
+          )}
           {!locked && (
             <Field label={t('show.numbering')} hint={s.numbering === 'absolute' ? t('show.numberingHint') : s.numbering ? t('show.orderHint') : undefined}>
               {(fid) => (
@@ -205,6 +224,19 @@ export function ShowDetail() {
         />
       )}
       {confirmDelete && <RemoveTitle kind="series" id={s.id} title={s.title} onClose={() => setConfirmDelete(false)} onRemoved={removed} />}
+      {removeWatched != null && (
+        <ConfirmRemoveWatched
+          path={`/series/${s.id}/watched/removal`}
+          title={s.title}
+          busy={turnOn.isPending}
+          error={turnOn.error}
+          onClose={() => {
+            setRemoveWatched(null)
+            turnOn.reset()
+          }}
+          onConfirm={(shown) => turnOn.mutate({ removeWatched, ...shown })}
+        />
+      )}
     </div>
   )
 }

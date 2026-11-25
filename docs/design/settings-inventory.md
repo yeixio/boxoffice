@@ -48,6 +48,7 @@ Personal: each admin has their own.
 | Drop unwanted tracks | Remove audio and subtitle tracks in other languages as files come in | Settings → Library → `#tracks` | Application | Advanced | Off | Languages to keep; MKVToolNix | Data |
 | Clean-up rules | Pick out watched or unwatched titles to delete | Settings → Library → `#cleanup` | Resource | Advanced | None | Matinee watch history | Data |
 | Clean-up: deletions a day | Most titles a rule deletes by itself in a day | Settings → Library → `#cleanup` | Application | Advanced | 5 | Rules set to delete by themselves | Data |
+| Space saver: remove watched episodes | Move episodes everyone watching a show has finished to the recycle folder, for shows without their own choice | Settings → Library → `#space-saver` | Application | Advanced | Off | Matinee watch history; turning it on shows what goes first | Data |
 | Recycle folders: delete replaced copies | When copies set aside in `.recycle` are deleted for good | Settings → Library → `#recycle` | Application | Basic | After 7 days | — | Data |
 
 Quality check (`#quality-check`), Problem files (`#problems`), the titles file (`#titles-file`) and indexer statistics (`#indexer-stats`) are actions or reports, not settings.
@@ -139,6 +140,7 @@ On the Requests page, which is where requests are handled (section 3.4).
 | Quality profile | The profile a title uses | Title page | Resource | Basic | Root folder's or rule's | Profiles | Behaviour |
 | Upgrades | Upgrade this title or not, overriding the app-wide choice | Title page | Resource | Advanced | As app-wide | — | Behaviour |
 | Space saver | Keep only the next N episodes past what's watched | Show page | Resource | Advanced | Off | Matinee watch history | Data |
+| Watched episodes | Remove this show's watched episodes or keep them, overriding the app-wide choice | Show page | Resource | Advanced | As app-wide (off) | Matinee watch history; turning it on shows what goes first | Data |
 | Second copy | Keep a second copy (such as 4K beside 1080p) | Title page | Resource | Advanced | Off | A second root folder | Data |
 | Edition | Which cut of a movie to keep | Movie page | Resource | Advanced | Any | — | Behaviour |
 | Music quality | FLAC first, FLAC only, or MP3 | Music page | Application | Basic | FLAC first | — | Behaviour |

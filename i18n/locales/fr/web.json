@@ -3040,7 +3040,26 @@
     "notStarted": "Personne n’a encore commencé cette série.",
     "upTo": "Regardé jusqu’à {{episode}}.",
     "later": "Plus tard",
-    "laterHint": "L’économie d’espace le récupère dès que quelqu’un s’en approche."
+    "laterHint": "L’économie d’espace le récupère dès que quelqu’un s’en approche.",
+    "remove": {
+      "label": "Épisodes regardés",
+      "on": "Retirer pour cette série",
+      "off": "Garder pour cette série",
+      "hint": "Retirer déplace dans le dossier de recyclage les épisodes que tous ceux qui regardent cette série ont terminés dans Matinee, et cesse de les surveiller. Une personne qui n’a pas commencé la série n’est pas comptée. Les épisodes spéciaux restent.",
+      "upTo": "Tous ceux qui la regardent ont terminé jusqu’à {{episode}}.",
+      "notYet": "Rien n’a encore été terminé par tous ceux qui la regardent.",
+      "all": "Retirer les épisodes regardés de toutes les séries",
+      "allHint": "Désactivé tant que vous ne l’activez pas ici. Les épisodes que tous ceux qui regardent une série ont terminés dans Matinee vont dans le dossier de recyclage et ne sont plus surveillés. Une personne qui n’a pas commencé la série n’est pas comptée, et les épisodes spéciaux restent. Chaque série peut avoir son propre choix sur sa page, qui l’emporte sur celui-ci.",
+      "own": "Séries avec leur propre choix : {{on}} retirent, {{off}} gardent.",
+      "confirmTitle": "Retirer les épisodes regardés ?",
+      "shows": "Séries : {{shows}}.",
+      "goesNow": "Déplacé maintenant dans le dossier de recyclage. Épisodes : {{episodes}}. Fichiers : {{files}}. Taille : {{size}}.",
+      "nothingNow": "Rien à déplacer pour l’instant.",
+      "later": "Ensuite, les épisodes partent à mesure que tout le monde les termine, {{n}} par jour au plus.",
+      "emptied": "Le dossier de recyclage est vidé après {{days}} jours, et c’est alors que l’espace est libéré. D’ici là, vous pouvez remettre un épisode à la main.",
+      "kept": "Le dossier de recyclage est conservé jusqu’à ce que vous le vidiez dans les Réglages, et c’est alors que l’espace est libéré.",
+      "stale": "Matinee n’a pas dit ce qui a été regardé depuis un jour. Rien n’est retiré tant qu’il ne l’a pas fait."
+    }
   },
   "secondCopy": {
     "title": "Deuxième copie",

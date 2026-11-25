@@ -2917,7 +2917,26 @@
     "notStarted": "Nog niemand is aan deze serie begonnen.",
     "upTo": "Bekeken tot en met {{episode}}.",
     "later": "Later",
-    "laterHint": "Ruimtebesparing haalt deze op zodra iemand er dichterbij komt."
+    "laterHint": "Ruimtebesparing haalt deze op zodra iemand er dichterbij komt.",
+    "remove": {
+      "label": "Bekeken afleveringen",
+      "on": "Weghalen bij deze serie",
+      "off": "Bewaren bij deze serie",
+      "hint": "Weghalen verplaatst de afleveringen die iedereen die deze serie in Matinee kijkt heeft uitgekeken naar de prullenbakmap, en houdt ze niet meer in de gaten. Wie de serie nog niet is begonnen, telt niet mee. Specials blijven.",
+      "upTo": "Iedereen die kijkt is klaar tot en met {{episode}}.",
+      "notYet": "Er is nog niets dat iedereen die kijkt heeft uitgekeken.",
+      "all": "Bekeken afleveringen bij alle series weghalen",
+      "allHint": "Uit, tenzij je het hier aanzet. Afleveringen die iedereen die een serie in Matinee kijkt heeft uitgekeken, gaan naar de prullenbakmap en worden niet meer in de gaten gehouden. Wie de serie nog niet is begonnen, telt niet mee, en specials blijven. Elke serie kan op haar pagina een eigen keuze hebben, en die gaat voor.",
+      "own": "Series met een eigen keuze: {{on}} weghalen, {{off}} bewaren.",
+      "confirmTitle": "Bekeken afleveringen weghalen?",
+      "shows": "Series: {{shows}}.",
+      "goesNow": "Gaat nu naar de prullenbakmap. Afleveringen: {{episodes}}. Bestanden: {{files}}. Grootte: {{size}}.",
+      "nothingNow": "Er valt nu niets te verplaatsen.",
+      "later": "Daarna verdwijnen afleveringen zodra iedereen ze heeft uitgekeken, hooguit {{n}} per dag.",
+      "emptied": "De prullenbakmap wordt na {{days}} dagen geleegd, en pas dan komt de ruimte vrij. Tot die tijd kun je een aflevering met de hand terugzetten.",
+      "kept": "De prullenbakmap blijft tot je hem in Instellingen leegt, en pas dan komt de ruimte vrij.",
+      "stale": "Matinee heeft de afgelopen dag niet gemeld wat er is bekeken. Tot dat gebeurt, wordt er niets weggehaald."
+    }
   },
   "secondCopy": {
     "title": "Tweede kopie",

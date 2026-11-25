@@ -2917,7 +2917,26 @@
     "notStarted": "Kukaan ei ole vielä aloittanut tätä sarjaa.",
     "upTo": "Katsottu jaksoon {{episode}} asti.",
     "later": "Myöhemmin",
-    "laterHint": "Tilansäästö hakee sen, kun joku pääsee lähemmäs sitä."
+    "laterHint": "Tilansäästö hakee sen, kun joku pääsee lähemmäs sitä.",
+    "remove": {
+      "label": "Katsotut jaksot",
+      "on": "Poista tästä sarjasta",
+      "off": "Säilytä tässä sarjassa",
+      "hint": "Poistaminen siirtää roskakorikansioon jaksot, jotka kaikki sarjaa Matineessa katsovat ovat katsoneet loppuun, eikä niitä enää seurata. Sarjaa aloittamatonta ei lasketa. Erikoisjaksot jäävät.",
+      "upTo": "Kaikki sitä katsovat ovat katsoneet jaksoon {{episode}} asti.",
+      "notYet": "Vielä ei ole jaksoa, jonka kaikki sitä katsovat olisivat katsoneet loppuun.",
+      "all": "Poista katsotut jaksot kaikista sarjoista",
+      "allHint": "Pois päältä, ellet ota sitä käyttöön tässä. Jaksot, jotka kaikki sarjaa Matineessa katsovat ovat katsoneet loppuun, siirtyvät roskakorikansioon eikä niitä enää seurata. Sarjaa aloittamatonta ei lasketa, ja erikoisjaksot jäävät. Jokaisella sarjalla voi olla sivullaan oma valintansa, joka menee tämän edelle.",
+      "own": "Sarjat, joilla on oma valinta: {{on}} poistaa, {{off}} säilyttää.",
+      "confirmTitle": "Poistetaanko katsotut jaksot?",
+      "shows": "Sarjoja: {{shows}}.",
+      "goesNow": "Siirretään nyt roskakorikansioon. Jaksoja: {{episodes}}. Tiedostoja: {{files}}. Koko: {{size}}.",
+      "nothingNow": "Juuri nyt ei ole mitään siirrettävää.",
+      "later": "Tämän jälkeen jaksot lähtevät sitä mukaa kuin kaikki ovat katsoneet ne, enintään {{n}} päivässä.",
+      "emptied": "Roskakorikansio tyhjennetään {{days}} päivän kuluttua, ja vasta silloin tila vapautuu. Siihen asti voit siirtää jakson takaisin käsin.",
+      "kept": "Roskakorikansio säilyy, kunnes tyhjennät sen Asetuksissa, ja vasta silloin tila vapautuu.",
+      "stale": "Matinee ei ole kertonut viimeisen vuorokauden aikana, mitä on katsottu. Mitään ei poisteta ennen sitä."
+    }
   },
   "secondCopy": {
     "title": "Toinen kopio",

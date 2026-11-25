@@ -148,6 +148,7 @@ type Server struct {
 	playOnOnce   sync.Once
 	titlesOnce   sync.Once
 	cleanupMu    sync.Mutex // one clean-up run or deletion at a time
+	watchedMu    sync.Mutex // one removal of watched episodes at a time
 	started      time.Time
 	failures     lockouts // client address and username -> wrong tries
 	signUps      signUpLimit
@@ -365,6 +366,7 @@ func (s *Server) Handler() http.Handler {
 	routes = append(routes, s.homeRoutes()...)
 	routes = append(routes, s.importRoutes()...)
 	routes = append(routes, s.moveRoutes()...)
+	routes = append(routes, s.watchedRemovalRoutes()...)
 	for _, r := range routes {
 		mux.Handle(r.pattern, s.wrap(r))
 	}
@@ -376,6 +378,7 @@ func (s *Server) Handler() http.Handler {
 	for _, app := range []arrapi.App{arrapi.Radarr, arrapi.Sonarr} {
 		h := arrapi.NewPaired(app, s.Catalog, key, s.Version, s.Log, pair)
 		h.Requests = s.Portal
+		h.Watched = s.removeWatchedSoon
 		mux.Handle("/"+string(app)+"/", http.StripPrefix("/"+string(app), h))
 	}
 	// Prometheus, with the token from Health → Prometheus (see alerts.go).

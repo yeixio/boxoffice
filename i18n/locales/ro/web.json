@@ -3040,7 +3040,26 @@
     "notStarted": "Nimeni nu a început încă acest serial.",
     "upTo": "Vizionat până la {{episode}}.",
     "later": "Mai târziu",
-    "laterHint": "Economisirea de spațiu îl aduce când cineva se apropie de el."
+    "laterHint": "Economisirea de spațiu îl aduce când cineva se apropie de el.",
+    "remove": {
+      "label": "Episoade vizionate",
+      "on": "Elimină din acest serial",
+      "off": "Păstrează pentru acest serial",
+      "hint": "Eliminarea mută în dosarul de reciclare episoadele pe care le-au terminat în Matinee toți cei care urmăresc acest serial și nu le mai supraveghează. Cine nu a început serialul nu este numărat. Episoadele speciale rămân.",
+      "upTo": "Toți cei care îl urmăresc au terminat până la {{episode}}.",
+      "notYet": "Încă nu există nimic terminat de toți cei care îl urmăresc.",
+      "all": "Elimină episoadele vizionate din toate serialele",
+      "allHint": "Oprit dacă nu îl pornești aici. Episoadele pe care le-au terminat în Matinee toți cei care urmăresc un serial merg în dosarul de reciclare și nu mai sunt supravegheate. Cine nu a început serialul nu este numărat, iar episoadele speciale rămân. Fiecare serial poate avea propria alegere pe pagina lui, care are întâietate.",
+      "own": "Seriale cu alegere proprie: {{on}} elimină, {{off}} păstrează.",
+      "confirmTitle": "Elimini episoadele vizionate?",
+      "shows": "Seriale: {{shows}}.",
+      "goesNow": "Se mută acum în dosarul de reciclare. Episoade: {{episodes}}. Fișiere: {{files}}. Dimensiune: {{size}}.",
+      "nothingNow": "Nu este nimic de mutat acum.",
+      "later": "După aceea, episoadele pleacă pe măsură ce toți le termină, cel mult {{n}} pe zi.",
+      "emptied": "Dosarul de reciclare se golește după {{days}} zile și abia atunci se eliberează spațiul. Până atunci poți pune un episod înapoi de mână.",
+      "kept": "Dosarul de reciclare se păstrează până îl golești din Setări și abia atunci se eliberează spațiul.",
+      "stale": "Matinee nu a spus ce s-a vizionat în ultima zi. Nu se elimină nimic până nu o face."
+    }
   },
   "secondCopy": {
     "title": "A doua copie",

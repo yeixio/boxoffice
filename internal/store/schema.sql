@@ -93,6 +93,9 @@ CREATE TABLE IF NOT EXISTS series (
 	-- anyone has watched (Matinee says which), and more as they watch.
 	-- 0 is off.
 	keep_ahead   INTEGER NOT NULL DEFAULT 0,
+	-- Whether episodes everyone watching has finished are removed: ''
+	-- follows Settings; 'on' or 'off' for this show.
+	remove_watched TEXT NOT NULL DEFAULT '',
 	-- A second copy of each episode at another quality (see store.Series.SecondProfileID).
 	second_profile_id INTEGER NOT NULL DEFAULT 0, -- 0: no second copies
 	second_root       TEXT NOT NULL DEFAULT '',   -- '' keeps them next to the first copies
@@ -790,6 +793,11 @@ CREATE TABLE IF NOT EXISTS watched (
 	-- 0 and 0 when Matinee doesn't say. Space saver goes by it.
 	furthest_season  INTEGER NOT NULL DEFAULT 0,
 	furthest_episode INTEGER NOT NULL DEFAULT 0,
+	-- A show: the latest episode everyone who has played any of it has
+	-- finished, specials left out; 0 and 0 when there's none, or Matinee
+	-- doesn't say. Removing watched episodes goes by it.
+	all_finished_season  INTEGER NOT NULL DEFAULT 0,
+	all_finished_episode INTEGER NOT NULL DEFAULT 0,
 	report      BIGINT NOT NULL,            -- the report it came in
 	PRIMARY KEY (kind, title_id)
 );

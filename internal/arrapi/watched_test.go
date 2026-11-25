@@ -92,6 +92,22 @@ func TestWatchedReport(t *testing.T) {
 	if wanted() != 2 {
 		t.Fatalf("after episode 1 was watched: %d wanted", wanted())
 	}
+	// How far everyone has finished is kept, and whoever hears of the
+	// report is told; one past what anyone has started is a mistake.
+	heard := 0
+	e.sonarr.Watched = func(context.Context) { heard++ }
+	body = map[string]any{"people": 3, "titles": []any{map[string]any{"tvdbId": 371980, "viewers": 2, "furthestSeason": 1, "furthestEpisode": 2, "allFinishedSeason": 1, "allFinishedEpisode": 1}}}
+	if code := call(t, "PUT", e.url+"/sonarr/api/v3/boxoffice/watched", body, &out); code != 200 {
+		t.Fatal(code)
+	}
+	if shows, _ = st.WatchedTitles(ctx, "series"); shows[show.ID].AllFinishedSeason != 1 || shows[show.ID].AllFinishedEpisode != 1 || heard != 1 {
+		t.Fatalf("how far everyone has finished: %+v, heard %d", shows, heard)
+	}
+	body = map[string]any{"people": 3, "titles": []any{map[string]any{"tvdbId": 371980, "viewers": 2, "furthestSeason": 1, "furthestEpisode": 2, "allFinishedSeason": 1, "allFinishedEpisode": 3}}}
+	call(t, "PUT", e.url+"/sonarr/api/v3/boxoffice/watched", body, &out)
+	if shows, _ = st.WatchedTitles(ctx, "series"); shows[show.ID].AllFinishedSeason != 0 || shows[show.ID].AllFinishedEpisode != 0 {
+		t.Fatalf("finished past what was started: %+v", shows)
+	}
 	// The next report has nothing for the movie: its plays are forgotten.
 	if code := call(t, "PUT", e.url+"/radarr/api/v3/boxoffice/watched", map[string]any{"people": 3, "titles": []any{}}, &out); code != 200 || out.Kept != 0 {
 		t.Fatalf("empty report: %d %+v", code, out)

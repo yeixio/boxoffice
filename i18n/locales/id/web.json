@@ -2794,7 +2794,26 @@
     "notStarted": "Belum ada yang mulai menonton acara ini.",
     "upTo": "Ditonton sampai {{episode}}.",
     "later": "Nanti",
-    "laterHint": "Penghemat ruang mengambilnya saat seseorang sudah lebih dekat ke episode ini."
+    "laterHint": "Penghemat ruang mengambilnya saat seseorang sudah lebih dekat ke episode ini.",
+    "remove": {
+      "label": "Episode yang sudah ditonton",
+      "on": "Hapus dari acara ini",
+      "off": "Simpan untuk acara ini",
+      "hint": "Menghapus memindahkan episode yang sudah diselesaikan semua orang yang menonton acara ini di Matinee ke folder daur ulang, dan berhenti memantaunya. Orang yang belum mulai menonton tidak dihitung. Episode spesial tetap ada.",
+      "upTo": "Semua yang menontonnya sudah selesai sampai {{episode}}.",
+      "notYet": "Belum ada yang diselesaikan oleh semua yang menontonnya.",
+      "all": "Hapus episode yang sudah ditonton dari semua acara",
+      "allHint": "Mati kecuali Anda menyalakannya di sini. Episode yang sudah diselesaikan semua orang yang menonton suatu acara di Matinee dipindahkan ke folder daur ulang dan tidak dipantau lagi. Orang yang belum mulai menonton tidak dihitung, dan episode spesial tetap ada. Setiap acara bisa punya pilihannya sendiri di halamannya, yang lebih diutamakan daripada ini.",
+      "own": "Acara dengan pilihannya sendiri: {{on}} menghapus, {{off}} menyimpan.",
+      "confirmTitle": "Hapus episode yang sudah ditonton?",
+      "shows": "Acara: {{shows}}.",
+      "goesNow": "Dipindahkan ke folder daur ulang sekarang. Episode: {{episodes}}. File: {{files}}. Ukuran: {{size}}.",
+      "nothingNow": "Tidak ada yang perlu dipindahkan saat ini.",
+      "later": "Setelah ini, episode pergi begitu semua orang menyelesaikannya, paling banyak {{n}} sehari.",
+      "emptied": "Folder daur ulang dikosongkan setelah {{days}} hari, dan saat itulah ruang dibebaskan. Sampai saat itu Anda bisa mengembalikan episode secara manual.",
+      "kept": "Folder daur ulang disimpan sampai Anda mengosongkannya di Pengaturan, dan saat itulah ruang dibebaskan.",
+      "stale": "Matinee belum memberi tahu apa yang ditonton dalam sehari terakhir. Tidak ada yang dihapus sampai ia memberi tahu."
+    }
   },
   "secondCopy": {
     "title": "Salinan kedua",
