@@ -2917,7 +2917,26 @@
     "notStarted": "Ingen har begynt på denne serien ennå.",
     "upTo": "Sett til og med {{episode}}.",
     "later": "Senere",
-    "laterHint": "Plasssparer henter den når noen kommer nærmere."
+    "laterHint": "Plasssparer henter den når noen kommer nærmere.",
+    "remove": {
+      "label": "Sette episoder",
+      "on": "Fjern fra denne serien",
+      "off": "Behold for denne serien",
+      "hint": "Fjerning flytter episodene som alle som ser serien har sett ferdig i Matinee, til papirkurvmappen og slutter å følge med på dem. En som ikke har begynt på serien, telles ikke. Spesialepisoder blir.",
+      "upTo": "Alle som ser den, er ferdige til og med {{episode}}.",
+      "notYet": "Det er ennå ingenting som alle som ser den, har sett ferdig.",
+      "all": "Fjern sette episoder fra alle serier",
+      "allHint": "Av med mindre du slår det på her. Episoder som alle som ser en serie har sett ferdig i Matinee, flyttes til papirkurvmappen og følges ikke lenger. En som ikke har begynt på serien, telles ikke, og spesialepisoder blir. Hver serie kan ha sitt eget valg på siden sin, og det går foran dette.",
+      "own": "Serier med eget valg: {{on}} fjerner, {{off}} beholder.",
+      "confirmTitle": "Fjerne sette episoder?",
+      "shows": "Serier: {{shows}}.",
+      "goesNow": "Flyttes til papirkurvmappen nå. Episoder: {{episodes}}. Filer: {{files}}. Størrelse: {{size}}.",
+      "nothingNow": "Det er ingenting å flytte akkurat nå.",
+      "later": "Etter dette forsvinner episoder etter hvert som alle har sett dem ferdig, høyst {{n}} om dagen.",
+      "emptied": "Papirkurvmappen tømmes etter {{days}} dager, og først da frigjøres plassen. Fram til da kan du flytte en episode tilbake for hånd.",
+      "kept": "Papirkurvmappen beholdes til du tømmer den i Innstillinger, og først da frigjøres plassen.",
+      "stale": "Matinee har ikke sagt hva som er sett det siste døgnet. Ingenting fjernes før det skjer."
+    }
   },
   "secondCopy": {
     "title": "Ekstra kopi",

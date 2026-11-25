@@ -20,7 +20,10 @@ import (
 // A show is named by tvdbId or tmdbId, and is finished by someone who has
 // played every episode Matinee has of it. A show can also say the latest
 // episode anyone has started, specials left out, as furthestSeason and
-// furthestEpisode: space saver fetches the next ones past it.
+// furthestEpisode: space saver fetches the next ones past it. And the
+// latest episode everyone who has played any of it has finished, as
+// allFinishedSeason and allFinishedEpisode: episodes up to it can be
+// removed, where that's turned on.
 func (h *Handler) watched(w http.ResponseWriter, r *http.Request) error {
 	var in struct {
 		People int `json:"people"`
@@ -34,6 +37,9 @@ func (h *Handler) watched(w http.ResponseWriter, r *http.Request) error {
 			// Shows only.
 			FurthestSeason  int `json:"furthestSeason"`
 			FurthestEpisode int `json:"furthestEpisode"`
+			// The latest episode everyone watching has finished.
+			AllFinishedSeason  int `json:"allFinishedSeason"`
+			AllFinishedEpisode int `json:"allFinishedEpisode"`
 		} `json:"titles"`
 	}
 	if err := read(r, &in); err != nil {
@@ -98,6 +104,11 @@ func (h *Handler) watched(w http.ResponseWriter, r *http.Request) error {
 		if kind == "series" && t.FurthestSeason > 0 && t.FurthestEpisode > 0 {
 			row.FurthestSeason, row.FurthestEpisode = t.FurthestSeason, t.FurthestEpisode
 		}
+		// Nobody has finished an episode nobody has started.
+		if kind == "series" && t.AllFinishedSeason > 0 && t.AllFinishedEpisode > 0 &&
+			(t.AllFinishedSeason < row.FurthestSeason || t.AllFinishedSeason == row.FurthestSeason && t.AllFinishedEpisode <= row.FurthestEpisode) {
+			row.AllFinishedSeason, row.AllFinishedEpisode = t.AllFinishedSeason, t.AllFinishedEpisode
+		}
 		rows = append(rows, row)
 	}
 	if err := st.ReplaceWatched(ctx, kind, in.People, rows); err != nil {
@@ -108,6 +119,9 @@ func (h *Handler) watched(w http.ResponseWriter, r *http.Request) error {
 	if kind == "series" {
 		if err := h.Catalog.SpaceSaver(ctx); err != nil {
 			h.Log.Warn("couldn't run space saver after a watch report", "err", err)
+		}
+		if h.Watched != nil {
+			h.Watched(ctx)
 		}
 	}
 	return write(w, http.StatusOK, map[string]int{"kept": len(rows)})

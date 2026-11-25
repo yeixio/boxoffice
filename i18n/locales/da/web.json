@@ -2917,7 +2917,26 @@
     "notStarted": "Ingen er begyndt på serien endnu.",
     "upTo": "Set til og med {{episode}}.",
     "later": "Senere",
-    "laterHint": "Pladssparer henter det, når nogen kommer tættere på."
+    "laterHint": "Pladssparer henter det, når nogen kommer tættere på.",
+    "remove": {
+      "label": "Sete afsnit",
+      "on": "Fjern fra denne serie",
+      "off": "Behold for denne serie",
+      "hint": "Fjernelse flytter de afsnit, som alle, der ser serien, har set færdig i Matinee, til papirkurvsmappen og holder op med at holde øje med dem. En, der ikke er begyndt på serien, tæller ikke med. Specialafsnit bliver.",
+      "upTo": "Alle, der ser den, er færdige til og med {{episode}}.",
+      "notYet": "Der er endnu ikke noget, som alle, der ser den, har set færdig.",
+      "all": "Fjern sete afsnit fra alle serier",
+      "allHint": "Slået fra, medmindre du slår det til her. Afsnit, som alle, der ser en serie, har set færdig i Matinee, flyttes til papirkurvsmappen, og der holdes ikke længere øje med dem. En, der ikke er begyndt på serien, tæller ikke med, og specialafsnit bliver. Hver serie kan have sit eget valg på sin side, og det går forud for dette.",
+      "own": "Serier med deres eget valg: {{on}} fjerner, {{off}} beholder.",
+      "confirmTitle": "Fjern sete afsnit?",
+      "shows": "Serier: {{shows}}.",
+      "goesNow": "Flyttes til papirkurvsmappen nu. Afsnit: {{episodes}}. Filer: {{files}}. Størrelse: {{size}}.",
+      "nothingNow": "Der er ikke noget at flytte lige nu.",
+      "later": "Derefter forsvinder afsnit, efterhånden som alle har set dem færdig, højst {{n}} om dagen.",
+      "emptied": "Papirkurvsmappen tømmes efter {{days}} dage, og først da frigøres pladsen. Indtil da kan du selv flytte et afsnit tilbage.",
+      "kept": "Papirkurvsmappen beholdes, indtil du tømmer den i Indstillinger, og først da frigøres pladsen.",
+      "stale": "Matinee har ikke fortalt, hvad der er set, det seneste døgn. Intet fjernes, før det sker."
+    }
   },
   "secondCopy": {
     "title": "Ekstra kopi",

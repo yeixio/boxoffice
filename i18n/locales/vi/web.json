@@ -2794,7 +2794,26 @@
     "notStarted": "Chưa ai bắt đầu xem chương trình này.",
     "upTo": "Đã xem đến {{episode}}.",
     "later": "Để sau",
-    "laterHint": "Tiết kiệm dung lượng sẽ tải tập này khi có người xem đến gần nó."
+    "laterHint": "Tiết kiệm dung lượng sẽ tải tập này khi có người xem đến gần nó.",
+    "remove": {
+      "label": "Các tập đã xem",
+      "on": "Gỡ khỏi chương trình này",
+      "off": "Giữ cho chương trình này",
+      "hint": "Gỡ sẽ chuyển các tập mà mọi người đang xem chương trình này trong Matinee đều đã xem xong vào thư mục tái chế, và ngừng theo dõi chúng. Người chưa bắt đầu xem không được tính. Các tập đặc biệt vẫn ở lại.",
+      "upTo": "Mọi người đang xem đều đã xem xong đến {{episode}}.",
+      "notYet": "Chưa có tập nào mà mọi người đang xem đều đã xem xong.",
+      "all": "Gỡ các tập đã xem khỏi mọi chương trình",
+      "allHint": "Tắt trừ khi bạn bật ở đây. Các tập mà mọi người đang xem một chương trình trong Matinee đều đã xem xong sẽ chuyển vào thư mục tái chế và không còn được theo dõi. Người chưa bắt đầu xem không được tính, và các tập đặc biệt vẫn ở lại. Mỗi chương trình có thể có lựa chọn riêng trên trang của nó, và lựa chọn đó được ưu tiên.",
+      "own": "Chương trình có lựa chọn riêng: {{on}} gỡ, {{off}} giữ.",
+      "confirmTitle": "Gỡ các tập đã xem?",
+      "shows": "Chương trình: {{shows}}.",
+      "goesNow": "Chuyển vào thư mục tái chế ngay bây giờ. Số tập: {{episodes}}. Số tệp: {{files}}. Dung lượng: {{size}}.",
+      "nothingNow": "Hiện không có gì để chuyển.",
+      "later": "Sau đó, các tập sẽ được gỡ khi mọi người xem xong, tối đa {{n}} tập mỗi ngày.",
+      "emptied": "Thư mục tái chế được dọn sau {{days}} ngày, và khi đó dung lượng mới được giải phóng. Cho đến lúc đó bạn có thể tự chuyển một tập trở lại.",
+      "kept": "Thư mục tái chế được giữ cho đến khi bạn dọn nó trong Cài đặt, và khi đó dung lượng mới được giải phóng.",
+      "stale": "Matinee chưa cho biết những gì đã xem trong một ngày qua. Sẽ không gỡ gì cho đến khi có báo cáo."
+    }
   },
   "secondCopy": {
     "title": "Bản sao thứ hai",

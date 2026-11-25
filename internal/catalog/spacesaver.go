@@ -18,7 +18,9 @@ import (
 // say, and those switches are left as the person set them. One that is on
 // disk already stays, and is upgraded like any other. Only episodes that would be
 // wanted are counted, so seasons switched off stay out of it. Episodes up
-// to the one being watched are never held, and nothing is ever deleted.
+// to the one being watched are never held, and nothing is deleted here.
+// Removing the episodes everyone has finished is a separate choice, off
+// unless turned on (see api/watchedeps.go).
 
 // MaxKeepAhead is the most episodes space saver can keep ahead.
 const MaxKeepAhead = 100

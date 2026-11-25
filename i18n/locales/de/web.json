@@ -2917,7 +2917,26 @@
     "notStarted": "Noch hat niemand diese Serie begonnen.",
     "upTo": "Angesehen bis {{episode}}.",
     "later": "Später",
-    "laterHint": "Der Platzsparer holt sie, sobald jemand näher herankommt."
+    "laterHint": "Der Platzsparer holt sie, sobald jemand näher herankommt.",
+    "remove": {
+      "label": "Angesehene Folgen",
+      "on": "Bei dieser Serie entfernen",
+      "off": "Bei dieser Serie behalten",
+      "hint": "Entfernen verschiebt die Folgen, die alle, die diese Serie in Matinee schauen, zu Ende gesehen haben, in den Papierkorbordner und beobachtet sie nicht mehr. Wer die Serie noch nicht begonnen hat, zählt nicht. Specials bleiben.",
+      "upTo": "Alle, die sie schauen, sind bis {{episode}} fertig.",
+      "notYet": "Noch hat niemand etwas zu Ende gesehen, das alle Zuschauenden fertig haben.",
+      "all": "Angesehene Folgen bei allen Serien entfernen",
+      "allHint": "Aus, solange du es hier nicht einschaltest. Folgen, die alle, die eine Serie in Matinee schauen, zu Ende gesehen haben, wandern in den Papierkorbordner und werden nicht mehr beobachtet. Wer die Serie noch nicht begonnen hat, zählt nicht, und Specials bleiben. Jede Serie kann auf ihrer Seite eine eigene Wahl haben, die Vorrang hat.",
+      "own": "Serien mit eigener Wahl: {{on}} entfernen, {{off}} behalten.",
+      "confirmTitle": "Angesehene Folgen entfernen?",
+      "shows": "Serien: {{shows}}.",
+      "goesNow": "Wird jetzt in den Papierkorbordner verschoben. Folgen: {{episodes}}. Dateien: {{files}}. Größe: {{size}}.",
+      "nothingNow": "Im Moment gibt es nichts zu verschieben.",
+      "later": "Danach gehen Folgen, sobald alle sie zu Ende gesehen haben, höchstens {{n}} am Tag.",
+      "emptied": "Der Papierkorbordner wird nach {{days}} Tagen geleert, erst dann wird der Platz frei. Bis dahin kannst du eine Folge von Hand zurückschieben.",
+      "kept": "Der Papierkorbordner bleibt, bis du ihn in den Einstellungen leerst, erst dann wird der Platz frei.",
+      "stale": "Matinee hat seit einem Tag nicht gemeldet, was angesehen wurde. Bis dahin wird nichts entfernt."
+    }
   },
   "secondCopy": {
     "title": "Zweite Kopie",

@@ -563,6 +563,12 @@ type editInput struct {
 	// A show's space saver: how many episodes past the latest one watched
 	// to fetch, or 0 for off.
 	KeepAhead *int `json:"keepAhead"`
+	// Whether a show's watched episodes are removed: "" to follow
+	// Settings, or "on" or "off" for this show. Turning it on takes what
+	// the person was shown would be removed now (expectFiles, expectSize).
+	RemoveWatched *string `json:"removeWatched"`
+	ExpectFiles   *int    `json:"expectFiles"`
+	ExpectSize    *int64  `json:"expectSize"`
 	// A movie's or a show's second copy: the quality profile to keep one at (0 for
 	// none), and the library folder it goes in ("" for next to the first).
 	SecondProfileID *int    `json:"secondProfileId"`
@@ -593,6 +599,14 @@ func (s *Server) checkEdit(r *http.Request, in editInput, kind string) error {
 		}
 		if in.Audio != nil && *in.Audio != "" && *in.Audio != store.AudioDubbed && *in.Audio != store.AudioOriginal {
 			return errorf(http.StatusBadRequest, `audio is "" for either, "dub" or "sub"`)
+		}
+	}
+	if in.RemoveWatched != nil {
+		if kind != "series" {
+			return errorf(http.StatusBadRequest, "removing watched episodes is for shows")
+		}
+		if v := *in.RemoveWatched; v != "" && v != "on" && v != "off" {
+			return errorf(http.StatusBadRequest, `removing watched episodes is "on", "off", or "" to follow Settings`)
 		}
 	}
 	if in.KeepAhead != nil {
@@ -760,7 +774,14 @@ func (s *Server) series(w http.ResponseWriter, r *http.Request) error {
 	out := map[string]any{"series": t, "episodes": eps, "reported": reported}
 	// Space saver goes by what Matinee says was watched: whether it has
 	// said anything, and how far into this show anyone has got.
-	if t.KeepAhead > 0 {
+	// Removing watched episodes goes by it too: how far everyone
+	// watching has got.
+	def, err := s.removeWatchedDefault(r.Context())
+	if err != nil {
+		return err
+	}
+	out["removeWatched"] = def // what Settings says, for shows that follow it
+	if t.KeepAhead > 0 || removesWatched(t, def) {
 		_, told, err := s.Store.LastWatchReport(r.Context(), "series")
 		if err != nil {
 			return err
@@ -769,7 +790,8 @@ func (s *Server) series(w http.ResponseWriter, r *http.Request) error {
 		if err != nil {
 			return err
 		}
-		out["watched"] = map[string]any{"reported": told, "season": all[t.ID].FurthestSeason, "episode": all[t.ID].FurthestEpisode}
+		out["watched"] = map[string]any{"reported": told, "season": all[t.ID].FurthestSeason, "episode": all[t.ID].FurthestEpisode,
+			"allSeason": all[t.ID].AllFinishedSeason, "allEpisode": all[t.ID].AllFinishedEpisode}
 	}
 	return writeJSON(w, http.StatusOK, out)
 }
@@ -857,6 +879,24 @@ func (s *Server) editSeries(w http.ResponseWriter, r *http.Request) error {
 	look, err := s.editSeriesSecond(r.Context(), &t, in)
 	if err != nil {
 		return err
+	}
+	// Its watched episodes start being removed: what the person was shown
+	// goes now, if that's still what's there.
+	if in.RemoveWatched != nil && *in.RemoveWatched != t.RemoveWatched {
+		s.watchedMu.Lock()
+		defer s.watchedMu.Unlock()
+		def, err := s.removeWatchedDefault(r.Context())
+		if err != nil {
+			return err
+		}
+		was := removesWatched(t, def)
+		t.RemoveWatched = *in.RemoveWatched
+		if removesWatched(t, def) && !was {
+			save := func() error { return s.Store.UpdateSeries(r.Context(), t) }
+			if err := s.turnOnWatchedRemoval(r.Context(), []store.Series{t}, in.ExpectFiles, in.ExpectSize, save); err != nil {
+				return err
+			}
+		}
 	}
 	if err := s.Store.UpdateSeries(r.Context(), t); err != nil {
 		return err

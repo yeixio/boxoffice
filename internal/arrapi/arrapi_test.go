@@ -28,6 +28,7 @@ type env struct {
 	movies string // its movie root folder
 	tv     string
 	fake   *tmdbtest.Fake
+	sonarr *arrapi.Handler
 }
 
 func setup(t *testing.T) env {
@@ -49,7 +50,8 @@ func setup(t *testing.T) env {
 	keyFn := func(context.Context) string { return key }
 	mux := http.NewServeMux()
 	mux.Handle("/radarr/", http.StripPrefix("/radarr", arrapi.New(arrapi.Radarr, cat, keyFn, "test", log)))
-	mux.Handle("/sonarr/", http.StripPrefix("/sonarr", arrapi.New(arrapi.Sonarr, cat, keyFn, "test", log)))
+	e.sonarr = arrapi.New(arrapi.Sonarr, cat, keyFn, "test", log)
+	mux.Handle("/sonarr/", http.StripPrefix("/sonarr", e.sonarr))
 	ts := httptest.NewServer(mux)
 	t.Cleanup(ts.Close)
 	e.url = ts.URL

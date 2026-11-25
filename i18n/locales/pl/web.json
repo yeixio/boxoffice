@@ -3163,7 +3163,26 @@
     "notStarted": "Nikt jeszcze nie zaczął tego serialu.",
     "upTo": "Obejrzano do {{episode}}.",
     "later": "Później",
-    "laterHint": "Oszczędzanie miejsca pobierze go, gdy ktoś się do niego zbliży."
+    "laterHint": "Oszczędzanie miejsca pobierze go, gdy ktoś się do niego zbliży.",
+    "remove": {
+      "label": "Obejrzane odcinki",
+      "on": "Usuwaj z tego serialu",
+      "off": "Zachowaj w tym serialu",
+      "hint": "Usuwanie przenosi do folderu kosza odcinki, które w Matinee obejrzał do końca każdy, kto ogląda ten serial, i przestaje ich pilnować. Kto nie zaczął serialu, nie jest liczony. Odcinki specjalne zostają.",
+      "upTo": "Wszyscy oglądający skończyli do {{episode}}.",
+      "notYet": "Nie ma jeszcze odcinka, który skończyliby wszyscy oglądający.",
+      "all": "Usuwaj obejrzane odcinki ze wszystkich seriali",
+      "allHint": "Wyłączone, dopóki nie włączysz tego tutaj. Odcinki, które w Matinee obejrzał do końca każdy, kto ogląda serial, trafiają do folderu kosza i nie są już pilnowane. Kto nie zaczął serialu, nie jest liczony, a odcinki specjalne zostają. Każdy serial może mieć na swojej stronie własny wybór, który ma pierwszeństwo.",
+      "own": "Seriale z własnym wyborem: {{on}} usuwa, {{off}} zachowuje.",
+      "confirmTitle": "Usuwać obejrzane odcinki?",
+      "shows": "Seriale: {{shows}}.",
+      "goesNow": "Teraz trafia do folderu kosza. Odcinki: {{episodes}}. Pliki: {{files}}. Rozmiar: {{size}}.",
+      "nothingNow": "W tej chwili nie ma nic do przeniesienia.",
+      "later": "Potem odcinki znikają, gdy wszyscy je skończą, najwyżej {{n}} dziennie.",
+      "emptied": "Folder kosza jest opróżniany po {{days}} dniach i dopiero wtedy zwalnia się miejsce. Do tego czasu możesz ręcznie przywrócić odcinek.",
+      "kept": "Folder kosza zostaje, dopóki nie opróżnisz go w Ustawieniach, i dopiero wtedy zwalnia się miejsce.",
+      "stale": "Matinee od doby nie podało, co obejrzano. Dopóki tego nie zrobi, nic nie zostanie usunięte."
+    }
   },
   "secondCopy": {
     "title": "Druga kopia",

@@ -216,6 +216,8 @@ export type Series = {
   autoUpgrade?: '' | 'on' | 'off'
   // Space saver: fetch only this many episodes past the latest one watched; 0 is off.
   keepAhead: number
+  // Whether episodes everyone watching has finished are removed: '' follows Settings.
+  removeWatched?: '' | 'on' | 'off'
   // How its releases number episodes ('' is S02E05; absolute is anime's
   // "Show - 137"), and the sound wanted ('' is either).
   // How releases number its episodes: as aired, straight through, or by

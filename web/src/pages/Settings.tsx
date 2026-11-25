@@ -31,6 +31,7 @@ import { CodeCard, PasskeysCard } from './SignInWays'
 import { SsoCard } from './Sso'
 import { matches, spans, words } from './settingsSearch'
 import { MoveDialog, MovesCard } from '../MoveTitles'
+import { SpaceSaverCard } from '../SpaceSaver'
 import { Badge, Button, Card, ErrorNote, Field, Input, Modal, Select, Spinner, Toggle, useTabKeys } from '../ui'
 
 // The sections Settings is split into, in tab order, as laid out in
@@ -79,6 +80,7 @@ const sections: SectionDef[] = [
       { id: 'subtitles', el: <SubtitleSettingsCard />, keys: ['subtitles.languages', 'subtitles.preferSdh', 'subtitles.dailyLimit', 'subtitles.apiKey'], terms: ['Bazarr', 'OpenSubtitles', 'Podnapisi', 'SRT', 'SDH', 'captions', 'CC'] },
       { id: 'tracks', el: <TracksCard />, keys: ['tracks.on', 'tracks.languages'], terms: ['Muxarr', 'striptracks', 'Tdarr', 'remux', 'audio tracks', 'dub', 'MKVToolNix', 'mkvmerge'] },
       { id: 'cleanup', el: <CleanupCard />, keys: ['cleanup.watched', 'cleanup.days', 'cleanup.auto', 'cleanup.leavingSoon'], terms: ['Maintainerr', 'Janitorr', 'delete watched', 'free space', 'disk space', 'purge'] },
+      { id: 'space-saver', el: <SpaceSaverCard />, keys: ['spaceSaver.remove.all'], terms: ['delete watched', 'remove watched', 'free space', 'disk space'] },
       { id: 'recycle', el: <RecycleFolders /> },
     ],
   },

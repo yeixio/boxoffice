@@ -2917,7 +2917,26 @@
     "notStarted": "Bu diziye henüz kimse başlamadı.",
     "upTo": "{{episode}} bölümüne kadar izlendi.",
     "later": "Sonra",
-    "laterHint": "Biri bu bölüme yaklaştığında alan tasarrufu onu getirir."
+    "laterHint": "Biri bu bölüme yaklaştığında alan tasarrufu onu getirir.",
+    "remove": {
+      "label": "İzlenen bölümler",
+      "on": "Bu diziden kaldır",
+      "off": "Bu dizide tut",
+      "hint": "Kaldırma, bu diziyi Matinee'de izleyen herkesin bitirdiği bölümleri geri dönüşüm klasörüne taşır ve onları takip etmeyi bırakır. Diziye başlamamış biri sayılmaz. Özel bölümler kalır.",
+      "upTo": "İzleyen herkes {{episode}} bölümüne kadar bitirdi.",
+      "notYet": "İzleyen herkesin bitirdiği bir bölüm henüz yok.",
+      "all": "İzlenen bölümleri tüm dizilerden kaldır",
+      "allHint": "Burada açmadığınız sürece kapalıdır. Bir diziyi Matinee'de izleyen herkesin bitirdiği bölümler geri dönüşüm klasörüne taşınır ve artık takip edilmez. Diziye başlamamış biri sayılmaz, özel bölümler kalır. Her dizinin kendi sayfasında kendi seçimi olabilir ve o seçim bundan önce gelir.",
+      "own": "Kendi seçimi olan diziler: {{on}} kaldırıyor, {{off}} tutuyor.",
+      "confirmTitle": "İzlenen bölümler kaldırılsın mı?",
+      "shows": "Dizi: {{shows}}.",
+      "goesNow": "Şimdi geri dönüşüm klasörüne taşınıyor. Bölüm: {{episodes}}. Dosya: {{files}}. Boyut: {{size}}.",
+      "nothingNow": "Şu anda taşınacak bir şey yok.",
+      "later": "Bundan sonra bölümler herkes bitirdikçe gider, günde en fazla {{n}}.",
+      "emptied": "Geri dönüşüm klasörü {{days}} gün sonra boşaltılır ve alan o zaman açılır. O zamana kadar bir bölümü elle geri koyabilirsiniz.",
+      "kept": "Geri dönüşüm klasörü siz Ayarlar'dan boşaltana kadar durur ve alan o zaman açılır.",
+      "stale": "Matinee son bir gündür neyin izlendiğini bildirmedi. Bildirene kadar hiçbir şey kaldırılmaz."
+    }
   },
   "secondCopy": {
     "title": "İkinci kopya",
