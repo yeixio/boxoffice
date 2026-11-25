@@ -3077,5 +3077,17 @@
     "languagesHint": "A cím eredeti nyelve mindig megmarad, ahogy a nyelvet nem jelölő sávok és azoknak a nyelveknek a feliratai is, amelyeken feliratokat tölt le. Ha nem maradna hang, az összes hang megmarad.",
     "saved": "Eddig megtakarítva: {{size}} (fájlok: {{files}})",
     "noTools": "Az FFmpeg nincs telepítve, ezért nem lehet sávokat eldobni."
+  },
+  "watch": {
+    "title": "Hol nézhető",
+    "country": "Ország",
+    "network": "Csatorna",
+    "moreFrom": "Továbbiak innen: {{name}}",
+    "stream": "Stream",
+    "free": "Ingyenes",
+    "rent": "Kölcsönzés",
+    "buy": "Vásárlás",
+    "none": "Tudomásunk szerint nem streamelhető itt: {{country}}.",
+    "source": "Streamingszolgáltatások a JustWatch-tól"
   }
 }

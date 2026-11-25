@@ -3077,5 +3077,17 @@
     "languagesHint": "De taal waarin een titel is gemaakt blijft altijd, net als sporen zonder taalvermelding en ondertitels in de talen waarin ondertitels worden opgehaald. Als er geen audio zou overblijven, blijft alle audio.",
     "saved": "Tot nu toe bespaard: {{size}} (bestanden: {{files}})",
     "noTools": "FFmpeg is hier niet geïnstalleerd, dus er kunnen geen sporen worden weggehaald."
+  },
+  "watch": {
+    "title": "Waar te kijken",
+    "country": "Land",
+    "network": "Zender",
+    "moreFrom": "Meer van {{name}}",
+    "stream": "Streamen",
+    "free": "Gratis",
+    "rent": "Huren",
+    "buy": "Kopen",
+    "none": "Voor zover we weten niet te streamen in {{country}}.",
+    "source": "Streamingdiensten van JustWatch"
   }
 }

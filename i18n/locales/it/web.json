@@ -3200,5 +3200,17 @@
     "languagesHint": "La lingua in cui il titolo è stato realizzato viene sempre mantenuta, così come le tracce che non indicano la lingua e i sottotitoli nelle lingue in cui vengono scaricati i sottotitoli. Se non restasse alcun audio, resta tutto.",
     "saved": "Risparmiato finora: {{size}} (file: {{files}})",
     "noTools": "FFmpeg non è installato qui, quindi non si possono eliminare tracce."
+  },
+  "watch": {
+    "title": "Dove guardarlo",
+    "country": "Paese",
+    "network": "Rete",
+    "moreFrom": "Altro da {{name}}",
+    "stream": "Streaming",
+    "free": "Gratis",
+    "rent": "Noleggio",
+    "buy": "Acquisto",
+    "none": "Non in streaming in {{country}}, per quanto ne sappiamo.",
+    "source": "Servizi di streaming da JustWatch"
   }
 }

@@ -3077,5 +3077,17 @@
     "languagesHint": "Die Sprache, in der ein Titel gedreht wurde, bleibt immer, ebenso Spuren ohne Sprachangabe und Untertitel in den Sprachen, in denen Untertitel geholt werden. Bliebe kein Ton übrig, bleibt der ganze Ton.",
     "saved": "Bisher gespart: {{size}} (Dateien: {{files}})",
     "noTools": "FFmpeg ist hier nicht installiert, daher können keine Spuren entfernt werden."
+  },
+  "watch": {
+    "title": "Wo ansehen",
+    "country": "Land",
+    "network": "Sender",
+    "moreFrom": "Mehr von {{name}}",
+    "stream": "Streamen",
+    "free": "Kostenlos",
+    "rent": "Leihen",
+    "buy": "Kaufen",
+    "none": "Soweit bekannt nicht als Stream in {{country}} verfügbar.",
+    "source": "Streamingdienste von JustWatch"
   }
 }

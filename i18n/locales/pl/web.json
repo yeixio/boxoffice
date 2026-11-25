@@ -3323,5 +3323,17 @@
     "languagesHint": "Język, w którym powstał tytuł, zostaje zawsze, podobnie jak ścieżki bez podanego języka i napisy w językach, w których pobierane są napisy. Gdyby nie został żaden dźwięk, zostaje cały.",
     "saved": "Zaoszczędzono dotąd: {{size}} (pliki: {{files}})",
     "noTools": "FFmpeg nie jest tu zainstalowany, więc nie można usuwać ścieżek."
+  },
+  "watch": {
+    "title": "Gdzie obejrzeć",
+    "country": "Kraj",
+    "network": "Stacja",
+    "moreFrom": "Więcej od {{name}}",
+    "stream": "Streaming",
+    "free": "Za darmo",
+    "rent": "Wypożycz",
+    "buy": "Kup",
+    "none": "Z tego, co wiemy, niedostępne w streamingu w kraju {{country}}.",
+    "source": "Serwisy streamingowe według JustWatch"
   }
 }

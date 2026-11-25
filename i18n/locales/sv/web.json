@@ -3077,5 +3077,17 @@
     "languagesHint": "Språket en titel gjordes på behålls alltid, liksom spår utan angivet språk och undertexter på de språk som undertexter hämtas på. Om inget ljud skulle bli kvar behålls allt ljud.",
     "saved": "Sparat hittills: {{size}} (filer: {{files}})",
     "noTools": "FFmpeg är inte installerat här, så inga spår kan tas bort."
+  },
+  "watch": {
+    "title": "Var kan man se den",
+    "country": "Land",
+    "network": "Kanal",
+    "moreFrom": "Mer från {{name}}",
+    "stream": "Streama",
+    "free": "Gratis",
+    "rent": "Hyr",
+    "buy": "Köp",
+    "none": "Går inte att streama i {{country}}, så vitt vi vet.",
+    "source": "Streamingtjänster från JustWatch"
   }
 }

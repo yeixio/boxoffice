@@ -3077,5 +3077,17 @@
     "languagesHint": "Kieli, jolla nimike on tehty, säilyy aina, samoin raidat, jotka eivät kerro kieltään, ja tekstitykset kielillä, joilla tekstityksiä haetaan. Jos ääntä ei jäisi lainkaan, kaikki ääni säilyy.",
     "saved": "Säästetty tähän mennessä: {{size}} (tiedostoja: {{files}})",
     "noTools": "FFmpegiä ei ole asennettu, joten raitoja ei voi pudottaa."
+  },
+  "watch": {
+    "title": "Missä katsoa",
+    "country": "Maa",
+    "network": "Kanava",
+    "moreFrom": "Lisää kanavalta {{name}}",
+    "stream": "Suoratoisto",
+    "free": "Ilmainen",
+    "rent": "Vuokraa",
+    "buy": "Osta",
+    "none": "Ei tietojemme mukaan suoratoistossa maassa {{country}}.",
+    "source": "Suoratoistopalvelut: JustWatch"
   }
 }

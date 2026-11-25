@@ -787,6 +787,22 @@ export type DiscoverRow = { id: string; title: string; because?: string; person?
 export type DiscoverPage = DiscoverRow & { page: number; pages: number }
 export type Genre = { id: number; name: string }
 export type Network = { id: number; name: string; logo?: string }
+// Provider is a streaming service or shop, such as Netflix or Apple TV.
+export type Provider = { id: number; name: string; logo?: string }
+// WhereToWatch is where a movie or show can be watched in one country
+// (GET /discover/watch/{kind}/{tmdbId}?country=): the networks a show is
+// made for, then services by how they're paid for. The services come
+// from JustWatch, through TMDB.
+export type WhereToWatch = {
+  networks: Network[]
+  country: string
+  link?: string
+  stream?: Provider[]
+  free?: Provider[]
+  rent?: Provider[]
+  buy?: Provider[]
+  countries: string[]
+}
 export type DiscoverHome = { rows: DiscoverRow[]; browse: { movieGenres: Genre[]; seriesGenres: Genre[]; networks: Network[] } }
 
 // ---- books ----

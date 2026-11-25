@@ -2954,5 +2954,17 @@
     "languagesHint": "影片的原始语言始终保留，未标明语言的轨道以及字幕下载所用语言的字幕也会保留。如果去掉后没有任何音轨，则保留全部音轨。",
     "saved": "目前已节省：{{size}}（文件数：{{files}}）",
     "noTools": "这里没有安装 FFmpeg，无法去掉轨道。"
+  },
+  "watch": {
+    "title": "在哪里观看",
+    "country": "国家/地区",
+    "network": "电视网",
+    "moreFrom": "{{name}} 的更多内容",
+    "stream": "订阅",
+    "free": "免费",
+    "rent": "租借",
+    "buy": "购买",
+    "none": "据我们所知，{{country}} 暂无流媒体。",
+    "source": "流媒体服务信息来自 JustWatch"
   }
 }

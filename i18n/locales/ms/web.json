@@ -2954,5 +2954,17 @@
     "languagesHint": "Bahasa asal tajuk dibuat sentiasa disimpan, begitu juga trek yang tidak menyatakan bahasanya dan sari kata dalam bahasa yang sari katanya diambil. Jika tiada audio yang tinggal, semuanya disimpan.",
     "saved": "Dijimatkan setakat ini: {{size}} (fail: {{files}})",
     "noTools": "FFmpeg tidak dipasang di sini, jadi tiada trek boleh dibuang."
+  },
+  "watch": {
+    "title": "Tempat menonton",
+    "country": "Negara",
+    "network": "Rangkaian",
+    "moreFrom": "Lagi daripada {{name}}",
+    "stream": "Strim",
+    "free": "Percuma",
+    "rent": "Sewa",
+    "buy": "Beli",
+    "none": "Setakat yang kami tahu, tiada strim di {{country}}.",
+    "source": "Perkhidmatan strim daripada JustWatch"
   }
 }

@@ -3323,5 +3323,17 @@
     "languagesHint": "Jazyk, ve kterém titul vznikl, zůstává vždy, stejně jako stopy bez uvedeného jazyka a titulky v jazycích, ve kterých se titulky stahují. Kdyby nezbyl žádný zvuk, zůstane všechen.",
     "saved": "Dosud ušetřeno: {{size}} (souborů: {{files}})",
     "noTools": "FFmpeg tu není nainstalovaný, takže žádné stopy zahodit nelze."
+  },
+  "watch": {
+    "title": "Kde sledovat",
+    "country": "Země",
+    "network": "Stanice",
+    "moreFrom": "Další od {{name}}",
+    "stream": "Streamování",
+    "free": "Zdarma",
+    "rent": "Půjčit",
+    "buy": "Koupit",
+    "none": "V zemi {{country}} se podle nás nestreamuje.",
+    "source": "Streamovací služby od JustWatch"
   }
 }

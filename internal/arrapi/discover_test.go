@@ -68,4 +68,15 @@ func TestDiscoverForMatinee(t *testing.T) {
 	if c := getJSON(t, e.url+"/radarr/api/v3/boxoffice/discover/search?q=matrix", &found); c != 200 || len(found) != 1 || found[0].Status != catalog.StatusWanted {
 		t.Fatalf("search matrix %d: %+v", c, found)
 	}
+
+	// Where to watch: Radarr's connection answers for movies.
+	e.fake.Raw["movie/603/watch/providers"] = map[string]any{"results": map[string]any{
+		"US": map[string]any{"flatrate": []any{map[string]any{"provider_id": 8, "provider_name": "Netflix", "logo_path": "/n.png"}}}}}
+	var w catalog.WhereToWatch
+	if c := getJSON(t, e.url+"/radarr/api/v3/boxoffice/discover/watch?tmdbId=603", &w); c != 200 || len(w.Stream) != 1 || w.Stream[0].Name != "Netflix" {
+		t.Fatalf("watch %d: %+v", c, w)
+	}
+	if c := getJSON(t, e.url+"/radarr/api/v3/boxoffice/discover/watch?tmdbId=x", nil); c != 400 {
+		t.Fatalf("bad id: %d", c)
+	}
 }

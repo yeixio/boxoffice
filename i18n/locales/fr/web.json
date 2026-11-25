@@ -3200,5 +3200,17 @@
     "languagesHint": "La langue dans laquelle un titre a été tourné est toujours gardée, tout comme les pistes qui n'indiquent pas leur langue et les sous-titres dans les langues où des sous-titres sont récupérés. S'il ne restait aucun audio, tout l'audio reste.",
     "saved": "Économisé jusqu'ici : {{size}} (fichiers : {{files}})",
     "noTools": "FFmpeg n'est pas installé ici, donc aucune piste ne peut être retirée."
+  },
+  "watch": {
+    "title": "Où regarder",
+    "country": "Pays",
+    "network": "Chaîne",
+    "moreFrom": "Plus de {{name}}",
+    "stream": "Streaming",
+    "free": "Gratuit",
+    "rent": "Louer",
+    "buy": "Acheter",
+    "none": "Pas en streaming en {{country}}, à notre connaissance.",
+    "source": "Services de streaming fournis par JustWatch"
   }
 }

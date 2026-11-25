@@ -2954,5 +2954,17 @@
     "languagesHint": "Ngôn ngữ gốc của tựa luôn được giữ, cũng như các track không ghi ngôn ngữ và phụ đề bằng những ngôn ngữ mà phụ đề được tải về. Nếu không còn âm thanh nào, toàn bộ âm thanh được giữ.",
     "saved": "Đã tiết kiệm đến nay: {{size}} (tệp: {{files}})",
     "noTools": "FFmpeg chưa được cài ở đây nên không thể bỏ track nào."
+  },
+  "watch": {
+    "title": "Xem ở đâu",
+    "country": "Quốc gia",
+    "network": "Kênh",
+    "moreFrom": "Thêm từ {{name}}",
+    "stream": "Phát trực tuyến",
+    "free": "Miễn phí",
+    "rent": "Thuê",
+    "buy": "Mua",
+    "none": "Theo chúng tôi biết, không có phát trực tuyến tại {{country}}.",
+    "source": "Dịch vụ phát trực tuyến từ JustWatch"
   }
 }

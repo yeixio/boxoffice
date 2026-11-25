@@ -1,3 +1,4 @@
+import { WhereToWatch } from '../WhereToWatch'
 import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -79,6 +80,7 @@ export function ShowDetail() {
         </div>
         <div className="col-span-2 flex flex-col md:col-span-1 md:col-start-2">
           {s.overview && <p className="max-w-3xl md:mt-4 leading-relaxed">{s.overview}</p>}
+          <WhereToWatch kind="series" tmdbId={s.tmdbId} className="mt-6 max-w-3xl" />
           {locked && <LockedNote />}
           {show.data.reported?.map((r) => {
             const e = episodes.find((x) => x.id === r.ownerId)
