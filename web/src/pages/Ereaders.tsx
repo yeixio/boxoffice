@@ -227,7 +227,7 @@ export function EreaderSettingsCard() {
             />
             {m.sameAsAlerts && !data.alertMail.ready && (
               <p className="text-sm text-muted">
-                <Link to="/health?tab=alerts" className="underline hover:text-ink">
+                <Link to="/settings#alerts" className="underline hover:text-ink">
                   {t('ereaders.setUpAlerts')}
                 </Link>
               </p>

@@ -4,7 +4,7 @@ Every setting in Box Office, where it lives, and how it's classified, as asked b
 
 **Columns**
 
-- **Where**: the page, tab and card a person changes it on today. Settings cards have an id, which is also their `/settings#<id>` link.
+- **Where**: the page, tab and card a person changes it on. Settings cards have an id, which is also their `/settings#<id>` link.
 - **Scope**: *Account* (one person), *Application* (all of Box Office), or *Resource* (one title, folder, profile, server, indexer, list, rule or device).
 - **Level**: *Basic*, *Advanced*, *Developer* or *Admin*, as in section 4.2.
 - **Default**: on a new install.
@@ -18,17 +18,17 @@ Personal: each admin has their own.
 
 | Name | Description | Where | Scope | Level | Default | Dependencies | Impact |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Language | The language Box Office shows this person, on every device they sign in on | Settings → General → `#language` | Account | Basic | Automatic (the browser's) | One of 32 catalogs | Visual |
-| Password | This person's password | Settings → General → `#password` | Account | Basic | Set at first run | At least 8 characters; signs every device out | Security |
-| Passkeys | Fingerprint, face, screen lock or security key sign-in | Settings → General → `#passkeys` | Account | Basic | None | Works only at the address it was made at | Security |
-| One-time code | A 6-digit authenticator code after the password, with recovery codes | Settings → General → `#code` | Account | Advanced | Off | Not asked after a passkey or single sign-on | Security |
+| Language | The language Box Office shows this person, on every device they sign in on | Settings → Your account → `#language` | Account | Basic | Automatic (the browser's) | One of 32 catalogs | Visual |
+| Password | This person's password | Settings → Your account → `#password` | Account | Basic | Set at first run | At least 8 characters; signs every device out | Security |
+| Passkeys | Fingerprint, face, screen lock or security key sign-in | Settings → Your account → `#passkeys` | Account | Basic | None | Works only at the address it was made at | Security |
+| One-time code | A 6-digit authenticator code after the password, with recovery codes | Settings → Your account → `#code` | Account | Advanced | Off | Not asked after a passkey or single sign-on | Security |
 
 ## General
 
 | Name | Description | Where | Scope | Level | Default | Dependencies | Impact |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Time zone | The clock for the speed schedule, data cap month, daily limits and times in messages | Settings → General → `#time-zone` | Application | Basic | The server's own (`TZ`), else UTC | — | Behaviour |
-| Kinds of media | Music, audiobooks, ebooks, comics, games, home videos and photos, each on or off | Settings → Library → `#media-types` | Application | Basic | All off | Each needs a root folder | Behaviour, Visual (adds sidebar entries) |
+| Kinds of media | Music, audiobooks, ebooks, comics, games, home videos and photos, each on or off | Settings → General → `#media-types` | Application | Basic | All off | Each needs a root folder | Behaviour, Visual (adds sidebar entries) |
 
 ## Library
 
@@ -45,11 +45,12 @@ Personal: each admin has their own.
 | Subtitles: prefer SDH | Prefer subtitles for the deaf and hard of hearing | Settings → Library → `#subtitles` | Application | Advanced | Off | — | Behaviour |
 | Subtitles: files a day | How many files are looked up a day | Settings → Library → `#subtitles` | Application | Advanced | 300 | — | Behaviour |
 | Subtitles: sources | Podnapisi on/off; OpenSubtitles API key, username, password | Settings → Library → `#subtitles` | Application | Advanced | Podnapisi on, OpenSubtitles off | OpenSubtitles needs a key | Behaviour, Security (stores a password) |
+| Drop unwanted tracks | Remove audio and subtitle tracks in other languages as files come in | Settings → Library → `#tracks` | Application | Advanced | Off | Languages to keep; MKVToolNix | Data |
 | Clean-up rules | Pick out watched or unwatched titles to delete | Settings → Library → `#cleanup` | Resource | Advanced | None | Matinee watch history | Data |
 | Clean-up: deletions a day | Most titles a rule deletes by itself in a day | Settings → Library → `#cleanup` | Application | Advanced | 5 | Rules set to delete by themselves | Data |
 | Recycle folders: delete replaced copies | When copies set aside in `.recycle` are deleted for good | Settings → Library → `#recycle` | Application | Basic | After 7 days | — | Data |
 
-Quality check (`#quality-check`) and Problem files (`#problems`) are actions, not settings.
+Quality check (`#quality-check`), Problem files (`#problems`), the titles file (`#titles-file`) and indexer statistics (`#indexer-stats`) are actions or reports, not settings.
 
 ## Downloads
 
@@ -89,31 +90,31 @@ Quality check (`#quality-check`) and Problem files (`#problems`) are actions, no
 
 | Name | Description | Where | Scope | Level | Default | Dependencies | Impact |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Alert rules | Disk almost full (90 %), root folder unreadable, errors pile up (10 in 15 min), downloads keep failing (3 in 60 min), starts or restarts, backups, problems | Health → Alerts | Application | Basic | All on | — | Behaviour |
-| Alert email | Mail server, sender and recipients | Health → Alerts | Application | Advanced | Off | — | Security (stores a password) |
-| Webhooks | Discord, ntfy, Home Assistant or any address | Health → Alerts | Resource | Advanced | None | — | Behaviour |
-| Prometheus metrics | `/metrics` with a token | Health → Alerts | Application | Developer | Off | — | Security |
-| Phone notifications | Push to this phone or computer, by topic (ready, requests, problems) | Settings → General → `#phone` | Resource (a device) | Basic | Off | Browser permission; HTTPS | Behaviour |
+| Alert rules | Disk almost full (90 %), root folder unreadable, errors pile up (10 in 15 min), downloads keep failing (3 in 60 min), starts or restarts, backups, problems | Settings → Notifications → `#alerts` | Application | Basic | All on | — | Behaviour |
+| Alert email | Mail server, sender and recipients | Settings → Notifications → `#alerts` | Application | Advanced | Off | — | Security (stores a password) |
+| Webhooks | Discord, ntfy, Home Assistant or any address | Settings → Notifications → `#alerts` | Resource | Advanced | None | — | Behaviour |
+| Prometheus metrics | `/metrics` with a token | Settings → Notifications → `#alerts` | Application | Developer | Off | — | Security |
+| Phone notifications | Push to this phone or computer, by topic (ready, requests, problems) | Settings → Notifications → `#phone` | Resource (a device) | Basic | Off | Browser permission; HTTPS | Behaviour |
 
 ## Connections
 
 | Name | Description | Where | Scope | Level | Default | Dependencies | Impact |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| TMDB key | Key for looking titles up | Settings → General → `#tmdb` | Application | Basic | Built in, or `BOXOFFICE_TMDB_KEY` | — | Behaviour |
-| API key | The key Matinee and other apps use | Settings → Apps and devices → `#matinee` | Application | Developer | Made at first run, or `BOXOFFICE_API_KEY` | Matinee needs the new one after a change | Security |
-| E-readers | Kindle, PocketBook and other email-in readers; send by itself | Settings → Apps and devices → `#ereaders` | Resource | Basic | None | A mail server (alerts' or its own) | Behaviour |
-| E-reader mail server | Its own server, or the alerts' | Settings → Apps and devices → `#ereaders` | Application | Advanced | Same as alerts | — | Security (stores a password) |
-| Move in | Bring titles and settings over from Radarr, Sonarr, Lidarr, Readarr, NZBGet | Move in page; Settings → Apps and devices → `#move-in` | Application | Basic | — | — | Data |
+| TMDB key | Key for looking titles up | Settings → Connections → `#tmdb` | Application | Basic | Built in, or `BOXOFFICE_TMDB_KEY` | — | Behaviour |
+| API key | The key Matinee and other apps use | Settings → Connections → `#matinee` | Application | Developer | Made at first run, or `BOXOFFICE_API_KEY` | Matinee needs the new one after a change | Security |
+| E-readers | Kindle, PocketBook and other email-in readers; send by itself | Settings → Connections → `#ereaders` | Resource | Basic | None | A mail server (alerts' or its own) | Behaviour |
+| E-reader mail server | Its own server, or the alerts' | Settings → Connections → `#ereaders` | Application | Advanced | Same as alerts | — | Security (stores a password) |
+| Move in | Bring titles and settings over from Radarr, Sonarr, Lidarr, Readarr, NZBGet | Move in page (until moved in); Settings → Connections → `#move-in` | Application | Basic | — | — | Data |
 | Calendar feed | Private iCal address for Coming up | Coming up | Application | Advanced | A random token | — | Security |
 
 ## System
 
 | Name | Description | Where | Scope | Level | Default | Dependencies | Impact |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Single sign-on | OpenID Connect provider, client, admins, admin group, members and member group, sign-in button name, request site use | Settings → General → `#sso` | Application | Admin | Off | A provider | Security |
-| Backups | How often, how many to keep, also send to (S3 and the like), passphrase | Backups page | Application | Admin | Every 24 hours, keep 14, nowhere else, no passphrase | — | Data, Security |
-| Restart | Stop cleanly and start again | Settings → General → `#restart` | Application | Admin | — | — | Behaviour |
-| Database | SQLite or PostgreSQL; move to another | Settings → General → `#database` | Application | Admin | SQLite in the data folder | An empty PostgreSQL database | Data |
+| Single sign-on | OpenID Connect provider, client, admins, admin group, members and member group, sign-in button name, request site use | Settings → System → `#sso` | Application | Admin | Off | A provider | Security |
+| Backups | How often, how many to keep, also send to (S3 and the like), passphrase | Settings → System → `#backups` | Application | Admin | Every 24 hours, keep 14, nowhere else, no passphrase | — | Data, Security |
+| Restart | Stop cleanly and start again | Settings → System → `#restart` | Application | Admin | — | — | Behaviour |
+| Database | SQLite or PostgreSQL; move to another | Settings → System → `#database` | Application | Admin | SQLite in the data folder | An empty PostgreSQL database | Data |
 | Debug logging | More detail in the log | Health → Log | Application | Developer | Off (`BOXOFFICE_DEBUG`) | — | Behaviour |
 
 ## Requests (request site)

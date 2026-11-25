@@ -2,7 +2,7 @@
 
 This is the audit asked for in #196. It checks the web UI, as of commit 093a5a0, against [Navigation & Settings Design Principles](navigation-and-settings.md), section by section. It was done on a demo server at three widths: desktop (1440 px, full sidebar), tablet (900 px, icons-only rail) and phone (390 px, header menu).
 
-Each section says what complies, what doesn't, and the fix. Fixes marked **done** landed with this audit. Fixes marked **proposed** move pages or settings, so they wait until the proposed structure at the end is agreed.
+Each section says what complies, what doesn't, and the fix. Every fix below is **done**. The small ones landed first; the ones that moved pages or settings waited until Mike agreed the proposed structure on 2026-11-25, and landed in the same pull request (#209). The structure as built is at the end.
 
 ## What the UI has today
 
@@ -38,12 +38,12 @@ Each section says what complies, what doesn't, and the fix. Fixes marked **done*
 - **Doesn't:** notifications are split three ways: alert rules and email/webhooks on Health → Alerts, push to phones on Settings → General, and the alert history on Health.
 - **Doesn't:** "Import files" sits in Library among things to browse, but it's an action that brings files in, like a download.
 - **Doesn't:** Backups is a page in the sidebar, though it is mostly configuration (schedule, places, passphrase) plus two actions.
-- Fix (**proposed**): the structure at the end.
+- Fix (**done**): the structure at the end.
 
 ### 2.2 Hick's Law
 
 - With every kind of media on, the sidebar has 18 destinations; with none extra, 12. The groups keep it scannable, but Setup holds things people open rarely (Move in once, Backups now and then).
-- Fix (**proposed**): Import files moves into Downloads, Backups moves into Settings, Move in stays only until moving in is done (it already leaves then) and is also reachable from Settings → Connections. Settings and the account move to the sidebar's footer. That leaves 8 primary destinations (Discover, Movies, Shows, Coming up, Requests, Downloads, Activity, Health) plus one per kind of media turned on.
+- Fix (**done**): Import files moves into Downloads, Backups moves into Settings, Move in stays only until moving in is done (it already leaves then) and is also reachable from Settings → Connections. Settings and the account move to the sidebar's footer. That leaves 8 primary destinations (Discover, Movies, Shows, Coming up, Requests, Downloads, Activity, Health) plus one per kind of media turned on.
 
 ### 2.3 Jakob's Law
 
@@ -62,12 +62,12 @@ Each section says what complies, what doesn't, and the fix. Fixes marked **done*
 
 - Complies: rarely used fields sit inside dialogs (servers, indexers, profiles), and OpenSubtitles hides behind an expander.
 - **Doesn't:** the Database card shows a PostgreSQL connection form on General to everyone, though most people never move. It belongs in System, which most people never open.
-- Fix (**proposed**): System tab.
+- Fix (**done**): System tab.
 
 ### 2.5 Navigation vs configuration
 
 - **Doesn't:** the Setup group is configuration (Backups, Settings) next to a one-off workflow (Move in). Health → Alerts puts configuration inside a status page.
-- Fix (**proposed**): Setup group goes; Alerts settings move to Settings → Notifications; Health keeps the check-up, server, log and the list of recent alerts.
+- Fix (**done**): Setup group goes; Alerts settings move to Settings → Notifications; Health keeps the check-up, server, log and the list of recent alerts.
 
 ### 3.1 Primary navigation
 
@@ -92,7 +92,7 @@ Library, Downloads and Searching stay as they are: they are Box Office's own dom
 ### 3.3 Account settings
 
 - **Doesn't:** Box Office has several admins with single sign-on and passkeys, but personal settings sit among app settings, and there is no place that says "this is you".
-- Fix (**proposed**): a "Your account" tab first in Settings with language, password, passkeys and one-time code; the sidebar footer shows the signed-in name, opening a small menu with Your account and Sign out.
+- Fix (**done**): a "Your account" tab first in Settings with language, password, passkeys and one-time code; the sidebar footer shows the signed-in name, opening a small menu with Your account and Sign out.
 
 ### 3.4 Contextual settings
 
@@ -130,7 +130,7 @@ Complies: sidebar on desktop, rail on tablet, folding menu with group headings o
 
 - Complies: deleting files, removing indexers/servers/clients, empty recycle folders, clean-up rules and the database move all confirm with the consequences spelled out.
 - **Didn't:** Restart and the database move sat among ordinary preferences on General with the same look.
-- Fix (**done** for the look): both cards now have a red edge, the colour of the danger buttons, so they stand apart from the preferences around them. Moving them to System is **proposed**.
+- Fix (**done** for the look): both cards now have a red edge, the colour of the danger buttons, so they stand apart from the preferences around them. Moving them to System is **done**.
 
 ### 7. Platform standards
 
@@ -154,9 +154,9 @@ Done: [settings-inventory.md](settings-inventory.md), linked from the standard.
 
 ### 11. Review checklist
 
-Run over the proposed structure below: every item passes, with one note: "Sign-in for everyone" (single sign-on) sits in System rather than its own Security tab, because a Security tab would hold one card (5.2).
+Run over the structure below: every item passes, with one note: "Sign-in for everyone" (single sign-on) sits in System rather than its own Security tab, because a Security tab would hold one card (5.2).
 
-## Proposed structure
+## Structure (agreed and built)
 
 **Sidebar**
 
@@ -165,7 +165,7 @@ Run over the proposed structure below: every item passes, with one note: "Sign-i
 | Library | Discover, Movies, Shows, then each kind of media turned on, Coming up |
 | Status | Requests, Downloads, Activity, Health |
 | Setup (only until moved in) | Move in |
-| Footer | Settings, *your name* (menu: Your account, Sign out), Icons only, version |
+| Footer | Settings, *your name* (opens Your account) with a sign-out button beside it, Icons only, version |
 
 Import files becomes a button on Downloads (beside Add NZB) and keeps its address, `/import-files`. Backups keeps its address, `/backups`, which opens Settings → System.
 
@@ -173,13 +173,15 @@ Import files becomes a button on Downloads (beside Add NZB) and keeps its addres
 
 | Tab | Cards |
 | --- | --- |
-| Your account | Language, Your password, Passkeys, One-time code |
 | General | Time zone, More than movies and TV |
-| Library | as today, less "More than movies and TV" |
-| Downloads | as today |
-| Searching | as today |
-| Notifications | Alerts (rules, email, webhooks, Prometheus), Phone app and notifications |
+| Library | as before, less "More than movies and TV" |
+| Downloads | as before |
+| Searching | as before |
+| Notifications | Phone app and notifications, Alerts (rules, email, webhooks, Prometheus) |
 | Connections | Connect Matinee, TMDB, Send to e-readers, Move in |
-| System | Single sign-on, Backups, Restart, Database, About |
+| System | Backups, Single sign-on, About, Restart, Database |
+| Your account | Language, Your password, Passkeys, One-time code |
 
-Every card keeps its id, so `/settings#<id>` links and the Settings search keep working; `/health?tab=alerts` and `/backups` forward to their new places. Renamed tabs are translated in all 32 languages.
+Your account is the last tab rather than the first: General stays the tab Settings opens on, and the account is also reached from the sidebar's foot. Health → Alerts keeps what's wrong now and the alerts sent, with a link to change them. The request site's settings stay on Requests (section 3.4) and Settings search finds them.
+
+Every card keeps its id, so `/settings#<id>` links and the Settings search keep working; `/settings?tab=apps` opens Connections and `/backups` opens Settings → System → Backups. New and renamed labels are translated in all 32 languages.

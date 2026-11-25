@@ -8,7 +8,7 @@ import { when } from '../format'
 import { Button, Card, ErrorNote, Heading, Spinner, TabRow } from '../ui'
 import { ServerMonitor } from './ServerMonitor'
 import { LogViewer, type LogSearch } from './LogViewer'
-import { AlertSettings } from './AlertSettings'
+import { AlertHistory } from './AlertSettings'
 
 // useHealth is Box Office's own check-up, looked at again now and then.
 export function useHealth() {
@@ -72,7 +72,7 @@ export function Health() {
         {tab === 'checkup' && <Checkup />}
         {tab === 'server' && <ServerMonitor onShowLog={showLog} />}
         {tab === 'log' && <LogViewer search={search} />}
-        {tab === 'alerts' && <AlertSettings />}
+        {tab === 'alerts' && <AlertHistory />}
       </div>
     </>
   )

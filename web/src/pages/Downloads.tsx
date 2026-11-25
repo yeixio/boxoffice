@@ -425,6 +425,14 @@ export function Downloads() {
             <Button onClick={() => setAdding(true)}>
               <Upload className="size-4" aria-hidden /> {t("dl.addNzb")}
             </Button>
+            {/* Bringing files in by hand lives here, beside adding an NZB,
+                rather than in the sidebar (docs/design/ui-audit-2026-11.md). */}
+            <Link
+              to="/import-files"
+              className="inline-flex items-center justify-center gap-2 rounded-md border border-line bg-card px-3.5 py-2 text-sm font-medium text-ink transition hover:border-ink/40"
+            >
+              <FolderInput className="size-4" aria-hidden /> {t("nav.importFiles")}
+            </Link>
             {s.enabled && <SpeedButton data={data} />}
             {s.enabled && (
               <Button

@@ -30,7 +30,8 @@
     "version": "Box Office {{version}}",
     "games": "Games",
     "importFiles": "Import files",
-    "photos": "Photos and videos"
+    "photos": "Photos and videos",
+    "yourAccount": "Your account ({{name}})"
   },
   "app": {
     "notAnswering": "Box Office isn't answering: {{error}}",
@@ -500,7 +501,7 @@
       "checkup": "Box Office checks itself for problems you can fix: keys, folders, files, connections, backups and tasks.",
       "server": "How busy Box Office and its machine are over the last hour, its disks, and the problems it has logged.",
       "log": "What Box Office has been doing, to find out why something happened or didn't.",
-      "alerts": "Hear about problems by email, Discord, ntfy or Home Assistant, and connect Prometheus."
+      "alerts": "What's wrong now, and the alerts sent by email, Discord, ntfy or Home Assistant."
     },
     "checkAgain": "Check again",
     "checking": "Checking…",
@@ -620,7 +621,9 @@
     "addTo": "Add to prometheus.yml",
     "k8s": "In Kubernetes, Prometheus can reach Box Office at its service address inside the cluster (its service name, namespace and port 7272) instead of the address above.",
     "newToken": "New token",
-    "tokenLabel": "Token"
+    "tokenLabel": "Token",
+    "seeSent": "See the alerts sent",
+    "change": "Change what you're alerted about"
   },
   "backups": {
     "reason": {
@@ -1068,7 +1071,7 @@
     "more": "More than movies and TV",
     "moreSub": "Turn on the other kinds of media you want Box Office to look after. Each is off until you turn it on, and turning one off later keeps its folders and settings. Box Office never changes files already in these libraries.",
     "inPlaceOf": "(in place of {{app}})",
-    "pickRoot": "Pick a root folder for each one you turned on, below.",
+    "pickRootLibrary": "Pick a root folder for each one you turned on, under <link>Library</link>.",
     "roots": {
       "movie": "Movie root folders",
       "series": "TV root folders",
@@ -1153,11 +1156,11 @@
     "sections": {
       "general": {
         "label": "General",
-        "sub": "Your language and password, the TMDB key Box Office looks titles up with, and restarting Box Office."
+        "sub": "The clock Box Office keeps, and which kinds of media it looks after."
       },
       "library": {
         "label": "Library",
-        "sub": "Which kinds of media Box Office looks after, where each library lives, and how it tidies up."
+        "sub": "Where each library lives, how new titles come in, and how Box Office tidies up."
       },
       "downloads": {
         "label": "Downloads",
@@ -1167,9 +1170,21 @@
         "label": "Searching",
         "sub": "Where Box Office looks for releases, which qualities it wants, and how often and how much it searches."
       },
-      "apps": {
-        "label": "Apps and devices",
-        "sub": "Connect Matinee, send ebooks to e-readers, and move in from Radarr, Sonarr, Lidarr or Readarr."
+      "notifications": {
+        "label": "Notifications",
+        "sub": "Alerts by email, Discord, ntfy or Home Assistant, Prometheus, and notifications on phones and computers."
+      },
+      "connections": {
+        "label": "Connections",
+        "sub": "Connect Matinee and TMDB, send ebooks to e-readers, and move in from Radarr, Sonarr, Lidarr or Readarr."
+      },
+      "system": {
+        "label": "System",
+        "sub": "Backups, single sign-on for everyone, restarting, the database, and which Box Office this is."
+      },
+      "account": {
+        "label": "Your account",
+        "sub": "Your language, password, passkeys and one-time code. They're yours alone: other admins have their own."
       },
       "elsewhere": {
         "label": "On other pages"
@@ -1241,7 +1256,14 @@
     "prefsNever": "Never take",
     "prefsWordsHint": "Separate words with commas. A word is matched whole, in capitals or not, in the part of the name after the title.",
     "prefsNeverHint": "A release with one of these is turned down. You can still pick it yourself.",
-    "prefsOn": ", release preferences"
+    "prefsOn": ", release preferences",
+    "about": {
+      "title": "About",
+      "guide": "Guide",
+      "changes": "What's changed",
+      "licence": "Licence"
+    },
+    "elsewhereSite": "Who can ask for titles, how requests are approved, and how the request site looks."
   },
   "mediaTypes": {
     "music": {
@@ -2129,10 +2151,10 @@
     "add": "Add an e-reader",
     "kobo": "Kobo, Tolino and Boox readers can't receive books by email, so Box Office can't send to them.",
     "sendFrom": "How books are sent",
-    "sameAsAlerts": "Use the mail server from Health → Alerts",
+    "sameAsAlerts": "Use the mail server from Settings → Notifications",
     "sameAsAlertsHint": "Books go out through {{host}}, like alerts do.",
-    "noAlertMail": "There's no mail server under Health → Alerts yet. Set one up there, or enter one below.",
-    "setUpAlerts": "Set up email in Health → Alerts",
+    "noAlertMail": "There's no mail server under Settings → Notifications yet. Set one up there, or enter one below.",
+    "setUpAlerts": "Set up email in Settings → Notifications",
     "from": "Books come from",
     "fromSameHint": "Leave it empty to use the address alerts come from. It must be one your mail server lets you send as.",
     "fromHint": "Usually the same as the username. It must be one your mail server lets you send as.",

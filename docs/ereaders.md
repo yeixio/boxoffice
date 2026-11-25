@@ -27,7 +27,7 @@ can't send to them. See [Kobo and other readers](#kobo-and-other-readers).
 - **Turn on Ebooks** in **Settings → More than movies and TV**. The
   **Send to e-readers** card appears in Settings once Ebooks is on.
 - **Box Office needs a way to send email.** If you already get alerts by
-  email (**Health → Alerts**), Box Office uses that mail server and there's
+  email (**Settings → Notifications**), Box Office uses that mail server and there's
   nothing more to set up. If not, you can enter one just for e-readers: see
   [The mail server](#the-mail-server).
 
@@ -101,7 +101,7 @@ each new ebook as an attachment.
 
 Books go out by email, through a mail server you choose.
 
-**Use the mail server from Health → Alerts** is on by default. Box Office
+**Use the mail server from Settings → Notifications** is on by default. Box Office
 then sends books the same way it sends alerts, and you have nothing more to
 type. Under **Books come from** you can give a different sender address, if
 your mail server lets you send as it; leave it empty to use the alerts'

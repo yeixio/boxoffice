@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Cloud, Download, HardDrive, Lock, RotateCcw, Upload } from 'lucide-react'
 import { api, get, post, put, type Backup, type BackupRemote, type Backups as BackupsData } from '../api'
 import { bytes, when } from '../format'
-import { Badge, Button, Card, ErrorNote, Field, Heading, Input, Modal, Select, Spinner, Toggle } from '../ui'
+import { Badge, Button, Card, ErrorNote, Field, Input, Modal, Select, Spinner, Toggle } from '../ui'
 
 const reasons: Record<string, string> = {
   scheduled: 'backups.reason.scheduled',
@@ -13,7 +13,9 @@ const reasons: Record<string, string> = {
   'before-restore': 'backups.reason.beforeRestore',
 }
 
-export function Backups() {
+// BackupsCard is Settings → System → Backups: the backups there are, making
+// one or restoring one, and when and where they're made.
+export function BackupsCard() {
   const { t } = useTranslation()
   const qc = useQueryClient()
   const data = useQuery({ queryKey: ['backups'], queryFn: () => get<BackupsData>('/backups') })
@@ -27,20 +29,20 @@ export function Backups() {
   const d = data.data
   return (
     <>
-      <Heading
-        title={t('nav.backups')}
-        sub={t('backups.sub')}
-        actions={
-          <>
-            <Button onClick={() => setRestoring('upload')}>
-              <Upload className="size-4" aria-hidden /> {t('backups.fromFile')}
-            </Button>
-            <Button variant="primary" busy={make.isPending} onClick={() => make.mutate()}>
-              {t('backups.now')}
-            </Button>
-          </>
-        }
-      />
+      <div className="mb-4 flex flex-wrap items-end justify-between gap-4">
+        <div className="min-w-0 max-w-3xl">
+          <h2 className="mb-1 font-display text-xl font-semibold">{t('nav.backups')}</h2>
+          <p className="text-muted">{t('backups.sub')}</p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <Button onClick={() => setRestoring('upload')}>
+            <Upload className="size-4" aria-hidden /> {t('backups.fromFile')}
+          </Button>
+          <Button variant="primary" busy={make.isPending} onClick={() => make.mutate()}>
+            {t('backups.now')}
+          </Button>
+        </div>
+      </div>
       {make.data?.warning && <p className="mb-4 text-sm text-gold">{make.data.warning}</p>}
       <ErrorNote error={make.error} />
       {d.remoteError && <p className="mb-4 text-sm text-bad">{t('backups.remoteError', { error: d.remoteError })}</p>}

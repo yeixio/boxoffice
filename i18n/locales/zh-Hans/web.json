@@ -28,7 +28,8 @@
     "version": "Box Office {{version}}",
     "games": "游戏",
     "importFiles": "导入文件",
-    "photos": "照片和视频"
+    "photos": "照片和视频",
+    "yourAccount": "你的账户({{name}})"
   },
   "app": {
     "notAnswering": "Box Office 没有响应：{{error}}",
@@ -472,7 +473,7 @@
       "checkup": "Box Office 会自行检查你能修复的问题：密钥、文件夹、文件、连接、备份和任务。",
       "server": "过去一小时 Box Office 及其主机的繁忙程度、磁盘，以及它记录的问题。",
       "log": "Box Office 做过的事，用来查明某件事为什么发生或没有发生。",
-      "alerts": "通过邮件、Discord、ntfy 或 Home Assistant 获知问题，并连接 Prometheus。"
+      "alerts": "现在出了什么问题,以及通过电子邮件、Discord、ntfy 或 Home Assistant 发送的警报。"
     },
     "checkAgain": "重新检查",
     "checking": "正在检查…",
@@ -588,7 +589,9 @@
     "addTo": "添加到 prometheus.yml",
     "k8s": "在 Kubernetes 中，Prometheus 可以通过集群内的服务地址（服务名、命名空间和端口 7272）访问 Box Office，而不必使用上面的地址。",
     "newToken": "新令牌",
-    "tokenLabel": "令牌"
+    "tokenLabel": "令牌",
+    "seeSent": "查看已发送的警报",
+    "change": "更改要提醒你的内容"
   },
   "backups": {
     "reason": {
@@ -994,7 +997,7 @@
     "more": "不只电影和电视",
     "moreSub": "打开你希望 Box Office 管理的其他媒体类型。每种在打开前都是关闭的，之后关闭也会保留其文件夹和设置。Box Office 从不更改这些媒体库中已有的文件。",
     "inPlaceOf": "（代替 {{app}}）",
-    "pickRoot": "为你打开的每种类型在下方选择一个根文件夹。",
+    "pickRootLibrary": "在<link>媒体库</link>中为你打开的每种类型选择一个根文件夹。",
     "roots": {
       "movie": "电影根文件夹",
       "series": "电视根文件夹",
@@ -1076,11 +1079,11 @@
     "sections": {
       "general": {
         "label": "常规",
-        "sub": "你的语言和密码、Box Office 用来查找影片的 TMDB 密钥,以及重启 Box Office。"
+        "sub": "Box Office 的时钟,以及它管理哪些媒体类型。"
       },
       "library": {
         "label": "媒体库",
-        "sub": "Box Office 管理哪些媒体类型、每个媒体库在哪里,以及如何整理。"
+        "sub": "每个媒体库的位置、新影片如何加入,以及 Box Office 如何整理。"
       },
       "downloads": {
         "label": "下载",
@@ -1090,9 +1093,21 @@
         "label": "搜索",
         "sub": "Box Office 在哪里查找发布、想要什么画质,以及搜索的频率和数量。"
       },
-      "apps": {
-        "label": "应用和设备",
-        "sub": "连接 Matinee、把电子书发送到阅读器,以及从 Radarr、Sonarr、Lidarr 或 Readarr 迁移过来。"
+      "notifications": {
+        "label": "通知",
+        "sub": "通过电子邮件、Discord、ntfy 或 Home Assistant 发送的警报、Prometheus,以及手机和电脑上的通知。"
+      },
+      "connections": {
+        "label": "连接",
+        "sub": "连接 Matinee 和 TMDB,把电子书发送到阅读器,并从 Radarr、Sonarr、Lidarr 或 Readarr 迁入。"
+      },
+      "system": {
+        "label": "系统",
+        "sub": "备份、所有人的单点登录、重启、数据库,以及这是哪个 Box Office。"
+      },
+      "account": {
+        "label": "你的账户",
+        "sub": "你的语言、密码、通行密钥和一次性代码。只属于你:其他管理员有各自的。"
       },
       "elsewhere": {
         "label": "其他页面"
@@ -1164,7 +1179,14 @@
     "prefsNever": "绝不获取",
     "prefsWordsHint": "用逗号分隔各个词。词要在名称中标题之后的部分整词匹配，不区分大小写。",
     "prefsNeverHint": "含有其中任何一个词的发布会被拒绝。你仍然可以自己选择它。",
-    "prefsOn": "，有发布偏好"
+    "prefsOn": "，有发布偏好",
+    "about": {
+      "title": "关于",
+      "guide": "指南",
+      "changes": "更新内容",
+      "licence": "许可证"
+    },
+    "elsewhereSite": "谁可以请求影片、请求如何批准,以及请求网站的外观。"
   },
   "mediaTypes": {
     "music": {
@@ -2030,10 +2052,10 @@
     "add": "添加阅读器",
     "kobo": "Kobo、Tolino 和 Boox 阅读器无法通过邮件接收图书，所以 Box Office 无法发送给它们。",
     "sendFrom": "如何发送图书",
-    "sameAsAlerts": "使用 健康 → 提醒 中的邮件服务器",
+    "sameAsAlerts": "使用 设置 → 通知 中的邮件服务器",
     "sameAsAlertsHint": "图书和提醒一样通过 {{host}} 发出。",
-    "noAlertMail": "健康 → 提醒 中还没有邮件服务器。请在那里设置，或在下面填写。",
-    "setUpAlerts": "在 健康 → 提醒 中设置邮件",
+    "noAlertMail": "设置 → 通知 中还没有邮件服务器。请在那里设置，或在下面填写。",
+    "setUpAlerts": "在 设置 → 通知 中设置邮件",
     "from": "图书发件地址",
     "fromSameHint": "留空则使用提醒的发件地址。你的邮件服务器必须允许你用这个地址发信。",
     "fromHint": "通常与用户名相同。你的邮件服务器必须允许你用这个地址发信。",

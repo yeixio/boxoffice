@@ -28,7 +28,8 @@
     "version": "Box Office {{version}}",
     "games": "Game",
     "importFiles": "Impor file",
-    "photos": "Foto dan video"
+    "photos": "Foto dan video",
+    "yourAccount": "Akun Anda ({{name}})"
   },
   "app": {
     "notAnswering": "Box Office tidak menjawab: {{error}}",
@@ -472,7 +473,7 @@
       "checkup": "Box Office memeriksa dirinya untuk masalah yang dapat Anda perbaiki: kunci, folder, file, koneksi, cadangan, dan tugas.",
       "server": "Seberapa sibuk Box Office dan mesinnya selama satu jam terakhir, disk-nya, dan masalah yang dicatatnya.",
       "log": "Apa yang dilakukan Box Office, untuk mengetahui mengapa sesuatu terjadi atau tidak.",
-      "alerts": "Dapatkan kabar masalah lewat email, Discord, ntfy, atau Home Assistant, dan hubungkan Prometheus."
+      "alerts": "Apa yang salah sekarang dan peringatan yang dikirim lewat email, Discord, ntfy, atau Home Assistant."
     },
     "checkAgain": "Periksa lagi",
     "checking": "Memeriksa…",
@@ -588,7 +589,9 @@
     "addTo": "Tambahkan ke prometheus.yml",
     "k8s": "Di Kubernetes, Prometheus dapat menjangkau Box Office di alamat layanannya di dalam cluster (nama layanan, namespace, dan port 7272) sebagai pengganti alamat di atas.",
     "newToken": "Token baru",
-    "tokenLabel": "Token"
+    "tokenLabel": "Token",
+    "seeSent": "Lihat peringatan terkirim",
+    "change": "Ubah hal yang diperingatkan"
   },
   "backups": {
     "reason": {
@@ -994,7 +997,7 @@
     "more": "Lebih dari film dan TV",
     "moreSub": "Aktifkan jenis media lain yang ingin diurus Box Office. Masing-masing nonaktif sampai Anda mengaktifkannya, dan menonaktifkannya nanti tetap menyimpan folder dan pengaturannya. Box Office tidak pernah mengubah file yang sudah ada di perpustakaan ini.",
     "inPlaceOf": "(menggantikan {{app}})",
-    "pickRoot": "Pilih folder akar untuk setiap jenis yang Anda aktifkan, di bawah.",
+    "pickRootLibrary": "Pilih folder akar untuk tiap jenis yang Anda aktifkan, di <link>Pustaka</link>.",
     "roots": {
       "movie": "Folder akar film",
       "series": "Folder akar TV",
@@ -1076,11 +1079,11 @@
     "sections": {
       "general": {
         "label": "Umum",
-        "sub": "Bahasa dan kata sandi Anda, kunci TMDB yang dipakai Box Office untuk mencari judul, dan memulai ulang Box Office."
+        "sub": "Jam Box Office dan jenis media yang diurusnya."
       },
       "library": {
         "label": "Perpustakaan",
-        "sub": "Jenis media apa saja yang diurus Box Office, di mana tiap pustaka berada, dan cara ia merapikannya."
+        "sub": "Lokasi tiap pustaka, cara judul baru masuk, dan cara Box Office merapikan."
       },
       "downloads": {
         "label": "Unduhan",
@@ -1090,9 +1093,21 @@
         "label": "Pencarian",
         "sub": "Di mana Box Office mencari rilis, kualitas apa yang diinginkan, serta seberapa sering dan seberapa banyak ia mencari."
       },
-      "apps": {
-        "label": "Aplikasi dan perangkat",
-        "sub": "Hubungkan Matinee, kirim ebook ke e-reader, dan pindah dari Radarr, Sonarr, Lidarr, atau Readarr."
+      "notifications": {
+        "label": "Notifikasi",
+        "sub": "Peringatan lewat email, Discord, ntfy, atau Home Assistant, Prometheus, dan notifikasi di ponsel dan komputer."
+      },
+      "connections": {
+        "label": "Koneksi",
+        "sub": "Hubungkan Matinee dan TMDB, kirim ebook ke e-reader, dan pindah dari Radarr, Sonarr, Lidarr, atau Readarr."
+      },
+      "system": {
+        "label": "Sistem",
+        "sub": "Cadangan, masuk tunggal untuk semua, mulai ulang, database, dan Box Office yang mana ini."
+      },
+      "account": {
+        "label": "Akun Anda",
+        "sub": "Bahasa, kata sandi, kunci sandi, dan kode sekali pakai Anda. Hanya milik Anda: admin lain punya sendiri."
       },
       "elsewhere": {
         "label": "Di halaman lain"
@@ -1164,7 +1179,14 @@
     "prefsNever": "Jangan pernah ambil",
     "prefsWordsHint": "Pisahkan kata dengan koma. Kata dicocokkan utuh, huruf besar atau kecil, di bagian nama setelah judul.",
     "prefsNeverHint": "Rilis yang memuat salah satunya ditolak. Anda tetap bisa memilihnya sendiri.",
-    "prefsOn": ", preferensi rilis"
+    "prefsOn": ", preferensi rilis",
+    "about": {
+      "title": "Tentang",
+      "guide": "Panduan",
+      "changes": "Yang berubah",
+      "licence": "Lisensi"
+    },
+    "elsewhereSite": "Siapa yang bisa meminta judul, bagaimana permintaan disetujui, dan tampilan situs permintaan."
   },
   "mediaTypes": {
     "music": {
@@ -2030,10 +2052,10 @@
     "add": "Tambah e-reader",
     "kobo": "E-reader Kobo, Tolino, dan Boox tidak bisa menerima buku lewat email, jadi Box Office tidak bisa mengirim ke sana.",
     "sendFrom": "Cara buku dikirim",
-    "sameAsAlerts": "Pakai server email dari Kesehatan → Peringatan",
+    "sameAsAlerts": "Pakai server email dari Pengaturan → Notifikasi",
     "sameAsAlertsHint": "Buku dikirim lewat {{host}}, sama seperti peringatan.",
-    "noAlertMail": "Belum ada server email di Kesehatan → Peringatan. Siapkan di sana, atau isi di bawah.",
-    "setUpAlerts": "Siapkan email di Kesehatan → Peringatan",
+    "noAlertMail": "Belum ada server email di Pengaturan → Notifikasi. Siapkan di sana, atau isi di bawah.",
+    "setUpAlerts": "Siapkan email di Pengaturan → Notifikasi",
     "from": "Buku dikirim dari",
     "fromSameHint": "Kosongkan untuk memakai alamat peringatan. Server email Anda harus mengizinkan Anda mengirim sebagai alamat ini.",
     "fromHint": "Biasanya sama dengan nama pengguna. Server email Anda harus mengizinkan Anda mengirim sebagai alamat ini.",

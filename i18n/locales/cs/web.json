@@ -34,7 +34,8 @@
     "version": "Box Office {{version}}",
     "games": "Hry",
     "importFiles": "Importovat soubory",
-    "photos": "Fotky a videa"
+    "photos": "Fotky a videa",
+    "yourAccount": "Váš účet ({{name}})"
   },
   "app": {
     "notAnswering": "Box Office neodpovídá: {{error}}",
@@ -556,7 +557,7 @@
       "checkup": "Box Office sám u sebe hledá problémy, které můžete opravit: klíče, složky, soubory, připojení, zálohy a úlohy.",
       "server": "Jak vytížený byl Box Office a jeho stroj za poslední hodinu, jeho disky a problémy, které zaznamenal.",
       "log": "Co Box Office dělal, abyste zjistili, proč se něco stalo nebo nestalo.",
-      "alerts": "Dozvídejte se o problémech e-mailem, přes Discord, ntfy nebo Home Assistant a připojte Prometheus."
+      "alerts": "Co je teď špatně a upozornění odeslaná e-mailem, přes Discord, ntfy nebo Home Assistant."
     },
     "checkAgain": "Zkontrolovat znovu",
     "checking": "Kontrola…",
@@ -684,7 +685,9 @@
     "addTo": "Přidat do prometheus.yml",
     "k8s": "V Kubernetes může Prometheus dosáhnout Box Office na jeho adrese služby uvnitř clusteru (název služby, jmenný prostor a port 7272) místo adresy výše.",
     "newToken": "Nový token",
-    "tokenLabel": "Token"
+    "tokenLabel": "Token",
+    "seeSent": "Zobrazit odeslaná upozornění",
+    "change": "Změnit, na co jste upozorňováni"
   },
   "backups": {
     "reason": {
@@ -1216,7 +1219,7 @@
     "more": "Víc než filmy a TV",
     "moreSub": "Zapněte další druhy médií, o které se má Box Office starat. Každý je vypnutý, dokud ho nezapnete, a pozdější vypnutí zachová jeho složky a nastavení. Box Office nikdy nemění soubory, které už v těchto knihovnách jsou.",
     "inPlaceOf": "(místo {{app}})",
-    "pickRoot": "Níže vyberte kořenovou složku pro každý zapnutý druh.",
+    "pickRootLibrary": "Pro každý zapnutý druh vyberte kořenovou složku v části <link>Knihovna</link>.",
     "roots": {
       "movie": "Kořenové složky filmů",
       "series": "Kořenové složky TV",
@@ -1307,11 +1310,11 @@
     "sections": {
       "general": {
         "label": "Obecné",
-        "sub": "Váš jazyk a heslo, klíč TMDB, kterým Box Office vyhledává tituly, a restart Box Office."
+        "sub": "Hodiny Box Office a druhy médií, o které se stará."
       },
       "library": {
         "label": "Knihovna",
-        "sub": "O jaké druhy médií se Box Office stará, kde je každá knihovna a jak ji uklízí."
+        "sub": "Kde je každá knihovna, jak přibývají nové tituly a jak Box Office uklízí."
       },
       "downloads": {
         "label": "Stažené",
@@ -1321,9 +1324,21 @@
         "label": "Hledání",
         "sub": "Kde Box Office hledá vydání, jaké kvality chce a jak často a kolik hledá."
       },
-      "apps": {
-        "label": "Aplikace a zařízení",
-        "sub": "Připojte Matinee, posílejte e-knihy do čteček a přestěhujte se z Radarru, Sonarru, Lidarru nebo Readarru."
+      "notifications": {
+        "label": "Oznámení",
+        "sub": "Upozornění e-mailem, přes Discord, ntfy nebo Home Assistant, Prometheus a oznámení na telefonech a počítačích."
+      },
+      "connections": {
+        "label": "Připojení",
+        "sub": "Připojte Matinee a TMDB, posílejte e-knihy do čteček a přestěhujte se z Radarr, Sonarr, Lidarr nebo Readarr."
+      },
+      "system": {
+        "label": "Systém",
+        "sub": "Zálohy, jednotné přihlášení pro všechny, restart, databáze a o jaký Box Office jde."
+      },
+      "account": {
+        "label": "Váš účet",
+        "sub": "Váš jazyk, heslo, přístupové klíče a jednorázový kód. Patří jen vám: ostatní správci mají své."
       },
       "elsewhere": {
         "label": "Na jiných stránkách"
@@ -1395,7 +1410,14 @@
     "prefsNever": "Nikdy nebrat",
     "prefsWordsHint": "Slova oddělte čárkami. Slovo se hledá celé, bez ohledu na velikost písmen, v části názvu za titulem.",
     "prefsNeverHint": "Vydání s některým z těchto slov se odmítne. Stále si ho můžete vybrat sami.",
-    "prefsOn": ", předvolby vydání"
+    "prefsOn": ", předvolby vydání",
+    "about": {
+      "title": "O aplikaci",
+      "guide": "Průvodce",
+      "changes": "Co je nového",
+      "licence": "Licence"
+    },
+    "elsewhereSite": "Kdo smí žádat o tituly, jak se žádosti schvalují a jak vypadá stránka žádostí."
   },
   "mediaTypes": {
     "music": {
@@ -2327,10 +2349,10 @@
     "add": "Přidat čtečku",
     "kobo": "Čtečky Kobo, Tolino a Boox nedokážou přijímat knihy e-mailem, takže do nich Box Office posílat nemůže.",
     "sendFrom": "Jak se knihy posílají",
-    "sameAsAlerts": "Použít poštovní server z Stav → Upozornění",
+    "sameAsAlerts": "Použít poštovní server z Nastavení → Oznámení",
     "sameAsAlertsHint": "Knihy odcházejí přes {{host}}, stejně jako upozornění.",
-    "noAlertMail": "V Stav → Upozornění zatím není poštovní server. Nastavte ho tam, nebo ho zadejte níže.",
-    "setUpAlerts": "Nastavit e-mail v Stav → Upozornění",
+    "noAlertMail": "V Nastavení → Oznámení zatím není poštovní server. Nastavte ho tam, nebo ho zadejte níže.",
+    "setUpAlerts": "Nastavit e-mail v Nastavení → Oznámení",
     "from": "Knihy chodí z",
     "fromSameHint": "Nechte prázdné pro adresu, ze které chodí upozornění. Váš poštovní server vám musí dovolit z ní posílat.",
     "fromHint": "Obvykle stejná jako uživatelské jméno. Váš poštovní server vám musí dovolit z ní posílat.",

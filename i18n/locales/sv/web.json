@@ -30,7 +30,8 @@
     "version": "Box Office {{version}}",
     "games": "Spel",
     "importFiles": "Importera filer",
-    "photos": "Foton och videor"
+    "photos": "Foton och videor",
+    "yourAccount": "Ditt konto ({{name}})"
   },
   "app": {
     "notAnswering": "Box Office svarar inte: {{error}}",
@@ -500,7 +501,7 @@
       "checkup": "Box Office kontrollerar sig själv efter problem som du kan åtgärda: nycklar, mappar, filer, anslutningar, säkerhetskopior och uppgifter.",
       "server": "Hur upptagna Box Office och dess maskin har varit den senaste timmen, dess diskar och problemen den har loggat.",
       "log": "Vad Box Office har gjort, för att ta reda på varför något hände eller inte.",
-      "alerts": "Få veta om problem via e-post, Discord, ntfy eller Home Assistant, och anslut Prometheus."
+      "alerts": "Vad som är fel nu och larmen skickade via e-post, Discord, ntfy eller Home Assistant."
     },
     "checkAgain": "Kontrollera igen",
     "checking": "Kontrollerar…",
@@ -620,7 +621,9 @@
     "addTo": "Lägg till i prometheus.yml",
     "k8s": "I Kubernetes kan Prometheus nå Box Office på dess tjänsteadress i klustret (tjänstens namn, namnrymd och port 7272) i stället för adressen ovan.",
     "newToken": "Ny token",
-    "tokenLabel": "Token"
+    "tokenLabel": "Token",
+    "seeSent": "Se skickade larm",
+    "change": "Ändra vad du larmas om"
   },
   "backups": {
     "reason": {
@@ -1068,7 +1071,7 @@
     "more": "Mer än filmer och tv",
     "moreSub": "Slå på de andra mediatyper du vill att Box Office ska ta hand om. Var och en är av tills du slår på den, och att slå av den senare behåller dess mappar och inställningar. Box Office ändrar aldrig filer som redan finns i de här biblioteken.",
     "inPlaceOf": "(i stället för {{app}})",
-    "pickRoot": "Välj en rotmapp för var och en du slog på, nedan.",
+    "pickRootLibrary": "Välj en rotmapp för varje du har slagit på, under <link>Bibliotek</link>.",
     "roots": {
       "movie": "Rotmappar för filmer",
       "series": "Rotmappar för tv",
@@ -1153,11 +1156,11 @@
     "sections": {
       "general": {
         "label": "Allmänt",
-        "sub": "Ditt språk och lösenord, TMDB-nyckeln som Box Office slår upp titlar med, och omstart av Box Office."
+        "sub": "Box Office klocka och vilka sorters media det tar hand om."
       },
       "library": {
         "label": "Bibliotek",
-        "sub": "Vilka sorters media Box Office sköter, var varje bibliotek finns och hur det städas."
+        "sub": "Var varje bibliotek finns, hur nya titlar kommer in och hur Box Office städar."
       },
       "downloads": {
         "label": "Nedladdningar",
@@ -1167,9 +1170,21 @@
         "label": "Sökning",
         "sub": "Var Box Office letar efter releaser, vilka kvaliteter det vill ha och hur ofta och hur mycket det söker."
       },
-      "apps": {
-        "label": "Appar och enheter",
-        "sub": "Anslut Matinee, skicka e-böcker till läsplattor och flytta in från Radarr, Sonarr, Lidarr eller Readarr."
+      "notifications": {
+        "label": "Aviseringar",
+        "sub": "Larm via e-post, Discord, ntfy eller Home Assistant, Prometheus och aviseringar på telefoner och datorer."
+      },
+      "connections": {
+        "label": "Anslutningar",
+        "sub": "Anslut Matinee och TMDB, skicka e-böcker till läsplattor och flytta in från Radarr, Sonarr, Lidarr eller Readarr."
+      },
+      "system": {
+        "label": "System",
+        "sub": "Säkerhetskopior, enkel inloggning för alla, omstart, databasen och vilken Box Office detta är."
+      },
+      "account": {
+        "label": "Ditt konto",
+        "sub": "Ditt språk, lösenord, nycklar och engångskod. De är bara dina: andra administratörer har sina egna."
       },
       "elsewhere": {
         "label": "På andra sidor"
@@ -1241,7 +1256,14 @@
     "prefsNever": "Ta aldrig",
     "prefsWordsHint": "Skilj ord åt med kommatecken. Ett ord måste stämma helt, med stora eller små bokstäver, i den del av namnet som kommer efter titeln.",
     "prefsNeverHint": "En utgåva med något av dessa avvisas. Du kan fortfarande välja den själv.",
-    "prefsOn": ", preferenser för utgåvor"
+    "prefsOn": ", preferenser för utgåvor",
+    "about": {
+      "title": "Om",
+      "guide": "Guide",
+      "changes": "Vad är nytt",
+      "licence": "Licens"
+    },
+    "elsewhereSite": "Vem som får be om titlar, hur önskemål godkänns och hur önskesidan ser ut."
   },
   "mediaTypes": {
     "music": {
@@ -2129,10 +2151,10 @@
     "add": "Lägg till en läsplatta",
     "kobo": "Kobo-, Tolino- och Boox-läsplattor kan inte ta emot böcker via e-post, så Box Office kan inte skicka till dem.",
     "sendFrom": "Hur böcker skickas",
-    "sameAsAlerts": "Använd e-postservern från Hälsa → Aviseringar",
+    "sameAsAlerts": "Använd e-postservern från Inställningar → Aviseringar",
     "sameAsAlertsHint": "Böcker skickas via {{host}}, precis som aviseringar.",
-    "noAlertMail": "Det finns ingen e-postserver under Hälsa → Aviseringar än. Ställ in en där, eller skriv in en nedan.",
-    "setUpAlerts": "Ställ in e-post under Hälsa → Aviseringar",
+    "noAlertMail": "Det finns ingen e-postserver under Inställningar → Aviseringar än. Ställ in en där, eller skriv in en nedan.",
+    "setUpAlerts": "Ställ in e-post under Inställningar → Aviseringar",
     "from": "Böcker kommer från",
     "fromSameHint": "Lämna tomt för att använda aviseringarnas adress. Din e-postserver måste låta dig skicka som den.",
     "fromHint": "Oftast samma som användarnamnet. Din e-postserver måste låta dig skicka som den.",

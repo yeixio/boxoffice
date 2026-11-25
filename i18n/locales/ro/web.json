@@ -32,7 +32,8 @@
     "version": "Box Office {{version}}",
     "games": "Jocuri",
     "importFiles": "Importă fișiere",
-    "photos": "Fotografii și videoclipuri"
+    "photos": "Fotografii și videoclipuri",
+    "yourAccount": "Contul tău ({{name}})"
   },
   "app": {
     "notAnswering": "Box Office nu răspunde: {{error}}",
@@ -528,7 +529,7 @@
       "checkup": "Box Office se verifică singur pentru probleme pe care le poți rezolva: chei, dosare, fișiere, conexiuni, copii de rezervă și sarcini.",
       "server": "Cât de ocupat a fost Box Office și mașina sa în ultima oră, discurile sale și problemele înregistrate.",
       "log": "Ce a făcut Box Office, ca să afli de ce s-a întâmplat sau nu ceva.",
-      "alerts": "Află despre probleme prin e-mail, Discord, ntfy sau Home Assistant și conectează Prometheus."
+      "alerts": "Ce nu merge acum și alertele trimise prin e-mail, Discord, ntfy sau Home Assistant."
     },
     "checkAgain": "Verifică din nou",
     "checking": "Se verifică…",
@@ -652,7 +653,9 @@
     "addTo": "Adaugă în prometheus.yml",
     "k8s": "În Kubernetes, Prometheus poate ajunge la Box Office la adresa serviciului său din cluster (numele serviciului, namespace-ul și portul 7272) în locul adresei de mai sus.",
     "newToken": "Token nou",
-    "tokenLabel": "Token"
+    "tokenLabel": "Token",
+    "seeSent": "Vezi alertele trimise",
+    "change": "Schimbă despre ce ești alertat"
   },
   "backups": {
     "reason": {
@@ -1142,7 +1145,7 @@
     "more": "Mai mult decât filme și TV",
     "moreSub": "Pornește celelalte tipuri de media de care vrei să aibă grijă Box Office. Fiecare e oprit până îl pornești, iar dacă îl oprești mai târziu își păstrează dosarele și setările. Box Office nu modifică niciodată fișierele aflate deja în aceste biblioteci.",
     "inPlaceOf": "(în loc de {{app}})",
-    "pickRoot": "Alege mai jos un dosar rădăcină pentru fiecare tip pornit.",
+    "pickRootLibrary": "Alege un dosar rădăcină pentru fiecare tip pornit, în <link>Bibliotecă</link>.",
     "roots": {
       "movie": "Dosare rădăcină pentru filme",
       "series": "Dosare rădăcină TV",
@@ -1230,11 +1233,11 @@
     "sections": {
       "general": {
         "label": "General",
-        "sub": "Limba și parola ta, cheia TMDB cu care Box Office caută titlurile și repornirea Box Office."
+        "sub": "Ceasul Box Office și ce tipuri de media gestionează."
       },
       "library": {
         "label": "Bibliotecă",
-        "sub": "Ce tipuri de media gestionează Box Office, unde se află fiecare bibliotecă și cum face ordine."
+        "sub": "Unde este fiecare bibliotecă, cum vin titlurile noi și cum face Box Office ordine."
       },
       "downloads": {
         "label": "Descărcări",
@@ -1244,9 +1247,21 @@
         "label": "Căutare",
         "sub": "Unde caută Box Office lansări, ce calități vrea și cât de des și cât caută."
       },
-      "apps": {
-        "label": "Aplicații și dispozitive",
-        "sub": "Conectează Matinee, trimite cărți electronice pe cititoare și mută-te din Radarr, Sonarr, Lidarr sau Readarr."
+      "notifications": {
+        "label": "Notificări",
+        "sub": "Alerte prin e-mail, Discord, ntfy sau Home Assistant, Prometheus și notificări pe telefoane și calculatoare."
+      },
+      "connections": {
+        "label": "Conexiuni",
+        "sub": "Conectează Matinee și TMDB, trimite cărți pe cititoare și mută-te din Radarr, Sonarr, Lidarr sau Readarr."
+      },
+      "system": {
+        "label": "Sistem",
+        "sub": "Copii de siguranță, autentificare unică pentru toți, repornire, baza de date și ce Box Office este acesta."
+      },
+      "account": {
+        "label": "Contul tău",
+        "sub": "Limba, parola, cheile de acces și codul unic. Sunt doar ale tale: ceilalți administratori le au pe ale lor."
       },
       "elsewhere": {
         "label": "Pe alte pagini"
@@ -1318,7 +1333,14 @@
     "prefsNever": "Nu lua niciodată",
     "prefsWordsHint": "Separă cuvintele prin virgule. Un cuvânt trebuie să se potrivească întreg, cu majuscule sau nu, în partea numelui de după titlu.",
     "prefsNeverHint": "O lansare cu unul dintre acestea este respinsă. O poți alege în continuare singur.",
-    "prefsOn": ", preferințe pentru lansări"
+    "prefsOn": ", preferințe pentru lansări",
+    "about": {
+      "title": "Despre",
+      "guide": "Ghid",
+      "changes": "Ce s-a schimbat",
+      "licence": "Licență"
+    },
+    "elsewhereSite": "Cine poate cere titluri, cum sunt aprobate cererile și cum arată site-ul de cereri."
   },
   "mediaTypes": {
     "music": {
@@ -2228,10 +2250,10 @@
     "add": "Adaugă un cititor",
     "kobo": "Cititoarele Kobo, Tolino și Boox nu pot primi cărți prin e-mail, așa că Box Office nu le poate trimite.",
     "sendFrom": "Cum se trimit cărțile",
-    "sameAsAlerts": "Folosește serverul de e-mail din Stare → Alerte",
+    "sameAsAlerts": "Folosește serverul de e-mail din Setări → Notificări",
     "sameAsAlertsHint": "Cărțile pleacă prin {{host}}, ca alertele.",
-    "noAlertMail": "Încă nu există un server de e-mail în Stare → Alerte. Configurează unul acolo sau introdu unul mai jos.",
-    "setUpAlerts": "Configurează e-mailul în Stare → Alerte",
+    "noAlertMail": "Încă nu există un server de e-mail în Setări → Notificări. Configurează unul acolo sau introdu unul mai jos.",
+    "setUpAlerts": "Configurează e-mailul în Setări → Notificări",
     "from": "Cărțile vin de la",
     "fromSameHint": "Lasă gol pentru a folosi adresa alertelor. Serverul tău trebuie să te lase să trimiți de pe ea.",
     "fromHint": "De obicei aceeași cu numele de utilizator. Serverul tău trebuie să te lase să trimiți de pe ea.",

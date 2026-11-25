@@ -23,6 +23,8 @@ import { TracksCard } from './Tracks'
 import { TitlesFileCard } from './TitlesFile'
 import { IndexerStatsCard } from './IndexerStats'
 import { CleanupCard } from './Cleanup'
+import { AlertSettings } from './AlertSettings'
+import { BackupsCard } from './Backups'
 import { TimeZoneCard } from './TimeZone'
 import { PhoneCard } from './Phone'
 import { CodeCard, PasskeysCard } from './SignInWays'
@@ -31,17 +33,24 @@ import { matches, spans, words } from './settingsSearch'
 import { MoveDialog, MovesCard } from '../MoveTitles'
 import { Badge, Button, Card, ErrorNote, Field, Input, Modal, Select, Spinner, Toggle, useTabKeys } from '../ui'
 
-// The sections Settings is split into, in tab order. "elsewhere" is never a
-// tab: it only lists, while searching, settings that live on other pages.
-const sectionIds = ['general', 'library', 'downloads', 'searching', 'apps'] as const
+// The sections Settings is split into, in tab order, as laid out in
+// docs/design/ui-audit-2026-11.md: what Box Office does (General to
+// Connections), then System for keeping the server itself, then the
+// signed-in person's own settings. "elsewhere" is never a tab: it only
+// lists, while searching, settings that live on other pages.
+const sectionIds = ['general', 'library', 'downloads', 'searching', 'notifications', 'connections', 'system', 'account'] as const
 type SectionId = (typeof sectionIds)[number]
 const isSection = (s: string | null | undefined): s is SectionId => sectionIds.includes(s as SectionId)
+// Tabs that were renamed, so old links and bookmarks still land.
+const oldTabs: Record<string, SectionId> = { apps: 'connections' }
+const tabFrom = (s: string | null): SectionId => (isSection(s) ? s : (s && oldTabs[s]) || 'general')
 
 // A card on the page. keys are catalog keys for words people may search
 // for that aren't on the card until it's opened, like a form's fields, and
 // terms are names that read the same in every language. A card with inner
 // is already given its id inside, so its wrapper doesn't take it.
-type CardDef = { id: string; el: ReactNode; keys?: string[]; terms?: string[]; inner?: boolean }
+// A wide card spans both columns, for a card with its own columns inside.
+type CardDef = { id: string; el: ReactNode; keys?: string[]; terms?: string[]; inner?: boolean; wide?: boolean }
 type SectionDef = { id: SectionId | 'elsewhere'; cards: CardDef[] }
 
 const mediaKinds: MediaTypeKey[] = ['music', 'audiobook', 'ebook', 'comic', 'game', 'home']
@@ -50,22 +59,13 @@ const sections: SectionDef[] = [
   {
     id: 'general',
     cards: [
-      { id: 'language', el: <Language /> },
       { id: 'time-zone', el: <TimeZoneCard />, terms: ['TZ', 'UTC', 'timezone', 'clock'] },
-      { id: 'tmdb', el: <General />, keys: ['settings.tmdbKey'], terms: ['API'] },
-      { id: 'password', el: <Account /> },
-      { id: 'passkeys', el: <PasskeysCard />, terms: ['passkey', 'WebAuthn', 'FIDO', 'fingerprint', 'Face ID', 'Touch ID', 'security key', 'YubiKey', 'login'] },
-      { id: 'code', el: <CodeCard />, keys: ['code.setUp', 'code.recoveryTitle'], terms: ['2FA', 'MFA', 'TOTP', 'two-factor', 'two-step', 'authenticator', 'OTP', 'login'] },
-      { id: 'sso', el: <SsoCard />, keys: ['sso.issuer', 'sso.clientId', 'sso.secret', 'sso.admins', 'sso.members'], terms: ['SSO', 'OIDC', 'OpenID Connect', 'OAuth', 'Authentik', 'Authelia', 'Keycloak', 'Pocket ID', 'login'] },
-      { id: 'phone', el: <PhoneCard />, keys: ['phone.topics.ready', 'phone.topics.requests', 'phone.topics.problems'], terms: ['PWA', 'push', 'iPhone', 'Android', 'Home Screen', 'app'] },
-      { id: 'restart', el: <Restart />, keys: ['settings.restartNow'], terms: ['reboot', 'Kubernetes', 'Docker'] },
-      { id: 'database', el: <DatabaseMove />, keys: ['settings.database.url', 'settings.database.file', 'settings.database.move'], terms: ['PostgreSQL', 'Postgres', 'SQLite', 'migrate', 'migration', 'database'] },
+      { id: 'media-types', el: <MediaTypes /> },
     ],
   },
   {
     id: 'library',
     cards: [
-      { id: 'media-types', el: <MediaTypes /> },
       { id: 'folders-movie', el: <RootFolders kind="movie" />, keys: ['settings.addFolder', 'files.folder'] },
       { id: 'folders-series', el: <RootFolders kind="series" />, keys: ['settings.addFolder', 'files.folder'] },
       { id: 'moves', el: <MovesCard />, keys: ['relocate.speedLimit', 'relocate.to'], terms: ['migrate', 'move', 'new drive', 'new disk', 'storage', 'transfer', 'relocate'] },
@@ -121,18 +121,44 @@ const sections: SectionDef[] = [
     ],
   },
   {
-    id: 'apps',
+    id: 'notifications',
+    cards: [
+      { id: 'phone', el: <PhoneCard />, keys: ['phone.topics.ready', 'phone.topics.requests', 'phone.topics.problems'], terms: ['PWA', 'push', 'iPhone', 'Android', 'Home Screen', 'app'] },
+      { id: 'alerts', el: <AlertSettings />, wide: true, keys: ['alerts.email', 'alerts.webhooks'], terms: ['webhook', 'Discord', 'ntfy', 'Home Assistant', 'Prometheus', 'email', 'SMTP', 'metrics'] },
+    ],
+  },
+  {
+    id: 'connections',
     cards: [
       { id: 'matinee', el: <ConnectMatinee />, terms: ['API'] },
+      { id: 'tmdb', el: <General />, keys: ['settings.tmdbKey'], terms: ['API'] },
       { id: 'ereaders', el: <Ereaders />, terms: ['Kindle', 'PocketBook', 'SMTP'] },
       { id: 'move-in', el: <MoveIn />, terms: ['Radarr', 'Sonarr', 'Lidarr', 'Readarr'] },
     ],
   },
   {
+    id: 'system',
+    cards: [
+      { id: 'backups', el: <BackupsCard />, wide: true, keys: ['backups.schedule', 'backups.passphrase', 'backups.alsoSend'], terms: ['S3', 'MinIO', 'restore', 'export'] },
+      { id: 'sso', el: <SsoCard />, keys: ['sso.issuer', 'sso.clientId', 'sso.secret', 'sso.admins', 'sso.members'], terms: ['SSO', 'OIDC', 'OpenID Connect', 'OAuth', 'Authentik', 'Authelia', 'Keycloak', 'Pocket ID', 'login', 'security'] },
+      { id: 'about', el: <About />, terms: ['version', 'licence', 'license', 'changelog', 'docs'] },
+      { id: 'restart', el: <Restart />, keys: ['settings.restartNow'], terms: ['reboot', 'Kubernetes', 'Docker'] },
+      { id: 'database', el: <DatabaseMove />, keys: ['settings.database.url', 'settings.database.file', 'settings.database.move'], terms: ['PostgreSQL', 'Postgres', 'SQLite', 'migrate', 'migration', 'database'] },
+    ],
+  },
+  {
+    id: 'account',
+    cards: [
+      { id: 'language', el: <Language /> },
+      { id: 'password', el: <Account /> },
+      { id: 'passkeys', el: <PasskeysCard />, terms: ['passkey', 'WebAuthn', 'FIDO', 'fingerprint', 'Face ID', 'Touch ID', 'security key', 'YubiKey', 'login', 'security'] },
+      { id: 'code', el: <CodeCard />, keys: ['code.setUp', 'code.recoveryTitle'], terms: ['2FA', 'MFA', 'TOTP', 'two-factor', 'two-step', 'authenticator', 'OTP', 'login', 'security'] },
+    ],
+  },
+  {
     id: 'elsewhere',
     cards: [
-      { id: 'alerts', el: <Elsewhere to="/health?tab=alerts" title="health.tabs.alerts" sub="health.subs.alerts" />, terms: ['webhook', 'Discord', 'ntfy', 'Home Assistant', 'Prometheus', 'email'] },
-      { id: 'backups', el: <Elsewhere to="/backups" title="nav.backups" sub="backups.sub" />, keys: ['backups.schedule', 'backups.passphrase', 'backups.alsoSend'], terms: ['S3', 'MinIO'] },
+      { id: 'request-site', el: <Elsewhere to="/requests?tab=site" title="req.tabs.site" sub="settings.elsewhereSite" />, terms: ['Overseerr', 'Jellyseerr', 'Ombi', 'members', 'quota', 'approval', 'portal'] },
     ],
   },
 ]
@@ -142,7 +168,7 @@ export function Settings() {
   const [params] = useSearchParams()
   const { hash, key: locationKey } = useLocation()
   const navigate = useNavigate()
-  const tab: SectionId = isSection(params.get('tab')) ? (params.get('tab') as SectionId) : 'general'
+  const tab = tabFrom(params.get('tab'))
   const [query, setQuery] = useState('')
   const q = useMemo(() => words(query), [query])
   const searching = q.length > 0
@@ -321,7 +347,7 @@ export function Settings() {
               {searching && <h2 className="mb-3 mt-2 text-xs font-semibold uppercase tracking-wider text-muted">{t(`settings.sections.${s.id}.label`)}</h2>}
               <div className="gap-6 lg:columns-2">
                 {s.cards.map((c) => (
-                  <div key={c.id} id={c.inner ? undefined : c.id} hidden={searching && !found.has(c.id)} className="mb-6 scroll-mt-20 break-inside-avoid has-[>[data-card]:empty]:hidden">
+                  <div key={c.id} id={c.inner ? undefined : c.id} hidden={searching && !found.has(c.id)} className={`mb-6 scroll-mt-20 break-inside-avoid has-[>[data-card]:empty]:hidden ${c.wide ? '[column-span:all] mt-2 first:mt-0' : ''}`}>
                     <div data-card={c.id}>{c.el}</div>
                     {searching && !!found.get(c.id)?.length && <p className="mt-2 px-1 text-xs text-muted">{t('settings.search.inside', { fields: found.get(c.id)!.join(', ') })}</p>}
                   </div>
@@ -331,7 +357,6 @@ export function Settings() {
           )
         })}
       </div>
-      {!searching && tab === 'general' && <System />}
     </>
   )
 }
@@ -545,7 +570,9 @@ function MediaTypes() {
         ))}
       </div>
       {s.data?.mediaTypes.some((m) => m.enabled) && (
-        <p className="mt-4 text-sm text-muted">{t('settings.pickRoot')}</p>
+        <p className="mt-4 text-sm text-muted">
+          <Trans i18nKey="settings.pickRootLibrary" components={{ link: <Link to="/settings?tab=library" className="font-medium text-marquee" /> }} />
+        </p>
       )}
       <ErrorNote error={save.error} />
     </Card>
@@ -1342,16 +1369,42 @@ function Restarting({ since, moving }: { since: string; moving?: boolean }) {
   )
 }
 
-function System() {
+// About is Settings → System → About: which Box Office this is, where it
+// keeps its data, and where its guides, changes and licence are.
+function About() {
+  const { t } = useTranslation()
   const s = useQuery({ queryKey: ['system'], queryFn: () => get<SystemInfo>('/system') })
-  if (!s.data) return null
+  const repo = 'https://github.com/yeixio/boxoffice'
+  const link = 'inline-flex items-center gap-1 font-medium text-marquee hover:underline'
   return (
-    <p className="mt-8 text-xs text-muted">
-      <Trans
-        i18nKey="settings.system"
-        values={{ version: s.data.version, os: s.data.os, go: s.data.go, db: s.data.database === 'postgres' ? 'PostgreSQL' : 'SQLite', dir: s.data.dataDir, since: day(s.data.startedAt) }}
-        components={{ code: <code /> }}
-      />
-    </p>
+    <Card>
+      <h2 className="mb-1 font-display text-lg font-semibold">{t('settings.about.title')}</h2>
+      {s.data && (
+        <p className="mb-4 text-sm text-muted">
+          <Trans
+            i18nKey="settings.system"
+            values={{ version: s.data.version, os: s.data.os, go: s.data.go, db: s.data.database === 'postgres' ? 'PostgreSQL' : 'SQLite', dir: s.data.dataDir, since: day(s.data.startedAt) }}
+            components={{ code: <code /> }}
+          />
+        </p>
+      )}
+      <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
+        <li>
+          <a className={link} href={`${repo}#readme`} target="_blank" rel="noreferrer">
+            {t('settings.about.guide')}
+          </a>
+        </li>
+        <li>
+          <a className={link} href={`${repo}/blob/main/CHANGELOG.md`} target="_blank" rel="noreferrer">
+            {t('settings.about.changes')}
+          </a>
+        </li>
+        <li>
+          <a className={link} href={`${repo}/blob/main/LICENSE`} target="_blank" rel="noreferrer">
+            {t('settings.about.licence')}
+          </a>
+        </li>
+      </ul>
+    </Card>
   )
 }

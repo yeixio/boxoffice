@@ -30,7 +30,8 @@
     "version": "Box Office {{version}}",
     "games": "Spill",
     "importFiles": "Importer filer",
-    "photos": "Bilder og videoer"
+    "photos": "Bilder og videoer",
+    "yourAccount": "Kontoen din ({{name}})"
   },
   "app": {
     "notAnswering": "Box Office svarer ikke: {{error}}",
@@ -500,7 +501,7 @@
       "checkup": "Box Office sjekker seg selv for problemer du kan fikse: nøkler, mapper, filer, tilkoblinger, sikkerhetskopier og oppgaver.",
       "server": "Hvor travle Box Office og maskinen har vært den siste timen, diskene og problemene den har loggført.",
       "log": "Hva Box Office har gjort, for å finne ut hvorfor noe skjedde eller ikke.",
-      "alerts": "Få beskjed om problemer på e-post, Discord, ntfy eller Home Assistant, og koble til Prometheus."
+      "alerts": "Hva som er galt nå og varslene sendt på e-post, Discord, ntfy eller Home Assistant."
     },
     "checkAgain": "Sjekk igjen",
     "checking": "Sjekker…",
@@ -620,7 +621,9 @@
     "addTo": "Legg til i prometheus.yml",
     "k8s": "I Kubernetes kan Prometheus nå Box Office på tjenesteadressen i klyngen (tjenestenavn, navnerom og port 7272) i stedet for adressen ovenfor.",
     "newToken": "Nytt token",
-    "tokenLabel": "Token"
+    "tokenLabel": "Token",
+    "seeSent": "Se sendte varsler",
+    "change": "Endre hva du varsles om"
   },
   "backups": {
     "reason": {
@@ -1068,7 +1071,7 @@
     "more": "Mer enn filmer og TV",
     "moreSub": "Slå på de andre medietypene du vil at Box Office skal ta seg av. Hver av dem er av til du slår den på, og å slå den av senere beholder mappene og innstillingene. Box Office endrer aldri filer som allerede finnes i disse bibliotekene.",
     "inPlaceOf": "(i stedet for {{app}})",
-    "pickRoot": "Velg en rotmappe for hver du slo på, nedenfor.",
+    "pickRootLibrary": "Velg en rotmappe for hver du har slått på, under <link>Bibliotek</link>.",
     "roots": {
       "movie": "Rotmapper for filmer",
       "series": "Rotmapper for TV",
@@ -1153,11 +1156,11 @@
     "sections": {
       "general": {
         "label": "Generelt",
-        "sub": "Språket og passordet ditt, TMDB-nøkkelen Box Office slår opp titler med, og omstart av Box Office."
+        "sub": "Klokken til Box Office og hvilke typer medier den tar seg av."
       },
       "library": {
         "label": "Bibliotek",
-        "sub": "Hvilke slags medier Box Office tar seg av, hvor hvert bibliotek ligger og hvordan det rydder."
+        "sub": "Hvor hvert bibliotek ligger, hvordan nye titler kommer inn og hvordan Box Office rydder."
       },
       "downloads": {
         "label": "Nedlastinger",
@@ -1167,9 +1170,21 @@
         "label": "Søk",
         "sub": "Hvor Box Office leter etter utgivelser, hvilke kvaliteter det vil ha, og hvor ofte og hvor mye det søker."
       },
-      "apps": {
-        "label": "Apper og enheter",
-        "sub": "Koble til Matinee, send e-bøker til lesebrett og flytt inn fra Radarr, Sonarr, Lidarr eller Readarr."
+      "notifications": {
+        "label": "Varsler",
+        "sub": "Varsler på e-post, Discord, ntfy eller Home Assistant, Prometheus og varsler på telefoner og datamaskiner."
+      },
+      "connections": {
+        "label": "Tilkoblinger",
+        "sub": "Koble til Matinee og TMDB, send e-bøker til lesebrett og flytt inn fra Radarr, Sonarr, Lidarr eller Readarr."
+      },
+      "system": {
+        "label": "System",
+        "sub": "Sikkerhetskopier, felles pålogging for alle, omstart, databasen og hvilken Box Office dette er."
+      },
+      "account": {
+        "label": "Kontoen din",
+        "sub": "Språket, passordet, tilgangsnøklene og engangskoden din. De er bare dine: andre administratorer har sine egne."
       },
       "elsewhere": {
         "label": "På andre sider"
@@ -1241,7 +1256,14 @@
     "prefsNever": "Ta aldri",
     "prefsWordsHint": "Skill ord med komma. Et ord må stemme helt, med store eller små bokstaver, i den delen av navnet som kommer etter tittelen.",
     "prefsNeverHint": "En utgivelse med ett av disse avvises. Du kan fortsatt velge den selv.",
-    "prefsOn": ", preferanser for utgivelser"
+    "prefsOn": ", preferanser for utgivelser",
+    "about": {
+      "title": "Om",
+      "guide": "Veiledning",
+      "changes": "Hva er nytt",
+      "licence": "Lisens"
+    },
+    "elsewhereSite": "Hvem som kan be om titler, hvordan forespørsler godkjennes og hvordan forespørselssiden ser ut."
   },
   "mediaTypes": {
     "music": {
@@ -2129,10 +2151,10 @@
     "add": "Legg til et lesebrett",
     "kobo": "Kobo-, Tolino- og Boox-lesebrett kan ikke ta imot bøker på e-post, så Box Office kan ikke sende til dem.",
     "sendFrom": "Hvordan bøker sendes",
-    "sameAsAlerts": "Bruk e-postserveren fra Helse → Varsler",
+    "sameAsAlerts": "Bruk e-postserveren fra Innstillinger → Varsler",
     "sameAsAlertsHint": "Bøker sendes via {{host}}, slik som varsler.",
-    "noAlertMail": "Det er ingen e-postserver under Helse → Varsler ennå. Sett opp en der, eller skriv inn en nedenfor.",
-    "setUpAlerts": "Sett opp e-post under Helse → Varsler",
+    "noAlertMail": "Det er ingen e-postserver under Innstillinger → Varsler ennå. Sett opp en der, eller skriv inn en nedenfor.",
+    "setUpAlerts": "Sett opp e-post under Innstillinger → Varsler",
     "from": "Bøker kommer fra",
     "fromSameHint": "La stå tomt for å bruke adressen varslene kommer fra. E-postserveren må la deg sende som den.",
     "fromHint": "Vanligvis det samme som brukernavnet. E-postserveren må la deg sende som den.",

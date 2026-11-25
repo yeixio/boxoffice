@@ -105,7 +105,7 @@ Open http://localhost:7272 and make the admin account. To have it file things in
 
 - **Ebooks straight to your e-reader.** Each ebook Box Office downloads can be emailed to your Kindle, PocketBook or any reader with an email address, as soon as it's in the library. See [Sending ebooks to e-readers](docs/ereaders.md).
 - **Health.** A check-up of the things that stop Box Office working (disks, folders it can't write to, indexers, news servers), live charts of the processor, memory, requests and download speed, the log with a debug switch, and alerts. Prometheus metrics are at `/metrics` once you make a token.
-- **Backups** of its database on a schedule, to its own disk and optionally to another folder (such as a NAS share) or S3-compatible storage (AWS S3, Backblaze B2, Cloudflare R2, MinIO). A passphrase encrypts them. Restore from the Backups page.
+- **Backups** of its database on a schedule, to its own disk and optionally to another folder (such as a NAS share) or S3-compatible storage (AWS S3, Backblaze B2, Cloudflare R2, MinIO). A passphrase encrypts them. Restore from **Settings → System → Backups**.
 - **Works on a phone.** Every page is built to work at phone width, in light and dark.
 
 ## The request site
@@ -224,7 +224,7 @@ ingress:
       paths: [{ path: /, pathType: Prefix }]
 ```
 
-The chart runs one pod with SQLite on its own volume by default. Set `postgresql.enabled=true` for a bundled PostgreSQL (its password is made into a Secret on first install, so it works the same under Argo CD or Flux), or `database.url` for your own. An install on SQLite moves to PostgreSQL (or back) from **Settings → General → Database**; see [Moving the database](docs/database.md). Set `apiKey.existingSecret` and `tmdb.existingSecret` to manage keys with the cluster. Mount the same volumes Matinee reads, at the same paths. Everything else is in [`values.yaml`](deploy/helm/boxoffice/values.yaml).
+The chart runs one pod with SQLite on its own volume by default. Set `postgresql.enabled=true` for a bundled PostgreSQL (its password is made into a Secret on first install, so it works the same under Argo CD or Flux), or `database.url` for your own. An install on SQLite moves to PostgreSQL (or back) from **Settings → System → Database**; see [Moving the database](docs/database.md). Set `apiKey.existingSecret` and `tmdb.existingSecret` to manage keys with the cluster. Mount the same volumes Matinee reads, at the same paths. Everything else is in [`values.yaml`](deploy/helm/boxoffice/values.yaml).
 
 Set `image.tag=main` to follow `main` instead. A reverse proxy or ingress in front of Box Office should allow long requests (an hour is plenty), because a big Move in preview takes a while.
 
