@@ -100,9 +100,13 @@ func (s *Service) query(ctx context.Context, ix store.Indexer, q Query) ([]Relea
 	if err := s.Store.CountIndexerUse(context.WithoutCancel(ctx), ix.ID, 1, 0, auto); err != nil {
 		s.logger().Warn("couldn't count an indexer search", "indexer", ix.Name, "err", err)
 	}
+	start := time.Now()
 	rs, lim, err := s.Client.Query(ctx, ix, q)
 	if ctx.Err() == nil {
 		s.noted(ctx, ix, lim, err)
+		if e := s.Store.NoteIndexerAnswer(context.WithoutCancel(ctx), ix.ID, time.Since(start), err != nil); e != nil {
+			s.logger().Warn("couldn't note how an indexer answered", "indexer", ix.Name, "err", e)
+		}
 	}
 	return rs, err
 }
@@ -149,6 +153,54 @@ func (s *Service) IndexerStates(ctx context.Context) (map[int64]IndexerState, er
 		}
 		out[ix.ID] = IndexerState{IndexerStatus: st, Name: ix.Name, Resting: st.Resting(now), Today: use[ix.ID],
 			QueryLimit: limitOf(ix.DailyQueries, st.APIMax), GrabLimit: limitOf(ix.DailyGrabs, st.GrabMax), LimitsReport: st.APIMax > 0 || st.GrabMax > 0}
+	}
+	return out, nil
+}
+
+// StatsDays is how many days indexer statistics cover: usage is kept a
+// month (see PruneIndexerUsage's caller).
+const StatsDays = 30
+
+// IndexerStats is one indexer's row of statistics.
+type IndexerStats struct {
+	ID   int64  `json:"id"`
+	Name string `json:"name"`
+	store.IndexerTotals
+	store.GrabOutcomes
+	// Today's use of its daily search allowance; the limit is 0 when it
+	// isn't known.
+	Today      int `json:"today"`
+	QueryLimit int `json:"queryLimit"`
+}
+
+// IndexerStatistics is what each indexer was asked over the last
+// StatsDays days, how it answered, and how what was grabbed from it ended.
+func (s *Service) IndexerStatistics(ctx context.Context) ([]IndexerStats, error) {
+	list, err := s.Store.Indexers(ctx)
+	if err != nil {
+		return nil, err
+	}
+	since := time.Now().AddDate(0, 0, -(StatsDays - 1))
+	totals, err := s.Store.IndexerTotalsSince(ctx, store.UsageDay(since))
+	if err != nil {
+		return nil, err
+	}
+	y, m, d := since.UTC().Date()
+	grabs, err := s.Store.GrabOutcomesSince(ctx, time.Date(y, m, d, 0, 0, 0, 0, time.UTC))
+	if err != nil {
+		return nil, err
+	}
+	states, err := s.IndexerStates(ctx)
+	if err != nil {
+		return nil, err
+	}
+	out := make([]IndexerStats, 0, len(list))
+	for _, ix := range list {
+		if ix.Protocol != "usenet" {
+			continue // never asked
+		}
+		out = append(out, IndexerStats{ID: ix.ID, Name: ix.Name, IndexerTotals: totals[ix.ID], GrabOutcomes: grabs[ix.Name],
+			Today: states[ix.ID].Today.Queries, QueryLimit: states[ix.ID].QueryLimit})
 	}
 	return out, nil
 }

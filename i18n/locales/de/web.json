@@ -3016,5 +3016,16 @@
     "queued": "{{n}} Titel werden im Hintergrund nacheinander hinzugefügt. Verfolge es unter <link>Aktivität</link>.",
     "artists": "Künstler",
     "authors": "Autoren"
+  },
+  "indexerStats": {
+    "title": "Indexer-Statistik",
+    "sub": "Was jeder Indexer in den letzten {{days}} Tagen gefragt wurde, wie er geantwortet hat und wie die von ihm geholten Downloads ausgegangen sind. Das hilft bei der Entscheidung, welche Indexer sich lohnen.",
+    "searches": "Suchen",
+    "auto": "{{n}} von Box Office selbst",
+    "answer": "Antwortzeit",
+    "grabbed": "Geholt",
+    "today": "Suchen heute",
+    "note": "Zu den Suchen zählen auch RSS-Abfragen. Aus dem Verlauf entfernte Downloads werden nicht mitgezählt.",
+    "none": "Füge einen Indexer hinzu, um hier seine Zahlen zu sehen."
   }
 }

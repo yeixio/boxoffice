@@ -2893,5 +2893,16 @@
     "queued": "Đang thêm {{n}} tựa trong nền, từng tựa một. Theo dõi tại <link>Hoạt động</link>.",
     "artists": "Nghệ sĩ",
     "authors": "Tác giả"
+  },
+  "indexerStats": {
+    "title": "Thống kê trình chỉ mục",
+    "sub": "Mỗi trình chỉ mục đã được hỏi gì trong {{days}} ngày qua, trả lời ra sao, và các lượt tải lấy từ đó kết thúc thế nào. Giúp quyết định trình chỉ mục nào đáng giữ.",
+    "searches": "Lượt tìm",
+    "auto": "{{n}} do Box Office tự thực hiện",
+    "answer": "Thời gian trả lời",
+    "grabbed": "Đã lấy",
+    "today": "Lượt tìm hôm nay",
+    "note": "Lượt tìm bao gồm cả kiểm tra RSS. Các lượt tải đã gỡ khỏi lịch sử không được tính.",
+    "none": "Thêm một trình chỉ mục để xem số liệu ở đây."
   }
 }

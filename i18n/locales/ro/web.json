@@ -3139,5 +3139,16 @@
     "queued": "Se adaugă {{n}} titluri în fundal, unul câte unul. Urmărește în <link>Activitate</link>.",
     "artists": "Artiști",
     "authors": "Autori"
+  },
+  "indexerStats": {
+    "title": "Statistici indexatoare",
+    "sub": "Ce i s-a cerut fiecărui indexator în ultimele {{days}} zile, cum a răspuns și cum s-au încheiat descărcările luate de la el. Te ajută să decizi ce indexatoare merită păstrate.",
+    "searches": "Căutări",
+    "auto": "{{n}} făcute de Box Office",
+    "answer": "Timp de răspuns",
+    "grabbed": "Luate",
+    "today": "Căutări azi",
+    "note": "Căutările includ verificările RSS. Descărcările eliminate din istoric nu sunt numărate.",
+    "none": "Adaugă un indexator ca să îi vezi cifrele aici."
   }
 }

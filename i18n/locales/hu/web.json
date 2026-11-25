@@ -3016,5 +3016,16 @@
     "queued": "{{n}} cím hozzáadása folyik a háttérben, egyenként. Kövesd itt: <link>Tevékenység</link>.",
     "artists": "Előadók",
     "authors": "Szerzők"
+  },
+  "indexerStats": {
+    "title": "Indexelők statisztikája",
+    "sub": "Mit kérdezett a Box Office az egyes indexelőktől az elmúlt {{days}} napban, hogyan válaszoltak, és mi lett a tőlük származó letöltésekkel. Segít eldönteni, mely indexelőket érdemes megtartani.",
+    "searches": "Keresések",
+    "auto": "{{n}} a Box Office-tól magától",
+    "answer": "Válaszidő",
+    "grabbed": "Letöltve",
+    "today": "Mai keresések",
+    "note": "A keresések közé az RSS-ellenőrzések is beleszámítanak. Az előzményekből eltávolított letöltések nem számítanak.",
+    "none": "Adj hozzá egy indexelőt, hogy itt lásd a számait."
   }
 }

@@ -2893,5 +2893,16 @@
     "queued": "Menambah {{n}} tajuk di latar belakang, satu demi satu. Ikuti di <link>Aktiviti</link>.",
     "artists": "Artis",
     "authors": "Pengarang"
+  },
+  "indexerStats": {
+    "title": "Statistik pengindeks",
+    "sub": "Apa yang ditanya kepada setiap pengindeks sepanjang {{days}} hari lalu, bagaimana ia menjawab, dan bagaimana muat turun yang diambil daripadanya berakhir. Ia membantu memutuskan pengindeks mana yang berbaloi disimpan.",
+    "searches": "Carian",
+    "auto": "{{n}} oleh Box Office sendiri",
+    "answer": "Masa jawapan",
+    "grabbed": "Diambil",
+    "today": "Carian hari ini",
+    "note": "Carian termasuk semakan RSS. Muat turun yang dibuang daripada sejarah tidak dikira.",
+    "none": "Tambah pengindeks untuk melihat angkanya di sini."
   }
 }

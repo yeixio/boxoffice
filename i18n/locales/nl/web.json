@@ -3016,5 +3016,16 @@
     "queued": "{{n}} titels worden op de achtergrond één voor één toegevoegd. Volg het in <link>Activiteit</link>.",
     "artists": "Artiesten",
     "authors": "Auteurs"
+  },
+  "indexerStats": {
+    "title": "Indexerstatistieken",
+    "sub": "Wat elke indexer de afgelopen {{days}} dagen is gevraagd, hoe die antwoordde en hoe de downloads die ervan zijn opgehaald zijn afgelopen. Het helpt bepalen welke indexers het waard zijn om te houden.",
+    "searches": "Zoekacties",
+    "auto": "{{n}} door Box Office zelf",
+    "answer": "Antwoordtijd",
+    "grabbed": "Opgehaald",
+    "today": "Zoekacties vandaag",
+    "note": "Bij zoekacties horen ook RSS-controles. Downloads die uit de geschiedenis zijn verwijderd, tellen niet mee.",
+    "none": "Voeg een indexer toe om de cijfers hier te zien."
   }
 }

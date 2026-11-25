@@ -352,6 +352,9 @@ CREATE TABLE IF NOT EXISTS indexer_usage (
 	queries    INTEGER NOT NULL DEFAULT 0,
 	grabs      INTEGER NOT NULL DEFAULT 0,
 	auto       INTEGER NOT NULL DEFAULT 0,
+	errors     INTEGER NOT NULL DEFAULT 0, -- queries that failed
+	answered   INTEGER NOT NULL DEFAULT 0, -- queries that were answered,
+	answer_ms  BIGINT NOT NULL DEFAULT 0,  -- and how long those took in all
 	PRIMARY KEY (indexer_id, day)
 );
 

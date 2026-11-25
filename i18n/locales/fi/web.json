@@ -3016,5 +3016,16 @@
     "queued": "Lisätään {{n}} nimikettä taustalla yksi kerrallaan. Seuraa kohdassa <link>Toiminta</link>.",
     "artists": "Artistit",
     "authors": "Kirjailijat"
+  },
+  "indexerStats": {
+    "title": "Indeksoijien tilastot",
+    "sub": "Mitä kultakin indeksoijalta on kysytty viimeisten {{days}} päivän aikana, miten se vastasi ja miten siltä haetut lataukset päättyivät. Tämä auttaa päättämään, mitkä indeksoijat kannattaa pitää.",
+    "searches": "Haut",
+    "auto": "{{n}} Box Officen omia",
+    "answer": "Vastausaika",
+    "grabbed": "Haettu",
+    "today": "Haut tänään",
+    "note": "Hakuihin lasketaan myös RSS-tarkistukset. Historiasta poistettuja latauksia ei lasketa.",
+    "none": "Lisää indeksoija, niin sen luvut näkyvät täällä."
   }
 }

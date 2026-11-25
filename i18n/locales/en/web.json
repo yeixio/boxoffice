@@ -3016,5 +3016,16 @@
     "queued": "Adding {{n}} titles in the background, one at a time. Follow along in <link>Activity</link>.",
     "artists": "Artists",
     "authors": "Authors"
+  },
+  "indexerStats": {
+    "title": "Indexer statistics",
+    "sub": "What each indexer was asked over the last {{days}} days, how it answered, and how the downloads grabbed from it ended. It helps decide which indexers are worth keeping.",
+    "searches": "Searches",
+    "auto": "{{n}} by Box Office itself",
+    "answer": "Answer time",
+    "grabbed": "Grabbed",
+    "today": "Searches today",
+    "note": "Searches include RSS checks. Downloads removed from the history aren't counted.",
+    "none": "Add an indexer to see its numbers here."
   }
 }

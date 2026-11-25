@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"github.com/yeixio/boxoffice/internal/search"
 	"net/http"
 	"strconv"
 	"strings"
@@ -95,6 +96,16 @@ func (s *Server) connections(w http.ResponseWriter, r *http.Request) error {
 	}
 	return writeJSON(w, http.StatusOK, map[string]any{"indexers": idx, "downloadClients": dcs, "usenetServers": servers, "blocklist": blocked,
 		"indexerStates": states, "quotas": quotas})
+}
+
+// indexerStats is the table under Settings → Searching: what each indexer
+// was asked lately, how it answered, and how its grabs ended.
+func (s *Server) indexerStats(w http.ResponseWriter, r *http.Request) error {
+	rows, err := s.Search.IndexerStatistics(r.Context())
+	if err != nil {
+		return err
+	}
+	return writeJSON(w, http.StatusOK, map[string]any{"days": search.StatsDays, "indexers": rows})
 }
 
 func (s *Server) deleteConnection(del func(*http.Request, int64) error) func(http.ResponseWriter, *http.Request) error {

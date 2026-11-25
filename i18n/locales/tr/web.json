@@ -3016,5 +3016,16 @@
     "queued": "{{n}} başlık arka planda birer birer ekleniyor. <link>Etkinlik</link> bölümünden izleyin.",
     "artists": "Sanatçılar",
     "authors": "Yazarlar"
+  },
+  "indexerStats": {
+    "title": "Dizinleyici istatistikleri",
+    "sub": "Son {{days}} günde her dizinleyiciye ne soruldu, nasıl yanıt verdi ve ondan alınan indirmeler nasıl sonuçlandı. Hangi dizinleyicilerin tutulmaya değer olduğuna karar vermenize yardımcı olur.",
+    "searches": "Aramalar",
+    "auto": "{{n}} tanesi Box Office'in kendisinden",
+    "answer": "Yanıt süresi",
+    "grabbed": "Alınan",
+    "today": "Bugünkü aramalar",
+    "note": "Aramalara RSS denetimleri de dahildir. Geçmişten kaldırılan indirmeler sayılmaz.",
+    "none": "Rakamlarını burada görmek için bir dizinleyici ekleyin."
   }
 }

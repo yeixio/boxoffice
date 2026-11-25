@@ -168,6 +168,9 @@ func migrateSchema(ctx context.Context, db schemaRunner, postgres bool) error {
 		{"books", "series_pos", "TEXT NOT NULL DEFAULT ''"},
 		{"games", "serial", "TEXT NOT NULL DEFAULT ''"},
 		{"game_wants", "serial", "TEXT NOT NULL DEFAULT ''"},
+		{"indexer_usage", "errors", "INTEGER NOT NULL DEFAULT 0"},
+		{"indexer_usage", "answered", "INTEGER NOT NULL DEFAULT 0"},
+		{"indexer_usage", "answer_ms", "BIGINT NOT NULL DEFAULT 0"},
 	} {
 		has, err := hasColumn(ctx, db, postgres, c.table, c.column)
 		if err != nil {

@@ -20,6 +20,7 @@ import { QualityCheckCard } from './QualityCheck'
 import { SubtitleSettingsCard } from './Subtitles'
 import { ListsCard } from './Lists'
 import { TitlesFileCard } from './TitlesFile'
+import { IndexerStatsCard } from './IndexerStats'
 import { CleanupCard } from './Cleanup'
 import { TimeZoneCard } from './TimeZone'
 import { PhoneCard } from './Phone'
@@ -111,6 +112,7 @@ const sections: SectionDef[] = [
         keys: ['conn.address', 'conn.indexer.apiKey', 'conn.indexer.kind', 'conn.indexer.categories', 'conn.indexer.apiPath', 'conn.indexer.priority', 'conn.auto.perDay', 'conn.indexer.grabs', 'conn.indexer.forSearch', 'conn.indexer.forRss'],
         terms: ['Prowlarr', 'Newznab', 'Torznab', 'NZB', 'API'],
       },
+      { id: 'indexer-stats', el: <IndexerStatsCard />, keys: ['indexerStats.answer', 'indexerStats.grabbed'], terms: ['Prowlarr', 'stats', 'statistics'] },
       { id: 'profiles', el: <Profiles />, keys: ['settings.newProfileTitle', 'settings.qualities', 'settings.goodEnough', 'settings.upgradeUntil', 'settings.sizes', 'settings.prefs'] },
       { id: 'automatic-searches', el: <AutoSearchSettings />, inner: true, terms: ['RSS'] },
       { id: 'data-cap', el: <DataCapSettingsCard />, inner: true },
