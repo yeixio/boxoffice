@@ -42,6 +42,7 @@ import (
 	"github.com/yeixio/boxoffice/internal/musicbrainz"
 	"github.com/yeixio/boxoffice/internal/notify"
 	"github.com/yeixio/boxoffice/internal/openlibrary"
+	"github.com/yeixio/boxoffice/internal/playon"
 	"github.com/yeixio/boxoffice/internal/portal"
 	"github.com/yeixio/boxoffice/internal/problems"
 	"github.com/yeixio/boxoffice/internal/push"
@@ -284,6 +285,10 @@ func run() error {
 	// Lists kept elsewhere (TMDB, Trakt, Plex) are read every few hours.
 	follower := &lists.Service{Store: db, Catalog: cat, Log: log, UserAgent: "BoxOffice/" + version.Version}
 	srv.Lists = follower
+	// PlayOn Cloud recordings are downloaded once they're finished, and
+	// filed through Import files like an NZB added by hand.
+	recorder := &playon.Service{Store: db, Dir: cfg.Downloads, FileAway: imports.Adopt, Log: log, UserAgent: "BoxOffice/" + version.Version}
+	srv.PlayOn = recorder
 	// A list of titles loaded from a file is added one title at a time.
 	srv.Titles = &titlelist.Service{Store: db, Catalog: cat, Music: tunes, Books: shelf, Jobs: runner}
 	srv.Titles.Register()
@@ -328,7 +333,7 @@ func run() error {
 	var wg sync.WaitGroup
 	for _, loop := range []func(context.Context){runner.Run, backups.Run, downloads.Run, mon.Monitor.Run, alerter.Run,
 		func(ctx context.Context) { cat.RefreshEvery(ctx, cfg.Refresh) }, func(ctx context.Context) { finder.AutoSearchEvery(ctx, runner) },
-		finder.RSSEvery, finder.HeldEvery, finder.RegrabsEvery, finder.PruneEvery, shelf.DetailsEvery, finds.Run, checker.Run, subs.Run, follower.Run, mover.Run, gameShelf.Run, homeShelf.Run, func(ctx context.Context) { api.RecycleSweepEvery(ctx, db, log) }, func(ctx context.Context) { api.SessionSweepEvery(ctx, db, log) }, srv.RunCleanup,
+		finder.RSSEvery, finder.HeldEvery, finder.RegrabsEvery, finder.PruneEvery, shelf.DetailsEvery, finds.Run, checker.Run, subs.Run, follower.Run, recorder.Run, mover.Run, gameShelf.Run, homeShelf.Run, func(ctx context.Context) { api.RecycleSweepEvery(ctx, db, log) }, func(ctx context.Context) { api.SessionSweepEvery(ctx, db, log) }, srv.RunCleanup,
 		func(ctx context.Context) { retryImports(ctx, downloads, log) }} {
 		wg.Add(1)
 		go func() { defer wg.Done(); loop(ctx) }()

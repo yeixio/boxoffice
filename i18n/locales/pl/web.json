@@ -3335,5 +3335,52 @@
     "buy": "Kup",
     "none": "Z tego, co wiemy, niedostępne w streamingu w kraju {{country}}.",
     "source": "Serwisy streamingowe według JustWatch"
+  },
+  "playon": {
+    "title": "PlayOn Cloud",
+    "on": "Włączone",
+    "off": "Wyłączone",
+    "sub": "PlayOn Cloud nagrywa seriale i filmy z serwisów streamingowych, takich jak Netflix, Hulu, Disney+ i Max. Planuj nagrania w aplikacji PlayOn Cloud jak zwykle: gdy nagranie się skończy, Box Office je pobierze i umieści w bibliotece tak jak Importuj pliki. PlayOn usuwa nagrania po 7 dniach, jeśli nie płacisz za miejsce, dlatego Box Office sprawdza co 15 minut.",
+    "docs": "Jak to działa",
+    "how": "Jak to skonfigurować",
+    "help": {
+      "1": "Załóż konto w PlayOn Cloud i nagraj coś w aplikacji na telefon.",
+      "2": "Wpisz e-mail i hasło, którymi logujesz się do PlayOn, i naciśnij Testuj.",
+      "3": "Włącz Pobieraj nagrania i naciśnij Zapisz.",
+      "4": "W aplikacji PlayOn Cloud wyłącz pobieranie nagrań na telefon, żeby nie pobierały się dwa razy."
+    },
+    "email": "E-mail PlayOn",
+    "password": "Hasło PlayOn",
+    "keepPassword": "Zapisane (zostaw puste, by zachować)",
+    "test": "Testuj",
+    "works": "Zalogowano. Nagrania gotowe do pobrania: {{count}}",
+    "forget": "Odłącz konto",
+    "bringIn": "Pobieraj nagrania",
+    "bringInHint": "Pobiera każde gotowe nagranie i umieszcza je w bibliotece. Pobrania wliczają się do miesięcznego limitu danych.",
+    "recordings": "Nagrania",
+    "checking": "Sprawdzanie PlayOn…",
+    "checkedAt": "Ostatnio sprawdzono {{when}}",
+    "inPlayOn": "W kolejce PlayOn: {{count}}",
+    "filedCount": "W bibliotece: {{count}}",
+    "checkCount": "Do sprawdzenia: {{count}}",
+    "expiring": "PlayOn usunie w ciągu doby: {{count}}",
+    "downloading": "Pobieranie {{name}}: {{done}} z {{total}}",
+    "checkHint": "Niektóre nagrania zostały pobrane, ale Box Office nie wie na pewno, czym są. Wskaż, czym jest każde, na stronie Importuj pliki.",
+    "openImport": "Otwórz Importuj pliki",
+    "checkNow": "Sprawdź teraz",
+    "none": "Brak nagrań. Nagraj coś w aplikacji PlayOn Cloud, a pojawi się tutaj, gdy się skończy.",
+    "retry": "Ponów",
+    "skip": "Pomiń",
+    "filedTo": "Umieszczono w {{path}}",
+    "expires": "PlayOn usunie je {{when}}",
+    "state": {
+      "new": "Czeka",
+      "downloading": "Pobieranie",
+      "filed": "W bibliotece",
+      "check": "Do sprawdzenia",
+      "failed": "Błąd",
+      "skipped": "Pominięte",
+      "expired": "Wygasło"
+    }
   }
 }

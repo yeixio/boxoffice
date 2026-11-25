@@ -3212,5 +3212,52 @@
     "buy": "Acquisto",
     "none": "Non in streaming in {{country}}, per quanto ne sappiamo.",
     "source": "Servizi di streaming da JustWatch"
+  },
+  "playon": {
+    "title": "PlayOn Cloud",
+    "on": "Attivo",
+    "off": "Disattivo",
+    "sub": "PlayOn Cloud registra serie e film da servizi di streaming come Netflix, Hulu, Disney+ e Max. Programma le registrazioni nell’app PlayOn Cloud come sempre: appena una è pronta, Box Office la scarica e la archivia nella libreria come fa Importa file. PlayOn elimina le registrazioni dopo 7 giorni se non paghi lo spazio, quindi Box Office controlla ogni 15 minuti.",
+    "docs": "Come funziona",
+    "how": "Come configurarlo",
+    "help": {
+      "1": "Iscriviti a PlayOn Cloud e registra qualcosa nella sua app per telefono.",
+      "2": "Inserisci l’email e la password con cui accedi a PlayOn, poi premi Prova.",
+      "3": "Attiva Porta dentro le registrazioni e premi Salva.",
+      "4": "Nell’app PlayOn Cloud, disattiva il download delle registrazioni sul telefono, così non vengono scaricate due volte."
+    },
+    "email": "Email PlayOn",
+    "password": "Password PlayOn",
+    "keepPassword": "Salvata (lascia vuoto per mantenerla)",
+    "test": "Prova",
+    "works": "Accesso riuscito. Registrazioni pronte da scaricare: {{count}}",
+    "forget": "Scollega account",
+    "bringIn": "Porta dentro le registrazioni",
+    "bringInHint": "Scarica ogni registrazione finita e la archivia nella libreria. I download contano nel limite di dati mensile.",
+    "recordings": "Registrazioni",
+    "checking": "Controllo di PlayOn…",
+    "checkedAt": "Ultimo controllo {{when}}",
+    "inPlayOn": "In coda su PlayOn: {{count}}",
+    "filedCount": "Nella libreria: {{count}}",
+    "checkCount": "Da controllare: {{count}}",
+    "expiring": "Eliminate da PlayOn entro un giorno: {{count}}",
+    "downloading": "Download di {{name}}: {{done}} di {{total}}",
+    "checkHint": "Alcune registrazioni sono state scaricate, ma Box Office non è sicuro di cosa siano. Indica cos’è ciascuna nella pagina Importa file.",
+    "openImport": "Apri Importa file",
+    "checkNow": "Controlla ora",
+    "none": "Ancora nessuna registrazione. Registra qualcosa nell’app PlayOn Cloud e comparirà qui quando sarà pronta.",
+    "retry": "Riprova",
+    "skip": "Salta",
+    "filedTo": "Archiviata in {{path}}",
+    "expires": "PlayOn la elimina il {{when}}",
+    "state": {
+      "new": "In attesa",
+      "downloading": "Download",
+      "filed": "Nella libreria",
+      "check": "Da controllare",
+      "failed": "Non riuscita",
+      "skipped": "Saltata",
+      "expired": "Scaduta"
+    }
   }
 }

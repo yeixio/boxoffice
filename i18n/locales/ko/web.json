@@ -2966,5 +2966,52 @@
     "buy": "구매",
     "none": "{{country}}에서는 스트리밍되지 않는 것으로 알고 있습니다.",
     "source": "스트리밍 서비스 정보: JustWatch"
+  },
+  "playon": {
+    "title": "PlayOn Cloud",
+    "on": "켜짐",
+    "off": "꺼짐",
+    "sub": "PlayOn Cloud는 Netflix, Hulu, Disney+, Max 같은 스트리밍 서비스의 프로그램과 영화를 녹화합니다. 평소처럼 PlayOn Cloud 앱에서 녹화를 예약하세요. 녹화가 끝날 때마다 Box Office가 내려받아 파일 가져오기와 같은 방식으로 라이브러리에 넣습니다. 저장 공간 요금을 내지 않으면 PlayOn은 7일 후 녹화를 삭제하므로 Box Office는 15분마다 확인합니다.",
+    "docs": "작동 방식",
+    "how": "설정 방법",
+    "help": {
+      "1": "PlayOn Cloud에 가입하고 휴대폰 앱에서 무언가를 녹화하세요.",
+      "2": "PlayOn에 로그인할 때 쓰는 이메일과 비밀번호를 입력하고 테스트를 누르세요.",
+      "3": "녹화 가져오기를 켜고 저장을 누르세요.",
+      "4": "녹화가 두 번 내려받아지지 않도록 PlayOn Cloud 앱에서 휴대폰으로 내려받기를 끄세요."
+    },
+    "email": "PlayOn 이메일",
+    "password": "PlayOn 비밀번호",
+    "keepPassword": "저장됨 (유지하려면 비워 두세요)",
+    "test": "테스트",
+    "works": "로그인했습니다. 내려받을 수 있는 녹화: {{count}}",
+    "forget": "계정 연결 해제",
+    "bringIn": "녹화 가져오기",
+    "bringInHint": "끝난 녹화를 하나씩 내려받아 라이브러리에 넣습니다. 내려받기는 월간 데이터 한도에 포함됩니다.",
+    "recordings": "녹화",
+    "checking": "PlayOn 확인 중…",
+    "checkedAt": "마지막 확인 {{when}}",
+    "inPlayOn": "PlayOn 대기열: {{count}}",
+    "filedCount": "라이브러리: {{count}}",
+    "checkCount": "확인 필요: {{count}}",
+    "expiring": "하루 안에 PlayOn이 삭제: {{count}}",
+    "downloading": "{{name}} 내려받는 중: {{total}} 중 {{done}}",
+    "checkHint": "일부 녹화를 내려받았지만 Box Office가 무엇인지 확실히 알지 못합니다. 파일 가져오기 페이지에서 각각 무엇인지 알려 주세요.",
+    "openImport": "파일 가져오기 열기",
+    "checkNow": "지금 확인",
+    "none": "아직 녹화가 없습니다. PlayOn Cloud 앱에서 녹화하면 끝난 뒤 여기에 나타납니다.",
+    "retry": "다시 시도",
+    "skip": "건너뛰기",
+    "filedTo": "{{path}}에 저장됨",
+    "expires": "PlayOn이 {{when}}에 삭제",
+    "state": {
+      "new": "대기 중",
+      "downloading": "내려받는 중",
+      "filed": "라이브러리",
+      "check": "확인 필요",
+      "failed": "실패",
+      "skipped": "건너뜀",
+      "expired": "만료됨"
+    }
   }
 }

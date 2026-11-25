@@ -3212,5 +3212,52 @@
     "buy": "Acheter",
     "none": "Pas en streaming en {{country}}, à notre connaissance.",
     "source": "Services de streaming fournis par JustWatch"
+  },
+  "playon": {
+    "title": "PlayOn Cloud",
+    "on": "Activé",
+    "off": "Désactivé",
+    "sub": "PlayOn Cloud enregistre des séries et des films depuis des services de streaming comme Netflix, Hulu, Disney+ et Max. Programmez vos enregistrements dans l’app PlayOn Cloud comme d’habitude : dès qu’un enregistrement est terminé, Box Office le télécharge et le range dans la bibliothèque comme Importer des fichiers. PlayOn supprime les enregistrements après 7 jours si vous ne payez pas de stockage, donc Box Office vérifie toutes les 15 minutes.",
+    "docs": "Comment ça marche",
+    "how": "Comment le configurer",
+    "help": {
+      "1": "Inscrivez-vous à PlayOn Cloud et enregistrez quelque chose dans son app mobile.",
+      "2": "Saisissez l’adresse e-mail et le mot de passe de votre compte PlayOn, puis appuyez sur Tester.",
+      "3": "Activez Récupérer les enregistrements et appuyez sur Enregistrer.",
+      "4": "Dans l’app PlayOn Cloud, désactivez le téléchargement sur le téléphone pour éviter les doublons."
+    },
+    "email": "E-mail PlayOn",
+    "password": "Mot de passe PlayOn",
+    "keepPassword": "Enregistré (laissez vide pour le garder)",
+    "test": "Tester",
+    "works": "Connecté. Enregistrements prêts à télécharger : {{count}}",
+    "forget": "Dissocier le compte",
+    "bringIn": "Récupérer les enregistrements",
+    "bringInHint": "Télécharge chaque enregistrement terminé et le range dans la bibliothèque. Les téléchargements comptent dans le plafond de données mensuel.",
+    "recordings": "Enregistrements",
+    "checking": "Interrogation de PlayOn…",
+    "checkedAt": "Dernière vérification {{when}}",
+    "inPlayOn": "En file dans PlayOn : {{count}}",
+    "filedCount": "Dans la bibliothèque : {{count}}",
+    "checkCount": "À vérifier : {{count}}",
+    "expiring": "Supprimés par PlayOn sous un jour : {{count}}",
+    "downloading": "Téléchargement de {{name}} : {{done}} sur {{total}}",
+    "checkHint": "Certains enregistrements ont été téléchargés, mais Box Office n’est pas sûr de ce qu’ils sont. Indiquez ce qu’est chacun sur la page Importer des fichiers.",
+    "openImport": "Ouvrir Importer des fichiers",
+    "checkNow": "Vérifier maintenant",
+    "none": "Aucun enregistrement pour l’instant. Enregistrez quelque chose dans l’app PlayOn Cloud : il apparaîtra ici une fois terminé.",
+    "retry": "Réessayer",
+    "skip": "Ignorer",
+    "filedTo": "Rangé dans {{path}}",
+    "expires": "PlayOn le supprime le {{when}}",
+    "state": {
+      "new": "En attente",
+      "downloading": "Téléchargement",
+      "filed": "Dans la bibliothèque",
+      "check": "À vérifier",
+      "failed": "Échec",
+      "skipped": "Ignoré",
+      "expired": "Expiré"
+    }
   }
 }

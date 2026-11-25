@@ -3089,5 +3089,52 @@
     "buy": "Kaufen",
     "none": "Soweit bekannt nicht als Stream in {{country}} verfügbar.",
     "source": "Streamingdienste von JustWatch"
+  },
+  "playon": {
+    "title": "PlayOn Cloud",
+    "on": "An",
+    "off": "Aus",
+    "sub": "PlayOn Cloud nimmt Serien und Filme von Streamingdiensten wie Netflix, Hulu, Disney+ und Max auf. Plane Aufnahmen wie gewohnt in der PlayOn-Cloud-App: Sobald eine fertig ist, lädt Box Office sie herunter und legt sie so in der Bibliothek ab wie „Dateien importieren“. PlayOn löscht Aufnahmen nach 7 Tagen, wenn du keinen Speicher bezahlst, deshalb schaut Box Office alle 15 Minuten nach.",
+    "docs": "So funktioniert es",
+    "how": "So richtest du es ein",
+    "help": {
+      "1": "Melde dich bei PlayOn Cloud an und nimm etwas in der Handy-App auf.",
+      "2": "Gib die E-Mail-Adresse und das Passwort ein, mit denen du dich bei PlayOn anmeldest, und tippe auf Testen.",
+      "3": "Schalte „Aufnahmen holen“ ein und tippe auf Speichern.",
+      "4": "Schalte in der PlayOn-Cloud-App das Herunterladen aufs Handy aus, damit Aufnahmen nicht doppelt geladen werden."
+    },
+    "email": "PlayOn-E-Mail",
+    "password": "PlayOn-Passwort",
+    "keepPassword": "Gespeichert (leer lassen, um es zu behalten)",
+    "test": "Testen",
+    "works": "Angemeldet. Aufnahmen bereit zum Herunterladen: {{count}}",
+    "forget": "Konto trennen",
+    "bringIn": "Aufnahmen holen",
+    "bringInHint": "Lädt jede fertige Aufnahme herunter und legt sie in der Bibliothek ab. Downloads zählen zum monatlichen Datenlimit.",
+    "recordings": "Aufnahmen",
+    "checking": "PlayOn wird abgefragt…",
+    "checkedAt": "Zuletzt geprüft {{when}}",
+    "inPlayOn": "In PlayOn geplant: {{count}}",
+    "filedCount": "In der Bibliothek: {{count}}",
+    "checkCount": "Zu prüfen: {{count}}",
+    "expiring": "Von PlayOn binnen eines Tages gelöscht: {{count}}",
+    "downloading": "Lade {{name}}: {{done}} von {{total}}",
+    "checkHint": "Einige Aufnahmen wurden geladen, aber Box Office ist sich nicht sicher, was sie sind. Sag auf der Seite „Dateien importieren“, was jede ist.",
+    "openImport": "Dateien importieren öffnen",
+    "checkNow": "Jetzt prüfen",
+    "none": "Noch keine Aufnahmen. Nimm etwas in der PlayOn-Cloud-App auf, dann erscheint es hier, sobald es fertig ist.",
+    "retry": "Erneut versuchen",
+    "skip": "Überspringen",
+    "filedTo": "Abgelegt in {{path}}",
+    "expires": "PlayOn löscht sie {{when}}",
+    "state": {
+      "new": "Wartet",
+      "downloading": "Wird geladen",
+      "filed": "In der Bibliothek",
+      "check": "Zu prüfen",
+      "failed": "Fehlgeschlagen",
+      "skipped": "Übersprungen",
+      "expired": "Abgelaufen"
+    }
   }
 }
