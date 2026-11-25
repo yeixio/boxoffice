@@ -1031,6 +1031,8 @@
     "qualities": "画質（悪い順）",
     "goodEnough": "十分",
     "setGoodEnough": "十分に設定",
+    "beforeRelease": "公開前",
+    "beforeReleaseHint": "映画の公開前に出回るコピーです：劇場で撮影したもの（Cam、Telesync、Telecine）、未完成版（Workprint）、早期の海外DVD（Regional）、評論家や賞の投票者に送られるスクリーナー。どれも本物のコピーより下に並ぶため、アップグレードがオンなら本物が出たときにちゃんと取得されます。",
     "upgradeUntil": "十分な画質までアップグレード",
     "delete": "削除",
     "password": "パスワード",

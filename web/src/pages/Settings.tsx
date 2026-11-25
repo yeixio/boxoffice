@@ -5,7 +5,7 @@ import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState, type R
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { AlertTriangle, ArrowRight, ArrowRightLeft, CircleCheck, Copy, Database, Lock, Search, Folder, FolderInput, FolderUp, KeyRound, LoaderCircle, Plus, RotateCcw, Trash2 } from 'lucide-react'
-import { api, del, get, post, put, type Status, type MediaType, type MediaTypeKey, type DatabaseInfo, type Profile, type ProfilePrefs, type ProfilePreset, type ProfileSizes, type Recycle, type RestartInfo, type RootFolder, type RootKind, type Settings as SettingsData, type ShowDefaults, type SystemInfo } from '../api'
+import { api, del, get, post, put, type Status, type MediaType, type MediaTypeKey, type DatabaseInfo, type Profile, type ProfilePrefs, type ProfilePreset, type ProfileSizes, type Quality, type Recycle, type RestartInfo, type RootFolder, type RootKind, type Settings as SettingsData, type ShowDefaults, type SystemInfo } from '../api'
 import { bytes, day } from '../format'
 import { AddRulesCard } from './AddRules'
 import { monitorOptions, useProfiles, useQualities, useRootFolders, useShowDefaults } from '../hooks'
@@ -979,6 +979,19 @@ function ProfileEditor({ profile, onClose }: { profile: Profile | null; onClose:
   })
   const remove = useMutation({ mutationFn: () => del(`/profiles/${profile!.id}`), onSuccess: done })
   const toggle = (id: number) => setAllowed(allowed.includes(id) ? allowed.filter((x) => x !== id) : [...allowed, id])
+  const qualityRow = (q: Quality) => (
+    <li key={q.id} className="flex items-center gap-2">
+      <input type="checkbox" id={`q${q.id}`} checked={allowed.includes(q.id)} onChange={() => toggle(q.id)} className="accent-[var(--marquee)]" />
+      <label htmlFor={`q${q.id}`} className="flex-1">
+        {q.name}
+      </label>
+      {allowed.includes(q.id) && (
+        <button onClick={() => setCutoff(q.id)} className={`text-xs ${cutoff === q.id ? 'font-semibold text-marquee' : 'text-muted hover:text-ink'}`}>
+          {cutoff === q.id ? t('settings.goodEnough') : t('settings.setGoodEnough')}
+        </button>
+      )}
+    </li>
+  )
   return (
     <Modal title={profile ? t('settings.edit', { name: profile.name }) : t('settings.newProfileTitle')} onClose={onClose}>
       <div className="flex flex-col gap-4">
@@ -986,19 +999,12 @@ function ProfileEditor({ profile, onClose }: { profile: Profile | null; onClose:
         <div>
           <div className="mb-2 text-sm font-medium">{t('settings.qualities')}</div>
           <ul className="grid grid-cols-2 gap-1.5 text-sm">
-            {qualities.data?.map((q) => (
-              <li key={q.id} className="flex items-center gap-2">
-                <input type="checkbox" id={`q${q.id}`} checked={allowed.includes(q.id)} onChange={() => toggle(q.id)} className="accent-[var(--marquee)]" />
-                <label htmlFor={`q${q.id}`} className="flex-1">
-                  {q.name}
-                </label>
-                {allowed.includes(q.id) && (
-                  <button onClick={() => setCutoff(q.id)} className={`text-xs ${cutoff === q.id ? 'font-semibold text-marquee' : 'text-muted hover:text-ink'}`}>
-                    {cutoff === q.id ? t('settings.goodEnough') : t('settings.setGoodEnough')}
-                  </button>
-                )}
-              </li>
-            ))}
+            {qualities.data?.filter((q) => !q.preRelease).map(qualityRow)}
+          </ul>
+          <div className="mt-4 mb-1 text-sm font-medium">{t('settings.beforeRelease')}</div>
+          <p className="mb-2 text-xs text-muted">{t('settings.beforeReleaseHint')}</p>
+          <ul className="grid grid-cols-2 gap-1.5 text-sm">
+            {qualities.data?.filter((q) => q.preRelease).map(qualityRow)}
           </ul>
         </div>
         <Toggle checked={upgrade} onChange={setUpgrade} label={t('settings.upgradeUntil')} />

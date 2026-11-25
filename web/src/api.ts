@@ -56,7 +56,8 @@ export type User = { id: number; username: string; language?: string }
 // sso is the single sign-on provider's name, when the sign-in page offers it.
 export type Status = { setup: boolean; version: string; user?: User; movedIn?: boolean; sso?: string; passkeys?: boolean }
 
-export type Quality = { id: number; name: string; source: string; resolution: number }
+// preRelease is a copy made before the film came out: a cam or a screener.
+export type Quality = { id: number; name: string; source: string; resolution: number; preRelease?: boolean }
 // locked is the Do not touch profile, which is never picked for a new title on its own.
 // SizeLimit is the least and most megabytes a minute a copy may be; 0 is no
 // limit.

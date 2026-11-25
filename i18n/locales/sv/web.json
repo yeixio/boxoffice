@@ -1108,6 +1108,8 @@
     "qualities": "Kvaliteter, sämst till bäst",
     "goodEnough": "bra nog",
     "setGoodEnough": "ange som bra nog",
+    "beforeRelease": "Före premiären",
+    "beforeReleaseHint": "Kopior som kommer ut före filmen: filmade på bio (Cam, Telesync, Telecine), en ofärdig version (Workprint), en tidig utländsk dvd (Regional) eller en screener till kritiker och prisjuryer. Var och en rankas under alla riktiga kopior, så med uppgraderingar på hämtas den riktiga kopian ändå när den kommer.",
     "upgradeUntil": "Uppgradera till bra nog-kvaliteten",
     "delete": "Radera",
     "password": "Ditt lösenord",
