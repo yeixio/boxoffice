@@ -14,7 +14,7 @@ import { PasskeyButton, PasskeyList } from '../Passkeys'
 import type { Passkey } from '../passkey'
 import { Or, SsoButton } from '../Sso'
 import { unsubscribe, usePush } from '../push'
-import { Button, Empty, ErrorNote, Field, Input, Modal, Poster, Select, Spinner } from '../ui'
+import { Button, Empty, ErrorNote, Field, Input, Modal, Poster, Select, Spinner, useTabKeys } from '../ui'
 import { onMemberSignedOut, papi, pget, ppost, problemLabel, problems, stateText, type DiscoverHome, type DiscoverPage, type DiscoverTitle, type Issue, type Member, type Problem, type Request, type Site } from './papi'
 
 // The request site: where the people who watch ask for movies and shows,
@@ -115,6 +115,7 @@ function PortalSignIn({ site }: { site: Site }) {
   const { t } = useTranslation('request')
   const qc = useQueryClient()
   const [mode, setMode] = useState<'matinee' | 'local' | 'signup'>(site.matinee ? 'matinee' : 'local')
+  const tabKeys = useTabKeys<HTMLDivElement>()
   const [username, setUsername] = useState('')
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
@@ -142,7 +143,7 @@ function PortalSignIn({ site }: { site: Site }) {
     <Centered site={site}>
       <form onSubmit={submit} className="flex flex-col gap-4 rounded-xl border border-line bg-card p-6">
         {mode !== 'signup' && choices.length > 1 && (
-          <div className="grid grid-cols-2 gap-1 rounded-lg bg-paper p-1" role="tablist" aria-label={t('signIn.with')}>
+          <div ref={tabKeys.ref} onKeyDown={tabKeys.onKeyDown} className="grid grid-cols-2 gap-1 rounded-lg bg-paper p-1" role="tablist" aria-label={t('signIn.with')}>
             {choices.map((c) => (
               <button
                 key={c.value}

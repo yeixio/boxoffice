@@ -26,7 +26,7 @@ import { CodeCard, PasskeysCard } from './SignInWays'
 import { SsoCard } from './Sso'
 import { matches, spans, words } from './settingsSearch'
 import { MoveDialog, MovesCard } from '../MoveTitles'
-import { Badge, Button, Card, ErrorNote, Field, Input, Modal, Select, Spinner, Toggle } from '../ui'
+import { Badge, Button, Card, ErrorNote, Field, Input, Modal, Select, Spinner, Toggle, useTabKeys } from '../ui'
 
 // The sections Settings is split into, in tab order. "elsewhere" is never a
 // tab: it only lists, while searching, settings that live on other pages.
@@ -142,6 +142,7 @@ export function Settings() {
   const searching = q.length > 0
   const root = useRef<HTMLDivElement>(null)
   const box = useRef<HTMLInputElement>(null)
+  const tabKeys = useTabKeys<HTMLDivElement>()
   const [found, setFound] = useState<ReadonlyMap<string, string[]>>(() => new Map())
   // tick moves on whenever the words on the cards change, as their data
   // loads, so searching and jumping to a card see the cards as they are.
@@ -281,7 +282,7 @@ export function Settings() {
         </div>
       </div>
       {!searching && (
-        <div className="mb-6 flex flex-wrap gap-2 sm:flex-nowrap sm:gap-1 sm:overflow-x-auto sm:border-b sm:border-line" role="tablist" aria-label={t('nav.settings')}>
+        <div ref={tabKeys.ref} onKeyDown={tabKeys.onKeyDown} className="mb-6 flex flex-wrap gap-2 sm:flex-nowrap sm:gap-1 sm:overflow-x-auto sm:border-b sm:border-line" role="tablist" aria-label={t('nav.settings')}>
           {sectionIds.map((id) => (
             <button
               key={id}
@@ -1128,8 +1129,10 @@ function Restart() {
     },
   })
   const n = info.data?.downloads ?? 0
+  // A red edge sets it apart from the preferences around it: it stops
+  // everything for a moment (design standard, section 6.4).
   return (
-    <Card>
+    <Card tone="danger">
       <h2 className="mb-1 font-display text-lg font-semibold">{t('settings.restart')}</h2>
       <p className="mb-4 text-sm text-muted">{t('settings.restartSub')}</p>
       <Button onClick={() => setConfirm(true)}>
@@ -1184,7 +1187,7 @@ function DatabaseMove() {
   if (!data) return null
   const hidden = target.replace(/:[^:@/]*@/, ':•••@')
   return (
-    <Card>
+    <Card tone="danger">
       <h2 className="mb-1 font-display text-lg font-semibold">{t('settings.database.title')}</h2>
       <p className="mb-4 flex items-start gap-2 text-sm text-muted">
         <Database className="mt-0.5 size-4 shrink-0" aria-hidden />

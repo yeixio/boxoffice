@@ -160,6 +160,27 @@ export function Sidebar({ status, nav, signOut }: { status: Status; nav: Nav; si
   const wide = useWide()
   const [narrowed, setNarrowed] = useState(load)
   const narrow = narrowed || !wide
+  // On the icons-only rail, a name shows beside an icon at once when it's
+  // pointed at or reached with the keyboard, since not every icon speaks
+  // for itself. It's placed on the page, as the rail's list would clip it.
+  const [tip, setTip] = useState<{ text: string; top: number; left: number } | null>(null)
+  const tipFor = (text: string) =>
+    narrow
+      ? {
+          onMouseEnter: (e: { currentTarget: HTMLElement }) => show(e.currentTarget, text),
+          onFocus: (e: { currentTarget: HTMLElement }) => show(e.currentTarget, text),
+          onMouseLeave: () => setTip(null),
+          onBlur: () => setTip(null),
+        }
+      : {}
+  const show = (el: HTMLElement, text: string) => {
+    const r = el.getBoundingClientRect()
+    const rtl = getComputedStyle(el).direction === 'rtl'
+    setTip({ text, top: r.top + r.height / 2, left: rtl ? r.left - 8 : r.right + 8 })
+  }
+  useEffect(() => {
+    if (!narrow) setTip(null)
+  }, [narrow])
   const toggle = () => {
     setNarrowed(!narrowed)
     try {
@@ -191,8 +212,8 @@ export function Sidebar({ status, nav, signOut }: { status: Status; nav: Nav; si
                   <li key={to}>
                     <NavLink
                       to={to}
-                      title={narrow ? t(label) : undefined}
                       aria-label={narrow ? t(label) : undefined}
+                      {...tipFor(t(label))}
                       className={({ isActive }) =>
                         `relative flex items-center gap-3 rounded-md py-2 text-sm font-medium transition ${narrow ? 'justify-center px-2' : 'px-3'} ${
                           isActive ? 'bg-ink text-paper' : 'text-muted hover:bg-line/50 hover:text-ink'
@@ -213,8 +234,9 @@ export function Sidebar({ status, nav, signOut }: { status: Status; nav: Nav; si
           <button
             onClick={signOut}
             className={`flex items-center gap-3 rounded-md py-2 text-sm text-muted hover:bg-line/50 hover:text-ink ${narrow ? 'px-2' : 'px-3'}`}
-            title={t('nav.signedInAs', { name: status.user?.username })}
+            title={narrow ? undefined : t('nav.signedInAs', { name: status.user?.username })}
             aria-label={t('nav.signOut')}
+            {...tipFor(t('nav.signOutName', { name: status.user?.username }))}
           >
             <LogOut className="size-4.5 shrink-0" aria-hidden />
             {!narrow && <span className="truncate">{t('nav.signOutName', { name: status.user?.username })}</span>}
@@ -223,9 +245,9 @@ export function Sidebar({ status, nav, signOut }: { status: Status; nav: Nav; si
             <button
               onClick={toggle}
               className={`flex items-center gap-3 rounded-md py-2 text-sm text-muted hover:bg-line/50 hover:text-ink ${narrow ? 'px-2' : 'px-3'}`}
-              title={narrow ? t('nav.showNames') : t('nav.iconsOnly')}
               aria-label={narrow ? t('nav.showNames') : t('nav.iconsOnly')}
               aria-pressed={narrow}
+              {...tipFor(t('nav.showNames'))}
             >
               {narrow ? <PanelLeftOpen className="size-4.5 shrink-0" aria-hidden /> : <PanelLeftClose className="size-4.5 shrink-0" aria-hidden />}
               {!narrow && t('nav.iconsOnly')}
@@ -235,6 +257,15 @@ export function Sidebar({ status, nav, signOut }: { status: Status; nav: Nav; si
         </div>
       </div>
       <div className="perforated-y" aria-hidden />
+      {narrow && tip && (
+        <span
+          aria-hidden
+          style={{ top: tip.top, left: tip.left }}
+          className="pointer-events-none fixed z-50 -translate-y-1/2 whitespace-nowrap rounded-md bg-ink px-2 py-1 text-xs font-medium text-paper shadow-md rtl:-translate-x-full"
+        >
+          {tip.text}
+        </span>
+      )}
     </aside>
   )
 }
