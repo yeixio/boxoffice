@@ -813,6 +813,13 @@ func (s *Store) AddFile(ctx context.Context, f File) (File, error) {
 	return f, err
 }
 
+// SetFileSize notes a file's new size, after it was written again. The
+// quality check looks inside a file whose size changed once more.
+func (s *Store) SetFileSize(ctx context.Context, id, size int64) error {
+	_, err := s.exec(ctx, "UPDATE media_files SET size = ? WHERE id = ?", size, id)
+	return err
+}
+
 func (s *Store) FileByID(ctx context.Context, id int64) (File, error) {
 	var f File
 	var added int64

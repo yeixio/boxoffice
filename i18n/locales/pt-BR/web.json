@@ -3169,5 +3169,14 @@
     "today": "Buscas hoje",
     "note": "As buscas incluem as verificações de RSS. Downloads removidos do histórico não são contados.",
     "none": "Adicione um indexador para ver os números dele aqui."
+  },
+  "tracks": {
+    "title": "Faixas indesejadas",
+    "sub": "Remuxes e lançamentos web costumam trazer uma dúzia de faixas de áudio e legendas. O Box Office pode remover as que estão em idiomas que ninguém usa aqui quando cada filme e episódio chega, sem recodificar a imagem nem as faixas mantidas. O arquivo como chegou vai para a pasta de reciclagem, e títulos em Não mexer são deixados como estão. Só arquivos MKV são tratados.",
+    "on": "Remover faixas de áudio e legendas indesejadas",
+    "languages": "Idiomas a manter",
+    "languagesHint": "O idioma em que o título foi feito é sempre mantido, assim como as faixas que não informam o idioma e as legendas nos idiomas em que legendas são buscadas. Se não sobrasse nenhum áudio, todo o áudio fica.",
+    "saved": "Economizado até agora: {{size}} (arquivos: {{files}})",
+    "noTools": "O FFmpeg não está instalado aqui, então nenhuma faixa pode ser removida."
   }
 }

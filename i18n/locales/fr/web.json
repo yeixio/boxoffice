@@ -3169,5 +3169,14 @@
     "today": "Recherches aujourd'hui",
     "note": "Les recherches incluent les vérifications RSS. Les téléchargements retirés de l'historique ne sont pas comptés.",
     "none": "Ajoutez un indexeur pour voir ses chiffres ici."
+  },
+  "tracks": {
+    "title": "Pistes indésirables",
+    "sub": "Les remux et les releases web contiennent souvent une douzaine de pistes audio et de sous-titres. Box Office peut retirer celles dans des langues que personne n'utilise ici à l'arrivée de chaque film et épisode, sans réencoder l'image ni les pistes gardées. Le fichier tel qu'il est arrivé va dans le dossier de recyclage, et les titres en « Ne pas toucher » sont laissés tels quels. Seuls les fichiers MKV sont traités.",
+    "on": "Retirer les pistes audio et de sous-titres indésirables",
+    "languages": "Langues à garder",
+    "languagesHint": "La langue dans laquelle un titre a été tourné est toujours gardée, tout comme les pistes qui n'indiquent pas leur langue et les sous-titres dans les langues où des sous-titres sont récupérés. S'il ne restait aucun audio, tout l'audio reste.",
+    "saved": "Économisé jusqu'ici : {{size}} (fichiers : {{files}})",
+    "noTools": "FFmpeg n'est pas installé ici, donc aucune piste ne peut être retirée."
   }
 }

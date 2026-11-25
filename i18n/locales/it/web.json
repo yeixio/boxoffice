@@ -3169,5 +3169,14 @@
     "today": "Ricerche oggi",
     "note": "Le ricerche includono i controlli RSS. I download rimossi dalla cronologia non vengono contati.",
     "none": "Aggiungi un indexer per vedere qui i suoi numeri."
+  },
+  "tracks": {
+    "title": "Tracce indesiderate",
+    "sub": "Remux e release web contengono spesso una dozzina di tracce audio e sottotitoli. Box Office può eliminare quelle in lingue che qui nessuno usa all'arrivo di ogni film ed episodio, senza ricodificare l'immagine né le tracce mantenute. Il file così com'è arrivato va nella cartella del cestino, e i titoli in Non toccare restano come sono. Vengono trattati solo i file MKV.",
+    "on": "Elimina le tracce audio e sottotitoli indesiderate",
+    "languages": "Lingue da mantenere",
+    "languagesHint": "La lingua in cui il titolo è stato realizzato viene sempre mantenuta, così come le tracce che non indicano la lingua e i sottotitoli nelle lingue in cui vengono scaricati i sottotitoli. Se non restasse alcun audio, resta tutto.",
+    "saved": "Risparmiato finora: {{size}} (file: {{files}})",
+    "noTools": "FFmpeg non è installato qui, quindi non si possono eliminare tracce."
   }
 }

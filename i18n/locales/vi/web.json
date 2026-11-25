@@ -2923,5 +2923,14 @@
     "today": "Lượt tìm hôm nay",
     "note": "Lượt tìm bao gồm cả kiểm tra RSS. Các lượt tải đã gỡ khỏi lịch sử không được tính.",
     "none": "Thêm một trình chỉ mục để xem số liệu ở đây."
+  },
+  "tracks": {
+    "title": "Track không mong muốn",
+    "sub": "Bản remux và bản phát hành web thường mang cả chục track âm thanh và phụ đề. Box Office có thể bỏ những track bằng ngôn ngữ không ai ở đây dùng khi mỗi phim và tập đến, mà không mã hóa lại hình ảnh hay các track được giữ. Tệp như lúc đến được chuyển vào thư mục thùng rác, và các tựa đặt Không đụng đến được để yên. Chỉ xử lý tệp MKV.",
+    "on": "Bỏ track âm thanh và phụ đề không mong muốn",
+    "languages": "Ngôn ngữ được giữ",
+    "languagesHint": "Ngôn ngữ gốc của tựa luôn được giữ, cũng như các track không ghi ngôn ngữ và phụ đề bằng những ngôn ngữ mà phụ đề được tải về. Nếu không còn âm thanh nào, toàn bộ âm thanh được giữ.",
+    "saved": "Đã tiết kiệm đến nay: {{size}} (tệp: {{files}})",
+    "noTools": "FFmpeg chưa được cài ở đây nên không thể bỏ track nào."
   }
 }

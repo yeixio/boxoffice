@@ -3046,5 +3046,14 @@
     "today": "Searches today",
     "note": "Searches include RSS checks. Downloads removed from the history aren't counted.",
     "none": "Add an indexer to see its numbers here."
+  },
+  "tracks": {
+    "title": "Unwanted tracks",
+    "sub": "Remuxes and web releases often carry a dozen audio and subtitle tracks. Box Office can drop the ones in languages nobody here uses as each movie and episode comes in, without re-encoding the picture or the tracks kept. The file as it came goes to the recycle folder, and titles on Do not touch are left alone. Only MKV files are handled.",
+    "on": "Drop unwanted audio and subtitle tracks",
+    "languages": "Languages to keep",
+    "languagesHint": "The language a title was made in is always kept, and so are tracks that don't say their language and subtitles in the languages subtitles are fetched in. If no audio would be left, all of it stays.",
+    "saved": "Saved so far: {{size}} (files: {{files}})",
+    "noTools": "FFmpeg isn't installed here, so no tracks can be dropped."
   }
 }

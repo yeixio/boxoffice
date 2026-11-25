@@ -3169,5 +3169,14 @@
     "today": "Búsquedas hoy",
     "note": "Las búsquedas incluyen las comprobaciones de RSS. Las descargas eliminadas del historial no se cuentan.",
     "none": "Añade un indexador para ver aquí sus cifras."
+  },
+  "tracks": {
+    "title": "Pistas no deseadas",
+    "sub": "Los remux y los lanzamientos web suelen traer una docena de pistas de audio y subtítulos. Box Office puede quitar las de idiomas que aquí nadie usa cuando llega cada película y episodio, sin recodificar la imagen ni las pistas que se conservan. El archivo tal como llegó va a la carpeta de reciclaje, y los títulos en No tocar se dejan como están. Solo se tratan archivos MKV.",
+    "on": "Quitar pistas de audio y subtítulos no deseadas",
+    "languages": "Idiomas que se conservan",
+    "languagesHint": "El idioma en que se hizo el título siempre se conserva, igual que las pistas que no indican idioma y los subtítulos en los idiomas en que se buscan subtítulos. Si no quedara audio, se conserva todo.",
+    "saved": "Ahorrado hasta ahora: {{size}} (archivos: {{files}})",
+    "noTools": "FFmpeg no está instalado aquí, así que no se pueden quitar pistas."
   }
 }

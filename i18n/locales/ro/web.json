@@ -3169,5 +3169,14 @@
     "today": "Căutări azi",
     "note": "Căutările includ verificările RSS. Descărcările eliminate din istoric nu sunt numărate.",
     "none": "Adaugă un indexator ca să îi vezi cifrele aici."
+  },
+  "tracks": {
+    "title": "Piste nedorite",
+    "sub": "Remuxurile și lansările web au adesea o duzină de piste audio și de subtitrări. Box Office le poate elimina pe cele în limbi pe care nu le folosește nimeni aici, la sosirea fiecărui film și episod, fără a recodifica imaginea sau pistele păstrate. Fișierul așa cum a sosit merge în dosarul de reciclare, iar titlurile cu „Nu atinge” sunt lăsate în pace. Sunt tratate doar fișierele MKV.",
+    "on": "Elimină pistele audio și de subtitrări nedorite",
+    "languages": "Limbi păstrate",
+    "languagesHint": "Limba în care a fost făcut titlul se păstrează mereu, la fel și pistele care nu își spun limba și subtitrările în limbile în care se aduc subtitrări. Dacă n-ar rămâne niciun sunet, rămâne tot.",
+    "saved": "Economisit până acum: {{size}} (fișiere: {{files}})",
+    "noTools": "FFmpeg nu este instalat aici, așa că nu se pot elimina piste."
   }
 }

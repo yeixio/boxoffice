@@ -3046,5 +3046,14 @@
     "today": "Zoekacties vandaag",
     "note": "Bij zoekacties horen ook RSS-controles. Downloads die uit de geschiedenis zijn verwijderd, tellen niet mee.",
     "none": "Voeg een indexer toe om de cijfers hier te zien."
+  },
+  "tracks": {
+    "title": "Ongewenste sporen",
+    "sub": "Remuxen en webreleases bevatten vaak een dozijn audio- en ondertitelsporen. Box Office kan de sporen in talen die hier niemand gebruikt weghalen zodra een film of aflevering binnenkomt, zonder het beeld of de bewaarde sporen opnieuw te coderen. Het bestand zoals het binnenkwam gaat naar de prullenbakmap, en titels op Niet aanraken blijven ongemoeid. Alleen MKV-bestanden worden behandeld.",
+    "on": "Ongewenste audio- en ondertitelsporen weghalen",
+    "languages": "Talen die blijven",
+    "languagesHint": "De taal waarin een titel is gemaakt blijft altijd, net als sporen zonder taalvermelding en ondertitels in de talen waarin ondertitels worden opgehaald. Als er geen audio zou overblijven, blijft alle audio.",
+    "saved": "Tot nu toe bespaard: {{size}} (bestanden: {{files}})",
+    "noTools": "FFmpeg is hier niet geïnstalleerd, dus er kunnen geen sporen worden weggehaald."
   }
 }

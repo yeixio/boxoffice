@@ -19,6 +19,7 @@ import { ProblemsCard } from './Problems'
 import { QualityCheckCard } from './QualityCheck'
 import { SubtitleSettingsCard } from './Subtitles'
 import { ListsCard } from './Lists'
+import { TracksCard } from './Tracks'
 import { TitlesFileCard } from './TitlesFile'
 import { IndexerStatsCard } from './IndexerStats'
 import { CleanupCard } from './Cleanup'
@@ -76,6 +77,7 @@ const sections: SectionDef[] = [
       { id: 'problems', el: <ProblemsCard /> },
       { id: 'quality-check', el: <QualityCheckCard />, keys: ['title.quality', 'qualityCheck.corrections'], terms: ['ffprobe', 'FFmpeg', 'HDR', 'Dolby Vision', 'MediaInfo', '4K', '1080p'] },
       { id: 'subtitles', el: <SubtitleSettingsCard />, keys: ['subtitles.languages', 'subtitles.preferSdh', 'subtitles.dailyLimit', 'subtitles.apiKey'], terms: ['Bazarr', 'OpenSubtitles', 'Podnapisi', 'SRT', 'SDH', 'captions', 'CC'] },
+      { id: 'tracks', el: <TracksCard />, keys: ['tracks.on', 'tracks.languages'], terms: ['Muxarr', 'striptracks', 'Tdarr', 'remux', 'audio tracks', 'dub', 'MKVToolNix', 'mkvmerge'] },
       { id: 'cleanup', el: <CleanupCard />, keys: ['cleanup.watched', 'cleanup.days', 'cleanup.auto', 'cleanup.leavingSoon'], terms: ['Maintainerr', 'Janitorr', 'delete watched', 'free space', 'disk space', 'purge'] },
       { id: 'recycle', el: <RecycleFolders /> },
     ],
