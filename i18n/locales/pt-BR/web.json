@@ -1434,7 +1434,16 @@
       "notSearching": "Sem buscar: {{reason}}.",
       "searchNow": "Buscar agora",
       "lastSearch": "Última busca {{when}}: {{what}}",
-      "runningNow": "em andamento"
+      "runningNow": "em andamento",
+      "searchOrder": "Ordem de busca",
+      "searchOrderHint": "Títulos faltando primeiro distribui as buscas pela ordem de download: filmes e episódios faltando vêm antes das melhorias, que ficam com o que sobrar. Alternar dá uma busca sim, outra não, a títulos faltando e a melhorias.",
+      "orderPriority": "Títulos faltando primeiro (a ordem de download)",
+      "orderTurns": "Títulos faltando e melhorias alternados",
+      "early": "Baixar antes da data de lançamento",
+      "earlyHint": "Quando um lançamento aparece cedo para um filme que sai para compra ou streaming em até um mês (ou está nos cinemas agora), ou para um episódio que vai ao ar em até 3 dias, a sincronização RSS pode baixá-lo. Gravações de cinema e screeners nunca são baixados antes. Isso não gasta buscas.",
+      "earlyCutoff": "Quando a qualidade atinge o limite do perfil",
+      "earlyAny": "Qualquer qualidade que o perfil aceite",
+      "earlyOff": "Desligado: esperar a data de lançamento"
     },
     "edit": "Editar {{name}}",
     "remove": "Remover {{name}}",
@@ -3028,7 +3037,8 @@
     "newDays": "Dias em que um lançamento conta como novo",
     "newDaysHint": "Um filme ou episódio é novo por esta quantidade de dias depois de ir ao ar ou sair para compra ou streaming. Depois disso, é um antigo faltando.",
     "preempt": "Parar o download atual por um com prioridade maior",
-    "preemptHint": "O interrompido continua depois de onde estava. Desligado, o novo espera sua vez."
+    "preemptHint": "O interrompido continua depois de onde estava. Desligado, o novo espera sua vez.",
+    "searches": "As buscas automáticas também seguem esta ordem, então títulos faltando são buscados antes das melhorias. Você pode mudar isso em Títulos faltando e melhorias."
   },
   "relocate": {
     "title": "Mover para outra pasta raiz",

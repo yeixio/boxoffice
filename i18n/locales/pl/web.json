@@ -1517,7 +1517,16 @@
       "notSearching": "Bez wyszukiwania: {{reason}}.",
       "searchNow": "Szukaj teraz",
       "lastSearch": "Ostatnie wyszukiwanie {{when}}: {{what}}",
-      "runningNow": "trwa teraz"
+      "runningNow": "trwa teraz",
+      "searchOrder": "Kolejność wyszukiwania",
+      "searchOrderHint": "Najpierw brakujące rozdziela wyszukiwania według kolejności pobierania: brakujące filmy i odcinki idą przed ulepszeniami, a ulepszenia dostają resztę. Na zmianę daje brakującym tytułom i ulepszeniom co drugie wyszukiwanie.",
+      "orderPriority": "Najpierw brakujące tytuły (kolejność pobierania)",
+      "orderTurns": "Brakujące tytuły i ulepszenia na zmianę",
+      "early": "Pobieraj przed datą premiery",
+      "earlyHint": "Gdy wydanie pojawi się wcześniej dla filmu, który w ciągu miesiąca trafi do sprzedaży lub streamingu (albo jest teraz w kinach), lub dla odcinka emitowanego w ciągu 3 dni, synchronizacja RSS może je pobrać. Nagrania z kina i screenery nigdy nie są pobierane wcześniej. Nie zużywa to wyszukiwań.",
+      "earlyCutoff": "Gdy jakość osiąga próg profilu",
+      "earlyAny": "Każda jakość, którą przyjmuje profil",
+      "earlyOff": "Wyłączone: czekaj na datę premiery"
     },
     "edit": "Edytuj {{name}}",
     "remove": "Usuń: {{name}}",
@@ -3151,7 +3160,8 @@
     "newDays": "Dni, przez które wydanie jest nowe",
     "newDaysHint": "Film lub odcinek jest nowy przez tyle dni od emisji lub premiery do kupienia lub streamingu. Potem jest starszym brakującym.",
     "preempt": "Zatrzymaj bieżące pobieranie dla wyżej ustawionego",
-    "preemptHint": "Zatrzymane wznowi się potem od miejsca, w którym było. Gdy wyłączone, nowe czeka na swoją kolej."
+    "preemptHint": "Zatrzymane wznowi się potem od miejsca, w którym było. Gdy wyłączone, nowe czeka na swoją kolej.",
+    "searches": "Automatyczne wyszukiwania też idą w tej kolejności, więc brakujące tytuły są szukane przed ulepszeniami. Możesz to zmienić w sekcji Brakujące tytuły i ulepszenia."
   },
   "relocate": {
     "title": "Przenieś do innego folderu głównego",

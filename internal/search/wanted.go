@@ -88,6 +88,16 @@ type AutoSettings struct {
 	// grabs by itself in a day (see SettingRegrabsPerDay); 0 means no
 	// limit.
 	RegrabsPerDay int `json:"regrabsPerDay"`
+	// SearchOrder is how the library patrol spends its searches:
+	// OrderPriority follows the download order, so missing titles come
+	// before upgrades; OrderTurns has missing titles and upgrades take
+	// turns (see SettingSearchOrder).
+	SearchOrder string `json:"searchOrder"`
+	// Early says whether RSS sync grabs a release of a movie or episode
+	// that isn't out yet by its dates: EarlyCutoff when its quality meets
+	// the profile's cutoff, EarlyAny for any quality the profile takes, or
+	// EarlyOff (see SettingEarly).
+	Early string `json:"early"`
 }
 
 // LoadAutoSettings reads the settings; automatic searches for missing
@@ -143,6 +153,20 @@ func LoadAutoSettings(ctx context.Context, st *store.Store) (AutoSettings, error
 	}
 	if a.RegrabsPerDay, err = regrabsPerDay(ctx, st); err != nil {
 		return a, err
+	}
+	if v, err = st.Setting(ctx, SettingSearchOrder); err != nil {
+		return a, err
+	}
+	a.SearchOrder = OrderPriority
+	if v == OrderTurns {
+		a.SearchOrder = OrderTurns
+	}
+	if v, err = st.Setting(ctx, SettingEarly); err != nil {
+		return a, err
+	}
+	a.Early = EarlyCutoff
+	if v == EarlyAny || v == EarlyOff {
+		a.Early = v
 	}
 	return a, nil
 }
@@ -216,7 +240,21 @@ func SaveAutoSettings(ctx context.Context, st *store.Store, a AutoSettings) erro
 	if a.RegrabsPerDay != DefaultRegrabsPerDay {
 		regrabs = strconv.Itoa(min(max(a.RegrabsPerDay, 0), MaxRegrabsPerDay))
 	}
-	return st.SetSetting(ctx, SettingRegrabsPerDay, regrabs)
+	if err := st.SetSetting(ctx, SettingRegrabsPerDay, regrabs); err != nil {
+		return err
+	}
+	order := ""
+	if a.SearchOrder == OrderTurns {
+		order = OrderTurns
+	}
+	if err := st.SetSetting(ctx, SettingSearchOrder, order); err != nil {
+		return err
+	}
+	early := ""
+	if a.Early == EarlyAny || a.Early == EarlyOff {
+		early = a.Early
+	}
+	return st.SetSetting(ctx, SettingEarly, early)
 }
 
 // upgradeOn says whether Box Office looks for upgrades of a title by
@@ -271,6 +309,12 @@ type Wanted struct {
 	// Copy is ModeSecond when it's only a movie's second copy that's
 	// missing or due an upgrade: its first copy is fine.
 	Copy string `json:"copy,omitempty"`
+	// Early is a movie or episode that isn't out yet by its dates, which
+	// RSS sync may still grab (see earlyWants); the patrol never searches
+	// for one.
+	Early bool `json:"early,omitempty"`
+
+	out time.Time // when a movie or an episode came out, for the download order's "new"
 }
 
 // newFor is how long a missing title counts as new.
@@ -332,6 +376,7 @@ func (s *Service) WantedList(ctx context.Context) ([]Wanted, error) {
 				continue
 			}
 			w.New = releasedSince(m, now.Add(-newFor))
+			w.out = movieOut(m)
 		case second && m.Second == nil:
 			w.Copy, w.Cutoff = ModeSecond, p2.Cutoff
 		case p.CutoffUnmet(m.File.Quality):
@@ -375,6 +420,7 @@ func (s *Service) WantedList(ctx context.Context) ([]Wanted, error) {
 			switch {
 			case e.File == nil:
 				w.New = e.AirDate.After(now.Add(-newFor))
+				w.out = *e.AirDate
 			case p.CutoffUnmet(e.File.Quality):
 				w.Upgrade, w.Have = true, e.File.Quality
 			default:
@@ -433,6 +479,14 @@ func released(m store.Movie, now time.Time) bool {
 
 // releasedSince says whether a movie came out (as released means) after t.
 func releasedSince(m store.Movie, t time.Time) bool {
+	out := movieOut(m)
+	return !out.IsZero() && out.After(t)
+}
+
+// movieOut is when a movie is out to buy or stream (the earlier of its
+// digital and disc dates), or, with neither known, 90 days after it opened
+// in cinemas; zero when no date is known.
+func movieOut(m store.Movie) time.Time {
 	var out time.Time
 	for _, d := range []*time.Time{m.DigitalRelease, m.PhysicalRelease} {
 		if d != nil && (out.IsZero() || d.Before(out)) {
@@ -442,7 +496,7 @@ func releasedSince(m store.Movie, t time.Time) bool {
 	if out.IsZero() && m.InCinemas != nil {
 		out = m.InCinemas.AddDate(0, 0, 90)
 	}
-	return !out.IsZero() && out.After(t)
+	return out
 }
 
 // AutoSearchEvery queues the automatic search once an hour, a few minutes
@@ -568,10 +622,10 @@ func (s *Service) jobWanted(ctx context.Context, _ string) (jobs.Result, error) 
 		}
 		due = append(due, w)
 	}
-	// Missing titles and upgrades take turns, so a long list of missing
-	// ones can't keep upgrades from ever coming up. Each keeps its own
-	// order (newly missing first).
-	{
+	if a.SearchOrder == OrderTurns {
+		// Missing titles and upgrades take turns, so a long list of
+		// missing ones can't keep upgrades from ever coming up. Each keeps
+		// its own order (newly missing first).
 		var lack, better []Wanted
 		for _, w := range due {
 			if w.Upgrade {
@@ -581,6 +635,15 @@ func (s *Service) jobWanted(ctx context.Context, _ string) (jobs.Result, error) 
 			}
 		}
 		due = interleave(lack, better)
+	} else {
+		// The download order: missing titles first, upgrades with the
+		// searches left over. Missing ones that keep turning up nothing
+		// wait longer each time (againAfter), so upgrades still come up.
+		p, err := s.Store.QueuePriority(ctx)
+		if err != nil {
+			return jobs.Result{}, err
+		}
+		due = byPriority(due, p, now)
 	}
 	// The episodes due of each season, to search for together.
 	type seasonKey struct {
@@ -598,8 +661,16 @@ func (s *Service) jobWanted(ctx context.Context, _ string) (jobs.Result, error) 
 	var missing, upgrades int
 	var o outcome
 	searchedAny := false
-	for _, w := range due {
+	waiting := 0 // upgrades the searches ran out before
+	for i, w := range due {
 		if o.searches >= budget || ctx.Err() != nil {
+			if a.SearchOrder != OrderTurns {
+				for _, w := range due[i:] {
+					if w.Upgrade {
+						waiting++
+					}
+				}
+			}
 			break
 		}
 		if w.Kind == "movie" {
@@ -715,6 +786,9 @@ func (s *Service) jobWanted(ctx context.Context, _ string) (jobs.Result, error) 
 	heldNote := ""
 	if held > 0 {
 		heldNote = fmt.Sprintf("; %s waiting: %s", count(held, "upgrade", "upgrades"), c.Why())
+	}
+	if waiting > 0 {
+		heldNote += fmt.Sprintf("; %s wait for missing titles to be searched first", count(waiting, "upgrade", "upgrades"))
 	}
 	if regrabsHeld > 0 {
 		heldNote += fmt.Sprintf("; %s not looked for: today's replacements are used up", count(regrabsHeld, "upgrade", "upgrades"))

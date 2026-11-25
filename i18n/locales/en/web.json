@@ -1351,7 +1351,16 @@
       "notSearching": "Not searching: {{reason}}.",
       "searchNow": "Search now",
       "lastSearch": "Last search {{when}}: {{what}}",
-      "runningNow": "running now"
+      "runningNow": "running now",
+      "searchOrder": "Search order",
+      "searchOrderHint": "Missing titles first spends the searches in the download order, so missing movies and episodes get them before upgrades, and upgrades get what's left. Take turns gives missing titles and upgrades every other search.",
+      "orderPriority": "Missing titles first (the download order)",
+      "orderTurns": "Missing titles and upgrades take turns",
+      "early": "Grab before the release date",
+      "earlyHint": "When a release turns up early for a movie that's out to buy or stream within a month (or is in cinemas now), or for an episode that airs within 3 days, RSS sync can grab it. Cinema recordings and screeners are never grabbed early. This uses no searches.",
+      "earlyCutoff": "When its quality meets the profile's cutoff",
+      "earlyAny": "Any quality the profile takes",
+      "earlyOff": "Off: wait for the release date"
     },
     "edit": "Edit {{name}}",
     "remove": "Remove {{name}}",
@@ -2905,7 +2914,8 @@
     "newDays": "Days a release counts as new",
     "newDaysHint": "A movie or episode is new for this many days after it airs or comes out to buy or stream. After that, it's an older missing one.",
     "preempt": "Stop the download that's on for one ranked ahead of it",
-    "preemptHint": "The one stopped carries on from where it was afterwards. When off, the new one waits its turn."
+    "preemptHint": "The one stopped carries on from where it was afterwards. When off, the new one waits its turn.",
+    "searches": "Automatic searches follow this order too, so missing titles are searched for before upgrades. You can change that under Missing titles and upgrades."
   },
   "relocate": {
     "title": "Move to another root folder",

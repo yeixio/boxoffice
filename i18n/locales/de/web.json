@@ -1351,7 +1351,16 @@
       "notSearching": "Keine Suche: {{reason}}.",
       "searchNow": "Jetzt suchen",
       "lastSearch": "Letzte Suche {{when}}: {{what}}",
-      "runningNow": "läuft gerade"
+      "runningNow": "läuft gerade",
+      "searchOrder": "Suchreihenfolge",
+      "searchOrderHint": "Fehlende Titel zuerst verteilt die Suchen nach der Download-Reihenfolge: Fehlende Filme und Episoden kommen vor Upgrades, und Upgrades bekommen, was übrig bleibt. Abwechselnd gibt fehlenden Titeln und Upgrades jede zweite Suche.",
+      "orderPriority": "Fehlende Titel zuerst (Download-Reihenfolge)",
+      "orderTurns": "Fehlende Titel und Upgrades abwechselnd",
+      "early": "Vor dem Erscheinungsdatum grabben",
+      "earlyHint": "Taucht eine Veröffentlichung früh auf, für einen Film, der innerhalb eines Monats zum Kaufen oder Streamen erscheint (oder gerade im Kino läuft), oder für eine Episode, die innerhalb von 3 Tagen ausgestrahlt wird, kann die RSS-Synchronisierung sie grabben. Kinoaufnahmen und Screener werden nie früh gegrabbt. Das kostet keine Suchen.",
+      "earlyCutoff": "Wenn die Qualität den Grenzwert des Profils erreicht",
+      "earlyAny": "Jede Qualität, die das Profil nimmt",
+      "earlyOff": "Aus: auf das Erscheinungsdatum warten"
     },
     "edit": "{{name}} bearbeiten",
     "remove": "{{name}} entfernen",
@@ -2905,7 +2914,8 @@
     "newDays": "Tage, die eine Veröffentlichung als neu gilt",
     "newDaysHint": "Ein Film oder eine Folge gilt so viele Tage nach Ausstrahlung oder Erscheinen zum Kaufen oder Streamen als neu. Danach gilt er als älterer fehlender Titel.",
     "preempt": "Laufenden Download für einen höher eingestuften anhalten",
-    "preemptHint": "Der angehaltene macht danach dort weiter, wo er war. Wenn aus, wartet der neue, bis er dran ist."
+    "preemptHint": "Der angehaltene macht danach dort weiter, wo er war. Wenn aus, wartet der neue, bis er dran ist.",
+    "searches": "Automatische Suchen folgen auch dieser Reihenfolge, fehlende Titel werden also vor Upgrades gesucht. Ändern kannst du das unter Fehlende Titel und Upgrades."
   },
   "relocate": {
     "title": "In einen anderen Stammordner verschieben",
