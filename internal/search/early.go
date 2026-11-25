@@ -4,7 +4,6 @@ import (
 	"cmp"
 	"context"
 	"fmt"
-	"regexp"
 	"slices"
 	"time"
 
@@ -42,10 +41,6 @@ const (
 	earlyMovieDays   = 30
 	earlyEpisodeDays = 3
 )
-
-// preRelease is the words in a name that say it was recorded in a cinema
-// or is a screener: never taken early, whatever quality its name gives.
-var preRelease = regexp.MustCompile(`(?i)(^|[^a-z0-9])(cam|hdcam|camrip|hqcam|ts|hdts|tsrip|telesync|tc|hdtc|telecine|scr|screener|dvdscr|bdscr|webscr|workprint|r5|pdvd|predvd)([^a-z0-9]|$)`)
 
 // group is the download order's group a wanted title would download in,
 // so the patrol can search in that order.
@@ -175,16 +170,23 @@ func (s *Service) earlyWants(ctx context.Context, now time.Time) ([]Wanted, erro
 }
 
 // earlyMiss is why a release of a title that isn't out yet isn't taken
-// early, or "" when it is: it mustn't be a cinema recording or a screener,
-// and with EarlyCutoff its quality must meet the profile's cutoff.
+// early, or "" when it is: a cinema recording or a screener only when the
+// profile takes that quality, and with EarlyCutoff its quality must meet
+// the profile's cutoff.
 func earlyMiss(mode string, p quality.Profile, c Candidate) string {
 	switch {
 	case mode == EarlyOff:
 		return "it isn't out yet, and early grabs are off"
-	case preRelease.MatchString(c.Title):
+	case isPreRelease(c.Quality) && !p.Accepts(c.Quality):
 		return "it isn't out yet, and this looks like a cinema recording or a screener"
 	case mode != EarlyAny && (c.Quality == 0 || quality.Rank(c.Quality) < quality.Rank(p.Cutoff)):
 		return "it isn't out yet, and this is below the profile's cutoff"
 	}
 	return ""
+}
+
+// isPreRelease says whether quality q is a copy made before release.
+func isPreRelease(q int) bool {
+	pq, _ := quality.ByID(q)
+	return pq.PreRelease
 }
