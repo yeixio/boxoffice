@@ -2966,5 +2966,52 @@
     "buy": "Beli",
     "none": "Sejauh yang kami tahu, tidak tersedia streaming di {{country}}.",
     "source": "Layanan streaming dari JustWatch"
+  },
+  "playon": {
+    "title": "PlayOn Cloud",
+    "on": "Aktif",
+    "off": "Nonaktif",
+    "sub": "PlayOn Cloud merekam acara dan film dari layanan streaming seperti Netflix, Hulu, Disney+, dan Max. Antrekan rekaman di aplikasi PlayOn Cloud seperti biasa: begitu satu selesai, Box Office mengunduhnya dan menyimpannya di pustaka seperti Impor file. PlayOn menghapus rekaman setelah 7 hari kecuali Anda membayar penyimpanan, jadi Box Office memeriksa setiap 15 menit.",
+    "docs": "Cara kerjanya",
+    "how": "Cara menyiapkannya",
+    "help": {
+      "1": "Daftar ke PlayOn Cloud dan rekam sesuatu di aplikasi ponselnya.",
+      "2": "Masukkan email dan kata sandi yang Anda pakai masuk ke PlayOn, lalu tekan Uji.",
+      "3": "Aktifkan Ambil rekaman dan tekan Simpan.",
+      "4": "Di aplikasi PlayOn Cloud, matikan unduhan rekaman ke ponsel agar tidak terunduh dua kali."
+    },
+    "email": "Email PlayOn",
+    "password": "Kata sandi PlayOn",
+    "keepPassword": "Tersimpan (kosongkan untuk mempertahankan)",
+    "test": "Uji",
+    "works": "Berhasil masuk. Rekaman siap diunduh: {{count}}",
+    "forget": "Putuskan akun",
+    "bringIn": "Ambil rekaman",
+    "bringInHint": "Mengunduh setiap rekaman yang selesai dan menyimpannya di pustaka. Unduhan dihitung dalam batas data bulanan.",
+    "recordings": "Rekaman",
+    "checking": "Memeriksa PlayOn…",
+    "checkedAt": "Terakhir diperiksa {{when}}",
+    "inPlayOn": "Antre di PlayOn: {{count}}",
+    "filedCount": "Di pustaka: {{count}}",
+    "checkCount": "Perlu diperiksa: {{count}}",
+    "expiring": "Dihapus PlayOn dalam sehari: {{count}}",
+    "downloading": "Mengunduh {{name}}: {{done}} dari {{total}}",
+    "checkHint": "Beberapa rekaman sudah diunduh, tetapi Box Office tidak yakin apa isinya. Tentukan masing-masing di halaman Impor file.",
+    "openImport": "Buka Impor file",
+    "checkNow": "Periksa sekarang",
+    "none": "Belum ada rekaman. Rekam sesuatu di aplikasi PlayOn Cloud dan rekaman akan muncul di sini setelah selesai.",
+    "retry": "Coba lagi",
+    "skip": "Lewati",
+    "filedTo": "Disimpan di {{path}}",
+    "expires": "PlayOn menghapusnya {{when}}",
+    "state": {
+      "new": "Menunggu",
+      "downloading": "Mengunduh",
+      "filed": "Di pustaka",
+      "check": "Perlu diperiksa",
+      "failed": "Gagal",
+      "skipped": "Dilewati",
+      "expired": "Kedaluwarsa"
+    }
   }
 }

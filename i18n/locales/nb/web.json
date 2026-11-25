@@ -3089,5 +3089,52 @@
     "buy": "Kjøp",
     "none": "Kan ikke strømmes i {{country}}, så vidt vi vet.",
     "source": "Strømmetjenester fra JustWatch"
+  },
+  "playon": {
+    "title": "PlayOn Cloud",
+    "on": "På",
+    "off": "Av",
+    "sub": "PlayOn Cloud tar opp serier og filmer fra strømmetjenester som Netflix, Hulu, Disney+ og Max. Legg inn opptak i PlayOn Cloud-appen som vanlig: når et er ferdig, laster Box Office det ned og legger det i biblioteket slik Importer filer gjør. PlayOn sletter opptak etter 7 dager hvis du ikke betaler for lagring, så Box Office sjekker hvert 15. minutt.",
+    "docs": "Slik virker det",
+    "how": "Slik setter du det opp",
+    "help": {
+      "1": "Registrer deg hos PlayOn Cloud og ta opp noe i mobilappen.",
+      "2": "Skriv inn e-postadressen og passordet du logger inn på PlayOn med, og trykk Test.",
+      "3": "Slå på Hent opptak og trykk Lagre.",
+      "4": "Slå av nedlasting til telefonen i PlayOn Cloud-appen, så opptak ikke lastes ned to ganger."
+    },
+    "email": "PlayOn-e-post",
+    "password": "PlayOn-passord",
+    "keepPassword": "Lagret (la stå tomt for å beholde)",
+    "test": "Test",
+    "works": "Logget inn. Opptak klare til nedlasting: {{count}}",
+    "forget": "Koble fra kontoen",
+    "bringIn": "Hent opptak",
+    "bringInHint": "Laster ned hvert ferdige opptak og legger det i biblioteket. Nedlastinger teller mot månedens datatak.",
+    "recordings": "Opptak",
+    "checking": "Sjekker PlayOn…",
+    "checkedAt": "Sist sjekket {{when}}",
+    "inPlayOn": "I kø hos PlayOn: {{count}}",
+    "filedCount": "I biblioteket: {{count}}",
+    "checkCount": "Å sjekke: {{count}}",
+    "expiring": "Slettes av PlayOn innen et døgn: {{count}}",
+    "downloading": "Laster ned {{name}}: {{done}} av {{total}}",
+    "checkHint": "Noen opptak ble lastet ned, men Box Office er ikke sikker på hva de er. Si hva hvert av dem er på siden Importer filer.",
+    "openImport": "Åpne Importer filer",
+    "checkNow": "Sjekk nå",
+    "none": "Ingen opptak ennå. Ta opp noe i PlayOn Cloud-appen, så dukker det opp her når det er ferdig.",
+    "retry": "Prøv igjen",
+    "skip": "Hopp over",
+    "filedTo": "Lagt i {{path}}",
+    "expires": "PlayOn sletter det {{when}}",
+    "state": {
+      "new": "Venter",
+      "downloading": "Laster ned",
+      "filed": "I biblioteket",
+      "check": "Å sjekke",
+      "failed": "Mislyktes",
+      "skipped": "Hoppet over",
+      "expired": "Utløpt"
+    }
   }
 }

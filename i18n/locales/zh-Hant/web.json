@@ -2966,5 +2966,52 @@
     "buy": "購買",
     "none": "據我們所知，{{country}} 暫無串流。",
     "source": "串流服務資訊來自 JustWatch"
+  },
+  "playon": {
+    "title": "PlayOn Cloud",
+    "on": "開",
+    "off": "關",
+    "sub": "PlayOn Cloud 可從 Netflix、Hulu、Disney+ 和 Max 等串流服務錄製影集和電影。像平常一樣在 PlayOn Cloud 應用程式中排定錄製：每個錄製完成後，Box Office 會下載並像「匯入檔案」一樣放進媒體庫。如果沒有付費購買儲存空間，PlayOn 會在 7 天後刪除錄製，所以 Box Office 每 15 分鐘檢查一次。",
+    "docs": "運作方式",
+    "how": "如何設定",
+    "help": {
+      "1": "註冊 PlayOn Cloud，並在手機應用程式中錄製一些內容。",
+      "2": "輸入你登入 PlayOn 的電子郵件和密碼，然後按「測試」。",
+      "3": "開啟「匯入錄製」，然後按「儲存」。",
+      "4": "在 PlayOn Cloud 應用程式中關閉下載到手機，以免錄製被下載兩次。"
+    },
+    "email": "PlayOn 電子郵件",
+    "password": "PlayOn 密碼",
+    "keepPassword": "已儲存（留空則保留）",
+    "test": "測試",
+    "works": "已登入。可下載的錄製：{{count}}",
+    "forget": "解除帳號連結",
+    "bringIn": "匯入錄製",
+    "bringInHint": "下載每個已完成的錄製並放進媒體庫。下載量計入每月流量上限。",
+    "recordings": "錄製",
+    "checking": "正在檢查 PlayOn…",
+    "checkedAt": "上次檢查 {{when}}",
+    "inPlayOn": "PlayOn 排隊中：{{count}}",
+    "filedCount": "已在媒體庫：{{count}}",
+    "checkCount": "待確認：{{count}}",
+    "expiring": "一天內將被 PlayOn 刪除：{{count}}",
+    "downloading": "正在下載 {{name}}：{{done}} / {{total}}",
+    "checkHint": "部分錄製已下載，但 Box Office 不確定它們是什麼。請在「匯入檔案」頁面說明每一個是什麼。",
+    "openImport": "開啟「匯入檔案」",
+    "checkNow": "立即檢查",
+    "none": "還沒有錄製。在 PlayOn Cloud 應用程式中錄製一些內容，完成後會顯示在這裡。",
+    "retry": "重試",
+    "skip": "略過",
+    "filedTo": "已放入 {{path}}",
+    "expires": "PlayOn 將於 {{when}} 刪除",
+    "state": {
+      "new": "等待中",
+      "downloading": "下載中",
+      "filed": "已在媒體庫",
+      "check": "待確認",
+      "failed": "失敗",
+      "skipped": "已略過",
+      "expired": "已過期"
+    }
   }
 }

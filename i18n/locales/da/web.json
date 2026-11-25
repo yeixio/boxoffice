@@ -3089,5 +3089,52 @@
     "buy": "Køb",
     "none": "Kan ikke streames i {{country}}, så vidt vi ved.",
     "source": "Streamingtjenester fra JustWatch"
+  },
+  "playon": {
+    "title": "PlayOn Cloud",
+    "on": "Til",
+    "off": "Fra",
+    "sub": "PlayOn Cloud optager serier og film fra streamingtjenester som Netflix, Hulu, Disney+ og Max. Sæt optagelser i kø i PlayOn Cloud-appen som altid: når en er færdig, downloader Box Office den og lægger den i biblioteket, ligesom Importér filer. PlayOn sletter optagelser efter 7 dage, hvis du ikke betaler for lagerplads, så Box Office tjekker hvert 15. minut.",
+    "docs": "Sådan virker det",
+    "how": "Sådan sætter du det op",
+    "help": {
+      "1": "Tilmeld dig PlayOn Cloud, og optag noget i mobilappen.",
+      "2": "Indtast den e-mail og adgangskode, du logger ind på PlayOn med, og tryk på Test.",
+      "3": "Slå Hent optagelser til, og tryk på Gem.",
+      "4": "Slå download til telefonen fra i PlayOn Cloud-appen, så optagelser ikke hentes to gange."
+    },
+    "email": "PlayOn-e-mail",
+    "password": "PlayOn-adgangskode",
+    "keepPassword": "Gemt (lad være tomt for at beholde den)",
+    "test": "Test",
+    "works": "Logget ind. Optagelser klar til download: {{count}}",
+    "forget": "Fjern kontoen",
+    "bringIn": "Hent optagelser",
+    "bringInHint": "Downloader hver færdig optagelse og lægger den i biblioteket. Downloads tæller med i månedens dataloft.",
+    "recordings": "Optagelser",
+    "checking": "Tjekker PlayOn…",
+    "checkedAt": "Sidst tjekket {{when}}",
+    "inPlayOn": "I kø hos PlayOn: {{count}}",
+    "filedCount": "I biblioteket: {{count}}",
+    "checkCount": "Skal tjekkes: {{count}}",
+    "expiring": "Slettes af PlayOn inden for et døgn: {{count}}",
+    "downloading": "Downloader {{name}}: {{done}} af {{total}}",
+    "checkHint": "Nogle optagelser blev downloadet, men Box Office er ikke sikker på, hvad de er. Angiv, hvad hver enkelt er, på siden Importér filer.",
+    "openImport": "Åbn Importér filer",
+    "checkNow": "Tjek nu",
+    "none": "Ingen optagelser endnu. Optag noget i PlayOn Cloud-appen, så dukker det op her, når det er færdigt.",
+    "retry": "Prøv igen",
+    "skip": "Spring over",
+    "filedTo": "Lagt i {{path}}",
+    "expires": "PlayOn sletter den {{when}}",
+    "state": {
+      "new": "Venter",
+      "downloading": "Downloader",
+      "filed": "I biblioteket",
+      "check": "Skal tjekkes",
+      "failed": "Mislykkedes",
+      "skipped": "Sprunget over",
+      "expired": "Udløbet"
+    }
   }
 }
